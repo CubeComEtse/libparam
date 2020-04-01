@@ -9,6 +9,7 @@
 
 #include "bsp.h"
 #include "obc_controller_rev_A.h"
+#include "usart_driver.h"
 #include "ioport.h"
 
 // All interrupt mask.
@@ -16,6 +17,9 @@
 
 // Local functions
 void BOARD_vInitTelemetryUart(void);
+
+// Local variables
+static struct usart_driver telemetryUsartDriver;
 
 void BOARD_vInit(void) {
 
@@ -30,15 +34,15 @@ void BOARD_vInit(void) {
     
     // Setup Telemetry UART
     BOARD_vInitTelemetryUart();
-    // Configure and enable interrupt of USART.
-    // NVIC_EnableIRQ(USART2_IRQn);
-
+    
+    Enable_global_interrupt();
 }
 
 
 void BOARD_vInitTelemetryUart(void) {
 
-    //usart_disable_interrupt(TELEMETRY_USART, ALL_INTERRUPT_MASK);
+    // Disable the Interrupts while configuring the usart
+    usart_disable_interrupt(TELEMETRY_USART, ALL_INTERRUPT_MASK);
 
     // Setup pins
     ioport_set_pin_mode(T_USART_RX_PIN, IOPORT_MODE_MUX_B);
@@ -63,5 +67,47 @@ void BOARD_vInitTelemetryUart(void) {
     usart_enable_tx(TELEMETRY_USART);
     usart_enable_rx(TELEMETRY_USART);
 
-    //usart_enable_interrupt(TELEMETRY_USART, US_IER_TXRDY | US_IER_TXEMPTY);
+    USART_init(&telemetryUsartDriver);
+
+    // Re-enable Interrupts
+    usart_enable_interrupt(TELEMETRY_USART, US_IER_RXRDY | US_IER_TXEMPTY);
+    
+    NVIC_EnableIRQ(TELEMETRY_USART_IRQ);
+}
+
+void BOARD_vEnableUartTXInterrupt(void) {
+    usart_disable_interrupt(TELEMETRY_USART, US_IER_TXEMPTY);
+}
+
+
+struct usart_driver* BOARD_psGetTelemetryDriver(void) {
+    return &telemetryUsartDriver;
+}
+
+void TELEMETRY_USART_HANDLER(void)
+{
+    uint32_t dw_status = usart_get_status(TELEMETRY_USART);
+
+    // A Value is received
+    if (dw_status & US_CSR_RXRDY) {
+        uint32_t received_byte;
+
+        usart_read(TELEMETRY_USART, &received_byte);
+        if (USART_byteReceived(&telemetryUsartDriver, (uint8_t) received_byte)) {
+            //Possibly set CTS/RTS pins here,
+        }
+    }
+
+    // TX Buffer and shift register empty
+    if (dw_status & US_CSR_TXEMPTY) {
+        uint8_t nextByte = 0;
+        if (USART_byteTransmitted(&telemetryUsartDriver, &nextByte)) {
+            // If true there is a value loaded
+            usart_write(TELEMETRY_USART, nextByte);
+        }
+        else {
+            // Disable the interrupt, re-enable later
+            usart_disable_interrupt(TELEMETRY_USART, US_IER_TXEMPTY);
+        }
+    }
 }

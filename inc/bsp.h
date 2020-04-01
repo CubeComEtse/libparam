@@ -9,6 +9,9 @@
 #ifndef BSP_H_
 #define BSP_H_
 
-void BOARD_vInit(void);
+#include "usart_driver.h"
 
+void BOARD_vInit(void);
+struct usart_driver* BOARD_psGetTelemetryDriver(void);
+void BOARD_vEnableUartTXInterrupt(void);
 #endif /* BSP_H_ */

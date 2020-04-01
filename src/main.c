@@ -2,20 +2,29 @@
 #include <asf.h>
 
 #include "bsp.h"
-#include "obc_controller_rev_A.h"
+#include "parser.h"
+#include "usart_driver.h"
+
+// Local variables
+static struct usart_driver* telemetryUsartDriver;
 
 int main (void)
 {
-    // ASF system Initialization
+    // System Initialization
     sysclk_init();
-
-    // Custom board Initizlization
     BOARD_vInit();
 
+    telemetryUsartDriver = BOARD_psGetTelemetryDriver();
+    USART_setEndChar(telemetryUsartDriver, '\n');
+
     while(1) {
-        usart_putchar(TELEMETRY_USART, 'a');
-        while(!usart_is_tx_empty(TELEMETRY_USART));
-        
-        delay_ms(500);
+        // Wait for a command to come in
+
+        if (USART_hasMessage(telemetryUsartDriver)){
+            uint8_t* buf = USART_getRxBuffer(telemetryUsartDriver);
+            parse_commands((char*) buf);
+            USART_clearMessage(telemetryUsartDriver);
+        }
     }
 }
+
