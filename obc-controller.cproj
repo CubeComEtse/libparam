@@ -560,10 +560,13 @@
     <Compile Include="inc\parser.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="inc\usart_buffer.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\parser.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\usart_driver.c">
+    <Compile Include="src\usart_buffer.c">
       <SubType>compile</SubType>
     </Compile>
     <None Include="src\ASF\common\services\ioport\ioport.h">
@@ -579,9 +582,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\bsp.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\usart_driver.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\ASF\asf.h">

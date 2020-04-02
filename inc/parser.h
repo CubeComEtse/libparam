@@ -9,9 +9,17 @@
 #ifndef PARSER_H_
 #define PARSER_H_
 
-void parse_commands(char * commands);
+#include <stdint.h>
+#include <string.h>
+#include <stdbool.h>
 
-void parse_spi_commands(const char *command);
-void parse_i2c_commands(const char *command);
+void PARSER_vInit(void);
+void PARSER_vProcess(void);
 
+bool PARSER_bHasMessage(void);
+void PARSER_vClearMessage(void);
+
+void PARSER_vParseCommands(void);
+void PARSER_vParseSPICommand(const char *command);
+void PARSER_vParseI2CCommand(const char *command);
 #endif /* PARSER_H_ */

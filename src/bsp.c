@@ -9,7 +9,7 @@
 
 #include "bsp.h"
 #include "obc_controller_rev_A.h"
-#include "usart_driver.h"
+#include "usart_buffer.h"
 #include "ioport.h"
 
 // All interrupt mask.
@@ -19,9 +19,9 @@
 void BOARD_vInitTelemetryUart(void);
 
 // Local variables
-static struct usart_driver telemetryUsartDriver;
+static  USART_data_t telemetryUsart;
 
-void BOARD_vInit(void) {
+void BSP_vInit(void) {
 
     // Setup pins for SPI select
     ioport_enable_pin(SPI_SELECT_PIN);
@@ -67,7 +67,7 @@ void BOARD_vInitTelemetryUart(void) {
     usart_enable_tx(TELEMETRY_USART);
     usart_enable_rx(TELEMETRY_USART);
 
-    USART_init(&telemetryUsartDriver);
+    USART_BUFFER_vInitialize(&telemetryUsart);
 
     // Re-enable Interrupts
     usart_enable_interrupt(TELEMETRY_USART, US_IER_RXRDY | US_IER_TXEMPTY);
@@ -75,14 +75,16 @@ void BOARD_vInitTelemetryUart(void) {
     NVIC_EnableIRQ(TELEMETRY_USART_IRQ);
 }
 
-void BOARD_vEnableUartTXInterrupt(void) {
+
+void BSP_vEnableUartTXInterrupt(void) {
     usart_disable_interrupt(TELEMETRY_USART, US_IER_TXEMPTY);
 }
 
 
-struct usart_driver* BOARD_psGetTelemetryDriver(void) {
-    return &telemetryUsartDriver;
+USART_data_t* BSP_psGetTelemetryDriver(void) {
+    return &telemetryUsart;
 }
+
 
 void TELEMETRY_USART_HANDLER(void)
 {
@@ -93,7 +95,7 @@ void TELEMETRY_USART_HANDLER(void)
         uint32_t received_byte;
 
         usart_read(TELEMETRY_USART, &received_byte);
-        if (USART_byteReceived(&telemetryUsartDriver, (uint8_t) received_byte)) {
+        if (USART_BUFFER_Receive(&telemetryUsart, (uint8_t) received_byte)) {
             //Possibly set CTS/RTS pins here,
         }
     }
@@ -101,7 +103,7 @@ void TELEMETRY_USART_HANDLER(void)
     // TX Buffer and shift register empty
     if (dw_status & US_CSR_TXEMPTY) {
         uint8_t nextByte = 0;
-        if (USART_byteTransmitted(&telemetryUsartDriver, &nextByte)) {
+        if (USART_BUFFER_Transmit(&telemetryUsart, &nextByte)) {
             // If true there is a value loaded
             usart_write(TELEMETRY_USART, nextByte);
         }
