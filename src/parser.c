@@ -8,6 +8,8 @@
 #include "parser.h"
 #include "bsp.h"
 #include "usart_buffer.h"
+#include "obc_controller_rev_A.h"
+#include "asf.h"
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -32,6 +34,10 @@ void PARSER_vInit(void)
 {
     telemetryUsartBuffer = BSP_psGetTelemetryDriver();
     PARSER_vClearMessage();
+
+    USART_TXBuffer_PutByte(telemetryUsartBuffer, 'a');
+    USART_TXBuffer_PutByte(telemetryUsartBuffer, 'b');
+    USART_TXBuffer_PutByte(telemetryUsartBuffer, 'c');
 }
 
 /**
@@ -104,7 +110,7 @@ void PARSER_vParseCommands(void)
             PARSER_vParseI2CCommand(command);
         }
         // Get the next token
-        command = strtok((char*) commandBuffer, s);
+        command = strtok(NULL, s);
     }
 }
 
@@ -145,7 +151,6 @@ void PARSER_vParseSPICommand(const char *command)
         if (strstr(subCommand, "speed") == subCommand) {
             if (hasEquals) {
                 uint16_t newSpeed = atoi(afterEquals);
-                asm("nop");
             }
             else {
 
@@ -174,6 +179,22 @@ void PARSER_vParseSPICommand(const char *command)
     }
 
     if (strstr(startFrom, "read") != NULL) {
+        uint8_t data[] = {5, 10, 20, 25};
+        
+        struct spi_device* sSpiDevice;
+        sSpiDevice = BSP_psGetSpiDriver();
+
+        spi_select_device(SPI_DEVICE, sSpiDevice);
+        ioport_set_pin_level(SPI_CS_PIN_7, 0);
+        spi_transceive_packet(SPI_DEVICE, data, data, 4);
+        ioport_set_pin_level(SPI_CS_PIN_7, 1);
+        spi_deselect_device(SPI_DEVICE, sSpiDevice);
+
+        //USART_TXBuffer_PutByte(telemetryUsartBuffer, 's');
+    }
+
+    if (strstr(startFrom, "write") != NULL) {
+        uint16_t data = 5;
     }
 }
 

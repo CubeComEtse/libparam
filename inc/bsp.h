@@ -13,5 +13,6 @@
 
 void BSP_vInit(void);
 USART_data_t* BSP_psGetTelemetryDriver(void);
+struct spi_device* BSP_psGetSpiDriver(void);
 void BSP_vEnableUartTXInterrupt(void);
 #endif /* BSP_H_ */

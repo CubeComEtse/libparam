@@ -9,7 +9,7 @@
 #ifndef OBC_CONTROLLER_REV_A_H_
 #define OBC_CONTROLLER_REV_A_H_
 
-#define SPI_SELECT_PIN          IOPORT_CREATE_PIN(PIOC, 17)
+#define SPI_SELECT_PIN          PIO_PC17_IDX
 
 #define SPI_CS_PIN_0            IOPORT_CREATE_PIN(PIOC, 25)
 #define SPI_CS_PIN_1            IOPORT_CREATE_PIN(PIOC, 28)
@@ -20,7 +20,12 @@
 #define SPI_CS_PIN_6            IOPORT_CREATE_PIN(PIOC, 19)
 #define SPI_CS_PIN_7            IOPORT_CREATE_PIN(PIOC, 18)
 
-#define SPI1_SCK                IOPORT_CREATE_PIN(PIOC, 24)
+#define SPI1_SCK                PIO_PC24_IDX
+#define SPI1_MOSI               PIO_PC27_IDX
+#define SPI1_MISO               PIO_PC26_IDX
+
+#define SPI_DEVICE              SPI1
+#define SPI_DEVICE_ID           ID_SPI1
 
 #define TELEMETRY_USART         USART2
 #define TELEMETRY_ID_USART      ID_USART2

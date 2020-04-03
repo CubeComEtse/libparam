@@ -11,33 +11,64 @@
 #include "obc_controller_rev_A.h"
 #include "usart_buffer.h"
 #include "ioport.h"
+#include "spi.h"
 
 // All interrupt mask.
 #define ALL_INTERRUPT_MASK  0xffffffff
 
 // Local functions
 void BOARD_vInitTelemetryUart(void);
+void BOARD_vInitSPI(void);
 
 // Local variables
-static  USART_data_t telemetryUsart;
+static USART_data_t telemetryUsart;
+static struct spi_device sSpiDevice;
 
 void BSP_vInit(void) {
 
+    ioport_init();
+
+    // Setup Telemetry UART
+    BOARD_vInitTelemetryUart();
+    BOARD_vInitSPI();
+    
+    Enable_global_interrupt();
+}
+
+void BOARD_vInitSPI(void) { 
+    spi_disable_interrupt(SPI_DEVICE, ALL_INTERRUPT_MASK);
+    
     // Setup pins for SPI select
     ioport_enable_pin(SPI_SELECT_PIN);
     ioport_set_pin_dir(SPI_SELECT_PIN, IOPORT_DIR_OUTPUT);
     ioport_set_pin_level(SPI_SELECT_PIN, 1);
 
     // Setup SPI
-    ioport_enable_pin(SPI1_SCK);
+    ioport_disable_pin(SPI1_SCK);
     ioport_set_pin_dir(SPI1_SCK, IOPORT_DIR_OUTPUT);
-    
-    // Setup Telemetry UART
-    BOARD_vInitTelemetryUart();
-    
-    Enable_global_interrupt();
+    ioport_set_pin_level(SPI1_SCK, 1);
+    ioport_set_pin_mode(SPI1_SCK, IOPORT_MODE_MUX_C);
+
+    ioport_disable_pin(SPI1_MOSI);
+    ioport_set_pin_dir(SPI1_MOSI, IOPORT_DIR_OUTPUT);
+    ioport_set_pin_mode(SPI1_MOSI, IOPORT_MODE_MUX_C);
+
+    ioport_disable_pin(SPI1_MISO);
+    ioport_set_pin_dir(SPI1_MISO, IOPORT_DIR_INPUT);
+    ioport_set_pin_mode(SPI1_MISO, IOPORT_MODE_MUX_C);
+
+    ioport_enable_pin(SPI_CS_PIN_7);
+    ioport_set_pin_dir(SPI_CS_PIN_7, IOPORT_DIR_OUTPUT);
+    ioport_set_pin_level(SPI_CS_PIN_7, 1);
+
+    spi_master_init(SPI_DEVICE);
+    spi_master_setup_device(SPI_DEVICE, &sSpiDevice, SPI_MODE_0, 400000, 0);
+    spi_enable(SPI_DEVICE);
 }
 
+struct spi_device* BSP_psGetSpiDriver(void) {
+    return &sSpiDevice; 
+}
 
 void BOARD_vInitTelemetryUart(void) {
 
@@ -56,13 +87,13 @@ void BOARD_vInitTelemetryUart(void) {
 
     // Setup for Telemetry USART
     sam_usart_opt_t sUsartOptions;
-    sUsartOptions.baudrate = 115200;
+    sUsartOptions.baudrate = 57600;
     sUsartOptions.char_length = US_MR_CHRL_8_BIT;
     sUsartOptions.parity_type = US_MR_PAR_NO;
     sUsartOptions.stop_bits = US_MR_NBSTOP_1_BIT;
     sUsartOptions.channel_mode = US_MR_CHMODE_NORMAL;
 
-    usart_init_rs232(TELEMETRY_USART, &sUsartOptions, sysclk_get_main_hz());
+    usart_init_rs232(TELEMETRY_USART, &sUsartOptions, sysclk_get_peripheral_hz());
 
     usart_enable_tx(TELEMETRY_USART);
     usart_enable_rx(TELEMETRY_USART);
@@ -77,7 +108,7 @@ void BOARD_vInitTelemetryUart(void) {
 
 
 void BSP_vEnableUartTXInterrupt(void) {
-    usart_disable_interrupt(TELEMETRY_USART, US_IER_TXEMPTY);
+    usart_enable_interrupt(TELEMETRY_USART, US_IER_TXEMPTY);
 }
 
 

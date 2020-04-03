@@ -12,6 +12,7 @@
  */ 
 
 #include <asf.h>
+#include "bsp.h"
 #include "stdint.h"
 #include "usart_buffer.h"
 
@@ -99,6 +100,8 @@ bool USART_TXBuffer_PutByte(USART_data_t * usart_data, uint8_t data)
 
         /* Enable DRE interrupt. */
     }
+
+    BSP_vEnableUartTXInterrupt();
     return TXBuffer_FreeSpace;
 }
 
