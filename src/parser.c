@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include "spi_manager.h"
 
 
 // Local variables
@@ -23,6 +24,9 @@ static uint8_t endChar = '\n';
 static uint8_t commandBuffer[128];
 static uint16_t bufPointer;
 static bool hasMessage;
+
+static uint8_t spi_tx_buffer[120];
+static uint8_t spi_rx_buffer[120];
 
 /**
  * \brief Initialize all pointers, buffers, etc.
@@ -124,6 +128,12 @@ void PARSER_vParseCommands(void)
  */
 void PARSER_vParseSPICommand(const char *command)
 {
+    /*
+    The parse will string match anything after the first 'spi.' section. If 
+    there is an '=' in the command the argument will be found first, because 
+    many commands use it.
+    */
+
     // Assume command starts with spi., so advance the pointer
     const char *startFrom = &command[4];
     const char *subCommand;
@@ -144,13 +154,14 @@ void PARSER_vParseSPICommand(const char *command)
             
             return;
         }
-        //Pointer arithmetic
+        // Nasty Pointer arithmetic
         subCommand+=1;
 
         // Set or get the speed
         if (strstr(subCommand, "speed") == subCommand) {
             if (hasEquals) {
-                uint16_t newSpeed = atoi(afterEquals);
+                uint32_t newSpeed = atoi(afterEquals);
+                SPI_MANAGER_vSetSpeed(newSpeed);
             }
             else {
 
@@ -161,6 +172,7 @@ void PARSER_vParseSPICommand(const char *command)
         if (strstr(subCommand, "cs") == subCommand) {
             if (hasEquals) {
                 uint8_t newPin = atoi(afterEquals);
+                SPI_MANAGER_vSetCSLine(newPin);
             }
             else {
 
@@ -170,31 +182,47 @@ void PARSER_vParseSPICommand(const char *command)
         // Set or get the SPI Mode
         if (strstr(subCommand, "mode") == subCommand) {
             if (hasEquals) {
-
+                uint8_t newMode = atoi(afterEquals);
+                SPI_MANAGER_vSetMode(newMode);
             }
             else {
 
             }
         }
     }
-
-    if (strstr(startFrom, "read") != NULL) {
-        uint8_t data[] = {5, 10, 20, 25};
-        
-        struct spi_device* sSpiDevice;
-        sSpiDevice = BSP_psGetSpiDriver();
-
-        spi_select_device(SPI_DEVICE, sSpiDevice);
-        ioport_set_pin_level(SPI_CS_PIN_7, 0);
-        spi_transceive_packet(SPI_DEVICE, data, data, 4);
-        ioport_set_pin_level(SPI_CS_PIN_7, 1);
-        spi_deselect_device(SPI_DEVICE, sSpiDevice);
-
-        //USART_TXBuffer_PutByte(telemetryUsartBuffer, 's');
+    if (strstr(startFrom, "start") != NULL) {
+        SPI_MANGER_vSelect();
     }
 
-    if (strstr(startFrom, "write") != NULL) {
-        uint16_t data = 5;
+    if (strstr(startFrom, "read") != NULL) {
+
+    }
+
+    if (strstr(startFrom, "write") != NULL && hasEquals) {
+        // There are two ways to send data, either as string, or as space-separated bytes
+        if (afterEquals[0] == '"') {
+            // Set starting position
+            uint16_t start_index = 1;
+
+            //Find ending position
+            char* final_quote = strstr(&afterEquals[start_index], "\"");
+            if (final_quote == NULL) {
+                return;
+            }
+            
+            uint16_t length = final_quote - &afterEquals[start_index];
+            memcpy(spi_tx_buffer, &afterEquals[start_index], length);
+
+            SPI_MANAGER_vExchangeBuffers(spi_tx_buffer, spi_rx_buffer, length);
+        }
+        else {
+            //Parse two bytes and a space
+        }
+        
+    }
+
+    if (strstr(startFrom, "stop") != NULL) {
+        SPI_MANAGER_vDeselect();
     }
 }
 
