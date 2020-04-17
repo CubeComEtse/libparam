@@ -2,7 +2,7 @@
 #include <asf.h>
 
 #include "bsp.h"
-#include "parser.h"
+#include "serial_multiplexer.h"
 
 
 int main (void)
@@ -12,16 +12,10 @@ int main (void)
     wdt_disable(WDT);
 
     BSP_vInit();
-    PARSER_vInit();
 
-    while(1) {
-        // Wait for a command to come in
-        PARSER_vProcess();
-
-        if (PARSER_bHasMessage()) {
-            PARSER_vParseCommands();
-            PARSER_vClearMessage();
-        }
+    while(1){
+        SERMUX_vProcess();
     }
 }
+
 

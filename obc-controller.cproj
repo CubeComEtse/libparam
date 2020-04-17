@@ -466,6 +466,7 @@
       <Value>../src/ASF/sam/drivers/rstc/example1</Value>
       <Value>../src/ASF/sam/drivers/rstc</Value>
       <Value>../src/ASF/sam/drivers/wdt</Value>
+      <Value>../serial_multiplexer</Value>
     </ListValues>
   </armgcc.compiler.directories.IncludePaths>
   <armgcc.compiler.optimization.OtherFlags>-fdata-sections</armgcc.compiler.optimization.OtherFlags>
@@ -614,7 +615,10 @@
     <Folder Include="src\config\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="inc\parser.h">
+    <Compile Include="inc\serial_multiplexer.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\serial_multiplexer_conf.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\spi_manager.h">
@@ -662,7 +666,7 @@
     <Compile Include="src\config\conf_clock.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\parser.c">
+    <Compile Include="src\serial_multiplexer.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\spi_manager.c">

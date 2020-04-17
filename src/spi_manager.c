@@ -13,6 +13,8 @@
 
 
 static uint32_t SPI_MANAGER_u32CsPin = SPI_CS_PIN_0;
+static uint32_t SPI_MANAGER_u32Speed = 400000;
+static uint8_t SPI_MANAGER_u8Mode = 0;
 // The polarity setting is equal to the selected level
 static bool SPI_MANAGER_bCsPolarity = 0;
 
@@ -73,7 +75,9 @@ void SPI_MANAGER_vDeselect(void)
  */
 void SPI_MANAGER_vSetSpeed(uint32_t newSpeed)
 {
-
+    SPI_MANAGER_u32Speed = newSpeed;
+   struct spi_device* sSpiDevice = BSP_psGetSpiDriver();
+   spi_master_setup_device(SPI_DEVICE, &sSpiDevice, SPI_MANAGER_u8Mode, SPI_MANAGER_u32Speed, 0);
 }
 
 /**
@@ -84,7 +88,8 @@ void SPI_MANAGER_vSetSpeed(uint32_t newSpeed)
  */
 void SPI_MANAGER_vSetMode(uint8_t newMode)
 {
-
+    struct spi_device* sSpiDevice = BSP_psGetSpiDriver();
+    //spi_master_setup_device(SPI_DEVICE, &sSpiDevice, newMode, newSpeed, 0);
 }
 
 /**
