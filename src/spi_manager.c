@@ -76,8 +76,7 @@ void SPI_MANAGER_vDeselect(void)
 void SPI_MANAGER_vSetSpeed(uint32_t newSpeed)
 {
     SPI_MANAGER_u32Speed = newSpeed;
-   struct spi_device* sSpiDevice = BSP_psGetSpiDriver();
-   spi_master_setup_device(SPI_DEVICE, &sSpiDevice, SPI_MANAGER_u8Mode, SPI_MANAGER_u32Speed, 0);
+   spi_master_setup_device(SPI_DEVICE, BSP_psGetSpiDriver(), SPI_MANAGER_u8Mode, SPI_MANAGER_u32Speed, 0);
 }
 
 /**
@@ -88,8 +87,8 @@ void SPI_MANAGER_vSetSpeed(uint32_t newSpeed)
  */
 void SPI_MANAGER_vSetMode(uint8_t newMode)
 {
-    struct spi_device* sSpiDevice = BSP_psGetSpiDriver();
-    //spi_master_setup_device(SPI_DEVICE, &sSpiDevice, newMode, newSpeed, 0);
+    SPI_MANAGER_u8Mode = newMode;
+    spi_master_setup_device(SPI_DEVICE, BSP_psGetSpiDriver(), SPI_MANAGER_u8Mode, SPI_MANAGER_u32Speed, 0);
 }
 
 /**

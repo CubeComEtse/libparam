@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <cmocka.h>
 
+#define TEST
+
 #include "usart_mocks.h"
 
 #include "serial_multiplexer.h"
