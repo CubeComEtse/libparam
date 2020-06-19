@@ -273,6 +273,9 @@ uint32_t twihs_master_read(Twihs *p_twihs, twihs_packet_t *p_packet)
 	uint8_t *buffer = p_packet->buffer;
 	uint32_t timeout = TWIHS_TIMEOUT;
 
+    // Empty buffer
+    uint8_t temp = p_twihs->TWIHS_RHR;
+
 	/* Check argument */
 	if (cnt == 0) {
 		return TWIHS_INVALID_ARGUMENT;

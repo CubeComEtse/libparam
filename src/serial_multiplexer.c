@@ -19,7 +19,6 @@ enum SERMUX_STATES {
     LENGTH,
     ENDPOINT,
     DATA,
-    PROCESS,
 };
 static enum SERMUX_STATES state;
 static uint16_t stateCounter;
@@ -59,10 +58,13 @@ void SERMUX_vInit(){
     }
 }
 
+void SERMUX_vDeRegisterEndpoint(uint16_t endpoint) {
+    SERMUX_vRegisterEndpoint(endpoint, SERMUX_vEmptyEndpoint);
+}
+
 void SERMUX_vProcess(void)
 {
     SERMUX_vReceiveByte();
-    SERMUX_vProcessMessage();
 }
 
 bool SERMUX_vRegisterEndpoint(const uint16_t endpoint, endpoint_callback_t func) {
@@ -85,14 +87,18 @@ void SERMUX_vTransmit(uint16_t endpoint, uint8_t* buffer, uint16_t length) {
     SERMUX_vTxMessage(&message);
 }
 
+uint8_t bigBuffer[500];
+uint16_t bufIndex;
+
 // Private Functions
 void SERMUX_vReceiveByte(void)
 {
-    while (SERMUX_bByteAvailable() && state != PROCESS) {
+    while (SERMUX_bByteAvailable()) {
+    
         uint8_t received_byte = SERMUX_u8GetByte();
-
+        
         switch (state) {
-            case POSSIBLE_HEADER:
+        case POSSIBLE_HEADER:
 
             if (received_byte == HEADERBYTES[stateCounter]) {
                 stateCounter += 1;
@@ -100,12 +106,12 @@ void SERMUX_vReceiveByte(void)
                     state = LENGTH;
                     stateCounter = 0;
                 }
-                } else {
+            } else {
                 // If for any reason they don't match, just reset the counter
                 stateCounter = 0;
             }
             break;
-            case LENGTH:
+        case LENGTH:
             currentMessage.length |= received_byte << (8 * stateCounter);
             stateCounter += 1;
 
@@ -115,14 +121,16 @@ void SERMUX_vReceiveByte(void)
                     // Reject the message
                     state = POSSIBLE_HEADER;
                     stateCounter = 0;
-                }
-                else {
+                } else {
+                    // Subtract 2 endpoint bytes
+                    currentMessage.length -= 2;
                     state = ENDPOINT;
                     stateCounter = 0;
                 }
             }
             break;
-            case ENDPOINT:
+
+        case ENDPOINT:
             currentMessage.endpoint |= received_byte << (8 * stateCounter);
             stateCounter += 1;
 
@@ -131,62 +139,58 @@ void SERMUX_vReceiveByte(void)
                     // Reject the message
                     state = POSSIBLE_HEADER;
                     stateCounter = 0;
-                }
-                else
-                {
+                } else {
                     state = DATA;
                     stateCounter = 0;
                 }
             }
             break;
 
-            case DATA:
+        case DATA:
             // Just store data to array
-            currentMessage.message[currentMessage.message_index] = received_byte;
-            currentMessage.message_index += 1;
+            currentMessage.message[stateCounter] = received_byte;
             stateCounter += 1;
 
-            if (stateCounter == currentMessage.length) {
-                // Wait for message to be processed
-                state = PROCESS;
+            if (stateCounter >= currentMessage.length) {
+                // Process message and reset
+                
+                BSP_vSetTestPin(true);
+                SERMUX_vProcessMessage();
+                BSP_vSetTestPin(false);
+                
+                currentMessage.endpoint = 0;
+                currentMessage.length = 0;
                 stateCounter = 0;
+
+                state = POSSIBLE_HEADER;
             }
             break;
-            case PROCESS:
-            // This should not be possible
-            break;
-            default:
+        default:
             state = POSSIBLE_HEADER;
             stateCounter = 0;
             break;
         }
     }
+    
 }
 
 void SERMUX_vProcessMessage(void) {
-    if (state != PROCESS) {
-        // Not a complete message yet
-        return;
-    }
-    
+
     if (currentMessage.endpoint >= MAX_ENDPOINTS) {
         // Error in message
         return;
     }
     struct sermux_message responseMessage;
 
+    // If the function returns true, echo values back
     endpoint_callback_t func = endpointFunctions[currentMessage.endpoint];
     if (func(currentMessage.message, currentMessage.length, responseMessage.message, &responseMessage.length)) {
+        
         responseMessage.endpoint = currentMessage.endpoint;
 
-        // Message handled, clear it
-        currentMessage.endpoint = 0;
-        currentMessage.length = 0;
-        state = POSSIBLE_HEADER;
-
         SERMUX_vTxMessage(&responseMessage);
+        
     }
-
 }
 
 void SERMUX_vTxMessage(struct sermux_message* message) {
@@ -199,8 +203,8 @@ void SERMUX_vTxMessage(struct sermux_message* message) {
         }
 
         // Send length
-        SERMUX_vPutByte(message->length & 0xFF);
-        SERMUX_vPutByte((message->length >> 8) & 0xFF);
+        SERMUX_vPutByte((message->length+2) & 0xFF);
+        SERMUX_vPutByte(((message->length+2) >> 8) & 0xFF);
 
         // Send endpoint
         SERMUX_vPutByte(message->endpoint & 0xFF);

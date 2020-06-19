@@ -38,8 +38,10 @@
           <option id="common.services.basic.serial" value="Add" config="" content-id="Atmel.ASF" />
           <option id="common.services.basic.spi_master" value="Add" config="standard_spi" content-id="Atmel.ASF" />
           <option id="common.utils.interrupt" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="sam.drivers.mcan" value="Add" config="" content-id="Atmel.ASF" />
           <option id="sam.drivers.pmc" value="Add" config="" content-id="Atmel.ASF" />
           <option id="sam.drivers.rstc" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="sam.drivers.twihs" value="Add" config="" content-id="Atmel.ASF" />
           <option id="sam.drivers.wdt" value="Add" config="" content-id="Atmel.ASF" />
           <option id="common.services.basic.twihs" value="Add" config="" content-id="Atmel.ASF" />
           <option id="sam.utils.linker_scripts" value="Add" config="" content-id="Atmel.ASF" />
@@ -260,6 +262,9 @@
           <file path="src/ASF/sam/drivers/wdt/wdt.h" framework="" version="3.48.0" source="sam\drivers\wdt\wdt.h" changed="False" content-id="Atmel.ASF" />
           <file path="src/ASF/sam/drivers/twihs/twihs.c" framework="" version="3.48.0" source="sam\drivers\twihs\twihs.c" changed="False" content-id="Atmel.ASF" />
           <file path="src/ASF/sam/drivers/twihs/twihs.h" framework="" version="3.48.0" source="sam\drivers\twihs\twihs.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/sam/drivers/mcan/mcan.c" framework="" version="3.48.0" source="sam\drivers\mcan\mcan.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/sam/drivers/mcan/mcan.h" framework="" version="3.48.0" source="sam\drivers\mcan\mcan.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/Config/conf_mcan.h" framework="" version="3.48.0" source="sam\drivers\mcan\module_config\conf_mcan.h" changed="False" content-id="Atmel.ASF" />
           <file path="src/ASF/common/services/twi/sam_twihs/twihs_master.h" framework="" version="3.48.0" source="common\services\twi\sam_twihs\twihs_master.h" changed="False" content-id="Atmel.ASF" />
           <file path="src/ASF/common/services/twi/twihs_master.h" framework="" version="3.48.0" source="common\services\twi\twihs_master.h" changed="False" content-id="Atmel.ASF" />
           <file path="src/ASF/common/services/twi/sam_twihs/twihs_slave.h" framework="" version="3.48.0" source="common\services\twi\sam_twihs\twihs_slave.h" changed="False" content-id="Atmel.ASF" />
@@ -339,6 +344,7 @@
       <Value>../src/ASF/sam/drivers/rstc</Value>
       <Value>../src/ASF/sam/drivers/wdt</Value>
       <Value>../src/ASF/sam/drivers/twihs</Value>
+      <Value>../src/ASF/sam/drivers/mcan</Value>
       <Value>../src/ASF/common/services/twi</Value>
     </ListValues>
   </armgcc.compiler.directories.IncludePaths>
@@ -390,6 +396,7 @@
       <Value>../src/ASF/sam/drivers/rstc</Value>
       <Value>../src/ASF/sam/drivers/wdt</Value>
       <Value>../src/ASF/sam/drivers/twihs</Value>
+      <Value>../src/ASF/sam/drivers/mcan</Value>
       <Value>../src/ASF/common/services/twi</Value>
     </ListValues>
   </armgcc.assembler.general.IncludePaths>
@@ -424,6 +431,7 @@
       <Value>../src/ASF/sam/drivers/rstc</Value>
       <Value>../src/ASF/sam/drivers/wdt</Value>
       <Value>../src/ASF/sam/drivers/twihs</Value>
+      <Value>../src/ASF/sam/drivers/mcan</Value>
       <Value>../src/ASF/common/services/twi</Value>
     </ListValues>
   </armgcc.preprocessingassembler.general.IncludePaths>
@@ -482,6 +490,7 @@
       <Value>../serial_multiplexer</Value>
       <Value>../drivers</Value>
       <Value>../src/ASF/sam/drivers/twihs</Value>
+      <Value>../src/ASF/sam/drivers/mcan</Value>
       <Value>../src/ASF/common/services/twi</Value>
     </ListValues>
   </armgcc.compiler.directories.IncludePaths>
@@ -534,6 +543,7 @@
       <Value>../src/ASF/sam/drivers/rstc</Value>
       <Value>../src/ASF/sam/drivers/wdt</Value>
       <Value>../src/ASF/sam/drivers/twihs</Value>
+      <Value>../src/ASF/sam/drivers/mcan</Value>
       <Value>../src/ASF/common/services/twi</Value>
     </ListValues>
   </armgcc.assembler.general.IncludePaths>
@@ -569,6 +579,7 @@
       <Value>../src/ASF/sam/drivers/rstc</Value>
       <Value>../src/ASF/sam/drivers/wdt</Value>
       <Value>../src/ASF/sam/drivers/twihs</Value>
+      <Value>../src/ASF/sam/drivers/mcan</Value>
       <Value>../src/ASF/common/services/twi</Value>
     </ListValues>
   </armgcc.preprocessingassembler.general.IncludePaths>
@@ -602,6 +613,7 @@
     <Folder Include="src\ASF\common\utils\interrupt\" />
     <Folder Include="src\ASF\sam\" />
     <Folder Include="src\ASF\sam\drivers\" />
+    <Folder Include="src\ASF\sam\drivers\mcan\" />
     <Folder Include="src\ASF\sam\drivers\pmc\" />
     <Folder Include="src\ASF\sam\drivers\rstc\" />
     <Folder Include="src\ASF\sam\drivers\rstc\example1\" />
@@ -671,6 +683,27 @@
     <Compile Include="inc\usart_buffer.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="inc\xtx.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <None Include="src\ASF\common\services\twi\sam_twihs\twihs_master.h">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="src\ASF\common\services\twi\twihs_master.h">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="src\ASF\common\services\twi\sam_twihs\twihs_slave.h">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="src\ASF\common\services\twi\twihs_slave.h">
+      <SubType>compile</SubType>
+    </None>
+    <Compile Include="src\File.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\xtx.c">
+      <SubType>compile</SubType>
+    </Compile>
     <None Include="src\asf.h">
       <SubType>compile</SubType>
     </None>
@@ -686,16 +719,10 @@
     <None Include="src\ASF\sam\drivers\rstc\example1\rstc_example1.h">
       <SubType>compile</SubType>
     </None>
-    <None Include="src\ASF\common\services\twi\sam_twihs\twihs_master.h">
+    <Compile Include="src\ASF\sam\drivers\mcan\mcan.c">
       <SubType>compile</SubType>
-    </None>
-    <None Include="src\ASF\common\services\twi\twihs_master.h">
-      <SubType>compile</SubType>
-    </None>
-    <None Include="src\ASF\common\services\twi\sam_twihs\twihs_slave.h">
-      <SubType>compile</SubType>
-    </None>
-    <None Include="src\ASF\common\services\twi\twihs_slave.h">
+    </Compile>
+    <None Include="src\ASF\sam\drivers\mcan\mcan.h">
       <SubType>compile</SubType>
     </None>
     <Compile Include="src\ASF\sam\drivers\rstc\rstc.c">
@@ -731,6 +758,9 @@
     <Compile Include="src\config\conf_clock.h">
       <SubType>compile</SubType>
     </Compile>
+    <None Include="src\config\conf_mcan.h">
+      <SubType>compile</SubType>
+    </None>
     <Compile Include="src\config\conf_twim.h">
       <SubType>compile</SubType>
     </Compile>

@@ -40,6 +40,16 @@ void SERMUX_vProcess(void);
  */
 bool SERMUX_vRegisterEndpoint(uint16_t endpoint, endpoint_callback_t func);
 
+
+/**
+ * \brief Clear the given endpoint
+ * 
+ * \param endpoint
+ * 
+ * \return void
+ */
+void SERMUX_vDeRegisterEndpoint(uint16_t endpoint);
+
 /**
  * \brief Send a complete message to the PC. Used by async endpoints such as USART
  * 
@@ -55,11 +65,12 @@ void SERMUX_vTransmit(uint16_t endpoint, uint8_t* buffer, uint16_t length);
 struct sermux_message {
     uint16_t length;
     uint16_t endpoint;
-    uint8_t message[16];
+    uint8_t message[64];
     uint16_t message_index;
 };
 void SERMUX_vReceiveByte(void);
 void SERMUX_vProcessMessage(void);
+struct sermux_message* SERMUX_spGetCurrentMessage(void);
 void SERMUX_vTxMessage(struct sermux_message* message);
 bool SERMUX_vEmptyEndpoint(const uint8_t* rx_buffer, const uint16_t rx_length, uint8_t* tx_buffer, uint16_t* tx_length);
 #endif

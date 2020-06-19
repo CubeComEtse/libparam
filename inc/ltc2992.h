@@ -37,8 +37,12 @@ void LTC2992_vNormalSetup(struct ltc2992_device* dev, uint8_t bus_address);
  * \return uint8_t
  */
 uint8_t LTC2992_u8GenAddr(uint8_t adr0, uint8_t adr1);
+
+uint8_t LTC2992_vGetRegister(struct ltc2992_device* dev, uint8_t register_address);
 void LTC2992_vSetRegister(struct ltc2992_device* dev, uint8_t register_address, uint8_t flags);
-void LTC2992_vReadPower(struct ltc2992_device* dev, uint16_t* power_1, uint16_t* power_2);
+
+void LTC2992_vReadPower(struct ltc2992_device* dev, uint32_t* power_1, uint32_t* power_2);
+void LTC2992_vReadVoltage(struct ltc2992_device* dev, uint16_t* voltage_1, uint16_t* voltage_2);
 
 #define LTC2992_CTRLA               0x00
 #define LTC2992_CTRLB               0x01
@@ -55,6 +59,7 @@ void LTC2992_vReadPower(struct ltc2992_device* dev, uint16_t* power_1, uint16_t*
 #define LTC2992_I1_MIN              0x18
 #define LTC2992_I1_MAX_THRESHOLD    0x1A
 #define LTC2992_I1_MIN_THRESHOLD    0x1C
+#define LTC2992_G1                  0x28
 
 #define CTRLA_CALIBRATE_ON_DEMAND   (0b1<<7)
 #define CTRLA_CALIBRATE_EVERY_CONV  (0b0<<7)
@@ -83,6 +88,11 @@ void LTC2992_vReadPower(struct ltc2992_device* dev, uint16_t* power_1, uint16_t*
 #define CTRLB_STUCK_BUS_TIMEOUT             (0b1<<4)
 #define CTRLB_RESET_PEAK_HOLD_VALUES        (0b1<<3)
 #define CTRLB_RESET                         (0b1<<0)
+
+
+
+#define LTC2992_P2                          0x37
+#define LTC2992_G2                          0x5A
 
 
 #endif /* LTC2992_H_ */

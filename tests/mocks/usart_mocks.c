@@ -8,9 +8,11 @@
 #include "usart_mocks.h"
 
 bool __wrap_USART_RXBuffer_IsEmpty(void){
-	return mock_type(bool);
+	bool ret = mock_type(bool);
+	return ret;
 }
 
 uint8_t __wrap_USART_RXBuffer_GetByte(void) {
-	return mock_type(uint8_t);
+	uint8_t data = mock_type(uint8_t);
+	return data;
 }

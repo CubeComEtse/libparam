@@ -91,17 +91,16 @@ bool USART_TXBuffer_PutByte(USART_data_t * usart_data, uint8_t data)
     TXbufPtr = &usart_data->buffer;
     TXBuffer_FreeSpace = USART_TXBuffer_GetFreeSpace(usart_data);
 
-    if(TXBuffer_FreeSpace > 1)
-    {
+    if(TXBuffer_FreeSpace > 1) {
         tempTX_Head = TXbufPtr->TX_Head;
-        TXbufPtr->TX[tempTX_Head]= data;
+        TXbufPtr->TX[tempTX_Head] = data;
         // Advance buffer head.
         TXbufPtr->TX_Head = (tempTX_Head + 1) % USART_TX_BUFFER_SIZE;
 
         /* Enable DRE interrupt. */
     }
-
     BSP_vEnableUartTXInterrupt();
+
     return TXBuffer_FreeSpace;
 }
 
@@ -186,6 +185,11 @@ uint8_t USART_RXBuffer_GetByte(USART_data_t * usart_data)
     // Advance buffer tail. 
     bufPtr->RX_Tail = (bufPtr->RX_Tail + 1) % USART_RX_BUFFER_SIZE;
 
+    if (USART_RXBuffer_GetFreeSpace(usart_data) > USART_RX_BUFFER_SIZE>>1) {
+        // Set to low to allow more bytes
+        BSP_vTelemetrySetCTS(false);
+    }
+
     return ans;
 }
 
@@ -215,14 +219,28 @@ bool USART_BUFFER_Receive(USART_data_t* usart_data, uint8_t rx_byte) {
     //Check for overflow.
     uint8_t tempRX_Tail = bufPtr->RX_Tail;
 
-    if (tempRX_Head == tempRX_Tail) {
-        ans = false;
-    } else {
-        ans = true;
-        usart_data->buffer.RX[usart_data->buffer.RX_Head] = rx_byte;
-        usart_data->buffer.RX_Head = tempRX_Head;
+    // Store the data
+    usart_data->buffer.RX[usart_data->buffer.RX_Head] = rx_byte;
+    usart_data->buffer.RX_Head = tempRX_Head;
+
+    // Keep at least 5 bytes space, they might be one their way
+    uint8_t min_space = 5;
+    if (tempRX_Tail > tempRX_Head){
+        if ((tempRX_Tail - tempRX_Head) % USART_RX_BUFFER_SIZE <= min_space) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
-    return ans;
+    else {
+        if (((USART_RX_BUFFER_SIZE - 1 - tempRX_Head) + tempRX_Tail ) <= min_space) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
 }
 
 /**

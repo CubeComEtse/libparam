@@ -12,8 +12,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#define USART_RX_BUFFER_SIZE 16
-#define USART_TX_BUFFER_SIZE 16
+#define USART_RX_BUFFER_SIZE 256
+#define USART_TX_BUFFER_SIZE 256
 
 // USART transmit and receive circular buffer.
 typedef struct USART_Buffer

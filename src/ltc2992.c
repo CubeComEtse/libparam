@@ -62,16 +62,39 @@ void LTC2992_vSetRegister(struct ltc2992_device* dev, uint8_t register_address, 
 
 }
 
-void LTC2992_vReadPower(struct ltc2992_device* dev, uint16_t* power_1, uint16_t* power_2) {
+uint8_t LTC2992_vGetRegister(struct ltc2992_device* dev, uint8_t register_address) {
+    uint8_t rx_byte = 0;
+    dev->i2c_read_function(dev->i2c_bus_addres, (uint16_t) register_address, &rx_byte, 1);
+    return rx_byte;
+}
+
+void LTC2992_vReadPower(struct ltc2992_device* dev, uint32_t* power_1, uint32_t* power_2) {
     // Check that the functions are set
     if (dev->i2c_read_function == 0) {
         return;
     }
 
-    uint8_t rx_buffer[] = {0, 0, 0};
-
+    // Power measurements are 3 bytes - But the driver might read a 4th
+    uint8_t rx_buffer[] = {0, 0, 0, 0};
     dev->i2c_read_function(dev->i2c_bus_addres, (uint16_t) LTC2992_P1, rx_buffer, 3);
+    *power_1 = (uint32_t) (rx_buffer[0] << 16 | rx_buffer[1] << 8| rx_buffer[2]);
 
-    // Convert the value to power
-    *power_1 = (uint16_t) (rx_buffer[1] << 8| rx_buffer[0]);
+    
+    dev->i2c_read_function(dev->i2c_bus_addres, (uint16_t) LTC2992_P2, rx_buffer, 3);
+    *power_2 = (uint32_t) (rx_buffer[0] << 16 | rx_buffer[1] << 8| rx_buffer[2]);
+}
+
+void LTC2992_vReadVoltage(struct ltc2992_device* dev, uint16_t* voltage_1, uint16_t* voltage_2) {
+    // Check that the functions are set
+    if (dev->i2c_read_function == 0) {
+        return;
+    }
+    
+    //Voltages are 12 bit, left aligned.
+    uint8_t rx_buffer[] = {0, 0, 0};
+    dev->i2c_read_function(dev->i2c_bus_addres, (uint16_t) LTC2992_G1, rx_buffer, 2);
+    *voltage_1 = (uint16_t) (rx_buffer[0] << 8 | rx_buffer[1]) >> 4;
+
+    dev->i2c_read_function(dev->i2c_bus_addres, (uint16_t) LTC2992_G2, rx_buffer, 2);
+    *voltage_2 = (uint16_t) (rx_buffer[0] << 8 | rx_buffer[1]) >> 4;
 }
