@@ -153,10 +153,7 @@ void SERMUX_vReceiveByte(void)
 
             if (stateCounter >= currentMessage.length) {
                 // Process message and reset
-                
-                BSP_vSetTestPin(true);
                 SERMUX_vProcessMessage();
-                BSP_vSetTestPin(false);
                 
                 currentMessage.endpoint = 0;
                 currentMessage.length = 0;

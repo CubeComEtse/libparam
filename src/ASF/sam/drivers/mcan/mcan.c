@@ -305,7 +305,8 @@ void mcan_set_baudrate(Mcan *hw, uint32_t baudrate)
 
 	gclk_mcan_value = genclk_get_frequency_hz(PMC_PCK_5);
 
-	mcan_nbtp_nbrp_value = gclk_mcan_value / baudrate / (3 + mcan_nbtp_ntseg1_value + mcan_nbtp_ntseg2_value);
+    mcan_nbtp_nbrp_value = gclk_mcan_value / baudrate;
+	mcan_nbtp_nbrp_value = mcan_nbtp_nbrp_value / (3 + mcan_nbtp_ntseg1_value + mcan_nbtp_ntseg2_value);
 #if (SAMV71B || SAME70B || SAMV70B)
 	hw->MCAN_NBTP = MCAN_NBTP_NBRP(mcan_nbtp_nbrp_value - 1) |
 			MCAN_NBTP_NSJW(mcan_nbtp_nsgw_value) |

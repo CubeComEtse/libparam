@@ -51,12 +51,7 @@ void XTX_vConfig(void) {
     // Setup SPI
     // SPI endpoint - if a board needs a special endpoint it
     SERMUX_vRegisterEndpoint(XTX_SPI_ENDPOINT, &spi_endpoint);
-
-    // Setup I2C
-    // I2C Endpoint
-    i2c_endpoint_init();
-    SERMUX_vRegisterEndpoint(XTX_I2C_ENDPOINT, &i2c_endpoint);
- }
+}
 
  void XTX_vDeConfig(void) {
     // De-assert all pins

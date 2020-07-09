@@ -31,7 +31,7 @@ void BSP_vSetPowerEn(power_pin_t pin, uint8_t level);
 /* Callbacks used by the LTC2992 power sensors*/
 void BSP_vPowerSenseWriteFunction(const uint8_t chip_addr, const uint8_t mem_address, const uint8_t* tx_buffer, const uint16_t length);
 void BSP_vPowerSenseReadFunction(const uint8_t chip_addr, const uint8_t mem_address, uint8_t* rx_buffer, uint16_t length);
-
+uint16_t BSP_u16TmrGetTick(void);
 void BSP_vUsbReset(void);
 
 void BSP_vTelemetrySetCTS(bool dir);

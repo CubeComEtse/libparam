@@ -33,9 +33,13 @@
 #define CONF_POWER_VBAT_FLAG    0x04
 #define CONF_POWER_VBATALT_FLAG 0x08 
 
-// Configure power measurements
-// Next 8 bytes are the measurements
+// Set power measurements
+// Next flag sets which settings to monitor
 #define CONF_MEASURE            0x02
+
+#define CONF_MEASURE_VOLTAGE    (1<<0)
+#define CONF_MEASURE_CURRENT    (1<<1)
+#define CONF_MEASURE_POWER      (1<<2)
 
 /*
     Supported boards
@@ -67,9 +71,11 @@
     Read voltage measurements from the LTC2992 ICs
 */
 #define CONF_READ_VOLTAGE       0x06
+#define CONF_READ_CURRENT       0x07
 
 
 void CONFIG_vInit(void);
+void CONFIG_vUpdate(void);
 bool CONFIG_bConfigEndpoint(const uint8_t* rx_buffer, const uint16_t rx_length, uint8_t* tx_buffer, uint16_t* tx_length);
 
 #endif /* CONFIG_H_ */

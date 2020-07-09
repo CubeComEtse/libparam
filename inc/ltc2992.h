@@ -43,6 +43,7 @@ void LTC2992_vSetRegister(struct ltc2992_device* dev, uint8_t register_address, 
 
 void LTC2992_vReadPower(struct ltc2992_device* dev, uint32_t* power_1, uint32_t* power_2);
 void LTC2992_vReadVoltage(struct ltc2992_device* dev, uint16_t* voltage_1, uint16_t* voltage_2);
+void LTC2992_vReadCurrent(struct ltc2992_device* dev, uint16_t* current_1, uint16_t* current_2);
 
 #define LTC2992_CTRLA               0x00
 #define LTC2992_CTRLB               0x01
@@ -92,6 +93,7 @@ void LTC2992_vReadVoltage(struct ltc2992_device* dev, uint16_t* voltage_1, uint1
 
 
 #define LTC2992_P2                          0x37
+#define LTC2992_I2                          0x46
 #define LTC2992_G2                          0x5A
 
 

@@ -13,12 +13,10 @@
 void LTC2992_vNormalSetup(struct ltc2992_device* dev, uint8_t bus_address) {
     dev->i2c_bus_addres = bus_address;
 
-    /*
     LTC2992_vSetRegister(dev, LTC2992_CTRLA, \
         CTRLA_CALIBRATE_EVERY_CONV | \
         CTRLA_MEASUREMENT_MODE_CONTINUOUS | \
         CTRLA_V_CONT_MODE_SENSE);
-        */
 }
 
 uint8_t LTC2992_u8GenAddr(uint8_t adr0, uint8_t adr1) {
@@ -97,4 +95,20 @@ void LTC2992_vReadVoltage(struct ltc2992_device* dev, uint16_t* voltage_1, uint1
 
     dev->i2c_read_function(dev->i2c_bus_addres, (uint16_t) LTC2992_G2, rx_buffer, 2);
     *voltage_2 = (uint16_t) (rx_buffer[0] << 8 | rx_buffer[1]) >> 4;
+}
+
+
+void LTC2992_vReadCurrent(struct ltc2992_device* dev, uint16_t* current_1, uint16_t* current_2) {
+    // Check that the functions are set
+    if (dev->i2c_read_function == 0) {
+        return;
+    }
+    
+    //Voltages are 12 bit, left aligned.
+    uint8_t rx_buffer[] = {0, 0, 0};
+    dev->i2c_read_function(dev->i2c_bus_addres, (uint16_t) LTC2992_I1, rx_buffer, 2);
+    *current_1 = (uint16_t) (rx_buffer[0] << 8 | rx_buffer[1]) >> 4;
+
+    dev->i2c_read_function(dev->i2c_bus_addres, (uint16_t) LTC2992_I2, rx_buffer, 2);
+    *current_2 = (uint16_t) (rx_buffer[0] << 8 | rx_buffer[1]) >> 4;
 }
