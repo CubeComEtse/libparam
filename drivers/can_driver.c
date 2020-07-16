@@ -22,7 +22,6 @@ static int receivedMessageRead = 0;
 static int receivedMessageWrite = 0;
 
 
-
 /**
 * \brief Send a message
 */
@@ -32,7 +31,7 @@ void CAN_DRIVER_vSendMessage(struct xtxCanMessage message)
     struct mcan_tx_element tx_element;
     mcan_get_tx_buffer_element_defaults(&tx_element);
 
-    tx_element.T0.reg = MCAN_TX_ELEMENT_T0_EXTENDED_ID(message.messageType  << 24 | message.registerAddres << 16 | OBC_CAN_ADRESS  << 8 | XTX_CAN_ADRESS ) | MCAN_TX_ELEMENT_T0_XTD;
+    tx_element.T0.reg = MCAN_TX_ELEMENT_T0_EXTENDED_ID(message.messageType  << 24 | message.registerAddres << 16 | message.address  << 8 | message.targetAddres ) | MCAN_TX_ELEMENT_T0_XTD;
     //tx_element.T0.reg = MCAN_TX_ELEMENT_T0_EXTENDED_ID( 0x55AA ) | MCAN_TX_ELEMENT_T0_XTD;
     
     tx_element.T1.bit.DLC = message.dataLen;

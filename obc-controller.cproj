@@ -681,6 +681,9 @@
     <Compile Include="inc\config.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="inc\endpoints.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="inc\i2c_endpoint.h">
       <SubType>compile</SubType>
     </Compile>
@@ -697,6 +700,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\spi_manager.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\std_message.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\tmr.h">

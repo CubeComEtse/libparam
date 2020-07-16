@@ -4,21 +4,18 @@
  */
 #include <stdint.h>
 #include <stdbool.h>
+
+#include "obc_controller_rev_A.h"
+#include "can_endpoint.h"
+#include "endpoints.h"
+#include "i2c_endpoint.h"
 #include "serial_multiplexer.h"
 #include "spi_endpoint.h"
-#include "i2c_endpoint.h"
 #include "xtx.h"
-#include "obc_controller_rev_A.h"
 #include "ioport.h"
-
-#define XTX_I2C_ENDPOINT   1
-#define XTX_SPI_ENDPOINT   4
-#define XTX_CAN_ENDPOINT   6
-#define XTX_CON_ENDPOINT   7
 
 // Local functions
 bool XTX_vConEndpoint(const uint8_t* rx_buffer, const uint16_t rx_length, uint8_t* tx_buffer, uint16_t* tx_length);
-
 
 /**
 * \brief Configure for the XTX board
@@ -45,21 +42,22 @@ void XTX_vConfig(void) {
     ioport_set_pin_dir(XTX_RDY_PIN, IOPORT_DIR_INPUT);
     ioport_set_pin_mode(XTX_RDY_PIN, IOPORT_MODE_PULLDOWN);
 
-    // XTX control endpoint - used to toggle enable and reset lines
-    SERMUX_vRegisterEndpoint(XTX_CON_ENDPOINT, &XTX_vConEndpoint);
+    // Configure endpoints
+    I2C_vInitEndpoint(I2C_ENDPOINT, XTX_CAN_ADRESS);
+    CAN_vInitEndpoint(CAN_ENDPOINT, OBC_CAN_ADRESS, XTX_CAN_ADRESS);
 
-    // Setup SPI
-    // SPI endpoint - if a board needs a special endpoint it
-    SERMUX_vRegisterEndpoint(XTX_SPI_ENDPOINT, &spi_endpoint);
+    // Register them with the sermux
+    SERMUX_vRegisterEndpoint(I2C_ENDPOINT, &I2C_bEndpoint);
+    SERMUX_vRegisterEndpoint(CAN_ENDPOINT, &CAN_bEndpoint);
+    SERMUX_vRegisterEndpoint(SPI_ENDPOINT, &SPI_bEndpoint);
+
 }
 
  void XTX_vDeConfig(void) {
-    // De-assert all pins
-
     // De-register endpoints
-    SERMUX_vDeRegisterEndpoint(XTX_CON_ENDPOINT);
-    SERMUX_vDeRegisterEndpoint(XTX_SPI_ENDPOINT);
-    SERMUX_vDeRegisterEndpoint(XTX_I2C_ENDPOINT);
+    SERMUX_vDeRegisterEndpoint(I2C_ENDPOINT);
+    SERMUX_vDeRegisterEndpoint(CAN_ENDPOINT);
+    SERMUX_vDeRegisterEndpoint(SPI_ENDPOINT);
  }
 
 

@@ -22,7 +22,6 @@
 // Local functions
 void BSP_vInitTelemetryUart(void);
 void BSP_vInitSPI(void);
-void BSP_vInitPC104I2C(void);
 void BSP_vInitBoardI2C(void) ;
 void BSP_vInitPowerSenseGPIO(void);
 void BSP_vInitPowerGPIO(void);
@@ -32,9 +31,10 @@ void BSP_vInit1MsTimer(void);
 // Local variables
 static USART_data_t telemetryUsart;
 static struct spi_device sSpiDevice;
-static struct i2c_driver board_i2c_driver;
 static struct mcan_module sCanModule;
 static volatile uint32_t fifo_receive_index = 0;
+
+static struct i2c_driver_data board_i2c_driver;
 
 void BSP_vInit(void) {
 
@@ -43,7 +43,6 @@ void BSP_vInit(void) {
 
     BSP_vInitTelemetryUart();
     BSP_vInitSPI();
-    BSP_vInitPC104I2C();
     BSP_vInitBoardI2C();
     BSP_vInitPowerSenseGPIO();
     BSP_vInitPowerGPIO();
@@ -151,26 +150,6 @@ void BSP_vTelemetrySetCTS(bool dir){
     ioport_set_pin_level(T_USART_CTS_PIN, dir);
 }
 
-/*
-    Initialize the I2C for communication on the PC104
-*/
-void BSP_vInitPC104I2C(void) {
-    sysclk_enable_peripheral_clock(I2C_PC104_DEVICE_ID);
-
-    // Setup pins
-    ioport_set_pin_mode(I2C_PC104_SDA_PIN, I2C_PC104_SDA_MUX);
-    ioport_disable_pin(I2C_PC104_SDA_PIN);
-
-    ioport_set_pin_mode(I2C_PC104_SCL_PIN, I2C_PC104_SCL_MUX);
-    ioport_disable_pin(I2C_PC104_SCL_PIN);
-
-    twihs_options_t i2cOptions;
-    i2cOptions.chip = 0x26;
-    i2cOptions.smbus = 0;
-    i2cOptions.master_clk = sysclk_get_peripheral_hz();
-    i2cOptions.speed = I2C_PC104_SPEED;
-    twihs_master_init(I2C_PC104_DEVICE, &i2cOptions);
-}
 
 void BSP_vEnableUartTXInterrupt(void) {
     usart_enable_interrupt(TELEMETRY_USART, US_IER_TXEMPTY);

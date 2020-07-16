@@ -16,4 +16,8 @@ struct XTX_configuration {
 void XTX_vConfig(void);
 void XTX_vDeConfig(void);
 
+void XTX_vSetEnable(bool enabled);
+void XTX_SetNReset(bool reset);
+bool XTX_bGetEnable(void);
+
 #endif /* XTX_H_ */

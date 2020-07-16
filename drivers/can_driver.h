@@ -19,6 +19,8 @@ struct xtxCanMessage {
     uint8_t registerAddres;
     uint8_t dataLen;
     uint8_t data[CAN_STRUCT_MAX_MESSAGE_LENGTH];
+    uint8_t targetAddres;
+    uint8_t address;
 };
 
 // Endpoint interaction

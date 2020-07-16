@@ -1,7 +1,3 @@
-/*
-
- */ 
-
 
 #ifndef CONFIG_H_
 #define CONFIG_H_
@@ -9,13 +5,11 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#define REG_ADDR                0
-#define RW_ADDR                 1
-#define VALUE_ADDR              2
-#define DATA_ADDR               3
+/*
+    Testing point to test if the device is responding.
+*/
 
-#define CONF_READ  0x00
-#define CONF_WRITE 0x01
+#define CONF_TEST               0x00
 
 /*
     Configure power supply
@@ -24,7 +18,7 @@
     individually enabled or disabled. To send the command, send the CONF_POWER
     byte, followed by a read or write byte. It writing, the next byte should
     contain flags, one for each power rail.
-    CONF_POWER, WRITE, CONF_POWER_5V_FLAG | CONF_POWER_VBAT_FLAG
+    CONF_POWER, WRITE, 0x00, CONF_POWER_5V_FLAG | CONF_POWER_VBAT_FLAG
 */
 #define CONF_POWER              0x01
 
@@ -33,21 +27,20 @@
 #define CONF_POWER_VBAT_FLAG    0x04
 #define CONF_POWER_VBATALT_FLAG 0x08 
 
-// Set power measurements
-// Next flag sets which settings to monitor
+/*
+    Power Measurements
+
+    Set which measurements to send to the PC. These are measured and sent at a
+    regular interval. Read from this address to see which are set
+
+    CONF_MEASURE, WRITE, CONF_MEASURE_VOLTAGE | CONF_MEASURE_CURRENT | CONF_MEASURE_POWER
+
+*/
 #define CONF_MEASURE            0x02
 
 #define CONF_MEASURE_VOLTAGE    (1<<0)
 #define CONF_MEASURE_CURRENT    (1<<1)
 #define CONF_MEASURE_POWER      (1<<2)
-
-/*
-    Supported boards
-
-    Read this register to get supported boards. writing has no effect
-*/
-#define CONF_SUPPORTED_BOARDS   0x03
-#define CONF_BOARD_BITFIELD (1<< CONF_BOARD_XTX)
 
 /*
     Configure board
@@ -63,19 +56,19 @@
 
 
 /*
-    Read power measurements from the LTC2992 ICs
+    Transmit measured values to PC
+
+    These addresses are used to send values to the PC. 8 Bytes are send for 
+    current and voltage, 16 bytes for power.
+
+    CONF_READ_POWER, 8 Bytes 
 */
 #define CONF_READ_POWER         0x05
-
-/*
-    Read voltage measurements from the LTC2992 ICs
-*/
 #define CONF_READ_VOLTAGE       0x06
 #define CONF_READ_CURRENT       0x07
 
-
-void CONFIG_vInit(void);
-void CONFIG_vUpdate(void);
+void CONFIG_vInit(uint8_t endpoint);
 bool CONFIG_bConfigEndpoint(const uint8_t* rx_buffer, const uint16_t rx_length, uint8_t* tx_buffer, uint16_t* tx_length);
+void CONFIG_vProcess(void);
 
 #endif /* CONFIG_H_ */
