@@ -39,7 +39,7 @@ static struct i2c_driver_data board_i2c_driver;
 void BSP_vInit(void) {
 
     ioport_init();
-    
+    delay_init(sysclk_get_cpu_hz());
 
     BSP_vInitTelemetryUart();
     BSP_vInitSPI();
@@ -74,7 +74,7 @@ void BSP_vInitSPI(void) {
     // Setup pins for SPI select
     ioport_enable_pin(SPI_SELECT_PIN);
     ioport_set_pin_dir(SPI_SELECT_PIN, IOPORT_DIR_OUTPUT);
-    ioport_set_pin_level(SPI_SELECT_PIN, 1);
+    ioport_set_pin_level(SPI_SELECT_PIN, 0);
 
     // Setup SPI
     ioport_disable_pin(SPI1_SCK);
@@ -289,14 +289,14 @@ struct mcan_module* BSP_psGetCanDriver(void) {
 
 void CAN_HANDLER(void)
 {
-    volatile uint32_t status, i, rx_buffer_index;
+    volatile uint32_t status, i;
     status = mcan_read_interrupt_status(&sCanModule);
 
     if (status & MCAN_RX_BUFFER_NEW_MESSAGE ) {
         mcan_clear_interrupt_status(&sCanModule, MCAN_RX_BUFFER_NEW_MESSAGE);
         static struct mcan_rx_element_buffer rx_element_buffer;
 
-        for (int i = 0; i < CONF_MCAN0_RX_BUFFER_NUM; i++) {
+        for (i = 0; i < CONF_MCAN0_RX_BUFFER_NUM; i++) {
             if (mcan_rx_get_buffer_status(&sCanModule, i)) {
                 mcan_rx_clear_buffer_status(&sCanModule, i);
                 mcan_get_rx_buffer_element(&sCanModule, &rx_element_buffer, i);
