@@ -14,5 +14,6 @@
 #define BOARD_ENDPOINT 2
 #define CAN_ENDPOINT 3
 #define SPI_ENDPOINT 4
+#define XTX_ENDPOINT 5 
 
 #endif /* ENDPOINTS_H_ */
