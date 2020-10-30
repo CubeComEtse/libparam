@@ -27,17 +27,9 @@ int main (void)
 
     // Register the board configuration endpoint
     SERMUX_vRegisterEndpoint(BOARD_ENDPOINT, &CONFIG_bConfigEndpoint);
-    
-    // Immediately register the board for XTX development, this will be changed later
-    XTX_vConfig();
-
-    delay_ms(100);
-
-    // Enable lines
-    XTX_vSetEnable(true);
-    XTX_SetNReset(true);
 
     BSP_vTelemetrySetCTS(false);
+
 
     /*
     All messages from the USART are handled by an endpoint. When the board 
@@ -57,5 +49,7 @@ int main (void)
         CAN_vProcess();
         CONFIG_vProcess();
         SPI_vProcess();
+
+        //XTX_vProcess();
     }
 }

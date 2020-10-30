@@ -42,6 +42,14 @@
 #define CONF_MEASURE_CURRENT    (1<<1)
 #define CONF_MEASURE_POWER      (1<<2)
 
+
+/*
+    Supported Boards
+
+    Read this value to receive a list of supported boards
+*/
+#define CONF_SUPPORTED_BOARDS   0x03
+
 /*
     Configure board
 

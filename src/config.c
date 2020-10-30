@@ -31,6 +31,13 @@ static tmr_t sUpdateTimer;
 // Set the interval to sample with - in milliseconds
 static uint16_t u16PowerMeasurementInterval = 250;
 
+enum Boards {
+    xtx = 1,
+};
+
+static int supportedBoardsLength = 1;
+static enum Boards supportedBoards[] = {xtx};
+
 
 // Local functions
 void CONFIG_vDecodePower(const uint8_t value);
@@ -96,6 +103,18 @@ bool CONFIG_bConfigEndpoint(const uint8_t* rx_buffer, const uint16_t rx_length, 
         case CONF_TEST:
             tx_buffer[LEN_idx] = 0;
             *tx_length = 3;
+            break;
+        case CONF_SUPPORTED_BOARDS:
+            // Copy the list of supported boards
+            for (int i = 0 ; i < supportedBoardsLength; i++) {
+                tx_buffer[DATA_idx + i] = supportedBoards[i];
+            }
+            tx_buffer[LEN_idx] = supportedBoardsLength;
+            *tx_length = 3 + supportedBoardsLength;
+            break;
+        case CONF_BOARD_SET:
+            tx_buffer[LEN_idx] = 1;
+            tx_buffer[DATA_idx] = currentBoardConfig;
             break;
         case CONF_POWER:
             tx_buffer[LEN_idx] = 1;
@@ -184,22 +203,29 @@ void CONFIG_vDecodePower(const uint8_t value) {
  */
 uint8_t CONFIG_vDecodeBoardSet(const uint8_t rw, const uint8_t value)
 {
-    if (currentBoardConfig != 0) {
-        //De-configure previous board
-        switch (currentBoardConfig) {
-        case CONF_BOARD_XTX:
-            XTX_vDeConfig();
-        }
+    // Only change the board if it is different
+    if (currentBoardConfig == value) {
+        return 0;
     }
 
-    // Just set the newBoard
+    //De-configure previous board
+    switch (currentBoardConfig) {
+    case  CONF_BOARD_NONE:
+        break;
+    case CONF_BOARD_XTX:
+        XTX_vDeConfig();
+        break;
+    }
+    // Set new board
     switch (value) {
     case  CONF_BOARD_NONE:
         break;
     case CONF_BOARD_XTX:
         XTX_vConfig();
+        break;
     }
     currentBoardConfig = value;
+    
     return 0;
 }
 
