@@ -57,7 +57,8 @@ uint8_t LTC2992_u8GenAddr(uint8_t adr0, uint8_t adr1) {
 }
 
 void LTC2992_vSetRegister(struct ltc2992_device* dev, uint8_t register_address, uint8_t flags) {
-
+    uint8_t data[1] = {flags};
+    //dev->i2c_write_function(dev->i2c_bus_addres, (uint16_t) register_address, data, 1);
 }
 
 uint8_t LTC2992_vGetRegister(struct ltc2992_device* dev, uint8_t register_address) {

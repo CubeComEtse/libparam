@@ -67,6 +67,8 @@ bool I2C_DRIVER_bWriteToChecksum(struct i2c_driver_data* drv, const uint8_t chip
 
 
     uint32_t result = twihs_master_write(drv->p_twihs, &write_packet);
+    twihs_read_byte(drv->p_twihs);
+
     return result == TWIHS_SUCCESS;
 }
 
@@ -95,6 +97,21 @@ bool I2C_DRIVER_bReadFromChecksum(struct i2c_driver_data* drv, const uint8_t chi
     uint32_t result = twihs_master_read(drv->p_twihs, &read_packet);
     // Clear buffer?
     twihs_read_byte(drv->p_twihs);
+
+    if (result == TWIHS_ERROR_TIMEOUT) {
+        ioport_enable_pin(I2C_PC104_SCL_PIN);
+        ioport_set_pin_dir(I2C_PC104_SCL_PIN, IOPORT_DIR_OUTPUT);
+        
+
+        for (int i = 0; i < 32; i++) {
+            ioport_toggle_pin_level(I2C_PC104_SCL_PIN);
+            delay_us(50);
+        }
+        
+        ioport_reset_pin_mode(I2C_PC104_SCL_PIN);
+
+        I2C_DRIVER_vInitPC104(drv);
+    }
     uint16_t calculated_checksum = 0;
 
     // Checksum calculation

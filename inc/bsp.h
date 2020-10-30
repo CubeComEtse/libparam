@@ -39,7 +39,4 @@ void BSP_vSetTestPin(bool level);
 
 // These should live in their own xtx file
 void XTX_vConfigBoard(void);
-void XTX_vSetEnable(bool enabled);
-void XTX_SetNReset(bool reset);
-bool XTX_bGetEnable(void);
 #endif /* BSP_H_ */

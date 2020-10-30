@@ -354,11 +354,16 @@ uint32_t twihs_master_write(Twihs *p_twihs, twihs_packet_t *p_packet)
 	p_twihs->TWIHS_IADR = 0;
 	p_twihs->TWIHS_IADR = twihs_mk_addr(p_packet->addr, p_packet->addr_length);
 
+    uint16_t timeout = TWIHS_TIMEOUT;
 	/* Send all bytes */
 	while (cnt > 0) {
 		status = p_twihs->TWIHS_SR;
 		if (status & TWIHS_SR_NACK) {
 			return TWIHS_RECEIVE_NACK;
+		}
+
+        if (!timeout--) {
+			return TWIHS_ERROR_TIMEOUT;
 		}
 
 		if (!(status & TWIHS_SR_TXRDY)) {
@@ -367,6 +372,7 @@ uint32_t twihs_master_write(Twihs *p_twihs, twihs_packet_t *p_packet)
 		p_twihs->TWIHS_THR = *buffer++;
 
 		cnt--;
+        timeout = TWIHS_TIMEOUT;
 	}
 
 	while (1) {
