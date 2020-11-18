@@ -712,6 +712,9 @@
     <Compile Include="inc\usart_buffer.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="inc\version.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="inc\xtx.h">
       <SubType>compile</SubType>
     </Compile>

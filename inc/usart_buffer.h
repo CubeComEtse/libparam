@@ -12,18 +12,18 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#define USART_RX_BUFFER_SIZE 256
-#define USART_TX_BUFFER_SIZE 256
+#define USART_RX_BUFFER_SIZE 800
+#define USART_TX_BUFFER_SIZE 800
 
 // USART transmit and receive circular buffer.
 typedef struct USART_Buffer
 {
     volatile uint8_t RX[USART_RX_BUFFER_SIZE];
     volatile uint8_t TX[USART_TX_BUFFER_SIZE];
-    volatile uint8_t RX_Head;
-    volatile uint8_t RX_Tail;
-    volatile uint8_t TX_Head;
-    volatile uint8_t TX_Tail;
+    volatile uint16_t RX_Head;
+    volatile uint16_t RX_Tail;
+    volatile uint16_t TX_Head;
+    volatile uint16_t TX_Tail;
 } USART_Buffer_t;
 
 

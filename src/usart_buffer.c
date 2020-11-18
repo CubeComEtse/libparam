@@ -34,8 +34,8 @@ void USART_BUFFER_vInitialize(USART_data_t * usart_data){
 bool USART_TXBuffer_IsEmpty(USART_data_t * usart_data)
 {
     // Make copies to make sure that volatile access is specified.
-    uint8_t tempHead = usart_data->buffer.TX_Head;
-    uint8_t tempTail = usart_data->buffer.TX_Tail;
+    uint16_t tempHead = usart_data->buffer.TX_Head;
+    uint16_t tempTail = usart_data->buffer.TX_Tail;
 
     // There are data left in the buffer unless Head and Tail are equal.
     return (tempHead == tempTail);
@@ -57,8 +57,8 @@ uint16_t USART_TXBuffer_GetFreeSpace(USART_data_t * usart_data)
 
 uint16_t USART_TXBuffer_GetUsedSpace(USART_data_t * usart_data) {
     // Make copies to make sure that volatile access is specified.
-    uint8_t tempHead = usart_data->buffer.TX_Head;
-    uint8_t tempTail = usart_data->buffer.TX_Tail;
+    uint16_t tempHead = usart_data->buffer.TX_Head;
+    uint16_t tempTail = usart_data->buffer.TX_Tail;
 
     // Equal - no space is used
     if (tempHead == tempTail) {
@@ -84,7 +84,7 @@ uint16_t USART_TXBuffer_GetUsedSpace(USART_data_t * usart_data) {
 */
 bool USART_TXBuffer_PutByte(USART_data_t * usart_data, uint8_t data)
 {
-    uint8_t tempTX_Head;
+    uint16_t tempTX_Head;
     uint16_t TXBuffer_FreeSpace;
     USART_Buffer_t * TXbufPtr;
 
@@ -114,8 +114,8 @@ bool USART_TXBuffer_PutByte(USART_data_t * usart_data, uint8_t data)
 */
 bool USART_RXBuffer_IsEmpty(USART_data_t * usart_data)
 {
-    uint8_t tempHead = usart_data->buffer.RX_Head;
-    uint8_t tempTail = usart_data->buffer.RX_Tail;
+    uint16_t tempHead = usart_data->buffer.RX_Head;
+    uint16_t tempTail = usart_data->buffer.RX_Tail;
     
     return (tempHead == tempTail);
 }
@@ -143,8 +143,8 @@ uint16_t USART_RXBuffer_GetFreeSpace(USART_data_t * usart_data)
 uint16_t USART_RXBuffer_GetUsedSpace(USART_data_t * usart_data)
 {
     // Make copies to make sure that volatile access is specified.
-    uint8_t tempHead = usart_data->buffer.RX_Head;
-    uint8_t tempTail = usart_data->buffer.RX_Tail;
+    uint16_t tempHead = usart_data->buffer.RX_Head;
+    uint16_t tempTail = usart_data->buffer.RX_Tail;
 
     // Equal - no space is used
     if (tempHead == tempTail) {
@@ -172,7 +172,7 @@ uint16_t USART_RXBuffer_GetUsedSpace(USART_data_t * usart_data)
 uint8_t USART_RXBuffer_GetByte(USART_data_t * usart_data)
 {
     USART_Buffer_t * bufPtr;
-    uint8_t ans;
+    uint16_t ans;
 
     //User should do this, but check anyway
     if (USART_RXBuffer_IsEmpty(usart_data)) {
@@ -209,15 +209,14 @@ uint8_t USART_RXBuffer_GetByte(USART_data_t * usart_data)
  */
 bool USART_BUFFER_Receive(USART_data_t* usart_data, uint8_t rx_byte) {
     USART_Buffer_t * bufPtr;
-    bool ans;
 
     bufPtr = &usart_data->buffer;
 
     // Advance buffer head.
-    uint8_t tempRX_Head = (bufPtr->RX_Head + 1) % USART_RX_BUFFER_SIZE;
+    uint16_t tempRX_Head = (bufPtr->RX_Head + 1) % USART_RX_BUFFER_SIZE;
 
     //Check for overflow.
-    uint8_t tempRX_Tail = bufPtr->RX_Tail;
+    uint16_t tempRX_Tail = bufPtr->RX_Tail;
 
     // Store the data
     usart_data->buffer.RX[usart_data->buffer.RX_Head] = rx_byte;
@@ -257,7 +256,7 @@ bool USART_BUFFER_Transmit(USART_data_t* usart_data, uint8_t* tx_byte) {
     bufPtr = &usart_data->buffer;
 
     /* Check if all data is transmitted. */
-    uint8_t tempTX_Tail = usart_data->buffer.TX_Tail;
+    uint16_t tempTX_Tail = usart_data->buffer.TX_Tail;
     if (bufPtr->TX_Head == tempTX_Tail){
 
         /* Disable DRE interrupts. */

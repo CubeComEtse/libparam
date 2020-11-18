@@ -14,6 +14,7 @@
 #include "std_message.h"
 #include "tmr.h"
 #include "xtx.h"
+#include "version.h"
 
 // Local Variables
 static struct ltc2992_device power_measure_1;
@@ -56,7 +57,7 @@ void CONFIG_vInit(uint8_t endpoint) {
     LTC2992_vNormalSetup(&power_measure_1, LTC2992_u8GenAddr(0, 0));
     LTC2992_vNormalSetup(&power_measure_2, LTC2992_u8GenAddr(0, 2));
 
-    //The LTC2992's are independant of i2c functions, so setup them
+    //The LTC2992's are independent of i2c functions, so setup them
     power_measure_1.i2c_write_function = BSP_vPowerSenseWriteFunction;
     power_measure_1.i2c_read_function = BSP_vPowerSenseReadFunction;
     power_measure_2.i2c_write_function = BSP_vPowerSenseWriteFunction;
@@ -124,6 +125,12 @@ bool CONFIG_bConfigEndpoint(const uint8_t* rx_buffer, const uint16_t rx_length, 
             tx_buffer[LEN_idx] = 1;
             tx_buffer[DATA_idx] = u8PowerMeasureConfig;
             break;
+        case CONF_READ_VERSION:
+            tx_buffer[LEN_idx] = 1;
+            tx_buffer[DATA_idx] = FIRMWARE_VERSION;
+            default:
+            // Unknown, don't answer
+            return false;
         }
         return true;
     }

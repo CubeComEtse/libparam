@@ -75,6 +75,8 @@
 #define CONF_READ_VOLTAGE       0x06
 #define CONF_READ_CURRENT       0x07
 
+#define CONF_READ_VERSION       0x08
+
 void CONFIG_vInit(uint8_t endpoint);
 bool CONFIG_bConfigEndpoint(const uint8_t* rx_buffer, const uint16_t rx_length, uint8_t* tx_buffer, uint16_t* tx_length);
 void CONFIG_vProcess(void);
