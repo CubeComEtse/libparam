@@ -45,7 +45,7 @@
 #define I2C_PC104_SDA_MUX       IOPORT_MODE_MUX_A
 #define I2C_PC104_SCL_PIN       PIO_PA4_IDX
 #define I2C_PC104_SCL_MUX       IOPORT_MODE_MUX_A
-#define I2C_PC104_SPEED         60000
+#define I2C_PC104_DEFAULT_SPEED         50000
 
 #define I2C_BOARD_DEVICE        TWIHS2
 #define I2C_BOARD_DEVICE_ID     ID_TWIHS2
@@ -84,6 +84,7 @@
 #define OBC_CAN_MASK            0x00000FF
 //#define MCAN_RX_EXTENDED_FILTER_ID_0_BUFFER_INDEX
 
+
 // Test Pin
 #define TEST_PIN                PIO_PD24_IDX
 
@@ -95,5 +96,9 @@
 #define XTX_RDY_PIN             PIO_PC2_IDX
 // H1.11
 #define XTX_SS_PIN              SPI_CS_PIN_2
+
+#define XSTEER_ADRESS           0x0000027
+
+#define XDC_ADDRESS             0x0000028
 
 #endif /* OBC_CONTROLLER_REV_A_H_ */

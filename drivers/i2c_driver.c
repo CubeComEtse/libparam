@@ -12,8 +12,12 @@
 #include "twihs.h"
 
 
-void I2C_DRIVER_vInitPC104(struct i2c_driver_data* drv) {
+static uint32_t i2c_speed;
+
+void I2C_DRIVER_vInitPC104(struct i2c_driver_data* drv, uint32_t speed) {
     sysclk_enable_peripheral_clock(I2C_PC104_DEVICE_ID);
+
+    i2c_speed = speed;
 
     // Setup pins
     ioport_set_pin_mode(I2C_PC104_SDA_PIN, I2C_PC104_SDA_MUX);
@@ -25,7 +29,7 @@ void I2C_DRIVER_vInitPC104(struct i2c_driver_data* drv) {
     i2cOptions.chip = 0x26;
     i2cOptions.smbus = 0;
     i2cOptions.master_clk = sysclk_get_peripheral_hz();
-    i2cOptions.speed = I2C_PC104_SPEED;
+    i2cOptions.speed = i2c_speed;
     twihs_master_init(I2C_PC104_DEVICE, &i2cOptions);
 
     // Set struct details so we can easily reference it later
@@ -110,7 +114,7 @@ bool I2C_DRIVER_bReadFromChecksum(struct i2c_driver_data* drv, const uint8_t chi
         
         ioport_reset_pin_mode(I2C_PC104_SCL_PIN);
 
-        I2C_DRIVER_vInitPC104(drv);
+        I2C_DRIVER_vInitPC104(drv, i2c_speed);
     }
     uint16_t calculated_checksum = 0;
 

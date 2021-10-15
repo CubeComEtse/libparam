@@ -17,7 +17,7 @@ struct i2c_driver_data {
     Twihs *p_twihs;
 };
 
-void I2C_DRIVER_vInitPC104(struct i2c_driver_data* drv);
+void I2C_DRIVER_vInitPC104(struct i2c_driver_data* drv, uint32_t speed);
 bool I2C_DRIVER_bWriteToChecksum(struct i2c_driver_data* drv, const uint8_t chip_addr, const uint8_t mem_address, const uint8_t* tx_buffer, const uint16_t length);
 bool I2C_DRIVER_bReadFromChecksum(struct i2c_driver_data* drv, const uint8_t chip_addr, const uint8_t mem_address, uint8_t* rx_buffer, uint16_t length);
 bool I2C_DRIVER_bWriteTo(struct i2c_driver_data* drv, const uint8_t chip_addr, const uint8_t mem_address, const uint8_t* tx_buffer, const uint16_t length);

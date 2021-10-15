@@ -15,6 +15,7 @@
 #include "spi_endpoint.h"
 #include "xtx.h"
 #include "ioport.h"
+#include "register_handler.h"
 #include "tmr.h"
 
 // Local functions
@@ -53,7 +54,7 @@ void XTX_vConfig(void) {
     ioport_set_pin_mode(XTX_RDY_PIN, IOPORT_MODE_PULLDOWN);
 
     // Configure endpoints
-    I2C_vInitEndpoint(I2C_ENDPOINT, XTX_CAN_ADRESS);
+    I2C_vInitEndpoint(I2C_ENDPOINT, XTX_CAN_ADRESS, REG_GetI2CSpeed());
     CAN_vInitEndpoint(CAN_ENDPOINT, OBC_CAN_ADRESS, XTX_CAN_ADRESS);
 
     // Register them with the sermux

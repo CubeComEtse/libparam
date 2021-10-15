@@ -283,7 +283,7 @@
       </framework-data>
     </AsfFrameworkConfig>
     <avrtool>com.atmel.avrdbg.tool.atmelice</avrtool>
-    <avrtoolserialnumber>J41800036728</avrtoolserialnumber>
+    <avrtoolserialnumber>J41800023473</avrtoolserialnumber>
     <avrdeviceexpectedsignature>0xA1220E00</avrdeviceexpectedsignature>
     <com_atmel_avrdbg_tool_atmelice>
       <ToolOptions>
@@ -294,7 +294,7 @@
         <InterfaceName>SWD</InterfaceName>
       </ToolOptions>
       <ToolType>com.atmel.avrdbg.tool.atmelice</ToolType>
-      <ToolNumber>J41800036728</ToolNumber>
+      <ToolNumber>J41800023473</ToolNumber>
       <ToolName>Atmel-ICE</ToolName>
     </com_atmel_avrdbg_tool_atmelice>
     <avrtoolinterface>SWD</avrtoolinterface>
@@ -499,6 +499,7 @@
       <Value>../src/ASF/sam/drivers/mcan</Value>
       <Value>../src/ASF/common/services/twi</Value>
       <Value>../src/ASF/sam/drivers/tc</Value>
+      <Value>../registers</Value>
     </ListValues>
   </armgcc.compiler.directories.IncludePaths>
   <armgcc.compiler.optimization.level>Optimize debugging experience (-Og)</armgcc.compiler.optimization.level>
@@ -601,6 +602,7 @@
     <Folder Include="inc" />
     <Folder Include="board" />
     <Folder Include="drivers" />
+    <Folder Include="registers" />
     <Folder Include="src\" />
     <Folder Include="src\ASF\" />
     <Folder Include="src\ASF\common\" />
@@ -691,6 +693,9 @@
     <Compile Include="inc\ltc2992.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="inc\register_handler.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="inc\serial_multiplexer.h">
       <SubType>compile</SubType>
     </Compile>
@@ -715,6 +720,12 @@
     <Compile Include="inc\version.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="inc\xdc.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\xsteer.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="inc\xtx.h">
       <SubType>compile</SubType>
     </Compile>
@@ -730,6 +741,9 @@
     <None Include="src\ASF\common\services\twi\twihs_slave.h">
       <SubType>compile</SubType>
     </None>
+    <Compile Include="registers\OBC.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\ASF\sam\drivers\tc\tc.c">
       <SubType>compile</SubType>
     </Compile>
@@ -742,7 +756,16 @@
     <Compile Include="src\File.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\register_handler.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\tmr.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\xdc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\xsteer.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\xtx.c">

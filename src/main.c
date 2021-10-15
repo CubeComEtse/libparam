@@ -9,6 +9,7 @@
 #include "i2c_endpoint.h"
 #include "serial_multiplexer.h"
 #include "spi_endpoint.h"
+#include "register_handler.h"
 #include "xtx.h"
 
 
@@ -21,6 +22,7 @@ int main (void)
     // Board initialization
     BSP_vInit();
     SERMUX_vInit();
+    REG_vInit();
 
     // Init the endpoint
     CONFIG_vInit(BOARD_ENDPOINT);
@@ -49,6 +51,8 @@ int main (void)
         CAN_vProcess();
         CONFIG_vProcess();
         SPI_vProcess();
+
+        REG_vProcessMessages();
 
         //XTX_vProcess();
     }

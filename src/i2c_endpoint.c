@@ -23,10 +23,17 @@ static uint8_t u8I2CAddress;
  * \param endpoint The endpoint number
  * \param dev_addr The i2c address of the device to talk to
  */
-void I2C_vInitEndpoint(uint8_t endpoint, uint8_t dev_addr) {
-    I2C_DRIVER_vInitPC104(&sI2cDriver);
+void I2C_vInitEndpoint(uint8_t endpoint, uint8_t dev_addr, uint8_t newSpeed) {
+    I2C_SetEndpointSpeed(newSpeed);
     u8I2CEndpoint = endpoint;
     u8I2CAddress = dev_addr;
+}
+
+/*
+ * Change the speed of the I2C instance
+*/
+void I2C_SetEndpointSpeed(uint8_t newSpeed){
+    I2C_DRIVER_vInitPC104(&sI2cDriver, newSpeed*10000);
 }
 
 /**

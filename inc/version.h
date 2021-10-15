@@ -9,6 +9,7 @@
 #ifndef VERSION_H_
 #define VERSION_H_
 
-#define FIRMWARE_VERSION 1
+#define FIRMWARE_VERSION_MAJOR 2
+#define FIRMWARE_VERSION_MINOR 0
 
 #endif /* VERSION_H_ */

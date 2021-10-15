@@ -11,7 +11,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-void I2C_vInitEndpoint(uint8_t endpoint, uint8_t dev_addr);
+void I2C_vInitEndpoint(uint8_t endpoint, uint8_t dev_addr, uint8_t newSpeed);
+void I2C_SetEndpointSpeed(uint8_t newSpeed);
 bool I2C_bEndpoint(const uint8_t* rx_buffer, const uint16_t rx_length, uint8_t* tx_buffer, uint16_t* tx_length);
 void I2C_vProcess(void);
 

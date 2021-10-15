@@ -50,12 +50,12 @@ void BSP_vInit(void) {
 
     BSP_vInit1MsTimer();
 
-
-    /*
+    
     ioport_enable_pin(USB_RESET_PIN);
     ioport_set_pin_level(USB_RESET_PIN, 0);
     ioport_set_pin_dir(USB_RESET_PIN, IOPORT_DIR_OUTPUT);
-    */
+    
+    BSP_vUsbReset();
     
     ioport_enable_pin(TEST_PIN);
     ioport_set_pin_dir(TEST_PIN, IOPORT_DIR_OUTPUT);

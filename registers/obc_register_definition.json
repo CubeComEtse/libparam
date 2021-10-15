@@ -1,0 +1,429 @@
+{
+	"generator": {
+		"languages": ["c", "c#"],
+		"c#": {
+			"functions_from": "extra.cs",
+			"namespace": "ControllerDemo.Components.Models"
+		},
+		"filename": "OBC"
+	},
+	"module":
+	{
+		"name": "OBC",
+		"registers": [
+			{
+				"name": "Board_ID",
+				"address": "0x10",
+				"dir": "r",
+				"width": "32",
+				"c#": {
+					"type": "UInt32"
+				},
+				"fields": [
+					{
+						"name": "ccIdentifier",
+						"description": "Identifier for the device",
+						"bit": "31-24",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						}
+					},
+					{
+						"name": "id0",
+						"description": "Identifier for the device",
+						"bit": "23-16",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						}
+					},
+					{
+						"name": "id1",
+						"description": "Identifier for the device",
+						"bit": "15-8",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						}
+					},
+					{
+						"name": "id2",
+						"description": "Identifier for the device",
+						"bit": "7-0",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						}
+					}
+				]
+			},
+			{
+				"name": "FW_Version",
+				"address": "0x11",
+				"dir": "rw",
+				"width": "32",
+				"fields": "Version",
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name": "HW_Version",
+				"address": "0x12",
+				"dir": "rw",
+				"width": "32",
+				"fields": "Version",
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name":"Scratchpad",
+				"address": "0x13",
+				"dir": "rw",
+				"width": "32",
+				"fields": [],
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name": "Supported_Boards",
+				"address": "0x14",
+				"dir": "r",
+				"width": "32",
+				"c#": {
+					"type": "UInt32"
+				},
+				"fields": []
+			},
+			{
+				"name":"Configured_Boards",
+				"address": "0x15",
+				"dir": "r",
+				"width": "32",
+				"c#": {
+					"type": "UInt32"
+				},
+				"fields": [],
+				"options": "BoardIdentifier"
+			},
+
+			{
+				"name": "ConfPower",
+				"address": "0x20",
+				"dir": "rw",
+				"width": "8",
+				"c#": {
+					"type": "byte"
+				},
+				"fields": [
+					{
+						"name": "voltage5Toggle",
+						"bit": "0",
+						"options": "Enabled",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						}
+					},
+					{
+						"name": "voltage3Toggle",
+						"bit": "1",
+						"options": "Enabled",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						}
+					},
+					{
+						"name": "voltageVBatToggle",
+						"bit": "2",
+						"options": "Enabled",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						}
+					},
+					{
+						"name": "voltageVBatAltToggle",
+						"bit": "3",
+						"options": "Enabled",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						}
+					}
+				]
+			},
+			{
+				"name":"MeasureVI_V3",
+				"address": "0x21",
+				"dir": "rw",
+				"width": "32",
+				"fields": "MeasureVI",
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name":"MeasurePower_V3",
+				"address": "0x22",
+				"dir": "rw",
+				"width": "32",
+				"fields": "MeasurePower",
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name":"MeasureVI_V5",
+				"address": "0x23",
+				"dir": "rw",
+				"width": "32",
+				"fields": "MeasureVI",
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name":"MeasurePower_V5",
+				"address": "0x24",
+				"dir": "rw",
+				"width": "32",
+				"fields": "MeasurePower",
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name":"MeasureVI_VBat",
+				"address": "0x25",
+				"dir": "rw",
+				"width": "32",
+				"fields": "MeasureVI",
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name":"MeasurePower_VBat",
+				"address": "0x26",
+				"dir": "rw",
+				"width": "32",
+				"fields": "MeasurePower",
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name":"MeasureVI_VBatAlt",
+				"address": "0x27",
+				"dir": "rw",
+				"width": "32",
+				"fields": "MeasureVI",
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name":"MeasurePower_VBatAlt",
+				"address": "0x28",
+				"dir": "rw",
+				"width": "32",
+				"fields": "MeasurePower",
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name": "I2CConfig",
+				"address": "0x29",
+				"dir": "rw",
+				"width": "32",
+				"fields": [
+					{
+						"name": "CHK",
+						"pretty-name": "Checksum",
+						"description": "Enables or Disables the checksum in the I2C communications",
+						"bit": "8",
+						"options": "Enabled",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						}
+					},
+					{
+						"name": "SPD",
+						"pretty-name": "I2C Speed",
+						"description": "Sets the I2C speed in 10kb/s intervals. (1 = 10 kb/s, 40 = 400 kb/s)",
+						"bit": "7-0",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						}
+					}
+				],
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name": "XTXpins",
+				"address": "0x30",
+				"dir": "rw",
+				"width": "32",
+				"fields": [
+					{
+						"name": "ENA",
+						"pretty-name": "XTX Enable",
+						"description": "XTX has an Enable line, which must be held HIGH to enable communications",
+						"bit": "0",
+						"options": "Enabled",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						}
+					},
+					{
+						"name": "nRST",
+						"pretty-name": "XTX notReset.",
+						"bit": "1",
+						"options": "Enabled",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						}
+					},
+					{
+						"name": "RDY",
+						"bit": "2",
+						"options": "Enabled",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						}
+					}
+				],
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name": "XDCConfig",
+				"address": "0x40",
+				"dir": "rw",
+				"width": "32",
+				"fields": [
+					{
+						"name": "ADDR",
+						"pretty-name": "I2C Address",
+						"description": "Set the I2C address of the XDC connected to the OBC. Wil default to 0x52",
+						"bit": "7-0",
+						"options": "Enabled",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						}
+					}
+				],
+				"c#": {
+					"type": "UInt32"
+				}
+			}
+		],
+		"generic_fields":{
+			"boardflag": [
+				{
+					"name": "boards",
+					"bit": "7-0",
+					"c#": {
+						"hasminmax": "false",
+						"type": "byte"
+					}
+				}
+			],
+			"Version" : [
+				{
+					"name": "major_version",
+					"description": "Identifier for the device",
+					"bit": "23-16",
+					"c#": {
+						"hasminmax": "false",
+						"type": "byte"
+					}
+				},
+				{
+					"name": "minor_version",
+					"description": "Identifier for the device",
+					"bit": "15-8",
+					"c#": {
+						"hasminmax": "false",
+						"type": "byte"
+					}
+				},
+				{
+					"name": "patch_version",
+					"description": "Identifier for the device",
+					"bit": "7-0",
+					"c#": {
+						"hasminmax": "false",
+						"type": "byte"
+					}
+				}
+			],
+			"MeasureVI": [
+				{
+					"name": "voltage",
+					"description": "The voltage measurement",
+					"bit": "31-16",
+					"c#": {
+						"hasminmax": "false",
+						"type": "UInt32"
+					}
+				},
+				{
+					"name": "current",
+					"description": "The current measurement",
+					"bit": "15-0",
+					"c#": {
+						"hasminmax": "false",
+						"type": "UInt32"
+					}
+				}
+			],
+			"MeasurePower": [
+				{
+					"name": "power",
+					"description": "The power measurement",
+					"bit": "31-0",
+					"c#": {
+						"hasminmax": "false",
+						"type": "UInt32"
+					}
+				}
+			]
+		},
+		"options" :{
+			"Enabled": {
+				"name": "Enabled",
+				"type" : "byte",
+				"options": [
+					{"name": "Enabled", "value": "1"},
+					{"name": "Disabled", "value": "0"}
+				]
+			},
+			"BoardIdentifier": {
+					"name": "BoardIdentifier",
+					"type" : "byte",
+					"options": [
+						{"name": "None", "value": "0"},
+						{"name": "XTX", "value": "1"},
+						{"name": "XSteer", "value": "2"},
+						{"name": "XDC", "value": "4"}
+					]
+				}
+		}
+	}
+}

@@ -1,0 +1,70 @@
+/*
+ * register_handler.h
+ *
+ * Created: 2021/08/03 14:34:22
+ *  Author: Kolijn
+ */ 
+
+
+#ifndef REGISTER_HANDLER_H_
+#define REGISTER_HANDLER_H_
+
+#include <stdbool.h>
+#include <stdint.h>
+
+#include "XDC.h"
+#include "OBC.h"
+
+enum power_channel{
+    CHANNEL_3,
+    CHANNEL_5,
+    CHANNEL_vBat,
+    CHANNEL_vBatAlt,
+};
+
+extern struct OBC_RegisterData currentRegisters;
+
+void REG_vInit(void);
+
+/*
+Store any incoming messages. We don't want to perform SPI transactions while receiving I2C data,
+So create this buffer between them.
+*/
+void REG_vAddMessage(const uint8_t address, const uint8_t* data);
+
+/*
+ * Checks if the provided register address is a valid one. Returns true if it 
+ * is, false otherwise
+*/
+bool REG_CheckAddress(const uint8_t address);
+
+/*
+Gets the register given by address, copies it's data into the data argument
+Returns true if the address is valid, false otherwise.
+*/
+bool REG_vGet(const uint8_t address, uint8_t* data, uint8_t* length);
+
+/*
+ * Process all the stored messages. This function should be called regularly.
+*/
+void REG_vProcessMessages(void);
+
+/*
+ * Add a flag to the I2C Status. The status can only be appended to, it is cleared when the user 
+ * reads it
+*/
+void REG_vSetI2CStatus(uint32_t flag);
+
+void REG_UpdateTemperature(uint16_t temperature);
+
+
+void REG_Copyu32ToArray(const uint32_t value, uint8_t* data);
+
+void REG_UpdateVoltagePins(uint8_t newValue);
+void REG_UpdateVoltage(enum power_channel channel, uint16_t value);
+void REG_UpdateCurrent(uint8_t channel, uint16_t value);
+void REG_UpdatePower(enum power_channel channel, uint16_t value);
+uint8_t REG_GetI2CSpeed(void);
+uint8_t REG_GetXDCAddress(void);
+
+#endif /* REGISTER_HANDLER_H_ */

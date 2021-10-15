@@ -59,8 +59,10 @@
 */
 #define CONF_BOARD_SET          0x04
 
-#define CONF_BOARD_NONE 0
-#define CONF_BOARD_XTX 1
+#define CONF_BOARD_NONE         0
+#define CONF_BOARD_XTX          1
+#define CONF_BOARD_XSTEER       2
+#define CONF_BOARD_XDC          4
 
 
 /*
@@ -79,6 +81,9 @@
 
 void CONFIG_vInit(uint8_t endpoint);
 bool CONFIG_bConfigEndpoint(const uint8_t* rx_buffer, const uint16_t rx_length, uint8_t* tx_buffer, uint16_t* tx_length);
+void CONFIG_vDecodePower(const uint8_t value);
+uint8_t CONFIG_vDecodeBoardSet(const uint8_t rw, const uint8_t value);
 void CONFIG_vProcess(void);
+uint8_t CONFIG_GetCurrentBoardconfig(void);
 
 #endif /* CONFIG_H_ */
