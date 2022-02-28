@@ -103,6 +103,8 @@ void SERMUX_vReceiveByte(void)
             if (received_byte == HEADERBYTES[stateCounter]) {
                 stateCounter += 1;
                 if (stateCounter == 4) {
+                    currentMessage.length = 0;
+                    currentMessage.endpoint = 0;
                     state = LENGTH;
                     stateCounter = 0;
                 }

@@ -63,8 +63,12 @@ void REG_Copyu32ToArray(const uint32_t value, uint8_t* data);
 void REG_UpdateVoltagePins(uint8_t newValue);
 void REG_UpdateVoltage(enum power_channel channel, uint16_t value);
 void REG_UpdateCurrent(uint8_t channel, uint16_t value);
-void REG_UpdatePower(enum power_channel channel, uint16_t value);
+void REG_UpdatePower(enum power_channel channel, uint32_t value);
+
 uint8_t REG_GetI2CSpeed(void);
-uint8_t REG_GetXDCAddress(void);
+void REG_SetI2CSpeed(uint32_t newSpeed);
+
+uint32_t REG_GetI2CAddress(void);
+void REG_vSetI2CAddress(uint8_t address);
 
 #endif /* REGISTER_HANDLER_H_ */

@@ -19,12 +19,15 @@
 #include "register_handler.h"
 #include "serial_multiplexer.h"
 
+#define XSTEER_DEFAULT_I2C_ADDRESS 0x52
+#define XSTEER_DEFAULT_I2C_SPEED 400000UL
+
 
 void XSteer_vConfig(void) {
 
-    // Configure endpoints
-    I2C_vInitEndpoint(I2C_ENDPOINT, XSTEER_ADRESS, REG_GetI2CSpeed());
-    //CAN_vInitEndpoint(CAN_ENDPOINT, OBC_CAN_ADRESS, XSTEER_ADRESS);
+    // Configure I2C Settings
+    REG_SetI2CSpeed(XSTEER_DEFAULT_I2C_SPEED);
+    REG_vSetI2CAddress(XSTEER_DEFAULT_I2C_ADDRESS);
 
     // Register them with the sermux
     SERMUX_vRegisterEndpoint(I2C_ENDPOINT, &I2C_bEndpoint);

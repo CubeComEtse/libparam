@@ -11,6 +11,8 @@
 #include "obc_controller_rev_A.h"
 #include "twihs.h"
 
+#include "register_handler.h"
+#include "OBC.h"
 
 static uint32_t i2c_speed;
 
@@ -47,7 +49,7 @@ void I2C_DRIVER_vInitPC104(struct i2c_driver_data* drv, uint32_t speed) {
  * 
  * \return bool
  */
-bool I2C_DRIVER_bWriteToChecksum(struct i2c_driver_data* drv, const uint8_t chip_addr, const uint8_t mem_address, const uint8_t* tx_buffer, const uint16_t length) {
+bool I2C_DRIVER_bWriteWithChecksum(struct i2c_driver_data* drv, const uint8_t chip_addr, const uint8_t mem_address, const uint8_t* tx_buffer, const uint16_t length) {
     // Create a new buffer to de-const the data and to add the checksum
     uint8_t tx_buffer_no_const[length + 2];
     memcpy(tx_buffer_no_const, tx_buffer, length);
@@ -73,6 +75,11 @@ bool I2C_DRIVER_bWriteToChecksum(struct i2c_driver_data* drv, const uint8_t chip
     uint32_t result = twihs_master_write(drv->p_twihs, &write_packet);
     twihs_read_byte(drv->p_twihs);
 
+    uint8_t trDelay = (uint8_t) ((currentRegisters.i2cconfa & OBC_REG_I2CCONFA_TRDEL_Msk) >> OBC_REG_I2CCONFA_TRDEL_Pos);
+    if (trDelay > 0){
+        delay_ms(trDelay * 10);
+    }
+
     return result == TWIHS_SUCCESS;
 }
 
@@ -85,7 +92,7 @@ bool I2C_DRIVER_bWriteToChecksum(struct i2c_driver_data* drv, const uint8_t chip
  * \param rx_buffer     A buffer to receive data into. It should be big enough to receive the data + 2 checksum
  * \param length        Length of the data, not including checksum
  * 
- * \return bool         True if reception was successfull and the checksum matches
+ * \return bool         True if reception was successful and the checksum matches
  */
 bool I2C_DRIVER_bReadFromChecksum(struct i2c_driver_data* drv, const uint8_t chip_addr, const uint8_t mem_address, uint8_t* rx_buffer, const uint16_t length) {
     twihs_packet_t read_packet;
@@ -96,17 +103,40 @@ bool I2C_DRIVER_bReadFromChecksum(struct i2c_driver_data* drv, const uint8_t chi
     read_packet.addr[2] = 0x00;
     read_packet.addr_length = 3;
     read_packet.buffer = rx_buffer;
-    read_packet.length = ((uint32_t) length) + 2;
+    read_packet.length = ((uint32_t) length) + 1;
+    uint32_t result =0;
 
-    uint32_t result = twihs_master_read(drv->p_twihs, &read_packet);
-    // Clear buffer?
-    twihs_read_byte(drv->p_twihs);
+    // There is a register option to use separate write-read instructions
+    // If the delay time is set, there will be a delay between them.
+    uint8_t wrDelay = (uint8_t) ((currentRegisters.i2cconfa & OBC_REG_I2CCONFA_WRDEL_Msk) >> OBC_REG_I2CCONFA_WRDEL_Pos);
+    if (wrDelay > 0){        
+        uint8_t buff[] = {mem_address, 0x00};
+
+        twihs_packet_t write_packet;
+        write_packet.chip = chip_addr;
+        write_packet.addr[0] = mem_address;
+        write_packet.addr_length = 1;
+        write_packet.buffer = &buff;
+        write_packet.length = 2;
+    
+        twihs_master_write(drv->p_twihs, &write_packet);
+
+        delay_us(wrDelay * 10);
+
+        result = twihs_master_read_no_addr(drv->p_twihs, &read_packet, true);
+    }
+    else {
+        //Otherwise just use the repeated start
+        result = twihs_master_read(drv->p_twihs, &read_packet);
+    }
+
+    // Clear buffer
+    // twihs_read_byte(drv->p_twihs);
 
     if (result == TWIHS_ERROR_TIMEOUT) {
         ioport_enable_pin(I2C_PC104_SCL_PIN);
         ioport_set_pin_dir(I2C_PC104_SCL_PIN, IOPORT_DIR_OUTPUT);
         
-
         for (int i = 0; i < 32; i++) {
             ioport_toggle_pin_level(I2C_PC104_SCL_PIN);
             delay_us(50);
@@ -116,14 +146,136 @@ bool I2C_DRIVER_bReadFromChecksum(struct i2c_driver_data* drv, const uint8_t chi
 
         I2C_DRIVER_vInitPC104(drv, i2c_speed);
     }
+
+    bool retVal = (result == TWIHS_SUCCESS);
+
     uint16_t calculated_checksum = 0;
 
     // Checksum calculation
     for (uint8_t i = 0 ; i < length; i ++) {
         calculated_checksum += (uint16_t) rx_buffer[i];
     }
-    bool res = (result == TWIHS_SUCCESS) && ((calculated_checksum & 0xFF) == rx_buffer[length]) && (((calculated_checksum >> 8) & 0xFF) == rx_buffer[length+1]);
-    return res;
+    retVal =  (result == TWIHS_SUCCESS) && ((calculated_checksum & 0xFF) == rx_buffer[length]) && (((calculated_checksum >> 8) & 0xFF) == rx_buffer[length+1]);
+    
+    if (retVal == false){
+        asm("nop");
+    }
+
+    uint8_t trDelay = (uint8_t) ((currentRegisters.i2cconfa & OBC_REG_I2CCONFA_TRDEL_Msk) >> OBC_REG_I2CCONFA_TRDEL_Pos);
+    if (trDelay > 0){
+        delay_ms(trDelay);
+    }
+
+    return retVal;
+}
+
+
+/**
+ * \brief Write to a register on the board, without using the checksum
+ * 
+ * \param drv           Pointer to the driver struct
+ * \param chip_addr     I2C Chip address
+ * \param mem_address   The register address to write to
+ * \param tx_buffer     The data to write. This does not include the checksum
+ * \param length        Length of the data
+ * 
+ * \return bool
+ */
+bool I2C_DRIVER_bWritePlain(struct i2c_driver_data* drv, const uint8_t chip_addr, const uint8_t mem_address, const uint8_t* tx_buffer, const uint16_t length) {
+    // Create a new buffer to de-const the data and to add the checksum
+    uint8_t tx_buffer_no_const[length];
+    memcpy(tx_buffer_no_const, tx_buffer, length);
+    
+    twihs_packet_t write_packet;
+    write_packet.chip = chip_addr;
+    write_packet.addr[0] = mem_address;
+    write_packet.addr_length = 1;
+    write_packet.buffer = tx_buffer_no_const;
+    write_packet.length = ((uint32_t) length);
+
+
+    uint32_t result = twihs_master_write(drv->p_twihs, &write_packet);
+    twihs_read_byte(drv->p_twihs);
+
+    uint8_t trDelay = (uint8_t) ((currentRegisters.i2cconfa & OBC_REG_I2CCONFA_TRDEL_Msk) >> OBC_REG_I2CCONFA_TRDEL_Pos);
+    if (trDelay > 0){
+        delay_ms(trDelay * 10);
+    }
+
+    return result == TWIHS_SUCCESS;
+}
+
+/**
+ * \brief Read from the Board, without using the Checksum bytes
+ * 
+ * \param drv           Pointer to the driver struct
+ * \param chip_addr     I2C Chip address
+ * \param mem_address   The register address to read from
+ * \param rx_buffer     A buffer to receive data into. It should be big enough to receive the data + 2 checksum
+ * \param length        Length of the data, not including checksum
+ * 
+ * \return bool         True if reception was successful and the checksum matches
+ */
+bool I2C_DRIVER_bReadPlain(struct i2c_driver_data* drv, const uint8_t chip_addr, const uint8_t mem_address, uint8_t* rx_buffer, const uint16_t length) {
+    twihs_packet_t read_packet;
+    read_packet.chip = chip_addr;
+    // Since we are only reading from s byte, the checksum is just that bute.
+    read_packet.addr[0] = mem_address;
+    read_packet.addr_length = 1;
+    read_packet.buffer = rx_buffer;
+    read_packet.length = ((uint32_t) length);
+    uint32_t result =0;
+
+    // There is a register option to use separate write-read instructions
+    // If the delay time is set, there will be a delay between them.
+    uint8_t wrDelay = (uint8_t) ((currentRegisters.i2cconfa & OBC_REG_I2CCONFA_WRDEL_Msk) >> OBC_REG_I2CCONFA_WRDEL_Pos);
+    if (wrDelay > 0){        
+        uint8_t buff[] = {mem_address, 0xFF};
+
+        twihs_packet_t write_packet;
+        write_packet.chip = chip_addr;
+        write_packet.addr[0] = mem_address;
+        write_packet.addr[1] = 0x10;
+        write_packet.addr_length = 0;
+        write_packet.buffer = &buff;
+        write_packet.length = 1;
+    
+        twihs_master_write(drv->p_twihs, &write_packet);
+
+        delay_us(wrDelay * 10);
+
+        result = twihs_master_read_no_addr(drv->p_twihs, &read_packet, true);
+    }
+    else {
+        //Otherwise just use the repeated start
+        result = twihs_master_read(drv->p_twihs, &read_packet);
+    }
+
+    // Clear buffer
+    // twihs_read_byte(drv->p_twihs);
+
+    if (result == TWIHS_ERROR_TIMEOUT) {
+        ioport_enable_pin(I2C_PC104_SCL_PIN);
+        ioport_set_pin_dir(I2C_PC104_SCL_PIN, IOPORT_DIR_OUTPUT);
+        
+        for (int i = 0; i < 32; i++) {
+            ioport_toggle_pin_level(I2C_PC104_SCL_PIN);
+            delay_us(50);
+        }
+        
+        ioport_reset_pin_mode(I2C_PC104_SCL_PIN);
+
+        I2C_DRIVER_vInitPC104(drv, i2c_speed);
+    }
+
+    bool retVal = (result == TWIHS_SUCCESS);
+
+    uint8_t trDelay = (uint8_t) ((currentRegisters.i2cconfa & OBC_REG_I2CCONFA_TRDEL_Msk) >> OBC_REG_I2CCONFA_TRDEL_Pos);
+    if (trDelay > 0){
+        delay_ms(trDelay);
+    }
+
+    return retVal;
 }
 
 /**
@@ -137,7 +289,7 @@ bool I2C_DRIVER_bReadFromChecksum(struct i2c_driver_data* drv, const uint8_t chi
  * 
  * \return bool         True if reception was successful
  */
-bool I2C_DRIVER_bWriteTo(struct i2c_driver_data* drv, const uint8_t chip_addr, const uint8_t mem_address, const uint8_t* tx_buffer, const uint16_t length) {
+bool I2C_DRIVER_bWriteLocal(struct i2c_driver_data* drv, const uint8_t chip_addr, const uint8_t mem_address, const uint8_t* tx_buffer, const uint16_t length) {
     // Create a new buffer to de-const the data
     uint8_t tx_buffer_no_const[length];
     memcpy(tx_buffer_no_const, tx_buffer, length);
@@ -154,13 +306,13 @@ bool I2C_DRIVER_bWriteTo(struct i2c_driver_data* drv, const uint8_t chip_addr, c
     return result == TWIHS_SUCCESS;
 }
 
-bool I2C_DRIVER_bReadFrom(struct i2c_driver_data* drv, const uint8_t chip_addr, const uint8_t mem_address, uint8_t* rx_buffer, const uint16_t length) {
+bool I2C_DRIVER_bReadLocal(struct i2c_driver_data* drv, const uint8_t chip_addr, const uint8_t mem_address, uint8_t* rx_buffer, const uint16_t length) {
     twihs_packet_t read_packet;
     read_packet.chip = chip_addr;
     read_packet.addr[0] = mem_address;
     read_packet.addr_length = 1;
     read_packet.buffer = rx_buffer;
-    read_packet.length = ((uint32_t) length);
+    read_packet.length = ((uint32_t) length) - 1;
 
     uint32_t result = twihs_master_read(drv->p_twihs, &read_packet);
 

@@ -46,7 +46,7 @@ void BSP_vInit(void) {
     BSP_vInitBoardI2C();
     BSP_vInitPowerSenseGPIO();
     BSP_vInitPowerGPIO();
-    BSP_vInitCan();
+    // BSP_vInitCan();
 
     BSP_vInit1MsTimer();
 
@@ -218,11 +218,11 @@ void BSP_vSetPowerEn(power_pin_t pin, uint8_t level) {
  * Callback function used by the LTC2992 sensors.
 */
 void BSP_vPowerSenseWriteFunction(const uint8_t chip_addr, const uint8_t mem_address, const uint8_t* tx_buffer, const uint16_t length) {
-    I2C_DRIVER_bWriteTo(&board_i2c_driver, chip_addr, mem_address, tx_buffer, length);
+    I2C_DRIVER_bWriteLocal(&board_i2c_driver, chip_addr, mem_address, tx_buffer, length);
 }
 
 void BSP_vPowerSenseReadFunction(const uint8_t chip_addr, const uint8_t mem_address, uint8_t* rx_buffer, uint16_t length) {
-    I2C_DRIVER_bReadFrom(&board_i2c_driver, chip_addr, mem_address, rx_buffer, length);
+    I2C_DRIVER_bReadLocal(&board_i2c_driver, chip_addr, mem_address, rx_buffer, length);
 }
 
 void BSP_vUsbReset(void) {

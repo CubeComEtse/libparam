@@ -16,7 +16,8 @@
 #define OBC_REG_MEASUREPOWER_VBAT                    0x26
 #define OBC_REG_MEASUREVI_VBATALT                    0x27
 #define OBC_REG_MEASUREPOWER_VBATALT                 0x28
-#define OBC_REG_I2CCONFIG                            0x29
+#define OBC_REG_I2CCONFA                             0x29
+#define OBC_REG_I2CCONFB                             0x2a
 #define OBC_REG_XTXPINS                              0x30
 #define OBC_REG_XDCCONFIG                            0x40
 
@@ -49,13 +50,21 @@
 #define OBC_REG_CONFPOWER_VOLTAGEVBATALTTOGGLE_Msk   (0x0001 << OBC_REG_CONFPOWER_VOLTAGEVBATALTTOGGLE_Pos)
 #define OBC_REG_CONFPOWER_VOLTAGEVBATALTTOGGLE       OBC_REG_CONFPOWER_VOLTAGEVBATALTTOGGLE_Msk
 
-/*************** Bit definition for I2CConfig register ***********************/
-#define OBC_REG_I2CCONFIG_CHK_Pos                    (8UL)
-#define OBC_REG_I2CCONFIG_CHK_Msk                    (0x0001 << OBC_REG_I2CCONFIG_CHK_Pos)
-#define OBC_REG_I2CCONFIG_CHK                        OBC_REG_I2CCONFIG_CHK_Msk
-#define OBC_REG_I2CCONFIG_SPD_Pos                    (0UL)
-#define OBC_REG_I2CCONFIG_SPD_Msk                    (0x00ff << OBC_REG_I2CCONFIG_SPD_Pos)
-#define OBC_REG_I2CCONFIG_SPD                        OBC_REG_I2CCONFIG_SPD_Msk
+/*************** Bit definition for I2CConfA register ************************/
+#define OBC_REG_I2CCONFA_TRDEL_Pos                   (16UL)
+#define OBC_REG_I2CCONFA_TRDEL_Msk                   (0x00ff << OBC_REG_I2CCONFA_TRDEL_Pos)
+#define OBC_REG_I2CCONFA_TRDEL                       OBC_REG_I2CCONFA_TRDEL_Msk
+#define OBC_REG_I2CCONFA_WRDEL_Pos                   (8UL)
+#define OBC_REG_I2CCONFA_WRDEL_Msk                   (0x00ff << OBC_REG_I2CCONFA_WRDEL_Pos)
+#define OBC_REG_I2CCONFA_WRDEL                       OBC_REG_I2CCONFA_WRDEL_Msk
+#define OBC_REG_I2CCONFA_SPD_Pos                     (0UL)
+#define OBC_REG_I2CCONFA_SPD_Msk                     (0x00ff << OBC_REG_I2CCONFA_SPD_Pos)
+#define OBC_REG_I2CCONFA_SPD                         OBC_REG_I2CCONFA_SPD_Msk
+
+/*************** Bit definition for I2CConfB register ************************/
+#define OBC_REG_I2CCONFB_ADDR_Pos                    (0UL)
+#define OBC_REG_I2CCONFB_ADDR_Msk                    (0x00ff << OBC_REG_I2CCONFB_ADDR_Pos)
+#define OBC_REG_I2CCONFB_ADDR                        OBC_REG_I2CCONFB_ADDR_Msk
 
 /*************** Bit definition for XTXpins register *************************/
 #define OBC_REG_XTXPINS_ENA_Pos                      (0UL)
@@ -120,7 +129,8 @@ struct OBC_RegisterData {
     uint32_t measurepower_vbat;
     uint32_t measurevi_vbatalt;
     uint32_t measurepower_vbatalt;
-    uint32_t i2cconfig;
+    uint32_t i2cconfa;
+    uint32_t i2cconfb;
     uint32_t xtxpins;
     uint32_t xdcconfig;
 };

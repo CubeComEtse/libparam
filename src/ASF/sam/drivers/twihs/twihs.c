@@ -150,54 +150,100 @@ uint32_t twihs_set_speed(Twihs *p_twihs, uint32_t ul_speed, uint32_t ul_mck)
 	uint32_t c_lh_div;
 	uint32_t cldiv, chdiv;
 
-	/* High-Speed can be only used in slave mode, 400k is the max speed allowed for master */
-	if (ul_speed > I2C_FAST_MODE_SPEED) {
-		return FAIL;
-	}
+    /* High-Speed can be only used in slave mode, 400k is the max speed allowed for master */
+    if (ul_speed > I2C_FAST_MODE_SPEED) {
+        return FAIL;
+    }
+    
+    // Kolijn Mods
+    if (ul_speed > LOW_LEVEL_TIME_LIMIT) {
+        // c_lh_div = (((ul_mck / ul_speed)  - TWIHS_CLK_CALC_ARGU) >> (ckdiv+1)) -5;
+
+        cldiv = (((ul_mck / LOW_LEVEL_TIME_LIMIT ) - TWIHS_CLK_CALC_ARGU) >> (ckdiv+1)) -5;
+        chdiv = ((ul_mck / (ul_speed + (ul_speed - LOW_LEVEL_TIME_LIMIT)) - TWIHS_CLK_CALC_ARGU) >> (ckdiv+1)) -5;
+
+        // cldiv must fit in 8 bits, ckdiv must fit in 3 bits 
+        while ((cldiv > TWIHS_CLK_DIV_MAX) && (ckdiv < TWIHS_CLK_DIV_MIN)) {
+            // Increase clock divider */
+            ckdiv++;
+            // Divide cldiv value 
+            cldiv /= TWIHS_CLK_DIVIDER;
+        }
+
+        // chdiv must fit in 8 bits, ckdiv must fit in 3 bits
+        while ((chdiv > TWIHS_CLK_DIV_MAX) && (ckdiv < TWIHS_CLK_DIV_MIN)) {
+            // Increase clock divider 
+            ckdiv++;
+            // Divide cldiv value 
+            chdiv /= TWIHS_CLK_DIVIDER;
+        }
+
+        
+        p_twihs->TWIHS_CWGR = TWIHS_CWGR_CLDIV(cldiv) | TWIHS_CWGR_CHDIV(chdiv) |TWIHS_CWGR_CKDIV(ckdiv);
+    }
+    else{
+        c_lh_div = (((ul_mck / ul_speed)  - TWIHS_CLK_CALC_ARGU) >> (ckdiv+1)) -5;
+
+        // cldiv must fit in 8 bits, ckdiv must fit in 3 bits
+        while ((c_lh_div > TWIHS_CLK_DIV_MAX) && (ckdiv < TWIHS_CLK_DIV_MIN)) {
+            // Increase clock divider */
+            ckdiv++;
+            // Divide cldiv value
+            c_lh_div /= TWIHS_CLK_DIVIDER;
+        }
+        
+        p_twihs->TWIHS_CWGR = TWIHS_CWGR_CLDIV(c_lh_div) | TWIHS_CWGR_CHDIV(c_lh_div) |TWIHS_CWGR_CKDIV(ckdiv);
+    }
+
+    // set clock waveform generator register 
+
+    return PASS;
+    
+
 
 	/* Low level time not less than 1.3us of I2C Fast Mode. */
 	if (ul_speed > LOW_LEVEL_TIME_LIMIT) {
-		/* Low level of time fixed for 1.3us. */
-		cldiv = ul_mck / (LOW_LEVEL_TIME_LIMIT * TWIHS_CLK_DIVIDER) - TWIHS_CLK_CALC_ARGU;
-		chdiv = ul_mck / ((ul_speed + (ul_speed - LOW_LEVEL_TIME_LIMIT)) * TWIHS_CLK_DIVIDER) - TWIHS_CLK_CALC_ARGU;
-		
-		/* cldiv must fit in 8 bits, ckdiv must fit in 3 bits */
-		while ((cldiv > TWIHS_CLK_DIV_MAX) && (ckdiv < TWIHS_CLK_DIV_MIN)) {
-			/* Increase clock divider */
-			ckdiv++;
-			/* Divide cldiv value */
-			cldiv /= TWIHS_CLK_DIVIDER;
-		}
-		/* chdiv must fit in 8 bits, ckdiv must fit in 3 bits */
-		while ((chdiv > TWIHS_CLK_DIV_MAX) && (ckdiv < TWIHS_CLK_DIV_MIN)) {
-			/* Increase clock divider */
-			ckdiv++;
-			/* Divide cldiv value */
-			chdiv /= TWIHS_CLK_DIVIDER;
-		}
+    	/* Low level of time fixed for 1.3us. */
+    	cldiv = ul_mck / (LOW_LEVEL_TIME_LIMIT * TWIHS_CLK_DIVIDER) - TWIHS_CLK_CALC_ARGU;
+    	chdiv = ul_mck / ((ul_speed + (ul_speed - LOW_LEVEL_TIME_LIMIT)) * TWIHS_CLK_DIVIDER) - TWIHS_CLK_CALC_ARGU;
+    	
+    	/* cldiv must fit in 8 bits, ckdiv must fit in 3 bits */
+    	while ((cldiv > TWIHS_CLK_DIV_MAX) && (ckdiv < TWIHS_CLK_DIV_MIN)) {
+        	/* Increase clock divider */
+        	ckdiv++;
+        	/* Divide cldiv value */
+        	cldiv /= TWIHS_CLK_DIVIDER;
+    	}
+    	/* chdiv must fit in 8 bits, ckdiv must fit in 3 bits */
+    	while ((chdiv > TWIHS_CLK_DIV_MAX) && (ckdiv < TWIHS_CLK_DIV_MIN)) {
+        	/* Increase clock divider */
+        	ckdiv++;
+        	/* Divide cldiv value */
+        	chdiv /= TWIHS_CLK_DIVIDER;
+    	}
 
-		/* set clock waveform generator register */
-		p_twihs->TWIHS_CWGR =
-				TWIHS_CWGR_CLDIV(cldiv) | TWIHS_CWGR_CHDIV(chdiv) |
-				TWIHS_CWGR_CKDIV(ckdiv);
-	} else {
-		c_lh_div = ul_mck / (ul_speed * TWIHS_CLK_DIVIDER) - TWIHS_CLK_CALC_ARGU;
+    	/* set clock waveform generator register */
+    	p_twihs->TWIHS_CWGR =
+    	TWIHS_CWGR_CLDIV(cldiv) | TWIHS_CWGR_CHDIV(chdiv) |
+    	TWIHS_CWGR_CKDIV(ckdiv);
+    } else {
+    	c_lh_div = ul_mck / (ul_speed * TWIHS_CLK_DIVIDER) - TWIHS_CLK_CALC_ARGU;
 
-		/* cldiv must fit in 8 bits, ckdiv must fit in 3 bits */
-		while ((c_lh_div > TWIHS_CLK_DIV_MAX) && (ckdiv < TWIHS_CLK_DIV_MIN)) {
-			/* Increase clock divider */
-			ckdiv++;
-			/* Divide cldiv value */
-			c_lh_div /= TWIHS_CLK_DIVIDER;
-		}
+    	/* cldiv must fit in 8 bits, ckdiv must fit in 3 bits */
+    	while ((c_lh_div > TWIHS_CLK_DIV_MAX) && (ckdiv < TWIHS_CLK_DIV_MIN)) {
+        	/* Increase clock divider */
+        	ckdiv++;
+        	/* Divide cldiv value */
+        	c_lh_div /= TWIHS_CLK_DIVIDER;
+    	}
 
-		/* set clock waveform generator register */
-		p_twihs->TWIHS_CWGR =
-				TWIHS_CWGR_CLDIV(c_lh_div) | TWIHS_CWGR_CHDIV(c_lh_div) |
-				TWIHS_CWGR_CKDIV(ckdiv);
-	}
+    	/* set clock waveform generator register */
+    	p_twihs->TWIHS_CWGR =
+    	TWIHS_CWGR_CLDIV(c_lh_div) | TWIHS_CWGR_CHDIV(c_lh_div) |
+    	TWIHS_CWGR_CKDIV(ckdiv);
+    }
 
-	return PASS;
+    return PASS;
 }
 
 /**
@@ -294,6 +340,13 @@ uint32_t twihs_master_read(Twihs *p_twihs, twihs_packet_t *p_packet)
 	/* Send a START Condition */
 	p_twihs->TWIHS_CR = TWIHS_CR_START;
 
+    //Kolijn Mods
+    // Immediately make the next byte a stop bit
+    if (cnt==1){
+        p_twihs->TWIHS_CR = TWIHS_CR_STOP;
+    }
+
+
 	while (cnt > 0) {
 		status = p_twihs->TWIHS_SR;
 		if (status & TWIHS_SR_NACK) {
@@ -319,9 +372,83 @@ uint32_t twihs_master_read(Twihs *p_twihs, twihs_packet_t *p_packet)
 	while (!(p_twihs->TWIHS_SR & TWIHS_SR_TXCOMP)) {
 	}
 
+    //Kolijn mods : Store the final byte as well
+    // Added in for XTX read again, why was it removed?
+    *buffer = p_twihs->TWIHS_RHR;
+
 	p_twihs->TWIHS_SR;
 
 	return TWIHS_SUCCESS;
+}
+
+uint32_t twihs_master_read_no_addr(Twihs *p_twihs, twihs_packet_t *p_packet, bool noAddress)
+{
+    uint32_t status, cnt = p_packet->length;
+    uint8_t *buffer = p_packet->buffer;
+    uint32_t timeout = TWIHS_TIMEOUT;
+
+    // Empty buffer
+    uint8_t temp = p_twihs->TWIHS_RHR;
+
+    /* Check argument */
+    if (cnt == 0) {
+        return TWIHS_INVALID_ARGUMENT;
+    }
+
+    /* Set read mode, slave address and 3 internal address byte lengths */
+    p_twihs->TWIHS_MMR = 0;
+    if (noAddress) {
+        p_twihs->TWIHS_MMR = TWIHS_MMR_MREAD | TWIHS_MMR_DADR(p_packet->chip);
+    }
+    else{
+        p_twihs->TWIHS_MMR = TWIHS_MMR_MREAD | TWIHS_MMR_DADR(p_packet->chip) | ((p_packet->addr_length << TWIHS_MMR_IADRSZ_Pos) &
+        TWIHS_MMR_IADRSZ_Msk);
+    }
+
+    /* Set internal address for remote chip */
+    p_twihs->TWIHS_IADR = 0;
+    p_twihs->TWIHS_IADR = twihs_mk_addr(p_packet->addr, p_packet->addr_length);
+
+    /* Send a START Condition */
+    p_twihs->TWIHS_CR = TWIHS_CR_START;
+
+    //Kolijn Mods
+    // Immediately make the next byte a stop bit
+    if (cnt==1){
+        p_twihs->TWIHS_CR = TWIHS_CR_STOP;
+    }
+
+    while (cnt > 0) {
+        status = p_twihs->TWIHS_SR;
+        if (status & TWIHS_SR_NACK) {
+            return TWIHS_RECEIVE_NACK;
+        }
+        if (!timeout--) {
+            return TWIHS_ERROR_TIMEOUT;
+        }
+        if (!(status & TWIHS_SR_RXRDY)) {
+            continue;
+        }
+        /* Last byte ? */
+        if (cnt == 1) {
+            p_twihs->TWIHS_CR = TWIHS_CR_STOP;
+        }
+
+        *buffer++ = p_twihs->TWIHS_RHR;
+
+        cnt--;
+        timeout = TWIHS_TIMEOUT;
+    }
+
+    while (!(p_twihs->TWIHS_SR & TWIHS_SR_TXCOMP)) {
+    }
+
+    //Kolijn mods : Store the final byte as well
+    *buffer = p_twihs->TWIHS_RHR;
+
+    p_twihs->TWIHS_SR;
+
+    return TWIHS_SUCCESS;
 }
 
 /**
@@ -354,6 +481,13 @@ uint32_t twihs_master_write(Twihs *p_twihs, twihs_packet_t *p_packet)
 	p_twihs->TWIHS_IADR = 0;
 	p_twihs->TWIHS_IADR = twihs_mk_addr(p_packet->addr, p_packet->addr_length);
 
+    //Kolijn Mods
+    // Immediately make the next byte a stop bit
+    /*
+    if (cnt==1){
+        p_twihs->TWIHS_CR = TWIHS_CR_STOP;
+    }*/
+
     uint16_t timeout = TWIHS_TIMEOUT;
 	/* Send all bytes */
 	while (cnt > 0) {
@@ -369,6 +503,7 @@ uint32_t twihs_master_write(Twihs *p_twihs, twihs_packet_t *p_packet)
 		if (!(status & TWIHS_SR_TXRDY)) {
 			continue;
 		}
+
 		p_twihs->TWIHS_THR = *buffer++;
 
 		cnt--;

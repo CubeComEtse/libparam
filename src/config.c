@@ -330,8 +330,8 @@ void CONFIG_vUpdatePowerMeasurements(void){
     REG_UpdatePower(CHANNEL_5, power2);
 
     LTC2992_vReadPower(&power_measure_2, &power1, &power2);
-    REG_UpdatePower(CHANNEL_vBat, power1);
-    REG_UpdatePower(CHANNEL_vBatAlt, power2);
+    REG_UpdatePower(CHANNEL_vBatAlt, power1);
+    REG_UpdatePower(CHANNEL_vBat, power2);
 }
 
 

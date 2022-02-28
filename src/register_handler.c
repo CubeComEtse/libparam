@@ -26,12 +26,12 @@ struct register_change_message messages[messages_max_length];
 
 struct OBC_RegisterData currentRegisters;
 
-static size_t AddressesCount = 18;
+static size_t AddressesCount = 19;
 static uint8_t Adresses[] = { OBC_REG_BOARD_ID, OBC_REG_FW_VERSION, OBC_REG_HW_VERSION, \
     OBC_REG_SCRATCHPAD, OBC_REG_SUPPORTED_BOARDS, OBC_REG_CONFIGURED_BOARDS, OBC_REG_CONFPOWER, \
     OBC_REG_MEASUREVI_V3, OBC_REG_MEASUREPOWER_V3, OBC_REG_MEASUREVI_V5, OBC_REG_MEASUREPOWER_V5, \
     OBC_REG_MEASUREVI_VBAT, OBC_REG_MEASUREPOWER_VBAT, OBC_REG_MEASUREVI_VBATALT, \
-    OBC_REG_MEASUREPOWER_VBATALT, OBC_REG_I2CCONFIG,
+    OBC_REG_MEASUREPOWER_VBATALT, OBC_REG_I2CCONFA, OBC_REG_I2CCONFB,
     OBC_REG_XTXPINS,
     OBC_REG_XDCCONFIG};
 
@@ -40,10 +40,10 @@ static uint8_t Adresses[] = { OBC_REG_BOARD_ID, OBC_REG_FW_VERSION, OBC_REG_HW_V
 void REG_vInit(){
     // Some values are fixed
     currentRegisters.board_id = 0x634F4243; //'cOBC'
-    currentRegisters.fw_version = 0x00020101;
+    currentRegisters.fw_version = 0x00020102;
     currentRegisters.hw_version = 0x00000001;
     currentRegisters.supported_boards = 0x07;
-    currentRegisters.i2cconfig = (0x5 << OBC_REG_I2CCONFIG_SPD_Pos);
+    currentRegisters.i2cconfa = (0x5UL << OBC_REG_I2CCONFA_SPD_Pos) | (10UL << OBC_REG_I2CCONFA_TRDEL_Pos);
 
     currentRegisters.xdcconfig = 0x52 << OBC_REG_XDCCONFIG_ADDR_Pos;
 }
@@ -158,14 +158,21 @@ bool REG_vGet(const uint8_t address, uint8_t* data, uint8_t* length){
             *length = 4;
             copyResult = true;
             break;
-        case OBC_REG_I2CCONFIG:
-            REG_Copyu32ToArray(currentRegisters.i2cconfig, data);
+        case OBC_REG_I2CCONFA:
+            REG_Copyu32ToArray(currentRegisters.i2cconfa, data);
+            *length = 4;
+            copyResult = true;
+            break;
+        case OBC_REG_I2CCONFB:
+            REG_Copyu32ToArray(currentRegisters.i2cconfb, data);
             *length = 4;
             copyResult = true;
             break;
         case OBC_REG_XTXPINS:
-            // Shouldn't readlly be here, but fine for now
-            currentRegisters.xtxpins = (currentRegisters.xtxpins & ~OBC_REG_XTXPINS_RDY_Msk) | (((uint32_t) XTX_bGetReady()) << OBC_REG_XTXPINS_RDY_Pos);
+            // Shouldn't really be here, but fine for now
+            
+            currentRegisters.xtxpins = (currentRegisters.xtxpins & ~OBC_REG_XTXPINS_RDY_Msk) | ( ( (bool) XTX_bGetReady() ) << OBC_REG_XTXPINS_RDY_Pos );
+            //currentRegisters.xtxpins = (currentRegisters.xtxpins & ~OBC_REG_XTXPINS_RDY_Msk) | (((uint32_t) ((bool) XTX_bGetReady())) << OBC_REG_XTXPINS_RDY_Pos);
 
             REG_Copyu32ToArray(currentRegisters.xtxpins, data);
             *length = 4;
@@ -241,11 +248,14 @@ void REG_vProcessMessages(void){
                 currentRegisters.confpower = deserialized;
                 CONFIG_vDecodePower((uint8_t) deserialized);
                 break;
-            case OBC_REG_I2CCONFIG:
-                I2C_SetEndpointSpeed((deserialized & OBC_REG_I2CCONFIG_SPD_Msk) >> OBC_REG_I2CCONFIG_SPD_Pos);
-                // Todo: Use the checksum bit
-                
-                currentRegisters.i2cconfig = deserialized;
+            case OBC_REG_I2CCONFA:
+                // Set the module speed here. The other values in the register are read when they are needed
+                I2C_SetEndpointSpeed( (uint32_t) ((deserialized & OBC_REG_I2CCONFA_SPD_Msk) >> OBC_REG_I2CCONFA_SPD_Pos) * 10000);
+                currentRegisters.i2cconfa = deserialized;
+                break;
+            case OBC_REG_I2CCONFB:
+                I2C_SetEndpointAddress((deserialized & OBC_REG_I2CCONFB_ADDR_Msk) >> OBC_REG_I2CCONFB_ADDR_Pos);
+                currentRegisters.i2cconfb = deserialized;
                 break;
             case OBC_REG_XTXPINS:
                 currentRegisters.xtxpins = deserialized;
@@ -308,7 +318,7 @@ void REG_UpdateCurrent(uint8_t channel, uint16_t value){
 }
 
 
-void REG_UpdatePower(uint8_t channel, uint16_t value){
+void REG_UpdatePower(uint8_t channel, uint32_t value){
     switch (channel)
     {
         case CHANNEL_3:
@@ -326,12 +336,38 @@ void REG_UpdatePower(uint8_t channel, uint16_t value){
     }
 }
 
-uint8_t REG_GetI2CSpeed(void){
-    return (currentRegisters.i2cconfig & OBC_REG_I2CCONFIG_SPD_Msk) >> OBC_REG_I2CCONFIG_SPD_Pos;
+/*
+ * Returns the current I2C Speed
+*/
+inline uint8_t REG_GetI2CSpeed(void){
+    return (currentRegisters.i2cconfa & OBC_REG_I2CCONFA_SPD_Msk) >> OBC_REG_I2CCONFA_SPD_Pos;
 }
 
 
-uint8_t REG_GetXDCAddress(void)
+/*
+ * Updates the I2C speed in the register data and updates the module settings
+*/
+void REG_SetI2CSpeed(uint32_t newSpeed)
 {
-    return (currentRegisters.xdcconfig & OBC_REG_XDCCONFIG_ADDR_Msk) >> OBC_REG_XDCCONFIG_ADDR_Pos;
+    currentRegisters.i2cconfa = (currentRegisters.i2cconfa & ~OBC_REG_I2CCONFA_SPD_Msk) | ( ((uint32_t) newSpeed / 10000) << OBC_REG_I2CCONFA_SPD_Pos);
+    I2C_SetEndpointSpeed(newSpeed);
+}
+
+/*
+ * Get the current I2C Address
+*/
+inline uint32_t REG_GetI2CAddress(void)
+{
+    return ((currentRegisters.i2cconfb & OBC_REG_I2CCONFB_ADDR_Msk) >> OBC_REG_I2CCONFB_ADDR_Pos);
+}
+
+/*
+ * Update the address in the register data, and update the I2C module to use 
+ * the new setting
+*/
+void REG_vSetI2CAddress(uint8_t address)
+{
+    currentRegisters.i2cconfb = (currentRegisters.i2cconfb & ~OBC_REG_I2CCONFB_ADDR_Msk) | ( ((uint32_t) address) << OBC_REG_I2CCONFB_ADDR_Pos);
+
+    I2C_SetEndpointAddress(address);
 }

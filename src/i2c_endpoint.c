@@ -13,27 +13,27 @@
 #include "i2c_driver.h"
 #include "std_message.h"
 
+#include "register_handler.h"
+
 static struct i2c_driver_data sI2cDriver;
-static uint8_t u8I2CEndpoint;
 static uint8_t u8I2CAddress;
 
+
 /**
- * \brief Initialize the I2C Endpoint
+ * \brief   Change the Speed of the I2C module
  * 
- * \param endpoint The endpoint number
- * \param dev_addr The i2c address of the device to talk to
- */
-void I2C_vInitEndpoint(uint8_t endpoint, uint8_t dev_addr, uint8_t newSpeed) {
-    I2C_SetEndpointSpeed(newSpeed);
-    u8I2CEndpoint = endpoint;
-    u8I2CAddress = dev_addr;
+ * \param newSpeed Speed in bps. For example, 400000UL.
+*/
+void I2C_SetEndpointSpeed(uint32_t newSpeed){
+    I2C_DRIVER_vInitPC104(&sI2cDriver, newSpeed);
 }
 
-/*
- * Change the speed of the I2C instance
+/**
+ * \brief   Change the address of the board we are talking to
+ * 
 */
-void I2C_SetEndpointSpeed(uint8_t newSpeed){
-    I2C_DRIVER_vInitPC104(&sI2cDriver, newSpeed*10000);
+void I2C_SetEndpointAddress(uint8_t address){
+    u8I2CAddress =  address;
 }
 
 /**
@@ -56,7 +56,7 @@ void I2C_SetEndpointSpeed(uint8_t newSpeed){
  * \return bool True to retransmit the buffers. Always returns False
  */
 bool I2C_bEndpoint(const uint8_t* rx_buffer, const uint16_t rx_length, uint8_t* tx_buffer, uint16_t* tx_length) {
-    
+
     // If it is a read packet, it should have length 3
     if (rx_buffer[DIR_idx] == READ) {
         
@@ -68,13 +68,44 @@ bool I2C_bEndpoint(const uint8_t* rx_buffer, const uint16_t rx_length, uint8_t* 
         *tx_length = 3 + rx_buffer[LEN_idx];
 
         return I2C_DRIVER_bReadFromChecksum(&sI2cDriver, u8I2CAddress, rx_buffer[ADDR_idx], &tx_buffer[DATA_idx], rx_buffer[LEN_idx]);
+
     }
     else
     {
-        I2C_DRIVER_bWriteToChecksum(&sI2cDriver, u8I2CAddress, rx_buffer[ADDR_idx], &rx_buffer[DATA_idx], rx_buffer[LEN_idx]);
+        I2C_DRIVER_bWriteWithChecksum(&sI2cDriver, u8I2CAddress, rx_buffer[ADDR_idx], &rx_buffer[DATA_idx], rx_buffer[LEN_idx]);
+        
         // Always return false, writes don't send data back
         return false;
     }
+}
+
+
+/**
+ * \brief Similar to I2C_bEndpoint, but without sending the checksum.
+ */
+bool I2C_bEndpointNoChecksum(const uint8_t* rx_buffer, const uint16_t rx_length, uint8_t* tx_buffer, uint16_t* tx_length) {
+
+    // If it is a read packet, it should have length 3
+    if (rx_buffer[DIR_idx] == READ) {
+        
+        // Update the TX buffer with values
+        tx_buffer[ADDR_idx] = rx_buffer[ADDR_idx];
+        tx_buffer[DIR_idx] = rx_buffer[DIR_idx];
+        tx_buffer[LEN_idx] = rx_buffer[LEN_idx];
+        // The length is the 3 bytes + the length we're reading
+        *tx_length = 3 + rx_buffer[LEN_idx];
+
+        return I2C_DRIVER_bReadPlain(&sI2cDriver, u8I2CAddress, rx_buffer[ADDR_idx], &tx_buffer[DATA_idx], rx_buffer[LEN_idx]);
+        
+    }
+    else
+    {
+        I2C_DRIVER_bWritePlain(&sI2cDriver, u8I2CAddress, rx_buffer[ADDR_idx], &rx_buffer[DATA_idx], rx_buffer[LEN_idx]);
+        
+        // Always return false, writes don't send data back
+        return false;
+    }
+
 }
 
 /**

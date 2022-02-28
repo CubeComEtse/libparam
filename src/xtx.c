@@ -28,6 +28,9 @@ static uint16_t u16PinReadycheckInterval = 100;
 // The previous state of the pin, should we send or not
 static bool prevReadyPin = false;
 
+#define XTX_DEFAULT_I2C_ADDRESS          0x26
+#define XTC_DEFAULT_I2C_SPEED            50000UL
+
 /**
 * \brief Configure for the XTX board
 * 
@@ -53,8 +56,11 @@ void XTX_vConfig(void) {
     ioport_set_pin_dir(XTX_RDY_PIN, IOPORT_DIR_INPUT);
     ioport_set_pin_mode(XTX_RDY_PIN, IOPORT_MODE_PULLDOWN);
 
+    // Setting these values in the Register_Handler will also set the values in the I2C module
+    REG_SetI2CSpeed(XTC_DEFAULT_I2C_SPEED);
+    REG_vSetI2CAddress(XTX_DEFAULT_I2C_ADDRESS);
+
     // Configure endpoints
-    I2C_vInitEndpoint(I2C_ENDPOINT, XTX_CAN_ADRESS, REG_GetI2CSpeed());
     CAN_vInitEndpoint(CAN_ENDPOINT, OBC_CAN_ADRESS, XTX_CAN_ADRESS);
 
     // Register them with the sermux

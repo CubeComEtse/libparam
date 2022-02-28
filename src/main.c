@@ -32,6 +32,10 @@ int main (void)
 
     BSP_vTelemetrySetCTS(false);
 
+    // Always register all the Endpoints.
+    SERMUX_vRegisterEndpoint(I2C_ENDPOINT_CHKSM, &I2C_bEndpoint);
+    SERMUX_vRegisterEndpoint(I2C_ENDPOINT_PLAIN, &I2C_bEndpointNoChecksum);
+
 
     /*
     All messages from the USART are handled by an endpoint. When the board 
@@ -54,6 +58,9 @@ int main (void)
 
         REG_vProcessMessages();
 
-        //XTX_vProcess();
+        //uint8_t data[] = {0x55};
+        //SERMUX_vTransmit(1, data, 1);
+
+        // XTX_vProcess();
     }
 }

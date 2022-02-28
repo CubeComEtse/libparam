@@ -383,6 +383,7 @@ void twihs_disable_master_mode(Twihs *p_twihs);
 uint32_t twihs_master_init(Twihs *p_twihs, const twihs_options_t *p_opt);
 uint32_t twihs_set_speed(Twihs *p_twihs, uint32_t ul_speed, uint32_t ul_mck);
 uint32_t twihs_probe(Twihs *p_twihs, uint8_t uc_slave_addr);
+uint32_t twihs_master_read_no_addr(Twihs *p_twihs, twihs_packet_t *p_packet, bool noAddress);
 uint32_t twihs_master_read(Twihs *p_twihs, twihs_packet_t *p_packet);
 uint32_t twihs_master_write(Twihs *p_twihs, twihs_packet_t *p_packet);
 void twihs_enable_interrupt(Twihs *p_twihs, uint32_t ul_sources);

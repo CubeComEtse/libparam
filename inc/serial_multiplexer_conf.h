@@ -17,7 +17,7 @@ const uint8_t HEADERBYTES[] = {0xF0, 0x55, 0xAA, 0x0F};
 /*
  * The max number of callbacks, from 0 to MAX_ENDPOINTS
 */
-#define MAX_ENDPOINTS  8
+#define MAX_ENDPOINTS  32
 
 
 #define MAX_MESSAGE_LENGTH 32

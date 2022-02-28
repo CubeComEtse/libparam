@@ -3,7 +3,7 @@
 		"languages": ["c", "c#"],
 		"c#": {
 			"functions_from": "extra.cs",
-			"namespace": "ControllerDemo.Components.Models"
+			"namespace": "Devices.Models"
 		},
 		"filename": "OBC"
 	},
@@ -238,17 +238,26 @@
 				}
 			},
 			{
-				"name": "I2CConfig",
+				"name": "I2CConfA",
 				"address": "0x29",
 				"dir": "rw",
 				"width": "32",
 				"fields": [
 					{
-						"name": "CHK",
-						"pretty-name": "Checksum",
-						"description": "Enables or Disables the checksum in the I2C communications",
-						"bit": "8",
-						"options": "Enabled",
+						"name": "TRDEL",
+						"pretty-name": "Transaction delay",
+						"description": "Delay in ms, between transactions",
+						"bit": "23-16",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						}
+					},
+					{
+						"name": "WRDEL",
+						"pretty-name": "Write-Read Delay",
+						"description": "Sets the delay, in 10 us increments, between performing an adress write and it's subsequent read. Only used on reads. Set to 0 to disable.",
+						"bit": "15-8",
 						"c#": {
 							"hasminmax": "false",
 							"type": "byte"
@@ -258,6 +267,29 @@
 						"name": "SPD",
 						"pretty-name": "I2C Speed",
 						"description": "Sets the I2C speed in 10kb/s intervals. (1 = 10 kb/s, 40 = 400 kb/s)",
+						"bit": "7-0",
+						"c#": {
+							"hasminmax": "true",
+							"min": 1,
+							"max": 40,
+							"type": "byte"
+						}
+					}
+				],
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name": "I2CConfB",
+				"address": "0x2A",
+				"dir": "rw",
+				"width": "32",
+				"fields": [
+					{
+						"name": "ADDR",
+						"pretty-name": "I2C Address",
+						"description": "The address of the I2C device. This is set by the OBC when a new board is configured, but can also be set by the user.",
 						"bit": "7-0",
 						"c#": {
 							"hasminmax": "false",
@@ -376,7 +408,7 @@
 			"MeasureVI": [
 				{
 					"name": "voltage",
-					"description": "The voltage measurement",
+					"description": "The voltage measurement, in mV",
 					"bit": "31-16",
 					"c#": {
 						"hasminmax": "false",
@@ -385,7 +417,7 @@
 				},
 				{
 					"name": "current",
-					"description": "The current measurement",
+					"description": "The current measurement, in mA",
 					"bit": "15-0",
 					"c#": {
 						"hasminmax": "false",

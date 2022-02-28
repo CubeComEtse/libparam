@@ -16,7 +16,7 @@ using System.Threading.Tasks;
  **********************************************************************/
 
 
-namespace ControllerDemo.Components.Models
+namespace Devices.Models
 {
     public class OBC : INotifyPropertyChanged, IModel
     {
@@ -38,10 +38,17 @@ namespace ControllerDemo.Components.Models
             OBC_REG_MEASUREPOWER_VBAT                = 0x26,
             OBC_REG_MEASUREVI_VBATALT                = 0x27,
             OBC_REG_MEASUREPOWER_VBATALT             = 0x28,
-            OBC_REG_I2CCONFIG                        = 0x29,
+            OBC_REG_I2CCONFA                         = 0x29,
+            OBC_REG_I2CCONFB                         = 0x2a,
             OBC_REG_XTXPINS                          = 0x30,
             OBC_REG_XDCCONFIG                        = 0x40,
         }
+
+        public enum OBCRegisterStorageLocations{
+        }
+
+        Dictionary<OBCRegisterStorageLocations, (int index, OBCRegisterAddress)> storageLocationLookup = new Dictionary<OBCRegisterStorageLocations, (int index, OBCRegisterAddress)>{ 
+        };
 
         [StructLayout(LayoutKind.Explicit, Pack = 1)]
         public struct RegisterData
@@ -63,7 +70,9 @@ namespace ControllerDemo.Components.Models
             [FieldOffset(0)]
             public RegMeasurePower RegMeasurePower;
             [FieldOffset(0)]
-            public RegI2CConfig RegI2CConfig;
+            public RegI2CConfA RegI2CConfA;
+            [FieldOffset(0)]
+            public RegI2CConfB RegI2CConfB;
             [FieldOffset(0)]
             public RegXTXpins RegXTXpins;
             [FieldOffset(0)]
@@ -216,18 +225,38 @@ namespace ControllerDemo.Components.Models
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
-        public struct RegI2CConfig
+        public struct RegI2CConfA
         {
             [FieldOffset(0)]
             UInt32 data;
 
-            public byte CHK
+            public byte TRDEL
             {
-                get { return (byte)((data & (UInt32)0x00000100) >> 8); } 
-                set { data = (UInt32)((data & ~(UInt32)0x00000100) | (( (UInt32)(value) & 0x00000001) << 8)); }
+                get { return (byte)((data & (UInt32)0x00ff0000) >> 16); } 
+                set { data = (UInt32)((data & ~(UInt32)0x00ff0000) | (( (UInt32)(value) & 0x000000ff) << 16)); }
+            }
+
+            public byte WRDEL
+            {
+                get { return (byte)((data & (UInt32)0x0000ff00) >> 8); } 
+                set { data = (UInt32)((data & ~(UInt32)0x0000ff00) | (( (UInt32)(value) & 0x000000ff) << 8)); }
             }
 
             public byte SPD
+            {
+                get { return (byte)((data & (UInt32)0x000000ff) >> 0); } 
+                set { data = (UInt32)((data & ~(UInt32)0x000000ff) | (( (UInt32)(value) & 0x000000ff) << 0)); }
+            }
+
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegI2CConfB
+        {
+            [FieldOffset(0)]
+            UInt32 data;
+
+            public byte ADDR
             {
                 get { return (byte)((data & (UInt32)0x000000ff) >> 0); } 
                 set { data = (UInt32)((data & ~(UInt32)0x000000ff) | (( (UInt32)(value) & 0x000000ff) << 0)); }
@@ -626,27 +655,52 @@ namespace ControllerDemo.Components.Models
             set => _ = Set(ref _MeasurePower_VBatAlt_power, value);
         }
         
-        /*************** Properties for I2CConfig register *******************/
-        private bool _I2CConfig_CHKIsSet;
-        public bool I2CConfig_CHKIsSet {
-            get => _I2CConfig_CHKIsSet;
-            set => _ = Set(ref _I2CConfig_CHKIsSet, value); 
+        /*************** Properties for I2CConfA register ********************/
+        private bool _I2CConfA_TRDELIsSet;
+        public bool I2CConfA_TRDELIsSet {
+            get => _I2CConfA_TRDELIsSet;
+            set => _ = Set(ref _I2CConfA_TRDELIsSet, value); 
         }
-        private Enabled _I2CConfig_CHK;
-        public Enabled I2CConfig_CHK {
-            get => _I2CConfig_CHK;
-            set => _ = Set(ref _I2CConfig_CHK, value);
+        private byte _I2CConfA_TRDEL;
+        public byte I2CConfA_TRDEL {
+            get => _I2CConfA_TRDEL;
+            set => _ = Set(ref _I2CConfA_TRDEL, value);
         }
         
-        private bool _I2CConfig_SPDIsSet;
-        public bool I2CConfig_SPDIsSet {
-            get => _I2CConfig_SPDIsSet;
-            set => _ = Set(ref _I2CConfig_SPDIsSet, value); 
+        private bool _I2CConfA_WRDELIsSet;
+        public bool I2CConfA_WRDELIsSet {
+            get => _I2CConfA_WRDELIsSet;
+            set => _ = Set(ref _I2CConfA_WRDELIsSet, value); 
         }
-        private byte _I2CConfig_SPD;
-        public byte I2CConfig_SPD {
-            get => _I2CConfig_SPD;
-            set => _ = Set(ref _I2CConfig_SPD, value);
+        private byte _I2CConfA_WRDEL;
+        public byte I2CConfA_WRDEL {
+            get => _I2CConfA_WRDEL;
+            set => _ = Set(ref _I2CConfA_WRDEL, value);
+        }
+        
+        public byte I2CConfA_SPDMax { get => 40; }
+        public byte I2CConfA_SPDMin { get => 1; }
+        private bool _I2CConfA_SPDIsSet;
+        public bool I2CConfA_SPDIsSet {
+            get => _I2CConfA_SPDIsSet;
+            set => _ = Set(ref _I2CConfA_SPDIsSet, value); 
+        }
+        private byte _I2CConfA_SPD;
+        public byte I2CConfA_SPD {
+            get => _I2CConfA_SPD;
+            set => _ = Set(ref _I2CConfA_SPD, value);
+        }
+        
+        /*************** Properties for I2CConfB register ********************/
+        private bool _I2CConfB_ADDRIsSet;
+        public bool I2CConfB_ADDRIsSet {
+            get => _I2CConfB_ADDRIsSet;
+            set => _ = Set(ref _I2CConfB_ADDRIsSet, value); 
+        }
+        private byte _I2CConfB_ADDR;
+        public byte I2CConfB_ADDR {
+            get => _I2CConfB_ADDR;
+            set => _ = Set(ref _I2CConfB_ADDR, value);
         }
         
         /*************** Properties for XTXpins register *********************/
@@ -695,6 +749,8 @@ namespace ControllerDemo.Components.Models
             set => _ = Set(ref _XDCConfig_ADDR, value);
         }
         
+        /*************** Holding Buffers for storageregs *********************/
+
         public void DecodeFrom(RegisterData register, OBCRegisterAddress address)
         {
             switch (address)
@@ -773,9 +829,14 @@ namespace ControllerDemo.Components.Models
                     MeasurePower_VBatAlt_power =  register.RegMeasurePower.power;
                     break;
 
-                case OBCRegisterAddress.OBC_REG_I2CCONFIG:
-                    I2CConfig_CHK = (Enabled) register.RegI2CConfig.CHK;
-                    I2CConfig_SPD =  register.RegI2CConfig.SPD;
+                case OBCRegisterAddress.OBC_REG_I2CCONFA:
+                    I2CConfA_TRDEL =  register.RegI2CConfA.TRDEL;
+                    I2CConfA_WRDEL =  register.RegI2CConfA.WRDEL;
+                    I2CConfA_SPD =  register.RegI2CConfA.SPD;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_I2CCONFB:
+                    I2CConfB_ADDR =  register.RegI2CConfB.ADDR;
                     break;
 
                 case OBCRegisterAddress.OBC_REG_XTXPINS:
@@ -790,6 +851,7 @@ namespace ControllerDemo.Components.Models
 
             }
         }
+
         public void EncodeTo(ref RegisterData register, OBCRegisterAddress address)
         {
             switch (address)
@@ -868,9 +930,14 @@ namespace ControllerDemo.Components.Models
                     register.RegMeasurePower.power = MeasurePower_VBatAlt_power;
                     break;
 
-                case OBCRegisterAddress.OBC_REG_I2CCONFIG:
-                    register.RegI2CConfig.CHK = (byte) I2CConfig_CHK;
-                    register.RegI2CConfig.SPD = I2CConfig_SPD;
+                case OBCRegisterAddress.OBC_REG_I2CCONFA:
+                    register.RegI2CConfA.TRDEL = I2CConfA_TRDEL;
+                    register.RegI2CConfA.WRDEL = I2CConfA_WRDEL;
+                    register.RegI2CConfA.SPD = I2CConfA_SPD;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_I2CCONFB:
+                    register.RegI2CConfB.ADDR = I2CConfB_ADDR;
                     break;
 
                 case OBCRegisterAddress.OBC_REG_XTXPINS:
@@ -885,6 +952,34 @@ namespace ControllerDemo.Components.Models
 
             }
         }
+
+        public void DeserializeReg(OBCRegisterStorageLocations location, byte data)
+        {
+            int index = storageLocationLookup[location].Item1;
+            OBCRegisterAddress address = storageLocationLookup[location].Item2;
+            
+            // Take the byte we received, 
+            switch (address)
+            {
+            }
+        }
+
+        public byte SerializeTo(OBCRegisterStorageLocations location)
+        {
+            if (!storageLocationLookup.ContainsKey(location)){
+                return 0x00;
+            }
+            
+            int index = storageLocationLookup[location].Item1;
+            OBCRegisterAddress address = storageLocationLookup[location].Item2;
+            
+            RegisterData reg = new RegisterData();
+            EncodeTo(ref reg, address);
+            
+            byte[] data = Stream.Serialize<OBC.RegisterData>(reg);
+            return data[index];
+        }
+
         /*
         * Wrapper for Setters
         */

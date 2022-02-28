@@ -17,14 +17,15 @@
 
 #include "xdc.h"
 
+#define XDC_DEFAULT_I2C_ADDRESS 0x52
+#define XDC_DEFAULT_I2C_SPEED 400000UL
+
 void XDC_vConfig(void)
 {
-    uint8_t address = REG_GetXDCAddress();
-
-    // Configure endpoints
-    I2C_vInitEndpoint(I2C_ENDPOINT, address, REG_GetI2CSpeed());
-    //CAN_vInitEndpoint(CAN_ENDPOINT, OBC_CAN_ADRESS, XSTEER_ADRESS);
-
+    // Configure I2C Settings
+    REG_SetI2CSpeed(XDC_DEFAULT_I2C_SPEED);
+    REG_vSetI2CAddress(XDC_DEFAULT_I2C_ADDRESS);
+    
     // Register them with the sermux
     SERMUX_vRegisterEndpoint(I2C_ENDPOINT, &I2C_bEndpoint);
     //SERMUX_vRegisterEndpoint(CAN_ENDPOINT, &CAN_bEndpoint);
