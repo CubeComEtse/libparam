@@ -46,7 +46,7 @@ void BSP_vInit(void) {
     BSP_vInitBoardI2C();
     BSP_vInitPowerSenseGPIO();
     BSP_vInitPowerGPIO();
-    // BSP_vInitCan();
+    BSP_vInitCan();
 
     BSP_vInit1MsTimer();
 
@@ -62,6 +62,7 @@ void BSP_vInit(void) {
     ioport_set_pin_level(TEST_PIN, 0);
 
     Enable_global_interrupt();
+
 }
 
 void BSP_vSetTestPin(bool level) {
@@ -256,11 +257,15 @@ void BSP_vInitCan(void) {
     // The MCAN_init function sets the PCK 5 clock, to 30MHz
     // Enable PMC_PCK_5. This controls CAN clock generation
     // Prescaler = 300/ (14+1) = 20MHz
-    pmc_pck_set_prescaler(PMC_PCK_5, PMC_PCK_PRES(14));
+    
+    //pmc_pck_set_prescaler(PMC_PCK_5, PMC_PCK_PRES(14));
+    // Prescaler = 60 / (2+1) = 20Mhz
+    pmc_pck_set_prescaler(PMC_PCK_5, PMC_PCK_PRES(2));
+
     pmc_pck_set_source(PMC_PCK_5, PMC_PCK_CSS_PLLA_CLK);
     pmc_enable_pck(PMC_PCK_5);
 
-    mcan_set_baudrate(CAN_DEVICE, 1000000);
+    mcan_set_baudrate(CAN_DEVICE, 200000);
 
     // Will set CCCR.INIT bit to 1, so configuration is possible,
     // mcan_enable_test_mode(&sCanModule);
@@ -285,6 +290,14 @@ void BSP_vInitCan(void) {
 
 struct mcan_module* BSP_psGetCanDriver(void) {
     return &sCanModule;
+}
+
+void BSP_vInitRTC(void){
+    Rtc rtc0 = {0};
+}
+
+void RTC_HANDLER(void){
+
 }
 
 void CAN_HANDLER(void)
@@ -344,6 +357,10 @@ void CAN_HANDLER(void)
     }
 }
 
+void MCAN0_INT1_Handler(void){
+    asm("nop");
+};
+
 
 void TELEMETRY_USART_HANDLER(void)
 {
@@ -383,7 +400,8 @@ void BSP_vInit1MsTimer(void) {
     // TC_CMR_CPCTRG : Set RC compare to trigger a timer counter reset
     sysclk_enable_peripheral_clock(ID_TC0);
     tc_init(TC0, timerChannel, TC_CMR_TCCLKS_TIMER_CLOCK3 | TC_CMR_CPCTRG);
-    tc_write_rc(TC0, timerChannel, 4687);
+    uint16_t prescaler = sysclk_get_main_hz() /32 / 1000;
+    tc_write_rc(TC0, timerChannel, prescaler);
 
     tc_enable_interrupt(TC0, timerChannel, TC_IER_CPCS);
 
@@ -397,7 +415,7 @@ void BSP_vInit1MsTimer(void) {
 }
 
 // ToDo: Refactor
-static uint16_t msTimeCounter;
+static uint64_t msTimeCounter;
 
 void TC0_Handler(void)
 {
@@ -407,5 +425,9 @@ void TC0_Handler(void)
 }
 
 uint16_t BSP_u16TmrGetTick(void){
+    return (uint16_t)msTimeCounter;
+}
+
+uint64_t BSP_u64GetTimestamp(void){
     return msTimeCounter;
 }

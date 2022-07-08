@@ -29,6 +29,9 @@ namespace Devices.Models
             OBC_REG_SCRATCHPAD                       = 0x13,
             OBC_REG_SUPPORTED_BOARDS                 = 0x14,
             OBC_REG_CONFIGURED_BOARDS                = 0x15,
+            OBC_REG_UPTIME                           = 0x16,
+            OBC_REG_EVENT_CONFA                      = 0x17,
+            OBC_REG_EVENT                            = 0x18,
             OBC_REG_CONFPOWER                        = 0x20,
             OBC_REG_MEASUREVI_V3                     = 0x21,
             OBC_REG_MEASUREPOWER_V3                  = 0x22,
@@ -63,6 +66,12 @@ namespace Devices.Models
             public RegSupported_Boards RegSupported_Boards;
             [FieldOffset(0)]
             public RegConfigured_Boards RegConfigured_Boards;
+            [FieldOffset(0)]
+            public RegUptime RegUptime;
+            [FieldOffset(0)]
+            public RegEvent_ConfA RegEvent_ConfA;
+            [FieldOffset(0)]
+            public RegEvent RegEvent;
             [FieldOffset(0)]
             public RegConfPower RegConfPower;
             [FieldOffset(0)]
@@ -156,6 +165,53 @@ namespace Devices.Models
         {
             [FieldOffset(0)]
             public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegUptime
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegEvent_ConfA
+        {
+            [FieldOffset(0)]
+            UInt32 data;
+
+            public short count
+            {
+                get { return (short)((data & (UInt32)0x0000ffff) >> 0); } 
+                set { data = (UInt32)((data & ~(UInt32)0x0000ffff) | (( (UInt32)(value) & 0x0000ffff) << 0)); }
+            }
+
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegEvent
+        {
+            [FieldOffset(0)]
+            UInt32 data;
+
+            public short section
+            {
+                get { return (short)((data & (UInt32)0xff000000) >> 24); } 
+                set { data = (UInt32)((data & ~(UInt32)0xff000000) | (( (UInt32)(value) & 0x000000ff) << 24)); }
+            }
+
+            public short detail
+            {
+                get { return (short)((data & (UInt32)0x00ff0000) >> 16); } 
+                set { data = (UInt32)((data & ~(UInt32)0x00ff0000) | (( (UInt32)(value) & 0x000000ff) << 16)); }
+            }
+
+            public short timestamp
+            {
+                get { return (short)((data & (UInt32)0x0000ffff) >> 0); } 
+                set { data = (UInt32)((data & ~(UInt32)0x0000ffff) | (( (UInt32)(value) & 0x0000ffff) << 0)); }
+            }
+
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
@@ -306,15 +362,21 @@ namespace Devices.Models
 
         public enum Enabled : byte
         {
+            [Description("Enabled")]
             Enabled = 1,
+            [Description("Disabled")]
             Disabled = 0,
         }
 
         public enum BoardIdentifier : byte
         {
+            [Description("Disabled")]
             None = 0,
+            [Description("XTX")]
             XTX = 1,
+            [Description("XSTEER")]
             XSteer = 2,
+            [Description("XDC")]
             XDC = 4,
         }
 
@@ -466,6 +528,64 @@ namespace Devices.Models
         public BoardIdentifier Configured_Boards {
             get => _Configured_Boards;
             set => _ = Set(ref _Configured_Boards, value);
+        }
+        
+        /*************** Properties for Uptime register **********************/
+        private bool _UptimeIsSet;
+        public bool UptimeIsSet {
+            get => _UptimeIsSet;
+            set => _ = Set(ref _UptimeIsSet, value); 
+        }
+        private UInt32 _Uptime;
+        public UInt32 Uptime {
+            get => _Uptime;
+            set => _ = Set(ref _Uptime, value);
+        }
+        
+        /*************** Properties for Event_ConfA register *****************/
+        private bool _Event_ConfA_countIsSet;
+        public bool Event_ConfA_countIsSet {
+            get => _Event_ConfA_countIsSet;
+            set => _ = Set(ref _Event_ConfA_countIsSet, value); 
+        }
+        private short _Event_ConfA_count;
+        public short Event_ConfA_count {
+            get => _Event_ConfA_count;
+            set => _ = Set(ref _Event_ConfA_count, value);
+        }
+        
+        /*************** Properties for Event register ***********************/
+        private bool _Event_sectionIsSet;
+        public bool Event_sectionIsSet {
+            get => _Event_sectionIsSet;
+            set => _ = Set(ref _Event_sectionIsSet, value); 
+        }
+        private short _Event_section;
+        public short Event_section {
+            get => _Event_section;
+            set => _ = Set(ref _Event_section, value);
+        }
+        
+        private bool _Event_detailIsSet;
+        public bool Event_detailIsSet {
+            get => _Event_detailIsSet;
+            set => _ = Set(ref _Event_detailIsSet, value); 
+        }
+        private short _Event_detail;
+        public short Event_detail {
+            get => _Event_detail;
+            set => _ = Set(ref _Event_detail, value);
+        }
+        
+        private bool _Event_timestampIsSet;
+        public bool Event_timestampIsSet {
+            get => _Event_timestampIsSet;
+            set => _ = Set(ref _Event_timestampIsSet, value); 
+        }
+        private short _Event_timestamp;
+        public short Event_timestamp {
+            get => _Event_timestamp;
+            set => _ = Set(ref _Event_timestamp, value);
         }
         
         /*************** Properties for ConfPower register *******************/
@@ -786,6 +906,20 @@ namespace Devices.Models
                     Configured_Boards = (BoardIdentifier) register.RegConfigured_Boards.value;
                     break;
 
+                case OBCRegisterAddress.OBC_REG_UPTIME:
+                    Uptime =  register.RegUptime.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_EVENT_CONFA:
+                    Event_ConfA_count =  register.RegEvent_ConfA.count;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_EVENT:
+                    Event_section =  register.RegEvent.section;
+                    Event_detail =  register.RegEvent.detail;
+                    Event_timestamp =  register.RegEvent.timestamp;
+                    break;
+
                 case OBCRegisterAddress.OBC_REG_CONFPOWER:
                     ConfPower_voltage5Toggle = (Enabled) register.RegConfPower.voltage5Toggle;
                     ConfPower_voltage3Toggle = (Enabled) register.RegConfPower.voltage3Toggle;
@@ -887,6 +1021,20 @@ namespace Devices.Models
                     register.RegConfigured_Boards.value = (byte) Configured_Boards;
                     break;
 
+                case OBCRegisterAddress.OBC_REG_UPTIME:
+                    register.RegUptime.value = Uptime;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_EVENT_CONFA:
+                    register.RegEvent_ConfA.count = Event_ConfA_count;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_EVENT:
+                    register.RegEvent.section = Event_section;
+                    register.RegEvent.detail = Event_detail;
+                    register.RegEvent.timestamp = Event_timestamp;
+                    break;
+
                 case OBCRegisterAddress.OBC_REG_CONFPOWER:
                     register.RegConfPower.voltage5Toggle = (byte) ConfPower_voltage5Toggle;
                     register.RegConfPower.voltage3Toggle = (byte) ConfPower_voltage3Toggle;
@@ -953,8 +1101,21 @@ namespace Devices.Models
             }
         }
 
+        public static byte[] GetRequiredStorageLocations(OBCRegisterAddress address)
+        {
+            // If this register does not have storage locations, only update it's address   
+            return new byte[]{(byte) address };
+        }
+
         public void DeserializeReg(OBCRegisterStorageLocations location, byte data)
         {
+            if (!storageLocationLookup.ContainsKey(location))
+            {
+                RegisterData reg = Stream.Deserialize<OBC.RegisterData>(new byte[] { data });
+                DecodeFrom(reg, (OBCRegisterAddress)location);
+                return;
+            }
+
             int index = storageLocationLookup[location].Item1;
             OBCRegisterAddress address = storageLocationLookup[location].Item2;
             
@@ -966,12 +1127,18 @@ namespace Devices.Models
 
         public byte SerializeTo(OBCRegisterStorageLocations location)
         {
-            if (!storageLocationLookup.ContainsKey(location)){
-                return 0x00;
+            int index = 0;
+            OBCRegisterAddress address;
+            if (!storageLocationLookup.ContainsKey(location))
+            {
+                index = 0;
+                address = (OBCRegisterAddress) location;
             }
-            
-            int index = storageLocationLookup[location].Item1;
-            OBCRegisterAddress address = storageLocationLookup[location].Item2;
+            else
+            {
+                index = storageLocationLookup[location].Item1;
+                address = storageLocationLookup[location].Item2;
+            }
             
             RegisterData reg = new RegisterData();
             EncodeTo(ref reg, address);

@@ -76,6 +76,7 @@
 #define CAN_DEVICE_ID           ID_MCAN0
 #define CAN_INTERRUPT           MCAN0_INT0_IRQn
 #define CAN_HANDLER             MCAN0_INT0_Handler
+#define CAN_HANDLER2            MCAN0_INT1_Handler
 
 // The XTX uses the bottom 8 bits as the address
 #define XTX_CAN_ADRESS          0x0000026
@@ -84,6 +85,7 @@
 #define OBC_CAN_MASK            0x00000FF
 //#define MCAN_RX_EXTENDED_FILTER_ID_0_BUFFER_INDEX
 
+#define RTC_HANDLER             RTC_Handler
 
 // Test Pin
 #define TEST_PIN                PIO_PD24_IDX

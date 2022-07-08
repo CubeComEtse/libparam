@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "event.h"
 #include "config.h"
 #include "register_handler.h"
 #include "i2c_endpoint.h"
@@ -24,11 +25,13 @@ uint32_t messages_head = 0;
 #define messages_max_length 16
 struct register_change_message messages[messages_max_length];
 
-struct OBC_RegisterData currentRegisters;
+OBC_RegisterData_t currentRegisters;
 
-static size_t AddressesCount = 19;
+static size_t AddressesCount = 22;
 static uint8_t Adresses[] = { OBC_REG_BOARD_ID, OBC_REG_FW_VERSION, OBC_REG_HW_VERSION, \
-    OBC_REG_SCRATCHPAD, OBC_REG_SUPPORTED_BOARDS, OBC_REG_CONFIGURED_BOARDS, OBC_REG_CONFPOWER, \
+    OBC_REG_SCRATCHPAD, OBC_REG_SUPPORTED_BOARDS, OBC_REG_CONFIGURED_BOARDS, 
+    OBC_REG_UPTIME, OBC_REG_EVENT_CONFA, OBC_REG_EVENT,
+    OBC_REG_CONFPOWER, \
     OBC_REG_MEASUREVI_V3, OBC_REG_MEASUREPOWER_V3, OBC_REG_MEASUREVI_V5, OBC_REG_MEASUREPOWER_V5, \
     OBC_REG_MEASUREVI_VBAT, OBC_REG_MEASUREPOWER_VBAT, OBC_REG_MEASUREVI_VBATALT, \
     OBC_REG_MEASUREPOWER_VBATALT, OBC_REG_I2CCONFA, OBC_REG_I2CCONFB,
@@ -40,7 +43,7 @@ static uint8_t Adresses[] = { OBC_REG_BOARD_ID, OBC_REG_FW_VERSION, OBC_REG_HW_V
 void REG_vInit(){
     // Some values are fixed
     currentRegisters.board_id = 0x634F4243; //'cOBC'
-    currentRegisters.fw_version = 0x00020102;
+    currentRegisters.fw_version = 0x00020201;
     currentRegisters.hw_version = 0x00000001;
     currentRegisters.supported_boards = 0x07;
     currentRegisters.i2cconfa = (0x5UL << OBC_REG_I2CCONFA_SPD_Pos) | (10UL << OBC_REG_I2CCONFA_TRDEL_Pos);
@@ -112,6 +115,33 @@ bool REG_vGet(const uint8_t address, uint8_t* data, uint8_t* length){
             REG_Copyu32ToArray(currentRegisters.configured_boards, data);
             *length = 4;
             copyResult = true;
+            break;
+        case OBC_REG_UPTIME:
+            REG_Copyu32ToArray(currentRegisters.uptime, data);
+            *length = 4;
+            copyResult = true;
+            break;
+        case OBC_REG_EVENT_CONFA:
+            REG_Set_Event_ConfA_count(&currentRegisters, EVENT_EventCount());
+            REG_Copyu32ToArray(currentRegisters.event_confa, data);
+            *length = 4;
+            copyResult = true;
+            break;
+        case OBC_REG_EVENT:
+            {
+                // Update the event from the buffer that is kept
+                event_t current_event = {0};
+                EVENT_GetEvent(&current_event);
+                REG_Set_Event_section(&currentRegisters, current_event.section);
+                REG_Set_Event_detail(&currentRegisters, current_event.detail);
+                REG_Set_Event_timestamp(&currentRegisters, current_event.timestamp);
+
+                REG_Copyu32ToArray(currentRegisters.event, data);
+
+                REG_Set_Event_ConfA_count(&currentRegisters, EVENT_EventCount());
+                *length = 4;
+                copyResult = true;
+            }
             break;
         case OBC_REG_CONFPOWER:
             REG_Copyu32ToArray(currentRegisters.confpower, data);
@@ -370,4 +400,14 @@ void REG_vSetI2CAddress(uint8_t address)
     currentRegisters.i2cconfb = (currentRegisters.i2cconfb & ~OBC_REG_I2CCONFB_ADDR_Msk) | ( ((uint32_t) address) << OBC_REG_I2CCONFB_ADDR_Pos);
 
     I2C_SetEndpointAddress(address);
+}
+
+
+inline void REG_vSetUptime(uint32_t uptime){
+
+    currentRegisters.uptime = uptime;
+}
+
+inline uint32_t REG_u32GetUptime(){
+    return currentRegisters.uptime;
 }

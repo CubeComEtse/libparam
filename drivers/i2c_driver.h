@@ -13,6 +13,8 @@
 #include <stdbool.h>
 #include "twihs.h"
 
+#define I2C_CHECK_READ_CHECKSUM_ERR     11
+
 struct i2c_driver_data {
     Twihs *p_twihs;
 };

@@ -35,6 +35,8 @@
  */
 
 #include "twihs.h"
+#include "tmr.h"
+#include "bsp.h"
 
 /// @cond 0
 /**INDENT-OFF**/
@@ -510,7 +512,14 @@ uint32_t twihs_master_write(Twihs *p_twihs, twihs_packet_t *p_packet)
         timeout = TWIHS_TIMEOUT;
 	}
 
-	while (1) {
+
+
+    //Kolijn Mods
+    // while (1) {
+    tmr_t i2c_timeout = {0};
+    TMR_vInit(&i2c_timeout, BSP_u16TmrGetTick, 1);
+    TMR_vStart(&i2c_timeout, 100);
+	while (!TMR_bExpired(&i2c_timeout)) {
 		status = p_twihs->TWIHS_SR;
 		if (status & TWIHS_SR_NACK) {
 			return TWIHS_RECEIVE_NACK;

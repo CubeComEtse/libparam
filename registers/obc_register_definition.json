@@ -109,7 +109,74 @@
 				"fields": [],
 				"options": "BoardIdentifier"
 			},
-
+			{
+				"name": "Uptime",
+				"address": "0x16",
+				"dir": "rw",
+				"width": "32",
+				"fields": [],
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name": "Event_ConfA",
+				"address": "0x17",
+				"dir": "rw",
+				"width": "32",
+				"fields": [
+					{
+						"name": "count",
+						"description": "Number of events in the system",
+						"bit": "15-0",
+						"c#": {
+							"hasminmax": "false",
+							"type": "short"
+						}
+					}
+				],
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name": "Event",
+				"address": "0x18",
+				"dir": "rw",
+				"width": "32",
+				"fields": [
+					{
+						"name": "section",
+						"description": "Which section of the OBC caused the event",
+						"bit": "31-24",
+						"c#": {
+							"hasminmax": "false",
+							"type": "short"
+						}
+					},
+					{
+						"name": "detail",
+						"description": "Details of the event",
+						"bit": "23-16",
+						"c#": {
+							"hasminmax": "false",
+							"type": "short"
+						}
+					},
+					{
+						"name": "timestamp",
+						"description": "Event timestamp, in milliseconds. Use in combination with Uptime to get timestamp",
+						"bit": "15-0",
+						"c#": {
+							"hasminmax": "false",
+							"type": "short"
+						}
+					}
+				],
+				"c#": {
+					"type": "UInt32"
+				}
+			},
 			{
 				"name": "ConfPower",
 				"address": "0x20",
@@ -442,18 +509,18 @@
 				"name": "Enabled",
 				"type" : "byte",
 				"options": [
-					{"name": "Enabled", "value": "1"},
-					{"name": "Disabled", "value": "0"}
+					{"name": "Enabled", "value": "1", "pretty_name": "Enabled"},
+					{"name": "Disabled", "value": "0",  "pretty_name": "Disabled"}
 				]
 			},
 			"BoardIdentifier": {
 					"name": "BoardIdentifier",
 					"type" : "byte",
 					"options": [
-						{"name": "None", "value": "0"},
-						{"name": "XTX", "value": "1"},
-						{"name": "XSteer", "value": "2"},
-						{"name": "XDC", "value": "4"}
+						{"name": "None", "value": "0",  "pretty_name": "Disabled"},
+						{"name": "XTX", "value": "1",  "pretty_name": "XTX"},
+						{"name": "XSteer", "value": "2",  "pretty_name": "XSTEER"},
+						{"name": "XDC", "value": "4",  "pretty_name": "XDC"}
 					]
 				}
 		}

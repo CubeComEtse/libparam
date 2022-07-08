@@ -11,6 +11,7 @@
 #include "spi_endpoint.h"
 #include "register_handler.h"
 #include "xtx.h"
+#include "tmr.h"
 
 
 int main (void)
@@ -36,6 +37,8 @@ int main (void)
     SERMUX_vRegisterEndpoint(I2C_ENDPOINT_CHKSM, &I2C_bEndpoint);
     SERMUX_vRegisterEndpoint(I2C_ENDPOINT_PLAIN, &I2C_bEndpointNoChecksum);
 
+    
+    SERMUX_vRegisterEndpoint(CAN_ENDPOINT, &CAN_bEndpoint);
 
     /*
     All messages from the USART are handled by an endpoint. When the board 
@@ -47,6 +50,40 @@ int main (void)
     Additionally, TEXT_ENDPOINT is used to send printf messages back to the 
     control software.
     */
+
+    tmr_t uptimeTimer;
+    uint32_t uptime = 0;
+    TMR_vInit(&uptimeTimer, BSP_u16TmrGetTick, 1);
+    TMR_vStart(&uptimeTimer, 1000);
+
+    #include "std_message.h"
+    #include "can_driver.h"
+    //CAN_vInitEndpoint(CAN_ENDPOINT, OBC_CAN_ADRESS, XTX_CAN_ADRESS);
+    uint8_t rx_buffer[8];
+    rx_buffer[ADDR_idx] = 0x02;
+    rx_buffer[DIR_idx] = READ;
+    rx_buffer[LEN_idx] = 3;
+    rx_buffer[DATA_idx] = 0;
+    uint16_t tx_len = 3;
+
+    uint8_t tx_buffer[8];
+    uint16_t tx_length = 0;
+
+    
+    struct xtxCanMessage message;
+    message.messageType = 0;
+    message.registerAddres = 0x00;
+
+    message.targetAddres = 0x26;
+    message.address = 0xE9;
+    
+    message.data[0] = 0;
+    message.data[1] = 0;
+    message.data[2] = 0x55;
+    message.data[3] = 0;
+    message.dataLen = 4;
+
+
     while(1){
         SERMUX_vProcess();
 
@@ -62,5 +99,15 @@ int main (void)
         //SERMUX_vTransmit(1, data, 1);
 
         // XTX_vProcess();
+        if (TMR_bExpired(&uptimeTimer)){
+            // Increase 
+            uptime += 1;
+            REG_vSetUptime(uptime);
+            TMR_vStart(&uptimeTimer, 1000);
+
+            // For testing.
+            
+            //CAN_DRIVER_vSendMessage(message);
+        }
     }
 }

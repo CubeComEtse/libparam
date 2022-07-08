@@ -22,7 +22,7 @@ enum power_channel{
     CHANNEL_vBatAlt,
 };
 
-extern struct OBC_RegisterData currentRegisters;
+extern OBC_RegisterData_t currentRegisters;
 
 void REG_vInit(void);
 
@@ -70,5 +70,8 @@ void REG_SetI2CSpeed(uint32_t newSpeed);
 
 uint32_t REG_GetI2CAddress(void);
 void REG_vSetI2CAddress(uint8_t address);
+
+void REG_vSetUptime(uint32_t uptime);
+uint32_t REG_u32GetUptime(void);
 
 #endif /* REGISTER_HANDLER_H_ */

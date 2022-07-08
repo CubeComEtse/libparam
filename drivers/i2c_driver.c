@@ -10,6 +10,7 @@
 #include "i2c_driver.h"
 #include "obc_controller_rev_A.h"
 #include "twihs.h"
+#include "event.h"
 
 #include "register_handler.h"
 #include "OBC.h"
@@ -75,6 +76,10 @@ bool I2C_DRIVER_bWriteWithChecksum(struct i2c_driver_data* drv, const uint8_t ch
     uint32_t result = twihs_master_write(drv->p_twihs, &write_packet);
     twihs_read_byte(drv->p_twihs);
 
+    if (result != TWIHS_SUCCESS){
+        EVENT_AddEvent(EVENT_SECTION_I2C, 16 + result);
+    }
+
     uint8_t trDelay = (uint8_t) ((currentRegisters.i2cconfa & OBC_REG_I2CCONFA_TRDEL_Msk) >> OBC_REG_I2CCONFA_TRDEL_Pos);
     if (trDelay > 0){
         delay_ms(trDelay * 10);
@@ -130,9 +135,12 @@ bool I2C_DRIVER_bReadFromChecksum(struct i2c_driver_data* drv, const uint8_t chi
         result = twihs_master_read(drv->p_twihs, &read_packet);
     }
 
+    if (result != TWIHS_SUCCESS){
+        EVENT_AddEvent(EVENT_SECTION_I2C, 32 + result);
+    }
+
     // Clear buffer
     // twihs_read_byte(drv->p_twihs);
-
     if (result == TWIHS_ERROR_TIMEOUT) {
         ioport_enable_pin(I2C_PC104_SCL_PIN);
         ioport_set_pin_dir(I2C_PC104_SCL_PIN, IOPORT_DIR_OUTPUT);
@@ -158,6 +166,8 @@ bool I2C_DRIVER_bReadFromChecksum(struct i2c_driver_data* drv, const uint8_t chi
     retVal =  (result == TWIHS_SUCCESS) && ((calculated_checksum & 0xFF) == rx_buffer[length]) && (((calculated_checksum >> 8) & 0xFF) == rx_buffer[length+1]);
     
     if (retVal == false){
+    
+        EVENT_AddEvent(EVENT_SECTION_I2C, I2C_CHECK_READ_CHECKSUM_ERR);
         asm("nop");
     }
 

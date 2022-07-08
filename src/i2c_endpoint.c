@@ -56,7 +56,6 @@ void I2C_SetEndpointAddress(uint8_t address){
  * \return bool True to retransmit the buffers. Always returns False
  */
 bool I2C_bEndpoint(const uint8_t* rx_buffer, const uint16_t rx_length, uint8_t* tx_buffer, uint16_t* tx_length) {
-
     // If it is a read packet, it should have length 3
     if (rx_buffer[DIR_idx] == READ) {
         
