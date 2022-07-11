@@ -95,19 +95,12 @@ int main (void)
 
         REG_vProcessMessages();
 
-        //uint8_t data[] = {0x55};
-        //SERMUX_vTransmit(1, data, 1);
-
         // XTX_vProcess();
         if (TMR_bExpired(&uptimeTimer)){
             // Increase 
             uptime += 1;
             REG_vSetUptime(uptime);
             TMR_vStart(&uptimeTimer, 1000);
-
-            // For testing.
-            
-            //CAN_DRIVER_vSendMessage(message);
         }
     }
 }

@@ -17,7 +17,9 @@
 #define XTX_ENDPOINT 5 
 
 // Renumbered some of the endpoints
-#define I2C_ENDPOINT_CHKSM  0x10
-#define I2C_ENDPOINT_PLAIN  0x11
+#define TEXT_ENDPOINT       0x10
+#define I2C_ENDPOINT_CHKSM  0x11
+#define I2C_ENDPOINT_PLAIN  0x12
+#define CAN_ENDPOINT        0x13
 
 #endif /* ENDPOINTS_H_ */
