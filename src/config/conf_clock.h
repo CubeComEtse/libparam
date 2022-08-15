@@ -62,15 +62,16 @@
 // PMC_PCK
 
 // ===== System Clock (MCK) Division Options     (Fmck = Fhclk / (SYSCLK_DIV))
-#define CONFIG_SYSCLK_DIV            1
+#define CONFIG_SYSCLK_DIV            2
 
 // ===== PLL0 (A) Options   (Fpll = (Fclk * PLL_mul) / PLL_div)
 // Use mul and div effective values here.
 #define CONFIG_PLL0_SOURCE          PLL_SRC_MAINCK_XTAL
-#define CONFIG_PLL0_MUL             5
-//#define CONFIG_PLL0_MUL             25
+// #define CONFIG_PLL0_MUL             25
+// #define CONFIG_PLL0_DIV             1
+
+#define CONFIG_PLL0_MUL             25
 #define CONFIG_PLL0_DIV             1
-//#define CONFIG_PLL0_DIV             6
 
 // ===== UPLL (UTMI) Hardware fixed at 480 MHz.
 

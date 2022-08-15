@@ -369,6 +369,37 @@
 				}
 			},
 			{
+				"name" : "CONFMULTI",
+				"address": "0x2B",
+				"dir": "rw",
+				"width": "32",
+				"fields": [
+					{
+						"name": "MENABLED",
+						"pretty-name": "Multitester Enabled",
+						"description": "Enable the multi tester interface.",
+						"bit": "0",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						}
+					},
+					{
+						"name": "CURPOS",
+						"pretty-name": "Current Position",
+						"description": "Currently enabled position",
+						"bit": "2-1",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						}
+					}
+				],
+				"c#": {
+					"type": "UInt32"
+				}
+			}
+			{
 				"name": "XTXpins",
 				"address": "0x30",
 				"dir": "rw",

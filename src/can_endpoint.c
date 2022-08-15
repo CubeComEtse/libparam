@@ -60,23 +60,27 @@ bool CAN_bEndpoint(const uint8_t* rx_buffer, const uint16_t rx_length, uint8_t* 
 {
     struct xtxCanMessage message;
 
-    // Setup struct according to buffer balues
+    // Setup struct according to buffer values
     switch (rx_buffer[DIR_idx] ) {
         case READ:
-        message.messageType = telemetry_request;
-        break;
+			message.messageType = telemetry_request;
+			message.dataLen = rx_buffer[LEN_idx];
+			memset(message.data, 0, min(CAN_STRUCT_MAX_MESSAGE_LENGTH, message.dataLen));
+			break;
         case WRITE:
-        message.messageType = telecommand_request;
-        break;
+			message.messageType = telecommand_request;
+			message.dataLen = rx_buffer[LEN_idx];
+			memcpy(message.data, &rx_buffer[DATA_idx], min(CAN_STRUCT_MAX_MESSAGE_LENGTH, message.dataLen));
+			break;
         default:
-        message.messageType = telemetry_request;
-        break;
+			message.messageType = telemetry_request;
+			message.dataLen = 0;
+			break;
     }
     message.registerAddres = rx_buffer[ADDR_idx];
-    message.dataLen = rx_buffer[LEN_idx];
+    
     message.address = u8CanAddress;
     message.targetAddres = u8CanTarget;
-    memcpy(message.data, &rx_buffer[DATA_idx], min(CAN_STRUCT_MAX_MESSAGE_LENGTH, message.dataLen));
 
     CAN_DRIVER_vSendMessage(message);
 

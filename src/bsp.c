@@ -260,8 +260,9 @@ void BSP_vInitCan(void) {
     
     //pmc_pck_set_prescaler(PMC_PCK_5, PMC_PCK_PRES(14));
     // Prescaler = 60 / (2+1) = 20Mhz
-    pmc_pck_set_prescaler(PMC_PCK_5, PMC_PCK_PRES(2));
-
+	
+	// Prescaler = 300Mhz / (14+1) = 20mhz
+    pmc_pck_set_prescaler(PMC_PCK_5, PMC_PCK_PRES(14));
     pmc_pck_set_source(PMC_PCK_5, PMC_PCK_CSS_PLLA_CLK);
     pmc_enable_pck(PMC_PCK_5);
 
