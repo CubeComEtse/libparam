@@ -7,12 +7,16 @@
 #include "config.h"
 #include "endpoints.h"
 #include "i2c_endpoint.h"
+#include "Multitester.h"
 #include "serial_multiplexer.h"
 #include "spi_endpoint.h"
 #include "register_handler.h"
 #include "xtx.h"
 #include "tmr.h"
 
+// This was only for CAN testing
+#include "std_message.h"
+#include "can_driver.h"
 
 int main (void)
 {
@@ -32,6 +36,7 @@ int main (void)
     SERMUX_vRegisterEndpoint(BOARD_ENDPOINT, &CONFIG_bConfigEndpoint);
 
     BSP_vTelemetrySetCTS(false);
+	I2C_SetEndpointSpeed(100000);
 
     // Always register all the Endpoints.
     SERMUX_vRegisterEndpoint(I2C_ENDPOINT_CHKSM, &I2C_bEndpoint);
@@ -56,8 +61,7 @@ int main (void)
     TMR_vInit(&uptimeTimer, BSP_u16TmrGetTick, 1);
     TMR_vStart(&uptimeTimer, 1000);
 
-    #include "std_message.h"
-    #include "can_driver.h"
+
     //CAN_vInitEndpoint(CAN_ENDPOINT, OBC_CAN_ADRESS, XTX_CAN_ADRESS);
     uint8_t rx_buffer[8];
     rx_buffer[ADDR_idx] = 0x02;
@@ -70,18 +74,6 @@ int main (void)
     uint16_t tx_length = 0;
 
     
-    struct xtxCanMessage message;
-    message.messageType = 0;
-    message.registerAddres = 0x00;
-
-    message.targetAddres = 0x26;
-    message.address = 0xE9;
-    
-    message.data[0] = 0;
-    message.data[1] = 0;
-    message.data[2] = 0x55;
-    message.data[3] = 0;
-    message.dataLen = 4;
 
 
     while(1){
@@ -92,6 +84,8 @@ int main (void)
         CAN_vProcess();
         CONFIG_vProcess();
         SPI_vProcess();
+		
+		MULTI_vProcess();
 
         REG_vProcessMessages();
 

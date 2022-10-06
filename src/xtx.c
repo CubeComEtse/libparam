@@ -10,6 +10,7 @@
 #include "can_endpoint.h"
 #include "endpoints.h"
 #include "std_message.h"
+#include "Multitester.h"
 #include "i2c_endpoint.h"
 #include "serial_multiplexer.h"
 #include "spi_endpoint.h"
@@ -84,7 +85,7 @@ void XTX_vDeConfig(void)
 
 
 void XTX_vSetEnable(bool enabled) {
-     ioport_set_pin_level(XTX_EN_PIN, enabled);
+	ioport_set_pin_level(XTX_EN_PIN, enabled);
 }
 
 bool XTX_bGetEnable(void){
@@ -92,7 +93,7 @@ bool XTX_bGetEnable(void){
 }
 
 void XTX_SetNReset(bool reset) {
-     ioport_set_pin_level(XTX_nRST_PIN, reset);
+	 ioport_set_pin_level(XTX_nRST_PIN, reset);
 }
 
 bool XTX_bGetNReset(void){
@@ -157,3 +158,4 @@ void XTX_vProcess(void) {
         //TMR_vStart(&sUpdateTimer, u16PinReadycheckInterval);
     //}
  }
+ 

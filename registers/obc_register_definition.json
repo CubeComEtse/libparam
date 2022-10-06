@@ -369,26 +369,52 @@
 				}
 			},
 			{
-				"name" : "CONFMULTI",
+				"name" : "ConfMulti",
 				"address": "0x2B",
 				"dir": "rw",
 				"width": "32",
 				"fields": [
 					{
-						"name": "MENABLED",
+						"name": "MEnabled",
 						"pretty-name": "Multitester Enabled",
 						"description": "Enable the multi tester interface.",
 						"bit": "0",
+						"options": "Enabled",
 						"c#": {
 							"hasminmax": "false",
 							"type": "byte"
 						}
 					},
 					{
-						"name": "CURPOS",
-						"pretty-name": "Current Position",
-						"description": "Currently enabled position",
-						"bit": "2-1",
+						"name": "AutoCLR",
+						"pretty-name": "",
+						"description": "Auto clear the other positions when changing",
+						"bit": "1",
+						"options": "Enabled",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						}
+					},
+					{
+						"name": "RfASwENA",
+						"pretty-name": "",
+						"description": "Enables Toggling the RF Switch as well",
+						"bit": "2",
+						"options": "Enabled",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						}
+					},
+					{ "name": "FanPos1", "bit": "4", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
+					{ "name": "FanPos2", "bit": "5",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
+					{ "name": "FanPos3", "bit": "6",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
+					{ "name": "FanPos4", "bit": "7",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
+					{
+						"name": "RfSwChan",
+						"description": "Enables the selected channel on the RF Switch. 0 Disables all",
+						"bit": "15-8",
 						"c#": {
 							"hasminmax": "false",
 							"type": "byte"
@@ -398,7 +424,7 @@
 				"c#": {
 					"type": "UInt32"
 				}
-			}
+			},
 			{
 				"name": "XTXpins",
 				"address": "0x30",
@@ -435,6 +461,32 @@
 							"type": "byte"
 						}
 					}
+				],
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name": "XTXMultitester",
+				"address": "0x31",
+				"dir": "rw",
+				"width": "32",
+				"fields": [
+					{ "name": "POS1_XTX_EN", "bit": "0", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
+					{ "name": "POS1_XTX_Power", "bit": "1",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
+					{ "name": "POS1_XTX_nReset", "bit": "2",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
+
+					{ "name": "POS2_XTX_EN", "bit": "4", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
+					{ "name": "POS2_XTX_Power", "bit": "5",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
+					{ "name": "POS2_XTX_nReset", "bit": "6",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
+
+					{ "name": "POS3_XTX_EN", "bit": "8", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
+					{ "name": "POS3_XTX_Power", "bit": "9",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
+					{ "name": "POS3_XTX_nReset", "bit": "10",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
+					
+					{ "name": "POS4_XTX_EN", "bit": "12", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
+					{ "name": "POS4_XTX_Power", "bit": "13",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
+					{ "name": "POS4_XTX_nReset", "bit": "14",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } }
 				],
 				"c#": {
 					"type": "UInt32"
@@ -533,7 +585,7 @@
 						"type": "UInt32"
 					}
 				}
-			]
+			] 
 		},
 		"options" :{
 			"Enabled": {

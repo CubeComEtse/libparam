@@ -21,6 +21,7 @@ namespace Devices.Models
     public class OBC : INotifyPropertyChanged, IModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        public bool SupressUpdates = false;
 
         public enum OBCRegisterAddress{
             OBC_REG_BOARD_ID                         = 0x10,
@@ -43,7 +44,9 @@ namespace Devices.Models
             OBC_REG_MEASUREPOWER_VBATALT             = 0x28,
             OBC_REG_I2CCONFA                         = 0x29,
             OBC_REG_I2CCONFB                         = 0x2a,
+            OBC_REG_CONFMULTI                        = 0x2b,
             OBC_REG_XTXPINS                          = 0x30,
+            OBC_REG_XTXMULTITESTER                   = 0x31,
             OBC_REG_XDCCONFIG                        = 0x40,
         }
 
@@ -83,7 +86,11 @@ namespace Devices.Models
             [FieldOffset(0)]
             public RegI2CConfB RegI2CConfB;
             [FieldOffset(0)]
+            public RegConfMulti RegConfMulti;
+            [FieldOffset(0)]
             public RegXTXpins RegXTXpins;
+            [FieldOffset(0)]
+            public RegXTXMultitester RegXTXMultitester;
             [FieldOffset(0)]
             public RegXDCConfig RegXDCConfig;
         }
@@ -321,6 +328,62 @@ namespace Devices.Models
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegConfMulti
+        {
+            [FieldOffset(0)]
+            UInt32 data;
+
+            public byte MEnabled
+            {
+                get { return (byte)((data & (UInt32)0x00000001) >> 0); } 
+                set { data = (UInt32)((data & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
+            }
+
+            public byte AutoCLR
+            {
+                get { return (byte)((data & (UInt32)0x00000002) >> 1); } 
+                set { data = (UInt32)((data & ~(UInt32)0x00000002) | (( (UInt32)(value) & 0x00000001) << 1)); }
+            }
+
+            public byte RfASwENA
+            {
+                get { return (byte)((data & (UInt32)0x00000004) >> 2); } 
+                set { data = (UInt32)((data & ~(UInt32)0x00000004) | (( (UInt32)(value) & 0x00000001) << 2)); }
+            }
+
+            public byte FanPos1
+            {
+                get { return (byte)((data & (UInt32)0x00000010) >> 4); } 
+                set { data = (UInt32)((data & ~(UInt32)0x00000010) | (( (UInt32)(value) & 0x00000001) << 4)); }
+            }
+
+            public byte FanPos2
+            {
+                get { return (byte)((data & (UInt32)0x00000020) >> 5); } 
+                set { data = (UInt32)((data & ~(UInt32)0x00000020) | (( (UInt32)(value) & 0x00000001) << 5)); }
+            }
+
+            public byte FanPos3
+            {
+                get { return (byte)((data & (UInt32)0x00000040) >> 6); } 
+                set { data = (UInt32)((data & ~(UInt32)0x00000040) | (( (UInt32)(value) & 0x00000001) << 6)); }
+            }
+
+            public byte FanPos4
+            {
+                get { return (byte)((data & (UInt32)0x00000080) >> 7); } 
+                set { data = (UInt32)((data & ~(UInt32)0x00000080) | (( (UInt32)(value) & 0x00000001) << 7)); }
+            }
+
+            public byte RfSwChan
+            {
+                get { return (byte)((data & (UInt32)0x0000ff00) >> 8); } 
+                set { data = (UInt32)((data & ~(UInt32)0x0000ff00) | (( (UInt32)(value) & 0x000000ff) << 8)); }
+            }
+
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
         public struct RegXTXpins
         {
             [FieldOffset(0)]
@@ -342,6 +405,86 @@ namespace Devices.Models
             {
                 get { return (byte)((data & (UInt32)0x00000004) >> 2); } 
                 set { data = (UInt32)((data & ~(UInt32)0x00000004) | (( (UInt32)(value) & 0x00000001) << 2)); }
+            }
+
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegXTXMultitester
+        {
+            [FieldOffset(0)]
+            UInt32 data;
+
+            public byte POS1_XTX_EN
+            {
+                get { return (byte)((data & (UInt32)0x00000001) >> 0); } 
+                set { data = (UInt32)((data & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
+            }
+
+            public byte POS1_XTX_Power
+            {
+                get { return (byte)((data & (UInt32)0x00000002) >> 1); } 
+                set { data = (UInt32)((data & ~(UInt32)0x00000002) | (( (UInt32)(value) & 0x00000001) << 1)); }
+            }
+
+            public byte POS1_XTX_nReset
+            {
+                get { return (byte)((data & (UInt32)0x00000004) >> 2); } 
+                set { data = (UInt32)((data & ~(UInt32)0x00000004) | (( (UInt32)(value) & 0x00000001) << 2)); }
+            }
+
+            public byte POS2_XTX_EN
+            {
+                get { return (byte)((data & (UInt32)0x00000010) >> 4); } 
+                set { data = (UInt32)((data & ~(UInt32)0x00000010) | (( (UInt32)(value) & 0x00000001) << 4)); }
+            }
+
+            public byte POS2_XTX_Power
+            {
+                get { return (byte)((data & (UInt32)0x00000020) >> 5); } 
+                set { data = (UInt32)((data & ~(UInt32)0x00000020) | (( (UInt32)(value) & 0x00000001) << 5)); }
+            }
+
+            public byte POS2_XTX_nReset
+            {
+                get { return (byte)((data & (UInt32)0x00000040) >> 6); } 
+                set { data = (UInt32)((data & ~(UInt32)0x00000040) | (( (UInt32)(value) & 0x00000001) << 6)); }
+            }
+
+            public byte POS3_XTX_EN
+            {
+                get { return (byte)((data & (UInt32)0x00000100) >> 8); } 
+                set { data = (UInt32)((data & ~(UInt32)0x00000100) | (( (UInt32)(value) & 0x00000001) << 8)); }
+            }
+
+            public byte POS3_XTX_Power
+            {
+                get { return (byte)((data & (UInt32)0x00000200) >> 9); } 
+                set { data = (UInt32)((data & ~(UInt32)0x00000200) | (( (UInt32)(value) & 0x00000001) << 9)); }
+            }
+
+            public byte POS3_XTX_nReset
+            {
+                get { return (byte)((data & (UInt32)0x00000400) >> 10); } 
+                set { data = (UInt32)((data & ~(UInt32)0x00000400) | (( (UInt32)(value) & 0x00000001) << 10)); }
+            }
+
+            public byte POS4_XTX_EN
+            {
+                get { return (byte)((data & (UInt32)0x00001000) >> 12); } 
+                set { data = (UInt32)((data & ~(UInt32)0x00001000) | (( (UInt32)(value) & 0x00000001) << 12)); }
+            }
+
+            public byte POS4_XTX_Power
+            {
+                get { return (byte)((data & (UInt32)0x00002000) >> 13); } 
+                set { data = (UInt32)((data & ~(UInt32)0x00002000) | (( (UInt32)(value) & 0x00000001) << 13)); }
+            }
+
+            public byte POS4_XTX_nReset
+            {
+                get { return (byte)((data & (UInt32)0x00004000) >> 14); } 
+                set { data = (UInt32)((data & ~(UInt32)0x00004000) | (( (UInt32)(value) & 0x00000001) << 14)); }
             }
 
         }
@@ -823,6 +966,95 @@ namespace Devices.Models
             set => _ = Set(ref _I2CConfB_ADDR, value);
         }
         
+        /*************** Properties for ConfMulti register *******************/
+        private bool _ConfMulti_MEnabledIsSet;
+        public bool ConfMulti_MEnabledIsSet {
+            get => _ConfMulti_MEnabledIsSet;
+            set => _ = Set(ref _ConfMulti_MEnabledIsSet, value); 
+        }
+        private Enabled _ConfMulti_MEnabled;
+        public Enabled ConfMulti_MEnabled {
+            get => _ConfMulti_MEnabled;
+            set => _ = Set(ref _ConfMulti_MEnabled, value);
+        }
+        
+        private bool _ConfMulti_AutoCLRIsSet;
+        public bool ConfMulti_AutoCLRIsSet {
+            get => _ConfMulti_AutoCLRIsSet;
+            set => _ = Set(ref _ConfMulti_AutoCLRIsSet, value); 
+        }
+        private Enabled _ConfMulti_AutoCLR;
+        public Enabled ConfMulti_AutoCLR {
+            get => _ConfMulti_AutoCLR;
+            set => _ = Set(ref _ConfMulti_AutoCLR, value);
+        }
+        
+        private bool _ConfMulti_RfASwENAIsSet;
+        public bool ConfMulti_RfASwENAIsSet {
+            get => _ConfMulti_RfASwENAIsSet;
+            set => _ = Set(ref _ConfMulti_RfASwENAIsSet, value); 
+        }
+        private Enabled _ConfMulti_RfASwENA;
+        public Enabled ConfMulti_RfASwENA {
+            get => _ConfMulti_RfASwENA;
+            set => _ = Set(ref _ConfMulti_RfASwENA, value);
+        }
+        
+        private bool _ConfMulti_FanPos1IsSet;
+        public bool ConfMulti_FanPos1IsSet {
+            get => _ConfMulti_FanPos1IsSet;
+            set => _ = Set(ref _ConfMulti_FanPos1IsSet, value); 
+        }
+        private Enabled _ConfMulti_FanPos1;
+        public Enabled ConfMulti_FanPos1 {
+            get => _ConfMulti_FanPos1;
+            set => _ = Set(ref _ConfMulti_FanPos1, value);
+        }
+        
+        private bool _ConfMulti_FanPos2IsSet;
+        public bool ConfMulti_FanPos2IsSet {
+            get => _ConfMulti_FanPos2IsSet;
+            set => _ = Set(ref _ConfMulti_FanPos2IsSet, value); 
+        }
+        private Enabled _ConfMulti_FanPos2;
+        public Enabled ConfMulti_FanPos2 {
+            get => _ConfMulti_FanPos2;
+            set => _ = Set(ref _ConfMulti_FanPos2, value);
+        }
+        
+        private bool _ConfMulti_FanPos3IsSet;
+        public bool ConfMulti_FanPos3IsSet {
+            get => _ConfMulti_FanPos3IsSet;
+            set => _ = Set(ref _ConfMulti_FanPos3IsSet, value); 
+        }
+        private Enabled _ConfMulti_FanPos3;
+        public Enabled ConfMulti_FanPos3 {
+            get => _ConfMulti_FanPos3;
+            set => _ = Set(ref _ConfMulti_FanPos3, value);
+        }
+        
+        private bool _ConfMulti_FanPos4IsSet;
+        public bool ConfMulti_FanPos4IsSet {
+            get => _ConfMulti_FanPos4IsSet;
+            set => _ = Set(ref _ConfMulti_FanPos4IsSet, value); 
+        }
+        private Enabled _ConfMulti_FanPos4;
+        public Enabled ConfMulti_FanPos4 {
+            get => _ConfMulti_FanPos4;
+            set => _ = Set(ref _ConfMulti_FanPos4, value);
+        }
+        
+        private bool _ConfMulti_RfSwChanIsSet;
+        public bool ConfMulti_RfSwChanIsSet {
+            get => _ConfMulti_RfSwChanIsSet;
+            set => _ = Set(ref _ConfMulti_RfSwChanIsSet, value); 
+        }
+        private byte _ConfMulti_RfSwChan;
+        public byte ConfMulti_RfSwChan {
+            get => _ConfMulti_RfSwChan;
+            set => _ = Set(ref _ConfMulti_RfSwChan, value);
+        }
+        
         /*************** Properties for XTXpins register *********************/
         private bool _XTXpins_ENAIsSet;
         public bool XTXpins_ENAIsSet {
@@ -855,6 +1087,139 @@ namespace Devices.Models
         public Enabled XTXpins_RDY {
             get => _XTXpins_RDY;
             set => _ = Set(ref _XTXpins_RDY, value);
+        }
+        
+        /*************** Properties for XTXMultitester register **************/
+        private bool _XTXMultitester_POS1_XTX_ENIsSet;
+        public bool XTXMultitester_POS1_XTX_ENIsSet {
+            get => _XTXMultitester_POS1_XTX_ENIsSet;
+            set => _ = Set(ref _XTXMultitester_POS1_XTX_ENIsSet, value); 
+        }
+        private Enabled _XTXMultitester_POS1_XTX_EN;
+        public Enabled XTXMultitester_POS1_XTX_EN {
+            get => _XTXMultitester_POS1_XTX_EN;
+            set => _ = Set(ref _XTXMultitester_POS1_XTX_EN, value);
+        }
+        
+        private bool _XTXMultitester_POS1_XTX_PowerIsSet;
+        public bool XTXMultitester_POS1_XTX_PowerIsSet {
+            get => _XTXMultitester_POS1_XTX_PowerIsSet;
+            set => _ = Set(ref _XTXMultitester_POS1_XTX_PowerIsSet, value); 
+        }
+        private Enabled _XTXMultitester_POS1_XTX_Power;
+        public Enabled XTXMultitester_POS1_XTX_Power {
+            get => _XTXMultitester_POS1_XTX_Power;
+            set => _ = Set(ref _XTXMultitester_POS1_XTX_Power, value);
+        }
+        
+        private bool _XTXMultitester_POS1_XTX_nResetIsSet;
+        public bool XTXMultitester_POS1_XTX_nResetIsSet {
+            get => _XTXMultitester_POS1_XTX_nResetIsSet;
+            set => _ = Set(ref _XTXMultitester_POS1_XTX_nResetIsSet, value); 
+        }
+        private Enabled _XTXMultitester_POS1_XTX_nReset;
+        public Enabled XTXMultitester_POS1_XTX_nReset {
+            get => _XTXMultitester_POS1_XTX_nReset;
+            set => _ = Set(ref _XTXMultitester_POS1_XTX_nReset, value);
+        }
+        
+        private bool _XTXMultitester_POS2_XTX_ENIsSet;
+        public bool XTXMultitester_POS2_XTX_ENIsSet {
+            get => _XTXMultitester_POS2_XTX_ENIsSet;
+            set => _ = Set(ref _XTXMultitester_POS2_XTX_ENIsSet, value); 
+        }
+        private Enabled _XTXMultitester_POS2_XTX_EN;
+        public Enabled XTXMultitester_POS2_XTX_EN {
+            get => _XTXMultitester_POS2_XTX_EN;
+            set => _ = Set(ref _XTXMultitester_POS2_XTX_EN, value);
+        }
+        
+        private bool _XTXMultitester_POS2_XTX_PowerIsSet;
+        public bool XTXMultitester_POS2_XTX_PowerIsSet {
+            get => _XTXMultitester_POS2_XTX_PowerIsSet;
+            set => _ = Set(ref _XTXMultitester_POS2_XTX_PowerIsSet, value); 
+        }
+        private Enabled _XTXMultitester_POS2_XTX_Power;
+        public Enabled XTXMultitester_POS2_XTX_Power {
+            get => _XTXMultitester_POS2_XTX_Power;
+            set => _ = Set(ref _XTXMultitester_POS2_XTX_Power, value);
+        }
+        
+        private bool _XTXMultitester_POS2_XTX_nResetIsSet;
+        public bool XTXMultitester_POS2_XTX_nResetIsSet {
+            get => _XTXMultitester_POS2_XTX_nResetIsSet;
+            set => _ = Set(ref _XTXMultitester_POS2_XTX_nResetIsSet, value); 
+        }
+        private Enabled _XTXMultitester_POS2_XTX_nReset;
+        public Enabled XTXMultitester_POS2_XTX_nReset {
+            get => _XTXMultitester_POS2_XTX_nReset;
+            set => _ = Set(ref _XTXMultitester_POS2_XTX_nReset, value);
+        }
+        
+        private bool _XTXMultitester_POS3_XTX_ENIsSet;
+        public bool XTXMultitester_POS3_XTX_ENIsSet {
+            get => _XTXMultitester_POS3_XTX_ENIsSet;
+            set => _ = Set(ref _XTXMultitester_POS3_XTX_ENIsSet, value); 
+        }
+        private Enabled _XTXMultitester_POS3_XTX_EN;
+        public Enabled XTXMultitester_POS3_XTX_EN {
+            get => _XTXMultitester_POS3_XTX_EN;
+            set => _ = Set(ref _XTXMultitester_POS3_XTX_EN, value);
+        }
+        
+        private bool _XTXMultitester_POS3_XTX_PowerIsSet;
+        public bool XTXMultitester_POS3_XTX_PowerIsSet {
+            get => _XTXMultitester_POS3_XTX_PowerIsSet;
+            set => _ = Set(ref _XTXMultitester_POS3_XTX_PowerIsSet, value); 
+        }
+        private Enabled _XTXMultitester_POS3_XTX_Power;
+        public Enabled XTXMultitester_POS3_XTX_Power {
+            get => _XTXMultitester_POS3_XTX_Power;
+            set => _ = Set(ref _XTXMultitester_POS3_XTX_Power, value);
+        }
+        
+        private bool _XTXMultitester_POS3_XTX_nResetIsSet;
+        public bool XTXMultitester_POS3_XTX_nResetIsSet {
+            get => _XTXMultitester_POS3_XTX_nResetIsSet;
+            set => _ = Set(ref _XTXMultitester_POS3_XTX_nResetIsSet, value); 
+        }
+        private Enabled _XTXMultitester_POS3_XTX_nReset;
+        public Enabled XTXMultitester_POS3_XTX_nReset {
+            get => _XTXMultitester_POS3_XTX_nReset;
+            set => _ = Set(ref _XTXMultitester_POS3_XTX_nReset, value);
+        }
+        
+        private bool _XTXMultitester_POS4_XTX_ENIsSet;
+        public bool XTXMultitester_POS4_XTX_ENIsSet {
+            get => _XTXMultitester_POS4_XTX_ENIsSet;
+            set => _ = Set(ref _XTXMultitester_POS4_XTX_ENIsSet, value); 
+        }
+        private Enabled _XTXMultitester_POS4_XTX_EN;
+        public Enabled XTXMultitester_POS4_XTX_EN {
+            get => _XTXMultitester_POS4_XTX_EN;
+            set => _ = Set(ref _XTXMultitester_POS4_XTX_EN, value);
+        }
+        
+        private bool _XTXMultitester_POS4_XTX_PowerIsSet;
+        public bool XTXMultitester_POS4_XTX_PowerIsSet {
+            get => _XTXMultitester_POS4_XTX_PowerIsSet;
+            set => _ = Set(ref _XTXMultitester_POS4_XTX_PowerIsSet, value); 
+        }
+        private Enabled _XTXMultitester_POS4_XTX_Power;
+        public Enabled XTXMultitester_POS4_XTX_Power {
+            get => _XTXMultitester_POS4_XTX_Power;
+            set => _ = Set(ref _XTXMultitester_POS4_XTX_Power, value);
+        }
+        
+        private bool _XTXMultitester_POS4_XTX_nResetIsSet;
+        public bool XTXMultitester_POS4_XTX_nResetIsSet {
+            get => _XTXMultitester_POS4_XTX_nResetIsSet;
+            set => _ = Set(ref _XTXMultitester_POS4_XTX_nResetIsSet, value); 
+        }
+        private Enabled _XTXMultitester_POS4_XTX_nReset;
+        public Enabled XTXMultitester_POS4_XTX_nReset {
+            get => _XTXMultitester_POS4_XTX_nReset;
+            set => _ = Set(ref _XTXMultitester_POS4_XTX_nReset, value);
         }
         
         /*************** Properties for XDCConfig register *******************/
@@ -973,10 +1338,36 @@ namespace Devices.Models
                     I2CConfB_ADDR =  register.RegI2CConfB.ADDR;
                     break;
 
+                case OBCRegisterAddress.OBC_REG_CONFMULTI:
+                    ConfMulti_MEnabled = (Enabled) register.RegConfMulti.MEnabled;
+                    ConfMulti_AutoCLR = (Enabled) register.RegConfMulti.AutoCLR;
+                    ConfMulti_RfASwENA = (Enabled) register.RegConfMulti.RfASwENA;
+                    ConfMulti_FanPos1 = (Enabled) register.RegConfMulti.FanPos1;
+                    ConfMulti_FanPos2 = (Enabled) register.RegConfMulti.FanPos2;
+                    ConfMulti_FanPos3 = (Enabled) register.RegConfMulti.FanPos3;
+                    ConfMulti_FanPos4 = (Enabled) register.RegConfMulti.FanPos4;
+                    ConfMulti_RfSwChan =  register.RegConfMulti.RfSwChan;
+                    break;
+
                 case OBCRegisterAddress.OBC_REG_XTXPINS:
                     XTXpins_ENA = (Enabled) register.RegXTXpins.ENA;
                     XTXpins_nRST = (Enabled) register.RegXTXpins.nRST;
                     XTXpins_RDY = (Enabled) register.RegXTXpins.RDY;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_XTXMULTITESTER:
+                    XTXMultitester_POS1_XTX_EN = (Enabled) register.RegXTXMultitester.POS1_XTX_EN;
+                    XTXMultitester_POS1_XTX_Power = (Enabled) register.RegXTXMultitester.POS1_XTX_Power;
+                    XTXMultitester_POS1_XTX_nReset = (Enabled) register.RegXTXMultitester.POS1_XTX_nReset;
+                    XTXMultitester_POS2_XTX_EN = (Enabled) register.RegXTXMultitester.POS2_XTX_EN;
+                    XTXMultitester_POS2_XTX_Power = (Enabled) register.RegXTXMultitester.POS2_XTX_Power;
+                    XTXMultitester_POS2_XTX_nReset = (Enabled) register.RegXTXMultitester.POS2_XTX_nReset;
+                    XTXMultitester_POS3_XTX_EN = (Enabled) register.RegXTXMultitester.POS3_XTX_EN;
+                    XTXMultitester_POS3_XTX_Power = (Enabled) register.RegXTXMultitester.POS3_XTX_Power;
+                    XTXMultitester_POS3_XTX_nReset = (Enabled) register.RegXTXMultitester.POS3_XTX_nReset;
+                    XTXMultitester_POS4_XTX_EN = (Enabled) register.RegXTXMultitester.POS4_XTX_EN;
+                    XTXMultitester_POS4_XTX_Power = (Enabled) register.RegXTXMultitester.POS4_XTX_Power;
+                    XTXMultitester_POS4_XTX_nReset = (Enabled) register.RegXTXMultitester.POS4_XTX_nReset;
                     break;
 
                 case OBCRegisterAddress.OBC_REG_XDCCONFIG:
@@ -1088,10 +1479,36 @@ namespace Devices.Models
                     register.RegI2CConfB.ADDR = I2CConfB_ADDR;
                     break;
 
+                case OBCRegisterAddress.OBC_REG_CONFMULTI:
+                    register.RegConfMulti.MEnabled = (byte) ConfMulti_MEnabled;
+                    register.RegConfMulti.AutoCLR = (byte) ConfMulti_AutoCLR;
+                    register.RegConfMulti.RfASwENA = (byte) ConfMulti_RfASwENA;
+                    register.RegConfMulti.FanPos1 = (byte) ConfMulti_FanPos1;
+                    register.RegConfMulti.FanPos2 = (byte) ConfMulti_FanPos2;
+                    register.RegConfMulti.FanPos3 = (byte) ConfMulti_FanPos3;
+                    register.RegConfMulti.FanPos4 = (byte) ConfMulti_FanPos4;
+                    register.RegConfMulti.RfSwChan = ConfMulti_RfSwChan;
+                    break;
+
                 case OBCRegisterAddress.OBC_REG_XTXPINS:
                     register.RegXTXpins.ENA = (byte) XTXpins_ENA;
                     register.RegXTXpins.nRST = (byte) XTXpins_nRST;
                     register.RegXTXpins.RDY = (byte) XTXpins_RDY;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_XTXMULTITESTER:
+                    register.RegXTXMultitester.POS1_XTX_EN = (byte) XTXMultitester_POS1_XTX_EN;
+                    register.RegXTXMultitester.POS1_XTX_Power = (byte) XTXMultitester_POS1_XTX_Power;
+                    register.RegXTXMultitester.POS1_XTX_nReset = (byte) XTXMultitester_POS1_XTX_nReset;
+                    register.RegXTXMultitester.POS2_XTX_EN = (byte) XTXMultitester_POS2_XTX_EN;
+                    register.RegXTXMultitester.POS2_XTX_Power = (byte) XTXMultitester_POS2_XTX_Power;
+                    register.RegXTXMultitester.POS2_XTX_nReset = (byte) XTXMultitester_POS2_XTX_nReset;
+                    register.RegXTXMultitester.POS3_XTX_EN = (byte) XTXMultitester_POS3_XTX_EN;
+                    register.RegXTXMultitester.POS3_XTX_Power = (byte) XTXMultitester_POS3_XTX_Power;
+                    register.RegXTXMultitester.POS3_XTX_nReset = (byte) XTXMultitester_POS3_XTX_nReset;
+                    register.RegXTXMultitester.POS4_XTX_EN = (byte) XTXMultitester_POS4_XTX_EN;
+                    register.RegXTXMultitester.POS4_XTX_Power = (byte) XTXMultitester_POS4_XTX_Power;
+                    register.RegXTXMultitester.POS4_XTX_nReset = (byte) XTXMultitester_POS4_XTX_nReset;
                     break;
 
                 case OBCRegisterAddress.OBC_REG_XDCCONFIG:
@@ -1160,7 +1577,10 @@ namespace Devices.Models
             
             // Setting the backing field and the RaisePropertyChanged
             backingField = value;
-            OnPropertyChanged(propertyname);
+            if (!SupressUpdates)
+            {
+                OnPropertyChanged(propertyname);
+            }
             return true;
         }
         protected virtual void OnPropertyChanged(string propertyname)

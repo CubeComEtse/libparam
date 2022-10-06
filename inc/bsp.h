@@ -35,6 +35,8 @@ uint16_t BSP_u16TmrGetTick(void);
 uint64_t BSP_u64GetTimestamp(void);
 void BSP_vUsbReset(void);
 
+struct i2c_driver_data* BSP_psGetI2cDriver(void);
+
 void BSP_vTelemetrySetCTS(bool dir);
 void BSP_vSetTestPin(bool level);
 

@@ -23,7 +23,9 @@
 #define OBC_REG_MEASUREPOWER_VBATALT                 0x28
 #define OBC_REG_I2CCONFA                             0x29
 #define OBC_REG_I2CCONFB                             0x2a
+#define OBC_REG_CONFMULTI                            0x2b
 #define OBC_REG_XTXPINS                              0x30
+#define OBC_REG_XTXMULTITESTER                       0x31
 #define OBC_REG_XDCCONFIG                            0x40
 
 
@@ -87,6 +89,32 @@
 #define OBC_REG_I2CCONFB_ADDR_Msk                    (0x00ff << OBC_REG_I2CCONFB_ADDR_Pos)
 #define OBC_REG_I2CCONFB_ADDR                        OBC_REG_I2CCONFB_ADDR_Msk
 
+/*************** Bit definition for ConfMulti register ***********************/
+#define OBC_REG_CONFMULTI_MENABLED_Pos               (0UL)
+#define OBC_REG_CONFMULTI_MENABLED_Msk               (0x0001 << OBC_REG_CONFMULTI_MENABLED_Pos)
+#define OBC_REG_CONFMULTI_MENABLED                   OBC_REG_CONFMULTI_MENABLED_Msk
+#define OBC_REG_CONFMULTI_AUTOCLR_Pos                (1UL)
+#define OBC_REG_CONFMULTI_AUTOCLR_Msk                (0x0001 << OBC_REG_CONFMULTI_AUTOCLR_Pos)
+#define OBC_REG_CONFMULTI_AUTOCLR                    OBC_REG_CONFMULTI_AUTOCLR_Msk
+#define OBC_REG_CONFMULTI_RFSWITCH_Pos               (2UL)
+#define OBC_REG_CONFMULTI_RFSWITCH_Msk               (0x0001 << OBC_REG_CONFMULTI_RFSWITCH_Pos)
+#define OBC_REG_CONFMULTI_RFSWITCH                   OBC_REG_CONFMULTI_RFSWITCH_Msk
+#define OBC_REG_CONFMULTI_FANPOS1_Pos                (4UL)
+#define OBC_REG_CONFMULTI_FANPOS1_Msk                (0x0001 << OBC_REG_CONFMULTI_FANPOS1_Pos)
+#define OBC_REG_CONFMULTI_FANPOS1                    OBC_REG_CONFMULTI_FANPOS1_Msk
+#define OBC_REG_CONFMULTI_FANPOS2_Pos                (5UL)
+#define OBC_REG_CONFMULTI_FANPOS2_Msk                (0x0001 << OBC_REG_CONFMULTI_FANPOS2_Pos)
+#define OBC_REG_CONFMULTI_FANPOS2                    OBC_REG_CONFMULTI_FANPOS2_Msk
+#define OBC_REG_CONFMULTI_FANPOS3_Pos                (6UL)
+#define OBC_REG_CONFMULTI_FANPOS3_Msk                (0x0001 << OBC_REG_CONFMULTI_FANPOS3_Pos)
+#define OBC_REG_CONFMULTI_FANPOS3                    OBC_REG_CONFMULTI_FANPOS3_Msk
+#define OBC_REG_CONFMULTI_FANPOS4_Pos                (7UL)
+#define OBC_REG_CONFMULTI_FANPOS4_Msk                (0x0001 << OBC_REG_CONFMULTI_FANPOS4_Pos)
+#define OBC_REG_CONFMULTI_FANPOS4                    OBC_REG_CONFMULTI_FANPOS4_Msk
+#define OBC_REG_CONFMULTI_RFCHAN_Pos                 (8UL)
+#define OBC_REG_CONFMULTI_RFCHAN_Msk                 (0x00ff << OBC_REG_CONFMULTI_RFCHAN_Pos)
+#define OBC_REG_CONFMULTI_RFCHAN                     OBC_REG_CONFMULTI_RFCHAN_Msk
+
 /*************** Bit definition for XTXpins register *************************/
 #define OBC_REG_XTXPINS_ENA_Pos                      (0UL)
 #define OBC_REG_XTXPINS_ENA_Msk                      (0x0001 << OBC_REG_XTXPINS_ENA_Pos)
@@ -97,6 +125,44 @@
 #define OBC_REG_XTXPINS_RDY_Pos                      (2UL)
 #define OBC_REG_XTXPINS_RDY_Msk                      (0x0001 << OBC_REG_XTXPINS_RDY_Pos)
 #define OBC_REG_XTXPINS_RDY                          OBC_REG_XTXPINS_RDY_Msk
+
+/*************** Bit definition for XTXMultitester register ******************/
+#define OBC_REG_XTXMULTITESTER_POS1_XTX_EN_Pos       (0UL)
+#define OBC_REG_XTXMULTITESTER_POS1_XTX_EN_Msk       (0x0001 << OBC_REG_XTXMULTITESTER_POS1_XTX_EN_Pos)
+#define OBC_REG_XTXMULTITESTER_POS1_XTX_EN           OBC_REG_XTXMULTITESTER_POS1_XTX_EN_Msk
+#define OBC_REG_XTXMULTITESTER_POS1_XTX_POWER_Pos    (1UL)
+#define OBC_REG_XTXMULTITESTER_POS1_XTX_POWER_Msk    (0x0001 << OBC_REG_XTXMULTITESTER_POS1_XTX_POWER_Pos)
+#define OBC_REG_XTXMULTITESTER_POS1_XTX_POWER        OBC_REG_XTXMULTITESTER_POS1_XTX_POWER_Msk
+#define OBC_REG_XTXMULTITESTER_POS1_XTX_NRESET_Pos   (2UL)
+#define OBC_REG_XTXMULTITESTER_POS1_XTX_NRESET_Msk   (0x0001 << OBC_REG_XTXMULTITESTER_POS1_XTX_NRESET_Pos)
+#define OBC_REG_XTXMULTITESTER_POS1_XTX_NRESET       OBC_REG_XTXMULTITESTER_POS1_XTX_NRESET_Msk
+#define OBC_REG_XTXMULTITESTER_POS2_XTX_EN_Pos       (4UL)
+#define OBC_REG_XTXMULTITESTER_POS2_XTX_EN_Msk       (0x0001 << OBC_REG_XTXMULTITESTER_POS2_XTX_EN_Pos)
+#define OBC_REG_XTXMULTITESTER_POS2_XTX_EN           OBC_REG_XTXMULTITESTER_POS2_XTX_EN_Msk
+#define OBC_REG_XTXMULTITESTER_POS2_XTX_POWER_Pos    (5UL)
+#define OBC_REG_XTXMULTITESTER_POS2_XTX_POWER_Msk    (0x0001 << OBC_REG_XTXMULTITESTER_POS2_XTX_POWER_Pos)
+#define OBC_REG_XTXMULTITESTER_POS2_XTX_POWER        OBC_REG_XTXMULTITESTER_POS2_XTX_POWER_Msk
+#define OBC_REG_XTXMULTITESTER_POS2_XTX_NRESET_Pos   (6UL)
+#define OBC_REG_XTXMULTITESTER_POS2_XTX_NRESET_Msk   (0x0001 << OBC_REG_XTXMULTITESTER_POS2_XTX_NRESET_Pos)
+#define OBC_REG_XTXMULTITESTER_POS2_XTX_NRESET       OBC_REG_XTXMULTITESTER_POS2_XTX_NRESET_Msk
+#define OBC_REG_XTXMULTITESTER_POS3_XTX_EN_Pos       (8UL)
+#define OBC_REG_XTXMULTITESTER_POS3_XTX_EN_Msk       (0x0001 << OBC_REG_XTXMULTITESTER_POS3_XTX_EN_Pos)
+#define OBC_REG_XTXMULTITESTER_POS3_XTX_EN           OBC_REG_XTXMULTITESTER_POS3_XTX_EN_Msk
+#define OBC_REG_XTXMULTITESTER_POS3_XTX_POWER_Pos    (9UL)
+#define OBC_REG_XTXMULTITESTER_POS3_XTX_POWER_Msk    (0x0001 << OBC_REG_XTXMULTITESTER_POS3_XTX_POWER_Pos)
+#define OBC_REG_XTXMULTITESTER_POS3_XTX_POWER        OBC_REG_XTXMULTITESTER_POS3_XTX_POWER_Msk
+#define OBC_REG_XTXMULTITESTER_POS3_XTX_NRESET_Pos   (10UL)
+#define OBC_REG_XTXMULTITESTER_POS3_XTX_NRESET_Msk   (0x0001 << OBC_REG_XTXMULTITESTER_POS3_XTX_NRESET_Pos)
+#define OBC_REG_XTXMULTITESTER_POS3_XTX_NRESET       OBC_REG_XTXMULTITESTER_POS3_XTX_NRESET_Msk
+#define OBC_REG_XTXMULTITESTER_POS4_XTX_EN_Pos       (12UL)
+#define OBC_REG_XTXMULTITESTER_POS4_XTX_EN_Msk       (0x0001 << OBC_REG_XTXMULTITESTER_POS4_XTX_EN_Pos)
+#define OBC_REG_XTXMULTITESTER_POS4_XTX_EN           OBC_REG_XTXMULTITESTER_POS4_XTX_EN_Msk
+#define OBC_REG_XTXMULTITESTER_POS4_XTX_POWER_Pos    (13UL)
+#define OBC_REG_XTXMULTITESTER_POS4_XTX_POWER_Msk    (0x0001 << OBC_REG_XTXMULTITESTER_POS4_XTX_POWER_Pos)
+#define OBC_REG_XTXMULTITESTER_POS4_XTX_POWER        OBC_REG_XTXMULTITESTER_POS4_XTX_POWER_Msk
+#define OBC_REG_XTXMULTITESTER_POS4_XTX_NRESET_Pos   (14UL)
+#define OBC_REG_XTXMULTITESTER_POS4_XTX_NRESET_Msk   (0x0001 << OBC_REG_XTXMULTITESTER_POS4_XTX_NRESET_Pos)
+#define OBC_REG_XTXMULTITESTER_POS4_XTX_NRESET       OBC_REG_XTXMULTITESTER_POS4_XTX_NRESET_Msk
 
 /*************** Bit definition for XDCConfig register ***********************/
 #define OBC_REG_XDCCONFIG_ADDR_Pos                   (0UL)
@@ -168,7 +234,9 @@ typedef struct  {
     uint32_t measurepower_vbatalt;
     uint32_t i2cconfa;
     uint32_t i2cconfb;
+    uint32_t confmulti;
     uint32_t xtxpins;
+    uint32_t xtxmultitester;
     uint32_t xdcconfig;
 } OBC_RegisterData_t;
 
@@ -512,6 +580,86 @@ static inline void REG_Set_I2CConfB_ADDR(OBC_RegisterData_t *registers, uint32_t
     registers->i2cconfb = (registers->i2cconfb & ~OBC_REG_I2CCONFB_ADDR_Msk) | (value << OBC_REG_I2CCONFB_ADDR_Pos);
 }
 
+static inline reg_enabled_t REG_Get_ConfMulti_MEnabled(OBC_RegisterData_t *registers)
+{
+    return (reg_enabled_t)((registers->confmulti & OBC_REG_CONFMULTI_MENABLED_Msk) >> OBC_REG_CONFMULTI_MENABLED_Pos);
+}
+
+static inline void REG_Set_ConfMulti_MEnabled(OBC_RegisterData_t *registers, reg_enabled_t value)
+{
+    registers->confmulti = (registers->confmulti & ~OBC_REG_CONFMULTI_MENABLED_Msk) | (value << OBC_REG_CONFMULTI_MENABLED_Pos);
+}
+
+static inline reg_enabled_t REG_Get_ConfMulti_AutoCLR(OBC_RegisterData_t *registers)
+{
+    return (reg_enabled_t)((registers->confmulti & OBC_REG_CONFMULTI_AUTOCLR_Msk) >> OBC_REG_CONFMULTI_AUTOCLR_Pos);
+}
+
+static inline void REG_Set_ConfMulti_AutoCLR(OBC_RegisterData_t *registers, reg_enabled_t value)
+{
+    registers->confmulti = (registers->confmulti & ~OBC_REG_CONFMULTI_AUTOCLR_Msk) | (value << OBC_REG_CONFMULTI_AUTOCLR_Pos);
+}
+
+static inline reg_enabled_t REG_Get_ConfMulti_RfSwitch(OBC_RegisterData_t *registers)
+{
+    return (reg_enabled_t)((registers->confmulti & OBC_REG_CONFMULTI_RFSWITCH_Msk) >> OBC_REG_CONFMULTI_RFSWITCH_Pos);
+}
+
+static inline void REG_Set_ConfMulti_RfSwitch(OBC_RegisterData_t *registers, reg_enabled_t value)
+{
+    registers->confmulti = (registers->confmulti & ~OBC_REG_CONFMULTI_RFSWITCH_Msk) | (value << OBC_REG_CONFMULTI_RFSWITCH_Pos);
+}
+
+static inline reg_enabled_t REG_Get_ConfMulti_FanPos1(OBC_RegisterData_t *registers)
+{
+    return (reg_enabled_t)((registers->confmulti & OBC_REG_CONFMULTI_FANPOS1_Msk) >> OBC_REG_CONFMULTI_FANPOS1_Pos);
+}
+
+static inline void REG_Set_ConfMulti_FanPos1(OBC_RegisterData_t *registers, reg_enabled_t value)
+{
+    registers->confmulti = (registers->confmulti & ~OBC_REG_CONFMULTI_FANPOS1_Msk) | (value << OBC_REG_CONFMULTI_FANPOS1_Pos);
+}
+
+static inline reg_enabled_t REG_Get_ConfMulti_FanPos2(OBC_RegisterData_t *registers)
+{
+    return (reg_enabled_t)((registers->confmulti & OBC_REG_CONFMULTI_FANPOS2_Msk) >> OBC_REG_CONFMULTI_FANPOS2_Pos);
+}
+
+static inline void REG_Set_ConfMulti_FanPos2(OBC_RegisterData_t *registers, reg_enabled_t value)
+{
+    registers->confmulti = (registers->confmulti & ~OBC_REG_CONFMULTI_FANPOS2_Msk) | (value << OBC_REG_CONFMULTI_FANPOS2_Pos);
+}
+
+static inline reg_enabled_t REG_Get_ConfMulti_FanPos3(OBC_RegisterData_t *registers)
+{
+    return (reg_enabled_t)((registers->confmulti & OBC_REG_CONFMULTI_FANPOS3_Msk) >> OBC_REG_CONFMULTI_FANPOS3_Pos);
+}
+
+static inline void REG_Set_ConfMulti_FanPos3(OBC_RegisterData_t *registers, reg_enabled_t value)
+{
+    registers->confmulti = (registers->confmulti & ~OBC_REG_CONFMULTI_FANPOS3_Msk) | (value << OBC_REG_CONFMULTI_FANPOS3_Pos);
+}
+
+static inline reg_enabled_t REG_Get_ConfMulti_FanPos4(OBC_RegisterData_t *registers)
+{
+    return (reg_enabled_t)((registers->confmulti & OBC_REG_CONFMULTI_FANPOS4_Msk) >> OBC_REG_CONFMULTI_FANPOS4_Pos);
+}
+
+static inline void REG_Set_ConfMulti_FanPos4(OBC_RegisterData_t *registers, reg_enabled_t value)
+{
+    registers->confmulti = (registers->confmulti & ~OBC_REG_CONFMULTI_FANPOS4_Msk) | (value << OBC_REG_CONFMULTI_FANPOS4_Pos);
+}
+
+static inline uint32_t REG_Get_ConfMulti_RfChan(OBC_RegisterData_t *registers)
+{
+    return (uint32_t)((registers->confmulti & OBC_REG_CONFMULTI_RFCHAN_Msk) >> OBC_REG_CONFMULTI_RFCHAN_Pos);
+}
+
+static inline void REG_Set_ConfMulti_RfChan(OBC_RegisterData_t *registers, uint32_t value)
+{
+    registers->confmulti = (registers->confmulti & ~OBC_REG_CONFMULTI_RFCHAN_Msk) | (value << OBC_REG_CONFMULTI_RFCHAN_Pos);
+}
+
 static inline reg_enabled_t REG_Get_XTXpins_ENA(OBC_RegisterData_t *registers)
 {
     return (reg_enabled_t)((registers->xtxpins & OBC_REG_XTXPINS_ENA_Msk) >> OBC_REG_XTXPINS_ENA_Pos);
@@ -540,6 +688,126 @@ static inline reg_enabled_t REG_Get_XTXpins_RDY(OBC_RegisterData_t *registers)
 static inline void REG_Set_XTXpins_RDY(OBC_RegisterData_t *registers, reg_enabled_t value)
 {
     registers->xtxpins = (registers->xtxpins & ~OBC_REG_XTXPINS_RDY_Msk) | (value << OBC_REG_XTXPINS_RDY_Pos);
+}
+
+static inline reg_enabled_t REG_Get_XTXMultitester_POS1_XTX_EN(OBC_RegisterData_t *registers)
+{
+    return (reg_enabled_t)((registers->xtxmultitester & OBC_REG_XTXMULTITESTER_POS1_XTX_EN_Msk) >> OBC_REG_XTXMULTITESTER_POS1_XTX_EN_Pos);
+}
+
+static inline void REG_Set_XTXMultitester_POS1_XTX_EN(OBC_RegisterData_t *registers, reg_enabled_t value)
+{
+    registers->xtxmultitester = (registers->xtxmultitester & ~OBC_REG_XTXMULTITESTER_POS1_XTX_EN_Msk) | (value << OBC_REG_XTXMULTITESTER_POS1_XTX_EN_Pos);
+}
+
+static inline reg_enabled_t REG_Get_XTXMultitester_POS1_XTX_Power(OBC_RegisterData_t *registers)
+{
+    return (reg_enabled_t)((registers->xtxmultitester & OBC_REG_XTXMULTITESTER_POS1_XTX_POWER_Msk) >> OBC_REG_XTXMULTITESTER_POS1_XTX_POWER_Pos);
+}
+
+static inline void REG_Set_XTXMultitester_POS1_XTX_Power(OBC_RegisterData_t *registers, reg_enabled_t value)
+{
+    registers->xtxmultitester = (registers->xtxmultitester & ~OBC_REG_XTXMULTITESTER_POS1_XTX_POWER_Msk) | (value << OBC_REG_XTXMULTITESTER_POS1_XTX_POWER_Pos);
+}
+
+static inline reg_enabled_t REG_Get_XTXMultitester_POS1_XTX_nReset(OBC_RegisterData_t *registers)
+{
+    return (reg_enabled_t)((registers->xtxmultitester & OBC_REG_XTXMULTITESTER_POS1_XTX_NRESET_Msk) >> OBC_REG_XTXMULTITESTER_POS1_XTX_NRESET_Pos);
+}
+
+static inline void REG_Set_XTXMultitester_POS1_XTX_nReset(OBC_RegisterData_t *registers, reg_enabled_t value)
+{
+    registers->xtxmultitester = (registers->xtxmultitester & ~OBC_REG_XTXMULTITESTER_POS1_XTX_NRESET_Msk) | (value << OBC_REG_XTXMULTITESTER_POS1_XTX_NRESET_Pos);
+}
+
+static inline reg_enabled_t REG_Get_XTXMultitester_POS2_XTX_EN(OBC_RegisterData_t *registers)
+{
+    return (reg_enabled_t)((registers->xtxmultitester & OBC_REG_XTXMULTITESTER_POS2_XTX_EN_Msk) >> OBC_REG_XTXMULTITESTER_POS2_XTX_EN_Pos);
+}
+
+static inline void REG_Set_XTXMultitester_POS2_XTX_EN(OBC_RegisterData_t *registers, reg_enabled_t value)
+{
+    registers->xtxmultitester = (registers->xtxmultitester & ~OBC_REG_XTXMULTITESTER_POS2_XTX_EN_Msk) | (value << OBC_REG_XTXMULTITESTER_POS2_XTX_EN_Pos);
+}
+
+static inline reg_enabled_t REG_Get_XTXMultitester_POS2_XTX_Power(OBC_RegisterData_t *registers)
+{
+    return (reg_enabled_t)((registers->xtxmultitester & OBC_REG_XTXMULTITESTER_POS2_XTX_POWER_Msk) >> OBC_REG_XTXMULTITESTER_POS2_XTX_POWER_Pos);
+}
+
+static inline void REG_Set_XTXMultitester_POS2_XTX_Power(OBC_RegisterData_t *registers, reg_enabled_t value)
+{
+    registers->xtxmultitester = (registers->xtxmultitester & ~OBC_REG_XTXMULTITESTER_POS2_XTX_POWER_Msk) | (value << OBC_REG_XTXMULTITESTER_POS2_XTX_POWER_Pos);
+}
+
+static inline reg_enabled_t REG_Get_XTXMultitester_POS2_XTX_nReset(OBC_RegisterData_t *registers)
+{
+    return (reg_enabled_t)((registers->xtxmultitester & OBC_REG_XTXMULTITESTER_POS2_XTX_NRESET_Msk) >> OBC_REG_XTXMULTITESTER_POS2_XTX_NRESET_Pos);
+}
+
+static inline void REG_Set_XTXMultitester_POS2_XTX_nReset(OBC_RegisterData_t *registers, reg_enabled_t value)
+{
+    registers->xtxmultitester = (registers->xtxmultitester & ~OBC_REG_XTXMULTITESTER_POS2_XTX_NRESET_Msk) | (value << OBC_REG_XTXMULTITESTER_POS2_XTX_NRESET_Pos);
+}
+
+static inline reg_enabled_t REG_Get_XTXMultitester_POS3_XTX_EN(OBC_RegisterData_t *registers)
+{
+    return (reg_enabled_t)((registers->xtxmultitester & OBC_REG_XTXMULTITESTER_POS3_XTX_EN_Msk) >> OBC_REG_XTXMULTITESTER_POS3_XTX_EN_Pos);
+}
+
+static inline void REG_Set_XTXMultitester_POS3_XTX_EN(OBC_RegisterData_t *registers, reg_enabled_t value)
+{
+    registers->xtxmultitester = (registers->xtxmultitester & ~OBC_REG_XTXMULTITESTER_POS3_XTX_EN_Msk) | (value << OBC_REG_XTXMULTITESTER_POS3_XTX_EN_Pos);
+}
+
+static inline reg_enabled_t REG_Get_XTXMultitester_POS3_XTX_Power(OBC_RegisterData_t *registers)
+{
+    return (reg_enabled_t)((registers->xtxmultitester & OBC_REG_XTXMULTITESTER_POS3_XTX_POWER_Msk) >> OBC_REG_XTXMULTITESTER_POS3_XTX_POWER_Pos);
+}
+
+static inline void REG_Set_XTXMultitester_POS3_XTX_Power(OBC_RegisterData_t *registers, reg_enabled_t value)
+{
+    registers->xtxmultitester = (registers->xtxmultitester & ~OBC_REG_XTXMULTITESTER_POS3_XTX_POWER_Msk) | (value << OBC_REG_XTXMULTITESTER_POS3_XTX_POWER_Pos);
+}
+
+static inline reg_enabled_t REG_Get_XTXMultitester_POS3_XTX_nReset(OBC_RegisterData_t *registers)
+{
+    return (reg_enabled_t)((registers->xtxmultitester & OBC_REG_XTXMULTITESTER_POS3_XTX_NRESET_Msk) >> OBC_REG_XTXMULTITESTER_POS3_XTX_NRESET_Pos);
+}
+
+static inline void REG_Set_XTXMultitester_POS3_XTX_nReset(OBC_RegisterData_t *registers, reg_enabled_t value)
+{
+    registers->xtxmultitester = (registers->xtxmultitester & ~OBC_REG_XTXMULTITESTER_POS3_XTX_NRESET_Msk) | (value << OBC_REG_XTXMULTITESTER_POS3_XTX_NRESET_Pos);
+}
+
+static inline reg_enabled_t REG_Get_XTXMultitester_POS4_XTX_EN(OBC_RegisterData_t *registers)
+{
+    return (reg_enabled_t)((registers->xtxmultitester & OBC_REG_XTXMULTITESTER_POS4_XTX_EN_Msk) >> OBC_REG_XTXMULTITESTER_POS4_XTX_EN_Pos);
+}
+
+static inline void REG_Set_XTXMultitester_POS4_XTX_EN(OBC_RegisterData_t *registers, reg_enabled_t value)
+{
+    registers->xtxmultitester = (registers->xtxmultitester & ~OBC_REG_XTXMULTITESTER_POS4_XTX_EN_Msk) | (value << OBC_REG_XTXMULTITESTER_POS4_XTX_EN_Pos);
+}
+
+static inline reg_enabled_t REG_Get_XTXMultitester_POS4_XTX_Power(OBC_RegisterData_t *registers)
+{
+    return (reg_enabled_t)((registers->xtxmultitester & OBC_REG_XTXMULTITESTER_POS4_XTX_POWER_Msk) >> OBC_REG_XTXMULTITESTER_POS4_XTX_POWER_Pos);
+}
+
+static inline void REG_Set_XTXMultitester_POS4_XTX_Power(OBC_RegisterData_t *registers, reg_enabled_t value)
+{
+    registers->xtxmultitester = (registers->xtxmultitester & ~OBC_REG_XTXMULTITESTER_POS4_XTX_POWER_Msk) | (value << OBC_REG_XTXMULTITESTER_POS4_XTX_POWER_Pos);
+}
+
+static inline reg_enabled_t REG_Get_XTXMultitester_POS4_XTX_nReset(OBC_RegisterData_t *registers)
+{
+    return (reg_enabled_t)((registers->xtxmultitester & OBC_REG_XTXMULTITESTER_POS4_XTX_NRESET_Msk) >> OBC_REG_XTXMULTITESTER_POS4_XTX_NRESET_Pos);
+}
+
+static inline void REG_Set_XTXMultitester_POS4_XTX_nReset(OBC_RegisterData_t *registers, reg_enabled_t value)
+{
+    registers->xtxmultitester = (registers->xtxmultitester & ~OBC_REG_XTXMULTITESTER_POS4_XTX_NRESET_Msk) | (value << OBC_REG_XTXMULTITESTER_POS4_XTX_NRESET_Pos);
 }
 
 static inline reg_enabled_t REG_Get_XDCConfig_ADDR(OBC_RegisterData_t *registers)

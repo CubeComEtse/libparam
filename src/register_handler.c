@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "event.h"
+#include "Multitester.h"
 #include "config.h"
 #include "register_handler.h"
 #include "i2c_endpoint.h"
@@ -27,7 +28,7 @@ struct register_change_message messages[messages_max_length];
 
 OBC_RegisterData_t currentRegisters;
 
-static size_t AddressesCount = 22;
+static size_t AddressesCount = 24;
 static uint8_t Adresses[] = { OBC_REG_BOARD_ID, OBC_REG_FW_VERSION, OBC_REG_HW_VERSION, \
     OBC_REG_SCRATCHPAD, OBC_REG_SUPPORTED_BOARDS, OBC_REG_CONFIGURED_BOARDS, 
     OBC_REG_UPTIME, OBC_REG_EVENT_CONFA, OBC_REG_EVENT,
@@ -35,7 +36,8 @@ static uint8_t Adresses[] = { OBC_REG_BOARD_ID, OBC_REG_FW_VERSION, OBC_REG_HW_V
     OBC_REG_MEASUREVI_V3, OBC_REG_MEASUREPOWER_V3, OBC_REG_MEASUREVI_V5, OBC_REG_MEASUREPOWER_V5, \
     OBC_REG_MEASUREVI_VBAT, OBC_REG_MEASUREPOWER_VBAT, OBC_REG_MEASUREVI_VBATALT, \
     OBC_REG_MEASUREPOWER_VBATALT, OBC_REG_I2CCONFA, OBC_REG_I2CCONFB,
-    OBC_REG_XTXPINS,
+	OBC_REG_CONFMULTI,
+    OBC_REG_XTXPINS, OBC_REG_XTXMULTITESTER,
     OBC_REG_XDCCONFIG};
 
 
@@ -49,6 +51,7 @@ void REG_vInit(){
     currentRegisters.i2cconfa = (0x5UL << OBC_REG_I2CCONFA_SPD_Pos) | (10UL << OBC_REG_I2CCONFA_TRDEL_Pos);
 
     currentRegisters.xdcconfig = 0x52 << OBC_REG_XDCCONFIG_ADDR_Pos;
+	currentRegisters.confmulti = 0x1111;
 }
 
 
@@ -198,6 +201,32 @@ bool REG_vGet(const uint8_t address, uint8_t* data, uint8_t* length){
             *length = 4;
             copyResult = true;
             break;
+		case OBC_REG_CONFMULTI:
+			// Update bits
+			REG_Set_ConfMulti_MEnabled(&currentRegisters, MULTI_bGetEnabled());
+			REG_Set_ConfMulti_AutoCLR(&currentRegisters, MULTI_bGetAutoClear());
+			
+			REG_Set_ConfMulti_FanPos1(&currentRegisters, MULTI_bGetChannelFan(Position1));
+			REG_Set_ConfMulti_FanPos2(&currentRegisters, MULTI_bGetChannelFan(Position2));
+			REG_Set_ConfMulti_FanPos3(&currentRegisters, MULTI_bGetChannelFan(Position3));
+			REG_Set_ConfMulti_FanPos4(&currentRegisters, MULTI_bGetChannelFan(Position4));
+			
+			REG_Set_ConfMulti_RfSwitch(&currentRegisters, MULTI_bGetRfSwitchEnabled());
+			REG_Set_ConfMulti_RfChan(&currentRegisters, MULTI_u8GetRFSwitchChannel());
+
+			REG_Copyu32ToArray(currentRegisters.confmulti, data);
+			*length = 4;
+			copyResult = true;
+			break;
+			
+		case OBC_REG_XTXMULTITESTER:
+			
+			REG_Copyu32ToArray(currentRegisters.xtxmultitester, data);
+			*length = 4;
+			copyResult = true;
+			break;
+		
+			
         case OBC_REG_XTXPINS:
             // Shouldn't really be here, but fine for now
             
@@ -287,6 +316,23 @@ void REG_vProcessMessages(void){
                 I2C_SetEndpointAddress((deserialized & OBC_REG_I2CCONFB_ADDR_Msk) >> OBC_REG_I2CCONFB_ADDR_Pos);
                 currentRegisters.i2cconfb = deserialized;
                 break;
+			case OBC_REG_CONFMULTI:
+				currentRegisters.confmulti = deserialized;
+				bool multiEnabled = REG_Get_ConfMulti_MEnabled(&currentRegisters);
+				bool autoClear = REG_Get_ConfMulti_AutoCLR(&currentRegisters);
+				
+				MULTI_vSetEnabled(multiEnabled);
+				MULTI_vSetAutoClear(autoClear);
+				
+				MULTI_vSetChannelFan(Position1, REG_Get_ConfMulti_FanPos1(&currentRegisters));
+				MULTI_vSetChannelFan(Position2, REG_Get_ConfMulti_FanPos2(&currentRegisters));
+				MULTI_vSetChannelFan(Position3, REG_Get_ConfMulti_FanPos3(&currentRegisters));
+				MULTI_vSetChannelFan(Position4, REG_Get_ConfMulti_FanPos4(&currentRegisters));
+				
+				MULTI_vSetRfSwitchEnabled(REG_Get_ConfMulti_RfSwitch(&currentRegisters));
+				MULTI_vSetRFSwitchChannel(REG_Get_ConfMulti_RfChan(&currentRegisters));
+				break;
+				
             case OBC_REG_XTXPINS:
                 currentRegisters.xtxpins = deserialized;
                 bit = (deserialized & OBC_REG_XTXPINS_ENA_Msk) >> OBC_REG_XTXPINS_ENA_Pos;
@@ -294,6 +340,27 @@ void REG_vProcessMessages(void){
                 bit = (deserialized & OBC_REG_XTXPINS_NRST_Msk) >> OBC_REG_XTXPINS_NRST_Pos;
                 XTX_SetNReset(bit);
                 break;
+				
+			case OBC_REG_XTXMULTITESTER:
+				currentRegisters.xtxmultitester = deserialized;
+				
+				// This could be a one liner :-D
+				MULTI_vSetChannelEnabled(Position1, REG_Get_XTXMultitester_POS1_XTX_EN(&currentRegisters));
+				MULTI_vSetChannelEnabled(Position2, REG_Get_XTXMultitester_POS2_XTX_EN(&currentRegisters));
+				MULTI_vSetChannelEnabled(Position3, REG_Get_XTXMultitester_POS3_XTX_EN(&currentRegisters));
+				MULTI_vSetChannelEnabled(Position4, REG_Get_XTXMultitester_POS4_XTX_EN(&currentRegisters));
+				
+				MULTI_vSetChannelnReset(Position1, REG_Get_XTXMultitester_POS1_XTX_nReset(&currentRegisters));
+				MULTI_vSetChannelnReset(Position2, REG_Get_XTXMultitester_POS2_XTX_nReset(&currentRegisters));
+				MULTI_vSetChannelnReset(Position3, REG_Get_XTXMultitester_POS3_XTX_nReset(&currentRegisters));
+				MULTI_vSetChannelnReset(Position4, REG_Get_XTXMultitester_POS4_XTX_nReset(&currentRegisters));
+				
+				// Set all the pins in one shot
+				MULTI_vSetChannelPowerPins(deserialized);
+				
+				currentRegisters.xtxmultitester = MULTI_u32GetPins();
+				
+				break;
             case OBC_REG_XDCCONFIG:
                 currentRegisters.xdcconfig = deserialized;
                 // If already configured, configure again

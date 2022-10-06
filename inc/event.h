@@ -12,6 +12,9 @@
 #include <stdint.h>
 
 #define EVENT_SECTION_I2C 10
+#define EVENT_SECTION_MULTI 11
+
+#define MULTITESTER_DID_NOT_RESPOND 2
 
 typedef struct{
     // Section will be I2C, GPIO, etc.

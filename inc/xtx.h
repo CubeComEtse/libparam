@@ -30,4 +30,16 @@ bool XTX_bGetNReset(void);
 bool XTX_bGetReady(void);
 void XTX_vProcess(void);
 
+/*
+ * Tell the XTX module if we are using the multitester. If we are, control lines
+ * Are toggled using the multitester rather that the gpio pins. 
+ */
+void XTX_vSetMultitesterEnabled(const bool ena);
+
+void XTX_vSetMultitesterAutoClr(const bool auto_clear);
+bool XTX_bGetMultitesterAutoClr(void);
+
+void XTX_vSetMultitesterPins(const uint32_t pinConfig);
+void XTX_u32GetMultiTesterPins(void);
+
 #endif /* XTX_H_ */

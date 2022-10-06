@@ -22,7 +22,7 @@
 // Local functions
 void BSP_vInitTelemetryUart(void);
 void BSP_vInitSPI(void);
-void BSP_vInitBoardI2C(void) ;
+void BSP_vInitBoardI2C(void);
 void BSP_vInitPowerSenseGPIO(void);
 void BSP_vInitPowerGPIO(void);
 void BSP_vInitCan(void);
@@ -184,6 +184,10 @@ void BSP_vInitBoardI2C(void) {
     board_i2c_driver.p_twihs = I2C_BOARD_DEVICE;
 }
 
+struct i2c_driver_data*  BSP_psGetI2cDriver(void) {
+	return &board_i2c_driver;
+}
+
 void BSP_vInitPowerSenseGPIO(void) {
     // LTC2992 1 - U7
     ioport_enable_pin(LTC2992_1_DATARDY_PIN);
@@ -266,7 +270,7 @@ void BSP_vInitCan(void) {
     pmc_pck_set_source(PMC_PCK_5, PMC_PCK_CSS_PLLA_CLK);
     pmc_enable_pck(PMC_PCK_5);
 
-    mcan_set_baudrate(CAN_DEVICE, 200000);
+    mcan_set_baudrate(CAN_DEVICE, 1000000);
 
     // Will set CCCR.INIT bit to 1, so configuration is possible,
     // mcan_enable_test_mode(&sCanModule);
@@ -401,7 +405,7 @@ void BSP_vInit1MsTimer(void) {
     // TC_CMR_CPCTRG : Set RC compare to trigger a timer counter reset
     sysclk_enable_peripheral_clock(ID_TC0);
     tc_init(TC0, timerChannel, TC_CMR_TCCLKS_TIMER_CLOCK3 | TC_CMR_CPCTRG);
-    uint16_t prescaler = sysclk_get_main_hz() /32 / 1000;
+    uint16_t prescaler = sysclk_get_main_hz() /64 / 1000;
     tc_write_rc(TC0, timerChannel, prescaler);
 
     tc_enable_interrupt(TC0, timerChannel, TC_IER_CPCS);
