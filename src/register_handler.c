@@ -211,8 +211,8 @@ bool REG_vGet(const uint8_t address, uint8_t* data, uint8_t* length){
 			REG_Set_ConfMulti_FanPos3(&currentRegisters, MULTI_bGetChannelFan(Position3));
 			REG_Set_ConfMulti_FanPos4(&currentRegisters, MULTI_bGetChannelFan(Position4));
 			
-			REG_Set_ConfMulti_RfSwitch(&currentRegisters, MULTI_bGetRfSwitchEnabled());
-			REG_Set_ConfMulti_RfChan(&currentRegisters, MULTI_u8GetRFSwitchChannel());
+			REG_Set_ConfMulti_RfASwENA(&currentRegisters, MULTI_bGetRfSwitchEnabled());
+			REG_Set_ConfMulti_RfSwChan(&currentRegisters, MULTI_u8GetRFSwitchChannel());
 
 			REG_Copyu32ToArray(currentRegisters.confmulti, data);
 			*length = 4;
@@ -329,8 +329,8 @@ void REG_vProcessMessages(void){
 				MULTI_vSetChannelFan(Position3, REG_Get_ConfMulti_FanPos3(&currentRegisters));
 				MULTI_vSetChannelFan(Position4, REG_Get_ConfMulti_FanPos4(&currentRegisters));
 				
-				MULTI_vSetRfSwitchEnabled(REG_Get_ConfMulti_RfSwitch(&currentRegisters));
-				MULTI_vSetRFSwitchChannel(REG_Get_ConfMulti_RfChan(&currentRegisters));
+				MULTI_vSetRfSwitchEnabled(REG_Get_ConfMulti_RfASwENA(&currentRegisters));
+				MULTI_vSetRFSwitchChannel(REG_Get_ConfMulti_RfSwChan(&currentRegisters));
 				break;
 				
             case OBC_REG_XTXPINS:

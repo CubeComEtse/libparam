@@ -96,9 +96,9 @@
 #define OBC_REG_CONFMULTI_AUTOCLR_Pos                (1UL)
 #define OBC_REG_CONFMULTI_AUTOCLR_Msk                (0x0001 << OBC_REG_CONFMULTI_AUTOCLR_Pos)
 #define OBC_REG_CONFMULTI_AUTOCLR                    OBC_REG_CONFMULTI_AUTOCLR_Msk
-#define OBC_REG_CONFMULTI_RFSWITCH_Pos               (2UL)
-#define OBC_REG_CONFMULTI_RFSWITCH_Msk               (0x0001 << OBC_REG_CONFMULTI_RFSWITCH_Pos)
-#define OBC_REG_CONFMULTI_RFSWITCH                   OBC_REG_CONFMULTI_RFSWITCH_Msk
+#define OBC_REG_CONFMULTI_RFASWENA_Pos               (2UL)
+#define OBC_REG_CONFMULTI_RFASWENA_Msk               (0x0001 << OBC_REG_CONFMULTI_RFASWENA_Pos)
+#define OBC_REG_CONFMULTI_RFASWENA                   OBC_REG_CONFMULTI_RFASWENA_Msk
 #define OBC_REG_CONFMULTI_FANPOS1_Pos                (4UL)
 #define OBC_REG_CONFMULTI_FANPOS1_Msk                (0x0001 << OBC_REG_CONFMULTI_FANPOS1_Pos)
 #define OBC_REG_CONFMULTI_FANPOS1                    OBC_REG_CONFMULTI_FANPOS1_Msk
@@ -111,9 +111,9 @@
 #define OBC_REG_CONFMULTI_FANPOS4_Pos                (7UL)
 #define OBC_REG_CONFMULTI_FANPOS4_Msk                (0x0001 << OBC_REG_CONFMULTI_FANPOS4_Pos)
 #define OBC_REG_CONFMULTI_FANPOS4                    OBC_REG_CONFMULTI_FANPOS4_Msk
-#define OBC_REG_CONFMULTI_RFCHAN_Pos                 (8UL)
-#define OBC_REG_CONFMULTI_RFCHAN_Msk                 (0x00ff << OBC_REG_CONFMULTI_RFCHAN_Pos)
-#define OBC_REG_CONFMULTI_RFCHAN                     OBC_REG_CONFMULTI_RFCHAN_Msk
+#define OBC_REG_CONFMULTI_RFSWCHAN_Pos               (8UL)
+#define OBC_REG_CONFMULTI_RFSWCHAN_Msk               (0x00ff << OBC_REG_CONFMULTI_RFSWCHAN_Pos)
+#define OBC_REG_CONFMULTI_RFSWCHAN                   OBC_REG_CONFMULTI_RFSWCHAN_Msk
 
 /*************** Bit definition for XTXpins register *************************/
 #define OBC_REG_XTXPINS_ENA_Pos                      (0UL)
@@ -600,14 +600,14 @@ static inline void REG_Set_ConfMulti_AutoCLR(OBC_RegisterData_t *registers, reg_
     registers->confmulti = (registers->confmulti & ~OBC_REG_CONFMULTI_AUTOCLR_Msk) | (value << OBC_REG_CONFMULTI_AUTOCLR_Pos);
 }
 
-static inline reg_enabled_t REG_Get_ConfMulti_RfSwitch(OBC_RegisterData_t *registers)
+static inline reg_enabled_t REG_Get_ConfMulti_RfASwENA(OBC_RegisterData_t *registers)
 {
-    return (reg_enabled_t)((registers->confmulti & OBC_REG_CONFMULTI_RFSWITCH_Msk) >> OBC_REG_CONFMULTI_RFSWITCH_Pos);
+    return (reg_enabled_t)((registers->confmulti & OBC_REG_CONFMULTI_RFASWENA_Msk) >> OBC_REG_CONFMULTI_RFASWENA_Pos);
 }
 
-static inline void REG_Set_ConfMulti_RfSwitch(OBC_RegisterData_t *registers, reg_enabled_t value)
+static inline void REG_Set_ConfMulti_RfASwENA(OBC_RegisterData_t *registers, reg_enabled_t value)
 {
-    registers->confmulti = (registers->confmulti & ~OBC_REG_CONFMULTI_RFSWITCH_Msk) | (value << OBC_REG_CONFMULTI_RFSWITCH_Pos);
+    registers->confmulti = (registers->confmulti & ~OBC_REG_CONFMULTI_RFASWENA_Msk) | (value << OBC_REG_CONFMULTI_RFASWENA_Pos);
 }
 
 static inline reg_enabled_t REG_Get_ConfMulti_FanPos1(OBC_RegisterData_t *registers)
@@ -650,14 +650,14 @@ static inline void REG_Set_ConfMulti_FanPos4(OBC_RegisterData_t *registers, reg_
     registers->confmulti = (registers->confmulti & ~OBC_REG_CONFMULTI_FANPOS4_Msk) | (value << OBC_REG_CONFMULTI_FANPOS4_Pos);
 }
 
-static inline uint32_t REG_Get_ConfMulti_RfChan(OBC_RegisterData_t *registers)
+static inline uint32_t REG_Get_ConfMulti_RfSwChan(OBC_RegisterData_t *registers)
 {
-    return (uint32_t)((registers->confmulti & OBC_REG_CONFMULTI_RFCHAN_Msk) >> OBC_REG_CONFMULTI_RFCHAN_Pos);
+    return (uint32_t)((registers->confmulti & OBC_REG_CONFMULTI_RFSWCHAN_Msk) >> OBC_REG_CONFMULTI_RFSWCHAN_Pos);
 }
 
-static inline void REG_Set_ConfMulti_RfChan(OBC_RegisterData_t *registers, uint32_t value)
+static inline void REG_Set_ConfMulti_RfSwChan(OBC_RegisterData_t *registers, uint32_t value)
 {
-    registers->confmulti = (registers->confmulti & ~OBC_REG_CONFMULTI_RFCHAN_Msk) | (value << OBC_REG_CONFMULTI_RFCHAN_Pos);
+    registers->confmulti = (registers->confmulti & ~OBC_REG_CONFMULTI_RFSWCHAN_Msk) | (value << OBC_REG_CONFMULTI_RFSWCHAN_Pos);
 }
 
 static inline reg_enabled_t REG_Get_XTXpins_ENA(OBC_RegisterData_t *registers)
