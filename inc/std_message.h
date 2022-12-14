@@ -13,6 +13,8 @@
 #define DIR_idx 1
 #define LEN_idx 2
 #define DATA_idx 3
+// Special byte added just for the DFA protocol
+#define CAN_EXTRA 3
 
 // This has to match the VS studio program
 enum RWDirection

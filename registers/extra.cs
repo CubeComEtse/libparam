@@ -12,6 +12,11 @@ public void RegisterListener(IModel other)
  */
 public void OtherHandler(object sender, PropertyChangedEventArgs e)
 {
+    if (e.PropertyName.Contains("IsSet"))
+    {
+        return;
+    }
+
     // Get has_field for this value
     string propertyString = e.PropertyName;
     string flagPropertyString = e.PropertyName + "IsSet";

@@ -17,26 +17,43 @@
 #define CAN_DRIVER_BUF_SIZE 8
 
 // Store received CAN messages to be sent back via UART
-struct xtxCanMessage receivedMessages[CAN_DRIVER_BUF_SIZE];
+can_message_t receivedMessages[CAN_DRIVER_BUF_SIZE];
 static int receivedMessageRead = 0;
 static int receivedMessageWrite = 0;
 
 
+
+static can_mode_t canMessageMode = CC_CAN_MODE;
+
+
+void CAN_DRIVER_vSetCanMode(const can_mode_t type){
+	canMessageMode = type;
+}
+
 /**
 * \brief Send a message
 */
-void CAN_DRIVER_vSendMessage(struct xtxCanMessage message)
+void CAN_DRIVER_vSendMessage(can_message_t message)
 {
+	
     // Construct a message
     struct mcan_tx_element tx_element;
     mcan_get_tx_buffer_element_defaults(&tx_element);
+	
+	tx_element.T0.reg = MCAN_TX_ELEMENT_T0_EXTENDED_ID(message.fullheader)| MCAN_TX_ELEMENT_T0_XTD;
+	
 
-    tx_element.T0.reg = MCAN_TX_ELEMENT_T0_EXTENDED_ID(message.messageType  << 24 | message.registerAddres << 16 | message.address  << 8 | message.targetAddres ) | MCAN_TX_ELEMENT_T0_XTD;
-    //tx_element.T0.reg = MCAN_TX_ELEMENT_T0_EXTENDED_ID( 0x55AA ) | MCAN_TX_ELEMENT_T0_XTD;
+	/*
+	if (canMessageMode == CC_CAN_MODE){
+		tx_element.T0.reg = MCAN_TX_ELEMENT_T0_EXTENDED_ID(message.messageType  << 24 | message.registerAddres << 16 | message.address  << 8 | message.targetAddres ) | MCAN_TX_ELEMENT_T0_XTD;
+	}
+	if (canMessageMode == DFA_CAN_MODE) {
+		tx_element.T0.reg = MCAN_TX_ELEMENT_T0_EXTENDED_ID(message.messageType  << 26 | CAN_DFA_FRAME_SINGLE << 24 | CAN_DFA_ID_EVID_SYNTIME << 16| message.targetAddres << 8 | message.address) | MCAN_TX_ELEMENT_T0_XTD;
+	}*/
     
-    tx_element.T1.bit.DLC = message.dataLen;
+    tx_element.T1.bit.DLC = message.length;
     
-    uint8_t lenToCopy = min(8, message.dataLen);
+    uint8_t lenToCopy = min(8, message.length);
     memcpy(tx_element.data, message.data, lenToCopy);
 
     mcan_set_tx_buffer_element(BSP_psGetCanDriver(), &tx_element, 0);
@@ -52,7 +69,7 @@ bool CAN_DRIVER_bHasMessage(void) {
 *
 * \return Pointer to message. Don't modify
 */
-struct xtxCanMessage* CAN_DRIVER_sGetMessage(void)
+can_message_t* CAN_DRIVER_sGetMessage(void)
 {
     return &receivedMessages[receivedMessageRead];
 }
@@ -75,22 +92,32 @@ void CAN_DRIVER_vClearMessage(void) {
  *
  * \return none
  */
-void CAN_DRIVER_vMessageInFifo0(struct mcan_rx_element_fifo_0 message)
+void CAN_DRIVER_vMessageInFifo0(struct mcan_rx_element_fifo_0 can_msg)
 {
     // Todo: Add buffer check
+	/*
+	if (canMessageMode == CC_CAN_MODE)
+	{
+		// Top 4 bits is instruction type
+		receivedMessages[receivedMessageWrite].messageType = (((message.R0.bit.ID) >> 24) & 0x1F);
 
-    // Top 4 bits is instruction type
-    receivedMessages[receivedMessageWrite].messageType = (((message.R0.bit.ID) >> 24) & 0xF);
-
-    // Next byte is register address
-    receivedMessages[receivedMessageWrite].registerAddres = (((message.R0.bit.ID) >> 16) & 0xFF);
-
-    // Don't need the rest - they are CAN addresses
+		// Next byte is register address
+		receivedMessages[receivedMessageWrite].registerAddres = (((message.R0.bit.ID) >> 16) & 0xFF);
+	}
+	if (canMessageMode == DFA_CAN_MODE)
+	{
+		// Top 3 bits is instruction type
+		receivedMessages[receivedMessageWrite].messageType = (((message.R0.bit.ID) >> 26) & 0x7);
+		
+		// Other bits are ignored for now
+	}*/
+	
+	receivedMessages[receivedMessageWrite].fullheader = can_msg.R0.reg;
 
     // Copy the message length and the data
-    receivedMessages[receivedMessageWrite].dataLen = message.R1.bit.DLC;
-    uint8_t lenToCopy = min(8, receivedMessages[receivedMessageWrite].dataLen);
-    memcpy(receivedMessages[receivedMessageWrite].data, message.data, lenToCopy);
+    receivedMessages[receivedMessageWrite].length = can_msg.R1.bit.DLC;
+    uint8_t lenToCopy = min(8, receivedMessages[receivedMessageWrite].length);
+    memcpy(receivedMessages[receivedMessageWrite].data, can_msg.data, lenToCopy);
 
     receivedMessageWrite = (receivedMessageWrite + 1) % CAN_DRIVER_BUF_SIZE;
 }
@@ -104,22 +131,39 @@ void CAN_DRIVER_vMessageInFifo0(struct mcan_rx_element_fifo_0 message)
  *
  * \return none
  */
-void CAN_DRIVER_vMessageInFifo1(struct mcan_rx_element_fifo_1 message)
+void CAN_DRIVER_vMessageInFifo1(struct mcan_rx_element_fifo_1 can_msg)
 {
+	/*
     // Todo: Add buffer check
+    if (canMessageMode == CC_CAN_MODE)
+    {
+	    // Top 4 bits is instruction type
+	    receivedMessages[receivedMessageWrite].messageType = (((message.R0.bit.ID) >> 24) & 0x1F);
 
-    // Top 4 bits is instruction type
-    receivedMessages[receivedMessageWrite].messageType = (((message.R0.bit.ID) >> 24) & 0xF);
-
-    // Next byte is register address
-    receivedMessages[receivedMessageWrite].registerAddres = (((message.R0.bit.ID) >> 16) & 0xFF);
-
-    // Don't need the rest - they are CAN addresses
+	    // Next byte is register address
+	    receivedMessages[receivedMessageWrite].registerAddres = (((message.R0.bit.ID) >> 16) & 0xFF);
+    }
+    if (canMessageMode == DFA_CAN_MODE)
+    {
+	    // Top 3 bits is instruction type
+	    receivedMessages[receivedMessageWrite].messageType = (((message.R0.bit.ID) >> 26) & 0x7);
+	    
+	    // Other bits are ignored for now
+    }
 
     // Copy the message length and the data
     receivedMessages[receivedMessageWrite].dataLen = message.R1.bit.DLC;
     uint8_t lenToCopy = min(8, receivedMessages[receivedMessageWrite].dataLen);
     memcpy(receivedMessages[receivedMessageWrite].data, message.data, lenToCopy);
 
-    receivedMessageWrite += 1;
+    receivedMessageWrite += 1;*/
+	
+	receivedMessages[receivedMessageWrite].fullheader = can_msg.R0.reg;
+
+	// Copy the message length and the data
+	receivedMessages[receivedMessageWrite].length = can_msg.R1.bit.DLC;
+	uint8_t lenToCopy = min(8, receivedMessages[receivedMessageWrite].length);
+	memcpy(receivedMessages[receivedMessageWrite].data, can_msg.data, lenToCopy);
+
+	receivedMessageWrite = (receivedMessageWrite + 1) % CAN_DRIVER_BUF_SIZE;
 }

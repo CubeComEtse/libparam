@@ -281,16 +281,20 @@ void BSP_vInitCan(void) {
     // Set up the filter for an extended message
     // We receive messages at OBC_CAN_ADRESS,
     // the XTX will receive messages on it's own address
-    struct mcan_extended_message_filter_element et_filter;
-    mcan_get_extended_message_filter_element_default(&et_filter);
-    et_filter.F0.reg = MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F0_EFID1(OBC_CAN_ADRESS) | MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F0_EFEC(1);
-    et_filter.F1.reg = MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F1_EFID2(OBC_CAN_MASK) | MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F1_EFT_CLASSIC;
-
-    mcan_set_rx_extended_filter(&sCanModule, &et_filter, 0);
-    mcan_set_rx_extended_filter(&sCanModule, &et_filter, 1);
-    
+	BSP_vCanSetAddressFilter(OBC_CAN_ADRESS, OBC_CAN_MASK);
+	
     irq_register_handler(CAN_INTERRUPT, 1);
     mcan_enable_interrupt(&sCanModule, MCAN_RX_BUFFER_NEW_MESSAGE | MCAN_RX_FIFO_0_NEW_MESSAGE | MCAN_RX_FIFO_1_NEW_MESSAGE | MCAN_FORMAT_ERROR | MCAN_ACKNOWLEDGE_ERROR | MCAN_BUS_OFF);
+}
+
+void BSP_vCanSetAddressFilter(uint32_t filter, uint32_t mask){
+	struct mcan_extended_message_filter_element et_filter;
+	mcan_get_extended_message_filter_element_default(&et_filter);
+	et_filter.F0.reg = MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F0_EFID1(filter) | MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F0_EFEC(1);
+	et_filter.F1.reg = MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F1_EFID2(mask) | MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F1_EFT_CLASSIC;
+
+	mcan_set_rx_extended_filter(&sCanModule, &et_filter, 0);
+	mcan_set_rx_extended_filter(&sCanModule, &et_filter, 1);
 }
 
 struct mcan_module* BSP_psGetCanDriver(void) {

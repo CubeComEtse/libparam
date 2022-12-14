@@ -24,6 +24,7 @@ typedef enum  {
 void BSP_vInit(void);
 USART_data_t* BSP_psGetTelemetryDriver(void);
 struct spi_device* BSP_psGetSpiDriver(void);
+void BSP_vCanSetAddressFilter(uint32_t filter, uint32_t mask);
 struct mcan_module* BSP_psGetCanDriver(void);
 void BSP_vEnableUartTXInterrupt(void);
 

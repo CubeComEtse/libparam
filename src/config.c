@@ -13,12 +13,14 @@
 #include "serial_multiplexer.h"
 #include "std_message.h"
 #include "tmr.h"
-#include "xtx.h"
-#include "xsteer.h"
-#include "xdc.h"
 #include "version.h"
 #include "OBC.h"
 #include "register_handler.h"
+
+#include "hdrtx_dfa.h"
+#include "xtx.h"
+#include "xsteer.h"
+#include "xdc.h"
 
 // Local Variables
 static struct ltc2992_device power_measure_1;
@@ -275,6 +277,9 @@ uint8_t CONFIG_vDecodeBoardSet(const uint8_t rw, const uint8_t value)
     case CONF_BOARD_XDC:
         XDC_vDeConfig();
         break;
+	case CONF_BOARD_HDRTX_DFA:
+		HDRTX_DFA_vDeConfig();
+		break;
     }
 
     // Set new board
@@ -289,6 +294,9 @@ uint8_t CONFIG_vDecodeBoardSet(const uint8_t rw, const uint8_t value)
         break;
     case CONF_BOARD_XDC:
         XDC_vConfig();
+        break;
+    case CONF_BOARD_HDRTX_DFA:
+        HDRTX_DFA_vConfig();
         break;
     }
     currentBoardConfig = value;
@@ -411,7 +419,6 @@ void CONFIG_vGetCurrentMeasurements(uint8_t* tx_buffer, uint16_t* tx_length) {
 
     *tx_length = 8;
 }
-
 
 uint8_t CONFIG_GetCurrentBoardconfig(void){
     return currentBoardConfig;

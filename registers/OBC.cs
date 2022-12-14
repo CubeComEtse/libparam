@@ -99,30 +99,30 @@ namespace Devices.Models
         public struct RegBoard_ID
         {
             [FieldOffset(0)]
-            UInt32 data;
+            UInt32 data0;
 
             public byte ccIdentifier
             {
-                get { return (byte)((data & (UInt32)0xff000000) >> 24); } 
-                set { data = (UInt32)((data & ~(UInt32)0xff000000) | (( (UInt32)(value) & 0x000000ff) << 24)); }
+                get { return (byte)((data0 & (UInt32)0xff000000) >> 24); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0xff000000) | (( (UInt32)(value) & 0x000000ff) << 24)); }
             }
 
             public byte id0
             {
-                get { return (byte)((data & (UInt32)0x00ff0000) >> 16); } 
-                set { data = (UInt32)((data & ~(UInt32)0x00ff0000) | (( (UInt32)(value) & 0x000000ff) << 16)); }
+                get { return (byte)((data0 & (UInt32)0x00ff0000) >> 16); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00ff0000) | (( (UInt32)(value) & 0x000000ff) << 16)); }
             }
 
             public byte id1
             {
-                get { return (byte)((data & (UInt32)0x0000ff00) >> 8); } 
-                set { data = (UInt32)((data & ~(UInt32)0x0000ff00) | (( (UInt32)(value) & 0x000000ff) << 8)); }
+                get { return (byte)((data0 & (UInt32)0x0000ff00) >> 8); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x0000ff00) | (( (UInt32)(value) & 0x000000ff) << 8)); }
             }
 
             public byte id2
             {
-                get { return (byte)((data & (UInt32)0x000000ff) >> 0); } 
-                set { data = (UInt32)((data & ~(UInt32)0x000000ff) | (( (UInt32)(value) & 0x000000ff) << 0)); }
+                get { return (byte)((data0 & (UInt32)0x000000ff) >> 0); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x000000ff) | (( (UInt32)(value) & 0x000000ff) << 0)); }
             }
 
         }
@@ -131,24 +131,24 @@ namespace Devices.Models
         public struct RegVersion
         {
             [FieldOffset(0)]
-            UInt32 data;
+            UInt32 data0;
 
             public byte major_version
             {
-                get { return (byte)((data & (UInt32)0x00ff0000) >> 16); } 
-                set { data = (UInt32)((data & ~(UInt32)0x00ff0000) | (( (UInt32)(value) & 0x000000ff) << 16)); }
+                get { return (byte)((data0 & (UInt32)0x00ff0000) >> 16); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00ff0000) | (( (UInt32)(value) & 0x000000ff) << 16)); }
             }
 
             public byte minor_version
             {
-                get { return (byte)((data & (UInt32)0x0000ff00) >> 8); } 
-                set { data = (UInt32)((data & ~(UInt32)0x0000ff00) | (( (UInt32)(value) & 0x000000ff) << 8)); }
+                get { return (byte)((data0 & (UInt32)0x0000ff00) >> 8); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x0000ff00) | (( (UInt32)(value) & 0x000000ff) << 8)); }
             }
 
             public byte patch_version
             {
-                get { return (byte)((data & (UInt32)0x000000ff) >> 0); } 
-                set { data = (UInt32)((data & ~(UInt32)0x000000ff) | (( (UInt32)(value) & 0x000000ff) << 0)); }
+                get { return (byte)((data0 & (UInt32)0x000000ff) >> 0); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x000000ff) | (( (UInt32)(value) & 0x000000ff) << 0)); }
             }
 
         }
@@ -185,12 +185,12 @@ namespace Devices.Models
         public struct RegEvent_ConfA
         {
             [FieldOffset(0)]
-            UInt32 data;
+            UInt32 data0;
 
             public short count
             {
-                get { return (short)((data & (UInt32)0x0000ffff) >> 0); } 
-                set { data = (UInt32)((data & ~(UInt32)0x0000ffff) | (( (UInt32)(value) & 0x0000ffff) << 0)); }
+                get { return (short)((data0 & (UInt32)0x0000ffff) >> 0); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x0000ffff) | (( (UInt32)(value) & 0x0000ffff) << 0)); }
             }
 
         }
@@ -199,24 +199,24 @@ namespace Devices.Models
         public struct RegEvent
         {
             [FieldOffset(0)]
-            UInt32 data;
+            UInt32 data0;
 
             public short section
             {
-                get { return (short)((data & (UInt32)0xff000000) >> 24); } 
-                set { data = (UInt32)((data & ~(UInt32)0xff000000) | (( (UInt32)(value) & 0x000000ff) << 24)); }
+                get { return (short)((data0 & (UInt32)0xff000000) >> 24); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0xff000000) | (( (UInt32)(value) & 0x000000ff) << 24)); }
             }
 
             public short detail
             {
-                get { return (short)((data & (UInt32)0x00ff0000) >> 16); } 
-                set { data = (UInt32)((data & ~(UInt32)0x00ff0000) | (( (UInt32)(value) & 0x000000ff) << 16)); }
+                get { return (short)((data0 & (UInt32)0x00ff0000) >> 16); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00ff0000) | (( (UInt32)(value) & 0x000000ff) << 16)); }
             }
 
             public short timestamp
             {
-                get { return (short)((data & (UInt32)0x0000ffff) >> 0); } 
-                set { data = (UInt32)((data & ~(UInt32)0x0000ffff) | (( (UInt32)(value) & 0x0000ffff) << 0)); }
+                get { return (short)((data0 & (UInt32)0x0000ffff) >> 0); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x0000ffff) | (( (UInt32)(value) & 0x0000ffff) << 0)); }
             }
 
         }
@@ -225,30 +225,30 @@ namespace Devices.Models
         public struct RegConfPower
         {
             [FieldOffset(0)]
-            byte data;
+            byte data0;
 
             public byte voltage5Toggle
             {
-                get { return (byte)((data & (byte)0x00000001) >> 0); } 
-                set { data = (byte)((data & ~(byte)0x00000001) | (( (byte)(value) & 0x00000001) << 0)); }
+                get { return (byte)((data0 & (byte)0x00000001) >> 0); } 
+                set { data0 = (byte)((data0 & ~(byte)0x00000001) | (( (byte)(value) & 0x00000001) << 0)); }
             }
 
             public byte voltage3Toggle
             {
-                get { return (byte)((data & (byte)0x00000002) >> 1); } 
-                set { data = (byte)((data & ~(byte)0x00000002) | (( (byte)(value) & 0x00000001) << 1)); }
+                get { return (byte)((data1 & (byte)0x00000001) >> 0); } 
+                set { data1 = (byte)((data1 & ~(byte)0x00000001) | (( (byte)(value) & 0x00000001) << 0)); }
             }
 
             public byte voltageVBatToggle
             {
-                get { return (byte)((data & (byte)0x00000004) >> 2); } 
-                set { data = (byte)((data & ~(byte)0x00000004) | (( (byte)(value) & 0x00000001) << 2)); }
+                get { return (byte)((data2 & (byte)0x00000001) >> 0); } 
+                set { data2 = (byte)((data2 & ~(byte)0x00000001) | (( (byte)(value) & 0x00000001) << 0)); }
             }
 
             public byte voltageVBatAltToggle
             {
-                get { return (byte)((data & (byte)0x00000008) >> 3); } 
-                set { data = (byte)((data & ~(byte)0x00000008) | (( (byte)(value) & 0x00000001) << 3)); }
+                get { return (byte)((data3 & (byte)0x00000001) >> 0); } 
+                set { data3 = (byte)((data3 & ~(byte)0x00000001) | (( (byte)(value) & 0x00000001) << 0)); }
             }
 
         }
@@ -257,18 +257,18 @@ namespace Devices.Models
         public struct RegMeasureVI
         {
             [FieldOffset(0)]
-            UInt32 data;
+            UInt32 data0;
 
             public UInt32 voltage
             {
-                get { return (UInt32)((data & (UInt32)0xffff0000) >> 16); } 
-                set { data = (UInt32)((data & ~(UInt32)0xffff0000) | (( (UInt32)(value) & 0x0000ffff) << 16)); }
+                get { return (UInt32)((data0 & (UInt32)0xffff0000) >> 16); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0xffff0000) | (( (UInt32)(value) & 0x0000ffff) << 16)); }
             }
 
             public UInt32 current
             {
-                get { return (UInt32)((data & (UInt32)0x0000ffff) >> 0); } 
-                set { data = (UInt32)((data & ~(UInt32)0x0000ffff) | (( (UInt32)(value) & 0x0000ffff) << 0)); }
+                get { return (UInt32)((data0 & (UInt32)0x0000ffff) >> 0); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x0000ffff) | (( (UInt32)(value) & 0x0000ffff) << 0)); }
             }
 
         }
@@ -277,12 +277,12 @@ namespace Devices.Models
         public struct RegMeasurePower
         {
             [FieldOffset(0)]
-            UInt32 data;
+            UInt32 data0;
 
             public UInt32 power
             {
-                get { return (UInt32)((data & (UInt32)0xffffffff) >> 0); } 
-                set { data = (UInt32)((data & ~(UInt32)0xffffffff) | (( (UInt32)(value) & 0xffffffff) << 0)); }
+                get { return (UInt32)((data0 & (UInt32)0xffffffff) >> 0); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0xffffffff) | (( (UInt32)(value) & 0xffffffff) << 0)); }
             }
 
         }
@@ -291,24 +291,24 @@ namespace Devices.Models
         public struct RegI2CConfA
         {
             [FieldOffset(0)]
-            UInt32 data;
+            UInt32 data0;
 
             public byte TRDEL
             {
-                get { return (byte)((data & (UInt32)0x00ff0000) >> 16); } 
-                set { data = (UInt32)((data & ~(UInt32)0x00ff0000) | (( (UInt32)(value) & 0x000000ff) << 16)); }
+                get { return (byte)((data0 & (UInt32)0x00ff0000) >> 16); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00ff0000) | (( (UInt32)(value) & 0x000000ff) << 16)); }
             }
 
             public byte WRDEL
             {
-                get { return (byte)((data & (UInt32)0x0000ff00) >> 8); } 
-                set { data = (UInt32)((data & ~(UInt32)0x0000ff00) | (( (UInt32)(value) & 0x000000ff) << 8)); }
+                get { return (byte)((data0 & (UInt32)0x0000ff00) >> 8); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x0000ff00) | (( (UInt32)(value) & 0x000000ff) << 8)); }
             }
 
             public byte SPD
             {
-                get { return (byte)((data & (UInt32)0x000000ff) >> 0); } 
-                set { data = (UInt32)((data & ~(UInt32)0x000000ff) | (( (UInt32)(value) & 0x000000ff) << 0)); }
+                get { return (byte)((data0 & (UInt32)0x000000ff) >> 0); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x000000ff) | (( (UInt32)(value) & 0x000000ff) << 0)); }
             }
 
         }
@@ -317,12 +317,12 @@ namespace Devices.Models
         public struct RegI2CConfB
         {
             [FieldOffset(0)]
-            UInt32 data;
+            UInt32 data0;
 
             public byte ADDR
             {
-                get { return (byte)((data & (UInt32)0x000000ff) >> 0); } 
-                set { data = (UInt32)((data & ~(UInt32)0x000000ff) | (( (UInt32)(value) & 0x000000ff) << 0)); }
+                get { return (byte)((data0 & (UInt32)0x000000ff) >> 0); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x000000ff) | (( (UInt32)(value) & 0x000000ff) << 0)); }
             }
 
         }
@@ -331,54 +331,54 @@ namespace Devices.Models
         public struct RegConfMulti
         {
             [FieldOffset(0)]
-            UInt32 data;
+            UInt32 data0;
 
             public byte MEnabled
             {
-                get { return (byte)((data & (UInt32)0x00000001) >> 0); } 
-                set { data = (UInt32)((data & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
+                get { return (byte)((data0 & (UInt32)0x00000001) >> 0); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
             }
 
             public byte AutoCLR
             {
-                get { return (byte)((data & (UInt32)0x00000002) >> 1); } 
-                set { data = (UInt32)((data & ~(UInt32)0x00000002) | (( (UInt32)(value) & 0x00000001) << 1)); }
+                get { return (byte)((data1 & (UInt32)0x00000001) >> 0); } 
+                set { data1 = (UInt32)((data1 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
             }
 
             public byte RfASwENA
             {
-                get { return (byte)((data & (UInt32)0x00000004) >> 2); } 
-                set { data = (UInt32)((data & ~(UInt32)0x00000004) | (( (UInt32)(value) & 0x00000001) << 2)); }
+                get { return (byte)((data2 & (UInt32)0x00000001) >> 0); } 
+                set { data2 = (UInt32)((data2 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
             }
 
             public byte FanPos1
             {
-                get { return (byte)((data & (UInt32)0x00000010) >> 4); } 
-                set { data = (UInt32)((data & ~(UInt32)0x00000010) | (( (UInt32)(value) & 0x00000001) << 4)); }
+                get { return (byte)((data4 & (UInt32)0x00000001) >> 0); } 
+                set { data4 = (UInt32)((data4 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
             }
 
             public byte FanPos2
             {
-                get { return (byte)((data & (UInt32)0x00000020) >> 5); } 
-                set { data = (UInt32)((data & ~(UInt32)0x00000020) | (( (UInt32)(value) & 0x00000001) << 5)); }
+                get { return (byte)((data5 & (UInt32)0x00000001) >> 0); } 
+                set { data5 = (UInt32)((data5 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
             }
 
             public byte FanPos3
             {
-                get { return (byte)((data & (UInt32)0x00000040) >> 6); } 
-                set { data = (UInt32)((data & ~(UInt32)0x00000040) | (( (UInt32)(value) & 0x00000001) << 6)); }
+                get { return (byte)((data6 & (UInt32)0x00000001) >> 0); } 
+                set { data6 = (UInt32)((data6 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
             }
 
             public byte FanPos4
             {
-                get { return (byte)((data & (UInt32)0x00000080) >> 7); } 
-                set { data = (UInt32)((data & ~(UInt32)0x00000080) | (( (UInt32)(value) & 0x00000001) << 7)); }
+                get { return (byte)((data7 & (UInt32)0x00000001) >> 0); } 
+                set { data7 = (UInt32)((data7 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
             }
 
             public byte RfSwChan
             {
-                get { return (byte)((data & (UInt32)0x0000ff00) >> 8); } 
-                set { data = (UInt32)((data & ~(UInt32)0x0000ff00) | (( (UInt32)(value) & 0x000000ff) << 8)); }
+                get { return (byte)((data0 & (UInt32)0x0000ff00) >> 8); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x0000ff00) | (( (UInt32)(value) & 0x000000ff) << 8)); }
             }
 
         }
@@ -387,24 +387,24 @@ namespace Devices.Models
         public struct RegXTXpins
         {
             [FieldOffset(0)]
-            UInt32 data;
+            UInt32 data0;
 
             public byte ENA
             {
-                get { return (byte)((data & (UInt32)0x00000001) >> 0); } 
-                set { data = (UInt32)((data & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
+                get { return (byte)((data0 & (UInt32)0x00000001) >> 0); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
             }
 
             public byte nRST
             {
-                get { return (byte)((data & (UInt32)0x00000002) >> 1); } 
-                set { data = (UInt32)((data & ~(UInt32)0x00000002) | (( (UInt32)(value) & 0x00000001) << 1)); }
+                get { return (byte)((data1 & (UInt32)0x00000001) >> 0); } 
+                set { data1 = (UInt32)((data1 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
             }
 
             public byte RDY
             {
-                get { return (byte)((data & (UInt32)0x00000004) >> 2); } 
-                set { data = (UInt32)((data & ~(UInt32)0x00000004) | (( (UInt32)(value) & 0x00000001) << 2)); }
+                get { return (byte)((data2 & (UInt32)0x00000001) >> 0); } 
+                set { data2 = (UInt32)((data2 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
             }
 
         }
@@ -413,78 +413,78 @@ namespace Devices.Models
         public struct RegXTXMultitester
         {
             [FieldOffset(0)]
-            UInt32 data;
+            UInt32 data0;
 
             public byte POS1_XTX_EN
             {
-                get { return (byte)((data & (UInt32)0x00000001) >> 0); } 
-                set { data = (UInt32)((data & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
+                get { return (byte)((data0 & (UInt32)0x00000001) >> 0); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
             }
 
             public byte POS1_XTX_Power
             {
-                get { return (byte)((data & (UInt32)0x00000002) >> 1); } 
-                set { data = (UInt32)((data & ~(UInt32)0x00000002) | (( (UInt32)(value) & 0x00000001) << 1)); }
+                get { return (byte)((data1 & (UInt32)0x00000001) >> 0); } 
+                set { data1 = (UInt32)((data1 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
             }
 
             public byte POS1_XTX_nReset
             {
-                get { return (byte)((data & (UInt32)0x00000004) >> 2); } 
-                set { data = (UInt32)((data & ~(UInt32)0x00000004) | (( (UInt32)(value) & 0x00000001) << 2)); }
+                get { return (byte)((data2 & (UInt32)0x00000001) >> 0); } 
+                set { data2 = (UInt32)((data2 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
             }
 
             public byte POS2_XTX_EN
             {
-                get { return (byte)((data & (UInt32)0x00000010) >> 4); } 
-                set { data = (UInt32)((data & ~(UInt32)0x00000010) | (( (UInt32)(value) & 0x00000001) << 4)); }
+                get { return (byte)((data4 & (UInt32)0x00000001) >> 0); } 
+                set { data4 = (UInt32)((data4 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
             }
 
             public byte POS2_XTX_Power
             {
-                get { return (byte)((data & (UInt32)0x00000020) >> 5); } 
-                set { data = (UInt32)((data & ~(UInt32)0x00000020) | (( (UInt32)(value) & 0x00000001) << 5)); }
+                get { return (byte)((data5 & (UInt32)0x00000001) >> 0); } 
+                set { data5 = (UInt32)((data5 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
             }
 
             public byte POS2_XTX_nReset
             {
-                get { return (byte)((data & (UInt32)0x00000040) >> 6); } 
-                set { data = (UInt32)((data & ~(UInt32)0x00000040) | (( (UInt32)(value) & 0x00000001) << 6)); }
+                get { return (byte)((data6 & (UInt32)0x00000001) >> 0); } 
+                set { data6 = (UInt32)((data6 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
             }
 
             public byte POS3_XTX_EN
             {
-                get { return (byte)((data & (UInt32)0x00000100) >> 8); } 
-                set { data = (UInt32)((data & ~(UInt32)0x00000100) | (( (UInt32)(value) & 0x00000001) << 8)); }
+                get { return (byte)((data8 & (UInt32)0x00000001) >> 0); } 
+                set { data8 = (UInt32)((data8 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
             }
 
             public byte POS3_XTX_Power
             {
-                get { return (byte)((data & (UInt32)0x00000200) >> 9); } 
-                set { data = (UInt32)((data & ~(UInt32)0x00000200) | (( (UInt32)(value) & 0x00000001) << 9)); }
+                get { return (byte)((data9 & (UInt32)0x00000001) >> 0); } 
+                set { data9 = (UInt32)((data9 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
             }
 
             public byte POS3_XTX_nReset
             {
-                get { return (byte)((data & (UInt32)0x00000400) >> 10); } 
-                set { data = (UInt32)((data & ~(UInt32)0x00000400) | (( (UInt32)(value) & 0x00000001) << 10)); }
+                get { return (byte)((data10 & (UInt32)0x00000001) >> 0); } 
+                set { data10 = (UInt32)((data10 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
             }
 
             public byte POS4_XTX_EN
             {
-                get { return (byte)((data & (UInt32)0x00001000) >> 12); } 
-                set { data = (UInt32)((data & ~(UInt32)0x00001000) | (( (UInt32)(value) & 0x00000001) << 12)); }
+                get { return (byte)((data12 & (UInt32)0x00000001) >> 0); } 
+                set { data12 = (UInt32)((data12 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
             }
 
             public byte POS4_XTX_Power
             {
-                get { return (byte)((data & (UInt32)0x00002000) >> 13); } 
-                set { data = (UInt32)((data & ~(UInt32)0x00002000) | (( (UInt32)(value) & 0x00000001) << 13)); }
+                get { return (byte)((data13 & (UInt32)0x00000001) >> 0); } 
+                set { data13 = (UInt32)((data13 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
             }
 
             public byte POS4_XTX_nReset
             {
-                get { return (byte)((data & (UInt32)0x00004000) >> 14); } 
-                set { data = (UInt32)((data & ~(UInt32)0x00004000) | (( (UInt32)(value) & 0x00000001) << 14)); }
+                get { return (byte)((data14 & (UInt32)0x00000001) >> 0); } 
+                set { data14 = (UInt32)((data14 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
             }
 
         }
@@ -493,12 +493,12 @@ namespace Devices.Models
         public struct RegXDCConfig
         {
             [FieldOffset(0)]
-            UInt32 data;
+            UInt32 data0;
 
             public byte ADDR
             {
-                get { return (byte)((data & (UInt32)0x000000ff) >> 0); } 
-                set { data = (UInt32)((data & ~(UInt32)0x000000ff) | (( (UInt32)(value) & 0x000000ff) << 0)); }
+                get { return (byte)((data0 & (UInt32)0x000000ff) >> 0); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x000000ff) | (( (UInt32)(value) & 0x000000ff) << 0)); }
             }
 
         }
@@ -521,6 +521,8 @@ namespace Devices.Models
             XSteer = 2,
             [Description("XDC")]
             XDC = 4,
+            [Description("HDRTX(DFA)")]
+            HDRTX_DFA = 8,
         }
 
         /*************** Properties for Board_ID register ********************/
@@ -1524,6 +1526,160 @@ namespace Devices.Models
             return new byte[]{(byte) address };
         }
 
+        public void ResetValues()
+        {
+            // First clear the value
+            // Then clear the IsSet
+            Board_ID_ccIdentifier = 0;
+            Board_ID_ccIdentifierIsSet = false;
+            Board_ID_id0 = 0;
+            Board_ID_id0IsSet = false;
+            Board_ID_id1 = 0;
+            Board_ID_id1IsSet = false;
+            Board_ID_id2 = 0;
+            Board_ID_id2IsSet = false;
+
+            FW_Version_major_version = 0;
+            FW_Version_major_versionIsSet = false;
+            FW_Version_minor_version = 0;
+            FW_Version_minor_versionIsSet = false;
+            FW_Version_patch_version = 0;
+            FW_Version_patch_versionIsSet = false;
+
+            HW_Version_major_version = 0;
+            HW_Version_major_versionIsSet = false;
+            HW_Version_minor_version = 0;
+            HW_Version_minor_versionIsSet = false;
+            HW_Version_patch_version = 0;
+            HW_Version_patch_versionIsSet = false;
+
+            Scratchpad = 0;
+            ScratchpadIsSet = false;
+
+            Supported_Boards = 0;
+            Supported_BoardsIsSet = false;
+
+            Configured_Boards = 0;
+            Configured_BoardsIsSet = false;
+
+            Uptime = 0;
+            UptimeIsSet = false;
+
+            Event_ConfA_count = 0;
+            Event_ConfA_countIsSet = false;
+
+            Event_section = 0;
+            Event_sectionIsSet = false;
+            Event_detail = 0;
+            Event_detailIsSet = false;
+            Event_timestamp = 0;
+            Event_timestampIsSet = false;
+
+            ConfPower_voltage5Toggle = 0;
+            ConfPower_voltage5ToggleIsSet = false;
+            ConfPower_voltage3Toggle = 0;
+            ConfPower_voltage3ToggleIsSet = false;
+            ConfPower_voltageVBatToggle = 0;
+            ConfPower_voltageVBatToggleIsSet = false;
+            ConfPower_voltageVBatAltToggle = 0;
+            ConfPower_voltageVBatAltToggleIsSet = false;
+
+            MeasureVI_V3_voltage = 0;
+            MeasureVI_V3_voltageIsSet = false;
+            MeasureVI_V3_current = 0;
+            MeasureVI_V3_currentIsSet = false;
+
+            MeasurePower_V3_power = 0;
+            MeasurePower_V3_powerIsSet = false;
+
+            MeasureVI_V5_voltage = 0;
+            MeasureVI_V5_voltageIsSet = false;
+            MeasureVI_V5_current = 0;
+            MeasureVI_V5_currentIsSet = false;
+
+            MeasurePower_V5_power = 0;
+            MeasurePower_V5_powerIsSet = false;
+
+            MeasureVI_VBat_voltage = 0;
+            MeasureVI_VBat_voltageIsSet = false;
+            MeasureVI_VBat_current = 0;
+            MeasureVI_VBat_currentIsSet = false;
+
+            MeasurePower_VBat_power = 0;
+            MeasurePower_VBat_powerIsSet = false;
+
+            MeasureVI_VBatAlt_voltage = 0;
+            MeasureVI_VBatAlt_voltageIsSet = false;
+            MeasureVI_VBatAlt_current = 0;
+            MeasureVI_VBatAlt_currentIsSet = false;
+
+            MeasurePower_VBatAlt_power = 0;
+            MeasurePower_VBatAlt_powerIsSet = false;
+
+            I2CConfA_TRDEL = 0;
+            I2CConfA_TRDELIsSet = false;
+            I2CConfA_WRDEL = 0;
+            I2CConfA_WRDELIsSet = false;
+            I2CConfA_SPD = 0;
+            I2CConfA_SPDIsSet = false;
+
+            I2CConfB_ADDR = 0;
+            I2CConfB_ADDRIsSet = false;
+
+            ConfMulti_MEnabled = 0;
+            ConfMulti_MEnabledIsSet = false;
+            ConfMulti_AutoCLR = 0;
+            ConfMulti_AutoCLRIsSet = false;
+            ConfMulti_RfASwENA = 0;
+            ConfMulti_RfASwENAIsSet = false;
+            ConfMulti_FanPos1 = 0;
+            ConfMulti_FanPos1IsSet = false;
+            ConfMulti_FanPos2 = 0;
+            ConfMulti_FanPos2IsSet = false;
+            ConfMulti_FanPos3 = 0;
+            ConfMulti_FanPos3IsSet = false;
+            ConfMulti_FanPos4 = 0;
+            ConfMulti_FanPos4IsSet = false;
+            ConfMulti_RfSwChan = 0;
+            ConfMulti_RfSwChanIsSet = false;
+
+            XTXpins_ENA = 0;
+            XTXpins_ENAIsSet = false;
+            XTXpins_nRST = 0;
+            XTXpins_nRSTIsSet = false;
+            XTXpins_RDY = 0;
+            XTXpins_RDYIsSet = false;
+
+            XTXMultitester_POS1_XTX_EN = 0;
+            XTXMultitester_POS1_XTX_ENIsSet = false;
+            XTXMultitester_POS1_XTX_Power = 0;
+            XTXMultitester_POS1_XTX_PowerIsSet = false;
+            XTXMultitester_POS1_XTX_nReset = 0;
+            XTXMultitester_POS1_XTX_nResetIsSet = false;
+            XTXMultitester_POS2_XTX_EN = 0;
+            XTXMultitester_POS2_XTX_ENIsSet = false;
+            XTXMultitester_POS2_XTX_Power = 0;
+            XTXMultitester_POS2_XTX_PowerIsSet = false;
+            XTXMultitester_POS2_XTX_nReset = 0;
+            XTXMultitester_POS2_XTX_nResetIsSet = false;
+            XTXMultitester_POS3_XTX_EN = 0;
+            XTXMultitester_POS3_XTX_ENIsSet = false;
+            XTXMultitester_POS3_XTX_Power = 0;
+            XTXMultitester_POS3_XTX_PowerIsSet = false;
+            XTXMultitester_POS3_XTX_nReset = 0;
+            XTXMultitester_POS3_XTX_nResetIsSet = false;
+            XTXMultitester_POS4_XTX_EN = 0;
+            XTXMultitester_POS4_XTX_ENIsSet = false;
+            XTXMultitester_POS4_XTX_Power = 0;
+            XTXMultitester_POS4_XTX_PowerIsSet = false;
+            XTXMultitester_POS4_XTX_nReset = 0;
+            XTXMultitester_POS4_XTX_nResetIsSet = false;
+
+            XDCConfig_ADDR = 0;
+            XDCConfig_ADDRIsSet = false;
+
+        }
+
         public void DeserializeReg(OBCRegisterStorageLocations location, byte data)
         {
             if (!storageLocationLookup.ContainsKey(location))
@@ -1602,6 +1758,11 @@ namespace Devices.Models
          */
         public void OtherHandler(object sender, PropertyChangedEventArgs e)
         {
+            if (e.PropertyName.Contains("IsSet"))
+            {
+                return;
+            }
+        
             // Get has_field for this value
             string propertyString = e.PropertyName;
             string flagPropertyString = e.PropertyName + "IsSet";

@@ -47,7 +47,7 @@ void REG_vInit(){
     currentRegisters.board_id = 0x634F4243; //'cOBC'
     currentRegisters.fw_version = 0x00020201;
     currentRegisters.hw_version = 0x00000001;
-    currentRegisters.supported_boards = 0x07;
+    currentRegisters.supported_boards = reg_boardidentifier_xtx | reg_boardidentifier_xsteer | reg_boardidentifier_xdc |reg_boardidentifier_hdrtx_dfa;
     currentRegisters.i2cconfa = (0x5UL << OBC_REG_I2CCONFA_SPD_Pos) | (10UL << OBC_REG_I2CCONFA_TRDEL_Pos);
 
     currentRegisters.xdcconfig = 0x52 << OBC_REG_XDCCONFIG_ADDR_Pos;

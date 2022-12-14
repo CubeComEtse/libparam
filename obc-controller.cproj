@@ -507,6 +507,7 @@
       <Value>../src/ASF/sam/drivers/tc</Value>
       <Value>../registers</Value>
       <Value>../src/ASF/sam/drivers/rtc</Value>
+      <Value>../libcsp/include</Value>
     </ListValues>
   </armgcc.compiler.directories.IncludePaths>
   <armgcc.compiler.optimization.OtherFlags>-fdata-sections</armgcc.compiler.optimization.OtherFlags>
@@ -699,6 +700,9 @@
     <Compile Include="inc\event.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="inc\hdrtx_dfa.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="inc\i2c_endpoint.h">
       <SubType>compile</SubType>
     </Compile>
@@ -778,6 +782,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\File.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\hdrtx_dfa.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\Multitester.c">

@@ -210,6 +210,7 @@ typedef enum {
     reg_boardidentifier_xtx = 1,                    // XTX
     reg_boardidentifier_xsteer = 2,                 // XSTEER
     reg_boardidentifier_xdc = 4,                    // XDC
+    reg_boardidentifier_hdrtx_dfa = 8,              // HDRTX(DFA)
 } reg_boardidentifier_t;
 
 

@@ -21,5 +21,6 @@
 #define I2C_ENDPOINT_CHKSM  0x11
 #define I2C_ENDPOINT_PLAIN  0x12
 // #define CAN_ENDPOINT        0x13
+#define CAN_ENDPOINT_DFA	0x14
 
 #endif /* ENDPOINTS_H_ */

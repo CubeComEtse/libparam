@@ -603,7 +603,8 @@
 						{"name": "None", "value": "0",  "pretty_name": "Disabled"},
 						{"name": "XTX", "value": "1",  "pretty_name": "XTX"},
 						{"name": "XSteer", "value": "2",  "pretty_name": "XSTEER"},
-						{"name": "XDC", "value": "4",  "pretty_name": "XDC"}
+						{"name": "XDC", "value": "4",  "pretty_name": "XDC"},
+						{"name": "HDRTX_DFA", "value": "8",  "pretty_name": "HDRTX(DFA)"}
 					]
 				}
 		}

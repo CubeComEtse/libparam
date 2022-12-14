@@ -43,8 +43,7 @@ int main (void)
     SERMUX_vRegisterEndpoint(I2C_ENDPOINT_PLAIN, &I2C_bEndpointNoChecksum);
 
     
-    SERMUX_vRegisterEndpoint(CAN_ENDPOINT, &CAN_bEndpoint);
-
+	
     /*
     All messages from the USART are handled by an endpoint. When the board 
     starts up only the BOARD_ENPOINT is enabled. This endpoint tells the 

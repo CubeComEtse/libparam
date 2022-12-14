@@ -62,7 +62,9 @@ void XTX_vConfig(void) {
     REG_vSetI2CAddress(XTX_DEFAULT_I2C_ADDRESS);
 
     // Configure endpoints
-    CAN_vInitEndpoint(CAN_ENDPOINT, OBC_CAN_ADRESS, XTX_CAN_ADRESS);
+	// The 0 value is hard-coded, but corresponds to can_message_t.CC_CAN_MODE
+    CAN_vInitEndpoint(CAN_ENDPOINT, OBC_CAN_ADRESS, XTX_CAN_ADRESS, 0);
+	BSP_vCanSetAddressFilter(OBC_CAN_ADRESS, OBC_CAN_MASK);
 
     // Register them with the sermux
     SERMUX_vRegisterEndpoint(I2C_ENDPOINT, &I2C_bEndpoint);

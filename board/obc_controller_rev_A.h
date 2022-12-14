@@ -80,6 +80,7 @@
 
 // The XTX uses the bottom 8 bits as the address
 #define XTX_CAN_ADRESS          0x0000026
+#define HDRTX_CAN_ADRESS		(65)
 #define XTX_CAN_MASK            0x00000FF
 #define OBC_CAN_ADRESS          0x00000E9
 #define OBC_CAN_MASK            0x00000FF
