@@ -13,6 +13,7 @@
 #include "can_driver.h"
 #include "serial_multiplexer.h"
 #include "std_message.h"
+#include "delay.h"
 
 enum XTX_CAN_MESSAGE_TYPES {
 	telecommand_request = 0x01,
@@ -98,23 +99,39 @@ bool CAN_bEndpoint(const uint8_t* rx_buffer, const uint16_t rx_length, uint8_t* 
 	// Setup struct according to buffer values
 	if (u8Mode == DFA_CAN_MODE){
 		
+		
 		message.fullheader |= rx_buffer[DIR_idx] << 24;
 		message.fullheader |= rx_buffer[CAN_EXTRA] << 16;
 		message.fullheader |= u8CanTarget << 8;
-		message.fullheader |= u8CanAddress; 
+		message.fullheader |= u8CanAddress;
 		
-		// Set the register address
-		message.data[0] = rx_buffer[ADDR_idx];
-		prevDFACanAddress = rx_buffer[ADDR_idx];
-		
-		// Copy data. If it is a read, length should be 0.
-		memcpy(&message.data[1], &rx_buffer[DATA_idx+1], rx_buffer[LEN_idx]);
-		
-		// Copy the length
-		message.length = rx_buffer[LEN_idx];
+		// This indicates the message is a read. In that case, send the 
+		// address we want to read from as the first data byte
+		if (rx_buffer[CAN_EXTRA] == 0xFF){
+			message.fullheader |= rx_buffer[CAN_EXTRA] << 16;
+			
+			// Set the register address
+			message.data[0] = rx_buffer[ADDR_idx];
+			
+			prevDFACanAddress = rx_buffer[ADDR_idx];
+			
+			// Copy data. If it is a read, length should be 0.
+			memcpy(&message.data[1], &rx_buffer[DATA_idx+1], rx_buffer[LEN_idx]);
+			
+			// Copy the length
+			message.length = rx_buffer[LEN_idx];
+		}
+		else{
+			// This is a write.
+			message.fullheader |= rx_buffer[ADDR_idx] << 16;
+			
+			memcpy(message.data, &rx_buffer[DATA_idx+1], rx_buffer[LEN_idx]);
+			
+			// Copy the length
+			message.length = rx_buffer[LEN_idx]-1;
+		}
 		
 		CAN_DRIVER_vSendMessage(message);
-	
 	}
 
 	return false;
@@ -139,15 +156,15 @@ void CAN_vProcess(void) {
 
 		if (u8Mode == CC_CAN_MODE){
 				
-			txBuffer[ADDR_idx] = currentMessage->registerAddres;
+			txBuffer[ADDR_idx] = (currentMessage->fullheader >> 16 ) & 0xFF;
 
 			// We only get data to return if it is a telemetry response
-			if (currentMessage->messageType == telemetry_response) {
+			if ((currentMessage->fullheader >> 24 ) & (0xFF == telemetry_response)) {
 				txBuffer[DIR_idx] = READ;
-				txBuffer[LEN_idx] = currentMessage->dataLen;
-				memcpy(&txBuffer[DATA_idx], currentMessage->data, currentMessage->dataLen);
+				txBuffer[LEN_idx] = currentMessage->length;
+				memcpy(&txBuffer[DATA_idx], currentMessage->data, currentMessage->length);
 
-				SERMUX_vTransmit(u8CanEndpoint, txBuffer, currentMessage->dataLen + 3);
+				SERMUX_vTransmit(u8CanEndpoint, txBuffer, currentMessage->length + 3);
 			}
 		}
 		
@@ -159,7 +176,7 @@ void CAN_vProcess(void) {
 			
 			// The DFA protocol doesn't send the address back to us. So just
 			// Remember what the address was, and send it back.
-			txBuffer[ADDR_idx] = prevDFACanAddress;
+			txBuffer[ADDR_idx] = (currentMessage->fullheader >> 16) & 0xFF;
 			txBuffer[DIR_idx] = (currentMessage->fullheader >> 24) & 0xFF;
 			txBuffer[LEN_idx] = 1;
 			// Message ID is extracted from the header,
@@ -168,6 +185,8 @@ void CAN_vProcess(void) {
 			memcpy(&txBuffer[DATA_idx+1], currentMessage->data, currentMessage->length);
 			txBuffer[LEN_idx] += currentMessage->length;
 			
+			// The added length here is 4. 3 for the normal header, 1 for the address
+			SERMUX_vTransmit(u8CanEndpoint, txBuffer, currentMessage->length + 4);
 			
 		}
 		CAN_DRIVER_vClearMessage();

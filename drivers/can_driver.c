@@ -14,7 +14,7 @@
 // Refactor this out
 #include "obc_controller_rev_A.h"
 
-#define CAN_DRIVER_BUF_SIZE 8
+#define CAN_DRIVER_BUF_SIZE 32
 
 // Store received CAN messages to be sent back via UART
 can_message_t receivedMessages[CAN_DRIVER_BUF_SIZE];
@@ -58,6 +58,9 @@ void CAN_DRIVER_vSendMessage(can_message_t message)
 
     mcan_set_tx_buffer_element(BSP_psGetCanDriver(), &tx_element, 0);
     mcan_tx_transfer_request(BSP_psGetCanDriver(), 1);
+	
+	// We have a weird message issue, where bytes from previous messages show
+	// up. This delay checks if sending slower helps
 }
 
 bool CAN_DRIVER_bHasMessage(void) {

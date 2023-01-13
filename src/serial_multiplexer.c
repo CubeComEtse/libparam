@@ -93,7 +93,10 @@ uint16_t bufIndex;
 // Private Functions
 void SERMUX_vReceiveByte(void)
 {
-    while (SERMUX_bByteAvailable()) {
+	// This flag gets set if a message is processed. 
+	// This releases the process so that other things can run as well.
+	bool processedMessage = false;
+    while (SERMUX_bByteAvailable() && !processedMessage) {
     
         uint8_t received_byte = SERMUX_u8GetByte();
         
@@ -156,6 +159,7 @@ void SERMUX_vReceiveByte(void)
             if (stateCounter >= currentMessage.length) {
                 // Process message and reset
                 SERMUX_vProcessMessage();
+				processedMessage = true;
                 
                 currentMessage.endpoint = 0;
                 currentMessage.length = 0;

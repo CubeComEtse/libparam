@@ -327,10 +327,13 @@ void CAN_HANDLER(void)
     }
 
     if (status & MCAN_RX_FIFO_0_NEW_MESSAGE) {
-        mcan_clear_interrupt_status(&sCanModule, MCAN_RX_FIFO_0_NEW_MESSAGE);
         struct mcan_rx_element_fifo_0 rx_element_fifo_0;
-
         mcan_get_rx_fifo_0_element(&sCanModule, &rx_element_fifo_0, fifo_receive_index);
+		
+		// Send message to driver
+		CAN_DRIVER_vMessageInFifo0(rx_element_fifo_0);
+		
+		// Ack the message, Suspect this allows a new message to be received
         mcan_rx_fifo_acknowledge(&sCanModule, 0, fifo_receive_index);
 
         fifo_receive_index++;
@@ -338,9 +341,9 @@ void CAN_HANDLER(void)
         {
             fifo_receive_index = 0;
         }
-
-        // Send message to driver
-        CAN_DRIVER_vMessageInFifo0(rx_element_fifo_0);
+		
+		// Finally, clear interupt flag
+        mcan_clear_interrupt_status(&sCanModule, MCAN_RX_FIFO_0_NEW_MESSAGE);
     }
 
     if (status & MCAN_RX_FIFO_1_NEW_MESSAGE) {
