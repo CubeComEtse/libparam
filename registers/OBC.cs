@@ -235,20 +235,20 @@ namespace Devices.Models
 
             public byte voltage3Toggle
             {
-                get { return (byte)((data1 & (byte)0x00000001) >> 0); } 
-                set { data1 = (byte)((data1 & ~(byte)0x00000001) | (( (byte)(value) & 0x00000001) << 0)); }
+                get { return (byte)((data0 & (byte)0x00000002) >> 1); } 
+                set { data0 = (byte)((data0 & ~(byte)0x00000002) | (( (byte)(value) & 0x00000001) << 1)); }
             }
 
             public byte voltageVBatToggle
             {
-                get { return (byte)((data2 & (byte)0x00000001) >> 0); } 
-                set { data2 = (byte)((data2 & ~(byte)0x00000001) | (( (byte)(value) & 0x00000001) << 0)); }
+                get { return (byte)((data0 & (byte)0x00000004) >> 2); } 
+                set { data0 = (byte)((data0 & ~(byte)0x00000004) | (( (byte)(value) & 0x00000001) << 2)); }
             }
 
             public byte voltageVBatAltToggle
             {
-                get { return (byte)((data3 & (byte)0x00000001) >> 0); } 
-                set { data3 = (byte)((data3 & ~(byte)0x00000001) | (( (byte)(value) & 0x00000001) << 0)); }
+                get { return (byte)((data0 & (byte)0x00000008) >> 3); } 
+                set { data0 = (byte)((data0 & ~(byte)0x00000008) | (( (byte)(value) & 0x00000001) << 3)); }
             }
 
         }
@@ -341,38 +341,38 @@ namespace Devices.Models
 
             public byte AutoCLR
             {
-                get { return (byte)((data1 & (UInt32)0x00000001) >> 0); } 
-                set { data1 = (UInt32)((data1 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
+                get { return (byte)((data0 & (UInt32)0x00000002) >> 1); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000002) | (( (UInt32)(value) & 0x00000001) << 1)); }
             }
 
-            public byte RfASwENA
+            public byte RfSwENA
             {
-                get { return (byte)((data2 & (UInt32)0x00000001) >> 0); } 
-                set { data2 = (UInt32)((data2 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
+                get { return (byte)((data0 & (UInt32)0x00000004) >> 2); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000004) | (( (UInt32)(value) & 0x00000001) << 2)); }
             }
 
             public byte FanPos1
             {
-                get { return (byte)((data4 & (UInt32)0x00000001) >> 0); } 
-                set { data4 = (UInt32)((data4 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
+                get { return (byte)((data0 & (UInt32)0x00000010) >> 4); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000010) | (( (UInt32)(value) & 0x00000001) << 4)); }
             }
 
             public byte FanPos2
             {
-                get { return (byte)((data5 & (UInt32)0x00000001) >> 0); } 
-                set { data5 = (UInt32)((data5 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
+                get { return (byte)((data0 & (UInt32)0x00000020) >> 5); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000020) | (( (UInt32)(value) & 0x00000001) << 5)); }
             }
 
             public byte FanPos3
             {
-                get { return (byte)((data6 & (UInt32)0x00000001) >> 0); } 
-                set { data6 = (UInt32)((data6 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
+                get { return (byte)((data0 & (UInt32)0x00000040) >> 6); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000040) | (( (UInt32)(value) & 0x00000001) << 6)); }
             }
 
             public byte FanPos4
             {
-                get { return (byte)((data7 & (UInt32)0x00000001) >> 0); } 
-                set { data7 = (UInt32)((data7 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
+                get { return (byte)((data0 & (UInt32)0x00000080) >> 7); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000080) | (( (UInt32)(value) & 0x00000001) << 7)); }
             }
 
             public byte RfSwChan
@@ -397,14 +397,14 @@ namespace Devices.Models
 
             public byte nRST
             {
-                get { return (byte)((data1 & (UInt32)0x00000001) >> 0); } 
-                set { data1 = (UInt32)((data1 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
+                get { return (byte)((data0 & (UInt32)0x00000002) >> 1); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000002) | (( (UInt32)(value) & 0x00000001) << 1)); }
             }
 
             public byte RDY
             {
-                get { return (byte)((data2 & (UInt32)0x00000001) >> 0); } 
-                set { data2 = (UInt32)((data2 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
+                get { return (byte)((data0 & (UInt32)0x00000004) >> 2); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000004) | (( (UInt32)(value) & 0x00000001) << 2)); }
             }
 
         }
@@ -423,68 +423,68 @@ namespace Devices.Models
 
             public byte POS1_XTX_Power
             {
-                get { return (byte)((data1 & (UInt32)0x00000001) >> 0); } 
-                set { data1 = (UInt32)((data1 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
+                get { return (byte)((data0 & (UInt32)0x00000002) >> 1); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000002) | (( (UInt32)(value) & 0x00000001) << 1)); }
             }
 
             public byte POS1_XTX_nReset
             {
-                get { return (byte)((data2 & (UInt32)0x00000001) >> 0); } 
-                set { data2 = (UInt32)((data2 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
+                get { return (byte)((data0 & (UInt32)0x00000004) >> 2); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000004) | (( (UInt32)(value) & 0x00000001) << 2)); }
             }
 
             public byte POS2_XTX_EN
             {
-                get { return (byte)((data4 & (UInt32)0x00000001) >> 0); } 
-                set { data4 = (UInt32)((data4 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
+                get { return (byte)((data0 & (UInt32)0x00000010) >> 4); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000010) | (( (UInt32)(value) & 0x00000001) << 4)); }
             }
 
             public byte POS2_XTX_Power
             {
-                get { return (byte)((data5 & (UInt32)0x00000001) >> 0); } 
-                set { data5 = (UInt32)((data5 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
+                get { return (byte)((data0 & (UInt32)0x00000020) >> 5); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000020) | (( (UInt32)(value) & 0x00000001) << 5)); }
             }
 
             public byte POS2_XTX_nReset
             {
-                get { return (byte)((data6 & (UInt32)0x00000001) >> 0); } 
-                set { data6 = (UInt32)((data6 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
+                get { return (byte)((data0 & (UInt32)0x00000040) >> 6); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000040) | (( (UInt32)(value) & 0x00000001) << 6)); }
             }
 
             public byte POS3_XTX_EN
             {
-                get { return (byte)((data8 & (UInt32)0x00000001) >> 0); } 
-                set { data8 = (UInt32)((data8 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
+                get { return (byte)((data0 & (UInt32)0x00000100) >> 8); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000100) | (( (UInt32)(value) & 0x00000001) << 8)); }
             }
 
             public byte POS3_XTX_Power
             {
-                get { return (byte)((data9 & (UInt32)0x00000001) >> 0); } 
-                set { data9 = (UInt32)((data9 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
+                get { return (byte)((data0 & (UInt32)0x00000200) >> 9); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000200) | (( (UInt32)(value) & 0x00000001) << 9)); }
             }
 
             public byte POS3_XTX_nReset
             {
-                get { return (byte)((data10 & (UInt32)0x00000001) >> 0); } 
-                set { data10 = (UInt32)((data10 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
+                get { return (byte)((data0 & (UInt32)0x00000400) >> 10); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000400) | (( (UInt32)(value) & 0x00000001) << 10)); }
             }
 
             public byte POS4_XTX_EN
             {
-                get { return (byte)((data12 & (UInt32)0x00000001) >> 0); } 
-                set { data12 = (UInt32)((data12 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
+                get { return (byte)((data0 & (UInt32)0x00001000) >> 12); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00001000) | (( (UInt32)(value) & 0x00000001) << 12)); }
             }
 
             public byte POS4_XTX_Power
             {
-                get { return (byte)((data13 & (UInt32)0x00000001) >> 0); } 
-                set { data13 = (UInt32)((data13 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
+                get { return (byte)((data0 & (UInt32)0x00002000) >> 13); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00002000) | (( (UInt32)(value) & 0x00000001) << 13)); }
             }
 
             public byte POS4_XTX_nReset
             {
-                get { return (byte)((data14 & (UInt32)0x00000001) >> 0); } 
-                set { data14 = (UInt32)((data14 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
+                get { return (byte)((data0 & (UInt32)0x00004000) >> 14); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00004000) | (( (UInt32)(value) & 0x00000001) << 14)); }
             }
 
         }
@@ -991,15 +991,15 @@ namespace Devices.Models
             set => _ = Set(ref _ConfMulti_AutoCLR, value);
         }
         
-        private bool _ConfMulti_RfASwENAIsSet;
-        public bool ConfMulti_RfASwENAIsSet {
-            get => _ConfMulti_RfASwENAIsSet;
-            set => _ = Set(ref _ConfMulti_RfASwENAIsSet, value); 
+        private bool _ConfMulti_RfSwENAIsSet;
+        public bool ConfMulti_RfSwENAIsSet {
+            get => _ConfMulti_RfSwENAIsSet;
+            set => _ = Set(ref _ConfMulti_RfSwENAIsSet, value); 
         }
-        private Enabled _ConfMulti_RfASwENA;
-        public Enabled ConfMulti_RfASwENA {
-            get => _ConfMulti_RfASwENA;
-            set => _ = Set(ref _ConfMulti_RfASwENA, value);
+        private Enabled _ConfMulti_RfSwENA;
+        public Enabled ConfMulti_RfSwENA {
+            get => _ConfMulti_RfSwENA;
+            set => _ = Set(ref _ConfMulti_RfSwENA, value);
         }
         
         private bool _ConfMulti_FanPos1IsSet;
@@ -1343,7 +1343,7 @@ namespace Devices.Models
                 case OBCRegisterAddress.OBC_REG_CONFMULTI:
                     ConfMulti_MEnabled = (Enabled) register.RegConfMulti.MEnabled;
                     ConfMulti_AutoCLR = (Enabled) register.RegConfMulti.AutoCLR;
-                    ConfMulti_RfASwENA = (Enabled) register.RegConfMulti.RfASwENA;
+                    ConfMulti_RfSwENA = (Enabled) register.RegConfMulti.RfSwENA;
                     ConfMulti_FanPos1 = (Enabled) register.RegConfMulti.FanPos1;
                     ConfMulti_FanPos2 = (Enabled) register.RegConfMulti.FanPos2;
                     ConfMulti_FanPos3 = (Enabled) register.RegConfMulti.FanPos3;
@@ -1484,7 +1484,7 @@ namespace Devices.Models
                 case OBCRegisterAddress.OBC_REG_CONFMULTI:
                     register.RegConfMulti.MEnabled = (byte) ConfMulti_MEnabled;
                     register.RegConfMulti.AutoCLR = (byte) ConfMulti_AutoCLR;
-                    register.RegConfMulti.RfASwENA = (byte) ConfMulti_RfASwENA;
+                    register.RegConfMulti.RfSwENA = (byte) ConfMulti_RfSwENA;
                     register.RegConfMulti.FanPos1 = (byte) ConfMulti_FanPos1;
                     register.RegConfMulti.FanPos2 = (byte) ConfMulti_FanPos2;
                     register.RegConfMulti.FanPos3 = (byte) ConfMulti_FanPos3;
@@ -1630,8 +1630,8 @@ namespace Devices.Models
             ConfMulti_MEnabledIsSet = false;
             ConfMulti_AutoCLR = 0;
             ConfMulti_AutoCLRIsSet = false;
-            ConfMulti_RfASwENA = 0;
-            ConfMulti_RfASwENAIsSet = false;
+            ConfMulti_RfSwENA = 0;
+            ConfMulti_RfSwENAIsSet = false;
             ConfMulti_FanPos1 = 0;
             ConfMulti_FanPos1IsSet = false;
             ConfMulti_FanPos2 = 0;

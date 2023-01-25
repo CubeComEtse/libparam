@@ -53,7 +53,7 @@ void CAN_DRIVER_vSendMessage(can_message_t message)
     
     tx_element.T1.bit.DLC = message.length;
     
-    uint8_t lenToCopy = min(8, message.length);
+    uint8_t lenToCopy = min(32, message.length);
     memcpy(tx_element.data, message.data, lenToCopy);
 
     mcan_set_tx_buffer_element(BSP_psGetCanDriver(), &tx_element, 0);

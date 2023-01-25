@@ -74,7 +74,7 @@
 #define CONF_MCAN1_RX_EXTENDED_ID_FILTER_NUM     16    
 
 /** The value should be 8/12/16/20/24/32/48/64. */
-#define CONF_MCAN_ELEMENT_DATA_SIZE         8
+#define CONF_MCAN_ELEMENT_DATA_SIZE         32
 
 /**
  * The setting of the nominal bit rate is based on the PCK5 which is 30M which you can

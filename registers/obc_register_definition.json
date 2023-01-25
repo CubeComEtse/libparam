@@ -397,7 +397,7 @@
 						}
 					},
 					{
-						"name": "RfASwENA",
+						"name": "RfSwENA",
 						"pretty-name": "",
 						"description": "Enables Toggling the RF Switch as well",
 						"bit": "2",

@@ -23,6 +23,7 @@ void HDRTX_DFA_vConfig(){
 
 	// Register them with the sermux
 	SERMUX_vRegisterEndpoint(CAN_ENDPOINT_DFA, &CAN_bEndpoint);
+	SERMUX_vRegisterEndpoint(CAN_ENDPOINT_DFA_FW, &CAN_bDFAFirmwareEndpoint);
 }
 
 void HDRTX_DFA_vDeConfig(void){

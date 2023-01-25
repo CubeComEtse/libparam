@@ -56,7 +56,7 @@ typedef struct {
 	union  {
 		uint32_t fullheader;
 		};
-	uint8_t data[16];
+	uint8_t data[64];
 	uint32_t length;
 } can_message_t;
 

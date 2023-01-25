@@ -60,6 +60,10 @@ void SERMUX_vDeRegisterEndpoint(uint16_t endpoint);
  * \return void
  */
 void SERMUX_vTransmit(uint16_t endpoint, uint8_t* buffer, uint16_t length);
+void SERMUX_vTransmitDirect(uint16_t endpoint, uint8_t* buffer, uint16_t length);
+
+
+uint16_t SERMUX_vGetFreeSpace(void);
 
 #ifdef TEST
 struct sermux_message {

@@ -30,7 +30,7 @@
 #define PCA9555_CMD_CFG_PORT0	6
 #define PCA9555_CMD_CFG_PORT1	7
 
-#define PCA9555_ADDR 0b0100000
+#define PCA9555_ADDR		  0b0100000
 #define PCA9555_RFSWITCH_ADDR 0b0100001
 
 static void MULTI_vSetPIN(channel_id_t channel, uint16_t pin_mask, bool ena);
@@ -49,8 +49,8 @@ static bool autoClear = true;
 
 static bool bitsUpdated = false;
 
-static bool rfSwitchEnabled = true;
-static bool rfSwitchDesiredState = true;
+static bool rfSwitchEnabled = false;
+static bool rfSwitchDesiredState = false;
 static uint8_t rfSwitchChannel = 0;
 static uint8_t rfSwitchDesiredChannel = 0;
 
@@ -107,27 +107,33 @@ void MULTI_vProcess(void){
 		currentState = desiredState;
 	}
 	
-	// If the rf switch is not on and we want it to be on
-	if (rfSwitchEnabled == false && rfSwitchDesiredState == true){
-		if (MULTI_bInitRFSwitch()){
-			rfSwitchEnabled = true;
+	
+	// If the MultiTester is enabled, see if the RF Switch can be enabled as well.
+	if (currentState == true)
+	{
+		// If the rf switch is not on and we want it to be on
+		if (rfSwitchEnabled == false && rfSwitchDesiredState == true){
+			if (MULTI_bInitRFSwitch()){
+				rfSwitchEnabled = true;
+			}
+			else{
+				rfSwitchEnabled = false;
+				rfSwitchDesiredState = false;
+			}
 		}
-		else{
+		if (rfSwitchEnabled == true && rfSwitchDesiredState == false){
+			MULTI_vDeinitRFSwitch();
 			rfSwitchEnabled = false;
-			rfSwitchDesiredState = false;
 		}
-	}
-	if (rfSwitchEnabled == true && rfSwitchDesiredState == false){
-		MULTI_vDeinitRFSwitch();
-		rfSwitchEnabled = false;
-	}
-	if (rfSwitchEnabled && rfSwitchChannel != rfSwitchDesiredChannel){
-		if (MULTI_vSetRfSwitchChannel(rfSwitchDesiredChannel))
-		{
-			rfSwitchChannel = rfSwitchDesiredChannel;
-		}
-		else{
-			rfSwitchDesiredChannel = rfSwitchChannel;
+		// And attempt to switch the channel
+		if (rfSwitchEnabled && rfSwitchChannel != rfSwitchDesiredChannel){
+			if (MULTI_vSetRfSwitchChannel(rfSwitchDesiredChannel))
+			{
+				rfSwitchChannel = rfSwitchDesiredChannel;
+			}
+			else{
+				rfSwitchDesiredChannel = rfSwitchChannel;
+			}
 		}
 	}
 	
@@ -358,11 +364,21 @@ void MULTI_vSetRFSwitchChannel(uint8_t channel){
 */
 bool MULTI_bInitRFSwitch(void){
 	
-	// First try reading from the device - it should answer
-	uint8_t rx_buffer[] = {0x00, 0x00};
-	bool answer = I2C_DRIVER_bReadLocal(I2C_psGetDriver(), PCA9555_RFSWITCH_ADDR, PCA9555_CMD_OUT_PORT0, rx_buffer, 2);
+	uint8_t buffer[] = {0x00, 0x00};
+	// First write all 0s to output ports
+	I2C_DRIVER_bWritePlain(I2C_psGetDriver(), PCA9555_RFSWITCH_ADDR, PCA9555_CMD_OUT_PORT0, buffer, 2);
+		
+	// Then make all pins outputs
+	buffer[0] = 0xF0;
+	buffer[1] = 0xFF;
+	I2C_DRIVER_bWritePlain(I2C_psGetDriver(), PCA9555_RFSWITCH_ADDR, PCA9555_CMD_CFG_PORT0, buffer, 2);
 	
-	if (!answer){
+	// Read the answer back in 
+	buffer[0] = 0x00;
+	buffer[0] = 0x00;
+	bool answer = I2C_DRIVER_bReadLocal(I2C_psGetDriver(), PCA9555_RFSWITCH_ADDR, PCA9555_CMD_OUT_PORT0, buffer, 3);
+	
+	if ((!answer) && (buffer[0] == 0xF0) && (buffer[1] == 0xFF)){
 		return false;
 	}
 	

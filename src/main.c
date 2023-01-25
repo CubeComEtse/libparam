@@ -80,7 +80,10 @@ int main (void)
 
         // Process the endpoints that require it
         I2C_vProcess();
+		
         CAN_vProcess();
+		CAN_vDFAFirmwareProcess(NULL);
+		
         CONFIG_vProcess();
         SPI_vProcess();
 		

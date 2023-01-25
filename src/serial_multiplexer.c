@@ -30,6 +30,7 @@ static endpoint_callback_t endpointFunctions[MAX_ENDPOINTS];
 void SERMUX_vReceiveByte(void);
 void SERMUX_vProcessMessage(void);
 void SERMUX_vTxMessage(struct sermux_message* message);
+void SERMUX_vTxMessageDirect(uint16_t endpoint, uint8_t* buffer, uint16_t length);
 bool SERMUX_vEmptyEndpoint(const uint8_t* rx_buffer, const uint16_t rx_length, uint8_t* tx_buffer, uint16_t* tx_length);
 struct sermux_message* SERMUX_spGetCurrentMessage(void);
 #endif
@@ -87,8 +88,13 @@ void SERMUX_vTransmit(uint16_t endpoint, uint8_t* buffer, uint16_t length) {
     SERMUX_vTxMessage(&message);
 }
 
-uint8_t bigBuffer[500];
-uint16_t bufIndex;
+/*
+Write without copying to a buffer
+*/
+void SERMUX_vTransmitDirect(uint16_t endpoint, uint8_t* buffer, uint16_t length) {
+    SERMUX_vTxMessageDirect(endpoint, buffer, length);
+}
+
 
 // Private Functions
 void SERMUX_vReceiveByte(void)
@@ -217,7 +223,32 @@ void SERMUX_vTxMessage(struct sermux_message* message) {
         for (uint8_t i = 0; i < message->length; i++) {
             SERMUX_vPutByte(message->message[i]);
         }
-    
+    }
+}
+
+uint16_t SERMUX_vGetFreeSpace(void){
+	return SERMUX_vGetSpaceAvailable();
+}
+
+void SERMUX_vTxMessageDirect(uint16_t endpoint, uint8_t* buffer, uint16_t length){
+	if (length > 0) {
+        // Send header bytes
+        for (uint8_t i = 0; i < 4; i++) {
+            SERMUX_vPutByte(HEADERBYTES[i]);
+        }
+
+        // Send length
+        SERMUX_vPutByte((length+2) & 0xFF);
+        SERMUX_vPutByte(((length+2) >> 8) & 0xFF);
+
+        // Send endpoint
+        SERMUX_vPutByte(endpoint & 0xFF);
+        SERMUX_vPutByte((endpoint >> 8) & 0xFF);
+
+        // Send data
+        for (uint32_t i = 0; i < length; i++) {
+            SERMUX_vPutByte(buffer[i]);
+        }
     }
 }
 

@@ -99,6 +99,10 @@ bool USART_TXBuffer_PutByte(USART_data_t * usart_data, uint8_t data)
 
         /* Enable DRE interrupt. */
     }
+	else{
+		// BUFFER OVERFLOW!
+		asm("nop");
+	}
     BSP_vEnableUartTXInterrupt();
 
     return TXBuffer_FreeSpace;

@@ -20,7 +20,7 @@ const uint8_t HEADERBYTES[] = {0xF0, 0x55, 0xAA, 0x0F};
 #define MAX_ENDPOINTS  32
 
 
-#define MAX_MESSAGE_LENGTH 32
+#define MAX_MESSAGE_LENGTH 64
 
 /*
  * The SERMUX_bByteAvailable should call a function that returns true if there
@@ -38,5 +38,7 @@ const uint8_t HEADERBYTES[] = {0xF0, 0x55, 0xAA, 0x0F};
 */
 #define SERMUX_vPutByte(x)           USART_TXBuffer_PutByte(BSP_psGetTelemetryDriver(), x)
 
+
+#define SERMUX_vGetSpaceAvailable()	USART_RXBuffer_GetFreeSpace(BSP_psGetTelemetryDriver())
 
 #endif /* SERIAL_MULTIPLEXER_CONF_H_ */

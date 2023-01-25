@@ -322,7 +322,8 @@ bool I2C_DRIVER_bReadLocal(struct i2c_driver_data* drv, const uint8_t chip_addr,
     read_packet.addr[0] = mem_address;
     read_packet.addr_length = 1;
     read_packet.buffer = rx_buffer;
-    read_packet.length = ((uint32_t) length) - 1;
+	// This used to be length -1, dunno why?
+    read_packet.length = ((uint32_t) length) -1;
 
     uint32_t result = twihs_master_read(drv->p_twihs, &read_packet);
 
