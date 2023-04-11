@@ -47,7 +47,7 @@ void REG_vInit(){
     currentRegisters.board_id = 0x634F4243; //'cOBC'
     currentRegisters.fw_version = 0x00020201;
     currentRegisters.hw_version = 0x00000001;
-    currentRegisters.supported_boards = reg_boardidentifier_xtx | reg_boardidentifier_xsteer | reg_boardidentifier_xdc |reg_boardidentifier_hdrtx_dfa;
+    currentRegisters.supported_boards = reg_boardidentifier_xtx | reg_boardidentifier_xsteer | reg_boardidentifier_xdc |reg_boardidentifier_hdrtx_dfa | reg_boardidentifier_hdrtx;
     currentRegisters.i2cconfa = (0x5UL << OBC_REG_I2CCONFA_SPD_Pos) | (10UL << OBC_REG_I2CCONFA_TRDEL_Pos);
 
     currentRegisters.xdcconfig = 0x52 << OBC_REG_XDCCONFIG_ADDR_Pos;
@@ -211,7 +211,7 @@ bool REG_vGet(const uint8_t address, uint8_t* data, uint8_t* length){
 			REG_Set_ConfMulti_FanPos3(&currentRegisters, MULTI_bGetChannelFan(Position3));
 			REG_Set_ConfMulti_FanPos4(&currentRegisters, MULTI_bGetChannelFan(Position4));
 			
-			REG_Set_ConfMulti_RfASwENA(&currentRegisters, MULTI_bGetRfSwitchEnabled());
+			REG_Set_ConfMulti_RfSwENA(&currentRegisters, MULTI_bGetRfSwitchEnabled());
 			REG_Set_ConfMulti_RfSwChan(&currentRegisters, MULTI_u8GetRFSwitchChannel());
 
 			REG_Copyu32ToArray(currentRegisters.confmulti, data);
@@ -329,7 +329,7 @@ void REG_vProcessMessages(void){
 				MULTI_vSetChannelFan(Position3, REG_Get_ConfMulti_FanPos3(&currentRegisters));
 				MULTI_vSetChannelFan(Position4, REG_Get_ConfMulti_FanPos4(&currentRegisters));
 				
-				MULTI_vSetRfSwitchEnabled(REG_Get_ConfMulti_RfASwENA(&currentRegisters));
+				MULTI_vSetRfSwitchEnabled(REG_Get_ConfMulti_RfSwENA(&currentRegisters));
 				MULTI_vSetRFSwitchChannel(REG_Get_ConfMulti_RfSwChan(&currentRegisters));
 				break;
 				

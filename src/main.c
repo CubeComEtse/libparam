@@ -12,6 +12,7 @@
 #include "spi_endpoint.h"
 #include "register_handler.h"
 #include "xtx.h"
+#include "hdrtx.h"
 #include "tmr.h"
 
 // This was only for CAN testing
@@ -88,6 +89,7 @@ int main (void)
         SPI_vProcess();
 		
 		MULTI_vProcess();
+		HDRTX_vProcess();
 
         REG_vProcessMessages();
 

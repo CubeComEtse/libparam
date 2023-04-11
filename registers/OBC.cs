@@ -523,6 +523,8 @@ namespace Devices.Models
             XDC = 4,
             [Description("HDRTX(DFA)")]
             HDRTX_DFA = 8,
+            [Description("HDRTX")]
+            HDRTX = 16,
         }
 
         /*************** Properties for Board_ID register ********************/

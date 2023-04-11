@@ -96,9 +96,9 @@
 #define OBC_REG_CONFMULTI_AUTOCLR_Pos                (1UL)
 #define OBC_REG_CONFMULTI_AUTOCLR_Msk                (0x0001 << OBC_REG_CONFMULTI_AUTOCLR_Pos)
 #define OBC_REG_CONFMULTI_AUTOCLR                    OBC_REG_CONFMULTI_AUTOCLR_Msk
-#define OBC_REG_CONFMULTI_RFASWENA_Pos               (2UL)
-#define OBC_REG_CONFMULTI_RFASWENA_Msk               (0x0001 << OBC_REG_CONFMULTI_RFASWENA_Pos)
-#define OBC_REG_CONFMULTI_RFASWENA                   OBC_REG_CONFMULTI_RFASWENA_Msk
+#define OBC_REG_CONFMULTI_RFSWENA_Pos                (2UL)
+#define OBC_REG_CONFMULTI_RFSWENA_Msk                (0x0001 << OBC_REG_CONFMULTI_RFSWENA_Pos)
+#define OBC_REG_CONFMULTI_RFSWENA                    OBC_REG_CONFMULTI_RFSWENA_Msk
 #define OBC_REG_CONFMULTI_FANPOS1_Pos                (4UL)
 #define OBC_REG_CONFMULTI_FANPOS1_Msk                (0x0001 << OBC_REG_CONFMULTI_FANPOS1_Pos)
 #define OBC_REG_CONFMULTI_FANPOS1                    OBC_REG_CONFMULTI_FANPOS1_Msk
@@ -211,6 +211,7 @@ typedef enum {
     reg_boardidentifier_xsteer = 2,                 // XSTEER
     reg_boardidentifier_xdc = 4,                    // XDC
     reg_boardidentifier_hdrtx_dfa = 8,              // HDRTX(DFA)
+    reg_boardidentifier_hdrtx = 16,                 // HDRTX
 } reg_boardidentifier_t;
 
 
@@ -601,14 +602,14 @@ static inline void REG_Set_ConfMulti_AutoCLR(OBC_RegisterData_t *registers, reg_
     registers->confmulti = (registers->confmulti & ~OBC_REG_CONFMULTI_AUTOCLR_Msk) | (value << OBC_REG_CONFMULTI_AUTOCLR_Pos);
 }
 
-static inline reg_enabled_t REG_Get_ConfMulti_RfASwENA(OBC_RegisterData_t *registers)
+static inline reg_enabled_t REG_Get_ConfMulti_RfSwENA(OBC_RegisterData_t *registers)
 {
-    return (reg_enabled_t)((registers->confmulti & OBC_REG_CONFMULTI_RFASWENA_Msk) >> OBC_REG_CONFMULTI_RFASWENA_Pos);
+    return (reg_enabled_t)((registers->confmulti & OBC_REG_CONFMULTI_RFSWENA_Msk) >> OBC_REG_CONFMULTI_RFSWENA_Pos);
 }
 
-static inline void REG_Set_ConfMulti_RfASwENA(OBC_RegisterData_t *registers, reg_enabled_t value)
+static inline void REG_Set_ConfMulti_RfSwENA(OBC_RegisterData_t *registers, reg_enabled_t value)
 {
-    registers->confmulti = (registers->confmulti & ~OBC_REG_CONFMULTI_RFASWENA_Msk) | (value << OBC_REG_CONFMULTI_RFASWENA_Pos);
+    registers->confmulti = (registers->confmulti & ~OBC_REG_CONFMULTI_RFSWENA_Msk) | (value << OBC_REG_CONFMULTI_RFSWENA_Pos);
 }
 
 static inline reg_enabled_t REG_Get_ConfMulti_FanPos1(OBC_RegisterData_t *registers)

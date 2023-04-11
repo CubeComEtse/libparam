@@ -12,6 +12,17 @@
 
 
 void HDRTX_DFA_vConfig(){
+	
+	// Setup XTXEn pin
+	ioport_enable_pin(XTX_EN_PIN);
+	ioport_set_pin_level(XTX_EN_PIN, 0);
+	ioport_set_pin_dir(XTX_EN_PIN, IOPORT_DIR_OUTPUT);
+		
+	// Setup nReset
+	ioport_enable_pin(XTX_nRST_PIN);
+	ioport_set_pin_level(XTX_nRST_PIN, 0);
+	ioport_set_pin_dir(XTX_nRST_PIN, IOPORT_DIR_OUTPUT);
+	
 	BSP_vCanSetAddressFilter(OBC_CAN_ADRESS<<8, OBC_CAN_MASK<<8);
 	
 	// Configure endpoints

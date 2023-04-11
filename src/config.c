@@ -18,6 +18,7 @@
 #include "register_handler.h"
 
 #include "hdrtx_dfa.h"
+#include "hdrtx.h"
 #include "xtx.h"
 #include "xsteer.h"
 #include "xdc.h"
@@ -280,6 +281,9 @@ uint8_t CONFIG_vDecodeBoardSet(const uint8_t rw, const uint8_t value)
 	case CONF_BOARD_HDRTX_DFA:
 		HDRTX_DFA_vDeConfig();
 		break;
+	case CONF_BOARD_HDRTX:
+		HDRTX_vDeConfig();
+		break;
     }
 
     // Set new board
@@ -297,6 +301,9 @@ uint8_t CONFIG_vDecodeBoardSet(const uint8_t rw, const uint8_t value)
         break;
     case CONF_BOARD_HDRTX_DFA:
         HDRTX_DFA_vConfig();
+        break;
+    case CONF_BOARD_HDRTX:
+        HDRTX_vConfig();
         break;
     }
     currentBoardConfig = value;

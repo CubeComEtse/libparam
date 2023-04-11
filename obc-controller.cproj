@@ -700,6 +700,9 @@
     <Compile Include="inc\event.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="inc\hdrtx.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="inc\hdrtx_dfa.h">
       <SubType>compile</SubType>
     </Compile>
@@ -782,6 +785,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\File.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\hdrtx.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\hdrtx_dfa.c">

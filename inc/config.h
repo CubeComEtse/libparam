@@ -64,6 +64,7 @@
 #define CONF_BOARD_XSTEER       2
 #define CONF_BOARD_XDC          4
 #define CONF_BOARD_HDRTX_DFA	8
+#define CONF_BOARD_HDRTX     	16
 
 
 /*

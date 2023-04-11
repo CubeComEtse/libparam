@@ -15,6 +15,7 @@
 #define CAN_ENDPOINT 3
 #define SPI_ENDPOINT 4
 #define XTX_ENDPOINT 5 
+#define HDRTX_ENDPOINT 6
 
 // Renumbered some of the endpoints
 // #define TEXT_ENDPOINT       0x10
