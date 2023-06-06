@@ -14,6 +14,7 @@
 #include "endpoints.h"
 #include "serial_multiplexer.h"
 #include "std_message.h"
+#include "Sermux_v2.h"
 #include "delay.h"
 #include "tmr.h"
 #include "bsp.h"
@@ -230,6 +231,14 @@ void CAN_vProcess(void) {
 				// The added length here is 4. 3 for the normal header, 1 for the address
 				SERMUX_vTransmit(u8CanEndpoint, txBuffer, currentMessage->length + 4);
 			
+			}
+			if (u8Mode == CC_CAN_2_MODE){
+				uint8_t id = (currentMessage->fullheader & 0xFF0000) >> 16;
+				// MsgType
+				txBuffer[0] = (currentMessage->fullheader & 0x1F000000) >> 24;
+				txBuffer[1] = currentMessage->length;
+				memcpy(&txBuffer[2], currentMessage->data, currentMessage->length);
+				SERMUX_v2_vSendMessage(u8CanEndpoint, id, txBuffer, currentMessage->length + 2);
 			}
 		}
 		CAN_DRIVER_vClearMessage();
@@ -448,3 +457,27 @@ void CAN_vDFAFirmwareProcess(can_message_t* msg)
 	}
 }
 	
+
+void ep_can_cc2(const uint8_t target, const bool dirBit, const uint8_t msgId, const uint8_t * message, const uint8_t length)
+{
+	can_message_t msg;
+	msg.fullheader = ((message[0] << 24) | (msgId << 16) | (u8CanAddress << 8) | (u8CanTarget << 0));
+	msg.length = message[1];
+	memcpy(msg.data, &message[2], msg.length);
+	
+	CAN_DRIVER_vSendMessage(msg);
+	
+	// Demo sending a message back
+	/*
+	uint8_t data[8];
+	data[0] = 0x7; // Unknown msg type
+	data[1] = 0x6; // Length
+	data[2] =message[2];
+	data[3] =message[3];
+	data[4] =2;
+	data[5] =3;
+	data[6] =4;
+	data[7] =5;
+	SERMUX_v2_vSendMessage(u8CanEndpoint, msgId, data, 8);*/
+}
+

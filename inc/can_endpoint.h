@@ -21,4 +21,6 @@ bool CAN_bEndpoint_DFA(const uint8_t* rx_buffer, const uint16_t rx_length, uint8
 
 bool CAN_bDFAFirmwareEndpoint(const uint8_t* rx_buffer, const uint16_t rx_length, uint8_t* tx_buffer, uint16_t* tx_length);
 void CAN_vDFAFirmwareProcess(can_message_t* msg);
+
+void ep_can_cc2(const uint8_t target, const bool dirBit, const uint8_t msgId, const uint8_t * message, const uint8_t length);
 #endif /* CAN_ENDPOINT_H_ */

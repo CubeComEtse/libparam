@@ -9,6 +9,7 @@
 #include "i2c_endpoint.h"
 #include "Multitester.h"
 #include "serial_multiplexer.h"
+#include "Sermux_v2.h"
 #include "spi_endpoint.h"
 #include "register_handler.h"
 #include "xtx.h"
@@ -28,6 +29,7 @@ int main (void)
     // Board initialization
     BSP_vInit();
     SERMUX_vInit();
+	SERMUX_V2_vInit();
     REG_vInit();
 
     // Init the endpoint
@@ -78,6 +80,7 @@ int main (void)
 
     while(1){
         SERMUX_vProcess();
+		SERMUX_v2_vProcess();
 
         // Process the endpoints that require it
         I2C_vProcess();

@@ -1,0 +1,1365 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
+!_TAG_PROC_CWD	C:/Users/Kolijn/temp/libcsp/	//
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	5.9.0	/p5.9.20221023.0/
+BUILD_SHARED_LIBS	CMakeLists.txt	/^  set(BUILD_SHARED_LIBS ON)$/;"	v
+Buffer	doc/basic.md	/^## Buffer$/;"	s	chapter:The basics of CSP
+C sources and headers	doc/codestyle.md	/^C sources and headers$/;"	s	chapter:Code style
+CAN0	examples/iflist.yaml	/^- name: "CAN0"$/;"	p
+CAN_0_irq_callback	contrib/drivers/can/csp_driver_can.c	/^void CAN_0_irq_callback(struct _can_async_device *dev, enum can_async_interrupt_type type) {$/;"	f	typeref:typename:void
+CAN_0_rx_callback	contrib/drivers/can/csp_driver_can.c	/^void CAN_0_rx_callback(struct can_async_descriptor *const descr) {$/;"	f	typeref:typename:void
+CAN_0_rx_callback_task	contrib/drivers/can/csp_driver_can.c	/^void CAN_0_rx_callback_task(struct can_async_descriptor *const descr) {$/;"	f	typeref:typename:void
+CAN_DEFER_TASK	contrib/drivers/can/csp_driver_can.c	/^#define CAN_DEFER_TASK /;"	d	file:
+CAN_FRAME_SIZE	src/interfaces/csp_if_can.c	/^#define CAN_FRAME_SIZE /;"	d	file:
+CFP1_CSP_HEADER_OFFSET	src/interfaces/csp_if_can.c	/^#define CFP1_CSP_HEADER_OFFSET /;"	d	file:
+CFP1_CSP_HEADER_SIZE	src/interfaces/csp_if_can.c	/^#define CFP1_CSP_HEADER_SIZE /;"	d	file:
+CFP1_DATA_LEN_OFFSET	src/interfaces/csp_if_can.c	/^#define CFP1_DATA_LEN_OFFSET /;"	d	file:
+CFP1_DATA_LEN_SIZE	src/interfaces/csp_if_can.c	/^#define CFP1_DATA_LEN_SIZE /;"	d	file:
+CFP1_DATA_OFFSET	src/interfaces/csp_if_can.c	/^#define CFP1_DATA_OFFSET /;"	d	file:
+CFP1_DATA_SIZE_BEGIN	src/interfaces/csp_if_can.c	/^#define CFP1_DATA_SIZE_BEGIN /;"	d	file:
+CFP1_DATA_SIZE_MORE	src/interfaces/csp_if_can.c	/^#define CFP1_DATA_SIZE_MORE /;"	d	file:
+CFP2_BEGIN_MASK	include/csp/interfaces/csp_if_can.h	/^#define CFP2_BEGIN_MASK /;"	d
+CFP2_BEGIN_OFFSET	include/csp/interfaces/csp_if_can.h	/^#define CFP2_BEGIN_OFFSET /;"	d
+CFP2_DPORT_MASK	include/csp/interfaces/csp_if_can.h	/^#define CFP2_DPORT_MASK /;"	d
+CFP2_DPORT_OFFSET	include/csp/interfaces/csp_if_can.h	/^#define CFP2_DPORT_OFFSET /;"	d
+CFP2_DST_MASK	include/csp/interfaces/csp_if_can.h	/^#define CFP2_DST_MASK /;"	d
+CFP2_DST_OFFSET	include/csp/interfaces/csp_if_can.h	/^#define CFP2_DST_OFFSET /;"	d
+CFP2_DST_SIZE	include/csp/interfaces/csp_if_can.h	/^#define CFP2_DST_SIZE /;"	d
+CFP2_END_MASK	include/csp/interfaces/csp_if_can.h	/^#define CFP2_END_MASK /;"	d
+CFP2_END_OFFSET	include/csp/interfaces/csp_if_can.h	/^#define CFP2_END_OFFSET /;"	d
+CFP2_FC_MASK	include/csp/interfaces/csp_if_can.h	/^#define CFP2_FC_MASK /;"	d
+CFP2_FC_OFFSET	include/csp/interfaces/csp_if_can.h	/^#define CFP2_FC_OFFSET /;"	d
+CFP2_FLAGS_MASK	include/csp/interfaces/csp_if_can.h	/^#define CFP2_FLAGS_MASK /;"	d
+CFP2_FLAGS_OFFSET	include/csp/interfaces/csp_if_can.h	/^#define CFP2_FLAGS_OFFSET /;"	d
+CFP2_ID_CONN_MASK	include/csp/interfaces/csp_if_can.h	/^#define CFP2_ID_CONN_MASK /;"	d
+CFP2_PRIO_MASK	include/csp/interfaces/csp_if_can.h	/^#define CFP2_PRIO_MASK /;"	d
+CFP2_PRIO_OFFSET	include/csp/interfaces/csp_if_can.h	/^#define CFP2_PRIO_OFFSET /;"	d
+CFP2_SC_MASK	include/csp/interfaces/csp_if_can.h	/^#define CFP2_SC_MASK /;"	d
+CFP2_SC_OFFSET	include/csp/interfaces/csp_if_can.h	/^#define CFP2_SC_OFFSET /;"	d
+CFP2_SENDER_MASK	include/csp/interfaces/csp_if_can.h	/^#define CFP2_SENDER_MASK /;"	d
+CFP2_SENDER_OFFSET	include/csp/interfaces/csp_if_can.h	/^#define CFP2_SENDER_OFFSET /;"	d
+CFP2_SENDER_SIZE	include/csp/interfaces/csp_if_can.h	/^#define CFP2_SENDER_SIZE /;"	d
+CFP2_SPORT_MASK	include/csp/interfaces/csp_if_can.h	/^#define CFP2_SPORT_MASK /;"	d
+CFP2_SPORT_OFFSET	include/csp/interfaces/csp_if_can.h	/^#define CFP2_SPORT_OFFSET /;"	d
+CFP2_SRC_MASK	include/csp/interfaces/csp_if_can.h	/^#define CFP2_SRC_MASK /;"	d
+CFP2_SRC_OFFSET	include/csp/interfaces/csp_if_can.h	/^#define CFP2_SRC_OFFSET /;"	d
+CFP2_SRC_SIZE	include/csp/interfaces/csp_if_can.h	/^#define CFP2_SRC_SIZE /;"	d
+CFP_BEGIN	src/interfaces/csp_if_can.c	/^	CFP_BEGIN = 0,$/;"	e	enum:cfp_frame_t	file:
+CFP_DST	include/csp/interfaces/csp_if_can.h	/^#define CFP_DST(/;"	d
+CFP_FIELD	include/csp/interfaces/csp_if_can.h	/^#define CFP_FIELD(/;"	d
+CFP_HOST_SIZE	include/csp/interfaces/csp_if_can.h	/^#define CFP_HOST_SIZE	/;"	d
+CFP_ID	include/csp/interfaces/csp_if_can.h	/^#define CFP_ID(/;"	d
+CFP_ID_CONN_MASK	include/csp/interfaces/csp_if_can.h	/^#define CFP_ID_CONN_MASK /;"	d
+CFP_ID_SIZE	include/csp/interfaces/csp_if_can.h	/^#define CFP_ID_SIZE	/;"	d
+CFP_MAKE_DST	include/csp/interfaces/csp_if_can.h	/^#define CFP_MAKE_DST(/;"	d
+CFP_MAKE_FIELD	include/csp/interfaces/csp_if_can.h	/^#define CFP_MAKE_FIELD(/;"	d
+CFP_MAKE_ID	include/csp/interfaces/csp_if_can.h	/^#define CFP_MAKE_ID(/;"	d
+CFP_MAKE_REMAIN	include/csp/interfaces/csp_if_can.h	/^#define CFP_MAKE_REMAIN(/;"	d
+CFP_MAKE_SRC	include/csp/interfaces/csp_if_can.h	/^#define CFP_MAKE_SRC(/;"	d
+CFP_MAKE_TYPE	include/csp/interfaces/csp_if_can.h	/^#define CFP_MAKE_TYPE(/;"	d
+CFP_MORE	src/interfaces/csp_if_can.c	/^	CFP_MORE = 1$/;"	e	enum:cfp_frame_t	file:
+CFP_REMAIN	include/csp/interfaces/csp_if_can.h	/^#define CFP_REMAIN(/;"	d
+CFP_REMAIN_SIZE	include/csp/interfaces/csp_if_can.h	/^#define CFP_REMAIN_SIZE	/;"	d
+CFP_SRC	include/csp/interfaces/csp_if_can.h	/^#define CFP_SRC(/;"	d
+CFP_TYPE	include/csp/interfaces/csp_if_can.h	/^#define CFP_TYPE(/;"	d
+CFP_TYPE_SIZE	include/csp/interfaces/csp_if_can.h	/^#define CFP_TYPE_SIZE	/;"	d
+CLIENT_PRIO	contrib/zephyr/samples/server-client/csp_server_client_zephyr.c	/^#define CLIENT_PRIO /;"	d	file:
+CLIENT_STACK_SIZE	contrib/zephyr/samples/server-client/csp_server_client_zephyr.c	/^#define CLIENT_STACK_SIZE /;"	d	file:
+CMAKE_BUILD_TYPE	CMakeLists.txt	/^  set(CMAKE_BUILD_TYPE MinSizeRel CACHE STRING "Build Type" FORCE)$/;"	v
+CMAKE_BUILD_TYPE	contrib/zephyr/CMakeLists.txt	/^  set(CMAKE_BUILD_TYPE None)$/;"	v
+CMAKE_SYSTEM_NAME	contrib/zephyr/CMakeLists.txt	/^  set(CMAKE_SYSTEM_NAME "Zephyr")$/;"	v
+CMP_MESSAGE	include/csp/csp_cmp.h	/^#define CMP_MESSAGE(/;"	d
+CMP_MESSAGE	include/csp/csp_cmp.h	/^CMP_MESSAGE(CSP_CMP_IDENT, ident)$/;"	f
+CMP_SIZE	include/csp/csp_cmp.h	/^#define CMP_SIZE(/;"	d
+CONFIG_LIBCSP	contrib/zephyr/Kconfig	/^config LIBCSP$/;"	c
+CONFIG_LIBCSP	contrib/zephyr/samples/arch/prj.conf	/^CONFIG_LIBCSP=y$/;"	k
+CONFIG_LIBCSP	contrib/zephyr/samples/server-client/prj.conf	/^CONFIG_LIBCSP=y$/;"	k
+CONFIG_LIBCSP_HAVE_STDIO	contrib/zephyr/Kconfig	/^config LIBCSP_HAVE_STDIO$/;"	c
+CONFIG_LIBCSP_HAVE_STDIO	contrib/zephyr/samples/arch/prj.conf	/^CONFIG_LIBCSP_HAVE_STDIO=y$/;"	k
+CONFIG_LIBCSP_HAVE_STDIO	contrib/zephyr/samples/server-client/prj.conf	/^CONFIG_LIBCSP_HAVE_STDIO=n$/;"	k
+CONFIG_LIBCSP_HAVE_STDIO_MODULE	contrib/zephyr/Kconfig	/^config LIBCSP_HAVE_STDIO$/;"	c
+CONFIG_LIBCSP_LOG_LEVEL_DBG	contrib/zephyr/samples/arch/prj.conf	/^CONFIG_LIBCSP_LOG_LEVEL_DBG=y$/;"	k
+CONFIG_LIBCSP_MODULE	contrib/zephyr/Kconfig	/^config LIBCSP$/;"	c
+CONFIG_LOG	contrib/zephyr/samples/arch/prj.conf	/^CONFIG_LOG=y$/;"	k
+CONFIG_LOG	contrib/zephyr/samples/server-client/prj.conf	/^CONFIG_LOG=y$/;"	k
+CONFIG_LOG2_MODE_DEFERRED	contrib/zephyr/samples/arch/prj.conf	/^CONFIG_LOG2_MODE_DEFERRED=y$/;"	k
+CONFIG_LOG2_MODE_DEFERRED	contrib/zephyr/samples/server-client/prj.conf	/^CONFIG_LOG2_MODE_DEFERRED=y$/;"	k
+CONFIG_LOG_SPEED	contrib/zephyr/samples/arch/prj.conf	/^CONFIG_LOG_SPEED=y$/;"	k
+CONFIG_LOG_SPEED	contrib/zephyr/samples/server-client/prj.conf	/^CONFIG_LOG_SPEED=y$/;"	k
+CONFIG_MINIMAL_LIBC_RAND	contrib/zephyr/samples/arch/prj.conf	/^CONFIG_MINIMAL_LIBC_RAND=y$/;"	k
+CONNECTION_CAPSULE	src/bindings/python/pycsp.c	/^#define CONNECTION_CAPSULE /;"	d	file:
+CONN_CLIENT	src/csp_conn.h	/^	CONN_CLIENT = 0,$/;"	e	enum:__anon2d608f650203
+CONN_CLOSED	src/csp_conn.h	/^	CONN_CLOSED = 0,$/;"	e	enum:__anon2d608f650103
+CONN_OPEN	src/csp_conn.h	/^	CONN_OPEN = 1,$/;"	e	enum:__anon2d608f650103
+CONN_SERVER	src/csp_conn.h	/^	CONN_SERVER = 1,$/;"	e	enum:__anon2d608f650203
+CSP	CMakeLists.txt	/^project(CSP)$/;"	p
+CSP tunnels	doc/tunnel.md	/^CSP tunnels$/;"	c
+CSP_ANY	include/csp/csp_types.h	/^#define CSP_ANY	/;"	d
+CSP_BUFFER_ALIGN	src/csp_buffer.c	/^#define CSP_BUFFER_ALIGN /;"	d	file:
+CSP_BUFFER_COUNT	CMakeLists.txt	/^set(CSP_BUFFER_COUNT 15 CACHE STRING "Number of total packet buffers")$/;"	v
+CSP_BUFFER_PACKET_OVERHEAD	include/csp/csp_types.h	/^#define CSP_BUFFER_PACKET_OVERHEAD /;"	d
+CSP_BUFFER_SIZE	CMakeLists.txt	/^set(CSP_BUFFER_SIZE 256 CACHE STRING "Bytes in each packet buffer")$/;"	v
+CSP_BUF_FREE	include/csp/csp_types.h	/^	CSP_BUF_FREE		= 5,   \/\/!< Free CSP buffers$/;"	e	enum:__anon930cb7bd0203
+CSP_CMP	include/csp/csp_types.h	/^	CSP_CMP				= 0,   \/\/!< CSP management, e.g. memory, routes, stats$/;"	e	enum:__anon930cb7bd0203
+CSP_CMP_CLOCK	include/csp/csp_cmp.h	/^#define CSP_CMP_CLOCK /;"	d
+CSP_CMP_IDENT	include/csp/csp_cmp.h	/^#define CSP_CMP_IDENT /;"	d
+CSP_CMP_IDENT_DATE_LEN	include/csp/csp_cmp.h	/^#define CSP_CMP_IDENT_DATE_LEN /;"	d
+CSP_CMP_IDENT_REV_LEN	include/csp/csp_cmp.h	/^#define CSP_CMP_IDENT_REV_LEN /;"	d
+CSP_CMP_IDENT_TIME_LEN	include/csp/csp_cmp.h	/^#define CSP_CMP_IDENT_TIME_LEN /;"	d
+CSP_CMP_IF_STATS	include/csp/csp_cmp.h	/^#define CSP_CMP_IF_STATS /;"	d
+CSP_CMP_PEEK	include/csp/csp_cmp.h	/^#define CSP_CMP_PEEK /;"	d
+CSP_CMP_PEEK_MAX_LEN	include/csp/csp_cmp.h	/^#define CSP_CMP_PEEK_MAX_LEN /;"	d
+CSP_CMP_POKE	include/csp/csp_cmp.h	/^#define CSP_CMP_POKE /;"	d
+CSP_CMP_POKE_MAX_LEN	include/csp/csp_cmp.h	/^#define CSP_CMP_POKE_MAX_LEN /;"	d
+CSP_CMP_REPLY	include/csp/csp_cmp.h	/^#define CSP_CMP_REPLY /;"	d
+CSP_CMP_REQUEST	include/csp/csp_cmp.h	/^#define CSP_CMP_REQUEST /;"	d
+CSP_CMP_ROUTE_IFACE_LEN	include/csp/csp_cmp.h	/^#define CSP_CMP_ROUTE_IFACE_LEN /;"	d
+CSP_CMP_ROUTE_SET_V1	include/csp/csp_cmp.h	/^#define CSP_CMP_ROUTE_SET_V1 /;"	d
+CSP_CMP_ROUTE_SET_V2	include/csp/csp_cmp.h	/^#define CSP_CMP_ROUTE_SET_V2 /;"	d
+CSP_CONN_MAX	CMakeLists.txt	/^set(CSP_CONN_MAX 8 CACHE STRING "Number of new connections on socket queue")$/;"	v
+CSP_CONN_RXQUEUE_LEN	CMakeLists.txt	/^set(CSP_CONN_RXQUEUE_LEN 16 CACHE STRING "Number of packets in connection queue")$/;"	v
+CSP_C_ARGS	CMakeLists.txt	/^  set(CSP_C_ARGS -Wshadow -Wcast-align -Wwrite-strings -Wno-unused-parameter)$/;"	v
+CSP_C_ARGS	CMakeLists.txt	/^  set(CSP_C_ARGS -Wwrite-strings -Wno-unused-parameter)$/;"	v
+CSP_DBG_CAN_ERR_FRAME_LOST	include/csp/csp_debug.h	/^#define CSP_DBG_CAN_ERR_FRAME_LOST /;"	d
+CSP_DBG_CAN_ERR_INCOMPLETE	include/csp/csp_debug.h	/^#define CSP_DBG_CAN_ERR_INCOMPLETE /;"	d
+CSP_DBG_CAN_ERR_RX_OUT	include/csp/csp_debug.h	/^#define CSP_DBG_CAN_ERR_RX_OUT /;"	d
+CSP_DBG_CAN_ERR_RX_OVF	include/csp/csp_debug.h	/^#define CSP_DBG_CAN_ERR_RX_OVF /;"	d
+CSP_DBG_CAN_ERR_SHORT_BEGIN	include/csp/csp_debug.h	/^#define CSP_DBG_CAN_ERR_SHORT_BEGIN /;"	d
+CSP_DBG_CAN_ERR_UNKNOWN	include/csp/csp_debug.h	/^#define CSP_DBG_CAN_ERR_UNKNOWN /;"	d
+CSP_DBG_ERR_ALREADY_CLOSED	include/csp/csp_debug.h	/^#define CSP_DBG_ERR_ALREADY_CLOSED /;"	d
+CSP_DBG_ERR_ALREADY_FREE	include/csp/csp_debug.h	/^#define CSP_DBG_ERR_ALREADY_FREE /;"	d
+CSP_DBG_ERR_CLOCK_SET_FAIL	include/csp/csp_debug.h	/^#define CSP_DBG_ERR_CLOCK_SET_FAIL /;"	d
+CSP_DBG_ERR_CORRUPT_BUFFER	include/csp/csp_debug.h	/^#define CSP_DBG_ERR_CORRUPT_BUFFER /;"	d
+CSP_DBG_ERR_INVALID_BIND_PORT	include/csp/csp_debug.h	/^#define CSP_DBG_ERR_INVALID_BIND_PORT /;"	d
+CSP_DBG_ERR_INVALID_POINTER	include/csp/csp_debug.h	/^#define CSP_DBG_ERR_INVALID_POINTER /;"	d
+CSP_DBG_ERR_INVALID_RTABLE_ENTRY	include/csp/csp_debug.h	/^#define CSP_DBG_ERR_INVALID_RTABLE_ENTRY /;"	d
+CSP_DBG_ERR_MTU_EXCEEDED	include/csp/csp_debug.h	/^#define CSP_DBG_ERR_MTU_EXCEEDED /;"	d
+CSP_DBG_ERR_PORT_ALREADY_IN_USE	include/csp/csp_debug.h	/^#define CSP_DBG_ERR_PORT_ALREADY_IN_USE /;"	d
+CSP_DBG_ERR_REFCOUNT	include/csp/csp_debug.h	/^#define CSP_DBG_ERR_REFCOUNT /;"	d
+CSP_DBG_ERR_UNSUPPORTED	include/csp/csp_debug.h	/^#define CSP_DBG_ERR_UNSUPPORTED /;"	d
+CSP_DEDUP_ALL	include/csp/csp.h	/^	CSP_DEDUP_ALL,              \/**< Deduplication on incoming and forwarding*\/$/;"	e	enum:csp_dedup_types
+CSP_DEDUP_COUNT	src/csp_dedup.c	/^#define CSP_DEDUP_COUNT /;"	d	file:
+CSP_DEDUP_FWD	include/csp/csp.h	/^	CSP_DEDUP_FWD,              \/**< Deduplication on forwarding only *\/$/;"	e	enum:csp_dedup_types
+CSP_DEDUP_INCOMING	include/csp/csp.h	/^	CSP_DEDUP_INCOMING,         \/**< Deduplication on incomfing only *\/$/;"	e	enum:csp_dedup_types
+CSP_DEDUP_OFF	include/csp/csp.h	/^	CSP_DEDUP_OFF,              \/**< Deduplication off *\/$/;"	e	enum:csp_dedup_types
+CSP_DEDUP_WINDOW_MS	src/csp_dedup.c	/^#define CSP_DEDUP_WINDOW_MS /;"	d	file:
+CSP_ENABLE_CSP_PRINT	CMakeLists.txt	/^set(CSP_ENABLE_CSP_PRINT 1)$/;"	v
+CSP_ERR_AGAIN	include/csp/csp_error.h	/^#define CSP_ERR_AGAIN	/;"	d
+CSP_ERR_ALREADY	include/csp/csp_error.h	/^#define CSP_ERR_ALREADY	/;"	d
+CSP_ERR_BUSY	include/csp/csp_error.h	/^#define CSP_ERR_BUSY	/;"	d
+CSP_ERR_CRC32	include/csp/csp_error.h	/^#define CSP_ERR_CRC32	/;"	d
+CSP_ERR_DRIVER	include/csp/csp_error.h	/^#define CSP_ERR_DRIVER	/;"	d
+CSP_ERR_HMAC	include/csp/csp_error.h	/^#define CSP_ERR_HMAC	/;"	d
+CSP_ERR_INVAL	include/csp/csp_error.h	/^#define CSP_ERR_INVAL	/;"	d
+CSP_ERR_NOBUFS	include/csp/csp_error.h	/^#define CSP_ERR_NOBUFS	/;"	d
+CSP_ERR_NOMEM	include/csp/csp_error.h	/^#define CSP_ERR_NOMEM	/;"	d
+CSP_ERR_NONE	include/csp/csp_error.h	/^#define CSP_ERR_NONE	/;"	d
+CSP_ERR_NOSYS	include/csp/csp_error.h	/^#define CSP_ERR_NOSYS	/;"	d
+CSP_ERR_NOTSUP	include/csp/csp_error.h	/^#define CSP_ERR_NOTSUP	/;"	d
+CSP_ERR_RESET	include/csp/csp_error.h	/^#define CSP_ERR_RESET	/;"	d
+CSP_ERR_SFP	include/csp/csp_error.h	/^#define CSP_ERR_SFP	/;"	d
+CSP_ERR_TIMEDOUT	include/csp/csp_error.h	/^#define CSP_ERR_TIMEDOUT	/;"	d
+CSP_ERR_TX	include/csp/csp_error.h	/^#define CSP_ERR_TX	/;"	d
+CSP_ERR_USED	include/csp/csp_error.h	/^#define CSP_ERR_USED	/;"	d
+CSP_FCRC32	include/csp/csp_types.h	/^#define CSP_FCRC32	/;"	d
+CSP_FFRAG	include/csp/csp_types.h	/^#define CSP_FFRAG	/;"	d
+CSP_FHMAC	include/csp/csp_types.h	/^#define CSP_FHMAC	/;"	d
+CSP_FRDP	include/csp/csp_types.h	/^#define CSP_FRDP	/;"	d
+CSP_FREERTOS	src/arch/CMakeLists.txt	/^  set(CSP_FREERTOS 1)$/;"	v
+CSP_FRES1	include/csp/csp_types.h	/^#define CSP_FRES1	/;"	d
+CSP_FRES2	include/csp/csp_types.h	/^#define CSP_FRES2	/;"	d
+CSP_FRES3	include/csp/csp_types.h	/^#define CSP_FRES3	/;"	d
+CSP_HAVE_STDIO	CMakeLists.txt	/^set(CSP_HAVE_STDIO 1)$/;"	v
+CSP_HMAC_LENGTH	include/csp/crypto/csp_hmac.h	/^#define CSP_HMAC_LENGTH	/;"	d
+CSP_HOSTNAME_LEN	include/csp/csp_types.h	/^#define CSP_HOSTNAME_LEN	/;"	d
+CSP_ID1_DPORT_MASK	src/csp_id.c	/^#define CSP_ID1_DPORT_MASK /;"	d	file:
+CSP_ID1_DPORT_OFFSET	src/csp_id.c	/^#define CSP_ID1_DPORT_OFFSET /;"	d	file:
+CSP_ID1_DST_MASK	src/csp_id.c	/^#define CSP_ID1_DST_MASK /;"	d	file:
+CSP_ID1_DST_OFFSET	src/csp_id.c	/^#define CSP_ID1_DST_OFFSET /;"	d	file:
+CSP_ID1_FLAGS_MASK	src/csp_id.c	/^#define CSP_ID1_FLAGS_MASK /;"	d	file:
+CSP_ID1_FLAGS_OFFSET	src/csp_id.c	/^#define CSP_ID1_FLAGS_OFFSET /;"	d	file:
+CSP_ID1_FLAGS_SIZE	src/csp_id.c	/^#define CSP_ID1_FLAGS_SIZE /;"	d	file:
+CSP_ID1_HEADER_SIZE	src/csp_id.c	/^#define CSP_ID1_HEADER_SIZE /;"	d	file:
+CSP_ID1_HOST_SIZE	src/csp_id.c	/^#define CSP_ID1_HOST_SIZE /;"	d	file:
+CSP_ID1_PORT_SIZE	src/csp_id.c	/^#define CSP_ID1_PORT_SIZE /;"	d	file:
+CSP_ID1_PRIO_MASK	src/csp_id.c	/^#define CSP_ID1_PRIO_MASK /;"	d	file:
+CSP_ID1_PRIO_OFFSET	src/csp_id.c	/^#define CSP_ID1_PRIO_OFFSET /;"	d	file:
+CSP_ID1_PRIO_SIZE	src/csp_id.c	/^#define CSP_ID1_PRIO_SIZE /;"	d	file:
+CSP_ID1_SPORT_MASK	src/csp_id.c	/^#define CSP_ID1_SPORT_MASK /;"	d	file:
+CSP_ID1_SPORT_OFFSET	src/csp_id.c	/^#define CSP_ID1_SPORT_OFFSET /;"	d	file:
+CSP_ID1_SRC_MASK	src/csp_id.c	/^#define CSP_ID1_SRC_MASK /;"	d	file:
+CSP_ID1_SRC_OFFSET	src/csp_id.c	/^#define CSP_ID1_SRC_OFFSET /;"	d	file:
+CSP_ID2_DPORT_MASK	src/csp_id.c	/^#define CSP_ID2_DPORT_MASK /;"	d	file:
+CSP_ID2_DPORT_OFFSET	src/csp_id.c	/^#define CSP_ID2_DPORT_OFFSET /;"	d	file:
+CSP_ID2_DST_MASK	src/csp_id.c	/^#define CSP_ID2_DST_MASK /;"	d	file:
+CSP_ID2_DST_OFFSET	src/csp_id.c	/^#define CSP_ID2_DST_OFFSET /;"	d	file:
+CSP_ID2_FLAGS_MASK	src/csp_id.c	/^#define CSP_ID2_FLAGS_MASK /;"	d	file:
+CSP_ID2_FLAGS_OFFSET	src/csp_id.c	/^#define CSP_ID2_FLAGS_OFFSET /;"	d	file:
+CSP_ID2_FLAGS_SIZE	src/csp_id.c	/^#define CSP_ID2_FLAGS_SIZE /;"	d	file:
+CSP_ID2_HEADER_SIZE	src/csp_id.c	/^#define CSP_ID2_HEADER_SIZE /;"	d	file:
+CSP_ID2_HOST_SIZE	src/csp_id.c	/^#define CSP_ID2_HOST_SIZE /;"	d	file:
+CSP_ID2_PORT_SIZE	src/csp_id.c	/^#define CSP_ID2_PORT_SIZE /;"	d	file:
+CSP_ID2_PRIO_MASK	src/csp_id.c	/^#define CSP_ID2_PRIO_MASK /;"	d	file:
+CSP_ID2_PRIO_OFFSET	src/csp_id.c	/^#define CSP_ID2_PRIO_OFFSET /;"	d	file:
+CSP_ID2_PRIO_SIZE	src/csp_id.c	/^#define CSP_ID2_PRIO_SIZE /;"	d	file:
+CSP_ID2_SPORT_MASK	src/csp_id.c	/^#define CSP_ID2_SPORT_MASK /;"	d	file:
+CSP_ID2_SPORT_OFFSET	src/csp_id.c	/^#define CSP_ID2_SPORT_OFFSET /;"	d	file:
+CSP_ID2_SRC_MASK	src/csp_id.c	/^#define CSP_ID2_SRC_MASK /;"	d	file:
+CSP_ID2_SRC_OFFSET	src/csp_id.c	/^#define CSP_ID2_SRC_OFFSET /;"	d	file:
+CSP_IFLIST_NAME_MAX	include/csp/csp_interface.h	/^#define CSP_IFLIST_NAME_MAX /;"	d
+CSP_IF_CAN_DEFAULT_NAME	include/csp/interfaces/csp_if_can.h	/^#define CSP_IF_CAN_DEFAULT_NAME /;"	d
+CSP_IF_I2C_DEFAULT_NAME	include/csp/interfaces/csp_if_i2c.h	/^#define CSP_IF_I2C_DEFAULT_NAME /;"	d
+CSP_IF_KISS_DEFAULT_NAME	include/csp/interfaces/csp_if_kiss.h	/^#define CSP_IF_KISS_DEFAULT_NAME /;"	d
+CSP_IF_LOOPBACK_NAME	include/csp/interfaces/csp_if_lo.h	/^#define CSP_IF_LOOPBACK_NAME /;"	d
+CSP_INFINITY	include/csp/csp.h	/^#define CSP_INFINITY /;"	d
+CSP_MAX_DELAY	include/csp/csp.h	/^#define CSP_MAX_DELAY /;"	d
+CSP_MAX_TIMEOUT	include/csp/csp.h	/^#define CSP_MAX_TIMEOUT /;"	d
+CSP_MEMFREE	include/csp/csp_types.h	/^	CSP_MEMFREE			= 3,   \/\/!< Free memory$/;"	e	enum:__anon930cb7bd0203
+CSP_MODEL_LEN	include/csp/csp_types.h	/^#define CSP_MODEL_LEN	/;"	d
+CSP_NO_VIA_ADDRESS	include/csp/csp_rtable.h	/^#define CSP_NO_VIA_ADDRESS	/;"	d
+CSP_O_CRC32	include/csp/csp_types.h	/^#define CSP_O_CRC32	/;"	d
+CSP_O_HMAC	include/csp/csp_types.h	/^#define CSP_O_HMAC	/;"	d
+CSP_O_NOCRC32	include/csp/csp_types.h	/^#define CSP_O_NOCRC32	/;"	d
+CSP_O_NOHMAC	include/csp/csp_types.h	/^#define CSP_O_NOHMAC	/;"	d
+CSP_O_NONE	include/csp/csp_types.h	/^#define CSP_O_NONE	/;"	d
+CSP_O_NORDP	include/csp/csp_types.h	/^#define CSP_O_NORDP	/;"	d
+CSP_O_RDP	include/csp/csp_types.h	/^#define CSP_O_RDP	/;"	d
+CSP_O_SAME	include/csp/csp_types.h	/^#define CSP_O_SAME	/;"	d
+CSP_PACKET_PADDING_BYTES	include/csp/csp_types.h	/^#define CSP_PACKET_PADDING_BYTES /;"	d
+CSP_PING	include/csp/csp_types.h	/^	CSP_PING			= 1,   \/\/!< Ping - return ping$/;"	e	enum:__anon930cb7bd0203
+CSP_POINTER_HAS_BEEN_FREED	src/bindings/python/pycsp.c	/^static int CSP_POINTER_HAS_BEEN_FREED = 0;  \/\/ used to indicate pointer has been freed, becaus/;"	v	typeref:typename:int	file:
+CSP_PORT_MAX_BIND	CMakeLists.txt	/^set(CSP_PORT_MAX_BIND 16 CACHE STRING "Length of incoming queue for router task")$/;"	v
+CSP_POSIX	CMakeLists.txt	/^  set(CSP_POSIX 1)$/;"	v
+CSP_POSIX	src/arch/CMakeLists.txt	/^  set(CSP_POSIX 1)$/;"	v
+CSP_PRINT_STDIO	CMakeLists.txt	/^set(CSP_PRINT_STDIO 0)$/;"	v
+CSP_PRIO_CRITICAL	include/csp/csp_types.h	/^	CSP_PRIO_CRITICAL		= 0, \/\/!< Critical$/;"	e	enum:__anon930cb7bd0303
+CSP_PRIO_HIGH	include/csp/csp_types.h	/^	CSP_PRIO_HIGH			= 1, \/\/!< High$/;"	e	enum:__anon930cb7bd0303
+CSP_PRIO_LOW	include/csp/csp_types.h	/^	CSP_PRIO_LOW			= 3, \/\/!< Low$/;"	e	enum:__anon930cb7bd0303
+CSP_PRIO_NORM	include/csp/csp_types.h	/^	CSP_PRIO_NORM			= 2, \/\/!< Normal (default)$/;"	e	enum:__anon930cb7bd0303
+CSP_PS	include/csp/csp_types.h	/^	CSP_PS				= 2,   \/\/!< Current process list$/;"	e	enum:__anon930cb7bd0203
+CSP_QFIFO_LEN	CMakeLists.txt	/^set(CSP_QFIFO_LEN 15 CACHE STRING "Length of incoming queue for router task.")$/;"	v
+CSP_QUEUE_ERROR	include/csp/arch/csp_queue.h	/^#define CSP_QUEUE_ERROR /;"	d
+CSP_QUEUE_OK	include/csp/arch/csp_queue.h	/^#define CSP_QUEUE_OK /;"	d
+CSP_RDP_CLOSED_BY_ALL	src/csp_conn.h	/^#define CSP_RDP_CLOSED_BY_ALL /;"	d
+CSP_RDP_CLOSED_BY_PROTOCOL	src/csp_conn.h	/^#define CSP_RDP_CLOSED_BY_PROTOCOL /;"	d
+CSP_RDP_CLOSED_BY_TIMEOUT	src/csp_conn.h	/^#define CSP_RDP_CLOSED_BY_TIMEOUT /;"	d
+CSP_RDP_CLOSED_BY_USERSPACE	src/csp_conn.h	/^#define CSP_RDP_CLOSED_BY_USERSPACE /;"	d
+CSP_RDP_HEADER_SIZE	include/csp/csp_types.h	/^#define CSP_RDP_HEADER_SIZE /;"	d
+CSP_RDP_MAX_WINDOW	CMakeLists.txt	/^set(CSP_RDP_MAX_WINDOW 5 CACHE STRING "Max window size for RDP")$/;"	v
+CSP_REBOOT	include/csp/csp_types.h	/^	CSP_REBOOT			= 4,   \/\/!< Reboot, see #CSP_REBOOT_MAGIC and #CSP_REBOOT_SHUTDOWN_MAGIC$/;"	e	enum:__anon930cb7bd0203
+CSP_REBOOT_MAGIC	include/csp/csp_types.h	/^#define CSP_REBOOT_MAGIC	/;"	d
+CSP_REBOOT_SHUTDOWN_MAGIC	include/csp/csp_types.h	/^#define CSP_REBOOT_SHUTDOWN_MAGIC	/;"	d
+CSP_RPS_MTU	src/csp_service_handler.c	/^#define CSP_RPS_MTU /;"	d	file:
+CSP_RTABLE_SIZE	CMakeLists.txt	/^set(CSP_RTABLE_SIZE 10 CACHE STRING "Number of elements in routing table")$/;"	v
+CSP_SEMAPHORE_ERROR	src/csp_semaphore.h	/^#define CSP_SEMAPHORE_ERROR	/;"	d
+CSP_SEMAPHORE_OK	src/csp_semaphore.h	/^#define CSP_SEMAPHORE_OK /;"	d
+CSP_SHA1_BLOCKSIZE	include/csp/crypto/csp_sha1.h	/^#define CSP_SHA1_BLOCKSIZE	/;"	d
+CSP_SHA1_DIGESTSIZE	include/csp/crypto/csp_sha1.h	/^#define CSP_SHA1_DIGESTSIZE	/;"	d
+CSP_SO_CONN_LESS	include/csp/csp_types.h	/^#define CSP_SO_CONN_LESS	/;"	d
+CSP_SO_CRC32PROHIB	include/csp/csp_types.h	/^#define CSP_SO_CRC32PROHIB	/;"	d
+CSP_SO_CRC32REQ	include/csp/csp_types.h	/^#define CSP_SO_CRC32REQ	/;"	d
+CSP_SO_HMACPROHIB	include/csp/csp_types.h	/^#define CSP_SO_HMACPROHIB	/;"	d
+CSP_SO_HMACREQ	include/csp/csp_types.h	/^#define CSP_SO_HMACREQ	/;"	d
+CSP_SO_NONE	include/csp/csp_types.h	/^#define CSP_SO_NONE	/;"	d
+CSP_SO_RDPPROHIB	include/csp/csp_types.h	/^#define CSP_SO_RDPPROHIB	/;"	d
+CSP_SO_RDPREQ	include/csp/csp_types.h	/^#define CSP_SO_RDPREQ	/;"	d
+CSP_SO_SAME	include/csp/csp_types.h	/^#define CSP_SO_SAME	/;"	d
+CSP_STATIC_ASSERT	include/csp/csp_types.h	/^#define CSP_STATIC_ASSERT(/;"	d
+CSP_UPTIME	include/csp/csp_types.h	/^	CSP_UPTIME			= 6,   \/\/!< Uptime$/;"	e	enum:__anon930cb7bd0203
+CSP_USE_DEDUP	CMakeLists.txt	/^option(CSP_USE_DEDUP "Packet deduplication" ON)$/;"	D
+CSP_USE_HMAC	CMakeLists.txt	/^option(CSP_USE_HMAC "Hash-based message authentication code" ON)$/;"	D
+CSP_USE_PROMISC	CMakeLists.txt	/^option(CSP_USE_PROMISC "Promiscious mode" ON)$/;"	D
+CSP_USE_RDP	CMakeLists.txt	/^option(CSP_USE_RDP "Reliable Datagram Protocol" ON)$/;"	D
+CSP_USE_RDP_FAST_CLOSE	src/csp_rdp.c	/^#define CSP_USE_RDP_FAST_CLOSE /;"	d	file:
+CSP_ZEPHYR	CMakeLists.txt	/^  set(CSP_ZEPHYR 1)$/;"	v
+CSP_ZEPHYR	src/arch/CMakeLists.txt	/^  set(CSP_ZEPHYR 1)$/;"	v
+CSP_ZMQHUB_IF_NAME	include/csp/interfaces/csp_if_zmqhub.h	/^#define CSP_ZMQHUB_IF_NAME /;"	d
+CSP_ZMQPROXY_PUBLISH_PORT	include/csp/interfaces/csp_if_zmqhub.h	/^#define CSP_ZMQPROXY_PUBLISH_PORT /;"	d
+CSP_ZMQPROXY_SUBSCRIBE_PORT	include/csp/interfaces/csp_if_zmqhub.h	/^#define CSP_ZMQPROXY_SUBSCRIBE_PORT /;"	d
+CSP_ZMQ_MTU	include/csp/interfaces/csp_if_zmqhub.h	/^#define CSP_ZMQ_MTU /;"	d
+Callback functions in CSP	doc/hooks.md	/^Callback functions in CSP$/;"	c
+Client and server example	doc/example.md	/^# Client and server example$/;"	c
+Code style	doc/codestyle.md	/^Code style$/;"	c
+Connection	doc/basic.md	/^## Connection$/;"	s	chapter:The basics of CSP
+Continous Integration	doc/CI.md	/^# Continous Integration$/;"	c
+Crypto	doc/hooks.md	/^Crypto$/;"	s	chapter:Hooks in CSP
+CubeSat Space Protocol	doc/libcsp.md	/^# CubeSat Space Protocol$/;"	c
+DEFAULT_BUILD_SYSTEM	examples/buildall.py	/^DEFAULT_BUILD_SYSTEM = 'waf'$/;"	v
+Debug	doc/hooks.md	/^Debug$/;"	s	chapter:Hooks in CSP
+Error	src/bindings/python/pycsp.c	/^static PyObject * Error = NULL;$/;"	v	typeref:typename:PyObject *	file:
+F0	src/crypto/csp_sha1.c	/^#define F0(/;"	d	file:
+F1	src/crypto/csp_sha1.c	/^#define F1(/;"	d	file:
+F2	src/crypto/csp_sha1.c	/^#define F2(/;"	d	file:
+F3	src/crypto/csp_sha1.c	/^#define F3(/;"	d	file:
+FEND	src/interfaces/csp_if_kiss.c	/^#define FEND /;"	d	file:
+FESC	src/interfaces/csp_if_kiss.c	/^#define FESC /;"	d	file:
+FF_0	src/crypto/csp_sha1.c	/^#define FF_0(/;"	d	file:
+FF_1	src/crypto/csp_sha1.c	/^#define FF_1(/;"	d	file:
+FF_2	src/crypto/csp_sha1.c	/^#define FF_2(/;"	d	file:
+FF_3	src/crypto/csp_sha1.c	/^#define FF_3(/;"	d	file:
+FIFO_TIMEOUT	src/csp_qfifo.h	/^#define FIFO_TIMEOUT /;"	d
+Features	README.md	/^## Features$/;"	s	chapter:The Cubesat Space Protocol
+HAVE_SYS_SOCKET_H	contrib/zephyr/CMakeLists.txt	/^  set(HAVE_SYS_SOCKET_H OFF)$/;"	v
+HMAC_KEY_LENGTH	src/crypto/csp_hmac.c	/^#define HMAC_KEY_LENGTH /;"	d	file:
+History	doc/history.md	/^# History$/;"	c
+Hooks in CSP	doc/hooks.md	/^Hooks in CSP$/;"	c
+How CSP uses memory	doc/memory.md	/^# How CSP uses memory$/;"	c
+How to install LibCSP	doc/INSTALL.md	/^# How to install LibCSP$/;"	c
+Interface	doc/basic.md	/^## Interface$/;"	s	chapter:The basics of CSP
+KISS_MODE_ESCAPED	include/csp/interfaces/csp_if_kiss.h	/^	KISS_MODE_ESCAPED,      \/\/!< Rx escape character $/;"	e	enum:__anonc711d7630103
+KISS_MODE_NOT_STARTED	include/csp/interfaces/csp_if_kiss.h	/^	KISS_MODE_NOT_STARTED,  \/\/!< No start detected$/;"	e	enum:__anonc711d7630103
+KISS_MODE_SKIP_FRAME	include/csp/interfaces/csp_if_kiss.h	/^	KISS_MODE_SKIP_FRAME,   \/\/!< Skip remaining frame, wait for end character$/;"	e	enum:__anonc711d7630103
+KISS_MODE_STARTED	include/csp/interfaces/csp_if_kiss.h	/^	KISS_MODE_STARTED,      \/\/!< Started on a KISS frame$/;"	e	enum:__anonc711d7630103
+LIBCSP	contrib/zephyr/Kconfig	/^config LIBCSP$/;"	c
+LIBCSP_HAVE_STDIO	contrib/zephyr/Kconfig	/^config LIBCSP_HAVE_STDIO$/;"	c
+LOAD32H	src/crypto/csp_sha1.c	/^#define LOAD32H(/;"	d	file:
+Layer 1: Drivers	doc/protocolstack.md	/^## Layer 1: Drivers$/;"	s	chapter:The Protocol Stack
+Layer 2: MAC interfaces	doc/protocolstack.md	/^## Layer 2: MAC interfaces$/;"	s	chapter:The Protocol Stack
+Layer 3: Network Router	doc/protocolstack.md	/^## Layer 3: Network Router$/;"	s	chapter:The Protocol Stack
+Layer 4: Transport Layer	doc/protocolstack.md	/^## Layer 4: Transport Layer$/;"	s	chapter:The Protocol Stack
+MIN	src/crypto/csp_sha1.c	/^#define MIN(/;"	d	file:
+MSG_CONFIRM	src/interfaces/csp_if_udp.c	/^#define MSG_CONFIRM /;"	d	file:
+MY_SERVER_PORT	contrib/zephyr/samples/server-client/main.c	/^#define MY_SERVER_PORT	/;"	d	file:
+MY_SERVER_PORT	examples/csp_server_client.c	/^#define MY_SERVER_PORT	/;"	d	file:
+Maximum Transfer Unit	doc/mtu.md	/^# Maximum Transfer Unit$/;"	c
+Network Topology	doc/topology.md	/^# Network Topology$/;"	c
+OUTGOING PACKET FLOW	doc/outflow.md	/^OUTGOING PACKET FLOW$/;"	c
+OUTGOING_PORTS	src/csp_conn.c	/^#define OUTGOING_PORTS /;"	d	file:
+PACKET_CAPSULE	src/bindings/python/pycsp.c	/^#define PACKET_CAPSULE /;"	d	file:
+PBUF_TIMEOUT_MS	src/interfaces/csp_if_can_pbuf.c	/^#define PBUF_TIMEOUT_MS /;"	d	file:
+PORT_CLOSED	src/csp_port.c	/^	PORT_CLOSED = 0,$/;"	e	enum:__anon4bb5ea970103	file:
+PORT_OPEN	src/csp_port.c	/^	PORT_OPEN = 1,$/;"	e	enum:__anon4bb5ea970103	file:
+PORT_OPEN_CB	src/csp_port.c	/^	PORT_OPEN_CB = 2,$/;"	e	enum:__anon4bb5ea970103	file:
+PTHREAD_QUEUE_EMPTY	src/arch/posix/pthread_queue.h	/^#define PTHREAD_QUEUE_EMPTY /;"	d
+PTHREAD_QUEUE_ERROR	src/arch/posix/pthread_queue.h	/^#define PTHREAD_QUEUE_ERROR /;"	d
+PTHREAD_QUEUE_FULL	src/arch/posix/pthread_queue.h	/^#define PTHREAD_QUEUE_FULL /;"	d
+PTHREAD_QUEUE_OK	src/arch/posix/pthread_queue.h	/^#define PTHREAD_QUEUE_OK /;"	d
+PY_SSIZE_T_CLEAN	src/bindings/python/pycsp.c	/^#define PY_SSIZE_T_CLEAN$/;"	d	file:
+PyErr_Error	src/bindings/python/pycsp.c	/^static PyObject * PyErr_Error(const char * message, int error) {$/;"	f	typeref:typename:PyObject *	file:
+PyInit_libcsp_py3	src/bindings/python/pycsp.c	/^PyMODINIT_FUNC PyInit_libcsp_py3(void) {$/;"	f	typeref:typename:PyMODINIT_FUNC
+Python code	doc/codestyle.md	/^Python code$/;"	s	chapter:Code style
+RDP	doc/protocolstack.md	/^### RDP$/;"	S	section:The Protocol Stack""Layer 4: Transport Layer
+RDP_ACK	src/csp_rdp.c	/^#define RDP_ACK /;"	d	file:
+RDP_CLOSED	src/csp_conn.h	/^	RDP_CLOSED = 0,$/;"	e	enum:__anon2d608f650303
+RDP_CLOSE_WAIT	src/csp_conn.h	/^	RDP_CLOSE_WAIT,$/;"	e	enum:__anon2d608f650303
+RDP_EAK	src/csp_rdp.c	/^#define RDP_EAK /;"	d	file:
+RDP_OPEN	src/csp_conn.h	/^	RDP_OPEN,$/;"	e	enum:__anon2d608f650303
+RDP_RST	src/csp_rdp.c	/^#define RDP_RST /;"	d	file:
+RDP_SYN	src/csp_rdp.c	/^#define RDP_SYN /;"	d	file:
+RDP_SYN_RCVD	src/csp_conn.h	/^	RDP_SYN_RCVD,$/;"	e	enum:__anon2d608f650303
+RDP_SYN_SENT	src/csp_conn.h	/^	RDP_SYN_SENT,$/;"	e	enum:__anon2d608f650303
+ROL	src/crypto/csp_sha1.c	/^#define ROL(/;"	d	file:
+ROUTER_PRIO	contrib/zephyr/samples/server-client/csp_server_client_zephyr.c	/^#define ROUTER_PRIO /;"	d	file:
+ROUTER_STACK_SIZE	contrib/zephyr/samples/server-client/csp_server_client_zephyr.c	/^#define ROUTER_STACK_SIZE /;"	d	file:
+Receive	doc/basic.md	/^## Receive$/;"	s	chapter:The basics of CSP
+Receive	doc/basic.md	/^### Receive$/;"	S	section:The basics of CSP""Interface
+Routing table	doc/basic.md	/^## Routing table$/;"	s	chapter:The basics of CSP
+Running the example	doc/example.md	/^## Running the example$/;"	s	chapter:Client and server example
+SERVER_PRIO	contrib/zephyr/samples/server-client/csp_server_client_zephyr.c	/^#define SERVER_PRIO /;"	d	file:
+SERVER_STACK_SIZE	contrib/zephyr/samples/server-client/csp_server_client_zephyr.c	/^#define SERVER_STACK_SIZE /;"	d	file:
+SKBUF_SIZE	src/csp_buffer.c	/^#define SKBUF_SIZE /;"	d	file:
+SOCKET_CAPSULE	src/bindings/python/pycsp.c	/^#define SOCKET_CAPSULE /;"	d	file:
+STORE32H	src/crypto/csp_sha1.c	/^#define STORE32H(/;"	d	file:
+STORE64H	src/crypto/csp_sha1.c	/^#define STORE64H(/;"	d	file:
+Satellites using CSP	doc/history.md	/^## Satellites using CSP$/;"	s	chapter:History
+Send	doc/basic.md	/^## Send$/;"	s	chapter:The basics of CSP
+Send	doc/basic.md	/^### Send$/;"	S	section:The basics of CSP""Interface
+Software license	README.md	/^## Software license$/;"	s	chapter:The Cubesat Space Protocol
+Structure	doc/structure.md	/^# Structure$/;"	c
+TFEND	src/interfaces/csp_if_kiss.c	/^#define TFEND /;"	d	file:
+TFESC	src/interfaces/csp_if_kiss.c	/^#define TFESC /;"	d	file:
+TNC_DATA	src/interfaces/csp_if_kiss.c	/^#define TNC_DATA /;"	d	file:
+The Cubesat Space Protocol	README.md	/^# The Cubesat Space Protocol$/;"	c
+The Protocol Stack	doc/protocolstack.md	/^# The Protocol Stack$/;"	c
+The basics of CSP	doc/basic.md	/^# The basics of CSP$/;"	c
+Time	doc/hooks.md	/^Time$/;"	s	chapter:Hooks in CSP
+UDP	doc/protocolstack.md	/^### UDP$/;"	S	section:The Protocol Stack""Layer 4: Transport Layer
+Using CMake	doc/INSTALL.md	/^## Using CMake$/;"	s	chapter:How to install LibCSP
+Using Meson	doc/INSTALL.md	/^## Using Meson$/;"	s	chapter:How to install LibCSP
+Using Waf	doc/INSTALL.md	/^## Using Waf$/;"	s	chapter:How to install LibCSP
+WINDOWS_QUEUE_EMPTY	contrib/windows/windows_queue.h	/^#define WINDOWS_QUEUE_EMPTY /;"	d
+WINDOWS_QUEUE_ERROR	contrib/windows/windows_queue.h	/^#define WINDOWS_QUEUE_ERROR /;"	d
+WINDOWS_QUEUE_FULL	contrib/windows/windows_queue.h	/^#define WINDOWS_QUEUE_FULL /;"	d
+WINDOWS_QUEUE_OK	contrib/windows/windows_queue.h	/^#define WINDOWS_QUEUE_OK /;"	d
+__anon04cf8eb60108	src/interfaces/csp_if_can_pbuf.h	/^typedef struct {$/;"	s
+__anon21d214c10108	src/drivers/usart/usart_kiss.c	/^typedef struct {$/;"	s	file:
+__anon245b89a80108	src/drivers/can/can_socketcan.c	/^typedef struct {$/;"	s	file:
+__anon2d608f650103	src/csp_conn.h	/^typedef enum {$/;"	g
+__anon2d608f650203	src/csp_conn.h	/^typedef enum {$/;"	g
+__anon2d608f650303	src/csp_conn.h	/^typedef enum {$/;"	g
+__anon2d608f650408	src/csp_conn.h	/^typedef struct {$/;"	s
+__anon4257022e0108	src/csp_rtable_stdio.c	/^typedef struct {$/;"	s	file:
+__anon4bb5ea970103	src/csp_port.c	/^typedef enum {$/;"	g	file:
+__anon4bb5ea970208	src/csp_port.c	/^typedef struct {$/;"	s	file:
+__anon4bb5ea97030a	src/csp_port.c	/^	union {$/;"	u	struct:__anon4bb5ea970208	file:
+__anon75dbf4ca0108	src/interfaces/csp_if_zmqhub.c	/^typedef struct {$/;"	s	file:
+__anon79d01e9b0108	include/csp/interfaces/csp_if_can.h	/^typedef struct {$/;"	s
+__anon7a22bd070108	include/csp/interfaces/csp_if_i2c.h	/^typedef struct {$/;"	s
+__anon7b0eb6c00108	include/csp/interfaces/csp_if_tun.h	/^typedef struct {$/;"	s
+__anon7b1785520108	include/csp/interfaces/csp_if_udp.h	/^typedef struct {$/;"	s
+__anon7ca789050108	include/csp/crypto/csp_sha1.h	/^typedef struct {$/;"	s
+__anon8a8d43d20108	src/drivers/usart/usart_windows.c	/^typedef struct {$/;"	s	file:
+__anon930cb7bd0108	include/csp/csp_types.h	/^typedef struct {$/;"	s
+__anon930cb7bd0203	include/csp/csp_types.h	/^typedef enum {$/;"	g
+__anon930cb7bd0303	include/csp/csp_types.h	/^typedef enum {$/;"	g
+__anon930cb7bd0408	include/csp/csp_types.h	/^typedef struct  __attribute__((packed)) {$/;"	s
+__anon930cb7bd050a	include/csp/csp_types.h	/^	union {$/;"	u	struct:csp_packet_s
+__anon930cb7bd0608	include/csp/csp_types.h	/^		struct {$/;"	s	union:csp_packet_s::__anon930cb7bd050a
+__anon930cb7bd0708	include/csp/csp_types.h	/^		struct {$/;"	s	union:csp_packet_s::__anon930cb7bd050a
+__anon930cb7bd080a	include/csp/csp_types.h	/^	union {$/;"	u	struct:csp_packet_s
+__anon97d873fb0108	src/crypto/csp_hmac.c	/^typedef struct {$/;"	s	file:
+__anona8b6bc370108	src/drivers/usart/usart_linux.c	/^typedef struct {$/;"	s	file:
+__anonc711d7630103	include/csp/interfaces/csp_if_kiss.h	/^typedef enum {$/;"	g
+__anonc711d7630208	include/csp/interfaces/csp_if_kiss.h	/^typedef struct {$/;"	s
+__anone058ef68010a	include/csp/csp_cmp.h	/^	union {$/;"	u	struct:csp_cmp_message
+__anone058ef680208	include/csp/csp_cmp.h	/^		struct {$/;"	s	union:csp_cmp_message::__anone058ef68010a
+__anone058ef680308	include/csp/csp_cmp.h	/^      struct {$/;"	s	union:csp_cmp_message::__anone058ef68010a
+__anone058ef680408	include/csp/csp_cmp.h	/^		struct {$/;"	s	union:csp_cmp_message::__anone058ef68010a
+__anone058ef680508	include/csp/csp_cmp.h	/^		struct __attribute__((__packed__)) {$/;"	s	union:csp_cmp_message::__anone058ef68010a
+__anone058ef680608	include/csp/csp_cmp.h	/^		struct {$/;"	s	union:csp_cmp_message::__anone058ef68010a
+__anone058ef680708	include/csp/csp_cmp.h	/^		struct {$/;"	s	union:csp_cmp_message::__anone058ef68010a
+__anonf2e58b380108	src/csp_rdp.c	/^typedef struct __attribute__((__packed__)) {$/;"	s	file:
+__anonf2f8bc7b0108	src/csp_sfp.c	/^typedef struct __attribute__((__packed__)) {$/;"	s	file:
+__anonf9c590cc0108	src/csp_qfifo.h	/^typedef struct {$/;"	s
+__atomic_compare_exchange_4	contrib/atomics/atomics_freertos_gcc.c	/^bool __atomic_compare_exchange_4(volatile void *ptr, void *expected, unsigned int desired, bool /;"	f	typeref:typename:bool
+ack_delay_count	src/csp_conn.h	/^	uint32_t ack_delay_count;$/;"	m	struct:__anon2d608f650408	typeref:typename:uint32_t
+ack_nr	src/csp_rdp.c	/^	uint16_t ack_nr;$/;"	m	struct:__anonf2e58b380108	typeref:typename:uint16_t	file:
+ack_timeout	src/csp_conn.h	/^	uint32_t ack_timeout;$/;"	m	struct:__anon2d608f650408	typeref:typename:uint32_t
+ack_timestamp	src/csp_conn.h	/^	uint32_t ack_timestamp;$/;"	m	struct:__anon2d608f650408	typeref:typename:uint32_t
+addr	include/csp/csp_cmp.h	/^			uint32_t addr;$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680608	typeref:typename:uint32_t
+addr	include/csp/csp_cmp.h	/^			uint32_t addr;$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680708	typeref:typename:uint32_t
+addr	include/csp/csp_interface.h	/^	uint16_t addr;              \/\/ Host address on this subnet$/;"	m	struct:csp_iface_s	typeref:typename:uint16_t
+addr	src/csp_yaml.c	/^	char * addr;$/;"	m	struct:data_s	typeref:typename:char *	file:
+address	include/csp/csp_rtable.h	/^	uint16_t address;$/;"	m	struct:csp_route_s	typeref:typename:uint16_t
+alloca	src/csp_service_handler.c	/^#define alloca /;"	d	file:
+arch	src/meson.build	/^subdir('arch')$/;"	S
+args	examples/buildall.py	/^    args, rest = parser.parse_known_args()$/;"	v
+arr_conn	src/csp_conn.c	/^static csp_conn_t arr_conn[CSP_CONN_MAX] __attribute__((section(".noinit")));$/;"	v	typeref:typename:csp_conn_t[]	file:
+autherr	include/csp/csp_cmp.h	/^			uint32_t autherr;$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680508	typeref:typename:uint32_t
+autherr	include/csp/csp_interface.h	/^	uint32_t autherr;           \/\/ Authentication errors (packets)$/;"	m	struct:csp_iface_s	typeref:typename:uint32_t
+baudrate	include/csp/drivers/usart.h	/^    uint32_t baudrate;$/;"	m	struct:csp_usart_conf	typeref:typename:uint32_t
+baudrate	src/csp_yaml.c	/^	char * baudrate;$/;"	m	struct:data_s	typeref:typename:char *	file:
+bif_a	src/csp_bridge.c	/^csp_iface_t * bif_a;$/;"	v	typeref:typename:csp_iface_t *
+bif_b	src/csp_bridge.c	/^csp_iface_t * bif_b;$/;"	v	typeref:typename:csp_iface_t *
+buf	include/csp/crypto/csp_sha1.h	/^	uint8_t  buf[CSP_SHA1_BLOCKSIZE];$/;"	m	struct:__anon7ca789050108	typeref:typename:uint8_t[]
+buffer	contrib/windows/windows_queue.c	/^	void * buffer;$/;"	m	struct:windows_queue_s	typeref:typename:void *	file:
+buffer	src/arch/posix/pthread_queue.h	/^    void * buffer;$/;"	m	struct:pthread_queue_s	typeref:typename:void *
+buffer	src/csp_rtable_stdio.c	/^	char * buffer;$/;"	m	struct:__anon4257022e0108	typeref:typename:char *	file:
+buffer_count	meson_options.txt	/^option('buffer_count', type: 'integer', value: 15, description: 'Number of total packet buffers'/;"	i
+buffer_size	meson_options.txt	/^option('buffer_size', type: 'integer', value: 256, description: 'Bytes in each packet buffer')$/;"	i
+build_with_cmake	examples/buildall.py	/^def build_with_cmake():$/;"	f
+build_with_meson	examples/buildall.py	/^def build_with_meson():$/;"	f
+build_with_waf	examples/buildall.py	/^def build_with_waf():$/;"	f
+c	meson.build	/^clib = meson.get_compiler('c').find_library('c', required: false)$/;"	B
+callback	src/csp_conn.h	/^	void (*callback)(csp_packet_t * packet);$/;"	m	struct:csp_conn_s	typeref:typename:void (*)(csp_packet_t * packet)
+callback	src/csp_port.c	/^		csp_callback_t callback;$/;"	m	union:__anon4bb5ea970208::__anon4bb5ea97030a	typeref:typename:csp_callback_t	file:
+can_context_t	src/drivers/can/can_socketcan.c	/^} can_context_t;$/;"	t	typeref:struct:__anon245b89a80108	file:
+can_task	contrib/drivers/can/csp_driver_can.c	/^static void can_task(void * param) {$/;"	f	typeref:typename:void	file:
+can_task_handle	contrib/drivers/can/csp_driver_can.c	/^static TaskHandle_t can_task_handle;$/;"	v	typeref:typename:TaskHandle_t	file:
+can_task_stack	contrib/drivers/can/csp_driver_can.c	/^static StackType_t can_task_stack[500];$/;"	v	typeref:typename:StackType_t[500]	file:
+can_task_tcb	contrib/drivers/can/csp_driver_can.c	/^static StaticTask_t can_task_tcb;$/;"	v	typeref:typename:StaticTask_t	file:
+cc	meson.build	/^cc = meson.get_compiler('c')$/;"	V
+cfp_frame_t	src/interfaces/csp_if_can.c	/^enum cfp_frame_t {$/;"	g	file:
+cfp_packet_counter	include/csp/interfaces/csp_if_can.h	/^    uint32_t cfp_packet_counter;$/;"	m	struct:__anon79d01e9b0108	typeref:typename:uint32_t
+cfpid	include/csp/csp_types.h	/^			uint32_t cfpid;             \/* Connection CFP identification number *\/$/;"	m	struct:csp_packet_s::__anon930cb7bd050a::__anon930cb7bd0708	typeref:typename:uint32_t
+cfpid	src/interfaces/csp_if_can_pbuf.h	/^	uint32_t cfpid;             \/* Connection CFP identification number *\/$/;"	m	struct:__anon04cf8eb60108	typeref:typename:uint32_t
+checkparity	include/csp/drivers/usart.h	/^    uint8_t checkparity;$/;"	m	struct:csp_usart_conf	typeref:typename:uint8_t
+clib	meson.build	/^	clib = dependency('libc', fallback: ['picolibc', 'picolibc_dep'], required: true)$/;"	V
+clib	meson.build	/^clib = meson.get_compiler('c').find_library('c', required: false)$/;"	V
+client	contrib/zephyr/samples/server-client/main.c	/^void client(void) {$/;"	f	typeref:typename:void
+client	examples/csp_server_client.c	/^void client(void) {$/;"	f	typeref:typename:void
+client_start	contrib/zephyr/samples/server-client/csp_server_client_zephyr.c	/^void client_start(void) {$/;"	f	typeref:typename:void
+client_start	examples/csp_server_client_posix.c	/^int client_start(void) {$/;"	f	typeref:typename:int
+client_start	examples/csp_server_client_windows.c	/^int client_start(void) {$/;"	f	typeref:typename:int
+client_task	contrib/zephyr/samples/server-client/csp_server_client_zephyr.c	/^static void * client_task(void * p1, void * p2, void * p3) {$/;"	f	typeref:typename:void *	file:
+clock	include/csp/csp_cmp.h	/^		csp_timestamp_t clock;$/;"	m	union:csp_cmp_message::__anone058ef68010a	typeref:typename:csp_timestamp_t
+closed_by	src/csp_conn.h	/^	uint8_t closed_by;     \/**< Tracks 'who' have closed the RDP connection *\/$/;"	m	struct:__anon2d608f650408	typeref:typename:uint8_t
+cmake	meson.build	/^	cmake = import('cmake')$/;"	V
+code	include/csp/csp_cmp.h	/^        uint8_t code;$/;"	m	struct:csp_cmp_message	typeref:typename:uint8_t
+cond_empty	contrib/windows/windows_queue.c	/^	CONDITION_VARIABLE cond_empty;$/;"	m	struct:windows_queue_s	typeref:typename:CONDITION_VARIABLE	file:
+cond_empty	src/arch/posix/pthread_queue.h	/^    pthread_cond_t cond_empty;$/;"	m	struct:pthread_queue_s	typeref:typename:pthread_cond_t
+cond_full	contrib/windows/windows_queue.c	/^	CONDITION_VARIABLE cond_full;$/;"	m	struct:windows_queue_s	typeref:typename:CONDITION_VARIABLE	file:
+cond_full	src/arch/posix/pthread_queue.h	/^    pthread_cond_t cond_full;$/;"	m	struct:pthread_queue_s	typeref:typename:pthread_cond_t
+conf	meson.build	/^conf = configuration_data()$/;"	V
+configurePort	src/drivers/usart/usart_windows.c	/^static int configurePort(csp_usart_fd_t fd, const csp_usart_conf_t * conf) {$/;"	f	typeref:typename:int	file:
+conn	include/csp/csp_types.h	/^			struct csp_conn_s * conn;   \/\/ Associated connection (this is used in RDP queue)$/;"	m	struct:csp_packet_s::__anon930cb7bd050a::__anon930cb7bd0608	typeref:struct:csp_conn_s *
+conn_dfl_so	include/csp/csp.h	/^	uint32_t conn_dfl_so;       \/**< Default connection options. Options will always be or'ed onto/;"	m	struct:csp_conf_s	typeref:typename:uint32_t
+conn_max	meson_options.txt	/^option('conn_max', type: 'integer', value: 8, description: 'Number of new connections on socket /;"	i
+conn_rxqueue_len	meson_options.txt	/^option('conn_rxqueue_len', type: 'integer', value: 15, description: 'Number of packets in connec/;"	i
+conn_timeout	src/csp_conn.h	/^	uint32_t conn_timeout;$/;"	m	struct:__anon2d608f650408	typeref:typename:uint32_t
+context	src/interfaces/csp_if_zmqhub.c	/^	void * context;$/;"	m	struct:__anon75dbf4ca0108	typeref:typename:void *	file:
+crc_tab	src/csp_crc32.c	/^static const uint32_t crc_tab[256] PROGMEM = {$/;"	v	typeref:typename:const uint32_t[256]PROGMEM	file:
+crypto	src/meson.build	/^subdir('crypto')$/;"	S
+csp	meson.build	/^csp_lib = library('csp',$/;"	B
+csp	meson.build	/^project('csp', 'c', version: '2.0', license: 'LGPL', meson_version : '>=0.53.2', default_options/;"	P
+csp_accept	src/csp_io.c	/^csp_conn_t * csp_accept(csp_socket_t * sock, uint32_t timeout) {$/;"	f	typeref:typename:csp_conn_t *
+csp_arch	contrib/zephyr/samples/arch/CMakeLists.txt	/^project(csp_arch)$/;"	p
+csp_arch	examples/CMakeLists.txt	/^add_executable(csp_arch EXCLUDE_FROM_ALL csp_arch.c)$/;"	t
+csp_arch	examples/meson.build	/^executable('csp_arch',$/;"	B
+csp_bin_sem_create	contrib/macosx/csp_semaphore.c	/^int csp_bin_sem_create(csp_bin_sem_handle_t * sem) {$/;"	f	typeref:typename:int
+csp_bin_sem_create	contrib/windows/csp_semaphore.c	/^int csp_bin_sem_create(csp_bin_sem_handle_t * sem) {$/;"	f	typeref:typename:int
+csp_bin_sem_create_static	contrib/macosx/csp_semaphore.c	/^void csp_bin_sem_create_static(csp_bin_sem_handle_t * handle, csp_bin_sem_t * buffer) {$/;"	f	typeref:typename:void
+csp_bin_sem_create_static	contrib/windows/csp_semaphore.c	/^void csp_bin_sem_create_static(csp_bin_sem_handle_t * handle, csp_bin_sem_t * buffer) {$/;"	f	typeref:typename:void
+csp_bin_sem_errno_to_csp	src/arch/zephyr/csp_semaphore.c	/^static int csp_bin_sem_errno_to_csp(int val) {$/;"	f	typeref:typename:int	file:
+csp_bin_sem_init	src/arch/freertos/csp_semaphore.c	/^void csp_bin_sem_init(csp_bin_sem_t * sem) {$/;"	f	typeref:typename:void
+csp_bin_sem_init	src/arch/posix/csp_semaphore.c	/^void csp_bin_sem_init(csp_bin_sem_t * sem) {$/;"	f	typeref:typename:void
+csp_bin_sem_init	src/arch/zephyr/csp_semaphore.c	/^void csp_bin_sem_init(csp_bin_sem_t * sem) {$/;"	f	typeref:typename:void
+csp_bin_sem_post	contrib/macosx/csp_semaphore.c	/^int csp_bin_sem_post(csp_bin_sem_handle_t * sem) {$/;"	f	typeref:typename:int
+csp_bin_sem_post	contrib/windows/csp_semaphore.c	/^int csp_bin_sem_post(csp_bin_sem_handle_t * sem) {$/;"	f	typeref:typename:int
+csp_bin_sem_post	src/arch/freertos/csp_semaphore.c	/^int csp_bin_sem_post(csp_bin_sem_t * sem) {$/;"	f	typeref:typename:int
+csp_bin_sem_post	src/arch/posix/csp_semaphore.c	/^int csp_bin_sem_post(csp_bin_sem_t * sem) {$/;"	f	typeref:typename:int
+csp_bin_sem_post	src/arch/zephyr/csp_semaphore.c	/^int csp_bin_sem_post(csp_bin_sem_t * sem) {$/;"	f	typeref:typename:int
+csp_bin_sem_post_isr	contrib/macosx/csp_semaphore.c	/^int csp_bin_sem_post_isr(csp_bin_sem_handle_t * sem, int * task_woken) {$/;"	f	typeref:typename:int
+csp_bin_sem_post_isr	contrib/windows/csp_semaphore.c	/^int csp_bin_sem_post_isr(csp_bin_sem_handle_t * sem, int * task_woken) {$/;"	f	typeref:typename:int
+csp_bin_sem_post_isr	src/arch/zephyr/csp_semaphore.c	/^int csp_bin_sem_post_isr(csp_bin_sem_t * sem, int * unused) {$/;"	f	typeref:typename:int
+csp_bin_sem_remove	contrib/macosx/csp_semaphore.c	/^int csp_bin_sem_remove(csp_bin_sem_handle_t * sem) {$/;"	f	typeref:typename:int
+csp_bin_sem_remove	contrib/windows/csp_semaphore.c	/^int csp_bin_sem_remove(csp_bin_sem_handle_t * sem) {$/;"	f	typeref:typename:int
+csp_bin_sem_t	src/csp_semaphore.h	/^    typedef TaskHandle_t csp_bin_sem_t;$/;"	t	typeref:typename:TaskHandle_t
+csp_bin_sem_t	src/csp_semaphore.h	/^    typedef sem_t csp_bin_sem_t;$/;"	t	typeref:typename:sem_t
+csp_bin_sem_t	src/csp_semaphore.h	/^    typedef struct k_sem csp_bin_sem_t;$/;"	t	typeref:struct:k_sem
+csp_bin_sem_wait	contrib/macosx/csp_semaphore.c	/^int csp_bin_sem_wait(csp_bin_sem_handle_t * sem, uint32_t timeout) {$/;"	f	typeref:typename:int
+csp_bin_sem_wait	contrib/windows/csp_semaphore.c	/^int csp_bin_sem_wait(csp_bin_sem_handle_t * sem, uint32_t timeout) {$/;"	f	typeref:typename:int
+csp_bin_sem_wait	src/arch/freertos/csp_semaphore.c	/^int csp_bin_sem_wait(csp_bin_sem_t * sem, unsigned int timeout) {$/;"	f	typeref:typename:int
+csp_bin_sem_wait	src/arch/posix/csp_semaphore.c	/^int csp_bin_sem_wait(csp_bin_sem_t * sem, unsigned int timeout) {$/;"	f	typeref:typename:int
+csp_bin_sem_wait	src/arch/zephyr/csp_semaphore.c	/^int csp_bin_sem_wait(csp_bin_sem_t * sem, uint32_t timeout) {$/;"	f	typeref:typename:int
+csp_bind	src/csp_port.c	/^int csp_bind(csp_socket_t * socket, uint8_t port) {$/;"	f	typeref:typename:int
+csp_bind_callback	src/csp_port.c	/^int csp_bind_callback(csp_callback_t callback, uint8_t port) {$/;"	f	typeref:typename:int
+csp_bridge_set_interfaces	src/csp_bridge.c	/^void csp_bridge_set_interfaces(csp_iface_t * if_a, csp_iface_t * if_b) {$/;"	f	typeref:typename:void
+csp_bridge_work	src/csp_bridge.c	/^void csp_bridge_work(void) {$/;"	f	typeref:typename:void
+csp_buf_free	src/csp_services.c	/^void csp_buf_free(uint16_t node, uint32_t timeout) {$/;"	f	typeref:typename:void
+csp_buffer_clone	src/csp_buffer.c	/^void * csp_buffer_clone(void * buffer) {$/;"	f	typeref:typename:void *
+csp_buffer_data_size	src/csp_buffer.c	/^size_t csp_buffer_data_size(void) {$/;"	f	typeref:typename:size_t
+csp_buffer_free	src/csp_buffer.c	/^void csp_buffer_free(void * packet) {$/;"	f	typeref:typename:void
+csp_buffer_free_isr	src/csp_buffer.c	/^void csp_buffer_free_isr(void * packet) {$/;"	f	typeref:typename:void
+csp_buffer_get	src/csp_buffer.c	/^void * csp_buffer_get(size_t _data_size) {$/;"	f	typeref:typename:void *
+csp_buffer_get_isr	src/csp_buffer.c	/^void * csp_buffer_get_isr(size_t _data_size) {$/;"	f	typeref:typename:void *
+csp_buffer_init	src/csp_buffer.c	/^void csp_buffer_init(void) {$/;"	f	typeref:typename:void
+csp_buffer_remaining	src/csp_buffer.c	/^int csp_buffer_remaining(void) {$/;"	f	typeref:typename:int
+csp_buffer_size	src/csp_buffer.c	/^size_t csp_buffer_size(void) {$/;"	f	typeref:typename:size_t
+csp_buffers	src/csp_buffer.c	/^static csp_queue_handle_t csp_buffers;$/;"	v	typeref:typename:csp_queue_handle_t	file:
+csp_bytesize	src/csp_iflist.c	/^unsigned long csp_bytesize(unsigned long bytes, char *postfix) {$/;"	f	typeref:typename:unsigned long
+csp_c_args	meson.build	/^csp_c_args = ['-Wshadow',$/;"	V
+csp_callback_t	include/csp/csp_types.h	/^typedef void (*csp_callback_t)(csp_packet_t * packet);$/;"	t	typeref:typename:void (*)(csp_packet_t * packet)
+csp_can1_rx	src/interfaces/csp_if_can.c	/^int csp_can1_rx(csp_iface_t * iface, uint32_t id, const uint8_t * data, uint8_t dlc, int * task_/;"	f	typeref:typename:int
+csp_can1_tx	src/interfaces/csp_if_can.c	/^int csp_can1_tx(csp_iface_t * iface, uint16_t via, csp_packet_t * packet, int from_me) {$/;"	f	typeref:typename:int
+csp_can2_rx	src/interfaces/csp_if_can.c	/^int csp_can2_rx(csp_iface_t * iface, uint32_t id, const uint8_t * data, uint8_t dlc, int * task_/;"	f	typeref:typename:int
+csp_can2_tx	src/interfaces/csp_if_can.c	/^int csp_can2_tx(csp_iface_t * iface, uint16_t via, csp_packet_t * packet, int from_me) {$/;"	f	typeref:typename:int
+csp_can_add_interface	src/interfaces/csp_if_can.c	/^int csp_can_add_interface(csp_iface_t * iface) {$/;"	f	typeref:typename:int
+csp_can_driver_tx_t	include/csp/interfaces/csp_if_can.h	/^typedef int (*csp_can_driver_tx_t)(void * driver_data, uint32_t id, const uint8_t * data, uint8_/;"	t	typeref:typename:int (*)(void * driver_data,uint32_t id,const uint8_t * data,uint8_t dlc)
+csp_can_interface_data_t	include/csp/interfaces/csp_if_can.h	/^} csp_can_interface_data_t;$/;"	t	typeref:struct:__anon79d01e9b0108
+csp_can_pbuf_cleanup	src/interfaces/csp_if_can_pbuf.c	/^void csp_can_pbuf_cleanup(csp_can_interface_data_t * ifdata) {$/;"	f	typeref:typename:void
+csp_can_pbuf_element_t	src/interfaces/csp_if_can_pbuf.h	/^} csp_can_pbuf_element_t;$/;"	t	typeref:struct:__anon04cf8eb60108
+csp_can_pbuf_find	src/interfaces/csp_if_can_pbuf.c	/^csp_packet_t * csp_can_pbuf_find(csp_can_interface_data_t * ifdata, uint32_t id, uint32_t mask, /;"	f	typeref:typename:csp_packet_t *
+csp_can_pbuf_free	src/interfaces/csp_if_can_pbuf.c	/^void csp_can_pbuf_free(csp_can_interface_data_t * ifdata, csp_packet_t * buffer, int buf_free, i/;"	f	typeref:typename:void
+csp_can_pbuf_new	src/interfaces/csp_if_can_pbuf.c	/^csp_packet_t * csp_can_pbuf_new(csp_can_interface_data_t * ifdata, uint32_t id, int * task_woken/;"	f	typeref:typename:csp_packet_t *
+csp_can_rx	src/interfaces/csp_if_can.c	/^int csp_can_rx(csp_iface_t * iface, uint32_t id, const uint8_t * data, uint8_t dlc, int * task_w/;"	f	typeref:typename:int
+csp_can_socketcan_init	src/drivers/can/can_socketcan.c	/^csp_iface_t * csp_can_socketcan_init(const char * device, int bitrate, bool promisc) {$/;"	f	typeref:typename:csp_iface_t *
+csp_can_socketcan_open_and_add_interface	src/drivers/can/can_socketcan.c	/^int csp_can_socketcan_open_and_add_interface(const char * device, const char * ifname, int bitra/;"	f	typeref:typename:int
+csp_can_socketcan_set_promisc	src/drivers/can/can_socketcan.c	/^int csp_can_socketcan_set_promisc(const bool promisc, can_context_t * ctx) {$/;"	f	typeref:typename:int
+csp_can_socketcan_stop	src/drivers/can/can_socketcan.c	/^int csp_can_socketcan_stop(csp_iface_t * iface) {$/;"	f	typeref:typename:int
+csp_can_tx_frame	contrib/drivers/can/csp_driver_can.c	/^int csp_can_tx_frame(void *driver_data, uint32_t id, const uint8_t * data, uint8_t dlc) {$/;"	f	typeref:typename:int
+csp_can_tx_frame	src/drivers/can/can_socketcan.c	/^static int csp_can_tx_frame(void * driver_data, uint32_t id, const uint8_t * data, uint8_t dlc) /;"	f	typeref:typename:int	file:
+csp_clock_get_time	contrib/windows/csp_clock.c	/^void csp_clock_get_time(csp_timestamp_t * time) {$/;"	f	typeref:typename:void
+csp_clock_get_time	src/arch/freertos/csp_clock.c	/^__attribute__((weak)) void csp_clock_get_time(csp_timestamp_t * time) {$/;"	f	typeref:typename:void
+csp_clock_get_time	src/arch/posix/csp_clock.c	/^__attribute__((weak)) void csp_clock_get_time(csp_timestamp_t * time) {$/;"	f	typeref:typename:void
+csp_clock_get_time	src/arch/zephyr/csp_clock.c	/^__attribute__((weak)) void csp_clock_get_time(csp_timestamp_t * time) {$/;"	f	typeref:typename:void
+csp_clock_set_time	contrib/windows/csp_clock.c	/^int csp_clock_set_time(const csp_timestamp_t * time) {$/;"	f	typeref:typename:int
+csp_clock_set_time	src/arch/freertos/csp_clock.c	/^__attribute__((weak)) int csp_clock_set_time(const csp_timestamp_t * time) {$/;"	f	typeref:typename:int
+csp_clock_set_time	src/arch/posix/csp_clock.c	/^__attribute__((weak)) int csp_clock_set_time(const csp_timestamp_t * time) {$/;"	f	typeref:typename:int
+csp_clock_set_time	src/arch/zephyr/csp_clock.c	/^__attribute__((weak)) int csp_clock_set_time(const csp_timestamp_t * time) {$/;"	f	typeref:typename:int
+csp_close	src/csp_conn.c	/^int csp_close(csp_conn_t * conn) {$/;"	f	typeref:typename:int
+csp_cmp	src/csp_services.c	/^int csp_cmp(uint16_t node, uint32_t timeout, uint8_t code, int msg_size, struct csp_cmp_message /;"	f	typeref:typename:int
+csp_cmp_handler	src/csp_service_handler.c	/^static int csp_cmp_handler(csp_packet_t * packet) {$/;"	f	typeref:typename:int	file:
+csp_cmp_memcpy_fnc	src/csp_service_handler.c	/^static csp_memcpy_fnc_t csp_cmp_memcpy_fnc = (csp_memcpy_fnc_t)memcpy;$/;"	v	typeref:typename:csp_memcpy_fnc_t	file:
+csp_cmp_memcpy_fnc	src/csp_service_handler.c	/^static csp_memcpy_fnc_t csp_cmp_memcpy_fnc = wrap_32bit_memcpy;$/;"	v	typeref:typename:csp_memcpy_fnc_t	file:
+csp_cmp_message	include/csp/csp_cmp.h	/^struct csp_cmp_message {$/;"	s
+csp_cmp_poke	include/csp/csp_cmp.h	/^static inline int csp_cmp_poke(uint16_t node, uint32_t timeout, struct csp_cmp_message *msg) {$/;"	f	typeref:typename:int
+csp_cmp_set_memcpy	src/csp_service_handler.c	/^void csp_cmp_set_memcpy(csp_memcpy_fnc_t fnc) {$/;"	f	typeref:typename:void
+csp_conf	src/csp_init.c	/^csp_conf_t csp_conf = {$/;"	v	typeref:typename:csp_conf_t
+csp_conf_s	include/csp/csp.h	/^typedef struct csp_conf_s {$/;"	s
+csp_conf_t	include/csp/csp.h	/^} csp_conf_t;$/;"	t	typeref:struct:csp_conf_s
+csp_config_h	meson.build	/^csp_config_h = configure_file(output: 'csp_autoconfig.h', configuration: conf, install_dir: 'csp/;"	V
+csp_conn_allocate	src/csp_conn.c	/^csp_conn_t * csp_conn_allocate(csp_conn_type_t type) {$/;"	f	typeref:typename:csp_conn_t *
+csp_conn_check_timeouts	src/csp_conn.c	/^void csp_conn_check_timeouts(void) {$/;"	f	typeref:typename:void
+csp_conn_close	src/csp_conn.c	/^int csp_conn_close(csp_conn_t * conn, uint8_t closed_by) {$/;"	f	typeref:typename:int
+csp_conn_dport	src/csp_conn.c	/^int csp_conn_dport(csp_conn_t * conn) {$/;"	f	typeref:typename:int
+csp_conn_dst	src/csp_conn.c	/^int csp_conn_dst(csp_conn_t * conn) {$/;"	f	typeref:typename:int
+csp_conn_enqueue_packet	src/csp_conn.c	/^int csp_conn_enqueue_packet(csp_conn_t * conn, csp_packet_t * packet) {$/;"	f	typeref:typename:int
+csp_conn_find_dport	src/csp_conn.c	/^csp_conn_t * csp_conn_find_dport(unsigned int dport) {$/;"	f	typeref:typename:csp_conn_t *
+csp_conn_find_existing	src/csp_conn.c	/^csp_conn_t * csp_conn_find_existing(csp_id_t * id) {$/;"	f	typeref:typename:csp_conn_t *
+csp_conn_flags	src/csp_conn.c	/^int csp_conn_flags(csp_conn_t * conn) {$/;"	f	typeref:typename:int
+csp_conn_flush_rx_queue	src/csp_conn.c	/^static int csp_conn_flush_rx_queue(csp_conn_t * conn) {$/;"	f	typeref:typename:int	file:
+csp_conn_get_array	src/csp_conn.c	/^const csp_conn_t * csp_conn_get_array(size_t * size) {$/;"	f	typeref:typename:const csp_conn_t *
+csp_conn_init	src/csp_conn.c	/^void csp_conn_init(void) {$/;"	f	typeref:typename:void
+csp_conn_new	src/csp_conn.c	/^csp_conn_t * csp_conn_new(csp_id_t idin, csp_id_t idout, csp_conn_type_t type) {$/;"	f	typeref:typename:csp_conn_t *
+csp_conn_print_table	include/csp/csp.h	/^inline void csp_conn_print_table(void) {}$/;"	f	typeref:typename:void
+csp_conn_print_table	src/csp_conn.c	/^void csp_conn_print_table(void) {$/;"	f	typeref:typename:void
+csp_conn_print_table_str	include/csp/csp.h	/^inline int csp_conn_print_table_str(char * str_buf, int str_size) {$/;"	f	typeref:typename:int
+csp_conn_print_table_str	src/csp_conn.c	/^int csp_conn_print_table_str(char * str_buf, int str_size) {$/;"	f	typeref:typename:int
+csp_conn_s	src/csp_conn.h	/^struct csp_conn_s {$/;"	s
+csp_conn_sport	src/csp_conn.c	/^int csp_conn_sport(csp_conn_t * conn) {$/;"	f	typeref:typename:int
+csp_conn_src	src/csp_conn.c	/^int csp_conn_src(csp_conn_t * conn) {$/;"	f	typeref:typename:int
+csp_conn_state_t	src/csp_conn.h	/^} csp_conn_state_t;$/;"	t	typeref:enum:__anon2d608f650103
+csp_conn_t	include/csp/csp_types.h	/^typedef struct csp_conn_s csp_conn_t;$/;"	t	typeref:struct:csp_conn_s
+csp_conn_type_t	src/csp_conn.h	/^} csp_conn_type_t;$/;"	t	typeref:enum:__anon2d608f650203
+csp_connect	src/csp_conn.c	/^csp_conn_t * csp_connect(uint8_t prio, uint16_t dest, uint8_t dport, uint32_t timeout, uint32_t /;"	f	typeref:typename:csp_conn_t *
+csp_const_memptr_t	include/csp/csp_types.h	/^typedef const uint32_t csp_const_memptr_t;$/;"	t	typeref:typename:const uint32_t
+csp_const_memptr_t	include/csp/csp_types.h	/^typedef const void * csp_const_memptr_t;$/;"	t	typeref:typename:const void *
+csp_crc32_append	src/csp_crc32.c	/^int csp_crc32_append(csp_packet_t * packet) {$/;"	f	typeref:typename:int
+csp_crc32_memory	src/csp_crc32.c	/^uint32_t csp_crc32_memory(const uint8_t * data, uint32_t length) {$/;"	f	typeref:typename:uint32_t
+csp_crc32_verify	src/csp_crc32.c	/^int csp_crc32_verify(csp_packet_t * packet) {$/;"	f	typeref:typename:int
+csp_crypto_decrypt	src/interfaces/csp_if_tun.c	/^__attribute__((weak)) int csp_crypto_decrypt(uint8_t * ciphertext_in, uint8_t ciphertext_len, ui/;"	f	typeref:typename:int
+csp_crypto_encrypt	src/interfaces/csp_if_tun.c	/^__attribute__((weak)) int csp_crypto_encrypt(uint8_t * msg_begin, uint8_t msg_len, uint8_t * cip/;"	f	typeref:typename:int
+csp_dbg_buffer_out	src/csp_debug.c	/^uint8_t csp_dbg_buffer_out;$/;"	v	typeref:typename:uint8_t
+csp_dbg_can_errno	src/csp_debug.c	/^uint8_t csp_dbg_can_errno;$/;"	v	typeref:typename:uint8_t
+csp_dbg_conn_noroute	src/csp_debug.c	/^uint8_t csp_dbg_conn_noroute;$/;"	v	typeref:typename:uint8_t
+csp_dbg_conn_out	src/csp_debug.c	/^uint8_t csp_dbg_conn_out;$/;"	v	typeref:typename:uint8_t
+csp_dbg_conn_ovf	src/csp_debug.c	/^uint8_t csp_dbg_conn_ovf;$/;"	v	typeref:typename:uint8_t
+csp_dbg_errno	src/csp_debug.c	/^uint8_t csp_dbg_errno;$/;"	v	typeref:typename:uint8_t
+csp_dbg_inval_reply	src/csp_debug.c	/^uint8_t csp_dbg_inval_reply;$/;"	v	typeref:typename:uint8_t
+csp_dbg_packet_print	src/csp_debug.c	/^uint8_t csp_dbg_packet_print;$/;"	v	typeref:typename:uint8_t
+csp_dbg_rdp_print	src/csp_debug.c	/^uint8_t csp_dbg_rdp_print;$/;"	v	typeref:typename:uint8_t
+csp_dedup_array	src/csp_dedup.c	/^static uint32_t csp_dedup_array[CSP_DEDUP_COUNT] = {0};$/;"	v	typeref:typename:uint32_t[]	file:
+csp_dedup_in	src/csp_dedup.c	/^static int csp_dedup_in = 0;$/;"	v	typeref:typename:int	file:
+csp_dedup_is_duplicate	src/csp_dedup.c	/^bool csp_dedup_is_duplicate(csp_packet_t * packet) {$/;"	f	typeref:typename:bool
+csp_dedup_timestamp	src/csp_dedup.c	/^static uint32_t csp_dedup_timestamp[CSP_DEDUP_COUNT] = {0};$/;"	v	typeref:typename:uint32_t[]	file:
+csp_dedup_types	include/csp/csp.h	/^enum csp_dedup_types {$/;"	g
+csp_dep	meson.build	/^csp_dep = declare_dependency($/;"	V
+csp_deps	meson.build	/^csp_deps = []$/;"	V
+csp_driver_can_init	contrib/drivers/can/csp_driver_can.c	/^csp_iface_t * csp_driver_can_init(int addr, int netmask, int id, can_mode_e mode, uint32_t bitra/;"	f	typeref:typename:csp_iface_t *
+csp_errno_zephyr_to_csp	src/arch/zephyr/csp_queue.c	/^static int csp_errno_zephyr_to_csp(int err) {$/;"	f	typeref:typename:int	file:
+csp_free_resources	src/csp_init.c	/^void csp_free_resources(void) {$/;"	f	typeref:typename:void
+csp_get_buf_free	src/csp_services.c	/^int csp_get_buf_free(uint16_t node, uint32_t timeout, uint32_t * size) {$/;"	f	typeref:typename:int
+csp_get_conf	src/csp_init.c	/^const csp_conf_t * csp_get_conf(void) {$/;"	f	typeref:typename:const csp_conf_t *
+csp_get_memfree	src/csp_services.c	/^int csp_get_memfree(uint16_t node, uint32_t timeout, uint32_t * size) {$/;"	f	typeref:typename:int
+csp_get_ms	contrib/windows/csp_time.c	/^uint32_t csp_get_ms(void) {$/;"	f	typeref:typename:uint32_t
+csp_get_ms	src/arch/freertos/csp_time.c	/^uint32_t csp_get_ms(void) {$/;"	f	typeref:typename:uint32_t
+csp_get_ms	src/arch/posix/csp_time.c	/^uint32_t csp_get_ms(void) {$/;"	f	typeref:typename:uint32_t
+csp_get_ms	src/arch/zephyr/csp_time.c	/^uint32_t csp_get_ms(void) {$/;"	f	typeref:typename:uint32_t
+csp_get_ms_isr	contrib/windows/csp_time.c	/^uint32_t csp_get_ms_isr(void) {$/;"	f	typeref:typename:uint32_t
+csp_get_ms_isr	src/arch/freertos/csp_time.c	/^uint32_t csp_get_ms_isr(void) {$/;"	f	typeref:typename:uint32_t
+csp_get_ms_isr	src/arch/posix/csp_time.c	/^uint32_t csp_get_ms_isr(void) {$/;"	f	typeref:typename:uint32_t
+csp_get_ms_isr	src/arch/zephyr/csp_time.c	/^uint32_t csp_get_ms_isr(void) {$/;"	f	typeref:typename:uint32_t
+csp_get_s	contrib/windows/csp_time.c	/^uint32_t csp_get_s(void) {$/;"	f	typeref:typename:uint32_t
+csp_get_s	src/arch/freertos/csp_time.c	/^uint32_t csp_get_s(void) {$/;"	f	typeref:typename:uint32_t
+csp_get_s	src/arch/posix/csp_time.c	/^uint32_t csp_get_s(void) {$/;"	f	typeref:typename:uint32_t
+csp_get_s	src/arch/zephyr/csp_time.c	/^uint32_t csp_get_s(void) {$/;"	f	typeref:typename:uint32_t
+csp_get_s_isr	contrib/windows/csp_time.c	/^uint32_t csp_get_s_isr(void) {$/;"	f	typeref:typename:uint32_t
+csp_get_s_isr	src/arch/freertos/csp_time.c	/^uint32_t csp_get_s_isr(void) {$/;"	f	typeref:typename:uint32_t
+csp_get_s_isr	src/arch/posix/csp_time.c	/^uint32_t csp_get_s_isr(void) {$/;"	f	typeref:typename:uint32_t
+csp_get_s_isr	src/arch/zephyr/csp_time.c	/^uint32_t csp_get_s_isr(void) {$/;"	f	typeref:typename:uint32_t
+csp_get_uptime	src/csp_services.c	/^int csp_get_uptime(uint16_t node, uint32_t timeout, uint32_t * uptime) {$/;"	f	typeref:typename:int
+csp_hex_dump	include/csp/csp.h	/^inline void csp_hex_dump(const char *desc, void *addr, int len) {}$/;"	f	typeref:typename:void
+csp_hex_dump	src/csp_hex_dump.c	/^void csp_hex_dump(const char * desc, void * addr, int len) {$/;"	f	typeref:typename:void
+csp_hex_dump	src/csp_hex_dump.c	/^void csp_hex_dump(const char * desc, void * addr, int len) {};$/;"	f	typeref:typename:void
+csp_hex_dump_format	src/csp_hex_dump.c	/^void csp_hex_dump_format(const char * desc, void * addr, int len, int format) {$/;"	f	typeref:typename:void
+csp_hmac_append	src/crypto/csp_hmac.c	/^int csp_hmac_append(csp_packet_t * packet, bool include_header) {$/;"	f	typeref:typename:int
+csp_hmac_done	src/crypto/csp_hmac.c	/^static int csp_hmac_done(hmac_state * hmac, uint8_t * out) {$/;"	f	typeref:typename:int	file:
+csp_hmac_init	src/crypto/csp_hmac.c	/^static int csp_hmac_init(hmac_state * hmac, const uint8_t * key, uint32_t keylen) {$/;"	f	typeref:typename:int	file:
+csp_hmac_key	src/crypto/csp_hmac.c	/^static uint8_t csp_hmac_key[HMAC_KEY_LENGTH];$/;"	v	typeref:typename:uint8_t[]	file:
+csp_hmac_memory	src/crypto/csp_hmac.c	/^int csp_hmac_memory(const void * key, uint32_t keylen, const void * data, uint32_t datalen, uint/;"	f	typeref:typename:int
+csp_hmac_process	src/crypto/csp_hmac.c	/^static int csp_hmac_process(hmac_state * hmac, const uint8_t * in, uint32_t inlen) {$/;"	f	typeref:typename:int	file:
+csp_hmac_set_key	src/crypto/csp_hmac.c	/^int csp_hmac_set_key(const void * key, uint32_t keylen) {$/;"	f	typeref:typename:int
+csp_hmac_verify	src/crypto/csp_hmac.c	/^int csp_hmac_verify(csp_packet_t * packet, bool include_header) {$/;"	f	typeref:typename:int
+csp_i2c_add_interface	src/interfaces/csp_if_i2c.c	/^int csp_i2c_add_interface(csp_iface_t * iface) {$/;"	f	typeref:typename:int
+csp_i2c_driver_tx_t	include/csp/interfaces/csp_if_i2c.h	/^typedef int (*csp_i2c_driver_tx_t)(void * driver_data, csp_packet_t * frame);$/;"	t	typeref:typename:int (*)(void * driver_data,csp_packet_t * frame)
+csp_i2c_interface_data_t	include/csp/interfaces/csp_if_i2c.h	/^} csp_i2c_interface_data_t;$/;"	t	typeref:struct:__anon7a22bd070108
+csp_i2c_rx	src/interfaces/csp_if_i2c.c	/^void csp_i2c_rx(csp_iface_t * iface, csp_packet_t * packet, void * pxTaskWoken) {$/;"	f	typeref:typename:void
+csp_i2c_tx	src/interfaces/csp_if_i2c.c	/^int csp_i2c_tx(csp_iface_t * iface, uint16_t via, csp_packet_t * packet, int from_me) {$/;"	f	typeref:typename:int
+csp_id1_prepend	src/csp_id.c	/^void csp_id1_prepend(csp_packet_t * packet) {$/;"	f	typeref:typename:void
+csp_id1_setup_rx	src/csp_id.c	/^void csp_id1_setup_rx(csp_packet_t * packet) {$/;"	f	typeref:typename:void
+csp_id1_strip	src/csp_id.c	/^int csp_id1_strip(csp_packet_t * packet) {$/;"	f	typeref:typename:int
+csp_id2_prepend	src/csp_id.c	/^void csp_id2_prepend(csp_packet_t * packet) {$/;"	f	typeref:typename:void
+csp_id2_setup_rx	src/csp_id.c	/^void csp_id2_setup_rx(csp_packet_t * packet) {$/;"	f	typeref:typename:void
+csp_id2_strip	src/csp_id.c	/^int csp_id2_strip(csp_packet_t * packet) {$/;"	f	typeref:typename:int
+csp_id_copy	src/csp_io.c	/^void csp_id_copy(csp_id_t * target, csp_id_t * source) {$/;"	f	typeref:typename:void
+csp_id_get_host_bits	src/csp_id.c	/^unsigned int csp_id_get_host_bits(void) {$/;"	f	typeref:typename:unsigned int
+csp_id_get_max_nodeid	src/csp_id.c	/^unsigned int csp_id_get_max_nodeid(void) {$/;"	f	typeref:typename:unsigned int
+csp_id_get_max_port	src/csp_id.c	/^unsigned int csp_id_get_max_port(void) {$/;"	f	typeref:typename:unsigned int
+csp_id_is_broadcast	src/csp_id.c	/^int csp_id_is_broadcast(uint16_t addr, csp_iface_t * iface) {$/;"	f	typeref:typename:int
+csp_id_prepend	src/csp_id.c	/^void csp_id_prepend(csp_packet_t * packet) {$/;"	f	typeref:typename:void
+csp_id_setup_rx	src/csp_id.c	/^int csp_id_setup_rx(csp_packet_t * packet) {$/;"	f	typeref:typename:int
+csp_id_strip	src/csp_id.c	/^int csp_id_strip(csp_packet_t * packet) {$/;"	f	typeref:typename:int
+csp_id_t	include/csp/csp_types.h	/^} csp_id_t ;$/;"	t	typeref:struct:__anon930cb7bd0408
+csp_if_lo	src/interfaces/csp_if_lo.c	/^csp_iface_t csp_if_lo = {$/;"	v	typeref:typename:csp_iface_t
+csp_if_tun_conf_t	include/csp/interfaces/csp_if_tun.h	/^} csp_if_tun_conf_t;$/;"	t	typeref:struct:__anon7b0eb6c00108
+csp_if_tun_init	src/interfaces/csp_if_tun.c	/^void csp_if_tun_init(csp_iface_t * iface, csp_if_tun_conf_t * ifconf) {$/;"	f	typeref:typename:void
+csp_if_tun_tx	src/interfaces/csp_if_tun.c	/^static int csp_if_tun_tx(csp_iface_t * iface, uint16_t via, csp_packet_t * packet, int from_me) /;"	f	typeref:typename:int	file:
+csp_if_udp_conf_t	include/csp/interfaces/csp_if_udp.h	/^} csp_if_udp_conf_t;$/;"	t	typeref:struct:__anon7b1785520108
+csp_if_udp_init	src/interfaces/csp_if_udp.c	/^void csp_if_udp_init(csp_iface_t * iface, csp_if_udp_conf_t * ifconf) {$/;"	f	typeref:typename:void
+csp_if_udp_rx_get_socket	src/interfaces/csp_if_udp.c	/^int csp_if_udp_rx_get_socket(int lport) {$/;"	f	typeref:typename:int
+csp_if_udp_rx_loop	src/interfaces/csp_if_udp.c	/^void * csp_if_udp_rx_loop(void * param) {$/;"	f	typeref:typename:void *
+csp_if_udp_rx_work	src/interfaces/csp_if_udp.c	/^int csp_if_udp_rx_work(int sockfd, size_t mtu, csp_iface_t * iface) {$/;"	f	typeref:typename:int
+csp_if_udp_tx	src/interfaces/csp_if_udp.c	/^static int csp_if_udp_tx(csp_iface_t * iface, uint16_t via, csp_packet_t * packet, int from_me) /;"	f	typeref:typename:int	file:
+csp_iface_s	include/csp/csp_interface.h	/^struct csp_iface_s {$/;"	s
+csp_iface_t	include/csp/csp_types.h	/^typedef struct csp_iface_s csp_iface_t;$/;"	t	typeref:struct:csp_iface_s
+csp_iflist_add	src/csp_iflist.c	/^int csp_iflist_add(csp_iface_t * ifc) {$/;"	f	typeref:typename:int
+csp_iflist_get	src/csp_iflist.c	/^csp_iface_t * csp_iflist_get(void) {$/;"	f	typeref:typename:csp_iface_t *
+csp_iflist_get_by_addr	src/csp_iflist.c	/^csp_iface_t * csp_iflist_get_by_addr(uint16_t addr) {$/;"	f	typeref:typename:csp_iface_t *
+csp_iflist_get_by_index	src/csp_iflist.c	/^csp_iface_t * csp_iflist_get_by_index(int idx) {$/;"	f	typeref:typename:csp_iface_t *
+csp_iflist_get_by_name	src/csp_iflist.c	/^csp_iface_t * csp_iflist_get_by_name(const char * name) {$/;"	f	typeref:typename:csp_iface_t *
+csp_iflist_get_by_subnet	src/csp_iflist.c	/^csp_iface_t * csp_iflist_get_by_subnet(uint16_t addr, csp_iface_t * ifc) {$/;"	f	typeref:typename:csp_iface_t *
+csp_iflist_get_default	src/csp_iflist.c	/^csp_iface_t * csp_iflist_get_default(void) {$/;"	f	typeref:typename:csp_iface_t *
+csp_iflist_is_within_subnet	src/csp_iflist.c	/^int csp_iflist_is_within_subnet(uint16_t addr, csp_iface_t * ifc) {$/;"	f	typeref:typename:int
+csp_iflist_print	include/csp/csp_iflist.h	/^inline void csp_iflist_print(void) {}$/;"	f	typeref:typename:void
+csp_iflist_print	src/csp_iflist.c	/^void csp_iflist_print(void) {$/;"	f	typeref:typename:void
+csp_iflist_set_default	src/csp_iflist.c	/^void csp_iflist_set_default(csp_iface_t * interface) {$/;"	f	typeref:typename:void
+csp_inc	meson.build	/^csp_inc = include_directories(['.', 'include'])$/;"	V
+csp_init	src/csp_init.c	/^void csp_init(void) {$/;"	f	typeref:typename:void
+csp_input_hook	src/csp_bridge.c	/^__attribute__((weak)) void csp_input_hook(csp_iface_t * iface, csp_packet_t * packet) {$/;"	f	typeref:typename:void
+csp_input_hook	src/csp_route.c	/^__attribute__((weak)) void csp_input_hook(csp_iface_t * iface, csp_packet_t * packet) {$/;"	f	typeref:typename:void
+csp_kiss_add_interface	src/interfaces/csp_if_kiss.c	/^int csp_kiss_add_interface(csp_iface_t * iface) {$/;"	f	typeref:typename:int
+csp_kiss_driver_tx_t	include/csp/interfaces/csp_if_kiss.h	/^typedef int (*csp_kiss_driver_tx_t)(void *driver_data, const uint8_t * data, size_t len);$/;"	t	typeref:typename:int (*)(void * driver_data,const uint8_t * data,size_t len)
+csp_kiss_interface_data_t	include/csp/interfaces/csp_if_kiss.h	/^} csp_kiss_interface_data_t;$/;"	t	typeref:struct:__anonc711d7630208
+csp_kiss_mode_t	include/csp/interfaces/csp_if_kiss.h	/^} csp_kiss_mode_t;$/;"	t	typeref:enum:__anonc711d7630103
+csp_kiss_rx	src/interfaces/csp_if_kiss.c	/^void csp_kiss_rx(csp_iface_t * iface, const uint8_t * buf, size_t len, void * pxTaskWoken) {$/;"	f	typeref:typename:void
+csp_kiss_tx	src/interfaces/csp_if_kiss.c	/^int csp_kiss_tx(csp_iface_t * iface, uint16_t via, csp_packet_t * packet, int from_me) {$/;"	f	typeref:typename:int
+csp_lib	meson.build	/^csp_lib = library('csp',$/;"	V
+csp_listen	src/csp_port.c	/^int csp_listen(csp_socket_t * socket, size_t backlog) {$/;"	f	typeref:typename:int
+csp_lo_tx	src/interfaces/csp_if_lo.c	/^static int csp_lo_tx(csp_iface_t * iface, uint16_t via, csp_packet_t * packet, int from_me) {$/;"	f	typeref:typename:int	file:
+csp_memcpy_fnc_t	include/csp/csp_types.h	/^typedef csp_memptr_t (*csp_memcpy_fnc_t)(csp_memptr_t, csp_const_memptr_t, size_t);$/;"	t	typeref:typename:csp_memptr_t (*)(csp_memptr_t,csp_const_memptr_t,size_t)
+csp_memfree	src/csp_services.c	/^void csp_memfree(uint16_t node, uint32_t timeout) {$/;"	f	typeref:typename:void
+csp_memfree_hook	src/arch/freertos/csp_system.c	/^__attribute__((weak)) uint32_t csp_memfree_hook(void) {$/;"	f	typeref:typename:uint32_t
+csp_memfree_hook	src/arch/posix/csp_system.c	/^uint32_t csp_memfree_hook(void) {$/;"	f	typeref:typename:uint32_t
+csp_memfree_hook	src/arch/zephyr/csp_hooks.c	/^__attribute__((weak)) uint32_t csp_memfree_hook(void) {$/;"	f	typeref:typename:uint32_t
+csp_memptr_t	include/csp/csp_types.h	/^typedef uint32_t csp_memptr_t;$/;"	t	typeref:typename:uint32_t
+csp_memptr_t	include/csp/csp_types.h	/^typedef void * csp_memptr_t;$/;"	t	typeref:typename:void *
+csp_output_hook	src/csp_io.c	/^__attribute__((weak)) void csp_output_hook(csp_id_t * idout, csp_packet_t * packet, csp_iface_t /;"	f	typeref:typename:void
+csp_packet_s	include/csp/csp_types.h	/^typedef struct csp_packet_s {$/;"	s
+csp_packet_t	include/csp/csp_types.h	/^} csp_packet_t;$/;"	t	typeref:struct:csp_packet_s
+csp_ping	src/csp_services.c	/^int csp_ping(uint16_t node, uint32_t timeout, unsigned int size, uint8_t conn_options) {$/;"	f	typeref:typename:int
+csp_ping_noreply	src/csp_services.c	/^void csp_ping_noreply(uint16_t node) {$/;"	f	typeref:typename:void
+csp_port_get_callback	src/csp_port.c	/^csp_callback_t csp_port_get_callback(unsigned int port) {$/;"	f	typeref:typename:csp_callback_t
+csp_port_get_socket	src/csp_port.c	/^csp_socket_t * csp_port_get_socket(unsigned int port) {$/;"	f	typeref:typename:csp_socket_t *
+csp_port_state_t	src/csp_port.c	/^} csp_port_state_t;$/;"	t	typeref:enum:__anon4bb5ea970103	file:
+csp_port_t	src/csp_port.c	/^} csp_port_t;$/;"	t	typeref:struct:__anon4bb5ea970208	file:
+csp_print	include/csp/csp_debug.h	/^#define csp_print(/;"	d
+csp_print_func	src/csp_debug.c	/^__attribute__((weak)) void csp_print_func(const char * fmt, ...) {$/;"	f	typeref:typename:void
+csp_print_func	src/csp_debug.c	/^__attribute__((weak)) void csp_print_func(const char * fmt, ...) {}$/;"	f	typeref:typename:void
+csp_print_packet	include/csp/csp_debug.h	/^#define csp_print_packet(/;"	d
+csp_prio_t	include/csp/csp_types.h	/^} csp_prio_t;$/;"	t	typeref:enum:__anon930cb7bd0303
+csp_promisc_add	src/csp_promisc.c	/^void csp_promisc_add(csp_packet_t * packet) {$/;"	f	typeref:typename:void
+csp_promisc_disable	src/csp_promisc.c	/^void csp_promisc_disable(void) {$/;"	f	typeref:typename:void
+csp_promisc_enable	src/csp_promisc.c	/^int csp_promisc_enable(unsigned int queue_size) {$/;"	f	typeref:typename:int
+csp_promisc_enabled	src/csp_promisc.c	/^static int csp_promisc_enabled = 0;$/;"	v	typeref:typename:int	file:
+csp_promisc_queue	src/csp_promisc.c	/^static csp_queue_handle_t csp_promisc_queue = NULL;$/;"	v	typeref:typename:csp_queue_handle_t	file:
+csp_promisc_queue_buffer	src/csp_promisc.c	/^char csp_promisc_queue_buffer[sizeof(csp_packet_t *) * CSP_CONN_RXQUEUE_LEN] __attribute__((sect/;"	v	typeref:typename:char[]
+csp_promisc_queue_static	src/csp_promisc.c	/^static csp_static_queue_t csp_promisc_queue_static __attribute__((section(".noinit")));$/;"	v	typeref:typename:csp_static_queue_t	file:
+csp_promisc_read	src/csp_promisc.c	/^csp_packet_t * csp_promisc_read(uint32_t timeout) {$/;"	f	typeref:typename:csp_packet_t *
+csp_ps	src/csp_services.c	/^void csp_ps(uint16_t node, uint32_t timeout) {$/;"	f	typeref:typename:void
+csp_ps_hook	src/arch/freertos/csp_system.c	/^__attribute__((weak)) unsigned int csp_ps_hook(csp_packet_t * packet) {$/;"	f	typeref:typename:unsigned int
+csp_ps_hook	src/arch/posix/csp_system.c	/^unsigned int csp_ps_hook(csp_packet_t * packet) {$/;"	f	typeref:typename:unsigned int
+csp_ps_hook	src/arch/zephyr/csp_hooks.c	/^__attribute__((weak)) unsigned int csp_ps_hook(csp_packet_t * packet) {$/;"	f	typeref:typename:unsigned int
+csp_pthread_create	examples/csp_server_client_posix.c	/^static int csp_pthread_create(void * (*routine)(void *)) {$/;"	f	typeref:typename:int	file:
+csp_qfifo_init	src/csp_qfifo.c	/^void csp_qfifo_init(void) {$/;"	f	typeref:typename:void
+csp_qfifo_read	src/csp_qfifo.c	/^int csp_qfifo_read(csp_qfifo_t * input) {$/;"	f	typeref:typename:int
+csp_qfifo_t	src/csp_qfifo.h	/^} csp_qfifo_t;$/;"	t	typeref:struct:__anonf9c590cc0108
+csp_qfifo_wake_up	src/csp_qfifo.c	/^void csp_qfifo_wake_up(void) {$/;"	f	typeref:typename:void
+csp_qfifo_write	src/csp_qfifo.c	/^void csp_qfifo_write(csp_packet_t * packet, csp_iface_t * iface, void * pxTaskWoken) {$/;"	f	typeref:typename:void
+csp_queue_create	contrib/windows/csp_queue.c	/^csp_queue_handle_t csp_queue_create(int length, size_t item_size) {$/;"	f	typeref:typename:csp_queue_handle_t
+csp_queue_create_static	contrib/windows/csp_queue.c	/^csp_queue_handle_t csp_queue_create_static(int length, size_t item_size, char * buffer, csp_stat/;"	f	typeref:typename:csp_queue_handle_t
+csp_queue_create_static	src/arch/freertos/csp_queue.c	/^csp_queue_handle_t csp_queue_create_static(int length, size_t item_size, char * buffer, csp_stat/;"	f	typeref:typename:csp_queue_handle_t
+csp_queue_create_static	src/arch/posix/csp_queue.c	/^csp_queue_handle_t csp_queue_create_static(int length, size_t item_size, char * buffer, csp_stat/;"	f	typeref:typename:csp_queue_handle_t
+csp_queue_create_static	src/arch/zephyr/csp_queue.c	/^csp_queue_handle_t csp_queue_create_static(int length, size_t item_size,$/;"	f	typeref:typename:csp_queue_handle_t
+csp_queue_dequeue	contrib/windows/csp_queue.c	/^int csp_queue_dequeue(csp_queue_handle_t handle, void * buf, uint32_t timeout) {$/;"	f	typeref:typename:int
+csp_queue_dequeue	src/arch/freertos/csp_queue.c	/^int csp_queue_dequeue(csp_queue_handle_t handle, void * buf, uint32_t timeout) {$/;"	f	typeref:typename:int
+csp_queue_dequeue	src/arch/posix/csp_queue.c	/^int csp_queue_dequeue(csp_queue_handle_t handle, void * buf, uint32_t timeout) {$/;"	f	typeref:typename:int
+csp_queue_dequeue	src/arch/zephyr/csp_queue.c	/^int csp_queue_dequeue(csp_queue_handle_t queue, void * buf, uint32_t timeout) {$/;"	f	typeref:typename:int
+csp_queue_dequeue_isr	contrib/windows/csp_queue.c	/^int csp_queue_dequeue_isr(csp_queue_handle_t handle, void * buf, int * task_woken) {$/;"	f	typeref:typename:int
+csp_queue_dequeue_isr	src/arch/freertos/csp_queue.c	/^int csp_queue_dequeue_isr(csp_queue_handle_t handle, void * buf, int * task_woken) {$/;"	f	typeref:typename:int
+csp_queue_dequeue_isr	src/arch/posix/csp_queue.c	/^int csp_queue_dequeue_isr(csp_queue_handle_t handle, void * buf, int * task_woken) {$/;"	f	typeref:typename:int
+csp_queue_dequeue_isr	src/arch/zephyr/csp_queue.c	/^int csp_queue_dequeue_isr(csp_queue_handle_t queue, void * buf, int * unused) {$/;"	f	typeref:typename:int
+csp_queue_enqueue	contrib/windows/csp_queue.c	/^int csp_queue_enqueue(csp_queue_handle_t handle, const void * value, uint32_t timeout) {$/;"	f	typeref:typename:int
+csp_queue_enqueue	src/arch/freertos/csp_queue.c	/^int csp_queue_enqueue(csp_queue_handle_t handle, const void * value, uint32_t timeout) {$/;"	f	typeref:typename:int
+csp_queue_enqueue	src/arch/posix/csp_queue.c	/^int csp_queue_enqueue(csp_queue_handle_t handle, const void * value, uint32_t timeout) {$/;"	f	typeref:typename:int
+csp_queue_enqueue	src/arch/zephyr/csp_queue.c	/^int csp_queue_enqueue(csp_queue_handle_t queue, const void * value, uint32_t timeout) {$/;"	f	typeref:typename:int
+csp_queue_enqueue_isr	contrib/windows/csp_queue.c	/^int csp_queue_enqueue_isr(csp_queue_handle_t handle, const void * value, int * task_woken) {$/;"	f	typeref:typename:int
+csp_queue_enqueue_isr	src/arch/freertos/csp_queue.c	/^int csp_queue_enqueue_isr(csp_queue_handle_t handle, const void * value, int * task_woken) {$/;"	f	typeref:typename:int
+csp_queue_enqueue_isr	src/arch/posix/csp_queue.c	/^int csp_queue_enqueue_isr(csp_queue_handle_t handle, const void * value, int * task_woken) {$/;"	f	typeref:typename:int
+csp_queue_enqueue_isr	src/arch/zephyr/csp_queue.c	/^int csp_queue_enqueue_isr(csp_queue_handle_t queue, const void * value, int * unused) {$/;"	f	typeref:typename:int
+csp_queue_free	src/arch/freertos/csp_queue.c	/^int csp_queue_free(csp_queue_handle_t handle) {$/;"	f	typeref:typename:int
+csp_queue_free	src/arch/posix/csp_queue.c	/^int csp_queue_free(csp_queue_handle_t handle) {$/;"	f	typeref:typename:int
+csp_queue_free	src/arch/zephyr/csp_queue.c	/^int csp_queue_free(csp_queue_handle_t queue) {$/;"	f	typeref:typename:int
+csp_queue_handle_t	include/csp/arch/csp_queue.h	/^typedef void * csp_queue_handle_t;$/;"	t	typeref:typename:void *
+csp_queue_remove	contrib/windows/csp_queue.c	/^void csp_queue_remove(csp_queue_handle_t queue) {$/;"	f	typeref:typename:void
+csp_queue_size	contrib/windows/csp_queue.c	/^int csp_queue_size(csp_queue_handle_t handle) {$/;"	f	typeref:typename:int
+csp_queue_size	src/arch/freertos/csp_queue.c	/^int csp_queue_size(csp_queue_handle_t handle) {$/;"	f	typeref:typename:int
+csp_queue_size	src/arch/posix/csp_queue.c	/^int csp_queue_size(csp_queue_handle_t handle) {$/;"	f	typeref:typename:int
+csp_queue_size	src/arch/zephyr/csp_queue.c	/^int csp_queue_size(csp_queue_handle_t queue) {$/;"	f	typeref:typename:int
+csp_queue_size_isr	contrib/windows/csp_queue.c	/^int csp_queue_size_isr(csp_queue_handle_t handle) {$/;"	f	typeref:typename:int
+csp_queue_size_isr	src/arch/freertos/csp_queue.c	/^int csp_queue_size_isr(csp_queue_handle_t handle) {$/;"	f	typeref:typename:int
+csp_queue_size_isr	src/arch/posix/csp_queue.c	/^int csp_queue_size_isr(csp_queue_handle_t handle) {$/;"	f	typeref:typename:int
+csp_queue_size_isr	src/arch/zephyr/csp_queue.c	/^int csp_queue_size_isr(csp_queue_handle_t queue) {$/;"	f	typeref:typename:int
+csp_rdp_ack_delay_count	src/csp_rdp.c	/^static uint32_t csp_rdp_ack_delay_count = 4 \/ 2;$/;"	v	typeref:typename:uint32_t	file:
+csp_rdp_ack_timeout	src/csp_rdp.c	/^static uint32_t csp_rdp_ack_timeout = 1000 \/ 4;$/;"	v	typeref:typename:uint32_t	file:
+csp_rdp_check_ack	src/csp_rdp.c	/^int csp_rdp_check_ack(csp_conn_t * conn) {$/;"	f	typeref:typename:int
+csp_rdp_check_timeouts	src/csp_rdp.c	/^void csp_rdp_check_timeouts(csp_conn_t * conn) {$/;"	f	typeref:typename:void
+csp_rdp_close	src/csp_rdp.c	/^int csp_rdp_close(csp_conn_t * conn, uint8_t closed_by) {$/;"	f	typeref:typename:int
+csp_rdp_close_internal	src/csp_rdp.c	/^static int csp_rdp_close_internal(csp_conn_t * conn, uint8_t closed_by, bool send_rst) {$/;"	f	typeref:typename:int	file:
+csp_rdp_conn_timeout	src/csp_rdp.c	/^static uint32_t csp_rdp_conn_timeout = 10000;$/;"	v	typeref:typename:uint32_t	file:
+csp_rdp_connect	src/csp_rdp.c	/^int csp_rdp_connect(csp_conn_t * conn) {$/;"	f	typeref:typename:int
+csp_rdp_delayed_acks	src/csp_rdp.c	/^static uint32_t csp_rdp_delayed_acks = 1;$/;"	v	typeref:typename:uint32_t	file:
+csp_rdp_error	include/csp/csp_debug.h	/^#define csp_rdp_error(/;"	d
+csp_rdp_flush_eack	src/csp_rdp.c	/^static void csp_rdp_flush_eack(csp_conn_t * conn, csp_packet_t * eack_packet) {$/;"	f	typeref:typename:void	file:
+csp_rdp_get_opt	src/csp_rdp.c	/^void csp_rdp_get_opt(unsigned int * window_size, unsigned int * conn_timeout_ms,$/;"	f	typeref:typename:void
+csp_rdp_header_add	src/csp_rdp.c	/^static rdp_header_t * csp_rdp_header_add(csp_packet_t * packet) {$/;"	f	typeref:typename:rdp_header_t *	file:
+csp_rdp_header_ref	src/csp_rdp.c	/^static rdp_header_t * csp_rdp_header_ref(csp_packet_t * packet) {$/;"	f	typeref:typename:rdp_header_t *	file:
+csp_rdp_header_remove	src/csp_rdp.c	/^static rdp_header_t * csp_rdp_header_remove(csp_packet_t * packet) {$/;"	f	typeref:typename:rdp_header_t *	file:
+csp_rdp_init	src/csp_rdp.c	/^void csp_rdp_init(csp_conn_t * conn) {$/;"	f	typeref:typename:void
+csp_rdp_is_conn_ready_for_tx	src/csp_rdp.c	/^static inline bool csp_rdp_is_conn_ready_for_tx(csp_conn_t * conn) {$/;"	f	typeref:typename:bool	file:
+csp_rdp_new_packet	src/csp_rdp.c	/^bool csp_rdp_new_packet(csp_conn_t * conn, csp_packet_t * packet) {$/;"	f	typeref:typename:bool
+csp_rdp_packet_timeout	src/csp_rdp.c	/^static uint32_t csp_rdp_packet_timeout = 1000;$/;"	v	typeref:typename:uint32_t	file:
+csp_rdp_protocol	include/csp/csp_debug.h	/^#define csp_rdp_protocol(/;"	d
+csp_rdp_queue_flush	src/csp_rdp_queue.c	/^void csp_rdp_queue_flush(csp_conn_t * conn) {$/;"	f	typeref:typename:void
+csp_rdp_queue_init	src/csp_rdp_queue.c	/^void csp_rdp_queue_init(void) {$/;"	f	typeref:typename:void
+csp_rdp_queue_rx_add	src/csp_rdp_queue.c	/^void csp_rdp_queue_rx_add(csp_conn_t * conn, csp_packet_t * packet) {$/;"	f	typeref:typename:void
+csp_rdp_queue_rx_get	src/csp_rdp_queue.c	/^csp_packet_t * csp_rdp_queue_rx_get(csp_conn_t * conn) {$/;"	f	typeref:typename:csp_packet_t *
+csp_rdp_queue_rx_size	src/csp_rdp_queue.c	/^int csp_rdp_queue_rx_size(void) {$/;"	f	typeref:typename:int
+csp_rdp_queue_tx_add	src/csp_rdp_queue.c	/^void csp_rdp_queue_tx_add(csp_conn_t * conn, csp_packet_t * packet) {$/;"	f	typeref:typename:void
+csp_rdp_queue_tx_get	src/csp_rdp_queue.c	/^csp_packet_t * csp_rdp_queue_tx_get(csp_conn_t * conn) {$/;"	f	typeref:typename:csp_packet_t *
+csp_rdp_queue_tx_size	src/csp_rdp_queue.c	/^int csp_rdp_queue_tx_size(void) {$/;"	f	typeref:typename:int
+csp_rdp_receive_data	src/csp_rdp.c	/^static inline int csp_rdp_receive_data(csp_conn_t * conn, csp_packet_t * packet) {$/;"	f	typeref:typename:int	file:
+csp_rdp_rx_queue_add	src/csp_rdp.c	/^static inline int csp_rdp_rx_queue_add(csp_conn_t * conn, csp_packet_t * packet, uint16_t seq_nr/;"	f	typeref:typename:int	file:
+csp_rdp_rx_queue_flush	src/csp_rdp.c	/^static inline void csp_rdp_rx_queue_flush(csp_conn_t * conn) {$/;"	f	typeref:typename:void	file:
+csp_rdp_send	src/csp_rdp.c	/^int csp_rdp_send(csp_conn_t * conn, csp_packet_t * packet) {$/;"	f	typeref:typename:int
+csp_rdp_send_cmp	src/csp_rdp.c	/^static int csp_rdp_send_cmp(csp_conn_t * conn, csp_packet_t * packet, int flags, int seq_nr, int/;"	f	typeref:typename:int	file:
+csp_rdp_send_eack	src/csp_rdp.c	/^static int csp_rdp_send_eack(csp_conn_t * conn) {$/;"	f	typeref:typename:int	file:
+csp_rdp_send_syn	src/csp_rdp.c	/^static int csp_rdp_send_syn(csp_conn_t * conn) {$/;"	f	typeref:typename:int	file:
+csp_rdp_seq_after	src/csp_rdp.c	/^static inline int csp_rdp_seq_after(uint16_t seq, uint16_t cmp) {$/;"	f	typeref:typename:int	file:
+csp_rdp_seq_before	src/csp_rdp.c	/^static inline int csp_rdp_seq_before(uint16_t seq, uint16_t cmp) {$/;"	f	typeref:typename:int	file:
+csp_rdp_seq_between	src/csp_rdp.c	/^static inline int csp_rdp_seq_between(uint16_t seq, uint16_t start, uint16_t end) {$/;"	f	typeref:typename:int	file:
+csp_rdp_seq_in_rx_queue	src/csp_rdp.c	/^static inline bool csp_rdp_seq_in_rx_queue(csp_conn_t * conn, uint16_t seq_nr) {$/;"	f	typeref:typename:bool	file:
+csp_rdp_set_opt	src/csp_rdp.c	/^void csp_rdp_set_opt(unsigned int window_size, unsigned int conn_timeout_ms,$/;"	f	typeref:typename:void
+csp_rdp_should_ack	src/csp_rdp.c	/^static inline bool csp_rdp_should_ack(csp_conn_t * conn) {$/;"	f	typeref:typename:bool	file:
+csp_rdp_state_t	src/csp_conn.h	/^} csp_rdp_state_t;$/;"	t	typeref:enum:__anon2d608f650303
+csp_rdp_t	src/csp_conn.h	/^} csp_rdp_t;$/;"	t	typeref:struct:__anon2d608f650408
+csp_rdp_time_after	src/csp_rdp.c	/^static inline int csp_rdp_time_after(uint32_t time, uint32_t cmp) {$/;"	f	typeref:typename:int	file:
+csp_rdp_time_before	src/csp_rdp.c	/^static inline int csp_rdp_time_before(uint32_t time, uint32_t cmp) {$/;"	f	typeref:typename:int	file:
+csp_rdp_window_size	src/csp_rdp.c	/^static uint32_t csp_rdp_window_size = 4;$/;"	v	typeref:typename:uint32_t	file:
+csp_read	src/csp_io.c	/^csp_packet_t * csp_read(csp_conn_t * conn, uint32_t timeout) {$/;"	f	typeref:typename:csp_packet_t *
+csp_reboot	src/csp_services.c	/^void csp_reboot(uint16_t node) {$/;"	f	typeref:typename:void
+csp_reboot_hook	contrib/hooks/csp_hook_asf4.c	/^void csp_reboot_hook(void) {$/;"	f	typeref:typename:void
+csp_reboot_hook	src/arch/posix/csp_system.c	/^void csp_reboot_hook(void) {$/;"	f	typeref:typename:void
+csp_reboot_hook	src/arch/zephyr/csp_hooks.c	/^__attribute__((weak)) void csp_reboot_hook(void) {$/;"	f	typeref:typename:void
+csp_recvfrom	src/csp_io.c	/^csp_packet_t * csp_recvfrom(csp_socket_t * socket, uint32_t timeout) {$/;"	f	typeref:typename:csp_packet_t *
+csp_route_check_options	src/csp_route.c	/^static int csp_route_check_options(csp_iface_t * iface, csp_packet_t * packet) {$/;"	f	typeref:typename:int	file:
+csp_route_s	include/csp/csp_rtable.h	/^typedef struct csp_route_s {$/;"	s
+csp_route_security_check	src/csp_route.c	/^static int csp_route_security_check(uint32_t security_opts, csp_iface_t * iface, csp_packet_t * /;"	f	typeref:typename:int	file:
+csp_route_start_task	src/bindings/python/pycsp.c	/^static int csp_route_start_task(void) {$/;"	f	typeref:typename:int	file:
+csp_route_t	include/csp/csp_rtable.h	/^} csp_route_t;$/;"	t	typeref:struct:csp_route_s
+csp_route_work	src/csp_route.c	/^int csp_route_work(void) {$/;"	f	typeref:typename:int
+csp_rtable_check	include/csp/csp_rtable.h	/^inline int csp_rtable_check(const char * rtable) { return CSP_ERR_NOSYS; }$/;"	f	typeref:typename:int
+csp_rtable_check	src/csp_rtable_stdio.c	/^int csp_rtable_check(const char * rtable) {$/;"	f	typeref:typename:int
+csp_rtable_clear	src/csp_rtable_cidr.c	/^void csp_rtable_clear(void) {$/;"	f	typeref:typename:void
+csp_rtable_find_exact	src/csp_rtable_cidr.c	/^static csp_route_t * csp_rtable_find_exact(uint16_t addr, uint16_t netmask) {$/;"	f	typeref:typename:csp_route_t *	file:
+csp_rtable_find_route	src/csp_rtable_cidr.c	/^csp_route_t * csp_rtable_find_route(uint16_t addr) {$/;"	f	typeref:typename:csp_route_t *
+csp_rtable_free	src/csp_rtable_cidr.c	/^void csp_rtable_free(void) {$/;"	f	typeref:typename:void
+csp_rtable_iterate	src/csp_rtable_cidr.c	/^void csp_rtable_iterate(csp_rtable_iterator_t iter, void * ctx) {$/;"	f	typeref:typename:void
+csp_rtable_iterator_t	include/csp/csp_rtable.h	/^typedef bool (*csp_rtable_iterator_t)(void * ctx, csp_route_t * route);$/;"	t	typeref:typename:bool (*)(void * ctx,csp_route_t * route)
+csp_rtable_load	include/csp/csp_rtable.h	/^inline int csp_rtable_load(const char * rtable) { return CSP_ERR_NOSYS; }$/;"	f	typeref:typename:int
+csp_rtable_load	src/csp_rtable_stdio.c	/^int csp_rtable_load(const char * rtable) {$/;"	f	typeref:typename:int
+csp_rtable_parse	src/csp_rtable_stdio.c	/^static int csp_rtable_parse(const char * rtable, int dry_run) {$/;"	f	typeref:typename:int	file:
+csp_rtable_print	include/csp/csp_rtable.h	/^inline void csp_rtable_print(void) {}$/;"	f	typeref:typename:void
+csp_rtable_print	src/csp_rtable_cidr.c	/^void csp_rtable_print(void) {$/;"	f	typeref:typename:void
+csp_rtable_print_route	src/csp_rtable_cidr.c	/^static bool csp_rtable_print_route(void * ctx, csp_route_t * route) {$/;"	f	typeref:typename:bool	file:
+csp_rtable_save	include/csp/csp_rtable.h	/^inline int csp_rtable_save(char * buffer, size_t buffer_size) { return CSP_ERR_NOSYS; }$/;"	f	typeref:typename:int
+csp_rtable_save	src/csp_rtable_stdio.c	/^int csp_rtable_save(char * buffer, size_t maxlen) {$/;"	f	typeref:typename:int
+csp_rtable_save_ctx_t	src/csp_rtable_stdio.c	/^} csp_rtable_save_ctx_t;$/;"	t	typeref:struct:__anon4257022e0108	file:
+csp_rtable_save_route	src/csp_rtable_stdio.c	/^static bool csp_rtable_save_route(void * vctx, csp_route_t * route) {$/;"	f	typeref:typename:bool	file:
+csp_rtable_set	src/csp_rtable_cidr.c	/^int csp_rtable_set(uint16_t address, int netmask, csp_iface_t * ifc, uint16_t via) {$/;"	f	typeref:typename:int
+csp_rtable_set_internal	src/csp_rtable_cidr.c	/^int csp_rtable_set_internal(uint16_t address, uint16_t netmask, csp_iface_t * ifc, uint16_t via)/;"	f	typeref:typename:int
+csp_send	src/csp_io.c	/^void csp_send(csp_conn_t * conn, csp_packet_t * packet) {$/;"	f	typeref:typename:void
+csp_send_direct	src/csp_io.c	/^void csp_send_direct(csp_id_t* idout, csp_packet_t * packet, csp_iface_t * routed_from) {$/;"	f	typeref:typename:void
+csp_send_direct_iface	src/csp_io.c	/^void csp_send_direct_iface(csp_id_t* idout, csp_packet_t * packet, csp_iface_t * iface, uint16_t/;"	f	typeref:typename:void
+csp_send_prio	src/csp_io.c	/^void csp_send_prio(uint8_t prio, csp_conn_t * conn, csp_packet_t * packet) {$/;"	f	typeref:typename:void
+csp_sendto	src/csp_io.c	/^void csp_sendto(uint8_t prio, uint16_t dest, uint8_t dport, uint8_t src_port, uint32_t opts, csp/;"	f	typeref:typename:void
+csp_sendto_reply	src/csp_io.c	/^void csp_sendto_reply(const csp_packet_t * request_packet, csp_packet_t * reply_packet, uint32_t/;"	f	typeref:typename:void
+csp_server	examples/python_bindings_example_server.py	/^def csp_server():$/;"	f
+csp_server_client	contrib/zephyr/samples/server-client/CMakeLists.txt	/^project(csp_server_client)$/;"	p
+csp_server_client	examples/CMakeLists.txt	/^  add_executable(csp_server_client EXCLUDE_FROM_ALL csp_server_client.c csp_server_client_posix./;"	t
+csp_server_client	examples/meson.build	/^executable('csp_server_client',$/;"	B
+csp_service_handler	src/csp_service_handler.c	/^void csp_service_handler(csp_packet_t * packet) {$/;"	f	typeref:typename:void
+csp_service_port_t	include/csp/csp_types.h	/^} csp_service_port_t;$/;"	t	typeref:enum:__anon930cb7bd0203
+csp_sfp_header_add	src/csp_sfp.c	/^static inline sfp_header_t * csp_sfp_header_add(csp_packet_t * packet) {$/;"	f	typeref:typename:sfp_header_t *	file:
+csp_sfp_header_remove	src/csp_sfp.c	/^static inline sfp_header_t * csp_sfp_header_remove(csp_packet_t * packet) {$/;"	f	typeref:typename:sfp_header_t *	file:
+csp_sfp_recv	include/csp/csp_sfp.h	/^static inline int csp_sfp_recv(csp_conn_t * conn, void ** dataout, int * datasize, uint32_t time/;"	f	typeref:typename:int
+csp_sfp_recv_fp	src/csp_sfp.c	/^int csp_sfp_recv_fp(csp_conn_t * conn, void ** return_data, int * return_datasize, uint32_t time/;"	f	typeref:typename:int
+csp_sfp_send	include/csp/csp_sfp.h	/^static inline int csp_sfp_send(csp_conn_t * conn, const void * data, unsigned int datasize, unsi/;"	f	typeref:typename:int
+csp_sfp_send_own_memcpy	src/csp_sfp.c	/^int csp_sfp_send_own_memcpy(csp_conn_t * conn, const void * data, unsigned int totalsize, unsign/;"	f	typeref:typename:int
+csp_sha1_compress	src/crypto/csp_sha1.c	/^static void csp_sha1_compress(csp_sha1_state_t * sha1, const uint8_t * buf) {$/;"	f	typeref:typename:void	file:
+csp_sha1_done	src/crypto/csp_sha1.c	/^void csp_sha1_done(csp_sha1_state_t * sha1, uint8_t * out) {$/;"	f	typeref:typename:void
+csp_sha1_init	src/crypto/csp_sha1.c	/^void csp_sha1_init(csp_sha1_state_t * sha1) {$/;"	f	typeref:typename:void
+csp_sha1_memory	src/crypto/csp_sha1.c	/^void csp_sha1_memory(const void * msg, uint32_t len, uint8_t * hash) {$/;"	f	typeref:typename:void
+csp_sha1_process	src/crypto/csp_sha1.c	/^void csp_sha1_process(csp_sha1_state_t * sha1, const void * data, uint32_t inlen) {$/;"	f	typeref:typename:void
+csp_sha1_state_t	include/csp/crypto/csp_sha1.h	/^} csp_sha1_state_t;$/;"	t	typeref:struct:__anon7ca789050108
+csp_shutdown	src/csp_services.c	/^void csp_shutdown(uint16_t node) {$/;"	f	typeref:typename:void
+csp_shutdown_hook	contrib/hooks/csp_hook_asf4.c	/^void csp_shutdown_hook(void) {$/;"	f	typeref:typename:void
+csp_shutdown_hook	src/arch/posix/csp_system.c	/^void csp_shutdown_hook(void) {$/;"	f	typeref:typename:void
+csp_shutdown_hook	src/arch/zephyr/csp_hooks.c	/^__attribute__((weak)) void csp_shutdown_hook(void) {$/;"	f	typeref:typename:void
+csp_skbf_s	src/csp_buffer.c	/^typedef struct csp_skbf_s {$/;"	s	file:
+csp_skbf_t	src/csp_buffer.c	/^} csp_skbf_t;$/;"	t	typeref:struct:csp_skbf_s	file:
+csp_socket_s	include/csp/csp_types.h	/^struct csp_socket_s {$/;"	s
+csp_socket_t	include/csp/csp_types.h	/^typedef struct csp_socket_s csp_socket_t;$/;"	t	typeref:struct:csp_socket_s
+csp_sources	meson.build	/^csp_sources = []$/;"	V
+csp_static_queue_t	include/csp/arch/csp_queue.h	/^typedef StaticQueue_t csp_static_queue_t;$/;"	t	typeref:typename:StaticQueue_t
+csp_static_queue_t	include/csp/arch/csp_queue.h	/^typedef struct k_msgq csp_static_queue_t;$/;"	t	typeref:struct:k_msgq
+csp_static_queue_t	include/csp/arch/csp_queue.h	/^typedef void * csp_static_queue_t;$/;"	t	typeref:typename:void *
+csp_sys_memfree	contrib/macosx/csp_system.c	/^uint32_t csp_sys_memfree(void) {$/;"	f	typeref:typename:uint32_t
+csp_sys_memfree	contrib/windows/csp_system.c	/^uint32_t csp_sys_memfree(void) {$/;"	f	typeref:typename:uint32_t
+csp_sys_tasklist	contrib/macosx/csp_system.c	/^int csp_sys_tasklist(char * out) {$/;"	f	typeref:typename:int
+csp_sys_tasklist	contrib/windows/csp_system.c	/^int csp_sys_tasklist(char * out) {$/;"	f	typeref:typename:int
+csp_sys_tasklist_size	contrib/macosx/csp_system.c	/^int csp_sys_tasklist_size(void) {$/;"	f	typeref:typename:int
+csp_sys_tasklist_size	contrib/windows/csp_system.c	/^int csp_sys_tasklist_size(void) {$/;"	f	typeref:typename:int
+csp_task_router	src/bindings/python/pycsp.c	/^static void * csp_task_router(void * param) {$/;"	f	typeref:typename:void *	file:
+csp_timestamp_t	include/csp/csp_types.h	/^} csp_timestamp_t;$/;"	t	typeref:struct:__anon930cb7bd0108
+csp_transaction	include/csp/csp.h	/^static inline int csp_transaction(uint8_t prio, uint16_t dest, uint8_t port, uint32_t timeout, v/;"	f	typeref:typename:int
+csp_transaction_persistent	src/csp_io.c	/^int csp_transaction_persistent(csp_conn_t * conn, uint32_t timeout, void * outbuf, int outlen, v/;"	f	typeref:typename:int
+csp_transaction_w_opts	src/csp_io.c	/^int csp_transaction_w_opts(uint8_t prio, uint16_t dest, uint8_t port, uint32_t timeout, void * o/;"	f	typeref:typename:int
+csp_uptime	src/csp_services.c	/^void csp_uptime(uint16_t node, uint32_t timeout) {$/;"	f	typeref:typename:void
+csp_usart_callback_t	include/csp/drivers/usart.h	/^typedef void (*csp_usart_callback_t) (void * user_data, uint8_t *buf, size_t len, void *pxTaskWo/;"	t	typeref:typename:void (*)(void * user_data,uint8_t * buf,size_t len,void * pxTaskWoken)
+csp_usart_conf	include/csp/drivers/usart.h	/^typedef struct csp_usart_conf {$/;"	s
+csp_usart_conf_t	include/csp/drivers/usart.h	/^} csp_usart_conf_t;$/;"	t	typeref:struct:csp_usart_conf
+csp_usart_fd_t	include/csp/drivers/usart.h	/^    typedef HANDLE csp_usart_fd_t;$/;"	t	typeref:typename:HANDLE
+csp_usart_fd_t	include/csp/drivers/usart.h	/^    typedef int csp_usart_fd_t;$/;"	t	typeref:typename:int
+csp_usart_lock	src/drivers/usart/usart_linux.c	/^void csp_usart_lock(void * driver_data) {$/;"	f	typeref:typename:void
+csp_usart_lock	src/drivers/usart/usart_windows.c	/^void csp_usart_lock(void * driver_data) {$/;"	f	typeref:typename:void
+csp_usart_open	src/drivers/usart/usart_linux.c	/^int csp_usart_open(const csp_usart_conf_t * conf, csp_usart_callback_t rx_callback, void * user_/;"	f	typeref:typename:int
+csp_usart_open	src/drivers/usart/usart_windows.c	/^int csp_usart_open(const csp_usart_conf_t * conf, csp_usart_callback_t rx_callback, void * user_/;"	f	typeref:typename:int
+csp_usart_open_and_add_kiss_interface	src/drivers/usart/usart_kiss.c	/^int csp_usart_open_and_add_kiss_interface(const csp_usart_conf_t * conf, const char * ifname, cs/;"	f	typeref:typename:int
+csp_usart_unlock	src/drivers/usart/usart_linux.c	/^void csp_usart_unlock(void * driver_data) {$/;"	f	typeref:typename:void
+csp_usart_unlock	src/drivers/usart/usart_windows.c	/^void csp_usart_unlock(void * driver_data) {$/;"	f	typeref:typename:void
+csp_usart_write	src/drivers/usart/usart_linux.c	/^int csp_usart_write(csp_usart_fd_t fd, const void * data, size_t data_length) {$/;"	f	typeref:typename:int
+csp_usart_write	src/drivers/usart/usart_windows.c	/^int csp_usart_write(csp_usart_fd_t fd, const void * data, size_t data_length) {$/;"	f	typeref:typename:int
+csp_win_thread_create	examples/csp_server_client_windows.c	/^static int csp_win_thread_create(unsigned int (* routine)(void *)) {$/;"	f	typeref:typename:int	file:
+csp_yaml_end_if	src/csp_yaml.c	/^static void csp_yaml_end_if(struct data_s * data, unsigned int * dfl_addr) {$/;"	f	typeref:typename:void	file:
+csp_yaml_init	src/csp_yaml.c	/^void csp_yaml_init(char * filename, unsigned int * dfl_addr) {$/;"	f	typeref:typename:void
+csp_yaml_key_value	src/csp_yaml.c	/^static void csp_yaml_key_value(struct data_s * data, char * key, char * value) {$/;"	f	typeref:typename:void	file:
+csp_yaml_start_if	src/csp_yaml.c	/^static void csp_yaml_start_if(struct data_s * data) {$/;"	f	typeref:typename:void	file:
+csp_zmqhub_init	src/interfaces/csp_if_zmqhub.c	/^int csp_zmqhub_init(uint16_t addr,$/;"	f	typeref:typename:int
+csp_zmqhub_init_filter2	src/interfaces/csp_if_zmqhub.c	/^int csp_zmqhub_init_filter2(const char * ifname, const char * host, uint16_t addr, uint16_t netm/;"	f	typeref:typename:int
+csp_zmqhub_init_w_endpoints	src/interfaces/csp_if_zmqhub.c	/^int csp_zmqhub_init_w_endpoints(uint16_t addr,$/;"	f	typeref:typename:int
+csp_zmqhub_init_w_name_endpoints_rxfilter	src/interfaces/csp_if_zmqhub.c	/^int csp_zmqhub_init_w_name_endpoints_rxfilter(const char * ifname,$/;"	f	typeref:typename:int
+csp_zmqhub_make_endpoint	src/interfaces/csp_if_zmqhub.c	/^int csp_zmqhub_make_endpoint(const char * host, uint16_t port, char * buf, size_t buf_size) {$/;"	f	typeref:typename:int
+csp_zmqhub_task	src/interfaces/csp_if_zmqhub.c	/^void * csp_zmqhub_task(void * param) {$/;"	f	typeref:typename:void *
+csp_zmqhub_tx	src/interfaces/csp_if_zmqhub.c	/^int csp_zmqhub_tx(csp_iface_t * iface, uint16_t via, csp_packet_t * packet, int from_me) {$/;"	f	typeref:typename:int
+curlen	include/csp/crypto/csp_sha1.h	/^	uint32_t curlen;$/;"	m	struct:__anon7ca789050108	typeref:typename:uint32_t
+data	include/csp/csp_cmp.h	/^			char data[CSP_CMP_PEEK_MAX_LEN];$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680608	typeref:typename:char[]
+data	include/csp/csp_cmp.h	/^			char data[CSP_CMP_POKE_MAX_LEN];$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680708	typeref:typename:char[]
+data	include/csp/csp_types.h	/^		uint8_t data[CSP_BUFFER_SIZE];$/;"	m	union:csp_packet_s::__anon930cb7bd080a	typeref:typename:uint8_t[]
+data16	include/csp/csp_types.h	/^		uint16_t data16[CSP_BUFFER_SIZE \/ 2];$/;"	m	union:csp_packet_s::__anon930cb7bd080a	typeref:typename:uint16_t[]
+data32	include/csp/csp_types.h	/^		uint32_t data32[CSP_BUFFER_SIZE \/ 4];$/;"	m	union:csp_packet_s::__anon930cb7bd080a	typeref:typename:uint32_t[]
+data_s	src/csp_yaml.c	/^struct data_s {$/;"	s	file:
+databits	include/csp/drivers/usart.h	/^    uint8_t databits;$/;"	m	struct:csp_usart_conf	typeref:typename:uint8_t
+date	include/csp/csp_cmp.h	/^			char date[CSP_CMP_IDENT_DATE_LEN];$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680208	typeref:typename:char[]
+debug	examples/zmqproxy.c	/^int debug = 0;$/;"	v	typeref:typename:int
+dedup	include/csp/csp.h	/^	uint8_t dedup;              \/**< Enable CSP deduplication. 0 = off, 1 = always on, 2 = only on/;"	m	struct:csp_conf_s	typeref:typename:uint8_t
+delayed_acks	src/csp_conn.h	/^	uint32_t delayed_acks;$/;"	m	struct:__anon2d608f650408	typeref:typename:uint32_t
+dest_node	include/csp/csp_cmp.h	/^			uint16_t dest_node;$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680408	typeref:typename:uint16_t
+dest_node	include/csp/csp_cmp.h	/^			uint8_t dest_node;$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680308	typeref:typename:uint8_t
+dest_socket	src/csp_conn.h	/^	csp_socket_t * dest_socket; \/* incoming connections destination socket *\/$/;"	m	struct:csp_conn_s	typeref:typename:csp_socket_t *
+destination	src/csp_yaml.c	/^	char * destination;$/;"	m	struct:data_s	typeref:typename:char *	file:
+device	include/csp/drivers/usart.h	/^    const char *device;$/;"	m	struct:csp_usart_conf	typeref:typename:const char *
+device	src/csp_yaml.c	/^	char * device;$/;"	m	struct:data_s	typeref:typename:char *	file:
+dfl_if	src/csp_iflist.c	/^static csp_iface_t * dfl_if = NULL;$/;"	v	typeref:typename:csp_iface_t *	file:
+do_cmp_clock	src/csp_service_handler.c	/^static int do_cmp_clock(struct csp_cmp_message * cmp) {$/;"	f	typeref:typename:int	file:
+do_cmp_ident	src/csp_service_handler.c	/^static int do_cmp_ident(struct csp_cmp_message * cmp) {$/;"	f	typeref:typename:int	file:
+do_cmp_if_stats	src/csp_service_handler.c	/^static int do_cmp_if_stats(struct csp_cmp_message * cmp) {$/;"	f	typeref:typename:int	file:
+do_cmp_peek	src/csp_service_handler.c	/^static int do_cmp_peek(struct csp_cmp_message * cmp) {$/;"	f	typeref:typename:int	file:
+do_cmp_poke	src/csp_service_handler.c	/^static int do_cmp_poke(struct csp_cmp_message * cmp) {$/;"	f	typeref:typename:int	file:
+do_cmp_route_set_v1	src/csp_service_handler.c	/^static int do_cmp_route_set_v1(struct csp_cmp_message * cmp) {$/;"	f	typeref:typename:int	file:
+do_cmp_route_set_v2	src/csp_service_handler.c	/^static int do_cmp_route_set_v2(struct csp_cmp_message * cmp) {$/;"	f	typeref:typename:int	file:
+dport	include/csp/csp_types.h	/^	uint8_t dport;$/;"	m	struct:__anon930cb7bd0408	typeref:typename:uint8_t
+driver	src/csp_yaml.c	/^	char * driver;$/;"	m	struct:data_s	typeref:typename:char *	file:
+driver_can	src/drivers/CMakeLists.txt	/^  add_library(driver_can OBJECT can\/can_socketcan.c)$/;"	t
+driver_data	include/csp/csp_interface.h	/^	void * driver_data;         \/\/ Driver data, only known\/used by the driver layer, e.g. device/;"	m	struct:csp_iface_s	typeref:typename:void *
+drivers	src/meson.build	/^subdir('drivers')$/;"	S
+drop	include/csp/csp_cmp.h	/^			uint32_t drop;$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680508	typeref:typename:uint32_t
+drop	include/csp/csp_interface.h	/^	uint32_t drop;              \/\/ Dropped packets$/;"	m	struct:csp_iface_s	typeref:typename:uint32_t
+dst	include/csp/csp_types.h	/^	uint16_t dst;$/;"	m	struct:__anon930cb7bd0408	typeref:typename:uint16_t
+enable-python3-bindings	CMakeLists.txt	/^option(enable-python3-bindings "Build Python3 binding")$/;"	D
+enable_csp_print	meson_options.txt	/^option('enable_csp_print', type: 'boolean', value: true, description: 'Enable csp_print()')$/;"	b
+enable_python3_bindings	meson_options.txt	/^option('enable_python3_bindings', type: 'boolean', value: false, description: 'Build Python 3 bi/;"	b
+error	src/csp_rtable_stdio.c	/^	int error;$/;"	m	struct:__anon4257022e0108	typeref:typename:int	file:
+examples	meson.build	/^subdir('examples')$/;"	S
+fd	src/drivers/usart/usart_kiss.c	/^	csp_usart_fd_t fd;$/;"	m	struct:__anon21d214c10108	typeref:typename:csp_usart_fd_t	file:
+fd	src/drivers/usart/usart_linux.c	/^	csp_usart_fd_t fd;$/;"	m	struct:__anona8b6bc370108	typeref:typename:csp_usart_fd_t	file:
+fd	src/drivers/usart/usart_windows.c	/^	csp_usart_fd_t fd;$/;"	m	struct:__anon8a8d43d20108	typeref:typename:csp_usart_fd_t	file:
+flags	include/csp/csp_types.h	/^	uint8_t flags;$/;"	m	struct:__anon930cb7bd0408	typeref:typename:uint8_t
+flags	src/csp_rdp.c	/^	uint8_t flags;$/;"	m	struct:__anonf2e58b380108	typeref:typename:uint8_t	file:
+frame	include/csp/csp_cmp.h	/^			uint32_t frame;$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680508	typeref:typename:uint32_t
+frame	include/csp/csp_interface.h	/^	uint32_t frame;             \/\/ Frame format errors (packets)$/;"	m	struct:csp_iface_s	typeref:typename:uint32_t
+frame_begin	include/csp/csp_types.h	/^			uint8_t * frame_begin;$/;"	m	struct:csp_packet_s::__anon930cb7bd050a::__anon930cb7bd0708	typeref:typename:uint8_t *
+frame_length	include/csp/csp_types.h	/^			uint16_t frame_length;$/;"	m	struct:csp_packet_s::__anon930cb7bd050a::__anon930cb7bd0708	typeref:typename:uint16_t
+freertos	src/arch/meson.build	/^	subdir('freertos')$/;"	S
+getOptions	examples/python_bindings_example_client.py	/^def getOptions():$/;"	f
+get_capsule_pointer	src/bindings/python/pycsp.c	/^static void * get_capsule_pointer(PyObject * capsule, const char * expected_type, bool allow_nul/;"	f	typeref:typename:void *	file:
+get_deadline	src/arch/posix/pthread_queue.c	/^static inline int get_deadline(struct timespec * ts, uint32_t timeout_ms) {$/;"	f	typeref:typename:int	file:
+get_obj_as_conn	src/bindings/python/pycsp.c	/^static csp_conn_t * get_obj_as_conn(PyObject * obj, bool allow_null) {$/;"	f	typeref:typename:csp_conn_t *	file:
+get_obj_as_packet	src/bindings/python/pycsp.c	/^static csp_packet_t * get_obj_as_packet(PyObject * obj, bool allow_null) {$/;"	f	typeref:typename:csp_packet_t *	file:
+get_obj_as_socket	src/bindings/python/pycsp.c	/^static csp_socket_t * get_obj_as_socket(PyObject * obj, bool allow_null) {$/;"	f	typeref:typename:csp_socket_t *	file:
+have_stdio	meson_options.txt	/^option('have_stdio', type: 'boolean', value: true, description: 'Use print and scan functions (s/;"	b
+head_idx	contrib/windows/windows_queue.c	/^	int head_idx;$/;"	m	struct:windows_queue_s	typeref:typename:int	file:
+header	include/csp/csp_types.h	/^	uint8_t header[CSP_PACKET_PADDING_BYTES];$/;"	m	struct:csp_packet_s	typeref:typename:uint8_t[]
+hmac_state	src/crypto/csp_hmac.c	/^} hmac_state;$/;"	t	typeref:struct:__anon97d873fb0108	file:
+host	include/csp/interfaces/csp_if_udp.h	/^	char * host;$/;"	m	struct:__anon7b1785520108	typeref:typename:char *
+hostname	include/csp/csp.h	/^	const char *hostname;       \/**< Host name, returned by the #CSP_CMP_IDENT request *\/$/;"	m	struct:csp_conf_s	typeref:typename:const char *
+hostname	include/csp/csp_cmp.h	/^			char hostname[CSP_HOSTNAME_LEN];$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680208	typeref:typename:char[]
+id	contrib/drivers/can/csp_driver_can.c	/^	uint32_t id;$/;"	m	struct:mcan_s	typeref:typename:uint32_t	file:
+id	include/csp/csp_types.h	/^	csp_id_t id;				\/\/ CSP id (unpacked version CPU readable)$/;"	m	struct:csp_packet_s	typeref:typename:csp_id_t
+id_l2bc	contrib/drivers/can/csp_driver_can.c	/^    uint32_t id_l2bc;$/;"	m	struct:mcan_s	typeref:typename:uint32_t	file:
+id_l3bc	contrib/drivers/can/csp_driver_can.c	/^    uint32_t id_l3bc;$/;"	m	struct:mcan_s	typeref:typename:uint32_t	file:
+ident	include/csp/csp_cmp.h	/^		} ident;$/;"	m	union:csp_cmp_message::__anone058ef68010a	typeref:struct:csp_cmp_message::__anone058ef68010a::__anone058ef680208
+idin	src/csp_conn.h	/^	csp_id_t idin;          \/* Identifier received *\/$/;"	m	struct:csp_conn_s	typeref:typename:csp_id_t
+idout	src/csp_conn.h	/^	csp_id_t idout;         \/* Identifier transmitted *\/$/;"	m	struct:csp_conn_s	typeref:typename:csp_id_t
+if_stats	include/csp/csp_cmp.h	/^		} if_stats;$/;"	m	union:csp_cmp_message::__anone058ef68010a	typeref:struct:csp_cmp_message::__anone058ef68010a::__anone058ef680508
+if_zmq	src/interfaces/CMakeLists.txt	/^  add_library(if_zmq OBJECT csp_if_zmqhub.c)$/;"	t
+iface	include/csp/csp_rtable.h	/^   csp_iface_t * iface;$/;"	m	struct:csp_route_s	typeref:typename:csp_iface_t *
+iface	src/csp_qfifo.h	/^	csp_iface_t * iface;$/;"	m	struct:__anonf9c590cc0108	typeref:typename:csp_iface_t *
+iface	src/drivers/can/can_socketcan.c	/^	csp_iface_t iface;$/;"	m	struct:__anon245b89a80108	typeref:typename:csp_iface_t	file:
+iface	src/drivers/usart/usart_kiss.c	/^	csp_iface_t iface;$/;"	m	struct:__anon21d214c10108	typeref:typename:csp_iface_t	file:
+iface	src/interfaces/csp_if_zmqhub.c	/^	csp_iface_t iface;$/;"	m	struct:__anon75dbf4ca0108	typeref:typename:csp_iface_t	file:
+ifdata	contrib/drivers/can/csp_driver_can.c	/^	csp_can_interface_data_t ifdata;$/;"	m	struct:mcan_s	typeref:typename:csp_can_interface_data_t	file:
+ifdata	src/drivers/can/can_socketcan.c	/^	csp_can_interface_data_t ifdata;$/;"	m	struct:__anon245b89a80108	typeref:typename:csp_can_interface_data_t	file:
+ifdata	src/drivers/usart/usart_kiss.c	/^	csp_kiss_interface_data_t ifdata;$/;"	m	struct:__anon21d214c10108	typeref:typename:csp_kiss_interface_data_t	file:
+in	src/arch/posix/pthread_queue.h	/^    int in;$/;"	m	struct:pthread_queue_s	typeref:typename:int
+inbuf	examples/python_bindings_example_client.py	/^    inbuf = bytearray(1)$/;"	v
+include	meson.build	/^  install_subdir('include', install_dir : '.')$/;"	S
+init_cond_clock_monotonic	src/arch/posix/pthread_queue.c	/^static inline int init_cond_clock_monotonic(pthread_cond_t * cond) {$/;"	f	typeref:typename:int	file:
+interface	contrib/drivers/can/csp_driver_can.c	/^	csp_iface_t interface;$/;"	m	struct:mcan_s	typeref:typename:csp_iface_t	file:
+interface	include/csp/csp_cmp.h	/^			char interface[CSP_CMP_ROUTE_IFACE_LEN];$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680308	typeref:typename:char[]
+interface	include/csp/csp_cmp.h	/^			char interface[CSP_CMP_ROUTE_IFACE_LEN];$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680408	typeref:typename:char[]
+interface	include/csp/csp_cmp.h	/^			char interface[CSP_CMP_ROUTE_IFACE_LEN];$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680508	typeref:typename:char[]
+interface_data	include/csp/csp_interface.h	/^	void * interface_data;      \/\/ Interface data, only known\/used by the interface layer, e.g. /;"	m	struct:csp_iface_s	typeref:typename:void *
+interfaces	src/csp_iflist.c	/^static csp_iface_t * interfaces = NULL;$/;"	v	typeref:typename:csp_iface_t *	file:
+interfaces	src/meson.build	/^subdir('interfaces')$/;"	S
+irq	include/csp/csp_cmp.h	/^			uint32_t irq;$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680508	typeref:typename:uint32_t
+irq	include/csp/csp_interface.h	/^	uint32_t irq;               \/\/ Interrupts$/;"	m	struct:csp_iface_s	typeref:typename:uint32_t
+isListening	src/drivers/usart/usart_windows.c	/^	LONG isListening;$/;"	m	struct:__anon8a8d43d20108	typeref:typename:LONG	file:
+is_dfl	src/csp_yaml.c	/^	char * is_dfl;$/;"	m	struct:data_s	typeref:typename:char *	file:
+item_size	contrib/windows/windows_queue.c	/^	int item_size;$/;"	m	struct:windows_queue_s	typeref:typename:int	file:
+item_size	src/arch/posix/pthread_queue.h	/^    int item_size;$/;"	m	struct:pthread_queue_s	typeref:typename:int
+items	contrib/windows/windows_queue.c	/^	int items;$/;"	m	struct:windows_queue_s	typeref:typename:int	file:
+items	src/arch/posix/pthread_queue.h	/^    int items;$/;"	m	struct:pthread_queue_s	typeref:typename:int
+key	src/crypto/csp_hmac.c	/^	uint8_t key[CSP_SHA1_BLOCKSIZE];$/;"	m	struct:__anon97d873fb0108	typeref:typename:uint8_t[]	file:
+kiss_context_t	src/drivers/usart/usart_kiss.c	/^} kiss_context_t;$/;"	t	typeref:struct:__anon21d214c10108	file:
+kiss_driver_rx	src/drivers/usart/usart_kiss.c	/^static void kiss_driver_rx(void * user_data, uint8_t * data, size_t data_size, void * pxTaskWoke/;"	f	typeref:typename:void	file:
+kiss_driver_tx	src/drivers/usart/usart_kiss.c	/^static int kiss_driver_tx(void * driver_data, const unsigned char * data, size_t data_length) {$/;"	f	typeref:typename:int	file:
+last_used	include/csp/csp_types.h	/^			uint32_t last_used;         \/* Timestamp in ms for last use of buffer *\/$/;"	m	struct:csp_packet_s::__anon930cb7bd050a::__anon930cb7bd0708	typeref:typename:uint32_t
+last_used	src/interfaces/csp_if_can_pbuf.h	/^	uint32_t last_used;         \/* Timestamp in ms for last use of buffer *\/$/;"	m	struct:__anon04cf8eb60108	typeref:typename:uint32_t
+len	include/csp/csp_cmp.h	/^			uint8_t len;$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680608	typeref:typename:uint8_t
+len	include/csp/csp_cmp.h	/^			uint8_t len;$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680708	typeref:typename:uint8_t
+len	src/csp_rtable_stdio.c	/^	size_t len;$/;"	m	struct:__anon4257022e0108	typeref:typename:size_t	file:
+length	include/csp/crypto/csp_sha1.h	/^	uint64_t length;$/;"	m	struct:__anon7ca789050108	typeref:typename:uint64_t
+length	include/csp/csp_types.h	/^	uint16_t length;			\/\/ Data length$/;"	m	struct:csp_packet_s	typeref:typename:uint16_t
+libcsp	CMakeLists.txt	/^add_library(libcsp)$/;"	t
+libcsp	examples/python_bindings_example_client.py	/^import libcsp_py3 as libcsp$/;"	I	nameref:module:libcsp_py3
+libcsp	examples/python_bindings_example_server.py	/^import libcsp_py3 as libcsp$/;"	I	nameref:module:libcsp_py3
+libcsp_zephyr_init	src/arch/zephyr/csp_zephyr_init.c	/^static int libcsp_zephyr_init(const struct device * unused) {$/;"	f	typeref:typename:int	file:
+listen_port	src/csp_yaml.c	/^	char * listen_port;$/;"	m	struct:data_s	typeref:typename:char *	file:
+lock	contrib/drivers/can/csp_driver_can.c	/^	SemaphoreHandle_t lock;$/;"	m	struct:mcan_s	typeref:typename:SemaphoreHandle_t	file:
+lock	src/drivers/usart/usart_linux.c	/^static pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;$/;"	v	typeref:typename:pthread_mutex_t	file:
+lock	src/interfaces/csp_if_zmqhub.c	/^static pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;$/;"	v	typeref:typename:pthread_mutex_t	file:
+lock_buf	contrib/drivers/can/csp_driver_can.c	/^	StaticSemaphore_t lock_buf;$/;"	m	struct:mcan_s	typeref:typename:StaticSemaphore_t	file:
+logfile	examples/zmqproxy.c	/^FILE * logfile;$/;"	v	typeref:typename:FILE *
+logfile_name	examples/zmqproxy.c	/^char * logfile_name = NULL;$/;"	v	typeref:typename:char *
+lport	include/csp/interfaces/csp_if_udp.h	/^	int lport;$/;"	m	struct:__anon7b1785520108	typeref:typename:int
+main	contrib/zephyr/samples/server-client/main.c	/^void main(void) {$/;"	f	typeref:typename:void
+main	examples/buildall.py	/^def main(build_system, rest):$/;"	f
+main	examples/csp_arch.c	/^int main(int argc, char * argv[]) {$/;"	f	typeref:typename:int
+main	examples/csp_server_client.c	/^int main(int argc, char * argv[]) {$/;"	f	typeref:typename:int
+main	examples/zmqproxy.c	/^int main(int argc, char ** argv) {$/;"	f	typeref:typename:int
+main	utils/cfpsplit.py	/^def main():$/;"	f
+main	utils/cspsplit.py	/^def main():$/;"	f
+mask	contrib/drivers/can/csp_driver_can.c	/^	uint32_t mask;$/;"	m	struct:mcan_s	typeref:typename:uint32_t	file:
+max_rx_length	include/csp/interfaces/csp_if_kiss.h	/^	unsigned int max_rx_length;$/;"	m	struct:__anonc711d7630208	typeref:typename:unsigned int
+maxlen	src/csp_rtable_stdio.c	/^	size_t maxlen;$/;"	m	struct:__anon4257022e0108	typeref:typename:size_t	file:
+mcan	contrib/drivers/can/csp_driver_can.c	/^} mcan[1] = {$/;"	v	typeref:struct:mcan_s[1]
+mcan_s	contrib/drivers/can/csp_driver_can.c	/^static struct mcan_s {$/;"	s	file:
+md	src/crypto/csp_hmac.c	/^	csp_sha1_state_t md;$/;"	m	struct:__anon97d873fb0108	typeref:typename:csp_sha1_state_t	file:
+methods	src/bindings/python/pycsp.c	/^static PyMethodDef methods[] = {$/;"	v	typeref:typename:PyMethodDef[]	file:
+mode	contrib/drivers/can/csp_driver_can.c	/^	can_mode_e mode;$/;"	m	struct:mcan_s	typeref:typename:can_mode_e	file:
+model	include/csp/csp.h	/^	const char *model;          \/**< Model, returned by the #CSP_CMP_IDENT request *\/$/;"	m	struct:csp_conf_s	typeref:typename:const char *
+model	include/csp/csp_cmp.h	/^			char model[CSP_MODEL_LEN];$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680208	typeref:typename:char[]
+moduledef	src/bindings/python/pycsp.c	/^static struct PyModuleDef moduledef = {$/;"	v	typeref:struct:PyModuleDef	file:
+mtu	include/csp/csp_interface.h	/^	uint16_t mtu;               \/\/ Maximum Transmission Unit of interface$/;"	m	struct:csp_iface_s	typeref:typename:uint16_t
+mutex	contrib/windows/windows_queue.c	/^	CRITICAL_SECTION mutex;$/;"	m	struct:windows_queue_s	typeref:typename:CRITICAL_SECTION	file:
+mutex	src/arch/posix/pthread_queue.h	/^    pthread_mutex_t mutex;$/;"	m	struct:pthread_queue_s	typeref:typename:pthread_mutex_t
+mutexHandle	src/drivers/usart/usart_windows.c	/^static HANDLE mutexHandle = NULL;$/;"	v	typeref:typename:HANDLE	file:
+name	include/csp/csp_interface.h	/^	const char * name;          \/\/ Name, max compare length is #CSP_IFLIST_NAME_MAX$/;"	m	struct:csp_iface_s	typeref:typename:const char *
+name	src/csp_yaml.c	/^	char * name;$/;"	m	struct:data_s	typeref:typename:char *	file:
+name	src/drivers/can/can_socketcan.c	/^	char name[CSP_IFLIST_NAME_MAX + 1];$/;"	m	struct:__anon245b89a80108	typeref:typename:char[]	file:
+name	src/drivers/usart/usart_kiss.c	/^	char name[CSP_IFLIST_NAME_MAX + 1];$/;"	m	struct:__anon21d214c10108	typeref:typename:char[]	file:
+name	src/interfaces/csp_if_zmqhub.c	/^	char name[CSP_IFLIST_NAME_MAX + 1];$/;"	m	struct:__anon75dbf4ca0108	typeref:typename:char[]	file:
+netmask	include/csp/csp_cmp.h	/^			uint16_t netmask;$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680408	typeref:typename:uint16_t
+netmask	include/csp/csp_interface.h	/^	uint16_t netmask;           \/\/ Subnet mask$/;"	m	struct:csp_iface_s	typeref:typename:uint16_t
+netmask	include/csp/csp_rtable.h	/^	uint16_t netmask;$/;"	m	struct:csp_route_s	typeref:typename:uint16_t
+netmask	src/csp_yaml.c	/^	char * netmask;$/;"	m	struct:data_s	typeref:typename:char *	file:
+next	include/csp/csp_interface.h	/^	struct csp_iface_s * next;  \/\/ Internal, interfaces are stored in a linked list$/;"	m	struct:csp_iface_s	typeref:struct:csp_iface_s *
+next	include/csp/csp_types.h	/^	struct csp_packet_s * next; \/\/ Used for lists \/ queues of packets$/;"	m	struct:csp_packet_s	typeref:struct:csp_packet_s *
+next_hop_via	include/csp/csp_cmp.h	/^			uint16_t next_hop_via;$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680408	typeref:typename:uint16_t
+next_hop_via	include/csp/csp_cmp.h	/^			uint8_t next_hop_via;$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680308	typeref:typename:uint8_t
+nexthop	include/csp/csp_interface.h	/^	nexthop_t nexthop;          \/\/ Next hop (Tx) function$/;"	m	struct:csp_iface_s	typeref:typename:nexthop_t
+nexthop_t	include/csp/csp_interface.h	/^typedef int (*nexthop_t)(csp_iface_t * iface, uint16_t via, csp_packet_t * packet, int from_me);$/;"	t	typeref:typename:int (*)(csp_iface_t * iface,uint16_t via,csp_packet_t * packet,int from_me)
+offset	src/csp_sfp.c	/^	uint32_t offset;$/;"	m	struct:__anonf2f8bc7b0108	typeref:typename:uint32_t	file:
+openPort	src/drivers/usart/usart_windows.c	/^static int openPort(const char * device, csp_usart_fd_t * return_fd) {$/;"	f	typeref:typename:int	file:
+options	examples/python_bindings_example_client.py	/^    options = getOptions()$/;"	v
+opts	include/csp/csp_types.h	/^	uint32_t opts;              \/* Connection or socket options *\/$/;"	m	struct:csp_socket_s	typeref:typename:uint32_t
+opts	src/csp_conn.h	/^	uint32_t opts;              \/* Connection or socket options *\/$/;"	m	struct:csp_conn_s	typeref:typename:uint32_t
+out	src/arch/posix/pthread_queue.h	/^    int out;$/;"	m	struct:pthread_queue_s	typeref:typename:int
+outbuf	examples/python_bindings_example_client.py	/^    outbuf = bytearray().fromhex('01')$/;"	v
+packet	src/csp_qfifo.h	/^	csp_packet_t * packet;$/;"	m	struct:__anonf9c590cc0108	typeref:typename:csp_packet_t *
+packet_padding_bytes	meson_options.txt	/^option('packet_padding_bytes', type: 'integer', value: 8, description: 'Number of bytes to inclu/;"	i
+packet_timeout	src/csp_conn.h	/^	uint32_t packet_timeout;$/;"	m	struct:__anon2d608f650408	typeref:typename:uint32_t
+paritysetting	include/csp/drivers/usart.h	/^    uint8_t paritysetting;$/;"	m	struct:csp_usart_conf	typeref:typename:uint8_t
+parser	examples/buildall.py	/^    parser = argparse.ArgumentParser()$/;"	v
+pbufs	include/csp/interfaces/csp_if_can.h	/^    csp_packet_t * pbufs;$/;"	m	struct:__anon79d01e9b0108	typeref:typename:csp_packet_t *
+peek	include/csp/csp_cmp.h	/^		} peek;$/;"	m	union:csp_cmp_message::__anone058ef68010a	typeref:struct:csp_cmp_message::__anone058ef68010a::__anone058ef680608
+peer_addr	include/csp/interfaces/csp_if_udp.h	/^	struct sockaddr_in peer_addr;$/;"	m	struct:__anon7b1785520108	typeref:struct:sockaddr_in
+poke	include/csp/csp_cmp.h	/^		} poke;$/;"	m	union:csp_cmp_message::__anone058ef68010a	typeref:struct:csp_cmp_message::__anone058ef68010a::__anone058ef680708
+port_max_bind	meson_options.txt	/^option('port_max_bind', type: 'integer', value: 16, description: 'Length of incoming queue for r/;"	i
+ports	src/csp_port.c	/^static csp_port_t ports[CSP_PORT_MAX_BIND + 2] = {0};$/;"	v	typeref:typename:csp_port_t[]	file:
+posix	src/arch/meson.build	/^	subdir('posix')$/;"	S
+pri	include/csp/csp_types.h	/^	uint8_t pri; $/;"	m	struct:__anon930cb7bd0408	typeref:typename:uint8_t
+print_stdio	meson_options.txt	/^option('print_stdio', type: 'boolean', value: true, description: 'Use vprintf for csp_print_func/;"	b
+promisc	src/csp_yaml.c	/^	char * promisc;$/;"	m	struct:data_s	typeref:typename:char *	file:
+pthread_queue_create	contrib/macosx/pthread_queue.c	/^pthread_queue_t * pthread_queue_create(int length, size_t item_size) {$/;"	f	typeref:typename:pthread_queue_t *
+pthread_queue_create	src/arch/posix/pthread_queue.c	/^pthread_queue_t * pthread_queue_create(int length, size_t item_size) {$/;"	f	typeref:typename:pthread_queue_t *
+pthread_queue_delete	contrib/macosx/pthread_queue.c	/^void pthread_queue_delete(pthread_queue_t * q) {$/;"	f	typeref:typename:void
+pthread_queue_delete	src/arch/posix/pthread_queue.c	/^void pthread_queue_delete(pthread_queue_t * q) {$/;"	f	typeref:typename:void
+pthread_queue_dequeue	contrib/macosx/pthread_queue.c	/^int pthread_queue_dequeue(pthread_queue_t * queue, void * buf, uint32_t timeout) {$/;"	f	typeref:typename:int
+pthread_queue_dequeue	src/arch/posix/pthread_queue.c	/^int pthread_queue_dequeue(pthread_queue_t * queue, void * buf, uint32_t timeout) {$/;"	f	typeref:typename:int
+pthread_queue_enqueue	contrib/macosx/pthread_queue.c	/^int pthread_queue_enqueue(pthread_queue_t * queue, const void * value, uint32_t timeout) {$/;"	f	typeref:typename:int
+pthread_queue_enqueue	src/arch/posix/pthread_queue.c	/^int pthread_queue_enqueue(pthread_queue_t * queue, const void * value, uint32_t timeout) {$/;"	f	typeref:typename:int
+pthread_queue_free	src/arch/posix/pthread_queue.c	/^int pthread_queue_free(pthread_queue_t * queue) {$/;"	f	typeref:typename:int
+pthread_queue_items	contrib/macosx/pthread_queue.c	/^int pthread_queue_items(pthread_queue_t * queue) {$/;"	f	typeref:typename:int
+pthread_queue_items	src/arch/posix/pthread_queue.c	/^int pthread_queue_items(pthread_queue_t * queue) {$/;"	f	typeref:typename:int
+pthread_queue_s	src/arch/posix/pthread_queue.h	/^typedef struct pthread_queue_s {$/;"	s
+pthread_queue_t	src/arch/posix/pthread_queue.h	/^} pthread_queue_t;$/;"	t	typeref:struct:pthread_queue_s
+pub_str	examples/zmqproxy.c	/^const char * pub_str = "tcp:\/\/0.0.0.0:7000";$/;"	v	typeref:typename:const char *
+publisher	src/interfaces/csp_if_zmqhub.c	/^	void * publisher;$/;"	m	struct:__anon75dbf4ca0108	typeref:typename:void *	file:
+py	meson.build	/^	py = import('python').find_installation('python3')$/;"	V
+pycsp_accept	src/bindings/python/pycsp.c	/^static PyObject * pycsp_accept(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_bind	src/bindings/python/pycsp.c	/^static PyObject * pycsp_bind(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_buffer_free	src/bindings/python/pycsp.c	/^static PyObject * pycsp_buffer_free(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_buffer_get	src/bindings/python/pycsp.c	/^static PyObject * pycsp_buffer_get(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_buffer_remaining	src/bindings/python/pycsp.c	/^static PyObject * pycsp_buffer_remaining(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_can_socketcan_init	src/bindings/python/pycsp.c	/^static PyObject * pycsp_can_socketcan_init(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_close	src/bindings/python/pycsp.c	/^static PyObject * pycsp_close(PyObject * self, PyObject * conn_capsule) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_cmp_clock_get	src/bindings/python/pycsp.c	/^static PyObject * pycsp_cmp_clock_get(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_cmp_clock_set	src/bindings/python/pycsp.c	/^static PyObject * pycsp_cmp_clock_set(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_cmp_ident	src/bindings/python/pycsp.c	/^static PyObject * pycsp_cmp_ident(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_cmp_peek	src/bindings/python/pycsp.c	/^static PyObject * pycsp_cmp_peek(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_cmp_poke	src/bindings/python/pycsp.c	/^static PyObject * pycsp_cmp_poke(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_cmp_route_set	src/bindings/python/pycsp.c	/^static PyObject * pycsp_cmp_route_set(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_conn_dport	src/bindings/python/pycsp.c	/^static PyObject * pycsp_conn_dport(PyObject * self, PyObject * conn_capsule) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_conn_dst	src/bindings/python/pycsp.c	/^static PyObject * pycsp_conn_dst(PyObject * self, PyObject * conn_capsule) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_conn_sport	src/bindings/python/pycsp.c	/^static PyObject * pycsp_conn_sport(PyObject * self, PyObject * conn_capsule) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_conn_src	src/bindings/python/pycsp.c	/^static PyObject * pycsp_conn_src(PyObject * self, PyObject * conn_capsule) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_connect	src/bindings/python/pycsp.c	/^static PyObject * pycsp_connect(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_free_csp_buffer	src/bindings/python/pycsp.c	/^static void pycsp_free_csp_buffer(PyObject * obj) {$/;"	f	typeref:typename:void	file:
+pycsp_free_csp_conn	src/bindings/python/pycsp.c	/^static void pycsp_free_csp_conn(PyObject * obj) {$/;"	f	typeref:typename:void	file:
+pycsp_free_csp_socket	src/bindings/python/pycsp.c	/^static void pycsp_free_csp_socket(PyObject * obj) {$/;"	f	typeref:typename:void	file:
+pycsp_get_buffer_stats	src/bindings/python/pycsp.c	/^static PyObject * pycsp_get_buffer_stats(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_get_hostname	src/bindings/python/pycsp.c	/^static PyObject * pycsp_get_hostname(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_get_model	src/bindings/python/pycsp.c	/^static PyObject * pycsp_get_model(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_get_revision	src/bindings/python/pycsp.c	/^static PyObject * pycsp_get_revision(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_init	src/bindings/python/pycsp.c	/^static PyObject * pycsp_init(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_kiss_init	src/bindings/python/pycsp.c	/^static PyObject * pycsp_kiss_init(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_listen	src/bindings/python/pycsp.c	/^static PyObject * pycsp_listen(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_packet_get_data	src/bindings/python/pycsp.c	/^static PyObject * pycsp_packet_get_data(PyObject * self, PyObject * packet_capsule) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_packet_get_length	src/bindings/python/pycsp.c	/^static PyObject * pycsp_packet_get_length(PyObject * self, PyObject * packet_capsule) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_packet_set_data	src/bindings/python/pycsp.c	/^static PyObject * pycsp_packet_set_data(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_ping	src/bindings/python/pycsp.c	/^static PyObject * pycsp_ping(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_print_connections	src/bindings/python/pycsp.c	/^static PyObject * pycsp_print_connections(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_print_routes	src/bindings/python/pycsp.c	/^static PyObject * pycsp_print_routes(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_rdp_get_opt	src/bindings/python/pycsp.c	/^static PyObject * pycsp_rdp_get_opt(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_rdp_set_opt	src/bindings/python/pycsp.c	/^static PyObject * pycsp_rdp_set_opt(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_read	src/bindings/python/pycsp.c	/^static PyObject * pycsp_read(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_reboot	src/bindings/python/pycsp.c	/^static PyObject * pycsp_reboot(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_recvfrom	src/bindings/python/pycsp.c	/^static PyObject * pycsp_recvfrom(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_route_start_task	src/bindings/python/pycsp.c	/^static PyObject * pycsp_route_start_task(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_rtable_check	src/bindings/python/pycsp.c	/^static PyObject * pycsp_rtable_check(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_rtable_clear	src/bindings/python/pycsp.c	/^static PyObject * pycsp_rtable_clear(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_rtable_load	src/bindings/python/pycsp.c	/^static PyObject * pycsp_rtable_load(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_rtable_set	src/bindings/python/pycsp.c	/^static PyObject * pycsp_rtable_set(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_send	src/bindings/python/pycsp.c	/^static PyObject * pycsp_send(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_sendto	src/bindings/python/pycsp.c	/^static PyObject * pycsp_sendto(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_sendto_reply	src/bindings/python/pycsp.c	/^static PyObject * pycsp_sendto_reply(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_service_handler	src/bindings/python/pycsp.c	/^static PyObject * pycsp_service_handler(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_shutdown	src/bindings/python/pycsp.c	/^static PyObject * pycsp_shutdown(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_socket	src/bindings/python/pycsp.c	/^static PyObject * pycsp_socket(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_transaction	src/bindings/python/pycsp.c	/^static PyObject * pycsp_transaction(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pycsp_zmqhub_init	src/bindings/python/pycsp.c	/^static PyObject * pycsp_zmqhub_init(PyObject * self, PyObject * args) {$/;"	f	typeref:typename:PyObject *	file:
+pydep	meson.build	/^	pydep = dependency('python3', version : '>=3.5', required : true)$/;"	V
+qfifo_len	meson_options.txt	/^option('qfifo_len', type: 'integer', value: 15, description: 'Length of incoming queue for route/;"	i
+qfifo_queue	src/csp_qfifo.c	/^static csp_static_queue_t qfifo_queue __attribute__((section(".noinit")));$/;"	v	typeref:typename:csp_static_queue_t	file:
+qfifo_queue_buffer	src/csp_qfifo.c	/^char qfifo_queue_buffer[sizeof(csp_qfifo_t) * CSP_QFIFO_LEN] __attribute__((section(".noinit")))/;"	v	typeref:typename:char[]
+qfifo_queue_handle	src/csp_qfifo.c	/^static csp_queue_handle_t qfifo_queue_handle __attribute__((section(".noinit")));$/;"	v	typeref:typename:csp_queue_handle_t	file:
+queueEmpty	contrib/windows/windows_queue.c	/^static int queueEmpty(windows_queue_t * queue) {$/;"	f	typeref:typename:int	file:
+queueFull	contrib/windows/windows_queue.c	/^static int queueFull(windows_queue_t * queue) {$/;"	f	typeref:typename:int	file:
+rcv_cur	src/csp_conn.h	/^	uint16_t rcv_cur;      \/**< The sequence number of the last segment received correctly and in /;"	m	struct:__anon2d608f650408	typeref:typename:uint16_t
+rcv_irs	src/csp_conn.h	/^	uint16_t rcv_irs;      \/**< The initial receive sequence number *\/$/;"	m	struct:__anon2d608f650408	typeref:typename:uint16_t
+rcv_lsa	src/csp_conn.h	/^	uint16_t rcv_lsa;      \/**< The last sequence number acknowledged by the receiver *\/$/;"	m	struct:__anon2d608f650408	typeref:typename:uint16_t
+rdp	src/csp_conn.h	/^	csp_rdp_t rdp; \/* RDP state *\/$/;"	m	struct:csp_conn_s	typeref:typename:csp_rdp_t
+rdp_header_t	src/csp_rdp.c	/^} rdp_header_t;$/;"	t	typeref:struct:__anonf2e58b380108	file:
+rdp_max_window	meson_options.txt	/^option('rdp_max_window', type: 'integer', value: 5, description: 'Max window size for RDP')$/;"	i
+rdp_quarantine	include/csp/csp_types.h	/^			uint32_t rdp_quarantine;	\/\/ EACK quarantine period$/;"	m	struct:csp_packet_s::__anon930cb7bd050a::__anon930cb7bd0608	typeref:typename:uint32_t
+refcount	src/csp_buffer.c	/^	unsigned int refcount;$/;"	m	struct:csp_skbf_s	typeref:typename:unsigned int	file:
+remain	include/csp/csp_types.h	/^			uint16_t remain;            \/* Remaining packets *\/$/;"	m	struct:csp_packet_s::__anon930cb7bd050a::__anon930cb7bd0708	typeref:typename:uint16_t
+remain	src/interfaces/csp_if_can_pbuf.h	/^	uint16_t remain;            \/* Remaining packets *\/$/;"	m	struct:__anon04cf8eb60108	typeref:typename:uint16_t
+remote_port	src/csp_yaml.c	/^	char * remote_port;$/;"	m	struct:data_s	typeref:typename:char *	file:
+rest	examples/buildall.py	/^    args, rest = parser.parse_known_args()$/;"	v
+revision	include/csp/csp.h	/^	const char *revision;       \/**< Revision, returned by the #CSP_CMP_IDENT request *\/$/;"	m	struct:csp_conf_s	typeref:typename:const char *
+revision	include/csp/csp_cmp.h	/^			char revision[CSP_CMP_IDENT_REV_LEN];$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680208	typeref:typename:char[]
+route_set_v1	include/csp/csp_cmp.h	/^		} route_set_v1;$/;"	m	union:csp_cmp_message::__anone058ef68010a	typeref:struct:csp_cmp_message::__anone058ef68010a::__anone058ef680308
+route_set_v2	include/csp/csp_cmp.h	/^		} route_set_v2;$/;"	m	union:csp_cmp_message::__anone058ef68010a	typeref:struct:csp_cmp_message::__anone058ef68010a::__anone058ef680408
+router_start	contrib/zephyr/samples/server-client/csp_server_client_zephyr.c	/^void router_start(void) {$/;"	f	typeref:typename:void
+router_start	examples/csp_server_client_posix.c	/^int router_start(void) {$/;"	f	typeref:typename:int
+router_start	examples/csp_server_client_windows.c	/^int router_start(void) {$/;"	f	typeref:typename:int
+router_task	contrib/zephyr/samples/server-client/csp_server_client_zephyr.c	/^static void * router_task(void * param) {$/;"	f	typeref:typename:void *	file:
+rport	include/csp/interfaces/csp_if_udp.h	/^	int rport;$/;"	m	struct:__anon7b1785520108	typeref:typename:int
+rtable	src/csp_rtable_cidr.c	/^static csp_route_t rtable[CSP_RTABLE_SIZE] = {0};$/;"	v	typeref:typename:csp_route_t[]	file:
+rtable_inptr	src/csp_rtable_cidr.c	/^static int rtable_inptr = 0;$/;"	v	typeref:typename:int	file:
+rtable_size	meson_options.txt	/^option('rtable_size', type: 'integer', value: 10, description: 'Number of elements in routing ta/;"	i
+rx	include/csp/csp_cmp.h	/^			uint32_t rx;$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680508	typeref:typename:uint32_t
+rx	include/csp/csp_interface.h	/^	uint32_t rx;                \/\/ Successfully received packets$/;"	m	struct:csp_iface_s	typeref:typename:uint32_t
+rx_callback	src/drivers/usart/usart_linux.c	/^	csp_usart_callback_t rx_callback;$/;"	m	struct:__anona8b6bc370108	typeref:typename:csp_usart_callback_t	file:
+rx_callback	src/drivers/usart/usart_windows.c	/^	csp_usart_callback_t rx_callback;$/;"	m	struct:__anon8a8d43d20108	typeref:typename:csp_usart_callback_t	file:
+rx_count	include/csp/csp_types.h	/^			uint16_t rx_count;          \/* Received bytes *\/$/;"	m	struct:csp_packet_s::__anon930cb7bd050a::__anon930cb7bd0708	typeref:typename:uint16_t
+rx_count	src/interfaces/csp_if_can_pbuf.h	/^	uint16_t rx_count;          \/* Received bytes *\/$/;"	m	struct:__anon04cf8eb60108	typeref:typename:uint16_t
+rx_error	include/csp/csp_cmp.h	/^			uint32_t rx_error;$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680508	typeref:typename:uint32_t
+rx_error	include/csp/csp_interface.h	/^	uint32_t rx_error;          \/\/ Receive errors, e.g. too large message$/;"	m	struct:csp_iface_s	typeref:typename:uint32_t
+rx_first	include/csp/interfaces/csp_if_kiss.h	/^	bool rx_first;$/;"	m	struct:__anonc711d7630208	typeref:typename:bool
+rx_length	include/csp/interfaces/csp_if_kiss.h	/^	unsigned int rx_length;$/;"	m	struct:__anonc711d7630208	typeref:typename:unsigned int
+rx_mode	include/csp/interfaces/csp_if_kiss.h	/^	csp_kiss_mode_t rx_mode;$/;"	m	struct:__anonc711d7630208	typeref:typename:csp_kiss_mode_t
+rx_packet	include/csp/interfaces/csp_if_kiss.h	/^	csp_packet_t * rx_packet;$/;"	m	struct:__anonc711d7630208	typeref:typename:csp_packet_t *
+rx_queue	include/csp/csp_types.h	/^	csp_queue_handle_t rx_queue;        \/* Queue for RX packets *\/$/;"	m	struct:csp_socket_s	typeref:typename:csp_queue_handle_t
+rx_queue	src/csp_conn.h	/^	csp_queue_handle_t rx_queue;        \/* Queue for RX packets *\/$/;"	m	struct:csp_conn_s	typeref:typename:csp_queue_handle_t
+rx_queue	src/csp_rdp_queue.c	/^static csp_queue_handle_t rx_queue;$/;"	v	typeref:typename:csp_queue_handle_t	file:
+rx_queue_static	include/csp/csp_types.h	/^	csp_static_queue_t rx_queue_static; \/* Static storage for rx queue *\/$/;"	m	struct:csp_socket_s	typeref:typename:csp_static_queue_t
+rx_queue_static	src/csp_conn.h	/^	csp_static_queue_t rx_queue_static; \/* Static storage for rx queue *\/$/;"	m	struct:csp_conn_s	typeref:typename:csp_static_queue_t
+rx_queue_static	src/csp_rdp_queue.c	/^static csp_static_queue_t rx_queue_static; \/* Static storage for rx queue *\/$/;"	v	typeref:typename:csp_static_queue_t	file:
+rx_queue_static_data	include/csp/csp_types.h	/^	char rx_queue_static_data[sizeof(csp_packet_t *) * CSP_CONN_RXQUEUE_LEN];$/;"	m	struct:csp_socket_s	typeref:typename:char[]
+rx_queue_static_data	src/csp_conn.h	/^	char rx_queue_static_data[sizeof(csp_packet_t *) * CSP_CONN_RXQUEUE_LEN];$/;"	m	struct:csp_conn_s	typeref:typename:char[]
+rx_queue_static_data	src/csp_rdp_queue.c	/^static char rx_queue_static_data[sizeof(csp_packet_t *) * CSP_RDP_MAX_WINDOW * 2];$/;"	v	typeref:typename:char[]	file:
+rx_thread	src/drivers/can/can_socketcan.c	/^	pthread_t rx_thread;$/;"	m	struct:__anon245b89a80108	typeref:typename:pthread_t	file:
+rx_thread	src/drivers/usart/usart_linux.c	/^	pthread_t rx_thread;$/;"	m	struct:__anona8b6bc370108	typeref:typename:pthread_t	file:
+rx_thread	src/drivers/usart/usart_windows.c	/^	HANDLE rx_thread;$/;"	m	struct:__anon8a8d43d20108	typeref:typename:HANDLE	file:
+rx_thread	src/interfaces/csp_if_zmqhub.c	/^	pthread_t rx_thread;$/;"	m	struct:__anon75dbf4ca0108	typeref:typename:pthread_t	file:
+rxbytes	include/csp/csp_cmp.h	/^			uint32_t rxbytes;$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680508	typeref:typename:uint32_t
+rxbytes	include/csp/csp_interface.h	/^	uint32_t rxbytes;           \/\/ Received bytes$/;"	m	struct:csp_iface_s	typeref:typename:uint32_t
+seq_nr	src/csp_rdp.c	/^	uint16_t seq_nr;$/;"	m	struct:__anonf2e58b380108	typeref:typename:uint16_t	file:
+server	contrib/zephyr/samples/server-client/main.c	/^void server(void) {$/;"	f	typeref:typename:void
+server	examples/csp_server_client.c	/^void server(void) {$/;"	f	typeref:typename:void
+server	src/csp_yaml.c	/^	char * server;$/;"	m	struct:data_s	typeref:typename:char *	file:
+server_address	contrib/zephyr/samples/server-client/main.c	/^static uint8_t server_address = 255;$/;"	v	typeref:typename:uint8_t	file:
+server_address	examples/csp_server_client.c	/^static uint8_t server_address = 255;$/;"	v	typeref:typename:uint8_t	file:
+server_handle	include/csp/interfaces/csp_if_udp.h	/^	pthread_t server_handle;$/;"	m	struct:__anon7b1785520108	typeref:typename:pthread_t
+server_received	contrib/zephyr/samples/server-client/main.c	/^static unsigned int server_received = 0;$/;"	v	typeref:typename:unsigned int	file:
+server_received	examples/csp_server_client.c	/^static unsigned int server_received = 0;$/;"	v	typeref:typename:unsigned int	file:
+server_start	contrib/zephyr/samples/server-client/csp_server_client_zephyr.c	/^void server_start(void) {$/;"	f	typeref:typename:void
+server_start	examples/csp_server_client_posix.c	/^int server_start(void) {$/;"	f	typeref:typename:int
+server_start	examples/csp_server_client_windows.c	/^int server_start(void) {$/;"	f	typeref:typename:int
+server_task	contrib/zephyr/samples/server-client/csp_server_client_zephyr.c	/^static void * server_task(void * p1, void * p2, void * p3) {$/;"	f	typeref:typename:void *	file:
+setPortTimeouts	src/drivers/usart/usart_windows.c	/^static int setPortTimeouts(csp_usart_fd_t fd) {$/;"	f	typeref:typename:int	file:
+sfp_header_t	src/csp_sfp.c	/^} sfp_header_t;$/;"	t	typeref:struct:__anonf2f8bc7b0108	file:
+size	contrib/windows/windows_queue.c	/^	int size;$/;"	m	struct:windows_queue_s	typeref:typename:int	file:
+size	src/arch/posix/pthread_queue.h	/^    int size;$/;"	m	struct:pthread_queue_s	typeref:typename:int
+skbf_addr	src/csp_buffer.c	/^	void * skbf_addr;$/;"	m	struct:csp_skbf_s	typeref:typename:void *	file:
+skbf_data	src/csp_buffer.c	/^	char skbf_data[sizeof(csp_packet_t)];$/;"	m	struct:csp_skbf_s	typeref:typename:char[]	file:
+snd_iss	src/csp_conn.h	/^	uint16_t snd_iss;      \/**< The initial send sequence number *\/$/;"	m	struct:__anon2d608f650408	typeref:typename:uint16_t
+snd_nxt	src/csp_conn.h	/^	uint16_t snd_nxt;      \/**< The sequence number of the next segment that is to be sent *\/$/;"	m	struct:__anon2d608f650408	typeref:typename:uint16_t
+snd_una	src/csp_conn.h	/^	uint16_t snd_una;      \/**< The sequence number of the oldest unacknowledged segment *\/$/;"	m	struct:__anon2d608f650408	typeref:typename:uint16_t
+socket	src/csp_port.c	/^		csp_socket_t * socket;$/;"	m	union:__anon4bb5ea970208::__anon4bb5ea97030a	typeref:typename:csp_socket_t *	file:
+socket	src/drivers/can/can_socketcan.c	/^	int socket;$/;"	m	struct:__anon245b89a80108	typeref:typename:int	file:
+socketcan_dep	src/drivers/meson.build	/^socketcan_dep = dependency('libsocketcan', required: false)$/;"	V
+socketcan_free	src/drivers/can/can_socketcan.c	/^static void socketcan_free(can_context_t * ctx) {$/;"	f	typeref:typename:void	file:
+socketcan_rx_thread	src/drivers/can/can_socketcan.c	/^static void * socketcan_rx_thread(void * arg) {$/;"	f	typeref:typename:void *	file:
+source	src/csp_yaml.c	/^	char * source;$/;"	m	struct:data_s	typeref:typename:char *	file:
+split_horizon_off	include/csp/csp_interface.h	/^	uint8_t split_horizon_off;  \/\/ Disable the route-loop prevention$/;"	m	struct:csp_iface_s	typeref:typename:uint8_t
+sport	include/csp/csp_types.h	/^	uint8_t sport;$/;"	m	struct:__anon930cb7bd0408	typeref:typename:uint8_t
+sport_outgoing	src/csp_conn.h	/^	uint8_t sport_outgoing; \/* When used for outgoing, use this sport *\/$/;"	m	struct:csp_conn_s	typeref:typename:uint8_t
+src	include/csp/csp_types.h	/^	uint16_t src;$/;"	m	struct:__anon930cb7bd0408	typeref:typename:uint16_t
+src	meson.build	/^subdir('src')$/;"	S
+state	include/csp/crypto/csp_sha1.h	/^	uint32_t state[5];$/;"	m	struct:__anon7ca789050108	typeref:typename:uint32_t[5]
+state	src/csp_conn.h	/^	atomic_int state; \/* Connection state (CONN_OPEN or CONN_CLOSED) *\/$/;"	m	struct:csp_conn_s	typeref:typename:atomic_int
+state	src/csp_conn.h	/^	csp_rdp_state_t state; \/**< Connection state *\/$/;"	m	struct:__anon2d608f650408	typeref:typename:csp_rdp_state_t
+state	src/csp_port.c	/^	csp_port_state_t state;$/;"	m	struct:__anon4bb5ea970208	typeref:typename:csp_port_state_t	file:
+stopbits	include/csp/drivers/usart.h	/^    uint8_t stopbits;$/;"	m	struct:csp_usart_conf	typeref:typename:uint8_t
+sub_str	examples/zmqproxy.c	/^const char * sub_str = "tcp:\/\/0.0.0.0:6000";$/;"	v	typeref:typename:const char *
+subscriber	src/interfaces/csp_if_zmqhub.c	/^	void * subscriber;$/;"	m	struct:__anon75dbf4ca0108	typeref:typename:void *	file:
+task_capture	examples/zmqproxy.c	/^static void * task_capture(void * ctx) {$/;"	f	typeref:typename:void *	file:
+task_client	examples/csp_server_client_posix.c	/^static void * task_client(void * param) {$/;"	f	typeref:typename:void *	file:
+task_client	examples/csp_server_client_windows.c	/^static unsigned int task_client(void * param) {$/;"	f	typeref:typename:unsigned int	file:
+task_router	examples/csp_server_client_posix.c	/^static void * task_router(void * param) {$/;"	f	typeref:typename:void *	file:
+task_router	examples/csp_server_client_windows.c	/^static unsigned int task_router(void * param) {$/;"	f	typeref:typename:unsigned int	file:
+task_server	examples/csp_server_client_posix.c	/^static void * task_server(void * param) {$/;"	f	typeref:typename:void *	file:
+task_server	examples/csp_server_client_windows.c	/^static unsigned int task_server(void * param) {$/;"	f	typeref:typename:unsigned int	file:
+test_mode	contrib/zephyr/samples/server-client/main.c	/^static bool test_mode = true;$/;"	v	typeref:typename:bool	file:
+test_mode	examples/csp_server_client.c	/^static bool test_mode = false;$/;"	v	typeref:typename:bool	file:
+time	include/csp/csp_cmp.h	/^			char time[CSP_CMP_IDENT_TIME_LEN];$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680208	typeref:typename:char[]
+timestamp	src/csp_conn.h	/^	uint32_t timestamp;         \/* Time the connection was opened *\/$/;"	m	struct:csp_conn_s	typeref:typename:uint32_t
+timestamp_rx	include/csp/csp_types.h	/^			uint32_t timestamp_rx;		\/\/ Time the message was received$/;"	m	struct:csp_packet_s::__anon930cb7bd050a::__anon930cb7bd0608	typeref:typename:uint32_t
+timestamp_tx	include/csp/csp_types.h	/^			uint32_t timestamp_tx;		\/\/ Time the message was sent$/;"	m	struct:csp_packet_s::__anon930cb7bd050a::__anon930cb7bd0608	typeref:typename:uint32_t
+totalsize	src/csp_sfp.c	/^	uint32_t totalsize;$/;"	m	struct:__anonf2f8bc7b0108	typeref:typename:uint32_t	file:
+tun_dst	include/csp/interfaces/csp_if_tun.h	/^	int tun_dst;$/;"	m	struct:__anon7b0eb6c00108	typeref:typename:int
+tun_src	include/csp/interfaces/csp_if_tun.h	/^	int tun_src;$/;"	m	struct:__anon7b0eb6c00108	typeref:typename:int
+tv_nsec	include/csp/csp_types.h	/^	uint32_t tv_nsec;$/;"	m	struct:__anon930cb7bd0108	typeref:typename:uint32_t
+tv_sec	include/csp/csp_types.h	/^	uint32_t tv_sec;$/;"	m	struct:__anon930cb7bd0108	typeref:typename:uint32_t
+tx	include/csp/csp_cmp.h	/^			uint32_t tx;$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680508	typeref:typename:uint32_t
+tx	include/csp/csp_interface.h	/^	uint32_t tx;                \/\/ Successfully transmitted packets$/;"	m	struct:csp_iface_s	typeref:typename:uint32_t
+tx_error	include/csp/csp_cmp.h	/^			uint32_t tx_error;$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680508	typeref:typename:uint32_t
+tx_error	include/csp/csp_interface.h	/^	uint32_t tx_error;          \/\/ Transmit errors (packets)$/;"	m	struct:csp_iface_s	typeref:typename:uint32_t
+tx_func	include/csp/interfaces/csp_if_can.h	/^    csp_can_driver_tx_t tx_func;$/;"	m	struct:__anon79d01e9b0108	typeref:typename:csp_can_driver_tx_t
+tx_func	include/csp/interfaces/csp_if_i2c.h	/^    csp_i2c_driver_tx_t tx_func;$/;"	m	struct:__anon7a22bd070108	typeref:typename:csp_i2c_driver_tx_t
+tx_func	include/csp/interfaces/csp_if_kiss.h	/^	csp_kiss_driver_tx_t tx_func;$/;"	m	struct:__anonc711d7630208	typeref:typename:csp_kiss_driver_tx_t
+tx_queue	src/csp_rdp_queue.c	/^static csp_queue_handle_t tx_queue;$/;"	v	typeref:typename:csp_queue_handle_t	file:
+tx_queue_static	src/csp_rdp_queue.c	/^static csp_static_queue_t tx_queue_static; \/* Static storage for rx queue *\/$/;"	v	typeref:typename:csp_static_queue_t	file:
+tx_queue_static_data	src/csp_rdp_queue.c	/^static char tx_queue_static_data[sizeof(csp_packet_t *) * CSP_RDP_MAX_WINDOW * 2];$/;"	v	typeref:typename:char[]	file:
+tx_wait	src/csp_conn.h	/^	csp_bin_sem_t tx_wait;$/;"	m	struct:__anon2d608f650408	typeref:typename:csp_bin_sem_t
+txbytes	include/csp/csp_cmp.h	/^			uint32_t txbytes;$/;"	m	struct:csp_cmp_message::__anone058ef68010a::__anone058ef680508	typeref:typename:uint32_t
+txbytes	include/csp/csp_interface.h	/^	uint32_t txbytes;           \/\/ Transmitted bytes$/;"	m	struct:csp_iface_s	typeref:typename:uint32_t
+type	include/csp/csp_cmp.h	/^        uint8_t type;$/;"	m	struct:csp_cmp_message	typeref:typename:uint8_t
+type	src/csp_conn.h	/^	atomic_int type;   \/* Connection type (CONN_CLIENT or CONN_SERVER) *\/$/;"	m	struct:csp_conn_s	typeref:typename:atomic_int
+usage	utils/cfpsplit.py	/^def usage():$/;"	f
+usage	utils/cspsplit.py	/^def usage():$/;"	f
+usart_context_t	src/drivers/usart/usart_linux.c	/^} usart_context_t;$/;"	t	typeref:struct:__anona8b6bc370108	file:
+usart_context_t	src/drivers/usart/usart_windows.c	/^} usart_context_t;$/;"	t	typeref:struct:__anon8a8d43d20108	file:
+usart_rx_thread	src/drivers/usart/usart_linux.c	/^static void * usart_rx_thread(void * arg) {$/;"	f	typeref:typename:void *	file:
+usart_rx_thread	src/drivers/usart/usart_windows.c	/^static unsigned WINAPI usart_rx_thread(void * params) {$/;"	f	typeref:typename:unsigned WINAPI	file:
+use_crc32	meson_options.txt	/^option('use_crc32', type: 'boolean', value: true, description: 'Cyclic redundancy check')$/;"	b
+use_dedup	meson_options.txt	/^option('use_dedup', type: 'boolean', value: true, description: 'Packet deduplication')$/;"	b
+use_hmac	meson_options.txt	/^option('use_hmac', type: 'boolean', value: true, description: 'Hash-based message authentication/;"	b
+use_promisc	meson_options.txt	/^option('use_promisc', type: 'boolean', value: true, description: 'Promiscious mode')$/;"	b
+use_rdp	meson_options.txt	/^option('use_rdp', type: 'boolean', value: true, description: 'Reliable Datagram Protocol')$/;"	b
+user_data	src/drivers/usart/usart_linux.c	/^	void * user_data;$/;"	m	struct:__anona8b6bc370108	typeref:typename:void *	file:
+user_data	src/drivers/usart/usart_windows.c	/^	void * user_data;$/;"	m	struct:__anon8a8d43d20108	typeref:typename:void *	file:
+version	include/csp/csp.h	/^	uint8_t version;            \/**< Protocol version to use (either 1 or 2) *\/$/;"	m	struct:csp_conf_s	typeref:typename:uint8_t
+version	meson_options.txt	/^option('version', type: 'integer', value: 1, description: 'Which version of CSP to use.')$/;"	i
+via	include/csp/csp_rtable.h	/^   uint16_t via;$/;"	m	struct:csp_route_s	typeref:typename:uint16_t
+wait_item_available	src/arch/posix/pthread_queue.c	/^static inline int wait_item_available(pthread_queue_t * queue, struct timespec * ts) {$/;"	f	typeref:typename:int	file:
+wait_slot_available	src/arch/posix/pthread_queue.c	/^static inline int wait_slot_available(pthread_queue_t * queue, struct timespec * ts) {$/;"	f	typeref:typename:int	file:
+window_size	src/csp_conn.h	/^	uint32_t window_size;$/;"	m	struct:__anon2d608f650408	typeref:typename:uint32_t
+windows_queue_create	contrib/windows/windows_queue.c	/^windows_queue_t * windows_queue_create(int length, size_t item_size) {$/;"	f	typeref:typename:windows_queue_t *
+windows_queue_delete	contrib/windows/windows_queue.c	/^void windows_queue_delete(windows_queue_t * q) {$/;"	f	typeref:typename:void
+windows_queue_dequeue	contrib/windows/windows_queue.c	/^int windows_queue_dequeue(windows_queue_t * queue, void * buf, int timeout) {$/;"	f	typeref:typename:int
+windows_queue_enqueue	contrib/windows/windows_queue.c	/^int windows_queue_enqueue(windows_queue_t * queue, const void * value, int timeout) {$/;"	f	typeref:typename:int
+windows_queue_items	contrib/windows/windows_queue.c	/^int windows_queue_items(windows_queue_t * queue) {$/;"	f	typeref:typename:int
+windows_queue_s	contrib/windows/windows_queue.c	/^struct windows_queue_s {$/;"	s	file:
+windows_queue_t	contrib/windows/windows_queue.h	/^typedef struct windows_queue_s windows_queue_t;$/;"	t	typeref:struct:windows_queue_s
+wrap_32bit_memcpy	src/csp_service_handler.c	/^static uint32_t wrap_32bit_memcpy(uint32_t to, const uint32_t from, size_t size) {$/;"	f	typeref:typename:uint32_t	file:
+yaml	meson.build	/^	yaml_pro = cmake.subproject('yaml', required: false)$/;"	P
+yaml_dep	meson.build	/^		yaml_dep = yaml_pro.dependency('yaml')$/;"	V
+yaml_dep	meson.build	/^yaml_dep = dependency('yaml-0.1', required : false)$/;"	V
+yaml_pro	meson.build	/^	yaml_pro = cmake.subproject('yaml', required: false)$/;"	V
+zmq_dep	src/interfaces/meson.build	/^zmq_dep = dependency('libzmq', version: '>4.0', required: false)$/;"	V
+zmq_driver_t	src/interfaces/csp_if_zmqhub.c	/^} zmq_driver_t;$/;"	t	typeref:struct:__anon75dbf4ca0108	file:
+zmqproxy	examples/CMakeLists.txt	/^  add_executable(zmqproxy EXCLUDE_FROM_ALL zmqproxy.c)$/;"	t
+zmqproxy	examples/meson.build	/^executable('zmqproxy',$/;"	B

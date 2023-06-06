@@ -671,6 +671,7 @@
     <Folder Include="src\ASF\thirdparty\CMSIS\Lib\" />
     <Folder Include="src\ASF\thirdparty\CMSIS\Lib\GCC\" />
     <Folder Include="src\config\" />
+    <Folder Include="src\endpoints" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="drivers\can_driver.c">
@@ -722,6 +723,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\serial_multiplexer_conf.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\Sermux_v2.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\spi_endpoint.h">
@@ -797,6 +801,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\register_handler.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Sermux_v2.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\tmr.c">

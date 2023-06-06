@@ -8,6 +8,7 @@
 #include "hdrtx.h"
 
 #include "bsp.h"
+#include "can_driver.h"
 #include "endpoints.h"
 #include "i2c_endpoint.h"
 #include "can_endpoint.h"
@@ -38,20 +39,18 @@ void HDRTX_vConfig(){
 
 	// Configure endpoints
 	// The 0 value is hard-coded, but corresponds to can_message_t.CC_CAN_MODE
-	/*CAN_vInitEndpoint(CAN_ENDPOINT, OBC_CAN_ADRESS, HDRTX_DEFAULT_I2C_ADDRESS, 0);
+	CAN_vInitEndpoint(CAN_ENDPOINT_V2, OBC_CAN_ADRESS, HDRTX_DEFAULT_I2C_ADDRESS, CC_CAN_2_MODE);
 	BSP_vCanSetAddressFilter(OBC_CAN_ADRESS, OBC_CAN_MASK);
-	*/
+	
 
 	// Register them with the sermux
-	//SERMUX_vRegisterEndpoint(CAN_ENDPOINT, &CAN_bEndpoint);
-	
-	// Only register I2C endpoint for now
-	SERMUX_vRegisterEndpoint(I2C_ENDPOINT_CHKSM, &I2C_bEndpointNoChecksum);
+	SERMUX_vRegisterEndpoint(CAN_ENDPOINT_V2, &CAN_bEndpoint);
+	//SERMUX_vRegisterEndpoint(I2C_ENDPOINT_CHKSM, &I2C_bEndpointNoChecksum);
 	
 }
 
 void HDRTX_vDeConfig(void){
-	SERMUX_vDeRegisterEndpoint(I2C_ENDPOINT);
+	SERMUX_vDeRegisterEndpoint(CAN_ENDPOINT_V2);
 	// SERMUX_vDeRegisterEndpoint(CAN_ENDPOINT);
 }
 

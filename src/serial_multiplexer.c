@@ -5,6 +5,13 @@
 #include <string.h>
 #include <stdbool.h>
 
+#include "Sermux_v2.h"
+
+/*
+ * The HEADERBYTES array configure the series of bytes to look for that defines a new packet 
+*/
+const uint8_t HEADERBYTES[] = {0xF0, 0x55, 0xAA, 0x0F};
+
 #ifndef TEST
 struct sermux_message {
     uint16_t length;
@@ -24,6 +31,7 @@ static enum SERMUX_STATES state;
 static uint16_t stateCounter;
 static struct sermux_message currentMessage;
 static endpoint_callback_t endpointFunctions[MAX_ENDPOINTS];
+
 
 // Local functions
 #ifndef TEST
@@ -105,6 +113,11 @@ void SERMUX_vReceiveByte(void)
     while (SERMUX_bByteAvailable() && !processedMessage) {
     
         uint8_t received_byte = SERMUX_u8GetByte();
+		
+		// Send the byte to the 2nd state machine as well.
+		// Its messages are processed outside of this loop.
+		
+		SERMUX_vV2StateMachine(received_byte);
         
         switch (state) {
         case POSSIBLE_HEADER:
@@ -182,6 +195,8 @@ void SERMUX_vReceiveByte(void)
     }
     
 }
+
+
 
 void SERMUX_vProcessMessage(void) {
 

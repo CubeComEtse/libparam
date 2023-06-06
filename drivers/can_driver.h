@@ -66,6 +66,7 @@ typedef struct {
 typedef enum {
 	CC_CAN_MODE = 0,
 	DFA_CAN_MODE = 1,
+	CC_CAN_2_MODE = 2,
 } can_mode_t;
 
 

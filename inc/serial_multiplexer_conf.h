@@ -3,16 +3,12 @@
  * to configure behavior
  */ 
 
-#ifndef SERIAL_MULTIPLEXER_CONF_H_
-#define SERIAL_MULTIPLEXER_CONF_H_
+#ifndef SERIAL_MULTIPLEXER_CONF_H
+#define SERIAL_MULTIPLEXER_CONF_H
 
 #include "usart_buffer.h"
 #include "bsp.h"
 
-/*
- * The HEADERBYTES array configure the series of bytes to look for that defines a new packet 
-*/
-const uint8_t HEADERBYTES[] = {0xF0, 0x55, 0xAA, 0x0F};
 
 /*
  * The max number of callbacks, from 0 to MAX_ENDPOINTS
