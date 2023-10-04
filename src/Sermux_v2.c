@@ -36,7 +36,7 @@ typedef struct {
 	uint8_t version;
 	uint8_t length;
 	uint8_t rx_count;
-	uint8_t buffer[128];
+	uint8_t buffer[200];
 	uint8_t crc;
 } v2_message_block_t;
 
@@ -76,6 +76,7 @@ void SERMUX_V2_vInit(void){
 
 /*
  V2 Messages run as their own separate state machines
+ 
 */
 void SERMUX_vV2StateMachine(uint8_t rx_byte){
 	switch (state){
@@ -128,6 +129,29 @@ void SERMUX_vV2StateMachine(uint8_t rx_byte){
 			state = V2_WAITING_1;
 			break;
 	}
+	
+}
+
+/*
+Returns true if we can receive a byte - there is a buffer that will accept it.
+*/
+bool SERMUX_vV2CanReceive(void)
+{
+	// If the RX buffer is empty, we can still receive.
+	if (!v2_rx_buffer_ready){
+		return true;
+	}
+	else{
+		// This means the other buffer is still full (messages are still being processed)
+		// Check if the (currently receiving) buffer is in its data section, and how far it is from its supposed length
+		// About 10 bytes before that, stop.
+		if (state == V2_STORE_DATA && (current_rx_block->length-current_rx_block->rx_count) < 10)
+		{
+			return false;
+		}
+	}
+	
+	return true;
 }
 
 /*
@@ -138,6 +162,7 @@ void SERMUX_v2_vProcess(void){
 	
 	if (v2_rx_buffer_ready){
 		
+		ioport_set_pin_level(TEST_PIN_0,1);
 		// Process a messages
 		uint8_t msg_len = current_msg_block->buffer[curr_msg_index +0];
 		uint8_t msg_target = current_msg_block->buffer[curr_msg_index +1];
@@ -179,6 +204,7 @@ void SERMUX_v2_vProcess(void){
 			v2_rx_buffer_ready = false;
 			curr_msg_index = 0;
 		}
+		ioport_set_pin_level(TEST_PIN_0,0);
 	}	
 	if (v2_tx_buffer_ready){
 		// Send header

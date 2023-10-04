@@ -190,7 +190,6 @@ void CAN_vProcess(void) {
 	{
 		// Get the latest message
 		currentMessage = CAN_DRIVER_sGetMessage();
-		ioport_set_pin_level(TEST_PIN,1);
 		
 		if (dfa_sw_state != idle){
 			CAN_vDFAFirmwareProcess(currentMessage);
@@ -242,7 +241,6 @@ void CAN_vProcess(void) {
 			}
 		}
 		CAN_DRIVER_vClearMessage();
-		ioport_set_pin_level(TEST_PIN, 0);
 	}
 }
 

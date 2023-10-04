@@ -76,6 +76,13 @@ int main (void)
     uint16_t tx_length = 0;
 
     
+    ioport_set_pin_level(TEST_PIN_2,1);
+    ioport_set_pin_level(TEST_PIN_2,0);
+
+    ioport_set_pin_level(TEST_PIN_3,1);
+    ioport_set_pin_level(TEST_PIN_3,0);
+    ioport_set_pin_level(TEST_PIN_1,1);
+    ioport_set_pin_level(TEST_PIN_1,0);
 
 
     while(1){
@@ -83,14 +90,19 @@ int main (void)
 		SERMUX_v2_vProcess();
 
         // Process the endpoints that require it
+		
         I2C_vProcess();
 		
         CAN_vProcess();
 		CAN_vDFAFirmwareProcess(NULL);
 		
-        CONFIG_vProcess();
-        SPI_vProcess();
+		// Green  - TEST_PIN_3
+		// Blue   - TEST_PIN_1
+		// Yellow - TEST_PIN_2
 		
+		
+        CONFIG_vProcess(); // Something here takes 5ms
+        SPI_vProcess();
 		MULTI_vProcess();
 		HDRTX_vProcess();
 

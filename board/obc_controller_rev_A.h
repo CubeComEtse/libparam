@@ -53,7 +53,7 @@
 #define I2C_BOARD_SDA_MUX       IOPORT_MODE_MUX_C
 #define I2C_BOARD_SCL_PIN       PIO_PD28_IDX
 #define I2C_BOARD_SCL_MUX       IOPORT_MODE_MUX_C
-#define I2C_BOARD_SPEED         100000
+#define I2C_BOARD_SPEED         400000
 
 #define LTC2992_1_DATARDY_PIN   PIO_PA24_IDX
 #define LTC2992_1_ALERT_PIN     PIO_PA22_IDX
@@ -88,8 +88,15 @@
 
 #define RTC_HANDLER             RTC_Handler
 
-// Test Pin
-#define TEST_PIN                PIO_PD24_IDX
+// Test Pins
+// Pin 55
+#define TEST_PIN_0              PIO_PD24_IDX
+// Pin 53
+#define TEST_PIN_1              PIO_PD26_IDX
+// Pin 52
+#define TEST_PIN_2              PIO_PD25_IDX
+// Pin 51
+#define TEST_PIN_3              PIO_PA14_IDX
 
 // H1.8
 #define XTX_nRST_PIN            PIO_PC1_IDX

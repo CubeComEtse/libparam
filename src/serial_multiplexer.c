@@ -110,7 +110,7 @@ void SERMUX_vReceiveByte(void)
 	// This flag gets set if a message is processed. 
 	// This releases the process so that other things can run as well.
 	bool processedMessage = false;
-    while (SERMUX_bByteAvailable() && !processedMessage) {
+    while (SERMUX_bByteAvailable() && !processedMessage && SERMUX_vV2CanReceive()) {
     
         uint8_t received_byte = SERMUX_u8GetByte();
 		

@@ -24,6 +24,7 @@ static int receivedMessageWrite = 0;
 
 
 static can_mode_t canMessageMode = CC_CAN_MODE;
+static uint8_t tx_buffer_counter = 0;
 
 
 void CAN_DRIVER_vSetCanMode(const can_mode_t type){
@@ -55,9 +56,22 @@ void CAN_DRIVER_vSendMessage(can_message_t message)
     
     uint8_t lenToCopy = min(32, message.length);
     memcpy(tx_element.data, message.data, lenToCopy);
+	
+	// Wait for the TX Buffer to be open
+	while (BSP_psGetCanDriver()->hw->MCAN_TXFQS & MCAN_TXFQS_TFQF  > 1);
 
-    mcan_set_tx_buffer_element(BSP_psGetCanDriver(), &tx_element, 0);
-    mcan_tx_transfer_request(BSP_psGetCanDriver(), 1);
+	// tfqpi should indicate where to write to next, and what bit to set to send?
+	// Datasheet 49.5.5.3 Tx FIFO, page 1416
+	uint32_t tfqpi = ((BSP_psGetCanDriver()->hw->MCAN_TXFQS & MCAN_TXFQS_TFQPI_Msk) >> MCAN_TXFQS_TFQPI_Pos);
+	
+    mcan_set_tx_buffer_element(BSP_psGetCanDriver(), &tx_element, tfqpi);
+	while (mcan_tx_transfer_request(BSP_psGetCanDriver(), 1 << tfqpi) == ERR_BUSY);  
+	 
+	tx_buffer_counter += 1;
+	if (tx_buffer_counter >= 32)
+	{
+		tx_buffer_counter = 0;
+	}
 	
 	// We have a weird message issue, where bytes from previous messages show
 	// up. This delay checks if sending slower helps

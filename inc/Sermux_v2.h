@@ -28,6 +28,7 @@
 
 void SERMUX_V2_vInit(void);
 void SERMUX_vV2StateMachine(uint8_t rx_byte);
+bool SERMUX_vV2CanReceive(void);
 void SERMUX_v2_vProcess(void);
 void SERMUX_v2_vSendMessage(uint8_t endpoint, uint8_t id, uint8_t * data, uint8_t length);
 

@@ -47,7 +47,7 @@
 /** Range: 1..64 */      
 #define CONF_MCAN0_RX_BUFFER_NUM         16
 /** Range: 1..16 */
-#define CONF_MCAN0_TX_BUFFER_NUM         4   
+#define CONF_MCAN0_TX_BUFFER_NUM         16  
 /** Range: 1..16 */        
 #define CONF_MCAN0_TX_FIFO_QUEUE_NUM     4     
 /** Range: 1..32 */       
@@ -74,7 +74,7 @@
 #define CONF_MCAN1_RX_EXTENDED_ID_FILTER_NUM     16    
 
 /** The value should be 8/12/16/20/24/32/48/64. */
-#define CONF_MCAN_ELEMENT_DATA_SIZE         32
+#define CONF_MCAN_ELEMENT_DATA_SIZE         8
 
 /**
  * The setting of the nominal bit rate is based on the PCK5 which is 30M which you can

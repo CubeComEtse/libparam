@@ -57,16 +57,28 @@ void BSP_vInit(void) {
     
     BSP_vUsbReset();
     
-    ioport_enable_pin(TEST_PIN);
-    ioport_set_pin_dir(TEST_PIN, IOPORT_DIR_OUTPUT);
-    ioport_set_pin_level(TEST_PIN, 0);
+    ioport_enable_pin(TEST_PIN_0);
+    ioport_set_pin_dir(TEST_PIN_0, IOPORT_DIR_OUTPUT);
+    ioport_set_pin_level(TEST_PIN_0, 0);
+	
+	ioport_enable_pin(TEST_PIN_1);
+	ioport_set_pin_dir(TEST_PIN_1, IOPORT_DIR_OUTPUT);
+	ioport_set_pin_level(TEST_PIN_1, 0);
+	
+	ioport_enable_pin(TEST_PIN_2);
+	ioport_set_pin_dir(TEST_PIN_2, IOPORT_DIR_OUTPUT);
+	ioport_set_pin_level(TEST_PIN_2, 0);
+	
+	ioport_enable_pin(TEST_PIN_3);
+	ioport_set_pin_dir(TEST_PIN_3, IOPORT_DIR_OUTPUT);
+	ioport_set_pin_level(TEST_PIN_3, 0);
 
     Enable_global_interrupt();
 
 }
 
 void BSP_vSetTestPin(bool level) {
-    ioport_set_pin_level(TEST_PIN, level);
+    ioport_set_pin_level(TEST_PIN_0, level);
 }
 
 void BSP_vInitSPI(void) { 

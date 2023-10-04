@@ -192,8 +192,9 @@ bool CONFIG_bConfigEndpoint(const uint8_t* rx_buffer, const uint16_t rx_length, 
 void CONFIG_vProcess(void) {
     if (TMR_bExpired(&sUpdateTimer)) {
         //Always measure the values
+        ioport_set_pin_level(TEST_PIN_2,0);
         CONFIG_vUpdatePowerMeasurements();
-    
+ 
         // Max require length is 16+1 for power measurements
         uint8_t tx_buffer[20];
         uint16_t tx_length;
@@ -229,6 +230,7 @@ void CONFIG_vProcess(void) {
         }
         // Restart timer
         TMR_vStart(&sUpdateTimer, u16PowerMeasurementInterval);
+        ioport_set_pin_level(TEST_PIN_2,1);
     }
 }
 
@@ -321,6 +323,7 @@ void CONFIG_vUpdatePowerMeasurements(void){
     uint16_t voltage2 = 0;
     uint16_t current1 = 0;
     uint16_t current2 = 0;
+	
 
     LTC2992_vReadVoltage(&power_measure_1, &voltage1, &voltage2);
     REG_UpdateVoltage(CHANNEL_3, voltage1);
@@ -330,7 +333,6 @@ void CONFIG_vUpdatePowerMeasurements(void){
     REG_UpdateVoltage(CHANNEL_vBatAlt, voltage1);
     REG_UpdateVoltage(CHANNEL_vBat, voltage2);
    
-
     LTC2992_vReadCurrent(&power_measure_1, &current1, &current2);
     REG_UpdateCurrent(CHANNEL_3, current1);
     REG_UpdateCurrent(CHANNEL_5, current2);
