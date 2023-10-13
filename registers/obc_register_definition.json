@@ -5,7 +5,12 @@
 			"functions_from": "extra.cs",
 			"namespace": "Devices.Models"
 		},
-		"filename": "OBC"
+		"filename": "OBC",
+		"filenames":{
+			"c_header": "OBC.h",
+			"c_source": "OBC.c",
+			"cs": "OBC.cs"
+		}
 	},
 	"module":
 	{
@@ -27,7 +32,8 @@
 						"c#": {
 							"hasminmax": "false",
 							"type": "byte"
-						}
+						},
+						"c": {"type": "uint8_t"}
 					},
 					{
 						"name": "id0",
@@ -36,7 +42,8 @@
 						"c#": {
 							"hasminmax": "false",
 							"type": "byte"
-						}
+						},
+						"c": {"type": "uint8_t"}
 					},
 					{
 						"name": "id1",
@@ -45,7 +52,8 @@
 						"c#": {
 							"hasminmax": "false",
 							"type": "byte"
-						}
+						},
+						"c": {"type": "uint8_t"}
 					},
 					{
 						"name": "id2",
@@ -54,7 +62,8 @@
 						"c#": {
 							"hasminmax": "false",
 							"type": "byte"
-						}
+						},
+						"c": {"type": "uint8_t"}
 					}
 				]
 			},
@@ -132,7 +141,8 @@
 						"c#": {
 							"hasminmax": "false",
 							"type": "short"
-						}
+						},
+						"c": {"type": "uint16_t"}
 					}
 				],
 				"c#": {
@@ -152,7 +162,8 @@
 						"c#": {
 							"hasminmax": "false",
 							"type": "short"
-						}
+						},
+						"c": {"type": "uint16_t"}
 					},
 					{
 						"name": "detail",
@@ -161,7 +172,8 @@
 						"c#": {
 							"hasminmax": "false",
 							"type": "short"
-						}
+						},
+						"c": {"type": "uint16_t"}
 					},
 					{
 						"name": "timestamp",
@@ -170,7 +182,8 @@
 						"c#": {
 							"hasminmax": "false",
 							"type": "short"
-						}
+						},
+						"c": {"type": "uint16_t"}
 					}
 				],
 				"c#": {
@@ -193,7 +206,8 @@
 						"c#": {
 							"hasminmax": "false",
 							"type": "byte"
-						}
+						},
+						"c": {"type": "bool"}
 					},
 					{
 						"name": "voltage3Toggle",
@@ -202,7 +216,8 @@
 						"c#": {
 							"hasminmax": "false",
 							"type": "byte"
-						}
+						},
+						"c": {"type": "bool"}
 					},
 					{
 						"name": "voltageVBatToggle",
@@ -211,7 +226,8 @@
 						"c#": {
 							"hasminmax": "false",
 							"type": "byte"
-						}
+						},
+						"c": {"type": "bool"}
 					},
 					{
 						"name": "voltageVBatAltToggle",
@@ -220,7 +236,8 @@
 						"c#": {
 							"hasminmax": "false",
 							"type": "byte"
-						}
+						},
+						"c": {"type": "bool"}
 					}
 				]
 			},
@@ -318,7 +335,8 @@
 						"c#": {
 							"hasminmax": "false",
 							"type": "byte"
-						}
+						},
+						"c": {"type": "uint8_t"}
 					},
 					{
 						"name": "WRDEL",
@@ -328,7 +346,8 @@
 						"c#": {
 							"hasminmax": "false",
 							"type": "byte"
-						}
+						},
+						"c": {"type": "uint8_t"}
 					},
 					{
 						"name": "SPD",
@@ -340,7 +359,8 @@
 							"min": 1,
 							"max": 40,
 							"type": "byte"
-						}
+						},
+						"c": {"type": "uint8_t"}
 					}
 				],
 				"c#": {
@@ -361,7 +381,8 @@
 						"c#": {
 							"hasminmax": "false",
 							"type": "byte"
-						}
+						},
+						"c": {"type": "uint8_t"}
 					}
 				],
 				"c#": {
@@ -383,7 +404,8 @@
 						"c#": {
 							"hasminmax": "false",
 							"type": "byte"
-						}
+						},
+						"c": {"type": "bool"}
 					},
 					{
 						"name": "AutoCLR",
@@ -394,7 +416,8 @@
 						"c#": {
 							"hasminmax": "false",
 							"type": "byte"
-						}
+						},
+						"c": {"type": "bool"}
 					},
 					{
 						"name": "RfSwENA",
@@ -405,12 +428,13 @@
 						"c#": {
 							"hasminmax": "false",
 							"type": "byte"
-						}
+						},
+						"c": {"type": "bool"}
 					},
-					{ "name": "FanPos1", "bit": "4", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
-					{ "name": "FanPos2", "bit": "5",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
-					{ "name": "FanPos3", "bit": "6",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
-					{ "name": "FanPos4", "bit": "7",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
+					{ "name": "FanPos1", "bit": "4", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+					{ "name": "FanPos2", "bit": "5",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+					{ "name": "FanPos3", "bit": "6",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"}},
+					{ "name": "FanPos4", "bit": "7",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
 					{
 						"name": "RfSwChan",
 						"description": "Enables the selected channel on the RF Switch. 0 Disables all",
@@ -418,7 +442,22 @@
 						"c#": {
 							"hasminmax": "false",
 							"type": "byte"
-						}
+						},
+						"c": {"type": "uint8_t"}
+					}
+				],
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name":"ConfTempSense",
+				"address": "0x2C",
+				"dir": "rw",
+				"width": "32",
+				"fields": [
+					{ "name": "EnableMeasurements", "bit": "0", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" },
+						"c": {"type": "bool"} 
 					}
 				],
 				"c#": {
@@ -440,7 +479,8 @@
 						"c#": {
 							"hasminmax": "false",
 							"type": "byte"
-						}
+						},
+						"c": {"type": "bool"} 
 					},
 					{
 						"name": "nRST",
@@ -450,7 +490,8 @@
 						"c#": {
 							"hasminmax": "false",
 							"type": "byte"
-						}
+						},
+						"c": {"type": "bool"}
 					},
 					{
 						"name": "RDY",
@@ -459,7 +500,8 @@
 						"c#": {
 							"hasminmax": "false",
 							"type": "byte"
-						}
+						},
+						"c": {"type": "bool"}
 					}
 				],
 				"c#": {
@@ -472,21 +514,21 @@
 				"dir": "rw",
 				"width": "32",
 				"fields": [
-					{ "name": "POS1_XTX_EN", "bit": "0", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
-					{ "name": "POS1_XTX_Power", "bit": "1",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
-					{ "name": "POS1_XTX_nReset", "bit": "2",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
+					{ "name": "POS1_XTX_EN", "bit": "0", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+					{ "name": "POS1_XTX_Power", "bit": "1",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+					{ "name": "POS1_XTX_nReset", "bit": "2",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
 
-					{ "name": "POS2_XTX_EN", "bit": "4", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
-					{ "name": "POS2_XTX_Power", "bit": "5",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
-					{ "name": "POS2_XTX_nReset", "bit": "6",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
+					{ "name": "POS2_XTX_EN", "bit": "4", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+					{ "name": "POS2_XTX_Power", "bit": "5",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+					{ "name": "POS2_XTX_nReset", "bit": "6",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
 
-					{ "name": "POS3_XTX_EN", "bit": "8", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
-					{ "name": "POS3_XTX_Power", "bit": "9",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
-					{ "name": "POS3_XTX_nReset", "bit": "10",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
+					{ "name": "POS3_XTX_EN", "bit": "8", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+					{ "name": "POS3_XTX_Power", "bit": "9",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+					{ "name": "POS3_XTX_nReset", "bit": "10",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
 					
-					{ "name": "POS4_XTX_EN", "bit": "12", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
-					{ "name": "POS4_XTX_Power", "bit": "13",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } },
-					{ "name": "POS4_XTX_nReset", "bit": "14",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" } }
+					{ "name": "POS4_XTX_EN", "bit": "12", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+					{ "name": "POS4_XTX_Power", "bit": "13",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+					{ "name": "POS4_XTX_nReset", "bit": "14",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} }
 				],
 				"c#": {
 					"type": "UInt32"
@@ -507,13 +549,47 @@
 						"c#": {
 							"hasminmax": "false",
 							"type": "byte"
-						}
+						}, 
+						"c": {"type": "byte"}
 					}
 				],
 				"c#": {
 					"type": "UInt32"
 				}
-			}
+			},
+			{ "name":"CSBoard_T0", "address": "0x50", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_T1", "address": "0x51", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_T2", "address": "0x52", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_T3", "address": "0x53", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_T4", "address": "0x54", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_T5", "address": "0x55", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_T6", "address": "0x56", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_T7", "address": "0x57", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current0I0", "address": "0x58", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current0I1", "address": "0x59", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current0I2", "address": "0x5A", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current1I0", "address": "0x5B", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current1I1", "address": "0x5C", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current1I2", "address": "0x5D", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current2I0", "address": "0x5E", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current2I1", "address": "0x5F", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current2I2", "address": "0x60", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current3I0", "address": "0x61", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current3I1", "address": "0x62", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current3I2", "address": "0x63", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current4I0", "address": "0x64", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current4I1", "address": "0x65", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current4I2", "address": "0x66", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current5I0", "address": "0x67", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current5I1", "address": "0x68", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current5I2", "address": "0x69", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current6I0", "address": "0x6A", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current6I1", "address": "0x6B", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current6I2", "address": "0x6C", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current7I0", "address": "0x6D", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current7I1", "address": "0x6E", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current7I2", "address": "0x6F", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } }
+
 		],
 		"generic_fields":{
 			"boardflag": [
@@ -523,7 +599,8 @@
 					"c#": {
 						"hasminmax": "false",
 						"type": "byte"
-					}
+					}, 
+					"c": {"type": "uint8_t"}
 				}
 			],
 			"Version" : [
@@ -534,7 +611,8 @@
 					"c#": {
 						"hasminmax": "false",
 						"type": "byte"
-					}
+					}, 
+					"c": {"type": "uint8_t"}
 				},
 				{
 					"name": "minor_version",
@@ -543,7 +621,8 @@
 					"c#": {
 						"hasminmax": "false",
 						"type": "byte"
-					}
+					}, 
+					"c": {"type": "uint8_t"}
 				},
 				{
 					"name": "patch_version",
@@ -552,7 +631,8 @@
 					"c#": {
 						"hasminmax": "false",
 						"type": "byte"
-					}
+					}, 
+					"c": {"type": "uint8_t"}
 				}
 			],
 			"MeasureVI": [
@@ -563,7 +643,8 @@
 					"c#": {
 						"hasminmax": "false",
 						"type": "UInt32"
-					}
+					}, 
+					"c": {"type": "uint16_t"}
 				},
 				{
 					"name": "current",
@@ -572,7 +653,8 @@
 					"c#": {
 						"hasminmax": "false",
 						"type": "UInt32"
-					}
+					}, 
+					"c": {"type": "uint16_t"}
 				}
 			],
 			"MeasurePower": [
@@ -583,7 +665,8 @@
 					"c#": {
 						"hasminmax": "false",
 						"type": "UInt32"
-					}
+					}, 
+					"c": {"type": "uint32_t"}
 				}
 			] 
 		},

@@ -80,7 +80,8 @@ bool I2C_DRIVER_bWriteWithChecksum(struct i2c_driver_data* drv, const uint8_t ch
         EVENT_AddEvent(EVENT_SECTION_I2C, 16 + result);
     }
 
-    uint8_t trDelay = (uint8_t) ((currentRegisters.i2cconfa & OBC_REG_I2CCONFA_TRDEL_Msk) >> OBC_REG_I2CCONFA_TRDEL_Pos);
+    uint8_t trDelay = 0;
+	mm_getI2CConfA_TRDEL(&trDelay);
     if (trDelay > 0){
         delay_ms(trDelay * 10);
     }
@@ -113,7 +114,8 @@ bool I2C_DRIVER_bReadFromChecksum(struct i2c_driver_data* drv, const uint8_t chi
 
     // There is a register option to use separate write-read instructions
     // If the delay time is set, there will be a delay between them.
-    uint8_t wrDelay = (uint8_t) ((currentRegisters.i2cconfa & OBC_REG_I2CCONFA_WRDEL_Msk) >> OBC_REG_I2CCONFA_WRDEL_Pos);
+    uint8_t wrDelay = 0;
+    mm_getI2CConfA_WRDEL(&wrDelay);
     if (wrDelay > 0){        
         uint8_t buff[] = {mem_address, 0x00};
 
@@ -171,7 +173,8 @@ bool I2C_DRIVER_bReadFromChecksum(struct i2c_driver_data* drv, const uint8_t chi
         asm("nop");
     }
 
-    uint8_t trDelay = (uint8_t) ((currentRegisters.i2cconfa & OBC_REG_I2CCONFA_TRDEL_Msk) >> OBC_REG_I2CCONFA_TRDEL_Pos);
+    uint8_t trDelay = 0;
+    mm_getI2CConfA_TRDEL(&trDelay);
     if (trDelay > 0){
         delay_ms(trDelay);
     }
@@ -207,7 +210,8 @@ bool I2C_DRIVER_bWritePlain(struct i2c_driver_data* drv, const uint8_t chip_addr
     uint32_t result = twihs_master_write(drv->p_twihs, &write_packet);
     twihs_read_byte(drv->p_twihs);
 
-    uint8_t trDelay = (uint8_t) ((currentRegisters.i2cconfa & OBC_REG_I2CCONFA_TRDEL_Msk) >> OBC_REG_I2CCONFA_TRDEL_Pos);
+    uint8_t trDelay = 0;
+    mm_getI2CConfA_TRDEL(&trDelay);
     if (trDelay > 0){
         delay_ms(trDelay * 10);
     }
@@ -238,7 +242,9 @@ bool I2C_DRIVER_bReadPlain(struct i2c_driver_data* drv, const uint8_t chip_addr,
 
     // There is a register option to use separate write-read instructions
     // If the delay time is set, there will be a delay between them.
-    uint8_t wrDelay = (uint8_t) ((currentRegisters.i2cconfa & OBC_REG_I2CCONFA_WRDEL_Msk) >> OBC_REG_I2CCONFA_WRDEL_Pos);
+    uint8_t wrDelay = 0;
+	mm_getI2CConfA_WRDEL(&wrDelay);
+	
     if (wrDelay > 0){        
         uint8_t buff[] = {mem_address, 0xFF};
 
@@ -280,7 +286,8 @@ bool I2C_DRIVER_bReadPlain(struct i2c_driver_data* drv, const uint8_t chip_addr,
 
     bool retVal = (result == TWIHS_SUCCESS);
 
-    uint8_t trDelay = (uint8_t) ((currentRegisters.i2cconfa & OBC_REG_I2CCONFA_TRDEL_Msk) >> OBC_REG_I2CCONFA_TRDEL_Pos);
+	uint8_t trDelay = 0;
+	mm_getI2CConfA_TRDEL(&trDelay);
     if (trDelay > 0){
         delay_ms(trDelay);
     }
@@ -328,4 +335,62 @@ bool I2C_DRIVER_bReadLocal(struct i2c_driver_data* drv, const uint8_t chip_addr,
     uint32_t result = twihs_master_read(drv->p_twihs, &read_packet);
 
     return result == TWIHS_SUCCESS;
+}
+
+
+
+
+
+
+
+// We need another one, this time with configurable address length - who knew that was a thing
+bool I2C_DRIVER_bReadCustom(struct i2c_driver_data* drv, const uint8_t chip_addr, const uint8_t * mem_address, const uint8_t mem_address_length, uint8_t* rx_buffer, const uint16_t length) 
+{
+	twihs_packet_t read_packet;
+	read_packet.chip = chip_addr;
+	memcpy(read_packet.addr, mem_address, min(mem_address_length,3));
+	read_packet.addr_length = mem_address_length;
+	read_packet.buffer = rx_buffer;
+	read_packet.length = ((uint32_t) length);
+	uint32_t result =0;
+
+	result = twihs_master_read(drv->p_twihs, &read_packet);
+	
+
+	// Clear buffer
+	// twihs_read_byte(drv->p_twihs);
+
+	if (result == TWIHS_ERROR_TIMEOUT) {
+		ioport_enable_pin(I2C_PC104_SCL_PIN);
+		ioport_set_pin_dir(I2C_PC104_SCL_PIN, IOPORT_DIR_OUTPUT);
+		
+		for (int i = 0; i < 32; i++) {
+			ioport_toggle_pin_level(I2C_PC104_SCL_PIN);
+			delay_us(50);
+		}
+		
+		ioport_reset_pin_mode(I2C_PC104_SCL_PIN);
+
+		I2C_DRIVER_vInitPC104(drv, i2c_speed);
+	}
+
+	bool retVal = (result == TWIHS_SUCCESS);
+
+	return retVal;
+}
+
+bool I2C_DRIVER_bWriteCustom(struct i2c_driver_data* drv, const uint8_t chip_addr, const uint8_t * mem_address, const uint8_t mem_address_length, uint8_t* tx_buffer, const uint16_t length)
+{	
+	twihs_packet_t write_packet;
+	write_packet.chip = chip_addr;
+	memcpy(write_packet.addr, mem_address, mem_address_length);
+	write_packet.addr_length = mem_address_length;
+	write_packet.buffer = tx_buffer;
+	write_packet.length = ((uint32_t) length);
+
+
+	uint32_t result = twihs_master_write(drv->p_twihs, &write_packet);
+	twihs_read_byte(drv->p_twihs);
+
+	return result == TWIHS_SUCCESS;
 }

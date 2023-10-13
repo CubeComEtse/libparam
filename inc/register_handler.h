@@ -15,14 +15,6 @@
 #include "XDC.h"
 #include "OBC.h"
 
-enum power_channel{
-    CHANNEL_3,
-    CHANNEL_5,
-    CHANNEL_vBat,
-    CHANNEL_vBatAlt,
-};
-
-extern OBC_RegisterData_t currentRegisters;
 
 void REG_vInit(void);
 
@@ -42,7 +34,7 @@ bool REG_CheckAddress(const uint8_t address);
 Gets the register given by address, copies it's data into the data argument
 Returns true if the address is valid, false otherwise.
 */
-bool REG_vGet(const uint8_t address, uint8_t* data, uint8_t* length);
+bool REG_vGet(const uint32_t address, uint8_t * buff, uint8_t * size);
 
 /*
  * Process all the stored messages. This function should be called regularly.
@@ -60,10 +52,6 @@ void REG_UpdateTemperature(uint16_t temperature);
 
 void REG_Copyu32ToArray(const uint32_t value, uint8_t* data);
 
-void REG_UpdateVoltagePins(uint8_t newValue);
-void REG_UpdateVoltage(enum power_channel channel, uint16_t value);
-void REG_UpdateCurrent(uint8_t channel, uint16_t value);
-void REG_UpdatePower(enum power_channel channel, uint32_t value);
 
 uint8_t REG_GetI2CSpeed(void);
 void REG_SetI2CSpeed(uint32_t newSpeed);
@@ -71,7 +59,5 @@ void REG_SetI2CSpeed(uint32_t newSpeed);
 uint32_t REG_GetI2CAddress(void);
 void REG_vSetI2CAddress(uint8_t address);
 
-void REG_vSetUptime(uint32_t uptime);
-uint32_t REG_u32GetUptime(void);
 
 #endif /* REGISTER_HANDLER_H_ */

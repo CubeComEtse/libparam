@@ -710,6 +710,9 @@
     <Compile Include="inc\i2c_endpoint.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="inc\ltc2499.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="inc\ltc2992.h">
       <SubType>compile</SubType>
     </Compile>
@@ -717,6 +720,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\register_handler.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\semphr.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\serial_multiplexer.h">
@@ -767,6 +773,9 @@
     <None Include="src\ASF\common\services\twi\twihs_slave.h">
       <SubType>compile</SubType>
     </None>
+    <Compile Include="registers\OBC.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="registers\OBC.h">
       <SubType>compile</SubType>
     </Compile>
@@ -795,6 +804,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\hdrtx_dfa.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\ltc2499.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\Multitester.c">

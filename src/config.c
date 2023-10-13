@@ -10,6 +10,7 @@
 #include "config.h"
 #include "bsp.h"
 #include "ltc2992.h"
+#include "ltc2499.h"
 #include "serial_multiplexer.h"
 #include "std_message.h"
 #include "tmr.h"
@@ -29,6 +30,8 @@ static struct ltc2992_device power_measure_2;
 static uint8_t currentBoardConfig = 0;
 static uint8_t u8BoardEndpoint;
 
+static ltc2499_device cs_board;
+
 // Current power line configuration
 static uint8_t u8PowerConfig;
 
@@ -38,6 +41,12 @@ static uint u8PowerMeasureConfig = 0;
 static tmr_t sUpdateTimer;
 // Set the interval to sample with - in milliseconds
 static uint16_t u16PowerMeasurementInterval = 250;
+
+
+static tmr_t sCSBoardTemperatureTimer;
+static uint16_t u16CSBoardMeasurementInterval = 100;
+
+static bool bCSBoardenabled = false;
 
 enum Boards {
     xtx = 1 << 0,
@@ -76,6 +85,13 @@ void CONFIG_vInit(uint8_t endpoint) {
 
     TMR_vInit(&sUpdateTimer, BSP_u16TmrGetTick, 1);
     TMR_vStart(&sUpdateTimer, u16PowerMeasurementInterval);
+	
+	TMR_vInit(&sCSBoardTemperatureTimer, BSP_u16TmrGetTick, 1);
+	TMR_vStart(&sCSBoardTemperatureTimer, u16CSBoardMeasurementInterval);
+	
+	cs_board.i2c_read_function = BSP_vCurrentSenseReadFunction;
+	cs_board.i2c_write_function = BSP_vCurrentSenseWriteFunction;
+	LTC2499_vInit(&cs_board);
 }
 
 /**
@@ -90,8 +106,11 @@ void CONFIG_vInit(uint8_t endpoint) {
  */
 bool CONFIG_bConfigEndpoint(const uint8_t* rx_buffer, const uint16_t rx_length, uint8_t* tx_buffer, uint16_t* tx_length)
 {
+	// There are 'old' registers between 0x00 and 0x10. These are processed further down in this function. Up here it checks
+	// if we are processing a new message, and then does that
+	
     //Insert support for new registers at the top
-    if (rx_buffer[DIR_idx] == READ && rx_buffer[ADDR_idx] >= OBC_REG_BOARD_ID) {
+    if (rx_buffer[DIR_idx] == READ && rx_buffer[ADDR_idx] >= reg_Board_ID_addr) {
         uint8_t dataLength = 0;
         if (REG_vGet(rx_buffer[ADDR_idx], &tx_buffer[DATA_idx], &dataLength)){
             // Copy the address and direction
@@ -104,7 +123,7 @@ bool CONFIG_bConfigEndpoint(const uint8_t* rx_buffer, const uint16_t rx_length, 
         }
     }
 
-    if (rx_buffer[DIR_idx] == WRITE && rx_buffer[ADDR_idx] >= OBC_REG_BOARD_ID) {
+    if (rx_buffer[DIR_idx] == WRITE && rx_buffer[ADDR_idx] >= reg_Board_ID_addr) {
         REG_vAddMessage(rx_buffer[ADDR_idx], &rx_buffer[DATA_idx]);
         return false;
     }
@@ -113,7 +132,7 @@ bool CONFIG_bConfigEndpoint(const uint8_t* rx_buffer, const uint16_t rx_length, 
     if (rx_buffer[DIR_idx] == WRITE) {
         switch(rx_buffer[ADDR_idx]) {
         case CONF_POWER:
-            REG_UpdateVoltagePins(rx_buffer[DATA_idx]);
+			mm_setConfPower((uint32_t) rx_buffer[DATA_idx]);
             CONFIG_vDecodePower(rx_buffer[DATA_idx]);
             break;
         case CONF_MEASURE:
@@ -232,6 +251,14 @@ void CONFIG_vProcess(void) {
         TMR_vStart(&sUpdateTimer, u16PowerMeasurementInterval);
         ioport_set_pin_level(TEST_PIN_2,1);
     }
+	
+	if (TMR_bExpired(&sCSBoardTemperatureTimer)){
+		if (bCSBoardenabled){
+			LTC2499_getSample(&cs_board);
+		}
+		
+		TMR_vStart(&sCSBoardTemperatureTimer, u16CSBoardMeasurementInterval);
+	}
 }
 
 /**
@@ -326,29 +353,29 @@ void CONFIG_vUpdatePowerMeasurements(void){
 	
 
     LTC2992_vReadVoltage(&power_measure_1, &voltage1, &voltage2);
-    REG_UpdateVoltage(CHANNEL_3, voltage1);
-    REG_UpdateVoltage(CHANNEL_5, voltage2);
+	mm_setMeasureVI_V3_voltage(voltage1);
+	mm_setMeasureVI_V5_voltage(voltage2);
+	
 
     LTC2992_vReadVoltage(&power_measure_2, &voltage1, &voltage2);
-    REG_UpdateVoltage(CHANNEL_vBatAlt, voltage1);
-    REG_UpdateVoltage(CHANNEL_vBat, voltage2);
+	mm_setMeasureVI_VBat_voltage(voltage2);
+	mm_setMeasureVI_VBatAlt_voltage(voltage2);
    
     LTC2992_vReadCurrent(&power_measure_1, &current1, &current2);
-    REG_UpdateCurrent(CHANNEL_3, current1);
-    REG_UpdateCurrent(CHANNEL_5, current2);
+	mm_setMeasureVI_V3_current(current1);
+	mm_setMeasureVI_V5_current(current1);
     
     LTC2992_vReadCurrent(&power_measure_2, &current1, &current2);
-    REG_UpdateCurrent(CHANNEL_vBatAlt, current1);
-    REG_UpdateCurrent(CHANNEL_vBat, current2);
-
+	mm_setMeasureVI_VBat_current(current2);
+	mm_setMeasureVI_VBatAlt_current(current1);
 
     LTC2992_vReadPower(&power_measure_1, &power1, &power2);
-    REG_UpdatePower(CHANNEL_3, power1);
-    REG_UpdatePower(CHANNEL_5, power2);
+	mm_setMeasurePower_V3(power1);
+	mm_setMeasurePower_V3(power2);
 
     LTC2992_vReadPower(&power_measure_2, &power1, &power2);
-    REG_UpdatePower(CHANNEL_vBatAlt, power1);
-    REG_UpdatePower(CHANNEL_vBat, power2);
+    mm_setMeasurePower_VBatAlt(power1);
+	mm_setMeasurePower_VBat(power2);
 }
 
 
@@ -361,8 +388,10 @@ void CONFIG_vUpdatePowerMeasurements(void){
  * \return void
  */
 void CONFIG_vGetPowerMeasurements(uint8_t* tx_buffer, uint16_t* tx_length){
-    uint32_t power1 = currentRegisters.measurepower_v3;
-    uint32_t power2 = currentRegisters.measurepower_v5;
+    uint32_t power1 = 0;
+	mm_getMeasurePower_V3(&power1);
+    uint32_t power2 = 0;
+    mm_getMeasurePower_V5(&power2);
 
     tx_buffer[0] = 0xFF & (power1);
     tx_buffer[1] = 0xFF & (power1 >> 8);
@@ -374,8 +403,9 @@ void CONFIG_vGetPowerMeasurements(uint8_t* tx_buffer, uint16_t* tx_length){
     tx_buffer[6] = 0xFF & (power2 >> 16);
     tx_buffer[7] = 0xFF & (power2 >> 24);
 
-    power1 = currentRegisters.measurepower_vbat;
-    power2 = currentRegisters.measurepower_vbatalt;
+    mm_getMeasurePower_VBat(&power1);
+    mm_getMeasurePower_VBatAlt(&power2);
+	
     tx_buffer[8] = 0xFF & (power1);
     tx_buffer[9] = 0xFF & (power1 >> 8);
     tx_buffer[10] = 0xFF & (power1 >> 16);
@@ -390,16 +420,18 @@ void CONFIG_vGetPowerMeasurements(uint8_t* tx_buffer, uint16_t* tx_length){
 }
 
 void CONFIG_vGetVoltageMeasurements(uint8_t* tx_buffer, uint16_t* tx_length) {
-    uint16_t voltage1 = (currentRegisters.measurevi_v3 & OBC_REG_MEASUREVI_VOLTAGE_Msk) >> OBC_REG_MEASUREVI_VOLTAGE_Pos;
-    uint16_t voltage2 = (currentRegisters.measurevi_v5 & OBC_REG_MEASUREVI_VOLTAGE_Msk) >> OBC_REG_MEASUREVI_VOLTAGE_Pos;
+    uint16_t voltage1 = 0;
+    uint16_t voltage2 = 0;
+	mm_getMeasureVI_V3_voltage(&voltage1);
+	mm_getMeasureVI_V5_voltage(&voltage2);
 
     tx_buffer[0] = 0xFF & (voltage1);
     tx_buffer[1] = 0xFF & (voltage1 >> 8);
     tx_buffer[2] = 0xFF & (voltage2);
     tx_buffer[3] = 0xFF & (voltage2 >> 8);
     
-    voltage1 = (currentRegisters.measurevi_vbat & OBC_REG_MEASUREVI_VOLTAGE_Msk) >> OBC_REG_MEASUREVI_VOLTAGE_Pos;
-    voltage2 = (currentRegisters.measurevi_vbatalt & OBC_REG_MEASUREVI_VOLTAGE_Msk) >> OBC_REG_MEASUREVI_VOLTAGE_Pos;
+    mm_getMeasureVI_VBat_voltage(&voltage1);
+    mm_getMeasureVI_VBatAlt_voltage(&voltage2);
 
     tx_buffer[4] = 0xFF & (voltage1);
     tx_buffer[5] = 0xFF & (voltage1 >> 8);
@@ -410,16 +442,18 @@ void CONFIG_vGetVoltageMeasurements(uint8_t* tx_buffer, uint16_t* tx_length) {
 }
 
 void CONFIG_vGetCurrentMeasurements(uint8_t* tx_buffer, uint16_t* tx_length) {
-    uint16_t current1 = (currentRegisters.measurevi_v3 & OBC_REG_MEASUREVI_CURRENT_Msk) >> OBC_REG_MEASUREVI_CURRENT_Pos;
-    uint16_t current2 = (currentRegisters.measurevi_v5 & OBC_REG_MEASUREVI_CURRENT_Msk) >> OBC_REG_MEASUREVI_CURRENT_Pos;
+    uint16_t current1 = 0;
+    uint16_t current2 = 0;
+    mm_getMeasureVI_V3_current(&current1);
+    mm_getMeasureVI_V5_current(&current2);
 
     tx_buffer[0] = 0xFF & (current1);
     tx_buffer[1] = 0xFF & (current1 >> 8);
     tx_buffer[2] = 0xFF & (current2);
     tx_buffer[3] = 0xFF & (current2 >> 8);
     
-    current1 = (currentRegisters.measurevi_vbat & OBC_REG_MEASUREVI_CURRENT_Msk) >> OBC_REG_MEASUREVI_CURRENT_Pos;
-    current2 = (currentRegisters.measurevi_vbatalt & OBC_REG_MEASUREVI_CURRENT_Msk) >> OBC_REG_MEASUREVI_CURRENT_Pos;
+    mm_getMeasureVI_VBat_current(&current1);
+	 mm_getMeasureVI_VBatAlt_current(&current2);
 
     tx_buffer[4] = 0xFF & (current1);
     tx_buffer[5] = 0xFF & (current1 >> 8);

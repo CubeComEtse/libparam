@@ -63,17 +63,7 @@ int main (void)
     TMR_vInit(&uptimeTimer, BSP_u16TmrGetTick, 1);
     TMR_vStart(&uptimeTimer, 1000);
 
-
     //CAN_vInitEndpoint(CAN_ENDPOINT, OBC_CAN_ADRESS, XTX_CAN_ADRESS);
-    uint8_t rx_buffer[8];
-    rx_buffer[ADDR_idx] = 0x02;
-    rx_buffer[DIR_idx] = READ;
-    rx_buffer[LEN_idx] = 3;
-    rx_buffer[DATA_idx] = 0;
-    uint16_t tx_len = 3;
-
-    uint8_t tx_buffer[8];
-    uint16_t tx_length = 0;
 
     
     ioport_set_pin_level(TEST_PIN_2,1);
@@ -112,7 +102,7 @@ int main (void)
         if (TMR_bExpired(&uptimeTimer)){
             // Increase 
             uptime += 1;
-            REG_vSetUptime(uptime);
+			mm_setUptime(uptime);
             TMR_vStart(&uptimeTimer, 1000);
         }
     }

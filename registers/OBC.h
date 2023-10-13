@@ -1,209 +1,267 @@
-#ifndef OBC_H_
-#define OBC_H_
+#ifndef memory_map_h
+#define memory_map_h
+
 #include <stdint.h>
 #include <stdbool.h>
 
-#define OBC_REG_BOARD_ID                             0x10
-#define OBC_REG_FW_VERSION                           0x11
-#define OBC_REG_HW_VERSION                           0x12
-#define OBC_REG_SCRATCHPAD                           0x13
-#define OBC_REG_SUPPORTED_BOARDS                     0x14
-#define OBC_REG_CONFIGURED_BOARDS                    0x15
-#define OBC_REG_UPTIME                               0x16
-#define OBC_REG_EVENT_CONFA                          0x17
-#define OBC_REG_EVENT                                0x18
-#define OBC_REG_CONFPOWER                            0x20
-#define OBC_REG_MEASUREVI_V3                         0x21
-#define OBC_REG_MEASUREPOWER_V3                      0x22
-#define OBC_REG_MEASUREVI_V5                         0x23
-#define OBC_REG_MEASUREPOWER_V5                      0x24
-#define OBC_REG_MEASUREVI_VBAT                       0x25
-#define OBC_REG_MEASUREPOWER_VBAT                    0x26
-#define OBC_REG_MEASUREVI_VBATALT                    0x27
-#define OBC_REG_MEASUREPOWER_VBATALT                 0x28
-#define OBC_REG_I2CCONFA                             0x29
-#define OBC_REG_I2CCONFB                             0x2a
-#define OBC_REG_CONFMULTI                            0x2b
-#define OBC_REG_XTXPINS                              0x30
-#define OBC_REG_XTXMULTITESTER                       0x31
-#define OBC_REG_XDCCONFIG                            0x40
-
+// Possible memory map responses
+typedef enum {
+	mm_OK = 0,
+	mm_OutOfRange = 1,
+	mm_NotReady = 2,
+} mm_response_t;
 
 /*************** Bit definition for Board_ID register ************************/
-#define OBC_REG_BOARD_ID_CCIDENTIFIER_Pos            (24UL)
-#define OBC_REG_BOARD_ID_CCIDENTIFIER_Msk            (0x00ff << OBC_REG_BOARD_ID_CCIDENTIFIER_Pos)
-#define OBC_REG_BOARD_ID_CCIDENTIFIER                OBC_REG_BOARD_ID_CCIDENTIFIER_Msk
-#define OBC_REG_BOARD_ID_ID0_Pos                     (16UL)
-#define OBC_REG_BOARD_ID_ID0_Msk                     (0x00ff << OBC_REG_BOARD_ID_ID0_Pos)
-#define OBC_REG_BOARD_ID_ID0                         OBC_REG_BOARD_ID_ID0_Msk
-#define OBC_REG_BOARD_ID_ID1_Pos                     (8UL)
-#define OBC_REG_BOARD_ID_ID1_Msk                     (0x00ff << OBC_REG_BOARD_ID_ID1_Pos)
-#define OBC_REG_BOARD_ID_ID1                         OBC_REG_BOARD_ID_ID1_Msk
-#define OBC_REG_BOARD_ID_ID2_Pos                     (0UL)
-#define OBC_REG_BOARD_ID_ID2_Msk                     (0x00ff << OBC_REG_BOARD_ID_ID2_Pos)
-#define OBC_REG_BOARD_ID_ID2                         OBC_REG_BOARD_ID_ID2_Msk
+#define REG_BOARD_ID_CCIDENTIFIER_Pos                (24UL)
+#define REG_BOARD_ID_CCIDENTIFIER_Msk                (0x00ff << REG_BOARD_ID_CCIDENTIFIER_Pos)
+#define REG_BOARD_ID_ID0_Pos                         (16UL)
+#define REG_BOARD_ID_ID0_Msk                         (0x00ff << REG_BOARD_ID_ID0_Pos)
+#define REG_BOARD_ID_ID1_Pos                         (8UL)
+#define REG_BOARD_ID_ID1_Msk                         (0x00ff << REG_BOARD_ID_ID1_Pos)
+#define REG_BOARD_ID_ID2_Pos                         (0UL)
+#define REG_BOARD_ID_ID2_Msk                         (0x00ff << REG_BOARD_ID_ID2_Pos)
 
 /*************** Bit definition for Event_ConfA register *********************/
-#define OBC_REG_EVENT_CONFA_COUNT_Pos                (0UL)
-#define OBC_REG_EVENT_CONFA_COUNT_Msk                (0xffff << OBC_REG_EVENT_CONFA_COUNT_Pos)
-#define OBC_REG_EVENT_CONFA_COUNT                    OBC_REG_EVENT_CONFA_COUNT_Msk
+#define REG_EVENT_CONFA_COUNT_Pos                    (0UL)
+#define REG_EVENT_CONFA_COUNT_Msk                    (0xffff << REG_EVENT_CONFA_COUNT_Pos)
 
 /*************** Bit definition for Event register ***************************/
-#define OBC_REG_EVENT_SECTION_Pos                    (24UL)
-#define OBC_REG_EVENT_SECTION_Msk                    (0x00ff << OBC_REG_EVENT_SECTION_Pos)
-#define OBC_REG_EVENT_SECTION                        OBC_REG_EVENT_SECTION_Msk
-#define OBC_REG_EVENT_DETAIL_Pos                     (16UL)
-#define OBC_REG_EVENT_DETAIL_Msk                     (0x00ff << OBC_REG_EVENT_DETAIL_Pos)
-#define OBC_REG_EVENT_DETAIL                         OBC_REG_EVENT_DETAIL_Msk
-#define OBC_REG_EVENT_TIMESTAMP_Pos                  (0UL)
-#define OBC_REG_EVENT_TIMESTAMP_Msk                  (0xffff << OBC_REG_EVENT_TIMESTAMP_Pos)
-#define OBC_REG_EVENT_TIMESTAMP                      OBC_REG_EVENT_TIMESTAMP_Msk
+#define REG_EVENT_SECTION_Pos                        (24UL)
+#define REG_EVENT_SECTION_Msk                        (0x00ff << REG_EVENT_SECTION_Pos)
+#define REG_EVENT_DETAIL_Pos                         (16UL)
+#define REG_EVENT_DETAIL_Msk                         (0x00ff << REG_EVENT_DETAIL_Pos)
+#define REG_EVENT_TIMESTAMP_Pos                      (0UL)
+#define REG_EVENT_TIMESTAMP_Msk                      (0xffff << REG_EVENT_TIMESTAMP_Pos)
 
 /*************** Bit definition for ConfPower register ***********************/
-#define OBC_REG_CONFPOWER_VOLTAGE5TOGGLE_Pos         (0UL)
-#define OBC_REG_CONFPOWER_VOLTAGE5TOGGLE_Msk         (0x0001 << OBC_REG_CONFPOWER_VOLTAGE5TOGGLE_Pos)
-#define OBC_REG_CONFPOWER_VOLTAGE5TOGGLE             OBC_REG_CONFPOWER_VOLTAGE5TOGGLE_Msk
-#define OBC_REG_CONFPOWER_VOLTAGE3TOGGLE_Pos         (1UL)
-#define OBC_REG_CONFPOWER_VOLTAGE3TOGGLE_Msk         (0x0001 << OBC_REG_CONFPOWER_VOLTAGE3TOGGLE_Pos)
-#define OBC_REG_CONFPOWER_VOLTAGE3TOGGLE             OBC_REG_CONFPOWER_VOLTAGE3TOGGLE_Msk
-#define OBC_REG_CONFPOWER_VOLTAGEVBATTOGGLE_Pos      (2UL)
-#define OBC_REG_CONFPOWER_VOLTAGEVBATTOGGLE_Msk      (0x0001 << OBC_REG_CONFPOWER_VOLTAGEVBATTOGGLE_Pos)
-#define OBC_REG_CONFPOWER_VOLTAGEVBATTOGGLE          OBC_REG_CONFPOWER_VOLTAGEVBATTOGGLE_Msk
-#define OBC_REG_CONFPOWER_VOLTAGEVBATALTTOGGLE_Pos   (3UL)
-#define OBC_REG_CONFPOWER_VOLTAGEVBATALTTOGGLE_Msk   (0x0001 << OBC_REG_CONFPOWER_VOLTAGEVBATALTTOGGLE_Pos)
-#define OBC_REG_CONFPOWER_VOLTAGEVBATALTTOGGLE       OBC_REG_CONFPOWER_VOLTAGEVBATALTTOGGLE_Msk
+#define REG_CONFPOWER_VOLTAGE5TOGGLE_Pos             (0UL)
+#define REG_CONFPOWER_VOLTAGE5TOGGLE_Msk             (0x0001 << REG_CONFPOWER_VOLTAGE5TOGGLE_Pos)
+#define REG_CONFPOWER_VOLTAGE3TOGGLE_Pos             (1UL)
+#define REG_CONFPOWER_VOLTAGE3TOGGLE_Msk             (0x0001 << REG_CONFPOWER_VOLTAGE3TOGGLE_Pos)
+#define REG_CONFPOWER_VOLTAGEVBATTOGGLE_Pos          (2UL)
+#define REG_CONFPOWER_VOLTAGEVBATTOGGLE_Msk          (0x0001 << REG_CONFPOWER_VOLTAGEVBATTOGGLE_Pos)
+#define REG_CONFPOWER_VOLTAGEVBATALTTOGGLE_Pos       (3UL)
+#define REG_CONFPOWER_VOLTAGEVBATALTTOGGLE_Msk       (0x0001 << REG_CONFPOWER_VOLTAGEVBATALTTOGGLE_Pos)
 
 /*************** Bit definition for I2CConfA register ************************/
-#define OBC_REG_I2CCONFA_TRDEL_Pos                   (16UL)
-#define OBC_REG_I2CCONFA_TRDEL_Msk                   (0x00ff << OBC_REG_I2CCONFA_TRDEL_Pos)
-#define OBC_REG_I2CCONFA_TRDEL                       OBC_REG_I2CCONFA_TRDEL_Msk
-#define OBC_REG_I2CCONFA_WRDEL_Pos                   (8UL)
-#define OBC_REG_I2CCONFA_WRDEL_Msk                   (0x00ff << OBC_REG_I2CCONFA_WRDEL_Pos)
-#define OBC_REG_I2CCONFA_WRDEL                       OBC_REG_I2CCONFA_WRDEL_Msk
-#define OBC_REG_I2CCONFA_SPD_Pos                     (0UL)
-#define OBC_REG_I2CCONFA_SPD_Msk                     (0x00ff << OBC_REG_I2CCONFA_SPD_Pos)
-#define OBC_REG_I2CCONFA_SPD                         OBC_REG_I2CCONFA_SPD_Msk
+#define REG_I2CCONFA_TRDEL_Pos                       (16UL)
+#define REG_I2CCONFA_TRDEL_Msk                       (0x00ff << REG_I2CCONFA_TRDEL_Pos)
+#define REG_I2CCONFA_WRDEL_Pos                       (8UL)
+#define REG_I2CCONFA_WRDEL_Msk                       (0x00ff << REG_I2CCONFA_WRDEL_Pos)
+#define REG_I2CCONFA_SPD_Pos                         (0UL)
+#define REG_I2CCONFA_SPD_Msk                         (0x00ff << REG_I2CCONFA_SPD_Pos)
 
 /*************** Bit definition for I2CConfB register ************************/
-#define OBC_REG_I2CCONFB_ADDR_Pos                    (0UL)
-#define OBC_REG_I2CCONFB_ADDR_Msk                    (0x00ff << OBC_REG_I2CCONFB_ADDR_Pos)
-#define OBC_REG_I2CCONFB_ADDR                        OBC_REG_I2CCONFB_ADDR_Msk
+#define REG_I2CCONFB_ADDR_Pos                        (0UL)
+#define REG_I2CCONFB_ADDR_Msk                        (0x00ff << REG_I2CCONFB_ADDR_Pos)
 
 /*************** Bit definition for ConfMulti register ***********************/
-#define OBC_REG_CONFMULTI_MENABLED_Pos               (0UL)
-#define OBC_REG_CONFMULTI_MENABLED_Msk               (0x0001 << OBC_REG_CONFMULTI_MENABLED_Pos)
-#define OBC_REG_CONFMULTI_MENABLED                   OBC_REG_CONFMULTI_MENABLED_Msk
-#define OBC_REG_CONFMULTI_AUTOCLR_Pos                (1UL)
-#define OBC_REG_CONFMULTI_AUTOCLR_Msk                (0x0001 << OBC_REG_CONFMULTI_AUTOCLR_Pos)
-#define OBC_REG_CONFMULTI_AUTOCLR                    OBC_REG_CONFMULTI_AUTOCLR_Msk
-#define OBC_REG_CONFMULTI_RFSWENA_Pos                (2UL)
-#define OBC_REG_CONFMULTI_RFSWENA_Msk                (0x0001 << OBC_REG_CONFMULTI_RFSWENA_Pos)
-#define OBC_REG_CONFMULTI_RFSWENA                    OBC_REG_CONFMULTI_RFSWENA_Msk
-#define OBC_REG_CONFMULTI_FANPOS1_Pos                (4UL)
-#define OBC_REG_CONFMULTI_FANPOS1_Msk                (0x0001 << OBC_REG_CONFMULTI_FANPOS1_Pos)
-#define OBC_REG_CONFMULTI_FANPOS1                    OBC_REG_CONFMULTI_FANPOS1_Msk
-#define OBC_REG_CONFMULTI_FANPOS2_Pos                (5UL)
-#define OBC_REG_CONFMULTI_FANPOS2_Msk                (0x0001 << OBC_REG_CONFMULTI_FANPOS2_Pos)
-#define OBC_REG_CONFMULTI_FANPOS2                    OBC_REG_CONFMULTI_FANPOS2_Msk
-#define OBC_REG_CONFMULTI_FANPOS3_Pos                (6UL)
-#define OBC_REG_CONFMULTI_FANPOS3_Msk                (0x0001 << OBC_REG_CONFMULTI_FANPOS3_Pos)
-#define OBC_REG_CONFMULTI_FANPOS3                    OBC_REG_CONFMULTI_FANPOS3_Msk
-#define OBC_REG_CONFMULTI_FANPOS4_Pos                (7UL)
-#define OBC_REG_CONFMULTI_FANPOS4_Msk                (0x0001 << OBC_REG_CONFMULTI_FANPOS4_Pos)
-#define OBC_REG_CONFMULTI_FANPOS4                    OBC_REG_CONFMULTI_FANPOS4_Msk
-#define OBC_REG_CONFMULTI_RFSWCHAN_Pos               (8UL)
-#define OBC_REG_CONFMULTI_RFSWCHAN_Msk               (0x00ff << OBC_REG_CONFMULTI_RFSWCHAN_Pos)
-#define OBC_REG_CONFMULTI_RFSWCHAN                   OBC_REG_CONFMULTI_RFSWCHAN_Msk
+#define REG_CONFMULTI_MENABLED_Pos                   (0UL)
+#define REG_CONFMULTI_MENABLED_Msk                   (0x0001 << REG_CONFMULTI_MENABLED_Pos)
+#define REG_CONFMULTI_AUTOCLR_Pos                    (1UL)
+#define REG_CONFMULTI_AUTOCLR_Msk                    (0x0001 << REG_CONFMULTI_AUTOCLR_Pos)
+#define REG_CONFMULTI_RFSWENA_Pos                    (2UL)
+#define REG_CONFMULTI_RFSWENA_Msk                    (0x0001 << REG_CONFMULTI_RFSWENA_Pos)
+#define REG_CONFMULTI_FANPOS1_Pos                    (4UL)
+#define REG_CONFMULTI_FANPOS1_Msk                    (0x0001 << REG_CONFMULTI_FANPOS1_Pos)
+#define REG_CONFMULTI_FANPOS2_Pos                    (5UL)
+#define REG_CONFMULTI_FANPOS2_Msk                    (0x0001 << REG_CONFMULTI_FANPOS2_Pos)
+#define REG_CONFMULTI_FANPOS3_Pos                    (6UL)
+#define REG_CONFMULTI_FANPOS3_Msk                    (0x0001 << REG_CONFMULTI_FANPOS3_Pos)
+#define REG_CONFMULTI_FANPOS4_Pos                    (7UL)
+#define REG_CONFMULTI_FANPOS4_Msk                    (0x0001 << REG_CONFMULTI_FANPOS4_Pos)
+#define REG_CONFMULTI_RFSWCHAN_Pos                   (8UL)
+#define REG_CONFMULTI_RFSWCHAN_Msk                   (0x00ff << REG_CONFMULTI_RFSWCHAN_Pos)
+
+/*************** Bit definition for ConfTempSense register *******************/
+#define REG_CONFTEMPSENSE_ENABLEMEASUREMENTS_Pos     (0UL)
+#define REG_CONFTEMPSENSE_ENABLEMEASUREMENTS_Msk     (0x0001 << REG_CONFTEMPSENSE_ENABLEMEASUREMENTS_Pos)
 
 /*************** Bit definition for XTXpins register *************************/
-#define OBC_REG_XTXPINS_ENA_Pos                      (0UL)
-#define OBC_REG_XTXPINS_ENA_Msk                      (0x0001 << OBC_REG_XTXPINS_ENA_Pos)
-#define OBC_REG_XTXPINS_ENA                          OBC_REG_XTXPINS_ENA_Msk
-#define OBC_REG_XTXPINS_NRST_Pos                     (1UL)
-#define OBC_REG_XTXPINS_NRST_Msk                     (0x0001 << OBC_REG_XTXPINS_NRST_Pos)
-#define OBC_REG_XTXPINS_NRST                         OBC_REG_XTXPINS_NRST_Msk
-#define OBC_REG_XTXPINS_RDY_Pos                      (2UL)
-#define OBC_REG_XTXPINS_RDY_Msk                      (0x0001 << OBC_REG_XTXPINS_RDY_Pos)
-#define OBC_REG_XTXPINS_RDY                          OBC_REG_XTXPINS_RDY_Msk
+#define REG_XTXPINS_ENA_Pos                          (0UL)
+#define REG_XTXPINS_ENA_Msk                          (0x0001 << REG_XTXPINS_ENA_Pos)
+#define REG_XTXPINS_NRST_Pos                         (1UL)
+#define REG_XTXPINS_NRST_Msk                         (0x0001 << REG_XTXPINS_NRST_Pos)
+#define REG_XTXPINS_RDY_Pos                          (2UL)
+#define REG_XTXPINS_RDY_Msk                          (0x0001 << REG_XTXPINS_RDY_Pos)
 
 /*************** Bit definition for XTXMultitester register ******************/
-#define OBC_REG_XTXMULTITESTER_POS1_XTX_EN_Pos       (0UL)
-#define OBC_REG_XTXMULTITESTER_POS1_XTX_EN_Msk       (0x0001 << OBC_REG_XTXMULTITESTER_POS1_XTX_EN_Pos)
-#define OBC_REG_XTXMULTITESTER_POS1_XTX_EN           OBC_REG_XTXMULTITESTER_POS1_XTX_EN_Msk
-#define OBC_REG_XTXMULTITESTER_POS1_XTX_POWER_Pos    (1UL)
-#define OBC_REG_XTXMULTITESTER_POS1_XTX_POWER_Msk    (0x0001 << OBC_REG_XTXMULTITESTER_POS1_XTX_POWER_Pos)
-#define OBC_REG_XTXMULTITESTER_POS1_XTX_POWER        OBC_REG_XTXMULTITESTER_POS1_XTX_POWER_Msk
-#define OBC_REG_XTXMULTITESTER_POS1_XTX_NRESET_Pos   (2UL)
-#define OBC_REG_XTXMULTITESTER_POS1_XTX_NRESET_Msk   (0x0001 << OBC_REG_XTXMULTITESTER_POS1_XTX_NRESET_Pos)
-#define OBC_REG_XTXMULTITESTER_POS1_XTX_NRESET       OBC_REG_XTXMULTITESTER_POS1_XTX_NRESET_Msk
-#define OBC_REG_XTXMULTITESTER_POS2_XTX_EN_Pos       (4UL)
-#define OBC_REG_XTXMULTITESTER_POS2_XTX_EN_Msk       (0x0001 << OBC_REG_XTXMULTITESTER_POS2_XTX_EN_Pos)
-#define OBC_REG_XTXMULTITESTER_POS2_XTX_EN           OBC_REG_XTXMULTITESTER_POS2_XTX_EN_Msk
-#define OBC_REG_XTXMULTITESTER_POS2_XTX_POWER_Pos    (5UL)
-#define OBC_REG_XTXMULTITESTER_POS2_XTX_POWER_Msk    (0x0001 << OBC_REG_XTXMULTITESTER_POS2_XTX_POWER_Pos)
-#define OBC_REG_XTXMULTITESTER_POS2_XTX_POWER        OBC_REG_XTXMULTITESTER_POS2_XTX_POWER_Msk
-#define OBC_REG_XTXMULTITESTER_POS2_XTX_NRESET_Pos   (6UL)
-#define OBC_REG_XTXMULTITESTER_POS2_XTX_NRESET_Msk   (0x0001 << OBC_REG_XTXMULTITESTER_POS2_XTX_NRESET_Pos)
-#define OBC_REG_XTXMULTITESTER_POS2_XTX_NRESET       OBC_REG_XTXMULTITESTER_POS2_XTX_NRESET_Msk
-#define OBC_REG_XTXMULTITESTER_POS3_XTX_EN_Pos       (8UL)
-#define OBC_REG_XTXMULTITESTER_POS3_XTX_EN_Msk       (0x0001 << OBC_REG_XTXMULTITESTER_POS3_XTX_EN_Pos)
-#define OBC_REG_XTXMULTITESTER_POS3_XTX_EN           OBC_REG_XTXMULTITESTER_POS3_XTX_EN_Msk
-#define OBC_REG_XTXMULTITESTER_POS3_XTX_POWER_Pos    (9UL)
-#define OBC_REG_XTXMULTITESTER_POS3_XTX_POWER_Msk    (0x0001 << OBC_REG_XTXMULTITESTER_POS3_XTX_POWER_Pos)
-#define OBC_REG_XTXMULTITESTER_POS3_XTX_POWER        OBC_REG_XTXMULTITESTER_POS3_XTX_POWER_Msk
-#define OBC_REG_XTXMULTITESTER_POS3_XTX_NRESET_Pos   (10UL)
-#define OBC_REG_XTXMULTITESTER_POS3_XTX_NRESET_Msk   (0x0001 << OBC_REG_XTXMULTITESTER_POS3_XTX_NRESET_Pos)
-#define OBC_REG_XTXMULTITESTER_POS3_XTX_NRESET       OBC_REG_XTXMULTITESTER_POS3_XTX_NRESET_Msk
-#define OBC_REG_XTXMULTITESTER_POS4_XTX_EN_Pos       (12UL)
-#define OBC_REG_XTXMULTITESTER_POS4_XTX_EN_Msk       (0x0001 << OBC_REG_XTXMULTITESTER_POS4_XTX_EN_Pos)
-#define OBC_REG_XTXMULTITESTER_POS4_XTX_EN           OBC_REG_XTXMULTITESTER_POS4_XTX_EN_Msk
-#define OBC_REG_XTXMULTITESTER_POS4_XTX_POWER_Pos    (13UL)
-#define OBC_REG_XTXMULTITESTER_POS4_XTX_POWER_Msk    (0x0001 << OBC_REG_XTXMULTITESTER_POS4_XTX_POWER_Pos)
-#define OBC_REG_XTXMULTITESTER_POS4_XTX_POWER        OBC_REG_XTXMULTITESTER_POS4_XTX_POWER_Msk
-#define OBC_REG_XTXMULTITESTER_POS4_XTX_NRESET_Pos   (14UL)
-#define OBC_REG_XTXMULTITESTER_POS4_XTX_NRESET_Msk   (0x0001 << OBC_REG_XTXMULTITESTER_POS4_XTX_NRESET_Pos)
-#define OBC_REG_XTXMULTITESTER_POS4_XTX_NRESET       OBC_REG_XTXMULTITESTER_POS4_XTX_NRESET_Msk
+#define REG_XTXMULTITESTER_POS1_XTX_EN_Pos           (0UL)
+#define REG_XTXMULTITESTER_POS1_XTX_EN_Msk           (0x0001 << REG_XTXMULTITESTER_POS1_XTX_EN_Pos)
+#define REG_XTXMULTITESTER_POS1_XTX_POWER_Pos        (1UL)
+#define REG_XTXMULTITESTER_POS1_XTX_POWER_Msk        (0x0001 << REG_XTXMULTITESTER_POS1_XTX_POWER_Pos)
+#define REG_XTXMULTITESTER_POS1_XTX_NRESET_Pos       (2UL)
+#define REG_XTXMULTITESTER_POS1_XTX_NRESET_Msk       (0x0001 << REG_XTXMULTITESTER_POS1_XTX_NRESET_Pos)
+#define REG_XTXMULTITESTER_POS2_XTX_EN_Pos           (4UL)
+#define REG_XTXMULTITESTER_POS2_XTX_EN_Msk           (0x0001 << REG_XTXMULTITESTER_POS2_XTX_EN_Pos)
+#define REG_XTXMULTITESTER_POS2_XTX_POWER_Pos        (5UL)
+#define REG_XTXMULTITESTER_POS2_XTX_POWER_Msk        (0x0001 << REG_XTXMULTITESTER_POS2_XTX_POWER_Pos)
+#define REG_XTXMULTITESTER_POS2_XTX_NRESET_Pos       (6UL)
+#define REG_XTXMULTITESTER_POS2_XTX_NRESET_Msk       (0x0001 << REG_XTXMULTITESTER_POS2_XTX_NRESET_Pos)
+#define REG_XTXMULTITESTER_POS3_XTX_EN_Pos           (8UL)
+#define REG_XTXMULTITESTER_POS3_XTX_EN_Msk           (0x0001 << REG_XTXMULTITESTER_POS3_XTX_EN_Pos)
+#define REG_XTXMULTITESTER_POS3_XTX_POWER_Pos        (9UL)
+#define REG_XTXMULTITESTER_POS3_XTX_POWER_Msk        (0x0001 << REG_XTXMULTITESTER_POS3_XTX_POWER_Pos)
+#define REG_XTXMULTITESTER_POS3_XTX_NRESET_Pos       (10UL)
+#define REG_XTXMULTITESTER_POS3_XTX_NRESET_Msk       (0x0001 << REG_XTXMULTITESTER_POS3_XTX_NRESET_Pos)
+#define REG_XTXMULTITESTER_POS4_XTX_EN_Pos           (12UL)
+#define REG_XTXMULTITESTER_POS4_XTX_EN_Msk           (0x0001 << REG_XTXMULTITESTER_POS4_XTX_EN_Pos)
+#define REG_XTXMULTITESTER_POS4_XTX_POWER_Pos        (13UL)
+#define REG_XTXMULTITESTER_POS4_XTX_POWER_Msk        (0x0001 << REG_XTXMULTITESTER_POS4_XTX_POWER_Pos)
+#define REG_XTXMULTITESTER_POS4_XTX_NRESET_Pos       (14UL)
+#define REG_XTXMULTITESTER_POS4_XTX_NRESET_Msk       (0x0001 << REG_XTXMULTITESTER_POS4_XTX_NRESET_Pos)
 
 /*************** Bit definition for XDCConfig register ***********************/
-#define OBC_REG_XDCCONFIG_ADDR_Pos                   (0UL)
-#define OBC_REG_XDCCONFIG_ADDR_Msk                   (0x00ff << OBC_REG_XDCCONFIG_ADDR_Pos)
-#define OBC_REG_XDCCONFIG_ADDR                       OBC_REG_XDCCONFIG_ADDR_Msk
+#define REG_XDCCONFIG_ADDR_Pos                       (0UL)
+#define REG_XDCCONFIG_ADDR_Msk                       (0x00ff << REG_XDCCONFIG_ADDR_Pos)
 
 /*************** Bit definition for boardflag register ***********************/
-#define OBC_REG_BOARDFLAG_BOARDS_Pos                 (0UL)
-#define OBC_REG_BOARDFLAG_BOARDS_Msk                 (0x00ff << OBC_REG_BOARDFLAG_BOARDS_Pos)
-#define OBC_REG_BOARDFLAG_BOARDS                     OBC_REG_BOARDFLAG_BOARDS_Msk
+#define REG_BOARDFLAG_BOARDS_Pos                     (0UL)
+#define REG_BOARDFLAG_BOARDS_Msk                     (0x00ff << REG_BOARDFLAG_BOARDS_Pos)
 
 /*************** Bit definition for Version register *************************/
-#define OBC_REG_VERSION_MAJOR_VERSION_Pos            (16UL)
-#define OBC_REG_VERSION_MAJOR_VERSION_Msk            (0x00ff << OBC_REG_VERSION_MAJOR_VERSION_Pos)
-#define OBC_REG_VERSION_MAJOR_VERSION                OBC_REG_VERSION_MAJOR_VERSION_Msk
-#define OBC_REG_VERSION_MINOR_VERSION_Pos            (8UL)
-#define OBC_REG_VERSION_MINOR_VERSION_Msk            (0x00ff << OBC_REG_VERSION_MINOR_VERSION_Pos)
-#define OBC_REG_VERSION_MINOR_VERSION                OBC_REG_VERSION_MINOR_VERSION_Msk
-#define OBC_REG_VERSION_PATCH_VERSION_Pos            (0UL)
-#define OBC_REG_VERSION_PATCH_VERSION_Msk            (0x00ff << OBC_REG_VERSION_PATCH_VERSION_Pos)
-#define OBC_REG_VERSION_PATCH_VERSION                OBC_REG_VERSION_PATCH_VERSION_Msk
+#define REG_VERSION_MAJOR_VERSION_Pos                (16UL)
+#define REG_VERSION_MAJOR_VERSION_Msk                (0x00ff << REG_VERSION_MAJOR_VERSION_Pos)
+#define REG_VERSION_MINOR_VERSION_Pos                (8UL)
+#define REG_VERSION_MINOR_VERSION_Msk                (0x00ff << REG_VERSION_MINOR_VERSION_Pos)
+#define REG_VERSION_PATCH_VERSION_Pos                (0UL)
+#define REG_VERSION_PATCH_VERSION_Msk                (0x00ff << REG_VERSION_PATCH_VERSION_Pos)
 
 /*************** Bit definition for MeasureVI register ***********************/
-#define OBC_REG_MEASUREVI_VOLTAGE_Pos                (16UL)
-#define OBC_REG_MEASUREVI_VOLTAGE_Msk                (0xffff << OBC_REG_MEASUREVI_VOLTAGE_Pos)
-#define OBC_REG_MEASUREVI_VOLTAGE                    OBC_REG_MEASUREVI_VOLTAGE_Msk
-#define OBC_REG_MEASUREVI_CURRENT_Pos                (0UL)
-#define OBC_REG_MEASUREVI_CURRENT_Msk                (0xffff << OBC_REG_MEASUREVI_CURRENT_Pos)
-#define OBC_REG_MEASUREVI_CURRENT                    OBC_REG_MEASUREVI_CURRENT_Msk
+#define REG_MEASUREVI_VOLTAGE_Pos                    (16UL)
+#define REG_MEASUREVI_VOLTAGE_Msk                    (0xffff << REG_MEASUREVI_VOLTAGE_Pos)
+#define REG_MEASUREVI_CURRENT_Pos                    (0UL)
+#define REG_MEASUREVI_CURRENT_Msk                    (0xffff << REG_MEASUREVI_CURRENT_Pos)
 
 /*************** Bit definition for MeasurePower register ********************/
-#define OBC_REG_MEASUREPOWER_POWER_Pos               (0UL)
-#define OBC_REG_MEASUREPOWER_POWER_Msk               (0xffffffff << OBC_REG_MEASUREPOWER_POWER_Pos)
-#define OBC_REG_MEASUREPOWER_POWER                   OBC_REG_MEASUREPOWER_POWER_Msk
+#define REG_MEASUREPOWER_POWER_Pos                   (0UL)
+#define REG_MEASUREPOWER_POWER_Msk                   (0xffffffff << REG_MEASUREPOWER_POWER_Pos)
 
 
+typedef struct {
+    uint32_t Board_ID;
+    uint32_t FW_Version;
+    uint32_t HW_Version;
+    uint32_t Scratchpad;
+    uint32_t Supported_Boards;
+    uint32_t Configured_Boards;
+    uint32_t Uptime;
+    uint32_t Event_ConfA;
+    uint32_t Event;
+    uint32_t ConfPower;
+    uint32_t MeasureVI_V3;
+    uint32_t MeasurePower_V3;
+    uint32_t MeasureVI_V5;
+    uint32_t MeasurePower_V5;
+    uint32_t MeasureVI_VBat;
+    uint32_t MeasurePower_VBat;
+    uint32_t MeasureVI_VBatAlt;
+    uint32_t MeasurePower_VBatAlt;
+    uint32_t I2CConfA;
+    uint32_t I2CConfB;
+    uint32_t ConfMulti;
+    uint32_t ConfTempSense;
+    uint32_t XTXpins;
+    uint32_t XTXMultitester;
+    uint32_t XDCConfig;
+    uint32_t CSBoard_T0;
+    uint32_t CSBoard_T1;
+    uint32_t CSBoard_T2;
+    uint32_t CSBoard_T3;
+    uint32_t CSBoard_T4;
+    uint32_t CSBoard_T5;
+    uint32_t CSBoard_T6;
+    uint32_t CSBoard_T7;
+    uint32_t CSBoard_Current0I0;
+    uint32_t CSBoard_Current0I1;
+    uint32_t CSBoard_Current0I2;
+    uint32_t CSBoard_Current1I0;
+    uint32_t CSBoard_Current1I1;
+    uint32_t CSBoard_Current1I2;
+    uint32_t CSBoard_Current2I0;
+    uint32_t CSBoard_Current2I1;
+    uint32_t CSBoard_Current2I2;
+    uint32_t CSBoard_Current3I0;
+    uint32_t CSBoard_Current3I1;
+    uint32_t CSBoard_Current3I2;
+    uint32_t CSBoard_Current4I0;
+    uint32_t CSBoard_Current4I1;
+    uint32_t CSBoard_Current4I2;
+    uint32_t CSBoard_Current5I0;
+    uint32_t CSBoard_Current5I1;
+    uint32_t CSBoard_Current5I2;
+    uint32_t CSBoard_Current6I0;
+    uint32_t CSBoard_Current6I1;
+    uint32_t CSBoard_Current6I2;
+    uint32_t CSBoard_Current7I0;
+    uint32_t CSBoard_Current7I1;
+    uint32_t CSBoard_Current7I2;
+} mm_t;
+
+typedef enum {
+    reg_Board_ID_addr = 0x10,
+    reg_FW_Version_addr = 0x11,
+    reg_HW_Version_addr = 0x12,
+    reg_Scratchpad_addr = 0x13,
+    reg_Supported_Boards_addr = 0x14,
+    reg_Configured_Boards_addr = 0x15,
+    reg_Uptime_addr = 0x16,
+    reg_Event_ConfA_addr = 0x17,
+    reg_Event_addr = 0x18,
+    reg_ConfPower_addr = 0x20,
+    reg_MeasureVI_V3_addr = 0x21,
+    reg_MeasurePower_V3_addr = 0x22,
+    reg_MeasureVI_V5_addr = 0x23,
+    reg_MeasurePower_V5_addr = 0x24,
+    reg_MeasureVI_VBat_addr = 0x25,
+    reg_MeasurePower_VBat_addr = 0x26,
+    reg_MeasureVI_VBatAlt_addr = 0x27,
+    reg_MeasurePower_VBatAlt_addr = 0x28,
+    reg_I2CConfA_addr = 0x29,
+    reg_I2CConfB_addr = 0x2A,
+    reg_ConfMulti_addr = 0x2B,
+    reg_ConfTempSense_addr = 0x2C,
+    reg_XTXpins_addr = 0x30,
+    reg_XTXMultitester_addr = 0x31,
+    reg_XDCConfig_addr = 0x40,
+    reg_CSBoard_T0_addr = 0x50,
+    reg_CSBoard_T1_addr = 0x51,
+    reg_CSBoard_T2_addr = 0x52,
+    reg_CSBoard_T3_addr = 0x53,
+    reg_CSBoard_T4_addr = 0x54,
+    reg_CSBoard_T5_addr = 0x55,
+    reg_CSBoard_T6_addr = 0x56,
+    reg_CSBoard_T7_addr = 0x57,
+    reg_CSBoard_Current0I0_addr = 0x58,
+    reg_CSBoard_Current0I1_addr = 0x59,
+    reg_CSBoard_Current0I2_addr = 0x5A,
+    reg_CSBoard_Current1I0_addr = 0x5B,
+    reg_CSBoard_Current1I1_addr = 0x5C,
+    reg_CSBoard_Current1I2_addr = 0x5D,
+    reg_CSBoard_Current2I0_addr = 0x5E,
+    reg_CSBoard_Current2I1_addr = 0x5F,
+    reg_CSBoard_Current2I2_addr = 0x60,
+    reg_CSBoard_Current3I0_addr = 0x61,
+    reg_CSBoard_Current3I1_addr = 0x62,
+    reg_CSBoard_Current3I2_addr = 0x63,
+    reg_CSBoard_Current4I0_addr = 0x64,
+    reg_CSBoard_Current4I1_addr = 0x65,
+    reg_CSBoard_Current4I2_addr = 0x66,
+    reg_CSBoard_Current5I0_addr = 0x67,
+    reg_CSBoard_Current5I1_addr = 0x68,
+    reg_CSBoard_Current5I2_addr = 0x69,
+    reg_CSBoard_Current6I0_addr = 0x6A,
+    reg_CSBoard_Current6I1_addr = 0x6B,
+    reg_CSBoard_Current6I2_addr = 0x6C,
+    reg_CSBoard_Current7I0_addr = 0x6D,
+    reg_CSBoard_Current7I1_addr = 0x6E,
+    reg_CSBoard_Current7I2_addr = 0x6F,
+} mm_register_address_t;
 
 typedef enum {
     reg_enabled_enabled = 1,                        // Enabled
     reg_enabled_disabled = 0,                       // Disabled
-} reg_enabled_t;
+} mm_enabled_t;
 
 typedef enum {
     reg_boardidentifier_none = 0,                   // Disabled
@@ -212,614 +270,451 @@ typedef enum {
     reg_boardidentifier_xdc = 4,                    // XDC
     reg_boardidentifier_hdrtx_dfa = 8,              // HDRTX(DFA)
     reg_boardidentifier_hdrtx = 16,                 // HDRTX
-} reg_boardidentifier_t;
-
-
-typedef struct  {
-    uint32_t board_id;
-    uint32_t fw_version;
-    uint32_t hw_version;
-    uint32_t scratchpad;
-    uint32_t supported_boards;
-    uint32_t configured_boards;
-    uint32_t uptime;
-    uint32_t event_confa;
-    uint32_t event;
-    uint8_t confpower;
-    uint32_t measurevi_v3;
-    uint32_t measurepower_v3;
-    uint32_t measurevi_v5;
-    uint32_t measurepower_v5;
-    uint32_t measurevi_vbat;
-    uint32_t measurepower_vbat;
-    uint32_t measurevi_vbatalt;
-    uint32_t measurepower_vbatalt;
-    uint32_t i2cconfa;
-    uint32_t i2cconfb;
-    uint32_t confmulti;
-    uint32_t xtxpins;
-    uint32_t xtxmultitester;
-    uint32_t xdcconfig;
-} OBC_RegisterData_t;
-
-static inline uint32_t REG_Get_Board_ID_ccIdentifier(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->board_id & OBC_REG_BOARD_ID_CCIDENTIFIER_Msk) >> OBC_REG_BOARD_ID_CCIDENTIFIER_Pos);
-}
-
-static inline void REG_Set_Board_ID_ccIdentifier(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->board_id = (registers->board_id & ~OBC_REG_BOARD_ID_CCIDENTIFIER_Msk) | (value << OBC_REG_BOARD_ID_CCIDENTIFIER_Pos);
-}
-
-static inline uint32_t REG_Get_Board_ID_id0(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->board_id & OBC_REG_BOARD_ID_ID0_Msk) >> OBC_REG_BOARD_ID_ID0_Pos);
-}
-
-static inline void REG_Set_Board_ID_id0(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->board_id = (registers->board_id & ~OBC_REG_BOARD_ID_ID0_Msk) | (value << OBC_REG_BOARD_ID_ID0_Pos);
-}
-
-static inline uint32_t REG_Get_Board_ID_id1(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->board_id & OBC_REG_BOARD_ID_ID1_Msk) >> OBC_REG_BOARD_ID_ID1_Pos);
-}
-
-static inline void REG_Set_Board_ID_id1(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->board_id = (registers->board_id & ~OBC_REG_BOARD_ID_ID1_Msk) | (value << OBC_REG_BOARD_ID_ID1_Pos);
-}
-
-static inline uint32_t REG_Get_Board_ID_id2(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->board_id & OBC_REG_BOARD_ID_ID2_Msk) >> OBC_REG_BOARD_ID_ID2_Pos);
-}
-
-static inline void REG_Set_Board_ID_id2(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->board_id = (registers->board_id & ~OBC_REG_BOARD_ID_ID2_Msk) | (value << OBC_REG_BOARD_ID_ID2_Pos);
-}
-
-static inline uint32_t REG_Get_FW_Version_major_version(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->fw_version & OBC_REG_VERSION_MAJOR_VERSION_Msk) >> OBC_REG_VERSION_MAJOR_VERSION_Pos);
-}
-
-static inline void REG_Set_FW_Version_major_version(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->fw_version = (registers->fw_version & ~OBC_REG_VERSION_MAJOR_VERSION_Msk) | (value << OBC_REG_VERSION_MAJOR_VERSION_Pos);
-}
-
-static inline uint32_t REG_Get_FW_Version_minor_version(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->fw_version & OBC_REG_VERSION_MINOR_VERSION_Msk) >> OBC_REG_VERSION_MINOR_VERSION_Pos);
-}
-
-static inline void REG_Set_FW_Version_minor_version(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->fw_version = (registers->fw_version & ~OBC_REG_VERSION_MINOR_VERSION_Msk) | (value << OBC_REG_VERSION_MINOR_VERSION_Pos);
-}
-
-static inline uint32_t REG_Get_FW_Version_patch_version(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->fw_version & OBC_REG_VERSION_PATCH_VERSION_Msk) >> OBC_REG_VERSION_PATCH_VERSION_Pos);
-}
-
-static inline void REG_Set_FW_Version_patch_version(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->fw_version = (registers->fw_version & ~OBC_REG_VERSION_PATCH_VERSION_Msk) | (value << OBC_REG_VERSION_PATCH_VERSION_Pos);
-}
-
-static inline uint32_t REG_Get_HW_Version_major_version(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->hw_version & OBC_REG_VERSION_MAJOR_VERSION_Msk) >> OBC_REG_VERSION_MAJOR_VERSION_Pos);
-}
-
-static inline void REG_Set_HW_Version_major_version(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->hw_version = (registers->hw_version & ~OBC_REG_VERSION_MAJOR_VERSION_Msk) | (value << OBC_REG_VERSION_MAJOR_VERSION_Pos);
-}
-
-static inline uint32_t REG_Get_HW_Version_minor_version(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->hw_version & OBC_REG_VERSION_MINOR_VERSION_Msk) >> OBC_REG_VERSION_MINOR_VERSION_Pos);
-}
-
-static inline void REG_Set_HW_Version_minor_version(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->hw_version = (registers->hw_version & ~OBC_REG_VERSION_MINOR_VERSION_Msk) | (value << OBC_REG_VERSION_MINOR_VERSION_Pos);
-}
-
-static inline uint32_t REG_Get_HW_Version_patch_version(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->hw_version & OBC_REG_VERSION_PATCH_VERSION_Msk) >> OBC_REG_VERSION_PATCH_VERSION_Pos);
-}
-
-static inline void REG_Set_HW_Version_patch_version(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->hw_version = (registers->hw_version & ~OBC_REG_VERSION_PATCH_VERSION_Msk) | (value << OBC_REG_VERSION_PATCH_VERSION_Pos);
-}
-
-static inline uint32_t REG_Get_Event_ConfA_count(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->event_confa & OBC_REG_EVENT_CONFA_COUNT_Msk) >> OBC_REG_EVENT_CONFA_COUNT_Pos);
-}
-
-static inline void REG_Set_Event_ConfA_count(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->event_confa = (registers->event_confa & ~OBC_REG_EVENT_CONFA_COUNT_Msk) | (value << OBC_REG_EVENT_CONFA_COUNT_Pos);
-}
-
-static inline uint32_t REG_Get_Event_section(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->event & OBC_REG_EVENT_SECTION_Msk) >> OBC_REG_EVENT_SECTION_Pos);
-}
-
-static inline void REG_Set_Event_section(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->event = (registers->event & ~OBC_REG_EVENT_SECTION_Msk) | (value << OBC_REG_EVENT_SECTION_Pos);
-}
-
-static inline uint32_t REG_Get_Event_detail(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->event & OBC_REG_EVENT_DETAIL_Msk) >> OBC_REG_EVENT_DETAIL_Pos);
-}
-
-static inline void REG_Set_Event_detail(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->event = (registers->event & ~OBC_REG_EVENT_DETAIL_Msk) | (value << OBC_REG_EVENT_DETAIL_Pos);
-}
-
-static inline uint32_t REG_Get_Event_timestamp(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->event & OBC_REG_EVENT_TIMESTAMP_Msk) >> OBC_REG_EVENT_TIMESTAMP_Pos);
-}
-
-static inline void REG_Set_Event_timestamp(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->event = (registers->event & ~OBC_REG_EVENT_TIMESTAMP_Msk) | (value << OBC_REG_EVENT_TIMESTAMP_Pos);
-}
-
-static inline reg_enabled_t REG_Get_ConfPower_voltage5Toggle(OBC_RegisterData_t *registers)
-{
-    return (reg_enabled_t)((registers->confpower & OBC_REG_CONFPOWER_VOLTAGE5TOGGLE_Msk) >> OBC_REG_CONFPOWER_VOLTAGE5TOGGLE_Pos);
-}
-
-static inline void REG_Set_ConfPower_voltage5Toggle(OBC_RegisterData_t *registers, reg_enabled_t value)
-{
-    registers->confpower = (registers->confpower & ~OBC_REG_CONFPOWER_VOLTAGE5TOGGLE_Msk) | (value << OBC_REG_CONFPOWER_VOLTAGE5TOGGLE_Pos);
-}
-
-static inline reg_enabled_t REG_Get_ConfPower_voltage3Toggle(OBC_RegisterData_t *registers)
-{
-    return (reg_enabled_t)((registers->confpower & OBC_REG_CONFPOWER_VOLTAGE3TOGGLE_Msk) >> OBC_REG_CONFPOWER_VOLTAGE3TOGGLE_Pos);
-}
-
-static inline void REG_Set_ConfPower_voltage3Toggle(OBC_RegisterData_t *registers, reg_enabled_t value)
-{
-    registers->confpower = (registers->confpower & ~OBC_REG_CONFPOWER_VOLTAGE3TOGGLE_Msk) | (value << OBC_REG_CONFPOWER_VOLTAGE3TOGGLE_Pos);
-}
-
-static inline reg_enabled_t REG_Get_ConfPower_voltageVBatToggle(OBC_RegisterData_t *registers)
-{
-    return (reg_enabled_t)((registers->confpower & OBC_REG_CONFPOWER_VOLTAGEVBATTOGGLE_Msk) >> OBC_REG_CONFPOWER_VOLTAGEVBATTOGGLE_Pos);
-}
-
-static inline void REG_Set_ConfPower_voltageVBatToggle(OBC_RegisterData_t *registers, reg_enabled_t value)
-{
-    registers->confpower = (registers->confpower & ~OBC_REG_CONFPOWER_VOLTAGEVBATTOGGLE_Msk) | (value << OBC_REG_CONFPOWER_VOLTAGEVBATTOGGLE_Pos);
-}
-
-static inline reg_enabled_t REG_Get_ConfPower_voltageVBatAltToggle(OBC_RegisterData_t *registers)
-{
-    return (reg_enabled_t)((registers->confpower & OBC_REG_CONFPOWER_VOLTAGEVBATALTTOGGLE_Msk) >> OBC_REG_CONFPOWER_VOLTAGEVBATALTTOGGLE_Pos);
-}
-
-static inline void REG_Set_ConfPower_voltageVBatAltToggle(OBC_RegisterData_t *registers, reg_enabled_t value)
-{
-    registers->confpower = (registers->confpower & ~OBC_REG_CONFPOWER_VOLTAGEVBATALTTOGGLE_Msk) | (value << OBC_REG_CONFPOWER_VOLTAGEVBATALTTOGGLE_Pos);
-}
-
-static inline uint32_t REG_Get_MeasureVI_V3_voltage(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->measurevi_v3 & OBC_REG_MEASUREVI_VOLTAGE_Msk) >> OBC_REG_MEASUREVI_VOLTAGE_Pos);
-}
-
-static inline void REG_Set_MeasureVI_V3_voltage(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->measurevi_v3 = (registers->measurevi_v3 & ~OBC_REG_MEASUREVI_VOLTAGE_Msk) | (value << OBC_REG_MEASUREVI_VOLTAGE_Pos);
-}
-
-static inline uint32_t REG_Get_MeasureVI_V3_current(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->measurevi_v3 & OBC_REG_MEASUREVI_CURRENT_Msk) >> OBC_REG_MEASUREVI_CURRENT_Pos);
-}
-
-static inline void REG_Set_MeasureVI_V3_current(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->measurevi_v3 = (registers->measurevi_v3 & ~OBC_REG_MEASUREVI_CURRENT_Msk) | (value << OBC_REG_MEASUREVI_CURRENT_Pos);
-}
-
-static inline uint32_t REG_Get_MeasurePower_V3_power(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->measurepower_v3 & OBC_REG_MEASUREPOWER_POWER_Msk) >> OBC_REG_MEASUREPOWER_POWER_Pos);
-}
-
-static inline void REG_Set_MeasurePower_V3_power(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->measurepower_v3 = (registers->measurepower_v3 & ~OBC_REG_MEASUREPOWER_POWER_Msk) | (value << OBC_REG_MEASUREPOWER_POWER_Pos);
-}
-
-static inline uint32_t REG_Get_MeasureVI_V5_voltage(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->measurevi_v5 & OBC_REG_MEASUREVI_VOLTAGE_Msk) >> OBC_REG_MEASUREVI_VOLTAGE_Pos);
-}
-
-static inline void REG_Set_MeasureVI_V5_voltage(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->measurevi_v5 = (registers->measurevi_v5 & ~OBC_REG_MEASUREVI_VOLTAGE_Msk) | (value << OBC_REG_MEASUREVI_VOLTAGE_Pos);
-}
-
-static inline uint32_t REG_Get_MeasureVI_V5_current(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->measurevi_v5 & OBC_REG_MEASUREVI_CURRENT_Msk) >> OBC_REG_MEASUREVI_CURRENT_Pos);
-}
-
-static inline void REG_Set_MeasureVI_V5_current(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->measurevi_v5 = (registers->measurevi_v5 & ~OBC_REG_MEASUREVI_CURRENT_Msk) | (value << OBC_REG_MEASUREVI_CURRENT_Pos);
-}
-
-static inline uint32_t REG_Get_MeasurePower_V5_power(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->measurepower_v5 & OBC_REG_MEASUREPOWER_POWER_Msk) >> OBC_REG_MEASUREPOWER_POWER_Pos);
-}
-
-static inline void REG_Set_MeasurePower_V5_power(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->measurepower_v5 = (registers->measurepower_v5 & ~OBC_REG_MEASUREPOWER_POWER_Msk) | (value << OBC_REG_MEASUREPOWER_POWER_Pos);
-}
-
-static inline uint32_t REG_Get_MeasureVI_VBat_voltage(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->measurevi_vbat & OBC_REG_MEASUREVI_VOLTAGE_Msk) >> OBC_REG_MEASUREVI_VOLTAGE_Pos);
-}
-
-static inline void REG_Set_MeasureVI_VBat_voltage(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->measurevi_vbat = (registers->measurevi_vbat & ~OBC_REG_MEASUREVI_VOLTAGE_Msk) | (value << OBC_REG_MEASUREVI_VOLTAGE_Pos);
-}
-
-static inline uint32_t REG_Get_MeasureVI_VBat_current(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->measurevi_vbat & OBC_REG_MEASUREVI_CURRENT_Msk) >> OBC_REG_MEASUREVI_CURRENT_Pos);
-}
-
-static inline void REG_Set_MeasureVI_VBat_current(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->measurevi_vbat = (registers->measurevi_vbat & ~OBC_REG_MEASUREVI_CURRENT_Msk) | (value << OBC_REG_MEASUREVI_CURRENT_Pos);
-}
-
-static inline uint32_t REG_Get_MeasurePower_VBat_power(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->measurepower_vbat & OBC_REG_MEASUREPOWER_POWER_Msk) >> OBC_REG_MEASUREPOWER_POWER_Pos);
-}
-
-static inline void REG_Set_MeasurePower_VBat_power(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->measurepower_vbat = (registers->measurepower_vbat & ~OBC_REG_MEASUREPOWER_POWER_Msk) | (value << OBC_REG_MEASUREPOWER_POWER_Pos);
-}
-
-static inline uint32_t REG_Get_MeasureVI_VBatAlt_voltage(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->measurevi_vbatalt & OBC_REG_MEASUREVI_VOLTAGE_Msk) >> OBC_REG_MEASUREVI_VOLTAGE_Pos);
-}
-
-static inline void REG_Set_MeasureVI_VBatAlt_voltage(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->measurevi_vbatalt = (registers->measurevi_vbatalt & ~OBC_REG_MEASUREVI_VOLTAGE_Msk) | (value << OBC_REG_MEASUREVI_VOLTAGE_Pos);
-}
-
-static inline uint32_t REG_Get_MeasureVI_VBatAlt_current(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->measurevi_vbatalt & OBC_REG_MEASUREVI_CURRENT_Msk) >> OBC_REG_MEASUREVI_CURRENT_Pos);
-}
-
-static inline void REG_Set_MeasureVI_VBatAlt_current(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->measurevi_vbatalt = (registers->measurevi_vbatalt & ~OBC_REG_MEASUREVI_CURRENT_Msk) | (value << OBC_REG_MEASUREVI_CURRENT_Pos);
-}
-
-static inline uint32_t REG_Get_MeasurePower_VBatAlt_power(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->measurepower_vbatalt & OBC_REG_MEASUREPOWER_POWER_Msk) >> OBC_REG_MEASUREPOWER_POWER_Pos);
-}
-
-static inline void REG_Set_MeasurePower_VBatAlt_power(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->measurepower_vbatalt = (registers->measurepower_vbatalt & ~OBC_REG_MEASUREPOWER_POWER_Msk) | (value << OBC_REG_MEASUREPOWER_POWER_Pos);
-}
-
-static inline uint32_t REG_Get_I2CConfA_TRDEL(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->i2cconfa & OBC_REG_I2CCONFA_TRDEL_Msk) >> OBC_REG_I2CCONFA_TRDEL_Pos);
-}
-
-static inline void REG_Set_I2CConfA_TRDEL(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->i2cconfa = (registers->i2cconfa & ~OBC_REG_I2CCONFA_TRDEL_Msk) | (value << OBC_REG_I2CCONFA_TRDEL_Pos);
-}
-
-static inline uint32_t REG_Get_I2CConfA_WRDEL(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->i2cconfa & OBC_REG_I2CCONFA_WRDEL_Msk) >> OBC_REG_I2CCONFA_WRDEL_Pos);
-}
-
-static inline void REG_Set_I2CConfA_WRDEL(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->i2cconfa = (registers->i2cconfa & ~OBC_REG_I2CCONFA_WRDEL_Msk) | (value << OBC_REG_I2CCONFA_WRDEL_Pos);
-}
-
-static inline uint32_t REG_Get_I2CConfA_SPD(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->i2cconfa & OBC_REG_I2CCONFA_SPD_Msk) >> OBC_REG_I2CCONFA_SPD_Pos);
-}
-
-static inline void REG_Set_I2CConfA_SPD(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->i2cconfa = (registers->i2cconfa & ~OBC_REG_I2CCONFA_SPD_Msk) | (value << OBC_REG_I2CCONFA_SPD_Pos);
-}
-
-static inline uint32_t REG_Get_I2CConfB_ADDR(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->i2cconfb & OBC_REG_I2CCONFB_ADDR_Msk) >> OBC_REG_I2CCONFB_ADDR_Pos);
-}
-
-static inline void REG_Set_I2CConfB_ADDR(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->i2cconfb = (registers->i2cconfb & ~OBC_REG_I2CCONFB_ADDR_Msk) | (value << OBC_REG_I2CCONFB_ADDR_Pos);
-}
-
-static inline reg_enabled_t REG_Get_ConfMulti_MEnabled(OBC_RegisterData_t *registers)
-{
-    return (reg_enabled_t)((registers->confmulti & OBC_REG_CONFMULTI_MENABLED_Msk) >> OBC_REG_CONFMULTI_MENABLED_Pos);
-}
-
-static inline void REG_Set_ConfMulti_MEnabled(OBC_RegisterData_t *registers, reg_enabled_t value)
-{
-    registers->confmulti = (registers->confmulti & ~OBC_REG_CONFMULTI_MENABLED_Msk) | (value << OBC_REG_CONFMULTI_MENABLED_Pos);
-}
-
-static inline reg_enabled_t REG_Get_ConfMulti_AutoCLR(OBC_RegisterData_t *registers)
-{
-    return (reg_enabled_t)((registers->confmulti & OBC_REG_CONFMULTI_AUTOCLR_Msk) >> OBC_REG_CONFMULTI_AUTOCLR_Pos);
-}
-
-static inline void REG_Set_ConfMulti_AutoCLR(OBC_RegisterData_t *registers, reg_enabled_t value)
-{
-    registers->confmulti = (registers->confmulti & ~OBC_REG_CONFMULTI_AUTOCLR_Msk) | (value << OBC_REG_CONFMULTI_AUTOCLR_Pos);
-}
-
-static inline reg_enabled_t REG_Get_ConfMulti_RfSwENA(OBC_RegisterData_t *registers)
-{
-    return (reg_enabled_t)((registers->confmulti & OBC_REG_CONFMULTI_RFSWENA_Msk) >> OBC_REG_CONFMULTI_RFSWENA_Pos);
-}
-
-static inline void REG_Set_ConfMulti_RfSwENA(OBC_RegisterData_t *registers, reg_enabled_t value)
-{
-    registers->confmulti = (registers->confmulti & ~OBC_REG_CONFMULTI_RFSWENA_Msk) | (value << OBC_REG_CONFMULTI_RFSWENA_Pos);
-}
-
-static inline reg_enabled_t REG_Get_ConfMulti_FanPos1(OBC_RegisterData_t *registers)
-{
-    return (reg_enabled_t)((registers->confmulti & OBC_REG_CONFMULTI_FANPOS1_Msk) >> OBC_REG_CONFMULTI_FANPOS1_Pos);
-}
-
-static inline void REG_Set_ConfMulti_FanPos1(OBC_RegisterData_t *registers, reg_enabled_t value)
-{
-    registers->confmulti = (registers->confmulti & ~OBC_REG_CONFMULTI_FANPOS1_Msk) | (value << OBC_REG_CONFMULTI_FANPOS1_Pos);
-}
-
-static inline reg_enabled_t REG_Get_ConfMulti_FanPos2(OBC_RegisterData_t *registers)
-{
-    return (reg_enabled_t)((registers->confmulti & OBC_REG_CONFMULTI_FANPOS2_Msk) >> OBC_REG_CONFMULTI_FANPOS2_Pos);
-}
-
-static inline void REG_Set_ConfMulti_FanPos2(OBC_RegisterData_t *registers, reg_enabled_t value)
-{
-    registers->confmulti = (registers->confmulti & ~OBC_REG_CONFMULTI_FANPOS2_Msk) | (value << OBC_REG_CONFMULTI_FANPOS2_Pos);
-}
-
-static inline reg_enabled_t REG_Get_ConfMulti_FanPos3(OBC_RegisterData_t *registers)
-{
-    return (reg_enabled_t)((registers->confmulti & OBC_REG_CONFMULTI_FANPOS3_Msk) >> OBC_REG_CONFMULTI_FANPOS3_Pos);
-}
-
-static inline void REG_Set_ConfMulti_FanPos3(OBC_RegisterData_t *registers, reg_enabled_t value)
-{
-    registers->confmulti = (registers->confmulti & ~OBC_REG_CONFMULTI_FANPOS3_Msk) | (value << OBC_REG_CONFMULTI_FANPOS3_Pos);
-}
-
-static inline reg_enabled_t REG_Get_ConfMulti_FanPos4(OBC_RegisterData_t *registers)
-{
-    return (reg_enabled_t)((registers->confmulti & OBC_REG_CONFMULTI_FANPOS4_Msk) >> OBC_REG_CONFMULTI_FANPOS4_Pos);
-}
-
-static inline void REG_Set_ConfMulti_FanPos4(OBC_RegisterData_t *registers, reg_enabled_t value)
-{
-    registers->confmulti = (registers->confmulti & ~OBC_REG_CONFMULTI_FANPOS4_Msk) | (value << OBC_REG_CONFMULTI_FANPOS4_Pos);
-}
-
-static inline uint32_t REG_Get_ConfMulti_RfSwChan(OBC_RegisterData_t *registers)
-{
-    return (uint32_t)((registers->confmulti & OBC_REG_CONFMULTI_RFSWCHAN_Msk) >> OBC_REG_CONFMULTI_RFSWCHAN_Pos);
-}
-
-static inline void REG_Set_ConfMulti_RfSwChan(OBC_RegisterData_t *registers, uint32_t value)
-{
-    registers->confmulti = (registers->confmulti & ~OBC_REG_CONFMULTI_RFSWCHAN_Msk) | (value << OBC_REG_CONFMULTI_RFSWCHAN_Pos);
-}
-
-static inline reg_enabled_t REG_Get_XTXpins_ENA(OBC_RegisterData_t *registers)
-{
-    return (reg_enabled_t)((registers->xtxpins & OBC_REG_XTXPINS_ENA_Msk) >> OBC_REG_XTXPINS_ENA_Pos);
-}
-
-static inline void REG_Set_XTXpins_ENA(OBC_RegisterData_t *registers, reg_enabled_t value)
-{
-    registers->xtxpins = (registers->xtxpins & ~OBC_REG_XTXPINS_ENA_Msk) | (value << OBC_REG_XTXPINS_ENA_Pos);
-}
-
-static inline reg_enabled_t REG_Get_XTXpins_nRST(OBC_RegisterData_t *registers)
-{
-    return (reg_enabled_t)((registers->xtxpins & OBC_REG_XTXPINS_NRST_Msk) >> OBC_REG_XTXPINS_NRST_Pos);
-}
-
-static inline void REG_Set_XTXpins_nRST(OBC_RegisterData_t *registers, reg_enabled_t value)
-{
-    registers->xtxpins = (registers->xtxpins & ~OBC_REG_XTXPINS_NRST_Msk) | (value << OBC_REG_XTXPINS_NRST_Pos);
-}
-
-static inline reg_enabled_t REG_Get_XTXpins_RDY(OBC_RegisterData_t *registers)
-{
-    return (reg_enabled_t)((registers->xtxpins & OBC_REG_XTXPINS_RDY_Msk) >> OBC_REG_XTXPINS_RDY_Pos);
-}
-
-static inline void REG_Set_XTXpins_RDY(OBC_RegisterData_t *registers, reg_enabled_t value)
-{
-    registers->xtxpins = (registers->xtxpins & ~OBC_REG_XTXPINS_RDY_Msk) | (value << OBC_REG_XTXPINS_RDY_Pos);
-}
-
-static inline reg_enabled_t REG_Get_XTXMultitester_POS1_XTX_EN(OBC_RegisterData_t *registers)
-{
-    return (reg_enabled_t)((registers->xtxmultitester & OBC_REG_XTXMULTITESTER_POS1_XTX_EN_Msk) >> OBC_REG_XTXMULTITESTER_POS1_XTX_EN_Pos);
-}
-
-static inline void REG_Set_XTXMultitester_POS1_XTX_EN(OBC_RegisterData_t *registers, reg_enabled_t value)
-{
-    registers->xtxmultitester = (registers->xtxmultitester & ~OBC_REG_XTXMULTITESTER_POS1_XTX_EN_Msk) | (value << OBC_REG_XTXMULTITESTER_POS1_XTX_EN_Pos);
-}
-
-static inline reg_enabled_t REG_Get_XTXMultitester_POS1_XTX_Power(OBC_RegisterData_t *registers)
-{
-    return (reg_enabled_t)((registers->xtxmultitester & OBC_REG_XTXMULTITESTER_POS1_XTX_POWER_Msk) >> OBC_REG_XTXMULTITESTER_POS1_XTX_POWER_Pos);
-}
-
-static inline void REG_Set_XTXMultitester_POS1_XTX_Power(OBC_RegisterData_t *registers, reg_enabled_t value)
-{
-    registers->xtxmultitester = (registers->xtxmultitester & ~OBC_REG_XTXMULTITESTER_POS1_XTX_POWER_Msk) | (value << OBC_REG_XTXMULTITESTER_POS1_XTX_POWER_Pos);
-}
-
-static inline reg_enabled_t REG_Get_XTXMultitester_POS1_XTX_nReset(OBC_RegisterData_t *registers)
-{
-    return (reg_enabled_t)((registers->xtxmultitester & OBC_REG_XTXMULTITESTER_POS1_XTX_NRESET_Msk) >> OBC_REG_XTXMULTITESTER_POS1_XTX_NRESET_Pos);
-}
-
-static inline void REG_Set_XTXMultitester_POS1_XTX_nReset(OBC_RegisterData_t *registers, reg_enabled_t value)
-{
-    registers->xtxmultitester = (registers->xtxmultitester & ~OBC_REG_XTXMULTITESTER_POS1_XTX_NRESET_Msk) | (value << OBC_REG_XTXMULTITESTER_POS1_XTX_NRESET_Pos);
-}
-
-static inline reg_enabled_t REG_Get_XTXMultitester_POS2_XTX_EN(OBC_RegisterData_t *registers)
-{
-    return (reg_enabled_t)((registers->xtxmultitester & OBC_REG_XTXMULTITESTER_POS2_XTX_EN_Msk) >> OBC_REG_XTXMULTITESTER_POS2_XTX_EN_Pos);
-}
-
-static inline void REG_Set_XTXMultitester_POS2_XTX_EN(OBC_RegisterData_t *registers, reg_enabled_t value)
-{
-    registers->xtxmultitester = (registers->xtxmultitester & ~OBC_REG_XTXMULTITESTER_POS2_XTX_EN_Msk) | (value << OBC_REG_XTXMULTITESTER_POS2_XTX_EN_Pos);
-}
-
-static inline reg_enabled_t REG_Get_XTXMultitester_POS2_XTX_Power(OBC_RegisterData_t *registers)
-{
-    return (reg_enabled_t)((registers->xtxmultitester & OBC_REG_XTXMULTITESTER_POS2_XTX_POWER_Msk) >> OBC_REG_XTXMULTITESTER_POS2_XTX_POWER_Pos);
-}
-
-static inline void REG_Set_XTXMultitester_POS2_XTX_Power(OBC_RegisterData_t *registers, reg_enabled_t value)
-{
-    registers->xtxmultitester = (registers->xtxmultitester & ~OBC_REG_XTXMULTITESTER_POS2_XTX_POWER_Msk) | (value << OBC_REG_XTXMULTITESTER_POS2_XTX_POWER_Pos);
-}
-
-static inline reg_enabled_t REG_Get_XTXMultitester_POS2_XTX_nReset(OBC_RegisterData_t *registers)
-{
-    return (reg_enabled_t)((registers->xtxmultitester & OBC_REG_XTXMULTITESTER_POS2_XTX_NRESET_Msk) >> OBC_REG_XTXMULTITESTER_POS2_XTX_NRESET_Pos);
-}
-
-static inline void REG_Set_XTXMultitester_POS2_XTX_nReset(OBC_RegisterData_t *registers, reg_enabled_t value)
-{
-    registers->xtxmultitester = (registers->xtxmultitester & ~OBC_REG_XTXMULTITESTER_POS2_XTX_NRESET_Msk) | (value << OBC_REG_XTXMULTITESTER_POS2_XTX_NRESET_Pos);
-}
-
-static inline reg_enabled_t REG_Get_XTXMultitester_POS3_XTX_EN(OBC_RegisterData_t *registers)
-{
-    return (reg_enabled_t)((registers->xtxmultitester & OBC_REG_XTXMULTITESTER_POS3_XTX_EN_Msk) >> OBC_REG_XTXMULTITESTER_POS3_XTX_EN_Pos);
-}
-
-static inline void REG_Set_XTXMultitester_POS3_XTX_EN(OBC_RegisterData_t *registers, reg_enabled_t value)
-{
-    registers->xtxmultitester = (registers->xtxmultitester & ~OBC_REG_XTXMULTITESTER_POS3_XTX_EN_Msk) | (value << OBC_REG_XTXMULTITESTER_POS3_XTX_EN_Pos);
-}
-
-static inline reg_enabled_t REG_Get_XTXMultitester_POS3_XTX_Power(OBC_RegisterData_t *registers)
-{
-    return (reg_enabled_t)((registers->xtxmultitester & OBC_REG_XTXMULTITESTER_POS3_XTX_POWER_Msk) >> OBC_REG_XTXMULTITESTER_POS3_XTX_POWER_Pos);
-}
-
-static inline void REG_Set_XTXMultitester_POS3_XTX_Power(OBC_RegisterData_t *registers, reg_enabled_t value)
-{
-    registers->xtxmultitester = (registers->xtxmultitester & ~OBC_REG_XTXMULTITESTER_POS3_XTX_POWER_Msk) | (value << OBC_REG_XTXMULTITESTER_POS3_XTX_POWER_Pos);
-}
-
-static inline reg_enabled_t REG_Get_XTXMultitester_POS3_XTX_nReset(OBC_RegisterData_t *registers)
-{
-    return (reg_enabled_t)((registers->xtxmultitester & OBC_REG_XTXMULTITESTER_POS3_XTX_NRESET_Msk) >> OBC_REG_XTXMULTITESTER_POS3_XTX_NRESET_Pos);
-}
-
-static inline void REG_Set_XTXMultitester_POS3_XTX_nReset(OBC_RegisterData_t *registers, reg_enabled_t value)
-{
-    registers->xtxmultitester = (registers->xtxmultitester & ~OBC_REG_XTXMULTITESTER_POS3_XTX_NRESET_Msk) | (value << OBC_REG_XTXMULTITESTER_POS3_XTX_NRESET_Pos);
-}
-
-static inline reg_enabled_t REG_Get_XTXMultitester_POS4_XTX_EN(OBC_RegisterData_t *registers)
-{
-    return (reg_enabled_t)((registers->xtxmultitester & OBC_REG_XTXMULTITESTER_POS4_XTX_EN_Msk) >> OBC_REG_XTXMULTITESTER_POS4_XTX_EN_Pos);
-}
-
-static inline void REG_Set_XTXMultitester_POS4_XTX_EN(OBC_RegisterData_t *registers, reg_enabled_t value)
-{
-    registers->xtxmultitester = (registers->xtxmultitester & ~OBC_REG_XTXMULTITESTER_POS4_XTX_EN_Msk) | (value << OBC_REG_XTXMULTITESTER_POS4_XTX_EN_Pos);
-}
-
-static inline reg_enabled_t REG_Get_XTXMultitester_POS4_XTX_Power(OBC_RegisterData_t *registers)
-{
-    return (reg_enabled_t)((registers->xtxmultitester & OBC_REG_XTXMULTITESTER_POS4_XTX_POWER_Msk) >> OBC_REG_XTXMULTITESTER_POS4_XTX_POWER_Pos);
-}
-
-static inline void REG_Set_XTXMultitester_POS4_XTX_Power(OBC_RegisterData_t *registers, reg_enabled_t value)
-{
-    registers->xtxmultitester = (registers->xtxmultitester & ~OBC_REG_XTXMULTITESTER_POS4_XTX_POWER_Msk) | (value << OBC_REG_XTXMULTITESTER_POS4_XTX_POWER_Pos);
-}
-
-static inline reg_enabled_t REG_Get_XTXMultitester_POS4_XTX_nReset(OBC_RegisterData_t *registers)
-{
-    return (reg_enabled_t)((registers->xtxmultitester & OBC_REG_XTXMULTITESTER_POS4_XTX_NRESET_Msk) >> OBC_REG_XTXMULTITESTER_POS4_XTX_NRESET_Pos);
-}
-
-static inline void REG_Set_XTXMultitester_POS4_XTX_nReset(OBC_RegisterData_t *registers, reg_enabled_t value)
-{
-    registers->xtxmultitester = (registers->xtxmultitester & ~OBC_REG_XTXMULTITESTER_POS4_XTX_NRESET_Msk) | (value << OBC_REG_XTXMULTITESTER_POS4_XTX_NRESET_Pos);
-}
-
-static inline reg_enabled_t REG_Get_XDCConfig_ADDR(OBC_RegisterData_t *registers)
-{
-    return (reg_enabled_t)((registers->xdcconfig & OBC_REG_XDCCONFIG_ADDR_Msk) >> OBC_REG_XDCCONFIG_ADDR_Pos);
-}
-
-static inline void REG_Set_XDCConfig_ADDR(OBC_RegisterData_t *registers, reg_enabled_t value)
-{
-    registers->xdcconfig = (registers->xdcconfig & ~OBC_REG_XDCCONFIG_ADDR_Msk) | (value << OBC_REG_XDCCONFIG_ADDR_Pos);
-}
-
-#endif /* OBC_H_ */
+} mm_boardidentifier_t;
+
+void mm_init(void);
+mm_t * get_mm_ptr(void);
+
+/*************** Get/Set functions for Board_ID register **********************************************************************/
+mm_response_t mm_setBoard_ID(const uint32_t val);
+mm_response_t mm_getBoard_ID(uint32_t * dest);
+mm_response_t mm_setBoard_ID_ccIdentifier(const uint8_t val);
+mm_response_t mm_getBoard_ID_ccIdentifier(uint8_t * dest);
+mm_response_t mm_getBoard_ID_ccIdentifierFrom(uint8_t * dest, const uint32_t source);
+mm_response_t mm_setBoard_ID_id0(const uint8_t val);
+mm_response_t mm_getBoard_ID_id0(uint8_t * dest);
+mm_response_t mm_getBoard_ID_id0From(uint8_t * dest, const uint32_t source);
+mm_response_t mm_setBoard_ID_id1(const uint8_t val);
+mm_response_t mm_getBoard_ID_id1(uint8_t * dest);
+mm_response_t mm_getBoard_ID_id1From(uint8_t * dest, const uint32_t source);
+mm_response_t mm_setBoard_ID_id2(const uint8_t val);
+mm_response_t mm_getBoard_ID_id2(uint8_t * dest);
+mm_response_t mm_getBoard_ID_id2From(uint8_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for FW_Version register ********************************************************************/
+mm_response_t mm_setFW_Version(const uint32_t val);
+mm_response_t mm_getFW_Version(uint32_t * dest);
+mm_response_t mm_setFW_Version_major_version(const uint8_t val);
+mm_response_t mm_getFW_Version_major_version(uint8_t * dest);
+mm_response_t mm_getFW_Version_major_versionFrom(uint8_t * dest, const uint32_t source);
+mm_response_t mm_setFW_Version_minor_version(const uint8_t val);
+mm_response_t mm_getFW_Version_minor_version(uint8_t * dest);
+mm_response_t mm_getFW_Version_minor_versionFrom(uint8_t * dest, const uint32_t source);
+mm_response_t mm_setFW_Version_patch_version(const uint8_t val);
+mm_response_t mm_getFW_Version_patch_version(uint8_t * dest);
+mm_response_t mm_getFW_Version_patch_versionFrom(uint8_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for HW_Version register ********************************************************************/
+mm_response_t mm_setHW_Version(const uint32_t val);
+mm_response_t mm_getHW_Version(uint32_t * dest);
+mm_response_t mm_setHW_Version_major_version(const uint8_t val);
+mm_response_t mm_getHW_Version_major_version(uint8_t * dest);
+mm_response_t mm_getHW_Version_major_versionFrom(uint8_t * dest, const uint32_t source);
+mm_response_t mm_setHW_Version_minor_version(const uint8_t val);
+mm_response_t mm_getHW_Version_minor_version(uint8_t * dest);
+mm_response_t mm_getHW_Version_minor_versionFrom(uint8_t * dest, const uint32_t source);
+mm_response_t mm_setHW_Version_patch_version(const uint8_t val);
+mm_response_t mm_getHW_Version_patch_version(uint8_t * dest);
+mm_response_t mm_getHW_Version_patch_versionFrom(uint8_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for Scratchpad register ********************************************************************/
+mm_response_t mm_setScratchpad(const uint32_t val);
+mm_response_t mm_getScratchpad(uint32_t * dest);
+mm_response_t mm_getScratchpadFrom(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for Supported_Boards register **************************************************************/
+mm_response_t mm_setSupported_Boards(const uint32_t val);
+mm_response_t mm_getSupported_Boards(uint32_t * dest);
+mm_response_t mm_getSupported_BoardsFrom(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for Configured_Boards register *************************************************************/
+mm_response_t mm_setConfigured_Boards(const uint32_t val);
+mm_response_t mm_getConfigured_Boards(uint32_t * dest);
+mm_response_t mm_getConfigured_BoardsFrom(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for Uptime register ************************************************************************/
+mm_response_t mm_setUptime(const uint32_t val);
+mm_response_t mm_getUptime(uint32_t * dest);
+mm_response_t mm_getUptimeFrom(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for Event_ConfA register *******************************************************************/
+mm_response_t mm_setEvent_ConfA(const uint32_t val);
+mm_response_t mm_getEvent_ConfA(uint32_t * dest);
+mm_response_t mm_setEvent_ConfA_count(const uint16_t val);
+mm_response_t mm_getEvent_ConfA_count(uint16_t * dest);
+mm_response_t mm_getEvent_ConfA_countFrom(uint16_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for Event register *************************************************************************/
+mm_response_t mm_setEvent(const uint32_t val);
+mm_response_t mm_getEvent(uint32_t * dest);
+mm_response_t mm_setEvent_section(const uint16_t val);
+mm_response_t mm_getEvent_section(uint16_t * dest);
+mm_response_t mm_getEvent_sectionFrom(uint16_t * dest, const uint32_t source);
+mm_response_t mm_setEvent_detail(const uint16_t val);
+mm_response_t mm_getEvent_detail(uint16_t * dest);
+mm_response_t mm_getEvent_detailFrom(uint16_t * dest, const uint32_t source);
+mm_response_t mm_setEvent_timestamp(const uint16_t val);
+mm_response_t mm_getEvent_timestamp(uint16_t * dest);
+mm_response_t mm_getEvent_timestampFrom(uint16_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for ConfPower register *********************************************************************/
+mm_response_t mm_setConfPower(const uint32_t val);
+mm_response_t mm_getConfPower(uint32_t * dest);
+mm_response_t mm_setConfPower_voltage5Toggle(const mm_enabled_t val);
+mm_response_t mm_getConfPower_voltage5Toggle(mm_enabled_t * dest);
+mm_response_t mm_getConfPower_voltage5ToggleFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setConfPower_voltage3Toggle(const mm_enabled_t val);
+mm_response_t mm_getConfPower_voltage3Toggle(mm_enabled_t * dest);
+mm_response_t mm_getConfPower_voltage3ToggleFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setConfPower_voltageVBatToggle(const mm_enabled_t val);
+mm_response_t mm_getConfPower_voltageVBatToggle(mm_enabled_t * dest);
+mm_response_t mm_getConfPower_voltageVBatToggleFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setConfPower_voltageVBatAltToggle(const mm_enabled_t val);
+mm_response_t mm_getConfPower_voltageVBatAltToggle(mm_enabled_t * dest);
+mm_response_t mm_getConfPower_voltageVBatAltToggleFrom(mm_enabled_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for MeasureVI_V3 register ******************************************************************/
+mm_response_t mm_setMeasureVI_V3(const uint32_t val);
+mm_response_t mm_getMeasureVI_V3(uint32_t * dest);
+mm_response_t mm_setMeasureVI_V3_voltage(const uint16_t val);
+mm_response_t mm_getMeasureVI_V3_voltage(uint16_t * dest);
+mm_response_t mm_getMeasureVI_V3_voltageFrom(uint16_t * dest, const uint32_t source);
+mm_response_t mm_setMeasureVI_V3_current(const uint16_t val);
+mm_response_t mm_getMeasureVI_V3_current(uint16_t * dest);
+mm_response_t mm_getMeasureVI_V3_currentFrom(uint16_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for MeasurePower_V3 register ***************************************************************/
+mm_response_t mm_setMeasurePower_V3(const uint32_t val);
+mm_response_t mm_getMeasurePower_V3(uint32_t * dest);
+mm_response_t mm_setMeasurePower_V3_power(const uint32_t val);
+mm_response_t mm_getMeasurePower_V3_power(uint32_t * dest);
+mm_response_t mm_getMeasurePower_V3_powerFrom(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for MeasureVI_V5 register ******************************************************************/
+mm_response_t mm_setMeasureVI_V5(const uint32_t val);
+mm_response_t mm_getMeasureVI_V5(uint32_t * dest);
+mm_response_t mm_setMeasureVI_V5_voltage(const uint16_t val);
+mm_response_t mm_getMeasureVI_V5_voltage(uint16_t * dest);
+mm_response_t mm_getMeasureVI_V5_voltageFrom(uint16_t * dest, const uint32_t source);
+mm_response_t mm_setMeasureVI_V5_current(const uint16_t val);
+mm_response_t mm_getMeasureVI_V5_current(uint16_t * dest);
+mm_response_t mm_getMeasureVI_V5_currentFrom(uint16_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for MeasurePower_V5 register ***************************************************************/
+mm_response_t mm_setMeasurePower_V5(const uint32_t val);
+mm_response_t mm_getMeasurePower_V5(uint32_t * dest);
+mm_response_t mm_setMeasurePower_V5_power(const uint32_t val);
+mm_response_t mm_getMeasurePower_V5_power(uint32_t * dest);
+mm_response_t mm_getMeasurePower_V5_powerFrom(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for MeasureVI_VBat register ****************************************************************/
+mm_response_t mm_setMeasureVI_VBat(const uint32_t val);
+mm_response_t mm_getMeasureVI_VBat(uint32_t * dest);
+mm_response_t mm_setMeasureVI_VBat_voltage(const uint16_t val);
+mm_response_t mm_getMeasureVI_VBat_voltage(uint16_t * dest);
+mm_response_t mm_getMeasureVI_VBat_voltageFrom(uint16_t * dest, const uint32_t source);
+mm_response_t mm_setMeasureVI_VBat_current(const uint16_t val);
+mm_response_t mm_getMeasureVI_VBat_current(uint16_t * dest);
+mm_response_t mm_getMeasureVI_VBat_currentFrom(uint16_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for MeasurePower_VBat register *************************************************************/
+mm_response_t mm_setMeasurePower_VBat(const uint32_t val);
+mm_response_t mm_getMeasurePower_VBat(uint32_t * dest);
+mm_response_t mm_setMeasurePower_VBat_power(const uint32_t val);
+mm_response_t mm_getMeasurePower_VBat_power(uint32_t * dest);
+mm_response_t mm_getMeasurePower_VBat_powerFrom(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for MeasureVI_VBatAlt register *************************************************************/
+mm_response_t mm_setMeasureVI_VBatAlt(const uint32_t val);
+mm_response_t mm_getMeasureVI_VBatAlt(uint32_t * dest);
+mm_response_t mm_setMeasureVI_VBatAlt_voltage(const uint16_t val);
+mm_response_t mm_getMeasureVI_VBatAlt_voltage(uint16_t * dest);
+mm_response_t mm_getMeasureVI_VBatAlt_voltageFrom(uint16_t * dest, const uint32_t source);
+mm_response_t mm_setMeasureVI_VBatAlt_current(const uint16_t val);
+mm_response_t mm_getMeasureVI_VBatAlt_current(uint16_t * dest);
+mm_response_t mm_getMeasureVI_VBatAlt_currentFrom(uint16_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for MeasurePower_VBatAlt register **********************************************************/
+mm_response_t mm_setMeasurePower_VBatAlt(const uint32_t val);
+mm_response_t mm_getMeasurePower_VBatAlt(uint32_t * dest);
+mm_response_t mm_setMeasurePower_VBatAlt_power(const uint32_t val);
+mm_response_t mm_getMeasurePower_VBatAlt_power(uint32_t * dest);
+mm_response_t mm_getMeasurePower_VBatAlt_powerFrom(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for I2CConfA register **********************************************************************/
+mm_response_t mm_setI2CConfA(const uint32_t val);
+mm_response_t mm_getI2CConfA(uint32_t * dest);
+mm_response_t mm_setI2CConfA_TRDEL(const uint8_t val);
+mm_response_t mm_getI2CConfA_TRDEL(uint8_t * dest);
+mm_response_t mm_getI2CConfA_TRDELFrom(uint8_t * dest, const uint32_t source);
+mm_response_t mm_setI2CConfA_WRDEL(const uint8_t val);
+mm_response_t mm_getI2CConfA_WRDEL(uint8_t * dest);
+mm_response_t mm_getI2CConfA_WRDELFrom(uint8_t * dest, const uint32_t source);
+mm_response_t mm_setI2CConfA_SPD(const uint8_t val);
+mm_response_t mm_getI2CConfA_SPD(uint8_t * dest);
+mm_response_t mm_getI2CConfA_SPDFrom(uint8_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for I2CConfB register **********************************************************************/
+mm_response_t mm_setI2CConfB(const uint32_t val);
+mm_response_t mm_getI2CConfB(uint32_t * dest);
+mm_response_t mm_setI2CConfB_ADDR(const uint8_t val);
+mm_response_t mm_getI2CConfB_ADDR(uint8_t * dest);
+mm_response_t mm_getI2CConfB_ADDRFrom(uint8_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for ConfMulti register *********************************************************************/
+mm_response_t mm_setConfMulti(const uint32_t val);
+mm_response_t mm_getConfMulti(uint32_t * dest);
+mm_response_t mm_setConfMulti_MEnabled(const mm_enabled_t val);
+mm_response_t mm_getConfMulti_MEnabled(mm_enabled_t * dest);
+mm_response_t mm_getConfMulti_MEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setConfMulti_AutoCLR(const mm_enabled_t val);
+mm_response_t mm_getConfMulti_AutoCLR(mm_enabled_t * dest);
+mm_response_t mm_getConfMulti_AutoCLRFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setConfMulti_RfSwENA(const mm_enabled_t val);
+mm_response_t mm_getConfMulti_RfSwENA(mm_enabled_t * dest);
+mm_response_t mm_getConfMulti_RfSwENAFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setConfMulti_FanPos1(const mm_enabled_t val);
+mm_response_t mm_getConfMulti_FanPos1(mm_enabled_t * dest);
+mm_response_t mm_getConfMulti_FanPos1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setConfMulti_FanPos2(const mm_enabled_t val);
+mm_response_t mm_getConfMulti_FanPos2(mm_enabled_t * dest);
+mm_response_t mm_getConfMulti_FanPos2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setConfMulti_FanPos3(const mm_enabled_t val);
+mm_response_t mm_getConfMulti_FanPos3(mm_enabled_t * dest);
+mm_response_t mm_getConfMulti_FanPos3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setConfMulti_FanPos4(const mm_enabled_t val);
+mm_response_t mm_getConfMulti_FanPos4(mm_enabled_t * dest);
+mm_response_t mm_getConfMulti_FanPos4From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setConfMulti_RfSwChan(const uint8_t val);
+mm_response_t mm_getConfMulti_RfSwChan(uint8_t * dest);
+mm_response_t mm_getConfMulti_RfSwChanFrom(uint8_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for ConfTempSense register *****************************************************************/
+mm_response_t mm_setConfTempSense(const uint32_t val);
+mm_response_t mm_getConfTempSense(uint32_t * dest);
+mm_response_t mm_setConfTempSense_EnableMeasurements(const mm_enabled_t val);
+mm_response_t mm_getConfTempSense_EnableMeasurements(mm_enabled_t * dest);
+mm_response_t mm_getConfTempSense_EnableMeasurementsFrom(mm_enabled_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for XTXpins register ***********************************************************************/
+mm_response_t mm_setXTXpins(const uint32_t val);
+mm_response_t mm_getXTXpins(uint32_t * dest);
+mm_response_t mm_setXTXpins_ENA(const mm_enabled_t val);
+mm_response_t mm_getXTXpins_ENA(mm_enabled_t * dest);
+mm_response_t mm_getXTXpins_ENAFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setXTXpins_nRST(const mm_enabled_t val);
+mm_response_t mm_getXTXpins_nRST(mm_enabled_t * dest);
+mm_response_t mm_getXTXpins_nRSTFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setXTXpins_RDY(const mm_enabled_t val);
+mm_response_t mm_getXTXpins_RDY(mm_enabled_t * dest);
+mm_response_t mm_getXTXpins_RDYFrom(mm_enabled_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for XTXMultitester register ****************************************************************/
+mm_response_t mm_setXTXMultitester(const uint32_t val);
+mm_response_t mm_getXTXMultitester(uint32_t * dest);
+mm_response_t mm_setXTXMultitester_POS1_XTX_EN(const mm_enabled_t val);
+mm_response_t mm_getXTXMultitester_POS1_XTX_EN(mm_enabled_t * dest);
+mm_response_t mm_getXTXMultitester_POS1_XTX_ENFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setXTXMultitester_POS1_XTX_Power(const mm_enabled_t val);
+mm_response_t mm_getXTXMultitester_POS1_XTX_Power(mm_enabled_t * dest);
+mm_response_t mm_getXTXMultitester_POS1_XTX_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setXTXMultitester_POS1_XTX_nReset(const mm_enabled_t val);
+mm_response_t mm_getXTXMultitester_POS1_XTX_nReset(mm_enabled_t * dest);
+mm_response_t mm_getXTXMultitester_POS1_XTX_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setXTXMultitester_POS2_XTX_EN(const mm_enabled_t val);
+mm_response_t mm_getXTXMultitester_POS2_XTX_EN(mm_enabled_t * dest);
+mm_response_t mm_getXTXMultitester_POS2_XTX_ENFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setXTXMultitester_POS2_XTX_Power(const mm_enabled_t val);
+mm_response_t mm_getXTXMultitester_POS2_XTX_Power(mm_enabled_t * dest);
+mm_response_t mm_getXTXMultitester_POS2_XTX_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setXTXMultitester_POS2_XTX_nReset(const mm_enabled_t val);
+mm_response_t mm_getXTXMultitester_POS2_XTX_nReset(mm_enabled_t * dest);
+mm_response_t mm_getXTXMultitester_POS2_XTX_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setXTXMultitester_POS3_XTX_EN(const mm_enabled_t val);
+mm_response_t mm_getXTXMultitester_POS3_XTX_EN(mm_enabled_t * dest);
+mm_response_t mm_getXTXMultitester_POS3_XTX_ENFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setXTXMultitester_POS3_XTX_Power(const mm_enabled_t val);
+mm_response_t mm_getXTXMultitester_POS3_XTX_Power(mm_enabled_t * dest);
+mm_response_t mm_getXTXMultitester_POS3_XTX_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setXTXMultitester_POS3_XTX_nReset(const mm_enabled_t val);
+mm_response_t mm_getXTXMultitester_POS3_XTX_nReset(mm_enabled_t * dest);
+mm_response_t mm_getXTXMultitester_POS3_XTX_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setXTXMultitester_POS4_XTX_EN(const mm_enabled_t val);
+mm_response_t mm_getXTXMultitester_POS4_XTX_EN(mm_enabled_t * dest);
+mm_response_t mm_getXTXMultitester_POS4_XTX_ENFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setXTXMultitester_POS4_XTX_Power(const mm_enabled_t val);
+mm_response_t mm_getXTXMultitester_POS4_XTX_Power(mm_enabled_t * dest);
+mm_response_t mm_getXTXMultitester_POS4_XTX_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setXTXMultitester_POS4_XTX_nReset(const mm_enabled_t val);
+mm_response_t mm_getXTXMultitester_POS4_XTX_nReset(mm_enabled_t * dest);
+mm_response_t mm_getXTXMultitester_POS4_XTX_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for XDCConfig register *********************************************************************/
+mm_response_t mm_setXDCConfig(const uint32_t val);
+mm_response_t mm_getXDCConfig(uint32_t * dest);
+mm_response_t mm_setXDCConfig_ADDR(const mm_enabled_t val);
+mm_response_t mm_getXDCConfig_ADDR(mm_enabled_t * dest);
+mm_response_t mm_getXDCConfig_ADDRFrom(mm_enabled_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_T0 register ********************************************************************/
+mm_response_t mm_setCSBoard_T0(const uint32_t val);
+mm_response_t mm_getCSBoard_T0(uint32_t * dest);
+mm_response_t mm_getCSBoard_T0From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_T1 register ********************************************************************/
+mm_response_t mm_setCSBoard_T1(const uint32_t val);
+mm_response_t mm_getCSBoard_T1(uint32_t * dest);
+mm_response_t mm_getCSBoard_T1From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_T2 register ********************************************************************/
+mm_response_t mm_setCSBoard_T2(const uint32_t val);
+mm_response_t mm_getCSBoard_T2(uint32_t * dest);
+mm_response_t mm_getCSBoard_T2From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_T3 register ********************************************************************/
+mm_response_t mm_setCSBoard_T3(const uint32_t val);
+mm_response_t mm_getCSBoard_T3(uint32_t * dest);
+mm_response_t mm_getCSBoard_T3From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_T4 register ********************************************************************/
+mm_response_t mm_setCSBoard_T4(const uint32_t val);
+mm_response_t mm_getCSBoard_T4(uint32_t * dest);
+mm_response_t mm_getCSBoard_T4From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_T5 register ********************************************************************/
+mm_response_t mm_setCSBoard_T5(const uint32_t val);
+mm_response_t mm_getCSBoard_T5(uint32_t * dest);
+mm_response_t mm_getCSBoard_T5From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_T6 register ********************************************************************/
+mm_response_t mm_setCSBoard_T6(const uint32_t val);
+mm_response_t mm_getCSBoard_T6(uint32_t * dest);
+mm_response_t mm_getCSBoard_T6From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_T7 register ********************************************************************/
+mm_response_t mm_setCSBoard_T7(const uint32_t val);
+mm_response_t mm_getCSBoard_T7(uint32_t * dest);
+mm_response_t mm_getCSBoard_T7From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_Current0I0 register ************************************************************/
+mm_response_t mm_setCSBoard_Current0I0(const uint32_t val);
+mm_response_t mm_getCSBoard_Current0I0(uint32_t * dest);
+mm_response_t mm_getCSBoard_Current0I0From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_Current0I1 register ************************************************************/
+mm_response_t mm_setCSBoard_Current0I1(const uint32_t val);
+mm_response_t mm_getCSBoard_Current0I1(uint32_t * dest);
+mm_response_t mm_getCSBoard_Current0I1From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_Current0I2 register ************************************************************/
+mm_response_t mm_setCSBoard_Current0I2(const uint32_t val);
+mm_response_t mm_getCSBoard_Current0I2(uint32_t * dest);
+mm_response_t mm_getCSBoard_Current0I2From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_Current1I0 register ************************************************************/
+mm_response_t mm_setCSBoard_Current1I0(const uint32_t val);
+mm_response_t mm_getCSBoard_Current1I0(uint32_t * dest);
+mm_response_t mm_getCSBoard_Current1I0From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_Current1I1 register ************************************************************/
+mm_response_t mm_setCSBoard_Current1I1(const uint32_t val);
+mm_response_t mm_getCSBoard_Current1I1(uint32_t * dest);
+mm_response_t mm_getCSBoard_Current1I1From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_Current1I2 register ************************************************************/
+mm_response_t mm_setCSBoard_Current1I2(const uint32_t val);
+mm_response_t mm_getCSBoard_Current1I2(uint32_t * dest);
+mm_response_t mm_getCSBoard_Current1I2From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_Current2I0 register ************************************************************/
+mm_response_t mm_setCSBoard_Current2I0(const uint32_t val);
+mm_response_t mm_getCSBoard_Current2I0(uint32_t * dest);
+mm_response_t mm_getCSBoard_Current2I0From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_Current2I1 register ************************************************************/
+mm_response_t mm_setCSBoard_Current2I1(const uint32_t val);
+mm_response_t mm_getCSBoard_Current2I1(uint32_t * dest);
+mm_response_t mm_getCSBoard_Current2I1From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_Current2I2 register ************************************************************/
+mm_response_t mm_setCSBoard_Current2I2(const uint32_t val);
+mm_response_t mm_getCSBoard_Current2I2(uint32_t * dest);
+mm_response_t mm_getCSBoard_Current2I2From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_Current3I0 register ************************************************************/
+mm_response_t mm_setCSBoard_Current3I0(const uint32_t val);
+mm_response_t mm_getCSBoard_Current3I0(uint32_t * dest);
+mm_response_t mm_getCSBoard_Current3I0From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_Current3I1 register ************************************************************/
+mm_response_t mm_setCSBoard_Current3I1(const uint32_t val);
+mm_response_t mm_getCSBoard_Current3I1(uint32_t * dest);
+mm_response_t mm_getCSBoard_Current3I1From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_Current3I2 register ************************************************************/
+mm_response_t mm_setCSBoard_Current3I2(const uint32_t val);
+mm_response_t mm_getCSBoard_Current3I2(uint32_t * dest);
+mm_response_t mm_getCSBoard_Current3I2From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_Current4I0 register ************************************************************/
+mm_response_t mm_setCSBoard_Current4I0(const uint32_t val);
+mm_response_t mm_getCSBoard_Current4I0(uint32_t * dest);
+mm_response_t mm_getCSBoard_Current4I0From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_Current4I1 register ************************************************************/
+mm_response_t mm_setCSBoard_Current4I1(const uint32_t val);
+mm_response_t mm_getCSBoard_Current4I1(uint32_t * dest);
+mm_response_t mm_getCSBoard_Current4I1From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_Current4I2 register ************************************************************/
+mm_response_t mm_setCSBoard_Current4I2(const uint32_t val);
+mm_response_t mm_getCSBoard_Current4I2(uint32_t * dest);
+mm_response_t mm_getCSBoard_Current4I2From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_Current5I0 register ************************************************************/
+mm_response_t mm_setCSBoard_Current5I0(const uint32_t val);
+mm_response_t mm_getCSBoard_Current5I0(uint32_t * dest);
+mm_response_t mm_getCSBoard_Current5I0From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_Current5I1 register ************************************************************/
+mm_response_t mm_setCSBoard_Current5I1(const uint32_t val);
+mm_response_t mm_getCSBoard_Current5I1(uint32_t * dest);
+mm_response_t mm_getCSBoard_Current5I1From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_Current5I2 register ************************************************************/
+mm_response_t mm_setCSBoard_Current5I2(const uint32_t val);
+mm_response_t mm_getCSBoard_Current5I2(uint32_t * dest);
+mm_response_t mm_getCSBoard_Current5I2From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_Current6I0 register ************************************************************/
+mm_response_t mm_setCSBoard_Current6I0(const uint32_t val);
+mm_response_t mm_getCSBoard_Current6I0(uint32_t * dest);
+mm_response_t mm_getCSBoard_Current6I0From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_Current6I1 register ************************************************************/
+mm_response_t mm_setCSBoard_Current6I1(const uint32_t val);
+mm_response_t mm_getCSBoard_Current6I1(uint32_t * dest);
+mm_response_t mm_getCSBoard_Current6I1From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_Current6I2 register ************************************************************/
+mm_response_t mm_setCSBoard_Current6I2(const uint32_t val);
+mm_response_t mm_getCSBoard_Current6I2(uint32_t * dest);
+mm_response_t mm_getCSBoard_Current6I2From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_Current7I0 register ************************************************************/
+mm_response_t mm_setCSBoard_Current7I0(const uint32_t val);
+mm_response_t mm_getCSBoard_Current7I0(uint32_t * dest);
+mm_response_t mm_getCSBoard_Current7I0From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_Current7I1 register ************************************************************/
+mm_response_t mm_setCSBoard_Current7I1(const uint32_t val);
+mm_response_t mm_getCSBoard_Current7I1(uint32_t * dest);
+mm_response_t mm_getCSBoard_Current7I1From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CSBoard_Current7I2 register ************************************************************/
+mm_response_t mm_setCSBoard_Current7I2(const uint32_t val);
+mm_response_t mm_getCSBoard_Current7I2(uint32_t * dest);
+mm_response_t mm_getCSBoard_Current7I2From(uint32_t * dest, const uint32_t source);
+
+
+#endif /* memory_map_h */

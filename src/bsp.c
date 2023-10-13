@@ -15,6 +15,7 @@
 #include "obc_controller_rev_A.h"
 #include "spi.h"
 #include "usart_buffer.h"
+#include "i2c_endpoint.h"
 
 // All interrupt mask.
 #define ALL_INTERRUPT_MASK  0xffffffff
@@ -241,6 +242,15 @@ void BSP_vPowerSenseWriteFunction(const uint8_t chip_addr, const uint8_t mem_add
 void BSP_vPowerSenseReadFunction(const uint8_t chip_addr, const uint8_t mem_address, uint8_t* rx_buffer, uint16_t length) {
     I2C_DRIVER_bReadLocal(&board_i2c_driver, chip_addr, mem_address, rx_buffer, length);
 }
+
+void BSP_vCurrentSenseReadFunction(const uint8_t chip_addr, const uint8_t * mem_address, const uint8_t mem_address_length, uint8_t* rx_buffer, const uint16_t length) {
+	I2C_DRIVER_bReadCustom(I2C_psGetDriver(), chip_addr, mem_address, mem_address_length, rx_buffer, length);
+}
+
+void BSP_vCurrentSenseWriteFunction(const uint8_t chip_addr, const uint8_t * mem_address, const uint8_t mem_address_length, uint8_t* tx_buffer, const uint16_t length) {
+	I2C_DRIVER_bWriteCustom(I2C_psGetDriver(), chip_addr, mem_address, mem_address_length, tx_buffer, length);
+}
+
 
 void BSP_vUsbReset(void) {
     ioport_set_pin_level(USB_RESET_PIN, 0);

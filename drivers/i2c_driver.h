@@ -30,4 +30,7 @@ bool I2C_DRIVER_bReadPlain(struct i2c_driver_data* drv, const uint8_t chip_addr,
 bool I2C_DRIVER_bWriteLocal(struct i2c_driver_data* drv, const uint8_t chip_addr, const uint8_t mem_address, const uint8_t* tx_buffer, const uint16_t length);
 bool I2C_DRIVER_bReadLocal(struct i2c_driver_data* drv, const uint8_t chip_addr, const uint8_t mem_address, uint8_t* rx_buffer, const uint16_t length);
 
+bool I2C_DRIVER_bReadCustom(struct i2c_driver_data* drv, const uint8_t chip_addr, const uint8_t * mem_address, const uint8_t mem_address_length, uint8_t* rx_buffer, const uint16_t length);
+bool I2C_DRIVER_bWriteCustom(struct i2c_driver_data* drv, const uint8_t chip_addr, const uint8_t * mem_address, const uint8_t mem_address_length, uint8_t* tx_buffer, const uint16_t length);
+
 #endif /* I2C_DRIVER_H_ */

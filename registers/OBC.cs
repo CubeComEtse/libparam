@@ -45,9 +45,42 @@ namespace Devices.Models
             OBC_REG_I2CCONFA                         = 0x29,
             OBC_REG_I2CCONFB                         = 0x2a,
             OBC_REG_CONFMULTI                        = 0x2b,
+            OBC_REG_CONFTEMPSENSE                    = 0x2c,
             OBC_REG_XTXPINS                          = 0x30,
             OBC_REG_XTXMULTITESTER                   = 0x31,
             OBC_REG_XDCCONFIG                        = 0x40,
+            OBC_REG_CSBOARD_T0                       = 0x50,
+            OBC_REG_CSBOARD_T1                       = 0x51,
+            OBC_REG_CSBOARD_T2                       = 0x52,
+            OBC_REG_CSBOARD_T3                       = 0x53,
+            OBC_REG_CSBOARD_T4                       = 0x54,
+            OBC_REG_CSBOARD_T5                       = 0x55,
+            OBC_REG_CSBOARD_T6                       = 0x56,
+            OBC_REG_CSBOARD_T7                       = 0x57,
+            OBC_REG_CSBOARD_CURRENT0I0               = 0x58,
+            OBC_REG_CSBOARD_CURRENT0I1               = 0x59,
+            OBC_REG_CSBOARD_CURRENT0I2               = 0x5a,
+            OBC_REG_CSBOARD_CURRENT1I0               = 0x5b,
+            OBC_REG_CSBOARD_CURRENT1I1               = 0x5c,
+            OBC_REG_CSBOARD_CURRENT1I2               = 0x5d,
+            OBC_REG_CSBOARD_CURRENT2I0               = 0x5e,
+            OBC_REG_CSBOARD_CURRENT2I1               = 0x5f,
+            OBC_REG_CSBOARD_CURRENT2I2               = 0x60,
+            OBC_REG_CSBOARD_CURRENT3I0               = 0x61,
+            OBC_REG_CSBOARD_CURRENT3I1               = 0x62,
+            OBC_REG_CSBOARD_CURRENT3I2               = 0x63,
+            OBC_REG_CSBOARD_CURRENT4I0               = 0x64,
+            OBC_REG_CSBOARD_CURRENT4I1               = 0x65,
+            OBC_REG_CSBOARD_CURRENT4I2               = 0x66,
+            OBC_REG_CSBOARD_CURRENT5I0               = 0x67,
+            OBC_REG_CSBOARD_CURRENT5I1               = 0x68,
+            OBC_REG_CSBOARD_CURRENT5I2               = 0x69,
+            OBC_REG_CSBOARD_CURRENT6I0               = 0x6a,
+            OBC_REG_CSBOARD_CURRENT6I1               = 0x6b,
+            OBC_REG_CSBOARD_CURRENT6I2               = 0x6c,
+            OBC_REG_CSBOARD_CURRENT7I0               = 0x6d,
+            OBC_REG_CSBOARD_CURRENT7I1               = 0x6e,
+            OBC_REG_CSBOARD_CURRENT7I2               = 0x6f,
         }
 
         public enum OBCRegisterStorageLocations{
@@ -88,11 +121,77 @@ namespace Devices.Models
             [FieldOffset(0)]
             public RegConfMulti RegConfMulti;
             [FieldOffset(0)]
+            public RegConfTempSense RegConfTempSense;
+            [FieldOffset(0)]
             public RegXTXpins RegXTXpins;
             [FieldOffset(0)]
             public RegXTXMultitester RegXTXMultitester;
             [FieldOffset(0)]
             public RegXDCConfig RegXDCConfig;
+            [FieldOffset(0)]
+            public RegCSBoard_T0 RegCSBoard_T0;
+            [FieldOffset(0)]
+            public RegCSBoard_T1 RegCSBoard_T1;
+            [FieldOffset(0)]
+            public RegCSBoard_T2 RegCSBoard_T2;
+            [FieldOffset(0)]
+            public RegCSBoard_T3 RegCSBoard_T3;
+            [FieldOffset(0)]
+            public RegCSBoard_T4 RegCSBoard_T4;
+            [FieldOffset(0)]
+            public RegCSBoard_T5 RegCSBoard_T5;
+            [FieldOffset(0)]
+            public RegCSBoard_T6 RegCSBoard_T6;
+            [FieldOffset(0)]
+            public RegCSBoard_T7 RegCSBoard_T7;
+            [FieldOffset(0)]
+            public RegCSBoard_Current0I0 RegCSBoard_Current0I0;
+            [FieldOffset(0)]
+            public RegCSBoard_Current0I1 RegCSBoard_Current0I1;
+            [FieldOffset(0)]
+            public RegCSBoard_Current0I2 RegCSBoard_Current0I2;
+            [FieldOffset(0)]
+            public RegCSBoard_Current1I0 RegCSBoard_Current1I0;
+            [FieldOffset(0)]
+            public RegCSBoard_Current1I1 RegCSBoard_Current1I1;
+            [FieldOffset(0)]
+            public RegCSBoard_Current1I2 RegCSBoard_Current1I2;
+            [FieldOffset(0)]
+            public RegCSBoard_Current2I0 RegCSBoard_Current2I0;
+            [FieldOffset(0)]
+            public RegCSBoard_Current2I1 RegCSBoard_Current2I1;
+            [FieldOffset(0)]
+            public RegCSBoard_Current2I2 RegCSBoard_Current2I2;
+            [FieldOffset(0)]
+            public RegCSBoard_Current3I0 RegCSBoard_Current3I0;
+            [FieldOffset(0)]
+            public RegCSBoard_Current3I1 RegCSBoard_Current3I1;
+            [FieldOffset(0)]
+            public RegCSBoard_Current3I2 RegCSBoard_Current3I2;
+            [FieldOffset(0)]
+            public RegCSBoard_Current4I0 RegCSBoard_Current4I0;
+            [FieldOffset(0)]
+            public RegCSBoard_Current4I1 RegCSBoard_Current4I1;
+            [FieldOffset(0)]
+            public RegCSBoard_Current4I2 RegCSBoard_Current4I2;
+            [FieldOffset(0)]
+            public RegCSBoard_Current5I0 RegCSBoard_Current5I0;
+            [FieldOffset(0)]
+            public RegCSBoard_Current5I1 RegCSBoard_Current5I1;
+            [FieldOffset(0)]
+            public RegCSBoard_Current5I2 RegCSBoard_Current5I2;
+            [FieldOffset(0)]
+            public RegCSBoard_Current6I0 RegCSBoard_Current6I0;
+            [FieldOffset(0)]
+            public RegCSBoard_Current6I1 RegCSBoard_Current6I1;
+            [FieldOffset(0)]
+            public RegCSBoard_Current6I2 RegCSBoard_Current6I2;
+            [FieldOffset(0)]
+            public RegCSBoard_Current7I0 RegCSBoard_Current7I0;
+            [FieldOffset(0)]
+            public RegCSBoard_Current7I1 RegCSBoard_Current7I1;
+            [FieldOffset(0)]
+            public RegCSBoard_Current7I2 RegCSBoard_Current7I2;
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
@@ -384,6 +483,20 @@ namespace Devices.Models
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegConfTempSense
+        {
+            [FieldOffset(0)]
+            UInt32 data0;
+
+            public byte EnableMeasurements
+            {
+                get { return (byte)((data0 & (UInt32)0x00000001) >> 0); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
+            }
+
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
         public struct RegXTXpins
         {
             [FieldOffset(0)]
@@ -501,6 +614,230 @@ namespace Devices.Models
                 set { data0 = (UInt32)((data0 & ~(UInt32)0x000000ff) | (( (UInt32)(value) & 0x000000ff) << 0)); }
             }
 
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_T0
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_T1
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_T2
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_T3
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_T4
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_T5
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_T6
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_T7
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_Current0I0
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_Current0I1
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_Current0I2
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_Current1I0
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_Current1I1
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_Current1I2
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_Current2I0
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_Current2I1
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_Current2I2
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_Current3I0
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_Current3I1
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_Current3I2
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_Current4I0
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_Current4I1
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_Current4I2
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_Current5I0
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_Current5I1
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_Current5I2
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_Current6I0
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_Current6I1
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_Current6I2
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_Current7I0
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_Current7I1
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegCSBoard_Current7I2
+        {
+            [FieldOffset(0)]
+            public UInt32 value;
         }
 
         public enum Enabled : byte
@@ -1059,6 +1396,18 @@ namespace Devices.Models
             set => _ = Set(ref _ConfMulti_RfSwChan, value);
         }
         
+        /*************** Properties for ConfTempSense register ***************/
+        private bool _ConfTempSense_EnableMeasurementsIsSet;
+        public bool ConfTempSense_EnableMeasurementsIsSet {
+            get => _ConfTempSense_EnableMeasurementsIsSet;
+            set => _ = Set(ref _ConfTempSense_EnableMeasurementsIsSet, value); 
+        }
+        private Enabled _ConfTempSense_EnableMeasurements;
+        public Enabled ConfTempSense_EnableMeasurements {
+            get => _ConfTempSense_EnableMeasurements;
+            set => _ = Set(ref _ConfTempSense_EnableMeasurements, value);
+        }
+        
         /*************** Properties for XTXpins register *********************/
         private bool _XTXpins_ENAIsSet;
         public bool XTXpins_ENAIsSet {
@@ -1238,6 +1587,390 @@ namespace Devices.Models
             set => _ = Set(ref _XDCConfig_ADDR, value);
         }
         
+        /*************** Properties for CSBoard_T0 register ******************/
+        private bool _CSBoard_T0IsSet;
+        public bool CSBoard_T0IsSet {
+            get => _CSBoard_T0IsSet;
+            set => _ = Set(ref _CSBoard_T0IsSet, value); 
+        }
+        private UInt32 _CSBoard_T0;
+        public UInt32 CSBoard_T0 {
+            get => _CSBoard_T0;
+            set => _ = Set(ref _CSBoard_T0, value);
+        }
+        
+        /*************** Properties for CSBoard_T1 register ******************/
+        private bool _CSBoard_T1IsSet;
+        public bool CSBoard_T1IsSet {
+            get => _CSBoard_T1IsSet;
+            set => _ = Set(ref _CSBoard_T1IsSet, value); 
+        }
+        private UInt32 _CSBoard_T1;
+        public UInt32 CSBoard_T1 {
+            get => _CSBoard_T1;
+            set => _ = Set(ref _CSBoard_T1, value);
+        }
+        
+        /*************** Properties for CSBoard_T2 register ******************/
+        private bool _CSBoard_T2IsSet;
+        public bool CSBoard_T2IsSet {
+            get => _CSBoard_T2IsSet;
+            set => _ = Set(ref _CSBoard_T2IsSet, value); 
+        }
+        private UInt32 _CSBoard_T2;
+        public UInt32 CSBoard_T2 {
+            get => _CSBoard_T2;
+            set => _ = Set(ref _CSBoard_T2, value);
+        }
+        
+        /*************** Properties for CSBoard_T3 register ******************/
+        private bool _CSBoard_T3IsSet;
+        public bool CSBoard_T3IsSet {
+            get => _CSBoard_T3IsSet;
+            set => _ = Set(ref _CSBoard_T3IsSet, value); 
+        }
+        private UInt32 _CSBoard_T3;
+        public UInt32 CSBoard_T3 {
+            get => _CSBoard_T3;
+            set => _ = Set(ref _CSBoard_T3, value);
+        }
+        
+        /*************** Properties for CSBoard_T4 register ******************/
+        private bool _CSBoard_T4IsSet;
+        public bool CSBoard_T4IsSet {
+            get => _CSBoard_T4IsSet;
+            set => _ = Set(ref _CSBoard_T4IsSet, value); 
+        }
+        private UInt32 _CSBoard_T4;
+        public UInt32 CSBoard_T4 {
+            get => _CSBoard_T4;
+            set => _ = Set(ref _CSBoard_T4, value);
+        }
+        
+        /*************** Properties for CSBoard_T5 register ******************/
+        private bool _CSBoard_T5IsSet;
+        public bool CSBoard_T5IsSet {
+            get => _CSBoard_T5IsSet;
+            set => _ = Set(ref _CSBoard_T5IsSet, value); 
+        }
+        private UInt32 _CSBoard_T5;
+        public UInt32 CSBoard_T5 {
+            get => _CSBoard_T5;
+            set => _ = Set(ref _CSBoard_T5, value);
+        }
+        
+        /*************** Properties for CSBoard_T6 register ******************/
+        private bool _CSBoard_T6IsSet;
+        public bool CSBoard_T6IsSet {
+            get => _CSBoard_T6IsSet;
+            set => _ = Set(ref _CSBoard_T6IsSet, value); 
+        }
+        private UInt32 _CSBoard_T6;
+        public UInt32 CSBoard_T6 {
+            get => _CSBoard_T6;
+            set => _ = Set(ref _CSBoard_T6, value);
+        }
+        
+        /*************** Properties for CSBoard_T7 register ******************/
+        private bool _CSBoard_T7IsSet;
+        public bool CSBoard_T7IsSet {
+            get => _CSBoard_T7IsSet;
+            set => _ = Set(ref _CSBoard_T7IsSet, value); 
+        }
+        private UInt32 _CSBoard_T7;
+        public UInt32 CSBoard_T7 {
+            get => _CSBoard_T7;
+            set => _ = Set(ref _CSBoard_T7, value);
+        }
+        
+        /*************** Properties for CSBoard_Current0I0 register **********/
+        private bool _CSBoard_Current0I0IsSet;
+        public bool CSBoard_Current0I0IsSet {
+            get => _CSBoard_Current0I0IsSet;
+            set => _ = Set(ref _CSBoard_Current0I0IsSet, value); 
+        }
+        private UInt32 _CSBoard_Current0I0;
+        public UInt32 CSBoard_Current0I0 {
+            get => _CSBoard_Current0I0;
+            set => _ = Set(ref _CSBoard_Current0I0, value);
+        }
+        
+        /*************** Properties for CSBoard_Current0I1 register **********/
+        private bool _CSBoard_Current0I1IsSet;
+        public bool CSBoard_Current0I1IsSet {
+            get => _CSBoard_Current0I1IsSet;
+            set => _ = Set(ref _CSBoard_Current0I1IsSet, value); 
+        }
+        private UInt32 _CSBoard_Current0I1;
+        public UInt32 CSBoard_Current0I1 {
+            get => _CSBoard_Current0I1;
+            set => _ = Set(ref _CSBoard_Current0I1, value);
+        }
+        
+        /*************** Properties for CSBoard_Current0I2 register **********/
+        private bool _CSBoard_Current0I2IsSet;
+        public bool CSBoard_Current0I2IsSet {
+            get => _CSBoard_Current0I2IsSet;
+            set => _ = Set(ref _CSBoard_Current0I2IsSet, value); 
+        }
+        private UInt32 _CSBoard_Current0I2;
+        public UInt32 CSBoard_Current0I2 {
+            get => _CSBoard_Current0I2;
+            set => _ = Set(ref _CSBoard_Current0I2, value);
+        }
+        
+        /*************** Properties for CSBoard_Current1I0 register **********/
+        private bool _CSBoard_Current1I0IsSet;
+        public bool CSBoard_Current1I0IsSet {
+            get => _CSBoard_Current1I0IsSet;
+            set => _ = Set(ref _CSBoard_Current1I0IsSet, value); 
+        }
+        private UInt32 _CSBoard_Current1I0;
+        public UInt32 CSBoard_Current1I0 {
+            get => _CSBoard_Current1I0;
+            set => _ = Set(ref _CSBoard_Current1I0, value);
+        }
+        
+        /*************** Properties for CSBoard_Current1I1 register **********/
+        private bool _CSBoard_Current1I1IsSet;
+        public bool CSBoard_Current1I1IsSet {
+            get => _CSBoard_Current1I1IsSet;
+            set => _ = Set(ref _CSBoard_Current1I1IsSet, value); 
+        }
+        private UInt32 _CSBoard_Current1I1;
+        public UInt32 CSBoard_Current1I1 {
+            get => _CSBoard_Current1I1;
+            set => _ = Set(ref _CSBoard_Current1I1, value);
+        }
+        
+        /*************** Properties for CSBoard_Current1I2 register **********/
+        private bool _CSBoard_Current1I2IsSet;
+        public bool CSBoard_Current1I2IsSet {
+            get => _CSBoard_Current1I2IsSet;
+            set => _ = Set(ref _CSBoard_Current1I2IsSet, value); 
+        }
+        private UInt32 _CSBoard_Current1I2;
+        public UInt32 CSBoard_Current1I2 {
+            get => _CSBoard_Current1I2;
+            set => _ = Set(ref _CSBoard_Current1I2, value);
+        }
+        
+        /*************** Properties for CSBoard_Current2I0 register **********/
+        private bool _CSBoard_Current2I0IsSet;
+        public bool CSBoard_Current2I0IsSet {
+            get => _CSBoard_Current2I0IsSet;
+            set => _ = Set(ref _CSBoard_Current2I0IsSet, value); 
+        }
+        private UInt32 _CSBoard_Current2I0;
+        public UInt32 CSBoard_Current2I0 {
+            get => _CSBoard_Current2I0;
+            set => _ = Set(ref _CSBoard_Current2I0, value);
+        }
+        
+        /*************** Properties for CSBoard_Current2I1 register **********/
+        private bool _CSBoard_Current2I1IsSet;
+        public bool CSBoard_Current2I1IsSet {
+            get => _CSBoard_Current2I1IsSet;
+            set => _ = Set(ref _CSBoard_Current2I1IsSet, value); 
+        }
+        private UInt32 _CSBoard_Current2I1;
+        public UInt32 CSBoard_Current2I1 {
+            get => _CSBoard_Current2I1;
+            set => _ = Set(ref _CSBoard_Current2I1, value);
+        }
+        
+        /*************** Properties for CSBoard_Current2I2 register **********/
+        private bool _CSBoard_Current2I2IsSet;
+        public bool CSBoard_Current2I2IsSet {
+            get => _CSBoard_Current2I2IsSet;
+            set => _ = Set(ref _CSBoard_Current2I2IsSet, value); 
+        }
+        private UInt32 _CSBoard_Current2I2;
+        public UInt32 CSBoard_Current2I2 {
+            get => _CSBoard_Current2I2;
+            set => _ = Set(ref _CSBoard_Current2I2, value);
+        }
+        
+        /*************** Properties for CSBoard_Current3I0 register **********/
+        private bool _CSBoard_Current3I0IsSet;
+        public bool CSBoard_Current3I0IsSet {
+            get => _CSBoard_Current3I0IsSet;
+            set => _ = Set(ref _CSBoard_Current3I0IsSet, value); 
+        }
+        private UInt32 _CSBoard_Current3I0;
+        public UInt32 CSBoard_Current3I0 {
+            get => _CSBoard_Current3I0;
+            set => _ = Set(ref _CSBoard_Current3I0, value);
+        }
+        
+        /*************** Properties for CSBoard_Current3I1 register **********/
+        private bool _CSBoard_Current3I1IsSet;
+        public bool CSBoard_Current3I1IsSet {
+            get => _CSBoard_Current3I1IsSet;
+            set => _ = Set(ref _CSBoard_Current3I1IsSet, value); 
+        }
+        private UInt32 _CSBoard_Current3I1;
+        public UInt32 CSBoard_Current3I1 {
+            get => _CSBoard_Current3I1;
+            set => _ = Set(ref _CSBoard_Current3I1, value);
+        }
+        
+        /*************** Properties for CSBoard_Current3I2 register **********/
+        private bool _CSBoard_Current3I2IsSet;
+        public bool CSBoard_Current3I2IsSet {
+            get => _CSBoard_Current3I2IsSet;
+            set => _ = Set(ref _CSBoard_Current3I2IsSet, value); 
+        }
+        private UInt32 _CSBoard_Current3I2;
+        public UInt32 CSBoard_Current3I2 {
+            get => _CSBoard_Current3I2;
+            set => _ = Set(ref _CSBoard_Current3I2, value);
+        }
+        
+        /*************** Properties for CSBoard_Current4I0 register **********/
+        private bool _CSBoard_Current4I0IsSet;
+        public bool CSBoard_Current4I0IsSet {
+            get => _CSBoard_Current4I0IsSet;
+            set => _ = Set(ref _CSBoard_Current4I0IsSet, value); 
+        }
+        private UInt32 _CSBoard_Current4I0;
+        public UInt32 CSBoard_Current4I0 {
+            get => _CSBoard_Current4I0;
+            set => _ = Set(ref _CSBoard_Current4I0, value);
+        }
+        
+        /*************** Properties for CSBoard_Current4I1 register **********/
+        private bool _CSBoard_Current4I1IsSet;
+        public bool CSBoard_Current4I1IsSet {
+            get => _CSBoard_Current4I1IsSet;
+            set => _ = Set(ref _CSBoard_Current4I1IsSet, value); 
+        }
+        private UInt32 _CSBoard_Current4I1;
+        public UInt32 CSBoard_Current4I1 {
+            get => _CSBoard_Current4I1;
+            set => _ = Set(ref _CSBoard_Current4I1, value);
+        }
+        
+        /*************** Properties for CSBoard_Current4I2 register **********/
+        private bool _CSBoard_Current4I2IsSet;
+        public bool CSBoard_Current4I2IsSet {
+            get => _CSBoard_Current4I2IsSet;
+            set => _ = Set(ref _CSBoard_Current4I2IsSet, value); 
+        }
+        private UInt32 _CSBoard_Current4I2;
+        public UInt32 CSBoard_Current4I2 {
+            get => _CSBoard_Current4I2;
+            set => _ = Set(ref _CSBoard_Current4I2, value);
+        }
+        
+        /*************** Properties for CSBoard_Current5I0 register **********/
+        private bool _CSBoard_Current5I0IsSet;
+        public bool CSBoard_Current5I0IsSet {
+            get => _CSBoard_Current5I0IsSet;
+            set => _ = Set(ref _CSBoard_Current5I0IsSet, value); 
+        }
+        private UInt32 _CSBoard_Current5I0;
+        public UInt32 CSBoard_Current5I0 {
+            get => _CSBoard_Current5I0;
+            set => _ = Set(ref _CSBoard_Current5I0, value);
+        }
+        
+        /*************** Properties for CSBoard_Current5I1 register **********/
+        private bool _CSBoard_Current5I1IsSet;
+        public bool CSBoard_Current5I1IsSet {
+            get => _CSBoard_Current5I1IsSet;
+            set => _ = Set(ref _CSBoard_Current5I1IsSet, value); 
+        }
+        private UInt32 _CSBoard_Current5I1;
+        public UInt32 CSBoard_Current5I1 {
+            get => _CSBoard_Current5I1;
+            set => _ = Set(ref _CSBoard_Current5I1, value);
+        }
+        
+        /*************** Properties for CSBoard_Current5I2 register **********/
+        private bool _CSBoard_Current5I2IsSet;
+        public bool CSBoard_Current5I2IsSet {
+            get => _CSBoard_Current5I2IsSet;
+            set => _ = Set(ref _CSBoard_Current5I2IsSet, value); 
+        }
+        private UInt32 _CSBoard_Current5I2;
+        public UInt32 CSBoard_Current5I2 {
+            get => _CSBoard_Current5I2;
+            set => _ = Set(ref _CSBoard_Current5I2, value);
+        }
+        
+        /*************** Properties for CSBoard_Current6I0 register **********/
+        private bool _CSBoard_Current6I0IsSet;
+        public bool CSBoard_Current6I0IsSet {
+            get => _CSBoard_Current6I0IsSet;
+            set => _ = Set(ref _CSBoard_Current6I0IsSet, value); 
+        }
+        private UInt32 _CSBoard_Current6I0;
+        public UInt32 CSBoard_Current6I0 {
+            get => _CSBoard_Current6I0;
+            set => _ = Set(ref _CSBoard_Current6I0, value);
+        }
+        
+        /*************** Properties for CSBoard_Current6I1 register **********/
+        private bool _CSBoard_Current6I1IsSet;
+        public bool CSBoard_Current6I1IsSet {
+            get => _CSBoard_Current6I1IsSet;
+            set => _ = Set(ref _CSBoard_Current6I1IsSet, value); 
+        }
+        private UInt32 _CSBoard_Current6I1;
+        public UInt32 CSBoard_Current6I1 {
+            get => _CSBoard_Current6I1;
+            set => _ = Set(ref _CSBoard_Current6I1, value);
+        }
+        
+        /*************** Properties for CSBoard_Current6I2 register **********/
+        private bool _CSBoard_Current6I2IsSet;
+        public bool CSBoard_Current6I2IsSet {
+            get => _CSBoard_Current6I2IsSet;
+            set => _ = Set(ref _CSBoard_Current6I2IsSet, value); 
+        }
+        private UInt32 _CSBoard_Current6I2;
+        public UInt32 CSBoard_Current6I2 {
+            get => _CSBoard_Current6I2;
+            set => _ = Set(ref _CSBoard_Current6I2, value);
+        }
+        
+        /*************** Properties for CSBoard_Current7I0 register **********/
+        private bool _CSBoard_Current7I0IsSet;
+        public bool CSBoard_Current7I0IsSet {
+            get => _CSBoard_Current7I0IsSet;
+            set => _ = Set(ref _CSBoard_Current7I0IsSet, value); 
+        }
+        private UInt32 _CSBoard_Current7I0;
+        public UInt32 CSBoard_Current7I0 {
+            get => _CSBoard_Current7I0;
+            set => _ = Set(ref _CSBoard_Current7I0, value);
+        }
+        
+        /*************** Properties for CSBoard_Current7I1 register **********/
+        private bool _CSBoard_Current7I1IsSet;
+        public bool CSBoard_Current7I1IsSet {
+            get => _CSBoard_Current7I1IsSet;
+            set => _ = Set(ref _CSBoard_Current7I1IsSet, value); 
+        }
+        private UInt32 _CSBoard_Current7I1;
+        public UInt32 CSBoard_Current7I1 {
+            get => _CSBoard_Current7I1;
+            set => _ = Set(ref _CSBoard_Current7I1, value);
+        }
+        
+        /*************** Properties for CSBoard_Current7I2 register **********/
+        private bool _CSBoard_Current7I2IsSet;
+        public bool CSBoard_Current7I2IsSet {
+            get => _CSBoard_Current7I2IsSet;
+            set => _ = Set(ref _CSBoard_Current7I2IsSet, value); 
+        }
+        private UInt32 _CSBoard_Current7I2;
+        public UInt32 CSBoard_Current7I2 {
+            get => _CSBoard_Current7I2;
+            set => _ = Set(ref _CSBoard_Current7I2, value);
+        }
+        
         /*************** Holding Buffers for storageregs *********************/
 
         public void DecodeFrom(RegisterData register, OBCRegisterAddress address)
@@ -1353,6 +2086,10 @@ namespace Devices.Models
                     ConfMulti_RfSwChan =  register.RegConfMulti.RfSwChan;
                     break;
 
+                case OBCRegisterAddress.OBC_REG_CONFTEMPSENSE:
+                    ConfTempSense_EnableMeasurements = (Enabled) register.RegConfTempSense.EnableMeasurements;
+                    break;
+
                 case OBCRegisterAddress.OBC_REG_XTXPINS:
                     XTXpins_ENA = (Enabled) register.RegXTXpins.ENA;
                     XTXpins_nRST = (Enabled) register.RegXTXpins.nRST;
@@ -1376,6 +2113,134 @@ namespace Devices.Models
 
                 case OBCRegisterAddress.OBC_REG_XDCCONFIG:
                     XDCConfig_ADDR = (Enabled) register.RegXDCConfig.ADDR;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_T0:
+                    CSBoard_T0 =  register.RegCSBoard_T0.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_T1:
+                    CSBoard_T1 =  register.RegCSBoard_T1.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_T2:
+                    CSBoard_T2 =  register.RegCSBoard_T2.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_T3:
+                    CSBoard_T3 =  register.RegCSBoard_T3.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_T4:
+                    CSBoard_T4 =  register.RegCSBoard_T4.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_T5:
+                    CSBoard_T5 =  register.RegCSBoard_T5.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_T6:
+                    CSBoard_T6 =  register.RegCSBoard_T6.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_T7:
+                    CSBoard_T7 =  register.RegCSBoard_T7.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT0I0:
+                    CSBoard_Current0I0 =  register.RegCSBoard_Current0I0.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT0I1:
+                    CSBoard_Current0I1 =  register.RegCSBoard_Current0I1.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT0I2:
+                    CSBoard_Current0I2 =  register.RegCSBoard_Current0I2.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT1I0:
+                    CSBoard_Current1I0 =  register.RegCSBoard_Current1I0.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT1I1:
+                    CSBoard_Current1I1 =  register.RegCSBoard_Current1I1.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT1I2:
+                    CSBoard_Current1I2 =  register.RegCSBoard_Current1I2.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT2I0:
+                    CSBoard_Current2I0 =  register.RegCSBoard_Current2I0.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT2I1:
+                    CSBoard_Current2I1 =  register.RegCSBoard_Current2I1.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT2I2:
+                    CSBoard_Current2I2 =  register.RegCSBoard_Current2I2.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT3I0:
+                    CSBoard_Current3I0 =  register.RegCSBoard_Current3I0.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT3I1:
+                    CSBoard_Current3I1 =  register.RegCSBoard_Current3I1.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT3I2:
+                    CSBoard_Current3I2 =  register.RegCSBoard_Current3I2.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT4I0:
+                    CSBoard_Current4I0 =  register.RegCSBoard_Current4I0.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT4I1:
+                    CSBoard_Current4I1 =  register.RegCSBoard_Current4I1.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT4I2:
+                    CSBoard_Current4I2 =  register.RegCSBoard_Current4I2.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT5I0:
+                    CSBoard_Current5I0 =  register.RegCSBoard_Current5I0.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT5I1:
+                    CSBoard_Current5I1 =  register.RegCSBoard_Current5I1.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT5I2:
+                    CSBoard_Current5I2 =  register.RegCSBoard_Current5I2.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT6I0:
+                    CSBoard_Current6I0 =  register.RegCSBoard_Current6I0.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT6I1:
+                    CSBoard_Current6I1 =  register.RegCSBoard_Current6I1.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT6I2:
+                    CSBoard_Current6I2 =  register.RegCSBoard_Current6I2.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT7I0:
+                    CSBoard_Current7I0 =  register.RegCSBoard_Current7I0.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT7I1:
+                    CSBoard_Current7I1 =  register.RegCSBoard_Current7I1.value;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT7I2:
+                    CSBoard_Current7I2 =  register.RegCSBoard_Current7I2.value;
                     break;
 
             }
@@ -1494,6 +2359,10 @@ namespace Devices.Models
                     register.RegConfMulti.RfSwChan = ConfMulti_RfSwChan;
                     break;
 
+                case OBCRegisterAddress.OBC_REG_CONFTEMPSENSE:
+                    register.RegConfTempSense.EnableMeasurements = (byte) ConfTempSense_EnableMeasurements;
+                    break;
+
                 case OBCRegisterAddress.OBC_REG_XTXPINS:
                     register.RegXTXpins.ENA = (byte) XTXpins_ENA;
                     register.RegXTXpins.nRST = (byte) XTXpins_nRST;
@@ -1517,6 +2386,134 @@ namespace Devices.Models
 
                 case OBCRegisterAddress.OBC_REG_XDCCONFIG:
                     register.RegXDCConfig.ADDR = (byte) XDCConfig_ADDR;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_T0:
+                    register.RegCSBoard_T0.value = CSBoard_T0;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_T1:
+                    register.RegCSBoard_T1.value = CSBoard_T1;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_T2:
+                    register.RegCSBoard_T2.value = CSBoard_T2;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_T3:
+                    register.RegCSBoard_T3.value = CSBoard_T3;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_T4:
+                    register.RegCSBoard_T4.value = CSBoard_T4;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_T5:
+                    register.RegCSBoard_T5.value = CSBoard_T5;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_T6:
+                    register.RegCSBoard_T6.value = CSBoard_T6;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_T7:
+                    register.RegCSBoard_T7.value = CSBoard_T7;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT0I0:
+                    register.RegCSBoard_Current0I0.value = CSBoard_Current0I0;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT0I1:
+                    register.RegCSBoard_Current0I1.value = CSBoard_Current0I1;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT0I2:
+                    register.RegCSBoard_Current0I2.value = CSBoard_Current0I2;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT1I0:
+                    register.RegCSBoard_Current1I0.value = CSBoard_Current1I0;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT1I1:
+                    register.RegCSBoard_Current1I1.value = CSBoard_Current1I1;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT1I2:
+                    register.RegCSBoard_Current1I2.value = CSBoard_Current1I2;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT2I0:
+                    register.RegCSBoard_Current2I0.value = CSBoard_Current2I0;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT2I1:
+                    register.RegCSBoard_Current2I1.value = CSBoard_Current2I1;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT2I2:
+                    register.RegCSBoard_Current2I2.value = CSBoard_Current2I2;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT3I0:
+                    register.RegCSBoard_Current3I0.value = CSBoard_Current3I0;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT3I1:
+                    register.RegCSBoard_Current3I1.value = CSBoard_Current3I1;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT3I2:
+                    register.RegCSBoard_Current3I2.value = CSBoard_Current3I2;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT4I0:
+                    register.RegCSBoard_Current4I0.value = CSBoard_Current4I0;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT4I1:
+                    register.RegCSBoard_Current4I1.value = CSBoard_Current4I1;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT4I2:
+                    register.RegCSBoard_Current4I2.value = CSBoard_Current4I2;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT5I0:
+                    register.RegCSBoard_Current5I0.value = CSBoard_Current5I0;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT5I1:
+                    register.RegCSBoard_Current5I1.value = CSBoard_Current5I1;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT5I2:
+                    register.RegCSBoard_Current5I2.value = CSBoard_Current5I2;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT6I0:
+                    register.RegCSBoard_Current6I0.value = CSBoard_Current6I0;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT6I1:
+                    register.RegCSBoard_Current6I1.value = CSBoard_Current6I1;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT6I2:
+                    register.RegCSBoard_Current6I2.value = CSBoard_Current6I2;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT7I0:
+                    register.RegCSBoard_Current7I0.value = CSBoard_Current7I0;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT7I1:
+                    register.RegCSBoard_Current7I1.value = CSBoard_Current7I1;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_CSBOARD_CURRENT7I2:
+                    register.RegCSBoard_Current7I2.value = CSBoard_Current7I2;
                     break;
 
             }
@@ -1645,6 +2642,9 @@ namespace Devices.Models
             ConfMulti_RfSwChan = 0;
             ConfMulti_RfSwChanIsSet = false;
 
+            ConfTempSense_EnableMeasurements = 0;
+            ConfTempSense_EnableMeasurementsIsSet = false;
+
             XTXpins_ENA = 0;
             XTXpins_ENAIsSet = false;
             XTXpins_nRST = 0;
@@ -1679,6 +2679,102 @@ namespace Devices.Models
 
             XDCConfig_ADDR = 0;
             XDCConfig_ADDRIsSet = false;
+
+            CSBoard_T0 = 0;
+            CSBoard_T0IsSet = false;
+
+            CSBoard_T1 = 0;
+            CSBoard_T1IsSet = false;
+
+            CSBoard_T2 = 0;
+            CSBoard_T2IsSet = false;
+
+            CSBoard_T3 = 0;
+            CSBoard_T3IsSet = false;
+
+            CSBoard_T4 = 0;
+            CSBoard_T4IsSet = false;
+
+            CSBoard_T5 = 0;
+            CSBoard_T5IsSet = false;
+
+            CSBoard_T6 = 0;
+            CSBoard_T6IsSet = false;
+
+            CSBoard_T7 = 0;
+            CSBoard_T7IsSet = false;
+
+            CSBoard_Current0I0 = 0;
+            CSBoard_Current0I0IsSet = false;
+
+            CSBoard_Current0I1 = 0;
+            CSBoard_Current0I1IsSet = false;
+
+            CSBoard_Current0I2 = 0;
+            CSBoard_Current0I2IsSet = false;
+
+            CSBoard_Current1I0 = 0;
+            CSBoard_Current1I0IsSet = false;
+
+            CSBoard_Current1I1 = 0;
+            CSBoard_Current1I1IsSet = false;
+
+            CSBoard_Current1I2 = 0;
+            CSBoard_Current1I2IsSet = false;
+
+            CSBoard_Current2I0 = 0;
+            CSBoard_Current2I0IsSet = false;
+
+            CSBoard_Current2I1 = 0;
+            CSBoard_Current2I1IsSet = false;
+
+            CSBoard_Current2I2 = 0;
+            CSBoard_Current2I2IsSet = false;
+
+            CSBoard_Current3I0 = 0;
+            CSBoard_Current3I0IsSet = false;
+
+            CSBoard_Current3I1 = 0;
+            CSBoard_Current3I1IsSet = false;
+
+            CSBoard_Current3I2 = 0;
+            CSBoard_Current3I2IsSet = false;
+
+            CSBoard_Current4I0 = 0;
+            CSBoard_Current4I0IsSet = false;
+
+            CSBoard_Current4I1 = 0;
+            CSBoard_Current4I1IsSet = false;
+
+            CSBoard_Current4I2 = 0;
+            CSBoard_Current4I2IsSet = false;
+
+            CSBoard_Current5I0 = 0;
+            CSBoard_Current5I0IsSet = false;
+
+            CSBoard_Current5I1 = 0;
+            CSBoard_Current5I1IsSet = false;
+
+            CSBoard_Current5I2 = 0;
+            CSBoard_Current5I2IsSet = false;
+
+            CSBoard_Current6I0 = 0;
+            CSBoard_Current6I0IsSet = false;
+
+            CSBoard_Current6I1 = 0;
+            CSBoard_Current6I1IsSet = false;
+
+            CSBoard_Current6I2 = 0;
+            CSBoard_Current6I2IsSet = false;
+
+            CSBoard_Current7I0 = 0;
+            CSBoard_Current7I0IsSet = false;
+
+            CSBoard_Current7I1 = 0;
+            CSBoard_Current7I1IsSet = false;
+
+            CSBoard_Current7I2 = 0;
+            CSBoard_Current7I2IsSet = false;
 
         }
 

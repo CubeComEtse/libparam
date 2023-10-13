@@ -23,7 +23,10 @@ static uint32_t write_index = 0;
 void EVENT_AddEvent(uint8_t section, uint8_t detail){
     events[write_index].section = section;
     events[write_index].detail = detail;
-    uint64_t ts = BSP_u64GetTimestamp() - (1000 * 60 * (REG_u32GetUptime() / 60));
+	uint32_t uptime;
+	mm_getUptime(&uptime);
+	
+    uint64_t ts = BSP_u64GetTimestamp() - (1000 * 60 * (uptime / 60));
     events[write_index].timestamp = (uint16_t)ts ;
 
     write_index = (write_index+1) % EVENT_BUFFER_SIZE;

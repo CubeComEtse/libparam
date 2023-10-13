@@ -26,32 +26,89 @@ uint32_t messages_head = 0;
 #define messages_max_length 16
 struct register_change_message messages[messages_max_length];
 
-OBC_RegisterData_t currentRegisters;
 
-static size_t AddressesCount = 24;
-static uint8_t Adresses[] = { OBC_REG_BOARD_ID, OBC_REG_FW_VERSION, OBC_REG_HW_VERSION, \
-    OBC_REG_SCRATCHPAD, OBC_REG_SUPPORTED_BOARDS, OBC_REG_CONFIGURED_BOARDS, 
-    OBC_REG_UPTIME, OBC_REG_EVENT_CONFA, OBC_REG_EVENT,
-    OBC_REG_CONFPOWER, \
-    OBC_REG_MEASUREVI_V3, OBC_REG_MEASUREPOWER_V3, OBC_REG_MEASUREVI_V5, OBC_REG_MEASUREPOWER_V5, \
-    OBC_REG_MEASUREVI_VBAT, OBC_REG_MEASUREPOWER_VBAT, OBC_REG_MEASUREVI_VBATALT, \
-    OBC_REG_MEASUREPOWER_VBATALT, OBC_REG_I2CCONFA, OBC_REG_I2CCONFB,
-	OBC_REG_CONFMULTI,
-    OBC_REG_XTXPINS, OBC_REG_XTXMULTITESTER,
-    OBC_REG_XDCCONFIG};
 
+typedef mm_response_t (*readAddressFunction)(uint32_t * dest);
+typedef struct {
+	mm_register_address_t address;
+	readAddressFunction readFunction;
+} addres_to_func_map_t;
+
+static addres_to_func_map_t address_to_func_map[] = {
+	{ reg_Board_ID_addr, mm_getBoard_ID},
+	{ reg_FW_Version_addr, mm_getFW_Version},
+	{ reg_HW_Version_addr, mm_getHW_Version},
+	{ reg_Scratchpad_addr, mm_getScratchpad},
+	{ reg_Supported_Boards_addr, mm_getSupported_Boards},
+	{ reg_Configured_Boards_addr, mm_getConfigured_Boards},
+	{ reg_Uptime_addr, mm_getUptime},
+	{ reg_Event_ConfA_addr, mm_getEvent_ConfA},
+	{ reg_Event_addr, mm_getEvent},
+	{ reg_ConfPower_addr, mm_getConfPower},
+	
+	{ reg_MeasureVI_V3_addr, mm_getMeasureVI_V3},
+	{ reg_MeasurePower_V3_addr, mm_getMeasurePower_V3},
+	{ reg_MeasureVI_V5_addr, mm_getMeasureVI_V5},
+	{ reg_MeasurePower_V5_addr, mm_getMeasurePower_V5},
+	{ reg_MeasureVI_VBat_addr, mm_getMeasureVI_VBat},
+	{ reg_MeasurePower_VBat_addr, mm_getMeasurePower_VBat},
+	{ reg_MeasureVI_VBatAlt_addr, mm_getMeasureVI_VBatAlt},
+	{ reg_MeasurePower_VBatAlt_addr, mm_getMeasurePower_VBatAlt },
+	
+	{ reg_I2CConfA_addr, mm_getI2CConfA},
+	{ reg_I2CConfB_addr, mm_getI2CConfB},
+	{ reg_ConfTempSense_addr, mm_getConfTempSense},
+	
+	{ reg_XTXpins_addr, mm_getXTXpins },
+	{ reg_XTXMultitester_addr, mm_getXTXMultitester },
+	{ reg_XDCConfig_addr, mm_getXDCConfig },
+	
+	{ reg_CSBoard_T0_addr, mm_getCSBoard_T0 },
+	{ reg_CSBoard_T1_addr, mm_getCSBoard_T1 },
+	{ reg_CSBoard_T2_addr, mm_getCSBoard_T2 },
+	{ reg_CSBoard_T3_addr, mm_getCSBoard_T3 },
+	{ reg_CSBoard_T4_addr, mm_getCSBoard_T4 },
+	{ reg_CSBoard_T5_addr, mm_getCSBoard_T5 },
+	{ reg_CSBoard_T6_addr, mm_getCSBoard_T6 },
+	{ reg_CSBoard_T7_addr, mm_getCSBoard_T7 },
+	{ reg_CSBoard_Current0I0_addr, mm_getCSBoard_Current0I0},
+	{ reg_CSBoard_Current0I1_addr, mm_getCSBoard_Current0I1},
+	{ reg_CSBoard_Current0I2_addr, mm_getCSBoard_Current0I2},
+	{ reg_CSBoard_Current1I0_addr, mm_getCSBoard_Current1I0},
+	{ reg_CSBoard_Current1I1_addr, mm_getCSBoard_Current1I1},
+	{ reg_CSBoard_Current1I2_addr, mm_getCSBoard_Current1I2},
+	{ reg_CSBoard_Current2I0_addr, mm_getCSBoard_Current2I0},
+	{ reg_CSBoard_Current2I1_addr, mm_getCSBoard_Current2I1},
+	{ reg_CSBoard_Current2I2_addr, mm_getCSBoard_Current2I2},
+	{ reg_CSBoard_Current3I0_addr, mm_getCSBoard_Current3I0},
+	{ reg_CSBoard_Current3I1_addr, mm_getCSBoard_Current3I1},
+	{ reg_CSBoard_Current3I2_addr, mm_getCSBoard_Current3I2},
+	{ reg_CSBoard_Current4I0_addr, mm_getCSBoard_Current4I0},
+	{ reg_CSBoard_Current4I1_addr, mm_getCSBoard_Current4I1},
+	{ reg_CSBoard_Current4I2_addr, mm_getCSBoard_Current4I2},
+	{ reg_CSBoard_Current5I0_addr, mm_getCSBoard_Current5I0},
+	{ reg_CSBoard_Current5I1_addr, mm_getCSBoard_Current5I1},
+	{ reg_CSBoard_Current5I2_addr, mm_getCSBoard_Current5I2},
+	{ reg_CSBoard_Current6I0_addr, mm_getCSBoard_Current6I0},
+	{ reg_CSBoard_Current6I1_addr, mm_getCSBoard_Current6I1},
+	{ reg_CSBoard_Current6I2_addr, mm_getCSBoard_Current6I2},
+	{ reg_CSBoard_Current7I0_addr, mm_getCSBoard_Current7I0},
+	{ reg_CSBoard_Current7I1_addr, mm_getCSBoard_Current7I1},
+	{ reg_CSBoard_Current7I2_addr, mm_getCSBoard_Current7I2},
+};
 
 
 void REG_vInit(){
     // Some values are fixed
-    currentRegisters.board_id = 0x634F4243; //'cOBC'
-    currentRegisters.fw_version = 0x00020203;
-    currentRegisters.hw_version = 0x00000001;
-    currentRegisters.supported_boards = reg_boardidentifier_xtx | reg_boardidentifier_xsteer | reg_boardidentifier_xdc |reg_boardidentifier_hdrtx_dfa | reg_boardidentifier_hdrtx;
-    currentRegisters.i2cconfa = (0x5UL << OBC_REG_I2CCONFA_SPD_Pos) | (10UL << OBC_REG_I2CCONFA_TRDEL_Pos);
-
-    currentRegisters.xdcconfig = 0x52 << OBC_REG_XDCCONFIG_ADDR_Pos;
-	currentRegisters.confmulti = 0x1111;
+	mm_setBoard_ID(0x634F4243);
+	mm_setFW_Version(0x00020203);
+	mm_setHW_Version(0x00000001);
+	
+	mm_setSupported_Boards(reg_boardidentifier_xtx | reg_boardidentifier_xsteer | reg_boardidentifier_xdc |reg_boardidentifier_hdrtx_dfa | reg_boardidentifier_hdrtx);
+	mm_setI2CConfA_SPD(0x5);
+	mm_setI2CConfA_TRDEL(10);
+	mm_setXDCConfig_ADDR(0x52);
+	mm_setConfMulti(0x1111);
 }
 
 
@@ -72,181 +129,149 @@ void REG_vAddMessage(const uint8_t address, const uint8_t* data){
 */
 bool REG_CheckAddress(const uint8_t address){
     bool found = false;
-    for (uint32_t i =0; i< AddressesCount; i++){
-        if(address == Adresses[i]){
+    for (int i = 0; i < (sizeof(address_to_func_map) / sizeof(address_to_func_map[0])); i++) {
+        if(address == address_to_func_map[i].address){
             found = true;
         }
     }   
     return found;
 }
 
-
 /*
 Gets the register given by address, copies it's data into the data argument
 Returns true if the address is valid, false otherwise.
 */
-bool REG_vGet(const uint8_t address, uint8_t* data, uint8_t* length){
-    bool copyResult = false;
+bool REG_vGet(const uint32_t address, uint8_t * buff, uint8_t * size)
+{
+	uint32_t destination;
+	bool return_value = false;
 
-    switch (address){
-        case OBC_REG_BOARD_ID:
-            REG_Copyu32ToArray(currentRegisters.board_id, data);
-            *length = 4;
-            copyResult = true;
-            break;
-        case OBC_REG_FW_VERSION:
-            REG_Copyu32ToArray(currentRegisters.fw_version, data);
-            *length = 4;
-            copyResult = true;
-            break;
-        case OBC_REG_HW_VERSION:
-            REG_Copyu32ToArray(currentRegisters.hw_version, data);
-            *length = 4;
-            copyResult = true;
-            break;
-        case OBC_REG_SCRATCHPAD:
-            REG_Copyu32ToArray(currentRegisters.scratchpad, data);
-            *length = 4;
-            copyResult = true;
-            break;
-        case OBC_REG_SUPPORTED_BOARDS:
-            REG_Copyu32ToArray(currentRegisters.supported_boards, data);
-            *length = 4;
-            copyResult = true;
-            break;
-        case OBC_REG_CONFIGURED_BOARDS:
-            REG_Copyu32ToArray(currentRegisters.configured_boards, data);
-            *length = 4;
-            copyResult = true;
-            break;
-        case OBC_REG_UPTIME:
-            REG_Copyu32ToArray(currentRegisters.uptime, data);
-            *length = 4;
-            copyResult = true;
-            break;
-        case OBC_REG_EVENT_CONFA:
-            REG_Set_Event_ConfA_count(&currentRegisters, EVENT_EventCount());
-            REG_Copyu32ToArray(currentRegisters.event_confa, data);
-            *length = 4;
-            copyResult = true;
-            break;
-        case OBC_REG_EVENT:
-            {
-                // Update the event from the buffer that is kept
-                event_t current_event = {0};
-                EVENT_GetEvent(&current_event);
-                REG_Set_Event_section(&currentRegisters, current_event.section);
-                REG_Set_Event_detail(&currentRegisters, current_event.detail);
-                REG_Set_Event_timestamp(&currentRegisters, current_event.timestamp);
+	// Loop through the entire array to find the correct function to call
+	for (int i = 0; i < (sizeof(address_to_func_map) / sizeof(address_to_func_map[0])); i++)
+	{
+		if (((uint32_t) address_to_func_map[i].address) == address)
+		{
+			// Call the function
+			uint32_t read_successful = address_to_func_map[i].readFunction(&destination);
+			if (read_successful == mm_OK){
+				// Copy into the buffer
+				REG_Copyu32ToArray(destination, buff);
+				// buff[0] = ( destination & 0xFF);
+				// buff[1] = ((destination >> 8 ) & 0xFF);
+				// buff[2] = ((destination >> 16) & 0xFF);
+				// buff[3] = ((destination >> 24) & 0xFF);
+				*size = 4;
 
-                REG_Copyu32ToArray(currentRegisters.event, data);
+				return_value = true;
 
-                REG_Set_Event_ConfA_count(&currentRegisters, EVENT_EventCount());
-                *length = 4;
-                copyResult = true;
-            }
-            break;
-        case OBC_REG_CONFPOWER:
-            REG_Copyu32ToArray(currentRegisters.confpower, data);
-            *length = 4;
-            copyResult = true;
-            break;
-        case OBC_REG_MEASUREVI_V3:
-            REG_Copyu32ToArray(currentRegisters.measurevi_v3, data);
-            *length = 4;
-            copyResult = true;
-            break;
-        case OBC_REG_MEASUREPOWER_V3:
-            REG_Copyu32ToArray(currentRegisters.measurepower_v3, data);
-            *length = 4;
-            copyResult = true;
-            break;
-        case OBC_REG_MEASUREVI_V5:
-            REG_Copyu32ToArray(currentRegisters.measurevi_v5, data);
-            *length = 4;
-            copyResult = true;
-            break;
-        case OBC_REG_MEASUREPOWER_V5:
-            REG_Copyu32ToArray(currentRegisters.measurepower_v5, data);
-            *length = 4;
-            copyResult = true;
-            break;
-        case OBC_REG_MEASUREVI_VBAT:
-            REG_Copyu32ToArray(currentRegisters.measurevi_vbat, data);
-            *length = 4;
-            copyResult = true;
-            break;
-        case OBC_REG_MEASUREPOWER_VBAT:
-            REG_Copyu32ToArray(currentRegisters.measurepower_vbat, data);
-            *length = 4;
-            copyResult = true;
-            break;
-        case OBC_REG_MEASUREVI_VBATALT:
-            REG_Copyu32ToArray(currentRegisters.measurevi_vbatalt, data);
-            *length = 4;
-            copyResult = true;
-            break;
-        case OBC_REG_MEASUREPOWER_VBATALT:
-            REG_Copyu32ToArray(currentRegisters.measurepower_vbatalt, data);
-            *length = 4;
-            copyResult = true;
-            break;
-        case OBC_REG_I2CCONFA:
-            REG_Copyu32ToArray(currentRegisters.i2cconfa, data);
-            *length = 4;
-            copyResult = true;
-            break;
-        case OBC_REG_I2CCONFB:
-            REG_Copyu32ToArray(currentRegisters.i2cconfb, data);
-            *length = 4;
-            copyResult = true;
-            break;
-		case OBC_REG_CONFMULTI:
-			// Update bits
-			REG_Set_ConfMulti_MEnabled(&currentRegisters, MULTI_bGetEnabled());
-			REG_Set_ConfMulti_AutoCLR(&currentRegisters, MULTI_bGetAutoClear());
-			
-			REG_Set_ConfMulti_FanPos1(&currentRegisters, MULTI_bGetChannelFan(Position1));
-			REG_Set_ConfMulti_FanPos2(&currentRegisters, MULTI_bGetChannelFan(Position2));
-			REG_Set_ConfMulti_FanPos3(&currentRegisters, MULTI_bGetChannelFan(Position3));
-			REG_Set_ConfMulti_FanPos4(&currentRegisters, MULTI_bGetChannelFan(Position4));
-			
-			REG_Set_ConfMulti_RfSwENA(&currentRegisters, MULTI_bGetRfSwitchEnabled());
-			REG_Set_ConfMulti_RfSwChan(&currentRegisters, MULTI_u8GetRFSwitchChannel());
+				// Set i to the limit, so that the next loop exits.
+				i = sizeof(address_to_func_map) / sizeof(address_to_func_map[0]);
+			}
+			else{
+				// An error reading this register - just return unknown error
+				return_value = false;
+			}
+		}
+	}
 
-			REG_Copyu32ToArray(currentRegisters.confmulti, data);
-			*length = 4;
-			copyResult = true;
-			break;
-			
-		case OBC_REG_XTXMULTITESTER:
-			
-			REG_Copyu32ToArray(currentRegisters.xtxmultitester, data);
-			*length = 4;
-			copyResult = true;
-			break;
+	switch (address)
+	{
 		
+		case reg_Event_ConfA_addr:
+		{
+			// Update the event count
+			mm_setEvent_ConfA_count(EVENT_EventCount());
 			
-        case OBC_REG_XTXPINS:
-            // Shouldn't really be here, but fine for now
-            
-            currentRegisters.xtxpins = (currentRegisters.xtxpins & ~OBC_REG_XTXPINS_RDY_Msk) | ( ( (bool) XTX_bGetReady() ) << OBC_REG_XTXPINS_RDY_Pos );
-            //currentRegisters.xtxpins = (currentRegisters.xtxpins & ~OBC_REG_XTXPINS_RDY_Msk) | (((uint32_t) ((bool) XTX_bGetReady())) << OBC_REG_XTXPINS_RDY_Pos);
+			uint32_t read_successful = mm_getEvent_ConfA(&destination);
+			if (read_successful == mm_OK){
+				// Copy into the buffer
+				REG_Copyu32ToArray(destination, buff);
+				*size = 4;
+				return_value = true;
+			}
+			else{
+				// An error reading this register - just return unknown error
+				return_value = false;
+			}
+		}
+		break;
+		case reg_Event_addr:
+		{
+			event_t current_event = {0};
+			EVENT_GetEvent(&current_event);
+			
+			// Update the event from the buffer that is kept
+			mm_setEvent_section(current_event.section);
+			mm_setEvent_detail(current_event.detail);
+			mm_setEvent_timestamp(current_event.timestamp);
+			
+			uint32_t read_successful = mm_getEvent(&destination);
+			if (read_successful == mm_OK){
+				// Copy into the buffer
+				REG_Copyu32ToArray(destination, buff);
+				*size = 4;
+				return_value = true;
+			}
+			else{
+				// An error reading this register - just return unknown error
+				return_value = false;
+			}
+			
+		}
+		break;
+		
+		case reg_ConfMulti_addr: 
+		{
+			// Update bits
+			mm_setConfMulti_MEnabled(MULTI_bGetEnabled());
+			mm_setConfMulti_AutoCLR(MULTI_bGetAutoClear());
+			
+			mm_setConfMulti_FanPos1(MULTI_bGetChannelFan(Position1));
+			mm_setConfMulti_FanPos2(MULTI_bGetChannelFan(Position2));
+			mm_setConfMulti_FanPos3(MULTI_bGetChannelFan(Position3));
+			mm_setConfMulti_FanPos4(MULTI_bGetChannelFan(Position4));
+			
+			mm_setConfMulti_RfSwENA(MULTI_bGetRfSwitchEnabled());
+			mm_setConfMulti_RfSwChan(MULTI_u8GetRFSwitchChannel());
+			
+			
+			uint32_t read_successful = mm_getConfMulti(&destination);
+			if (read_successful == mm_OK){
+				// Copy into the buffer
+				REG_Copyu32ToArray(destination, buff);
+				*size = 4;
+				return_value = true;
+			}
+			else{
+				// An error reading this register - just return unknown error
+				return_value = false;
+			}
+		}
+		break;
+				
+		case reg_XTXpins_addr: 
+		{
+			// Shouldn't really be here, but fine for now
+			mm_setXTXpins_RDY(XTX_bGetReady());
 
-            REG_Copyu32ToArray(currentRegisters.xtxpins, data);
-            *length = 4;
-            copyResult = true;
-            break;
-        case OBC_REG_XDCCONFIG:
-            REG_Copyu32ToArray(currentRegisters.xdcconfig, data);
-            *length = 4;
-            copyResult = true;
-            break;
-        default:
-            copyResult = false;
-    }
+			uint32_t read_successful = mm_getXTXpins(&destination);
+			if (read_successful == mm_OK){
+				// Copy into the buffer
+				REG_Copyu32ToArray(destination, buff);
+				*size = 4;
+				return_value = true;
+			}
+			else{
+				// An error reading this register - just return unknown error
+				return_value = false;
+			}
+		}
+		break;
+		
+	}
+	
 
-    return copyResult;
+    return return_value;
 }
 
 /*
@@ -274,95 +299,175 @@ void REG_vProcessMessages(void){
     {
         // First decode the array as a uint32_t
         uint32_t deserialized = REG_CopyArrayToU32(messages[messages_tail].data);
-        uint32_t bit = 0;
         
         // Do something based on the message
         switch (messages[messages_tail].address)
         {
             // Read-only registers. Can't write to them
-            case OBC_REG_BOARD_ID:
-            case OBC_REG_FW_VERSION:
-            case OBC_REG_HW_VERSION:
-            case OBC_REG_SUPPORTED_BOARDS:
-            case OBC_REG_MEASUREVI_V3:
-            case OBC_REG_MEASUREPOWER_V3:
-            case OBC_REG_MEASUREVI_V5:
-            case OBC_REG_MEASUREPOWER_V5:
-            case OBC_REG_MEASUREVI_VBAT:
-            case OBC_REG_MEASUREPOWER_VBAT:
-            case OBC_REG_MEASUREVI_VBATALT:
-            case OBC_REG_MEASUREPOWER_VBATALT:
+            case reg_Board_ID_addr:
+            case reg_FW_Version_addr:
+            case reg_HW_Version_addr:
+            case reg_Supported_Boards_addr:
+            case reg_Uptime_addr:
+            case reg_MeasureVI_V3_addr:
+            case reg_MeasurePower_V3_addr:
+            case reg_MeasureVI_V5_addr:
+            case reg_MeasurePower_V5_addr:
+            case reg_MeasureVI_VBat_addr:
+            case reg_MeasurePower_VBat_addr:
+            case reg_MeasureVI_VBatAlt_addr:
+            case reg_MeasurePower_VBatAlt_addr:
+            case reg_CSBoard_T0_addr:
+            case reg_CSBoard_T1_addr:
+            case reg_CSBoard_T2_addr:
+            case reg_CSBoard_T3_addr:
+            case reg_CSBoard_T4_addr:
+            case reg_CSBoard_T5_addr:
+            case reg_CSBoard_T6_addr:
+            case reg_CSBoard_T7_addr:
+            case reg_CSBoard_Current0I0_addr:
+            case reg_CSBoard_Current0I1_addr:
+            case reg_CSBoard_Current0I2_addr:
+            case reg_CSBoard_Current1I0_addr:
+            case reg_CSBoard_Current1I1_addr:
+            case reg_CSBoard_Current1I2_addr:
+            case reg_CSBoard_Current2I0_addr:
+            case reg_CSBoard_Current2I1_addr:
+            case reg_CSBoard_Current2I2_addr:
+            case reg_CSBoard_Current3I0_addr:
+            case reg_CSBoard_Current3I1_addr:
+            case reg_CSBoard_Current3I2_addr:
+            case reg_CSBoard_Current4I0_addr:
+            case reg_CSBoard_Current4I1_addr:
+            case reg_CSBoard_Current4I2_addr:
+            case reg_CSBoard_Current5I0_addr:
+            case reg_CSBoard_Current5I1_addr:
+            case reg_CSBoard_Current5I2_addr:
+            case reg_CSBoard_Current6I0_addr:
+            case reg_CSBoard_Current6I1_addr:
+            case reg_CSBoard_Current6I2_addr:
+            case reg_CSBoard_Current7I0_addr:
+            case reg_CSBoard_Current7I1_addr:
+            case reg_CSBoard_Current7I2_addr:
+				break;
+
+            case reg_Scratchpad_addr:
+				mm_setScratchpad(deserialized);
                 break;
 
-            case OBC_REG_SCRATCHPAD:
-                currentRegisters.scratchpad = deserialized;
-                break;
-
-            case OBC_REG_CONFIGURED_BOARDS:
-                currentRegisters.configured_boards = deserialized;
+            case reg_Configured_Boards_addr:
+				mm_setConfigured_Boards(deserialized);
                 CONFIG_vDecodeBoardSet(0, (uint8_t) deserialized);
                 break;
 
-            case OBC_REG_CONFPOWER:
-                currentRegisters.confpower = deserialized;
+            case reg_ConfPower_addr:
+				mm_setConfPower(deserialized);
                 CONFIG_vDecodePower((uint8_t) deserialized);
                 break;
-            case OBC_REG_I2CCONFA:
+				
+            case reg_I2CConfA_addr:
+			{
                 // Set the module speed here. The other values in the register are read when they are needed
-                I2C_SetEndpointSpeed( (uint32_t) ((deserialized & OBC_REG_I2CCONFA_SPD_Msk) >> OBC_REG_I2CCONFA_SPD_Pos) * 10000);
-                currentRegisters.i2cconfa = deserialized;
+				uint8_t spd = 0;
+				mm_getI2CConfA_SPDFrom(&spd, deserialized);
+				
+                I2C_SetEndpointSpeed( (uint32_t) (spd) * 10000);
+                mm_setI2CConfA(deserialized);
+			}
                 break;
-            case OBC_REG_I2CCONFB:
-                I2C_SetEndpointAddress((deserialized & OBC_REG_I2CCONFB_ADDR_Msk) >> OBC_REG_I2CCONFB_ADDR_Pos);
-                currentRegisters.i2cconfb = deserialized;
+				
+            case reg_I2CConfB_addr:
+			{
+				uint8_t address = 0;
+				mm_getI2CConfB_ADDRFrom(&address, deserialized);
+                I2C_SetEndpointAddress(address);
+				mm_setI2CConfB(deserialized);
+			}
                 break;
-			case OBC_REG_CONFMULTI:
-				currentRegisters.confmulti = deserialized;
-				bool multiEnabled = REG_Get_ConfMulti_MEnabled(&currentRegisters);
-				bool autoClear = REG_Get_ConfMulti_AutoCLR(&currentRegisters);
 				
-				MULTI_vSetEnabled(multiEnabled);
-				MULTI_vSetAutoClear(autoClear);
+			case reg_ConfMulti_addr:
+			{
+				mm_enabled_t multiEnabled = reg_enabled_disabled;
+				mm_enabled_t autoClear = reg_enabled_disabled;
+				mm_getConfMulti_MEnabledFrom(&multiEnabled, deserialized);
+				mm_getConfMulti_AutoCLRFrom(&multiEnabled, deserialized);
 				
-				MULTI_vSetChannelFan(Position1, REG_Get_ConfMulti_FanPos1(&currentRegisters));
-				MULTI_vSetChannelFan(Position2, REG_Get_ConfMulti_FanPos2(&currentRegisters));
-				MULTI_vSetChannelFan(Position3, REG_Get_ConfMulti_FanPos3(&currentRegisters));
-				MULTI_vSetChannelFan(Position4, REG_Get_ConfMulti_FanPos4(&currentRegisters));
+				MULTI_vSetEnabled(multiEnabled==reg_enabled_enabled);
+				MULTI_vSetAutoClear(autoClear==reg_enabled_enabled);
 				
-				MULTI_vSetRfSwitchEnabled(REG_Get_ConfMulti_RfSwENA(&currentRegisters));
-				MULTI_vSetRFSwitchChannel(REG_Get_ConfMulti_RfSwChan(&currentRegisters));
+				mm_enabled_t fanEnabled;
+				mm_getConfMulti_FanPos1From(&fanEnabled, deserialized);
+				MULTI_vSetChannelFan(Position1, fanEnabled == reg_enabled_enabled);
+				
+				mm_getConfMulti_FanPos2From(&fanEnabled, deserialized);
+				MULTI_vSetChannelFan(Position2, fanEnabled == reg_enabled_enabled);
+				
+				mm_getConfMulti_FanPos3From(&fanEnabled, deserialized);
+				MULTI_vSetChannelFan(Position3, fanEnabled == reg_enabled_enabled);
+				
+				mm_getConfMulti_FanPos4From(&fanEnabled, deserialized);
+				MULTI_vSetChannelFan(Position4, fanEnabled == reg_enabled_enabled);
+				
+				mm_enabled_t RfSwEna;
+				mm_getConfMulti_RfSwENAFrom(&RfSwEna, deserialized);
+				MULTI_vSetRfSwitchEnabled(RfSwEna == reg_enabled_enabled);
+				
+				mm_enabled_t RfSwChan;
+				mm_getConfMulti_RfSwENAFrom(&RfSwChan, deserialized);
+				MULTI_vSetRFSwitchChannel(RfSwChan == reg_enabled_enabled);
+				
+				mm_setConfMulti(deserialized);
+			}
 				break;
 				
-            case OBC_REG_XTXPINS:
-                currentRegisters.xtxpins = deserialized;
-                bit = (deserialized & OBC_REG_XTXPINS_ENA_Msk) >> OBC_REG_XTXPINS_ENA_Pos;
-                XTX_vSetEnable(bit);
-                bit = (deserialized & OBC_REG_XTXPINS_NRST_Msk) >> OBC_REG_XTXPINS_NRST_Pos;
-                XTX_SetNReset(bit);
+            case reg_XTXpins_addr: 
+				mm_setXTXpins(deserialized);
+				
+				mm_enabled_t val;
+				mm_getXTXpins_ENAFrom(&val, deserialized);
+                XTX_vSetEnable(val == reg_enabled_enabled);
+				
+                mm_getXTXpins_nRSTFrom(&val, deserialized);
+                XTX_SetNReset(val == reg_enabled_enabled);
                 break;
 				
-			case OBC_REG_XTXMULTITESTER:
-				currentRegisters.xtxmultitester = deserialized;
+			case reg_XTXMultitester_addr: 
+				mm_setXTXMultitester(deserialized);
 				
-				// This could be a one liner :-D
-				MULTI_vSetChannelEnabled(Position1, REG_Get_XTXMultitester_POS1_XTX_EN(&currentRegisters));
-				MULTI_vSetChannelEnabled(Position2, REG_Get_XTXMultitester_POS2_XTX_EN(&currentRegisters));
-				MULTI_vSetChannelEnabled(Position3, REG_Get_XTXMultitester_POS3_XTX_EN(&currentRegisters));
-				MULTI_vSetChannelEnabled(Position4, REG_Get_XTXMultitester_POS4_XTX_EN(&currentRegisters));
+				mm_enabled_t dest;
+				mm_getXTXMultitester_POS1_XTX_EN(&dest);
+				MULTI_vSetChannelEnabled(Position1, dest);
 				
-				MULTI_vSetChannelnReset(Position1, REG_Get_XTXMultitester_POS1_XTX_nReset(&currentRegisters));
-				MULTI_vSetChannelnReset(Position2, REG_Get_XTXMultitester_POS2_XTX_nReset(&currentRegisters));
-				MULTI_vSetChannelnReset(Position3, REG_Get_XTXMultitester_POS3_XTX_nReset(&currentRegisters));
-				MULTI_vSetChannelnReset(Position4, REG_Get_XTXMultitester_POS4_XTX_nReset(&currentRegisters));
+				mm_getXTXMultitester_POS2_XTX_EN(&dest);
+				MULTI_vSetChannelEnabled(Position2, dest);
+				
+				mm_getXTXMultitester_POS3_XTX_EN(&dest);
+				MULTI_vSetChannelEnabled(Position3, dest);
+				
+				mm_getXTXMultitester_POS4_XTX_EN(&dest);
+				MULTI_vSetChannelEnabled(Position4, dest);
+				
+				
+				mm_getXTXMultitester_POS1_XTX_nReset(&dest);
+				MULTI_vSetChannelnReset(Position1, dest);
+				
+				mm_getXTXMultitester_POS2_XTX_nReset(&dest);
+				MULTI_vSetChannelnReset(Position2, dest);
+				
+				mm_getXTXMultitester_POS3_XTX_nReset(&dest);
+				MULTI_vSetChannelnReset(Position3, dest);
+				
+				mm_getXTXMultitester_POS4_XTX_nReset(&dest);
+				MULTI_vSetChannelnReset(Position4, dest);
 				
 				// Set all the pins in one shot
 				MULTI_vSetChannelPowerPins(deserialized);
 				
-				currentRegisters.xtxmultitester = MULTI_u32GetPins();
+				mm_setXTXMultitester(MULTI_u32GetPins());
 				
 				break;
-            case OBC_REG_XDCCONFIG:
-                currentRegisters.xdcconfig = deserialized;
+            case reg_XDCConfig_addr: 
+                mm_setXDCConfig(deserialized);
                 // If already configured, configure again
                 if (CONFIG_GetCurrentBoardconfig() == CONF_BOARD_XDC){
                     XDC_vConfig();
@@ -375,69 +480,14 @@ void REG_vProcessMessages(void){
     }
 }
 
-void REG_UpdateVoltagePins(uint8_t newValue){
-    currentRegisters.confpower = newValue;
-}
-
-void REG_UpdateVoltage(uint8_t channel, uint16_t value){
-    switch (channel){
-        case CHANNEL_3:
-            currentRegisters.measurevi_v3 = (currentRegisters.measurevi_v3 & ~OBC_REG_MEASUREVI_VOLTAGE_Msk) | (((uint32_t) value) << OBC_REG_MEASUREVI_VOLTAGE_Pos);
-            break;
-        case CHANNEL_5:
-            currentRegisters.measurevi_v5 = (currentRegisters.measurevi_v5 & ~OBC_REG_MEASUREVI_VOLTAGE_Msk) | (((uint32_t) value) << OBC_REG_MEASUREVI_VOLTAGE_Pos);
-            break;    
-        case CHANNEL_vBat:
-            currentRegisters.measurevi_vbat = (currentRegisters.measurevi_vbat & ~OBC_REG_MEASUREVI_VOLTAGE_Msk) | (((uint32_t) value) << OBC_REG_MEASUREVI_VOLTAGE_Pos);
-            break;    
-        case CHANNEL_vBatAlt:
-            currentRegisters.measurevi_vbatalt = (currentRegisters.measurevi_vbatalt & ~OBC_REG_MEASUREVI_VOLTAGE_Msk) | (((uint32_t) value) << OBC_REG_MEASUREVI_VOLTAGE_Pos);
-            break;
-    }
-}
-
-
-void REG_UpdateCurrent(uint8_t channel, uint16_t value){
-    switch (channel){
-        case CHANNEL_3:
-        currentRegisters.measurevi_v3 = (currentRegisters.measurevi_v3 & ~OBC_REG_MEASUREVI_CURRENT_Msk) | (((uint32_t) value) << OBC_REG_MEASUREVI_CURRENT_Pos);
-        break;
-        case CHANNEL_5:
-        currentRegisters.measurevi_v5 = (currentRegisters.measurevi_v5 & ~OBC_REG_MEASUREVI_CURRENT_Msk) | (((uint32_t) value) << OBC_REG_MEASUREVI_CURRENT_Pos);
-        break;
-        case CHANNEL_vBat:
-        currentRegisters.measurevi_vbat = (currentRegisters.measurevi_vbat & ~OBC_REG_MEASUREVI_CURRENT_Msk) | (((uint32_t) value) << OBC_REG_MEASUREVI_CURRENT_Pos);
-        break;
-        case CHANNEL_vBatAlt:
-        currentRegisters.measurevi_vbatalt = (currentRegisters.measurevi_vbatalt & ~OBC_REG_MEASUREVI_CURRENT_Msk) | (((uint32_t) value) << OBC_REG_MEASUREVI_CURRENT_Pos);
-        break;
-    }
-}
-
-
-void REG_UpdatePower(uint8_t channel, uint32_t value){
-    switch (channel)
-    {
-        case CHANNEL_3:
-        currentRegisters.measurepower_v3 = value;
-        break;
-        case CHANNEL_5:
-        currentRegisters.measurepower_v5 = value;
-        break;
-        case CHANNEL_vBat:
-        currentRegisters.measurepower_vbat = value;
-        break;
-        case CHANNEL_vBatAlt:
-        currentRegisters.measurepower_vbatalt = value;
-        break;
-    }
-}
 
 /*
  * Returns the current I2C Speed
 */
 inline uint8_t REG_GetI2CSpeed(void){
-    return (currentRegisters.i2cconfa & OBC_REG_I2CCONFA_SPD_Msk) >> OBC_REG_I2CCONFA_SPD_Pos;
+	uint8_t speed;
+	mm_getI2CConfA_SPD(&speed);
+    return speed;
 }
 
 
@@ -446,7 +496,7 @@ inline uint8_t REG_GetI2CSpeed(void){
 */
 void REG_SetI2CSpeed(uint32_t newSpeed)
 {
-    currentRegisters.i2cconfa = (currentRegisters.i2cconfa & ~OBC_REG_I2CCONFA_SPD_Msk) | ( ((uint32_t) newSpeed / 10000) << OBC_REG_I2CCONFA_SPD_Pos);
+	mm_setI2CConfA_SPD(newSpeed / 10000);
     I2C_SetEndpointSpeed(newSpeed);
 }
 
@@ -455,7 +505,9 @@ void REG_SetI2CSpeed(uint32_t newSpeed)
 */
 inline uint32_t REG_GetI2CAddress(void)
 {
-    return ((currentRegisters.i2cconfb & OBC_REG_I2CCONFB_ADDR_Msk) >> OBC_REG_I2CCONFB_ADDR_Pos);
+	uint8_t addr;
+	mm_getI2CConfB_ADDR(&addr);
+    return addr;
 }
 
 /*
@@ -464,17 +516,6 @@ inline uint32_t REG_GetI2CAddress(void)
 */
 void REG_vSetI2CAddress(uint8_t address)
 {
-    currentRegisters.i2cconfb = (currentRegisters.i2cconfb & ~OBC_REG_I2CCONFB_ADDR_Msk) | ( ((uint32_t) address) << OBC_REG_I2CCONFB_ADDR_Pos);
-
+	mm_setI2CConfB_ADDR(address);
     I2C_SetEndpointAddress(address);
-}
-
-
-inline void REG_vSetUptime(uint32_t uptime){
-
-    currentRegisters.uptime = uptime;
-}
-
-inline uint32_t REG_u32GetUptime(){
-    return currentRegisters.uptime;
 }
