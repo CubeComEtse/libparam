@@ -390,7 +390,7 @@ void REG_vProcessMessages(void){
 				mm_enabled_t multiEnabled = reg_enabled_disabled;
 				mm_enabled_t autoClear = reg_enabled_disabled;
 				mm_getConfMulti_MEnabledFrom(&multiEnabled, deserialized);
-				mm_getConfMulti_AutoCLRFrom(&multiEnabled, deserialized);
+				mm_getConfMulti_AutoCLRFrom(&autoClear, deserialized);
 				
 				MULTI_vSetEnabled(multiEnabled==reg_enabled_enabled);
 				MULTI_vSetAutoClear(autoClear==reg_enabled_enabled);
@@ -412,9 +412,9 @@ void REG_vProcessMessages(void){
 				mm_getConfMulti_RfSwENAFrom(&RfSwEna, deserialized);
 				MULTI_vSetRfSwitchEnabled(RfSwEna == reg_enabled_enabled);
 				
-				mm_enabled_t RfSwChan;
-				mm_getConfMulti_RfSwENAFrom(&RfSwChan, deserialized);
-				MULTI_vSetRFSwitchChannel(RfSwChan == reg_enabled_enabled);
+				uint8_t RfSwChan;
+				mm_getConfMulti_RfSwChanFrom(&RfSwChan, deserialized);
+				MULTI_vSetRFSwitchChannel(RfSwChan);
 				
 				mm_setConfMulti(deserialized);
 			}
