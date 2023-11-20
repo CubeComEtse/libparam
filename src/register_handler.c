@@ -54,6 +54,8 @@ static addres_to_func_map_t address_to_func_map[] = {
 	{ reg_MeasurePower_VBat_addr, mm_getMeasurePower_VBat},
 	{ reg_MeasureVI_VBatAlt_addr, mm_getMeasureVI_VBatAlt},
 	{ reg_MeasurePower_VBatAlt_addr, mm_getMeasurePower_VBatAlt },
+		
+	{ reg_ConfTempSense_addr, mm_getConfTempSense },
 	
 	{ reg_I2CConfA_addr, mm_getI2CConfA},
 	{ reg_I2CConfB_addr, mm_getI2CConfB},
@@ -104,7 +106,8 @@ void REG_vInit(){
 	mm_setFW_Version(0x00020203);
 	mm_setHW_Version(0x00000001);
 	
-	mm_setSupported_Boards(reg_boardidentifier_xtx | reg_boardidentifier_xsteer | reg_boardidentifier_xdc |reg_boardidentifier_hdrtx_dfa | reg_boardidentifier_hdrtx);
+	mm_setSupported_Boards(reg_boardidentifier_xtx | reg_boardidentifier_xsteer | reg_boardidentifier_xdc | 
+		reg_boardidentifier_hdrtx_dfa | reg_boardidentifier_hdrtx | reg_boardidentifier_gen2);
 	mm_setI2CConfA_SPD(0x5);
 	mm_setI2CConfA_TRDEL(10);
 	mm_setXDCConfig_ADDR(0x52);
@@ -473,6 +476,15 @@ void REG_vProcessMessages(void){
                     XDC_vConfig();
                 }
                 break;
+			case reg_ConfTempSense_addr:
+			{
+				mm_enabled_t cs_enabled = reg_enabled_disabled;
+				mm_getConfTempSense_EnableMeasurementsFrom(&cs_enabled, deserialized);
+				CONFIG_SetCurrentSenseBoardEnabled(cs_enabled == reg_enabled_enabled);
+				
+				mm_setConfTempSense(deserialized);
+			}
+			break;
         }        
 
         // The message has been handled

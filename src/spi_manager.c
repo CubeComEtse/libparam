@@ -34,6 +34,7 @@ void SPI_MANAGER_vSelectDevice(enum SPI_SELECT newSpiDevice)
     }
 }
 
+
 /**
  * \brief Sets the CS pin to use when transmitting
  *

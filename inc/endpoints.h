@@ -26,6 +26,8 @@
 #define CAN_ENDPOINT_DFA_FW 0x15
 
 #define CAN_ENDPOINT_V2 0x34
+#define I2C_ENDPOINT_V2 0x35
+
 
 
 #endif /* ENDPOINTS_H_ */

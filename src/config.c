@@ -18,6 +18,8 @@
 #include "OBC.h"
 #include "register_handler.h"
 
+#include "gen2.h"
+
 #include "hdrtx_dfa.h"
 #include "hdrtx.h"
 #include "xtx.h"
@@ -44,7 +46,7 @@ static uint16_t u16PowerMeasurementInterval = 250;
 
 
 static tmr_t sCSBoardTemperatureTimer;
-static uint16_t u16CSBoardMeasurementInterval = 100;
+static uint16_t u16CSBoardMeasurementInterval = 160;
 
 static bool bCSBoardenabled = false;
 
@@ -210,6 +212,7 @@ bool CONFIG_bConfigEndpoint(const uint8_t* rx_buffer, const uint16_t rx_length, 
  */
 void CONFIG_vProcess(void) {
     if (TMR_bExpired(&sUpdateTimer)) {
+		
         //Always measure the values
         ioport_set_pin_level(TEST_PIN_2,0);
         CONFIG_vUpdatePowerMeasurements();
@@ -253,6 +256,7 @@ void CONFIG_vProcess(void) {
     }
 	
 	if (TMR_bExpired(&sCSBoardTemperatureTimer)){
+		
 		if (bCSBoardenabled){
 			LTC2499_getSample(&cs_board);
 		}
@@ -313,6 +317,8 @@ uint8_t CONFIG_vDecodeBoardSet(const uint8_t rw, const uint8_t value)
 	case CONF_BOARD_HDRTX:
 		HDRTX_vDeConfig();
 		break;
+	case CONF_BOARD_GEN2:
+		GEN2_vDeconfig();
     }
 
     // Set new board
@@ -334,6 +340,9 @@ uint8_t CONFIG_vDecodeBoardSet(const uint8_t rw, const uint8_t value)
     case CONF_BOARD_HDRTX:
         HDRTX_vConfig();
         break;
+	case CONF_BOARD_GEN2:
+		GEN2_Config();
+		break;
     }
     currentBoardConfig = value;
     
@@ -465,4 +474,8 @@ void CONFIG_vGetCurrentMeasurements(uint8_t* tx_buffer, uint16_t* tx_length) {
 
 uint8_t CONFIG_GetCurrentBoardconfig(void){
     return currentBoardConfig;
+}
+
+void CONFIG_SetCurrentSenseBoardEnabled(bool value){
+	bCSBoardenabled = value;
 }

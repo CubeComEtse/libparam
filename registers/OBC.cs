@@ -620,56 +620,56 @@ namespace Devices.Models
         public struct RegCSBoard_T0
         {
             [FieldOffset(0)]
-            public UInt32 value;
+            public Int32 value;
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
         public struct RegCSBoard_T1
         {
             [FieldOffset(0)]
-            public UInt32 value;
+            public Int32 value;
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
         public struct RegCSBoard_T2
         {
             [FieldOffset(0)]
-            public UInt32 value;
+            public Int32 value;
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
         public struct RegCSBoard_T3
         {
             [FieldOffset(0)]
-            public UInt32 value;
+            public Int32 value;
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
         public struct RegCSBoard_T4
         {
             [FieldOffset(0)]
-            public UInt32 value;
+            public Int32 value;
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
         public struct RegCSBoard_T5
         {
             [FieldOffset(0)]
-            public UInt32 value;
+            public Int32 value;
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
         public struct RegCSBoard_T6
         {
             [FieldOffset(0)]
-            public UInt32 value;
+            public Int32 value;
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
         public struct RegCSBoard_T7
         {
             [FieldOffset(0)]
-            public UInt32 value;
+            public Int32 value;
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
@@ -862,6 +862,8 @@ namespace Devices.Models
             HDRTX_DFA = 8,
             [Description("HDRTX")]
             HDRTX = 16,
+            [Description("GEN2")]
+            GEN2 = 32,
         }
 
         /*************** Properties for Board_ID register ********************/
@@ -1593,8 +1595,8 @@ namespace Devices.Models
             get => _CSBoard_T0IsSet;
             set => _ = Set(ref _CSBoard_T0IsSet, value); 
         }
-        private UInt32 _CSBoard_T0;
-        public UInt32 CSBoard_T0 {
+        private Int32 _CSBoard_T0;
+        public Int32 CSBoard_T0 {
             get => _CSBoard_T0;
             set => _ = Set(ref _CSBoard_T0, value);
         }
@@ -1605,8 +1607,8 @@ namespace Devices.Models
             get => _CSBoard_T1IsSet;
             set => _ = Set(ref _CSBoard_T1IsSet, value); 
         }
-        private UInt32 _CSBoard_T1;
-        public UInt32 CSBoard_T1 {
+        private Int32 _CSBoard_T1;
+        public Int32 CSBoard_T1 {
             get => _CSBoard_T1;
             set => _ = Set(ref _CSBoard_T1, value);
         }
@@ -1617,8 +1619,8 @@ namespace Devices.Models
             get => _CSBoard_T2IsSet;
             set => _ = Set(ref _CSBoard_T2IsSet, value); 
         }
-        private UInt32 _CSBoard_T2;
-        public UInt32 CSBoard_T2 {
+        private Int32 _CSBoard_T2;
+        public Int32 CSBoard_T2 {
             get => _CSBoard_T2;
             set => _ = Set(ref _CSBoard_T2, value);
         }
@@ -1629,8 +1631,8 @@ namespace Devices.Models
             get => _CSBoard_T3IsSet;
             set => _ = Set(ref _CSBoard_T3IsSet, value); 
         }
-        private UInt32 _CSBoard_T3;
-        public UInt32 CSBoard_T3 {
+        private Int32 _CSBoard_T3;
+        public Int32 CSBoard_T3 {
             get => _CSBoard_T3;
             set => _ = Set(ref _CSBoard_T3, value);
         }
@@ -1641,8 +1643,8 @@ namespace Devices.Models
             get => _CSBoard_T4IsSet;
             set => _ = Set(ref _CSBoard_T4IsSet, value); 
         }
-        private UInt32 _CSBoard_T4;
-        public UInt32 CSBoard_T4 {
+        private Int32 _CSBoard_T4;
+        public Int32 CSBoard_T4 {
             get => _CSBoard_T4;
             set => _ = Set(ref _CSBoard_T4, value);
         }
@@ -1653,8 +1655,8 @@ namespace Devices.Models
             get => _CSBoard_T5IsSet;
             set => _ = Set(ref _CSBoard_T5IsSet, value); 
         }
-        private UInt32 _CSBoard_T5;
-        public UInt32 CSBoard_T5 {
+        private Int32 _CSBoard_T5;
+        public Int32 CSBoard_T5 {
             get => _CSBoard_T5;
             set => _ = Set(ref _CSBoard_T5, value);
         }
@@ -1665,8 +1667,8 @@ namespace Devices.Models
             get => _CSBoard_T6IsSet;
             set => _ = Set(ref _CSBoard_T6IsSet, value); 
         }
-        private UInt32 _CSBoard_T6;
-        public UInt32 CSBoard_T6 {
+        private Int32 _CSBoard_T6;
+        public Int32 CSBoard_T6 {
             get => _CSBoard_T6;
             set => _ = Set(ref _CSBoard_T6, value);
         }
@@ -1677,8 +1679,8 @@ namespace Devices.Models
             get => _CSBoard_T7IsSet;
             set => _ = Set(ref _CSBoard_T7IsSet, value); 
         }
-        private UInt32 _CSBoard_T7;
-        public UInt32 CSBoard_T7 {
+        private Int32 _CSBoard_T7;
+        public Int32 CSBoard_T7 {
             get => _CSBoard_T7;
             set => _ = Set(ref _CSBoard_T7, value);
         }

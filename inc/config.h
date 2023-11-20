@@ -65,6 +65,7 @@
 #define CONF_BOARD_XDC          4
 #define CONF_BOARD_HDRTX_DFA	8
 #define CONF_BOARD_HDRTX     	16
+#define CONF_BOARD_GEN2			32
 
 
 /*
@@ -87,5 +88,6 @@ void CONFIG_vDecodePower(const uint8_t value);
 uint8_t CONFIG_vDecodeBoardSet(const uint8_t rw, const uint8_t value);
 void CONFIG_vProcess(void);
 uint8_t CONFIG_GetCurrentBoardconfig(void);
+void CONFIG_SetCurrentSenseBoardEnabled(bool value);
 
 #endif /* CONFIG_H_ */

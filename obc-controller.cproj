@@ -701,6 +701,9 @@
     <Compile Include="inc\event.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="inc\gen2.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="inc\hdrtx.h">
       <SubType>compile</SubType>
     </Compile>
@@ -798,6 +801,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\File.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\gen2.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\hdrtx.c">

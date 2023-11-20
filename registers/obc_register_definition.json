@@ -557,14 +557,14 @@
 					"type": "UInt32"
 				}
 			},
-			{ "name":"CSBoard_T0", "address": "0x50", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
-			{ "name":"CSBoard_T1", "address": "0x51", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
-			{ "name":"CSBoard_T2", "address": "0x52", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
-			{ "name":"CSBoard_T3", "address": "0x53", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
-			{ "name":"CSBoard_T4", "address": "0x54", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
-			{ "name":"CSBoard_T5", "address": "0x55", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
-			{ "name":"CSBoard_T6", "address": "0x56", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
-			{ "name":"CSBoard_T7", "address": "0x57", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_T0", "address": "0x50", "dir": "r", "width": "32", "fields": [], "c#": {"type": "Int32" }, "c": {"type": "int32_t"} },
+			{ "name":"CSBoard_T1", "address": "0x51", "dir": "r", "width": "32", "fields": [], "c#": {"type": "Int32" }, "c": {"type": "int32_t"} },
+			{ "name":"CSBoard_T2", "address": "0x52", "dir": "r", "width": "32", "fields": [], "c#": {"type": "Int32" }, "c": {"type": "int32_t"} },
+			{ "name":"CSBoard_T3", "address": "0x53", "dir": "r", "width": "32", "fields": [], "c#": {"type": "Int32" }, "c": {"type": "int32_t"} },
+			{ "name":"CSBoard_T4", "address": "0x54", "dir": "r", "width": "32", "fields": [], "c#": {"type": "Int32" }, "c": {"type": "int32_t"} },
+			{ "name":"CSBoard_T5", "address": "0x55", "dir": "r", "width": "32", "fields": [], "c#": {"type": "Int32" }, "c": {"type": "int32_t"} },
+			{ "name":"CSBoard_T6", "address": "0x56", "dir": "r", "width": "32", "fields": [], "c#": {"type": "Int32" }, "c": {"type": "int32_t"} },
+			{ "name":"CSBoard_T7", "address": "0x57", "dir": "r", "width": "32", "fields": [], "c#": {"type": "Int32" }, "c": {"type": "int32_t"} },
 			{ "name":"CSBoard_Current0I0", "address": "0x58", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
 			{ "name":"CSBoard_Current0I1", "address": "0x59", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
 			{ "name":"CSBoard_Current0I2", "address": "0x5A", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
@@ -688,7 +688,8 @@
 						{"name": "XSteer", "value": "2",  "pretty_name": "XSTEER"},
 						{"name": "XDC", "value": "4",  "pretty_name": "XDC"},
 						{"name": "HDRTX_DFA", "value": "8",  "pretty_name": "HDRTX(DFA)"},
-						{"name": "HDRTX", "value": "16",  "pretty_name": "HDRTX"}
+						{"name": "HDRTX", "value": "16",  "pretty_name": "HDRTX"},
+						{"name": "GEN2", "value": "32",  "pretty_name": "GEN2"}
 					]
 				}
 		}

@@ -47,6 +47,8 @@ void HDRTX_vConfig(){
 	SERMUX_vRegisterEndpoint(CAN_ENDPOINT_V2, &CAN_bEndpoint);
 	//SERMUX_vRegisterEndpoint(I2C_ENDPOINT_CHKSM, &I2C_bEndpointNoChecksum);
 	
+	// Don't think we need to register i2c endpoint
+	
 }
 
 void HDRTX_vDeConfig(void){

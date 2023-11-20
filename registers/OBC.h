@@ -270,6 +270,7 @@ typedef enum {
     reg_boardidentifier_xdc = 4,                    // XDC
     reg_boardidentifier_hdrtx_dfa = 8,              // HDRTX(DFA)
     reg_boardidentifier_hdrtx = 16,                 // HDRTX
+    reg_boardidentifier_gen2 = 32,                  // GEN2
 } mm_boardidentifier_t;
 
 void mm_init(void);

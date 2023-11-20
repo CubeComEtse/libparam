@@ -14,6 +14,8 @@
 #include "std_message.h"
 
 #include "register_handler.h"
+#include "serial_multiplexer.h"
+#include "Sermux_v2.h"
 
 static struct i2c_driver_data sI2cDriver;
 static uint8_t u8I2CAddress;
@@ -117,4 +119,26 @@ void I2C_vProcess(void) {
 
 struct i2c_driver_data* I2C_psGetDriver(void){
 	return &sI2cDriver;
+}
+
+void ep_i2c_cc2(const uint8_t target, const bool dirBit, const uint8_t msgId, const uint8_t * message, const uint8_t length)
+{
+	//Dirbit is READ, !Write
+	if (dirBit)
+	{
+		uint8_t rxbuffer[16];
+		// Copy the address
+		rxbuffer[0] = message[0];
+		rxbuffer[1] = message[1];
+		
+		if (I2C_DRIVER_bReadCustom(&sI2cDriver, u8I2CAddress, message, 2, &rxbuffer[2],  message[2]))
+		{	
+			// 0x80 sets the readBit
+			SERMUX_v2_vSendMessage(target | 0x80, msgId, rxbuffer, message[2]+2);	
+		}
+	}
+	else
+	{
+		I2C_DRIVER_bWriteCustom(&sI2cDriver, u8I2CAddress, message, 2, &message[2], length-2);
+	}
 }

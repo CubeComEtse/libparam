@@ -11,6 +11,7 @@
 
 #include "Sermux_v2.h"
 #include "can_endpoint.h"
+#include "i2c_endpoint.h"
 #include "serial_multiplexer_conf.h"
 
 /*
@@ -186,6 +187,7 @@ void SERMUX_v2_vProcess(void){
 				case EP_V2_I2C_CC_CHECKSUM:
 					break;
 				case EP_V2_I2C_CC_2:
+					ep_i2c_cc2(msg_target, dirBit, msg_id, &current_msg_block->buffer[curr_msg_index + 3], msg_len - 3);
 					break;
 				case EP_V2_CAN_CC:
 					break;
