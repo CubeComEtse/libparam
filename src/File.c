@@ -8,7 +8,6 @@
 #include <errno.h>
 #include <stdio.h>
 #include <sys/unistd.h>
-#include "serial_multiplexer.h"
 
 
 int _write(int file, char *data, int len)
@@ -18,7 +17,9 @@ int _write(int file, char *data, int len)
         errno = EBADF;
         return -1;
     }
-    SERMUX_vTransmit(0, (uint8_t*) data, len);
+    
+	//Todo	
+	//SERMUX_vTransmit(0, (uint8_t*) data, len);
 
     // Return bytes written - we don't know if serial tx works
     return len;

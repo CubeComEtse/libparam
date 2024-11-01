@@ -2,108 +2,165 @@
 #include <stdbool.h>
 #include "string.h"
 
-#include "bsp.h"
-#include "can_endpoint.h"
-#include "config.h"
-#include "endpoints.h"
-#include "i2c_endpoint.h"
-#include "Multitester.h"
-#include "serial_multiplexer.h"
-#include "Sermux_v2.h"
-#include "spi_endpoint.h"
-#include "register_handler.h"
-#include "xtx.h"
-#include "hdrtx.h"
-#include "tmr.h"
+#include <asf.h>
 
-// This was only for CAN testing
-#include "std_message.h"
-#include "can_driver.h"
+#include <FreeRTOS.h>
+#include <task.h>
+#include <queue.h>
+#include <timers.h>
+#include <semphr.h>
+
+#include "bsp.h"
+#include "register_handler.h"
+#include "ltc2499.h"
+#include "ltc2992.h"
+#include "gse_manager.h"
+#include "sermux_v3.h"
+#include "pc_messages.h"
+#include "led_driver.h"
+
+#include "can_target.h"
+#include "i2c_target.h"
+#include "local_target.h"
+
+
+static ltc2992_device_t power_measure_1;
+static ltc2992_device_t power_measure_2;
+static ltc2499_device_t cs_board;
+
+static gse_manager_t gse_manager;
+
+static local_target_t local_target;
+static i2c_target_t i2c_target;
+static can_target_t can_target;
+
+sermux_v3_t sermux_v3;
+static bsp_t bsp;
+
+void uart_test_Task(void * handle);
+
+StackType_t exampleTaskStack[512] = {0};
+StaticTask_t sermux_task;
 
 int main (void)
 {
-    // System Initialization
-    sysclk_init();
-    wdt_disable(WDT);
-
     // Board initialization
-    BSP_vInit();
-    SERMUX_vInit();
-	SERMUX_V2_vInit();
-    REG_vInit();
-
-    // Init the endpoint
-    CONFIG_vInit(BOARD_ENDPOINT);
-
-    // Register the board configuration endpoint
-    SERMUX_vRegisterEndpoint(BOARD_ENDPOINT, &CONFIG_bConfigEndpoint);
-
-    BSP_vTelemetrySetCTS(false);
-	I2C_SetEndpointSpeed(100000);
-
-    // Always register all the Endpoints.
-    SERMUX_vRegisterEndpoint(I2C_ENDPOINT_CHKSM, &I2C_bEndpoint);
-    SERMUX_vRegisterEndpoint(I2C_ENDPOINT_PLAIN, &I2C_bEndpointNoChecksum);
-
-    
+    BSP_Init(&bsp);
 	
-    /*
-    All messages from the USART are handled by an endpoint. When the board 
-    starts up only the BOARD_ENPOINT is enabled. This endpoint tells the 
-    control software which board are supported. The control software then 
-    sends a message to select a board, and the rest of the endpoints are 
-    configured appropriately.
-
-    Additionally, TEXT_ENDPOINT is used to send printf messages back to the 
-    control software.
-    */
-
-    tmr_t uptimeTimer;
-    uint32_t uptime = 0;
-    TMR_vInit(&uptimeTimer, BSP_u16TmrGetTick, 1);
-    TMR_vStart(&uptimeTimer, 1000);
-
-    //CAN_vInitEndpoint(CAN_ENDPOINT, OBC_CAN_ADRESS, XTX_CAN_ADRESS);
-
-    
-    ioport_set_pin_level(TEST_PIN_2,1);
-    ioport_set_pin_level(TEST_PIN_2,0);
-
-    ioport_set_pin_level(TEST_PIN_3,1);
-    ioport_set_pin_level(TEST_PIN_3,0);
-    ioport_set_pin_level(TEST_PIN_1,1);
-    ioport_set_pin_level(TEST_PIN_1,0);
-
-
-    while(1){
-        SERMUX_vProcess();
-		SERMUX_v2_vProcess();
-
-        // Process the endpoints that require it
+	//Initialize memory map
+    mm_init();
+	
+	// Initialize register map
+	REG_vInit();
+	
+	// NEW! IMPROVED! SHINY!
+	
+	LED_DRIVER_Setup();
+	
+	//The LTC2992's are independent of i2c functions, so setup them
+	power_measure_1.i2c_write_function = ccd_i2c_driver_Write;
+	power_measure_1.i2c_read_function = ccd_i2c_driver_Read;
+	power_measure_1.i2c_handle = bsp.local_i2c;
+	power_measure_2.i2c_write_function = ccd_i2c_driver_Write;
+	power_measure_2.i2c_read_function = ccd_i2c_driver_Read;
+	power_measure_1.i2c_handle = bsp.local_i2c;
+	
+	// Todo: This all depends on the type of board this code is for
+	// LTC2992_vNormalSetup(&power_measure_1, LTC2992_u8GenAddr(0, 0));
+	// LTC2992_vNormalSetup(&power_measure_2, LTC2992_u8GenAddr(0, 2));
+	
+	cs_board.i2c_read_function = ccd_i2c_driver_Read;
+	cs_board.i2c_write_function = ccd_i2c_driver_Write;
+	LTC2499_vInit(&cs_board);
 		
-        I2C_vProcess();
-		
-        CAN_vProcess();
-		CAN_vDFAFirmwareProcess(NULL);
-		
-		// Green  - TEST_PIN_3
-		// Blue   - TEST_PIN_1
-		// Yellow - TEST_PIN_2
-		
-		
-        CONFIG_vProcess(); // Something here takes 5ms
-        SPI_vProcess();
-		MULTI_vProcess();
-		HDRTX_vProcess();
+	gse_manager.power_measure_1  = &power_measure_1;
+	gse_manager.power_measure_2 = &power_measure_2;
+	gse_manager.cs_board = &cs_board;
+	GSE_MANAGER_Init(&gse_manager);
+	
+	LOCALTARGET_Init(&local_target);
 
-        REG_vProcessMessages();
+	i2c_target.i2c_read = ccd_i2c_driver_Read;
+	i2c_target.i2c_write = ccd_i2c_driver_Write;
+	i2c_target.i2c_handle = bsp.bus_i2c;
+	I2CTARGET_Init(&i2c_target);
+	
+	can_target.can_send = ccd_can_Send_message;
+	CANTARGET_Init(&can_target);
+	
+	
+	sermux_v3.in_stream = bsp.telemetry_uart->uart_rx_buffer;
+	sermux_v3.out_stream = bsp.telemetry_uart->uart_tx_buffer;
+	SERMUX_V3_Init(&sermux_v3);
 
-        // XTX_vProcess();
-        if (TMR_bExpired(&uptimeTimer)){
-            // Increase 
-            uptime += 1;
-			mm_setUptime(uptime);
-            TMR_vStart(&uptimeTimer, 1000);
-        }
-    }
+	//Add Local Targets
+	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_GSE, local_target.incoming_messages, local_target.outgoing_messages);
+	
+	// Add I2C Targets
+	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_I2C_CC, i2c_target.incoming_messages, i2c_target.outgoing_messages);
+	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_I2C_CC_CHECKSUM, i2c_target.incoming_messages, i2c_target.outgoing_messages);
+	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_I2C_CC_2, i2c_target.incoming_messages, i2c_target.outgoing_messages);
+	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_I2C_CC_3, i2c_target.incoming_messages, i2c_target.outgoing_messages);
+
+	// Add CAN Targets
+	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_I2C_CC, can_target.incoming_messages, can_target.outgoing_messages);
+	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_I2C_CC_CHECKSUM, can_target.incoming_messages, can_target.outgoing_messages);
+	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_I2C_CC_2, can_target.incoming_messages, can_target.outgoing_messages);
+	
+	
+	
+	// Todo: Some parameters here are correct.
+	
+	// xTaskCreate(uart_test_Task, "uart", 1024, NULL, 2, NULL);
+    // xTaskCreateStatic(uart_test_Task, "uartTask", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 1U, &(exampleTaskStack[0]), &(exampleTaskTCB));
+	//xTaskCreate(uart_test_Task, "uart", 128, NULL, configMAX_PRIORITIES - 2, &uartTask);
+	
+	//xTaskCreate(GSE_MANAGER_Task, "GSE Manager", 1024, (void*) &gse_manager, tskIDLE_PRIORITY + 1, NULL );
+	
+	xTaskCreate(SERMUX_V3_ReceiveTask, "Serial MUX RX", 512, (void*) &sermux_v3, tskIDLE_PRIORITY+4, NULL);
+	//xTaskCreate(SERMUX_V3_TransmitTask, "Serial MUX TX", 512, (void*) &sermux_v3, tskIDLE_PRIORITY+4, NULL);
+	
+	//xTaskCreate(I2CTARGET_Task, "I2C Target", 512, (void*) &i2c_target,  tskIDLE_PRIORITY+1, NULL);
+	//xTaskCreate(LOCALTARGET_Task, "Local Target", 512, (void*) &local_target,  tskIDLE_PRIORITY+3, NULL);
+	
+	
+	// High priority for this, to always keep the RX buffer empty and not loose data.
+	xTaskCreate(ccd_usart_RXProcessingTask, "UART RX", 512, (void*) bsp.telemetry_uart, tskIDLE_PRIORITY + 4, &(bsp.telemetry_uart->task_reference));
+	xTaskCreate(ccd_usart_TXProcessingTask, "UART TX", 512, (void*) bsp.telemetry_uart, tskIDLE_PRIORITY + 4, NULL);
+	
+	// LED task has lowest priority
+	// xTaskCreate(LED_DRIVER_UpdateTask, "LED", 512, (void*) NULL, tskIDLE_PRIORITY, NULL);
+	
+	vTaskStartScheduler();
+	
+	//Todo: Reboot!
+	while(1);
+	
+	// Might be needed:
+	// BSP_vTelemetrySetCTS(false);
+
+}
+
+void uart_test_Task(void * handle){
+	
+	while(1){
+	}
+}
+
+
+void vApplicationStackOverflowHook( TaskHandle_t xTask,char * pcTaskName )
+{
+    // Check pcTaskName for the name of the offending task,
+	// or pxCurrentTCB if pcTaskName has itself been corrupted. 
+    ( void ) xTask;
+    ( void ) pcTaskName;
+}
+
+void vApplicationMallocFailedHook(void){
+	while(1){
+		
+	}
+}
+
+void vApplicationTickHook(void){
 }

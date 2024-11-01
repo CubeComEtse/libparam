@@ -42,10 +42,11 @@
           <option id="sam.drivers.mcan" value="Add" config="" content-id="Atmel.ASF" />
           <option id="sam.drivers.pmc" value="Add" config="" content-id="Atmel.ASF" />
           <option id="sam.drivers.rstc" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="sam.drivers.rtc" value="Add" config="" content-id="Atmel.ASF" />
           <option id="sam.drivers.tc" value="Add" config="" content-id="Atmel.ASF" />
           <option id="sam.drivers.twihs" value="Add" config="" content-id="Atmel.ASF" />
           <option id="sam.drivers.wdt" value="Add" config="" content-id="Atmel.ASF" />
-          <option id="sam.drivers.rtc" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="sam.drivers.xdmac" value="Add" config="" content-id="Atmel.ASF" />
           <option id="sam.utils.linker_scripts" value="Add" config="" content-id="Atmel.ASF" />
         </options>
         <configurations>
@@ -275,6 +276,8 @@
           <file path="src/ASF/sam/drivers/tc/tc.h" framework="" version="3.48.0" source="sam\drivers\tc\tc.h" changed="False" content-id="Atmel.ASF" />
           <file path="src/ASF/sam/drivers/rtc/rtc.c" framework="" version="3.48.0" source="sam\drivers\rtc\rtc.c" changed="False" content-id="Atmel.ASF" />
           <file path="src/ASF/sam/drivers/rtc/rtc.h" framework="" version="3.48.0" source="sam\drivers\rtc\rtc.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/sam/drivers/xdmac/xdmac.c" framework="" version="3.48.0" source="sam\drivers\xdmac\xdmac.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/sam/drivers/xdmac/xdmac.h" framework="" version="3.48.0" source="sam\drivers\xdmac\xdmac.h" changed="False" content-id="Atmel.ASF" />
         </files>
         <documentation help="https://asf.microchip.com/docs/3.48.0/common.applications.user_application.user_board.samv71q21/html/index.html" />
         <offline-documentation help="" />
@@ -302,6 +305,17 @@
     </com_atmel_avrdbg_tool_atmelice>
     <avrtoolinterface>SWD</avrtoolinterface>
     <avrtoolinterfaceclock>2000000</avrtoolinterfaceclock>
+    <custom>
+      <ToolOptions xmlns="">
+        <InterfaceProperties>
+        </InterfaceProperties>
+        <InterfaceName>SWD</InterfaceName>
+      </ToolOptions>
+      <ToolType xmlns="">custom</ToolType>
+      <ToolNumber xmlns="">
+      </ToolNumber>
+      <ToolName xmlns="">Custom Programming Tool</ToolName>
+    </custom>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>
@@ -354,6 +368,7 @@
       <Value>../src/ASF/common/services/twi</Value>
       <Value>../src/ASF/sam/drivers/tc</Value>
       <Value>../src/ASF/sam/drivers/rtc</Value>
+      <Value>../src/ASF/sam/drivers/xdmac</Value>
     </ListValues>
   </armgcc.compiler.directories.IncludePaths>
   <armgcc.compiler.optimization.level>Optimize for size (-Os)</armgcc.compiler.optimization.level>
@@ -408,6 +423,7 @@
       <Value>../src/ASF/common/services/twi</Value>
       <Value>../src/ASF/sam/drivers/tc</Value>
       <Value>../src/ASF/sam/drivers/rtc</Value>
+      <Value>../src/ASF/sam/drivers/xdmac</Value>
     </ListValues>
   </armgcc.assembler.general.IncludePaths>
   <armgcc.preprocessingassembler.general.AssemblerFlags>-DARM_MATH_CM7=true -DBOARD=USER_BOARD -Dprintf=iprintf -Dscanf=iscanf</armgcc.preprocessingassembler.general.AssemblerFlags>
@@ -445,6 +461,7 @@
       <Value>../src/ASF/common/services/twi</Value>
       <Value>../src/ASF/sam/drivers/tc</Value>
       <Value>../src/ASF/sam/drivers/rtc</Value>
+      <Value>../src/ASF/sam/drivers/xdmac</Value>
     </ListValues>
   </armgcc.preprocessingassembler.general.IncludePaths>
 </ArmGcc>
@@ -480,8 +497,6 @@
       <Value>../src/ASF/sam/utils/cmsis/samv71/source/templates</Value>
       <Value>../src/ASF/sam/utils/cmsis/samv71/include</Value>
       <Value>../src/ASF/common/boards/user_board</Value>
-      <Value>../src</Value>
-      <Value>../src/config</Value>
       <Value>../src/ASF/sam/drivers/pmc</Value>
       <Value>../src/ASF/sam/drivers/uart</Value>
       <Value>../src/ASF/common/services/clock</Value>
@@ -490,24 +505,25 @@
       <Value>../src/ASF/sam/drivers/usart</Value>
       <Value>../src/ASF/common/services/ioport</Value>
       <Value>../src/ASF/common/services/delay</Value>
-      <Value>../inc</Value>
       <Value>../src/ASF</Value>
-      <Value>../board</Value>
       <Value>../src/ASF/sam/drivers/spi</Value>
       <Value>../src/ASF/common/services/spi/sam_spi</Value>
       <Value>../src/ASF/common/services/spi</Value>
       <Value>../src/ASF/sam/drivers/rstc/example1</Value>
       <Value>../src/ASF/sam/drivers/rstc</Value>
       <Value>../src/ASF/sam/drivers/wdt</Value>
-      <Value>../serial_multiplexer</Value>
-      <Value>../drivers</Value>
       <Value>../src/ASF/sam/drivers/twihs</Value>
       <Value>../src/ASF/sam/drivers/mcan</Value>
       <Value>../src/ASF/common/services/twi</Value>
       <Value>../src/ASF/sam/drivers/tc</Value>
-      <Value>../registers</Value>
       <Value>../src/ASF/sam/drivers/rtc</Value>
-      <Value>../libcsp/include</Value>
+      <Value>../inc</Value>
+      <Value>../inc/board</Value>
+      <Value>../inc/drivers</Value>
+      <Value>../inc/freertos</Value>
+      <Value>../inc/config</Value>
+      <Value>../src/freertos/portable/GCC/ARM_CM7/r0p1</Value>
+      <Value>../src/ASF/sam/drivers/xdmac</Value>
     </ListValues>
   </armgcc.compiler.directories.IncludePaths>
   <armgcc.compiler.optimization.OtherFlags>-fdata-sections</armgcc.compiler.optimization.OtherFlags>
@@ -563,6 +579,7 @@
       <Value>../src/ASF/common/services/twi</Value>
       <Value>../src/ASF/sam/drivers/tc</Value>
       <Value>../src/ASF/sam/drivers/rtc</Value>
+      <Value>../src/ASF/sam/drivers/xdmac</Value>
     </ListValues>
   </armgcc.assembler.general.IncludePaths>
   <armgcc.assembler.debugging.DebugLevel>Default (-g)</armgcc.assembler.debugging.DebugLevel>
@@ -601,6 +618,7 @@
       <Value>../src/ASF/common/services/twi</Value>
       <Value>../src/ASF/sam/drivers/tc</Value>
       <Value>../src/ASF/sam/drivers/rtc</Value>
+      <Value>../src/ASF/sam/drivers/xdmac</Value>
     </ListValues>
   </armgcc.preprocessingassembler.general.IncludePaths>
   <armgcc.preprocessingassembler.debugging.DebugLevel>Default (-Wa,-g)</armgcc.preprocessingassembler.debugging.DebugLevel>
@@ -608,10 +626,15 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="inc" />
-    <Folder Include="board" />
-    <Folder Include="drivers" />
-    <Folder Include="registers" />
+    <Folder Include="Debug\" />
+    <Folder Include="Debug\inc\" />
+    <Folder Include="Debug\inc\inc\" />
+    <Folder Include="Debug\inc\inc\board\" />
+    <Folder Include="inc\" />
+    <Folder Include="inc\board\" />
+    <Folder Include="inc\config\" />
+    <Folder Include="inc\drivers\" />
+    <Folder Include="inc\freertos\" />
     <Folder Include="src\" />
     <Folder Include="src\ASF\" />
     <Folder Include="src\ASF\common\" />
@@ -645,6 +668,7 @@
     <Folder Include="src\ASF\sam\drivers\uart\" />
     <Folder Include="src\ASF\sam\drivers\usart\" />
     <Folder Include="src\ASF\sam\drivers\wdt\" />
+    <Folder Include="src\ASF\sam\drivers\xdmac\" />
     <Folder Include="src\ASF\sam\utils\" />
     <Folder Include="src\ASF\sam\utils\cmsis\" />
     <Folder Include="src\ASF\sam\utils\cmsis\samv71\" />
@@ -670,29 +694,64 @@
     <Folder Include="src\ASF\thirdparty\CMSIS\Include\" />
     <Folder Include="src\ASF\thirdparty\CMSIS\Lib\" />
     <Folder Include="src\ASF\thirdparty\CMSIS\Lib\GCC\" />
-    <Folder Include="src\config\" />
-    <Folder Include="src\endpoints" />
+    <Folder Include="src\freertos\" />
+    <Folder Include="src\freertos\portable\" />
+    <Folder Include="src\freertos\portable\GCC\" />
+    <Folder Include="src\freertos\portable\GCC\ARM_CM7\" />
+    <Folder Include="src\freertos\portable\GCC\ARM_CM7\r0p1\" />
+    <Folder Include="src\freertos\portable\MemMang\" />
+    <Folder Include="src\registers\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="drivers\can_driver.c">
+    <Compile Include="inc\board\obc_controller_rev_A.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="drivers\can_driver.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="drivers\i2c_driver.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="drivers\i2c_driver.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="drivers\spi_driver.h">
+    <Compile Include="inc\bsp.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\can_endpoint.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="inc\can_target.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="inc\config.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\config\conf_board.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\config\conf_clock.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\config\conf_mcan.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\config\conf_spi_master.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\config\conf_twim.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\config\conf_uart_serial.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\drivers\ccd_can_driver.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\drivers\ccd_can_driver.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\drivers\ccd_i2c_driver.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\drivers\ccd_uart_driver.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\drivers\ccd_i2c_driver.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\drivers\ccd_uart_driver.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\endpoints.h">
@@ -701,16 +760,85 @@
     <Compile Include="inc\event.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\gen2.h">
+    <Compile Include="inc\extra_maths.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\hdrtx.h">
+    <Compile Include="inc\FreeRTOSConfig.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\hdrtx_dfa.h">
+    <Compile Include="inc\freertos\atomic.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\i2c_endpoint.h">
+    <Compile Include="inc\freertos\croutine.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\freertos\deprecated_definitions.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\freertos\event_groups.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\freertos\FreeRTOS.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\freertos\list.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\freertos\message_buffer.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\freertos\mpu_prototypes.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\freertos\mpu_syscall_numbers.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\freertos\mpu_wrappers.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\freertos\newlib-freertos.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\freertos\picolibc-freertos.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\freertos\portable.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\freertos\projdefs.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\freertos\queue.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\freertos\semphr.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\freertos\StackMacros.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\freertos\stack_macros.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\freertos\stream_buffer.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\freertos\task.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\freertos\timers.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\gse_manager.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\i2c_target.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\led_driver.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\local_target.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\ltc2499.h">
@@ -719,51 +847,123 @@
     <Compile Include="inc\ltc2992.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="inc\ltc2992_conf.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="inc\Multitester.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\OBC.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\pc_messages.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\register_handler.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\semphr.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\serial_multiplexer.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\serial_multiplexer_conf.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\Sermux_v2.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\spi_endpoint.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\spi_manager.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\std_message.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\tmr.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\usart_buffer.h">
+    <Compile Include="inc\sermux_v3.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\version.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\xdc.h">
+    <None Include="src\asf.h">
+      <SubType>compile</SubType>
+    </None>
+    <Compile Include="src\ASF\sam\drivers\xdmac\xdmac.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\xsteer.h">
+    <None Include="src\ASF\sam\drivers\xdmac\xdmac.h">
+      <SubType>compile</SubType>
+    </None>
+    <Compile Include="src\bsp.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\xtx.h">
+    <Compile Include="src\can_target.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\extra_maths.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\freertos\croutine.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\freertos\event_groups.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\freertos\list.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\freertos\portable\GCC\ARM_CM7\r0p1\port.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\freertos\portable\GCC\ARM_CM7\r0p1\portmacro.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\freertos\portable\MemMang\heap_4.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\freertos\queue.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\freertos\stream_buffer.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\freertos\tasks.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\freertos\timers.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\gse_manager.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\event.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\File.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\i2c_target.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\led_driver.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\local_target.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\multitester.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\sermux_v3.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\ltc2499.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\ltc2992.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\pc104.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\pc_messages.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\registers\OBC.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\register_handler.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <None Include="inc\freertos\CMakeLists.txt">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="inc\freertos\stdint.readme">
+      <SubType>compile</SubType>
+    </None>
     <None Include="src\ASF\common\services\twi\sam_twihs\twihs_master.h">
       <SubType>compile</SubType>
     </None>
@@ -776,12 +976,6 @@
     <None Include="src\ASF\common\services\twi\twihs_slave.h">
       <SubType>compile</SubType>
     </None>
-    <Compile Include="registers\OBC.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="registers\OBC.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="src\ASF\sam\drivers\rtc\rtc.c">
       <SubType>compile</SubType>
     </Compile>
@@ -792,51 +986,6 @@
       <SubType>compile</SubType>
     </Compile>
     <None Include="src\ASF\sam\drivers\tc\tc.h">
-      <SubType>compile</SubType>
-    </None>
-    <Compile Include="src\can_endpoint.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\event.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\File.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\gen2.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\hdrtx.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\hdrtx_dfa.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\ltc2499.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\Multitester.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\register_handler.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\Sermux_v2.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\tmr.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\xdc.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\xsteer.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\xtx.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <None Include="src\asf.h">
       <SubType>compile</SubType>
     </None>
     <Compile Include="src\ASF\common\services\spi\sam_spi\spi_master.c">
@@ -869,9 +1018,6 @@
     <None Include="src\ASF\sam\drivers\spi\spi.h">
       <SubType>compile</SubType>
     </None>
-    <None Include="src\config\conf_spi_master.h">
-      <SubType>compile</SubType>
-    </None>
     <Compile Include="src\ASF\sam\drivers\twihs\twihs.c">
       <SubType>compile</SubType>
     </Compile>
@@ -884,36 +1030,6 @@
     <None Include="src\ASF\sam\drivers\wdt\wdt.h">
       <SubType>compile</SubType>
     </None>
-    <Compile Include="src\config.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\config\conf_clock.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <None Include="src\config\conf_mcan.h">
-      <SubType>compile</SubType>
-    </None>
-    <Compile Include="src\config\conf_twim.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\i2c_endpoint.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\ltc2992.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\serial_multiplexer.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\spi_endpoint.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\spi_manager.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\usart_buffer.c">
-      <SubType>compile</SubType>
-    </Compile>
     <None Include="src\ASF\common\services\ioport\ioport.h">
       <SubType>compile</SubType>
     </None>
@@ -923,12 +1039,6 @@
     <None Include="src\ASF\common\services\delay\delay.h">
       <SubType>compile</SubType>
     </None>
-    <Compile Include="board\obc_controller_rev_A.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\bsp.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="src\ASF\asf.h">
       <SubType>compile</SubType>
     </Compile>
@@ -942,9 +1052,6 @@
       <SubType>compile</SubType>
     </Compile>
     <None Include="src\ASF\sam\drivers\usart\usart.h">
-      <SubType>compile</SubType>
-    </None>
-    <None Include="src\config\conf_uart_serial.h">
       <SubType>compile</SubType>
     </None>
     <None Include="src\ASF\common\services\serial\serial.h">
@@ -1098,9 +1205,6 @@
       <SubType>compile</SubType>
     </None>
     <None Include="src\ASF\thirdparty\CMSIS\README.txt">
-      <SubType>compile</SubType>
-    </None>
-    <None Include="src\config\conf_board.h">
       <SubType>compile</SubType>
     </None>
     <None Include="src\ASF\sam\utils\fpu\fpu.h">
@@ -1502,12 +1606,15 @@
     <Compile Include="src\ASF\sam\utils\syscalls\gcc\syscalls.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\bsp.c">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="src\main.c">
       <SubType>compile</SubType>
     </Compile>
+    <None Include="src\freertos\CMakeLists.txt">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="src\freertos\portable\GCC\ARM_CM7\ReadMe.txt">
+      <SubType>compile</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>

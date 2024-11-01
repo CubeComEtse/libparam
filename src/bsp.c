@@ -8,20 +8,16 @@
 #include <asf.h>
 
 #include "bsp.h"
-#include "can_driver.h"
+
 #include "genclk.h"
-#include "i2c_driver.h"
 #include "ioport.h"
 #include "obc_controller_rev_A.h"
 #include "spi.h"
-#include "usart_buffer.h"
-#include "i2c_endpoint.h"
 
 // All interrupt mask.
 #define ALL_INTERRUPT_MASK  0xffffffff
 
 // Local functions
-void BSP_vInitTelemetryUart(void);
 void BSP_vInitSPI(void);
 void BSP_vInitBoardI2C(void);
 void BSP_vInitPowerSenseGPIO(void);
@@ -29,34 +25,70 @@ void BSP_vInitPowerGPIO(void);
 void BSP_vInitCan(void);
 void BSP_vInit1MsTimer(void);
 
+
+
+
 // Local variables
-static USART_data_t telemetryUsart;
 static struct spi_device sSpiDevice;
 static struct mcan_module sCanModule;
 static volatile uint32_t fifo_receive_index = 0;
 
-static struct i2c_driver_data board_i2c_driver;
 
-void BSP_vInit(void) {
+// Post cleanup
+static ccd_uart_t telemetry_uart;
+static ccd_i2c_t  bus_i2c;
 
-    ioport_init();
-    delay_init(sysclk_get_cpu_hz());
+void BSP_Init(bsp_t * bsp) {
 
-    BSP_vInitTelemetryUart();
+	// System Initialization
+	sysclk_init();    
+	
+	wdt_disable(WDT);
+	
+	// General GPIO is handled here - not in a driver
+	ioport_init();
+
+	//Telemetry UART
+	ioport_set_pin_mode(T_USART_RX_PIN, IOPORT_MODE_MUX_B);
+	ioport_disable_pin(T_USART_RX_PIN);
+
+	ioport_set_pin_mode(T_USART_TX_PIN, IOPORT_MODE_MUX_B);
+	ioport_disable_pin(T_USART_TX_PIN);
+
+	ioport_enable_pin(T_USART_RTS_PIN);
+	ioport_set_pin_dir(T_USART_RTS_PIN, IOPORT_DIR_INPUT);
+	ioport_enable_pin(T_USART_CTS_PIN);
+	ioport_set_pin_dir(T_USART_CTS_PIN, IOPORT_DIR_OUTPUT);
+	telemetry_uart.cts_pin = T_USART_CTS_PIN;
+	ccd_uart_Init(&telemetry_uart, T_USART, T_USART_SPEED);
+	bsp->telemetry_uart = &telemetry_uart;
+
+	// Board I2C
+	ioport_set_pin_mode(I2C_BOARD_SDA_PIN, I2C_BOARD_SDA_MUX);
+	ioport_disable_pin(I2C_BOARD_SDA_PIN);
+
+	ioport_set_pin_mode(I2C_BOARD_SCL_PIN, I2C_BOARD_SCL_MUX);
+	ioport_disable_pin(I2C_BOARD_SCL_PIN);
+	ccd_i2c_driver_Init(&bus_i2c, I2C_BOARD_DEVICE);
+	bsp->bus_i2c = &bus_i2c;
+	bsp->local_i2c = &bus_i2c;
+
+
+
+	
+
     BSP_vInitSPI();
-    BSP_vInitBoardI2C();
     BSP_vInitPowerSenseGPIO();
     BSP_vInitPowerGPIO();
     BSP_vInitCan();
 
-    BSP_vInit1MsTimer();
+    //BSP_vInit1MsTimer();
 
     
     ioport_enable_pin(USB_RESET_PIN);
     ioport_set_pin_level(USB_RESET_PIN, 0);
     ioport_set_pin_dir(USB_RESET_PIN, IOPORT_DIR_OUTPUT);
     
-    BSP_vUsbReset();
     
     ioport_enable_pin(TEST_PIN_0);
     ioport_set_pin_dir(TEST_PIN_0, IOPORT_DIR_OUTPUT);
@@ -73,9 +105,32 @@ void BSP_vInit(void) {
 	ioport_enable_pin(TEST_PIN_3);
 	ioport_set_pin_dir(TEST_PIN_3, IOPORT_DIR_OUTPUT);
 	ioport_set_pin_level(TEST_PIN_3, 0);
+	
+	ioport_enable_pin(PIN_DEBUG_0);
+	ioport_enable_pin(PIN_DEBUG_1);
+	ioport_enable_pin(PIN_DEBUG_2);
+	ioport_enable_pin(PIN_DEBUG_3);
+	
+	ioport_set_pin_level(PIN_DEBUG_0, 0);
+	ioport_set_pin_level(PIN_DEBUG_1, 0);
+	ioport_set_pin_level(PIN_DEBUG_2, 0);
+	ioport_set_pin_level(PIN_DEBUG_3, 0);
 
+	ioport_set_pin_dir(PIN_DEBUG_0, IOPORT_DIR_OUTPUT);
+	ioport_set_pin_dir(PIN_DEBUG_1, IOPORT_DIR_OUTPUT);
+	ioport_set_pin_dir(PIN_DEBUG_2, IOPORT_DIR_OUTPUT);
+	ioport_set_pin_dir(PIN_DEBUG_3, IOPORT_DIR_OUTPUT);
+
+    BSP_vUsbReset();
+	
+	// Make all interrupt prioirty bits preempt bits, rather than sub-prioirty bits.
+	// According to https://www.freertos.org/Documentation/02-Kernel/03-Supported-devices/04-Demos/ARM-Cortex/RTOS-Cortex-M3-M4
+	NVIC_SetPriorityGrouping(4);
     Enable_global_interrupt();
-
+	
+	// Set the systick to the lowest possible interrupt level
+    SysTick_Config(300000);
+	NVIC_SetPriority(SysTick_IRQn, (1<<__NVIC_PRIO_BITS) -1 );
 }
 
 void BSP_vSetTestPin(bool level) {
@@ -117,90 +172,6 @@ struct spi_device* BSP_psGetSpiDriver(void) {
     return &sSpiDevice; 
 }
 
-void BSP_vInitTelemetryUart(void) {
-
-    // Disable the Interrupts while configuring the usart
-    usart_disable_interrupt(TELEMETRY_USART, ALL_INTERRUPT_MASK);
-
-    // Setup pins
-    ioport_set_pin_mode(T_USART_RX_PIN, IOPORT_MODE_MUX_B);
-    ioport_disable_pin(T_USART_RX_PIN);
-
-    ioport_set_pin_mode(T_USART_TX_PIN, IOPORT_MODE_MUX_B);
-    ioport_disable_pin(T_USART_TX_PIN);
-
-    ioport_enable_pin(T_USART_RTS_PIN);
-    ioport_set_pin_dir(T_USART_RTS_PIN, IOPORT_DIR_INPUT);
-    ioport_enable_pin(T_USART_CTS_PIN);
-    ioport_set_pin_dir(T_USART_CTS_PIN, IOPORT_DIR_OUTPUT);
-
-    // Enable Clock to this module
-    sysclk_enable_peripheral_clock(TELEMETRY_ID_USART);
-
-    // Setup for Telemetry USART
-    sam_usart_opt_t sUsartOptions;
-    sUsartOptions.baudrate = TELEMERTY_USART_SPEED;
-    sUsartOptions.char_length = US_MR_CHRL_8_BIT;
-    sUsartOptions.parity_type = US_MR_PAR_NO;
-    sUsartOptions.stop_bits = US_MR_NBSTOP_1_BIT;
-    sUsartOptions.channel_mode = US_MR_CHMODE_NORMAL;
-
-    usart_init_rs232(TELEMETRY_USART, &sUsartOptions, sysclk_get_peripheral_hz());
-
-    usart_enable_tx(TELEMETRY_USART);
-    usart_enable_rx(TELEMETRY_USART);
-
-    USART_BUFFER_vInitialize(&telemetryUsart);
-
-    // Re-enable Interrupts
-    usart_enable_interrupt(TELEMETRY_USART, US_IER_RXRDY | US_IER_TXEMPTY);
-    
-    NVIC_EnableIRQ(TELEMETRY_USART_IRQ);
-
-    BSP_vTelemetrySetCTS(false);
-}
-
-void BSP_vTelemetrySetCTS(bool dir){
-    ioport_set_pin_level(T_USART_CTS_PIN, dir);
-}
-
-
-void BSP_vEnableUartTXInterrupt(void) {
-    usart_enable_interrupt(TELEMETRY_USART, US_IER_TXEMPTY);
-}
-
-USART_data_t* BSP_psGetTelemetryDriver(void) {
-    return &telemetryUsart;
-}
-
-/*
-    Initialize the I2C for on-board communications
-*/
-void BSP_vInitBoardI2C(void) {
-    sysclk_enable_peripheral_clock(I2C_BOARD_DEVICE_ID);
-
-    // Setup pins
-    ioport_set_pin_mode(I2C_BOARD_SDA_PIN, I2C_BOARD_SDA_MUX);
-    ioport_disable_pin(I2C_BOARD_SDA_PIN);
-
-    ioport_set_pin_mode(I2C_BOARD_SCL_PIN, I2C_BOARD_SCL_MUX);
-    ioport_disable_pin(I2C_BOARD_SCL_PIN);
-
-    twihs_options_t i2cOptions;   
-    i2cOptions.chip = 0x26;
-    i2cOptions.smbus = 0;
-    i2cOptions.master_clk = sysclk_get_peripheral_hz();
-    i2cOptions.speed = I2C_BOARD_SPEED;
-    twihs_master_init(I2C_BOARD_DEVICE, &i2cOptions);
-
-    // Create the driver objects used by the I2C driver
-    board_i2c_driver.p_twihs = I2C_BOARD_DEVICE;
-}
-
-struct i2c_driver_data*  BSP_psGetI2cDriver(void) {
-	return &board_i2c_driver;
-}
-
 void BSP_vInitPowerSenseGPIO(void) {
     // LTC2992 1 - U7
     ioport_enable_pin(LTC2992_1_DATARDY_PIN);
@@ -232,26 +203,6 @@ void BSP_vSetPowerEn(power_pin_t pin, uint8_t level) {
 }
 
 
-/*
- * Callback function used by the LTC2992 sensors.
-*/
-void BSP_vPowerSenseWriteFunction(const uint8_t chip_addr, const uint8_t mem_address, const uint8_t* tx_buffer, const uint16_t length) {
-    I2C_DRIVER_bWriteLocal(&board_i2c_driver, chip_addr, mem_address, tx_buffer, length);
-}
-
-void BSP_vPowerSenseReadFunction(const uint8_t chip_addr, const uint8_t mem_address, uint8_t* rx_buffer, uint16_t length) {
-    I2C_DRIVER_bReadLocal(&board_i2c_driver, chip_addr, mem_address, rx_buffer, length);
-}
-
-void BSP_vCurrentSenseReadFunction(const uint8_t chip_addr, const uint8_t * mem_address, const uint8_t mem_address_length, uint8_t* rx_buffer, const uint16_t length) {
-	I2C_DRIVER_bReadCustom(I2C_psGetDriver(), chip_addr, mem_address, mem_address_length, rx_buffer, length);
-}
-
-void BSP_vCurrentSenseWriteFunction(const uint8_t chip_addr, const uint8_t * mem_address, const uint8_t mem_address_length, uint8_t* tx_buffer, const uint16_t length) {
-	I2C_DRIVER_bWriteCustom(I2C_psGetDriver(), chip_addr, mem_address, mem_address_length, tx_buffer, length);
-}
-
-
 void BSP_vUsbReset(void) {
     ioport_set_pin_level(USB_RESET_PIN, 0);
     delay_ms(100);
@@ -270,7 +221,7 @@ void BSP_vInitCan(void) {
     ioport_set_pin_mode(CAN_PIN_RX, CAN_PIN_RX_MUX);
 
     // Enable clock to CAN module
-    // Peripheral clock controlls register set/get, etc.
+    // Peripheral clock controls register set/get, etc.
     sysclk_enable_peripheral_clock(CAN_DEVICE_ID);
 
     // Enable and configure CAN module
@@ -396,34 +347,7 @@ void MCAN0_INT1_Handler(void){
 };
 
 
-void TELEMETRY_USART_HANDLER(void)
-{
-    uint32_t dw_status = usart_get_status(TELEMETRY_USART);
 
-    // A Value is received
-    if (dw_status & US_CSR_RXRDY) {
-        uint32_t received_byte;
-
-        usart_read(TELEMETRY_USART, &received_byte);
-        
-        if (!USART_BUFFER_Receive(&telemetryUsart, (uint8_t) received_byte)) {
-            // Set CTS here, if buffer is full
-            BSP_vTelemetrySetCTS(true);
-        }
-    }
-
-    // TX Buffer and shift register empty
-    if (dw_status & US_CSR_TXEMPTY) {
-        uint8_t nextByte = 0;
-        if (USART_BUFFER_Transmit(&telemetryUsart, &nextByte)) {
-            // If true there is a value loaded
-            usart_write(TELEMETRY_USART, nextByte);
-        } else {
-            // Disable the interrupt, re-enable later
-            usart_disable_interrupt(TELEMETRY_USART, US_IER_TXEMPTY);
-        }
-    }
-}
 
 void BSP_vInit1MsTimer(void) {
 
@@ -464,4 +388,9 @@ uint16_t BSP_u16TmrGetTick(void){
 
 uint64_t BSP_u64GetTimestamp(void){
     return msTimeCounter;
+}
+
+
+void USART2_Handler(void){
+	ccd_uart_InterruptHandler(&telemetry_uart);
 }

@@ -10,13 +10,14 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <stddef.h>
 
-
-struct ltc2992_device {
+typedef struct{
     uint8_t i2c_bus_addres;
-    void (*i2c_write_function)(const uint8_t chip_addr, const uint8_t mem_address, const uint8_t* tx_buffer, const uint16_t length);
-    void (*i2c_read_function)(const uint8_t chip_addr, const uint8_t mem_address, uint8_t* rx_buffer, uint16_t length);
-};
+    bool (*i2c_write_function)(void * handle, const uint8_t dev_addr, const uint8_t * data, const size_t data_len);
+    bool (*i2c_read_function)(void * handle, const uint8_t dev_addr, const uint8_t * addr, const size_t addr_len, uint8_t * read_buffer, size_t read_len);
+    void * i2c_handle;
+}ltc2992_device_t;
 
 /**
  * \brief Setup the device normally, storing values in the provided struct.
@@ -26,7 +27,7 @@ struct ltc2992_device {
  * 
  * \return void
  */
-void LTC2992_vNormalSetup(struct ltc2992_device* dev, uint8_t bus_address);
+void LTC2992_vNormalSetup(ltc2992_device_t * dev, uint8_t bus_address);
 
 /**
  * \brief Generate the bus address, given the pin configurations
@@ -38,12 +39,12 @@ void LTC2992_vNormalSetup(struct ltc2992_device* dev, uint8_t bus_address);
  */
 uint8_t LTC2992_u8GenAddr(uint8_t adr0, uint8_t adr1);
 
-uint8_t LTC2992_vGetRegister(struct ltc2992_device* dev, uint8_t register_address);
-void LTC2992_vSetRegister(struct ltc2992_device* dev, uint8_t register_address, uint8_t flags);
+uint8_t LTC2992_vGetRegister(ltc2992_device_t * dev, uint8_t register_address);
+void LTC2992_vSetRegister(ltc2992_device_t * dev, uint8_t register_address, uint8_t flags);
 
-void LTC2992_vReadPower(struct ltc2992_device* dev, uint32_t* power_1, uint32_t* power_2);
-void LTC2992_vReadVoltage(struct ltc2992_device* dev, uint16_t* voltage_1, uint16_t* voltage_2);
-void LTC2992_vReadCurrent(struct ltc2992_device* dev, uint16_t* current_1, uint16_t* current_2);
+void LTC2992_vReadPower(ltc2992_device_t * dev, uint32_t* power_1, uint32_t* power_2);
+void LTC2992_vReadVoltage(ltc2992_device_t * dev, uint16_t* voltage_1, uint16_t* voltage_2);
+void LTC2992_vReadCurrent(ltc2992_device_t * dev, uint16_t* current_1, uint16_t* current_2);
 
 #define LTC2992_CTRLA               0x00
 #define LTC2992_CTRLB               0x01

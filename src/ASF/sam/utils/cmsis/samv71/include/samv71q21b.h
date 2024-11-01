@@ -254,10 +254,12 @@ void HardFault_Handler  ( void );
 void MemManage_Handler  ( void );
 void BusFault_Handler   ( void );
 void UsageFault_Handler ( void );
-void SVC_Handler        ( void );
+// These mods are necessary for FreeRTOS, it declares these functions as naked,
+// So ASF can't declare them here.
+// void SVC_Handler        ( void );
 void DebugMon_Handler   ( void );
-void PendSV_Handler     ( void );
-void SysTick_Handler    ( void );
+//void PendSV_Handler     ( void );
+// void SysTick_Handler    ( void );
 
 /* Peripherals handlers */
 void ACC_Handler        ( void );

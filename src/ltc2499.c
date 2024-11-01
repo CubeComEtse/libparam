@@ -5,26 +5,30 @@
  *  Author: Kolijn
  */ 
 
-#include <stddef.h>
-
 #include "ltc2499.h"
-#include "tmr.h"
-#include "math.h"
+
+#include <assert.h>
+#include <math.h>
+
 #include "OBC.h"
 
-void LTC2499_vInit(ltc2499_device* dev) {
+void LTC2499_vInit(ltc2499_device_t * dev) {
+	assert(dev->i2c_read_function);
+	assert(dev->i2c_write_function);
+	
 	dev->i2c_bus_addres = 0x76;
+	dev->read_or_write = true;
 }
 
-bool read_or_write = true;
-
-void LTC2499_getSample(ltc2499_device *dev){
-
-	if (read_or_write)
+void LTC2499_getSample(ltc2499_device_t *dev)
+{
+	assert(dev);
+	
+	if (dev->read_or_write)
 	{
 		// Send the instruction to read the data
 		uint8_t rx_buffer[4] = {0};
-		dev->i2c_read_function(dev->i2c_bus_addres, NULL, 0, rx_buffer, 4);
+		dev->i2c_read_function(dev->i2c_handle, dev->i2c_bus_addres, NULL, 0, rx_buffer, 4);
 		
 		uint32_t rx_value = ((uint32_t)rx_buffer[0]) << 24 | ((uint32_t)rx_buffer[1]) << 16 | ((uint32_t) rx_buffer[2]) << 8 | (uint32_t)rx_buffer[3];
 		
@@ -97,8 +101,8 @@ void LTC2499_getSample(ltc2499_device *dev){
 		tx_buffer[0] = 0xA0 | dev->channel;
 		// 2nd byte sets frequency rejection and loads a new config.
 		tx_buffer[1] = 0b10010000;
-		dev->i2c_write_function(dev->i2c_bus_addres, NULL, 0, tx_buffer, 1);
+		dev->i2c_write_function(dev->i2c_handle, dev->i2c_bus_addres, tx_buffer, 1);
 	}
-	read_or_write = !read_or_write;
+	dev->read_or_write = !dev->read_or_write;
 	
 }

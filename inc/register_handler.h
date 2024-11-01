@@ -11,18 +11,12 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <stddef.h>
 
-#include "XDC.h"
 #include "OBC.h"
 
 
 void REG_vInit(void);
-
-/*
-Store any incoming messages. We don't want to perform SPI transactions while receiving I2C data,
-So create this buffer between them.
-*/
-void REG_vAddMessage(const uint8_t address, const uint8_t* data);
 
 /*
  * Checks if the provided register address is a valid one. Returns true if it 
@@ -34,12 +28,16 @@ bool REG_CheckAddress(const uint8_t address);
 Gets the register given by address, copies it's data into the data argument
 Returns true if the address is valid, false otherwise.
 */
-bool REG_vGet(const uint32_t address, uint8_t * buff, uint8_t * size);
+bool REG_vReadFromAddress(const uint32_t address, uint8_t * buff, uint8_t * size);
 
 /*
  * Process all the stored messages. This function should be called regularly.
 */
-void REG_vProcessMessages(void);
+void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const size_t length);
+
+
+
+
 
 /*
  * Add a flag to the I2C Status. The status can only be appended to, it is cleared when the user 

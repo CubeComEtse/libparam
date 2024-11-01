@@ -6,10 +6,8 @@
 #include "Multitester.h"
 #include "config.h"
 #include "register_handler.h"
-#include "i2c_endpoint.h"
 
 #include "OBC.h"
-#include "xtx.h"
   
 static uint32_t REG_CopyArrayToU32(const uint8_t* data);
 
@@ -17,22 +15,13 @@ static uint32_t REG_CopyArrayToU32(const uint8_t* data);
  * This module handles the register interface exposed to the outside.
 */
 
-struct register_change_message{
-    uint8_t address;
-    uint8_t data[4];
-};
-uint32_t messages_tail = 0;
-uint32_t messages_head = 0;
-#define messages_max_length 16
-struct register_change_message messages[messages_max_length];
-
-
-
 typedef mm_response_t (*readAddressFunction)(uint32_t * dest);
 typedef struct {
 	mm_register_address_t address;
 	readAddressFunction readFunction;
 } addres_to_func_map_t;
+
+static multitester_t * multitester;
 
 static addres_to_func_map_t address_to_func_map[] = {
 	{ reg_Board_ID_addr, mm_getBoard_ID},
@@ -102,29 +91,19 @@ static addres_to_func_map_t address_to_func_map[] = {
 
 void REG_vInit(){
     // Some values are fixed
+	// Todo: This initialization can only be done when the freertso scheduler is running
+	/*
 	mm_setBoard_ID(0x634F4243);
 	mm_setFW_Version(0x00020203);
 	mm_setHW_Version(0x00000001);
 	
-	mm_setSupported_Boards(reg_boardidentifier_xtx | reg_boardidentifier_xsteer | reg_boardidentifier_xdc | 
-		reg_boardidentifier_hdrtx_dfa | reg_boardidentifier_hdrtx | reg_boardidentifier_gen2);
 	mm_setI2CConfA_SPD(0x5);
 	mm_setI2CConfA_TRDEL(10);
 	mm_setXDCConfig_ADDR(0x52);
 	mm_setConfMulti(0x1111);
+	*/
 }
 
-
-/*
-Store any incoming messages. We don't want to perform SPI transactions while receiving I2C data,
-So create this buffer between them.
-*/
-void REG_vAddMessage(const uint8_t address, const uint8_t* data){
-    messages[messages_head].address = address;
-    memcpy(messages[messages_head].data, data, 4);
-     
-    messages_head = (messages_head +1 ) % messages_max_length;
-}
 
 /*
  * Checks if the provided register address is a valid one. Returns true if it 
@@ -132,7 +111,7 @@ void REG_vAddMessage(const uint8_t address, const uint8_t* data){
 */
 bool REG_CheckAddress(const uint8_t address){
     bool found = false;
-    for (int i = 0; i < (sizeof(address_to_func_map) / sizeof(address_to_func_map[0])); i++) {
+    for (uint32_t i = 0; i < (sizeof(address_to_func_map) / sizeof(address_to_func_map[0])); i++) {
         if(address == address_to_func_map[i].address){
             found = true;
         }
@@ -144,13 +123,13 @@ bool REG_CheckAddress(const uint8_t address){
 Gets the register given by address, copies it's data into the data argument
 Returns true if the address is valid, false otherwise.
 */
-bool REG_vGet(const uint32_t address, uint8_t * buff, uint8_t * size)
+bool REG_vReadFromAddress(const uint32_t address, uint8_t * buff, uint8_t * size)
 {
 	uint32_t destination;
 	bool return_value = false;
 
 	// Loop through the entire array to find the correct function to call
-	for (int i = 0; i < (sizeof(address_to_func_map) / sizeof(address_to_func_map[0])); i++)
+	for (uint32_t i = 0; i < (sizeof(address_to_func_map) / sizeof(address_to_func_map[0])); i++)
 	{
 		if (((uint32_t) address_to_func_map[i].address) == address)
 		{
@@ -159,10 +138,6 @@ bool REG_vGet(const uint32_t address, uint8_t * buff, uint8_t * size)
 			if (read_successful == mm_OK){
 				// Copy into the buffer
 				REG_Copyu32ToArray(destination, buff);
-				// buff[0] = ( destination & 0xFF);
-				// buff[1] = ((destination >> 8 ) & 0xFF);
-				// buff[2] = ((destination >> 16) & 0xFF);
-				// buff[3] = ((destination >> 24) & 0xFF);
 				*size = 4;
 
 				return_value = true;
@@ -226,16 +201,17 @@ bool REG_vGet(const uint32_t address, uint8_t * buff, uint8_t * size)
 		case reg_ConfMulti_addr: 
 		{
 			// Update bits
-			mm_setConfMulti_MEnabled(MULTI_bGetEnabled());
-			mm_setConfMulti_AutoCLR(MULTI_bGetAutoClear());
+			// Todo: This part
+			mm_setConfMulti_MEnabled(MULTI_bGetEnabled(multitester));
+			mm_setConfMulti_AutoCLR(MULTI_bGetAutoClear(multitester));
 			
-			mm_setConfMulti_FanPos1(MULTI_bGetChannelFan(Position1));
-			mm_setConfMulti_FanPos2(MULTI_bGetChannelFan(Position2));
-			mm_setConfMulti_FanPos3(MULTI_bGetChannelFan(Position3));
-			mm_setConfMulti_FanPos4(MULTI_bGetChannelFan(Position4));
+			mm_setConfMulti_FanPos1(MULTI_bGetChannelFan(multitester, Position1));
+			mm_setConfMulti_FanPos2(MULTI_bGetChannelFan(multitester, Position2));
+			mm_setConfMulti_FanPos3(MULTI_bGetChannelFan(multitester, Position3));
+			mm_setConfMulti_FanPos4(MULTI_bGetChannelFan(multitester, Position4));
 			
-			mm_setConfMulti_RfSwENA(MULTI_bGetRfSwitchEnabled());
-			mm_setConfMulti_RfSwChan(MULTI_u8GetRFSwitchChannel());
+			mm_setConfMulti_RfSwENA(MULTI_bGetRfSwitchEnabled(multitester));
+			mm_setConfMulti_RfSwChan(MULTI_u8GetRFSwitchChannel(multitester));
 			
 			
 			uint32_t read_successful = mm_getConfMulti(&destination);
@@ -255,7 +231,8 @@ bool REG_vGet(const uint32_t address, uint8_t * buff, uint8_t * size)
 		case reg_XTXpins_addr: 
 		{
 			// Shouldn't really be here, but fine for now
-			mm_setXTXpins_RDY(XTX_bGetReady());
+			// Todo: Replace
+			// mm_setXTXpins_RDY(XTX_bGetReady());
 
 			uint32_t read_successful = mm_getXTXpins(&destination);
 			if (read_successful == mm_OK){
@@ -296,200 +273,196 @@ static uint32_t REG_CopyArrayToU32(const uint8_t* data){
 /*
  * Process all the stored messages. This function should be called regularly.
 */
-void REG_vProcessMessages(void){
-    // Only allow one message per call
-    if (messages_tail != messages_head)
-    {
-        // First decode the array as a uint32_t
-        uint32_t deserialized = REG_CopyArrayToU32(messages[messages_tail].data);
+void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const size_t length)
+{
+	// First decode the array as a uint32_t
+	uint32_t deserialized = REG_CopyArrayToU32(data);
         
-        // Do something based on the message
-        switch (messages[messages_tail].address)
-        {
-            // Read-only registers. Can't write to them
-            case reg_Board_ID_addr:
-            case reg_FW_Version_addr:
-            case reg_HW_Version_addr:
-            case reg_Supported_Boards_addr:
-            case reg_Uptime_addr:
-            case reg_MeasureVI_V3_addr:
-            case reg_MeasurePower_V3_addr:
-            case reg_MeasureVI_V5_addr:
-            case reg_MeasurePower_V5_addr:
-            case reg_MeasureVI_VBat_addr:
-            case reg_MeasurePower_VBat_addr:
-            case reg_MeasureVI_VBatAlt_addr:
-            case reg_MeasurePower_VBatAlt_addr:
-            case reg_CSBoard_T0_addr:
-            case reg_CSBoard_T1_addr:
-            case reg_CSBoard_T2_addr:
-            case reg_CSBoard_T3_addr:
-            case reg_CSBoard_T4_addr:
-            case reg_CSBoard_T5_addr:
-            case reg_CSBoard_T6_addr:
-            case reg_CSBoard_T7_addr:
-            case reg_CSBoard_Current0I0_addr:
-            case reg_CSBoard_Current0I1_addr:
-            case reg_CSBoard_Current0I2_addr:
-            case reg_CSBoard_Current1I0_addr:
-            case reg_CSBoard_Current1I1_addr:
-            case reg_CSBoard_Current1I2_addr:
-            case reg_CSBoard_Current2I0_addr:
-            case reg_CSBoard_Current2I1_addr:
-            case reg_CSBoard_Current2I2_addr:
-            case reg_CSBoard_Current3I0_addr:
-            case reg_CSBoard_Current3I1_addr:
-            case reg_CSBoard_Current3I2_addr:
-            case reg_CSBoard_Current4I0_addr:
-            case reg_CSBoard_Current4I1_addr:
-            case reg_CSBoard_Current4I2_addr:
-            case reg_CSBoard_Current5I0_addr:
-            case reg_CSBoard_Current5I1_addr:
-            case reg_CSBoard_Current5I2_addr:
-            case reg_CSBoard_Current6I0_addr:
-            case reg_CSBoard_Current6I1_addr:
-            case reg_CSBoard_Current6I2_addr:
-            case reg_CSBoard_Current7I0_addr:
-            case reg_CSBoard_Current7I1_addr:
-            case reg_CSBoard_Current7I2_addr:
-				break;
-
-            case reg_Scratchpad_addr:
-				mm_setScratchpad(deserialized);
-                break;
-
-            case reg_Configured_Boards_addr:
-				mm_setConfigured_Boards(deserialized);
-                CONFIG_vDecodeBoardSet(0, (uint8_t) deserialized);
-                break;
-
-            case reg_ConfPower_addr:
-				mm_setConfPower(deserialized);
-                CONFIG_vDecodePower((uint8_t) deserialized);
-                break;
-				
-            case reg_I2CConfA_addr:
-			{
-                // Set the module speed here. The other values in the register are read when they are needed
-				uint8_t spd = 0;
-				mm_getI2CConfA_SPDFrom(&spd, deserialized);
-				
-                I2C_SetEndpointSpeed( (uint32_t) (spd) * 10000);
-                mm_setI2CConfA(deserialized);
-			}
-                break;
-				
-            case reg_I2CConfB_addr:
-			{
-				uint8_t address = 0;
-				mm_getI2CConfB_ADDRFrom(&address, deserialized);
-                I2C_SetEndpointAddress(address);
-				mm_setI2CConfB(deserialized);
-			}
-                break;
-				
-			case reg_ConfMulti_addr:
-			{
-				mm_enabled_t multiEnabled = reg_enabled_disabled;
-				mm_enabled_t autoClear = reg_enabled_disabled;
-				mm_getConfMulti_MEnabledFrom(&multiEnabled, deserialized);
-				mm_getConfMulti_AutoCLRFrom(&autoClear, deserialized);
-				
-				MULTI_vSetEnabled(multiEnabled==reg_enabled_enabled);
-				MULTI_vSetAutoClear(autoClear==reg_enabled_enabled);
-				
-				mm_enabled_t fanEnabled;
-				mm_getConfMulti_FanPos1From(&fanEnabled, deserialized);
-				MULTI_vSetChannelFan(Position1, fanEnabled == reg_enabled_enabled);
-				
-				mm_getConfMulti_FanPos2From(&fanEnabled, deserialized);
-				MULTI_vSetChannelFan(Position2, fanEnabled == reg_enabled_enabled);
-				
-				mm_getConfMulti_FanPos3From(&fanEnabled, deserialized);
-				MULTI_vSetChannelFan(Position3, fanEnabled == reg_enabled_enabled);
-				
-				mm_getConfMulti_FanPos4From(&fanEnabled, deserialized);
-				MULTI_vSetChannelFan(Position4, fanEnabled == reg_enabled_enabled);
-				
-				mm_enabled_t RfSwEna;
-				mm_getConfMulti_RfSwENAFrom(&RfSwEna, deserialized);
-				MULTI_vSetRfSwitchEnabled(RfSwEna == reg_enabled_enabled);
-				
-				uint8_t RfSwChan;
-				mm_getConfMulti_RfSwChanFrom(&RfSwChan, deserialized);
-				MULTI_vSetRFSwitchChannel(RfSwChan);
-				
-				mm_setConfMulti(deserialized);
-			}
-				break;
-				
-            case reg_XTXpins_addr: 
-				mm_setXTXpins(deserialized);
-				
-				mm_enabled_t val;
-				mm_getXTXpins_ENAFrom(&val, deserialized);
-                XTX_vSetEnable(val == reg_enabled_enabled);
-				
-                mm_getXTXpins_nRSTFrom(&val, deserialized);
-                XTX_SetNReset(val == reg_enabled_enabled);
-                break;
-				
-			case reg_XTXMultitester_addr: 
-				mm_setXTXMultitester(deserialized);
-				
-				mm_enabled_t dest;
-				mm_getXTXMultitester_POS1_XTX_EN(&dest);
-				MULTI_vSetChannelEnabled(Position1, dest);
-				
-				mm_getXTXMultitester_POS2_XTX_EN(&dest);
-				MULTI_vSetChannelEnabled(Position2, dest);
-				
-				mm_getXTXMultitester_POS3_XTX_EN(&dest);
-				MULTI_vSetChannelEnabled(Position3, dest);
-				
-				mm_getXTXMultitester_POS4_XTX_EN(&dest);
-				MULTI_vSetChannelEnabled(Position4, dest);
-				
-				
-				mm_getXTXMultitester_POS1_XTX_nReset(&dest);
-				MULTI_vSetChannelnReset(Position1, dest);
-				
-				mm_getXTXMultitester_POS2_XTX_nReset(&dest);
-				MULTI_vSetChannelnReset(Position2, dest);
-				
-				mm_getXTXMultitester_POS3_XTX_nReset(&dest);
-				MULTI_vSetChannelnReset(Position3, dest);
-				
-				mm_getXTXMultitester_POS4_XTX_nReset(&dest);
-				MULTI_vSetChannelnReset(Position4, dest);
-				
-				// Set all the pins in one shot
-				MULTI_vSetChannelPowerPins(deserialized);
-				
-				mm_setXTXMultitester(MULTI_u32GetPins());
-				
-				break;
-            case reg_XDCConfig_addr: 
-                mm_setXDCConfig(deserialized);
-                // If already configured, configure again
-                if (CONFIG_GetCurrentBoardconfig() == CONF_BOARD_XDC){
-                    XDC_vConfig();
-                }
-                break;
-			case reg_ConfTempSense_addr:
-			{
-				mm_enabled_t cs_enabled = reg_enabled_disabled;
-				mm_getConfTempSense_EnableMeasurementsFrom(&cs_enabled, deserialized);
-				CONFIG_SetCurrentSenseBoardEnabled(cs_enabled == reg_enabled_enabled);
-				
-				mm_setConfTempSense(deserialized);
-			}
+	// Do something based on the message
+	switch (address)
+	{
+		// Read-only registers. Can't write to them
+		case reg_Board_ID_addr:
+		case reg_FW_Version_addr:
+		case reg_HW_Version_addr:
+		case reg_Supported_Boards_addr:
+		case reg_Uptime_addr:
+		case reg_MeasureVI_V3_addr:
+		case reg_MeasurePower_V3_addr:
+		case reg_MeasureVI_V5_addr:
+		case reg_MeasurePower_V5_addr:
+		case reg_MeasureVI_VBat_addr:
+		case reg_MeasurePower_VBat_addr:
+		case reg_MeasureVI_VBatAlt_addr:
+		case reg_MeasurePower_VBatAlt_addr:
+		case reg_CSBoard_T0_addr:
+		case reg_CSBoard_T1_addr:
+		case reg_CSBoard_T2_addr:
+		case reg_CSBoard_T3_addr:
+		case reg_CSBoard_T4_addr:
+		case reg_CSBoard_T5_addr:
+		case reg_CSBoard_T6_addr:
+		case reg_CSBoard_T7_addr:
+		case reg_CSBoard_Current0I0_addr:
+		case reg_CSBoard_Current0I1_addr:
+		case reg_CSBoard_Current0I2_addr:
+		case reg_CSBoard_Current1I0_addr:
+		case reg_CSBoard_Current1I1_addr:
+		case reg_CSBoard_Current1I2_addr:
+		case reg_CSBoard_Current2I0_addr:
+		case reg_CSBoard_Current2I1_addr:
+		case reg_CSBoard_Current2I2_addr:
+		case reg_CSBoard_Current3I0_addr:
+		case reg_CSBoard_Current3I1_addr:
+		case reg_CSBoard_Current3I2_addr:
+		case reg_CSBoard_Current4I0_addr:
+		case reg_CSBoard_Current4I1_addr:
+		case reg_CSBoard_Current4I2_addr:
+		case reg_CSBoard_Current5I0_addr:
+		case reg_CSBoard_Current5I1_addr:
+		case reg_CSBoard_Current5I2_addr:
+		case reg_CSBoard_Current6I0_addr:
+		case reg_CSBoard_Current6I1_addr:
+		case reg_CSBoard_Current6I2_addr:
+		case reg_CSBoard_Current7I0_addr:
+		case reg_CSBoard_Current7I1_addr:
+		case reg_CSBoard_Current7I2_addr:
 			break;
-        }        
 
-        // The message has been handled
-        messages_tail = (messages_tail + 1 ) % messages_max_length;
-    }
+		case reg_Scratchpad_addr:
+			mm_setScratchpad(deserialized);
+			break;
+
+		case reg_Configured_Boards_addr:
+			mm_setConfigured_Boards(deserialized);
+			//CONFIG_vDecodeBoardSet(0, (uint8_t) deserialized);
+			break;
+
+		case reg_ConfPower_addr:
+			mm_setConfPower(deserialized);
+			//CONFIG_vDecodePower((uint8_t) deserialized);
+			break;
+				
+		case reg_I2CConfA_addr:
+		{
+			// Set the module speed here. The other values in the register are read when they are needed
+			uint8_t spd = 0;
+			mm_getI2CConfA_SPDFrom(&spd, deserialized);
+				
+			// Todo:
+			//I2C_SetEndpointSpeed( (uint32_t) (spd) * 10000);
+			mm_setI2CConfA(deserialized);
+		}
+			break;
+				
+		case reg_I2CConfB_addr:
+		{
+			uint8_t i2c_address = 0;
+			mm_getI2CConfB_ADDRFrom(&i2c_address, deserialized);
+			// Todo:
+			//I2C_SetEndpointAddress(i2c_address);
+			mm_setI2CConfB(deserialized);
+		}
+			break;
+				
+		case reg_ConfMulti_addr:
+		{
+			//Todo: All of this
+			mm_enabled_t multiEnabled = reg_enabled_disabled;
+			mm_enabled_t autoClear = reg_enabled_disabled;
+			mm_getConfMulti_MEnabledFrom(&multiEnabled, deserialized);
+			mm_getConfMulti_AutoCLRFrom(&autoClear, deserialized);
+				
+			MULTI_vSetEnabled(multitester, multiEnabled==reg_enabled_enabled);
+			MULTI_vSetAutoClear(multitester, autoClear==reg_enabled_enabled);
+				
+			mm_enabled_t fanEnabled;
+			mm_getConfMulti_FanPos1From( &fanEnabled, deserialized);
+			MULTI_vSetChannelFan(multitester, Position1, fanEnabled == reg_enabled_enabled);
+				
+			mm_getConfMulti_FanPos2From(&fanEnabled, deserialized);
+			MULTI_vSetChannelFan(multitester, Position2, fanEnabled == reg_enabled_enabled);
+				
+			mm_getConfMulti_FanPos3From( &fanEnabled, deserialized);
+			MULTI_vSetChannelFan(multitester, Position3, fanEnabled == reg_enabled_enabled);
+				
+			mm_getConfMulti_FanPos4From( &fanEnabled, deserialized);
+			MULTI_vSetChannelFan(multitester, Position4, fanEnabled == reg_enabled_enabled);
+				
+			mm_enabled_t RfSwEna;
+			mm_getConfMulti_RfSwENAFrom( &RfSwEna, deserialized);
+			MULTI_vSetRfSwitchEnabled(multitester, RfSwEna == reg_enabled_enabled);
+				
+			uint8_t RfSwChan;
+			mm_getConfMulti_RfSwChanFrom(&RfSwChan, deserialized);
+			MULTI_vSetRFSwitchChannel(multitester, RfSwChan);
+				
+			mm_setConfMulti(deserialized);
+		}
+			break;
+				
+		case reg_XTXpins_addr: 
+			mm_setXTXpins(deserialized);
+				
+			mm_enabled_t val;
+			mm_getXTXpins_ENAFrom(&val, deserialized);
+			//Todo: Both of these
+			// XTX_vSetEnable(val == reg_enabled_enabled);
+				
+			mm_getXTXpins_nRSTFrom(&val, deserialized);
+			// XTX_SetNReset(val == reg_enabled_enabled);
+			break;
+				
+		case reg_XTXMultitester_addr: 
+			mm_setXTXMultitester(deserialized);
+				
+			mm_enabled_t dest;
+			mm_getXTXMultitester_POS1_XTX_EN(&dest);
+			MULTI_vSetChannelEnabled(multitester, Position1, dest);
+				
+			mm_getXTXMultitester_POS2_XTX_EN(&dest);
+			MULTI_vSetChannelEnabled(multitester, Position2, dest);
+				
+			mm_getXTXMultitester_POS3_XTX_EN(&dest);
+			MULTI_vSetChannelEnabled(multitester, Position3, dest);
+				
+			mm_getXTXMultitester_POS4_XTX_EN(&dest);
+			MULTI_vSetChannelEnabled(multitester, Position4, dest);
+				
+				
+			mm_getXTXMultitester_POS1_XTX_nReset(&dest);
+			MULTI_vSetChannelnReset(multitester, Position1, dest);
+				
+			mm_getXTXMultitester_POS2_XTX_nReset(&dest);
+			MULTI_vSetChannelnReset(multitester, Position2, dest);
+				
+			mm_getXTXMultitester_POS3_XTX_nReset(&dest);
+			MULTI_vSetChannelnReset(multitester, Position3, dest);
+				
+			mm_getXTXMultitester_POS4_XTX_nReset(&dest);
+			MULTI_vSetChannelnReset(multitester, Position4, dest);
+				
+			// Set all the pins in one shot
+			MULTI_vSetChannelPowerPins(multitester, deserialized);
+				
+			mm_setXTXMultitester(MULTI_u32GetPins(multitester));
+				
+			break;
+		case reg_XDCConfig_addr: 
+			mm_setXDCConfig(deserialized);
+			// If already configured, configure again
+			// Todo: This register can dissapear
+			break;
+		case reg_ConfTempSense_addr:
+		{
+			mm_enabled_t cs_enabled = reg_enabled_disabled;
+			mm_getConfTempSense_EnableMeasurementsFrom(&cs_enabled, deserialized);
+			// CONFIG_SetCurrentSenseBoardEnabled(cs_enabled == reg_enabled_enabled);
+				
+			mm_setConfTempSense(deserialized);
+		}
+		break;
+	}        
 }
 
 
@@ -509,7 +482,8 @@ inline uint8_t REG_GetI2CSpeed(void){
 void REG_SetI2CSpeed(uint32_t newSpeed)
 {
 	mm_setI2CConfA_SPD(newSpeed / 10000);
-    I2C_SetEndpointSpeed(newSpeed);
+	// Todo:
+    //I2C_SetEndpointSpeed(newSpeed);
 }
 
 /*
@@ -529,5 +503,6 @@ inline uint32_t REG_GetI2CAddress(void)
 void REG_vSetI2CAddress(uint8_t address)
 {
 	mm_setI2CConfB_ADDR(address);
-    I2C_SetEndpointAddress(address);
+	//Todo
+    //I2C_SetEndpointAddress(address);
 }

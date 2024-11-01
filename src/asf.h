@@ -124,4 +124,9 @@
 // From module: WDT - Watchdog Timer
 #include <wdt.h>
 
+// From module: XDMAC - XDMA Controller
+#include <xdmac.h>
+
+#include <pwm.h>
+
 #endif // ASF_H

@@ -1,0 +1,105 @@
+/*
+ * This is the CAN Target. All messages that should be sent over CAN are 
+ * received and processed here.
+ * 
+ * This instance has a message buffer which receives messages. A FreeRTOS 
+ * task checks this buffer and sends messages if required. This instance
+ * requires function pointers to CAN to send messages.
+ *
+ */ 
+
+#include "can_target.h"
+
+#include "assert.h"
+
+#include "pc_messages.h"
+
+
+#define CAN_TELECOMMAND_REQUEST 0x01
+#define CAN_TELEMETRY_REQUEST 0x04
+
+/*
+ * Initialize the instance. 
+ *
+ * Before calling this function the following should be set
+*/
+void CANTARGET_Init(can_target_t * handle)
+{
+	assert(handle->can_send);
+	// Do not assert the handle, it might be void.
+	
+	// This buffer size is an initial guess. Feel free to update it later.
+	handle->incoming_messages = xMessageBufferCreate(256);
+	handle->outgoing_messages = xMessageBufferCreate(256);
+	
+}
+
+void CANTARGET_Task(void * handle)
+{
+	assert(handle);
+	can_target_t * hnd = (can_target_t *) handle;
+	
+	uint8_t rx_buffer[32];
+	v2_msg_t in_message;
+	
+	bool decode_successfull;
+	
+	while(1){
+		// Wait indefinitely to receive a message 
+		size_t rx_length = xMessageBufferReceive(hnd->incoming_messages, rx_buffer, 16, portMAX_DELAY);
+		
+		if (rx_length == 0){
+			continue;
+		}
+		
+		decode_successfull = decode_v2_message(&in_message, rx_buffer, rx_length);
+		
+		if (!decode_successfull){
+			continue;
+		}
+		
+		
+		// There is a little disconnect here: The CAN driver is only configured
+		// to send messages in a certain mode, since it needs to setup its
+		// filters. The Target can receive messages for any target and still send
+		// them.
+		
+		if (in_message.target == EP_V2_CAN_CC)
+		{
+			uint32_t can_header = 0;
+			can_header |= hnd->our_can_address << 8;
+			can_header |= in_message.data[0];
+			if (in_message.is_read)
+			{
+				can_header |= CAN_TELEMETRY_REQUEST << 24;
+			}
+			else
+			{
+				can_header |= CAN_TELECOMMAND_REQUEST << 24;
+			}
+		}
+		if (in_message.target == EP_V2_CAN_CC_2)
+		{
+			// In this message format the destination CAN address was set in a separate register
+			// 0 - MsgType
+			// 1 - Length
+			// 2 - Data (containing register address)
+			uint32_t can_header = ((in_message.data[0] << 24) | (in_message.msg_id << 16) | (hnd->our_can_address << 8) | (hnd->radio_can_address << 0));
+
+			hnd->can_send(hnd->can_handle, can_header, &in_message.data[2], in_message.data[1]);
+		}
+		if (in_message.target == EP_V2_CAN_CC_3)
+		{
+			// new CAN messages don't use the read bit, the message type that is set in the 
+			// header determines what the message does
+			
+			// 0 - CAN Address
+			// 1 - MsgType (for header)
+			// 2 - Length
+			// 3 - Data. Data can contain the address
+			
+			uint32_t can_header = ((in_message.data[1] << 24) | (in_message.msg_id << 16) | (hnd->our_can_address << 8) | (in_message.data[0] << 0));
+			hnd->can_send(hnd->can_handle, can_header, &in_message.data[3], in_message.data[2]);
+		}
+	}
+}

@@ -35,7 +35,6 @@
  */
 
 #include "twihs.h"
-#include "tmr.h"
 #include "bsp.h"
 
 /// @cond 0
@@ -515,7 +514,13 @@ uint32_t twihs_master_write(Twihs *p_twihs, twihs_packet_t *p_packet)
 
 
     //Kolijn Mods
-    // while (1) {
+    // while (1) { This was commented out
+		
+		
+		
+	// Todo:
+	// This part used to run on a timer, but Tmr was removed. So fix somehow?
+	/*
     tmr_t i2c_timeout = {0};
     TMR_vInit(&i2c_timeout, BSP_u16TmrGetTick, 1);
     TMR_vStart(&i2c_timeout, 100);
@@ -528,7 +533,7 @@ uint32_t twihs_master_write(Twihs *p_twihs, twihs_packet_t *p_packet)
 		if (status & TWIHS_SR_TXRDY) {
 			break;
 		}
-	}
+	}*/
 
 	p_twihs->TWIHS_CR = TWIHS_CR_STOP;
 

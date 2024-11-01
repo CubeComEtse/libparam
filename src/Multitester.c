@@ -9,10 +9,6 @@
 
 #include "event.h"
 #include "bsp.h"
-#include "i2c_driver.h"
-#include "i2c_endpoint.h"
-
-
 
 // The I2C Expander has two ports, with 8 outputs each. Outputs 0-3 are for Position1, 4-7
 // are the same but for port2. The pins are repeated in the same order, so we can use an offset
@@ -33,11 +29,11 @@
 #define PCA9555_ADDR		  0b0100000
 #define PCA9555_RFSWITCH_ADDR 0b0100001
 
-static void MULTI_vSetPIN(channel_id_t channel, uint16_t pin_mask, bool ena);
-static bool MULTI_bGetPIN(channel_id_t channel, uint16_t pin_mask);
-static bool MULTI_bInitRFSwitch(void);
-static void MULTI_vDeinitRFSwitch(void);
-static bool MULTI_vSetRfSwitchChannel(uint8_t channel);
+static void MULTI_vSetPIN(multitester_t * handle, channel_id_t channel, uint16_t pin_mask, bool ena);
+static bool MULTI_bGetPIN(multitester_t * handle, channel_id_t channel, uint16_t pin_mask);
+static bool MULTI_bInitRFSwitch(multitester_t * handle);
+static void MULTI_vDeinitRFSwitch(multitester_t * handle);
+static bool MULTI_vSetRfSwitchChannel(multitester_t * handle, uint8_t channel);
 
 static uint16_t portbits;
 // CurrentState of the MultiTester. 
@@ -54,16 +50,18 @@ static bool rfSwitchDesiredState = false;
 static uint8_t rfSwitchChannel = 0;
 static uint8_t rfSwitchDesiredChannel = 0;
 
-bool MULTI_vInit(void)
+bool MULTI_vInit(multitester_t * handle)
 {
-	uint8_t tx_buffer[] = {0x22, 0x22};
+	uint8_t tx_buffer[] = {0, 0x22, 0x22};
 		
 	// First, set ENA lines and Fan lines to 1
-	I2C_DRIVER_bWritePlain(I2C_psGetDriver(), PCA9555_ADDR, PCA9555_CMD_OUT_PORT0, tx_buffer, 2);
+	tx_buffer[0] = PCA9555_CMD_OUT_PORT0;
+	handle->i2c_write_function(handle->i2c_handle, PCA9555_ADDR, tx_buffer, 3);
+	
 	portbits = 0x2222;
 	
 	uint8_t rx_buffer[] = {0x00, 0x00};
-	I2C_DRIVER_bReadPlain(I2C_psGetDriver(), PCA9555_ADDR, PCA9555_CMD_OUT_PORT0, rx_buffer, 2);
+	handle->i2c_read_function(handle->i2c_handle, PCA9555_ADDR, tx_buffer, 1, rx_buffer, 2);
 	
 	if (!((rx_buffer[0] == tx_buffer[0]) && (rx_buffer[1] == tx_buffer[1])))
 	{
@@ -71,28 +69,30 @@ bool MULTI_vInit(void)
 		return false;
 	}
 	
-	tx_buffer[0] = 0x00;
+	tx_buffer[0] = PCA9555_CMD_CFG_PORT0;
 	tx_buffer[1] = 0x00;
+	tx_buffer[2] = 0x00;
 	
 	// Then make all pins outputs
-	I2C_DRIVER_bWritePlain(I2C_psGetDriver(), PCA9555_ADDR, PCA9555_CMD_CFG_PORT0, tx_buffer, 2);
+	handle->i2c_write_function(handle->i2c_handle, PCA9555_ADDR, tx_buffer, 3);
 	
 	return true;
 }
 
-void MULTI_vDeinit(void)
+void MULTI_vDeinit(multitester_t * handle)
 {
-	uint8_t tx_buffer[] = {0xFF, 0xFF};
+	uint8_t tx_buffer[] = {PCA9555_CMD_CFG_PORT0, 0xFF, 0xFF};
 	
 	// Then make all pins inputs
-	I2C_DRIVER_bWritePlain(I2C_psGetDriver(), PCA9555_ADDR, PCA9555_CMD_CFG_PORT0, tx_buffer, 2);
+	handle->i2c_write_function(handle->i2c_handle, PCA9555_ADDR, tx_buffer, 3);
 	
 }
 
-void MULTI_vProcess(void){
+//Todo: All these variables should be part of the handle
+void MULTI_vProcess(multitester_t * handle){
 	if (desiredState && !currentState){
 		// Turn on MultiTester
-		if (MULTI_vInit())
+		if (MULTI_vInit(handle))
 		{
 			currentState = desiredState;
 		}
@@ -102,7 +102,7 @@ void MULTI_vProcess(void){
 	}	
 	if (!desiredState && currentState){
 		// Turn off MultiTester
-		MULTI_vDeinit();
+		MULTI_vDeinit(handle);
 		
 		currentState = desiredState;
 	}
@@ -113,7 +113,7 @@ void MULTI_vProcess(void){
 	{
 		// If the rf switch is not on and we want it to be on
 		if (rfSwitchEnabled == false && rfSwitchDesiredState == true){
-			if (MULTI_bInitRFSwitch()){
+			if (MULTI_bInitRFSwitch(handle)){
 				rfSwitchEnabled = true;
 			}
 			else{
@@ -122,12 +122,12 @@ void MULTI_vProcess(void){
 			}
 		}
 		if (rfSwitchEnabled == true && rfSwitchDesiredState == false){
-			MULTI_vDeinitRFSwitch();
+			MULTI_vDeinitRFSwitch(handle);
 			rfSwitchEnabled = false;
 		}
 		// And attempt to switch the channel
 		if (rfSwitchEnabled && rfSwitchChannel != rfSwitchDesiredChannel){
-			if (MULTI_vSetRfSwitchChannel(rfSwitchDesiredChannel))
+			if (MULTI_vSetRfSwitchChannel(handle, rfSwitchDesiredChannel))
 			{
 				rfSwitchChannel = rfSwitchDesiredChannel;
 			}
@@ -139,10 +139,10 @@ void MULTI_vProcess(void){
 	
 	if (currentState && bitsUpdated){
 		
-		uint8_t tx_buffer[] = {(portbits & 0xFF), ((portbits>>8) & 0xFF)};
+		uint8_t tx_buffer[] = {PCA9555_CMD_OUT_PORT0, (portbits & 0xFF), ((portbits>>8) & 0xFF)};
 		
 		// First, set all outputs 0
-		I2C_DRIVER_bWritePlain(I2C_psGetDriver(), PCA9555_ADDR, PCA9555_CMD_OUT_PORT0, tx_buffer, 2);
+		handle->i2c_write_function(handle->i2c_handle, PCA9555_ADDR, tx_buffer, 3);
 		
 		bitsUpdated = false;
 	}
@@ -151,79 +151,79 @@ void MULTI_vProcess(void){
 /*
  * Set/Clears the Enable line (XTX enable) for the given
 */
-void MULTI_vSetChannelEnabled(channel_id_t channel, bool ena){
-	MULTI_vSetPIN(channel, ENA_PIN, ena);
+void MULTI_vSetChannelEnabled(multitester_t * handle, channel_id_t channel, bool ena){
+	MULTI_vSetPIN(handle, channel, ENA_PIN, ena);
 }
 
 /*
  * Set/Clears the Power line, controlling the 3.3v line. This has a inverter in it
 */
-void MULTI_vSetChannelPowerPins(const uint16_t pins){
+void MULTI_vSetChannelPowerPins(multitester_t * handle, const uint16_t pins){
 	
-	uint16_t prevState = MULTI_u32GetPins();
+	uint16_t prevState = MULTI_u32GetPins(handle);
 	
 	// For each of the pins, set the output.
 	// IF this pin is newly activate, disable the rest
 	
 	if (pins & (POWER_PIN << 0))
 	{
-		MULTI_vSetPIN(Position1, POWER_PIN, false);
+		MULTI_vSetPIN(handle, Position1, POWER_PIN, false);
 		if (autoClear && !(prevState & (POWER_PIN << 0)))
 		{				
-			MULTI_vSetPIN(Position2, POWER_PIN, true);
-			MULTI_vSetPIN(Position3, POWER_PIN, true);
-			MULTI_vSetPIN(Position4, POWER_PIN, true);
+			MULTI_vSetPIN(handle, Position2, POWER_PIN, true);
+			MULTI_vSetPIN(handle, Position3, POWER_PIN, true);
+			MULTI_vSetPIN(handle, Position4, POWER_PIN, true);
 			return;
 		}
 	}
 	else{
-		MULTI_vSetPIN(Position1, POWER_PIN, true);
+		MULTI_vSetPIN(handle, Position1, POWER_PIN, true);
 	}
 	
 	
 	if (pins & (POWER_PIN << 4))
 	{
-		MULTI_vSetPIN(Position2, POWER_PIN, false);
+		MULTI_vSetPIN(handle, Position2, POWER_PIN, false);
 		if (autoClear &&  !(prevState & (POWER_PIN << 4)))
 		{
-			MULTI_vSetPIN(Position1, POWER_PIN, true);
-			MULTI_vSetPIN(Position3, POWER_PIN, true);
-			MULTI_vSetPIN(Position4, POWER_PIN, true);
+			MULTI_vSetPIN(handle, Position1, POWER_PIN, true);
+			MULTI_vSetPIN(handle, Position3, POWER_PIN, true);
+			MULTI_vSetPIN(handle, Position4, POWER_PIN, true);
 			return;
 		}
 	}
 	else{
-		MULTI_vSetPIN(Position2, POWER_PIN, true);
+		MULTI_vSetPIN(handle, Position2, POWER_PIN, true);
 	}
 	
 	if (pins & (POWER_PIN << 8))
 	{
-		MULTI_vSetPIN(Position3, POWER_PIN, false);
+		MULTI_vSetPIN(handle, Position3, POWER_PIN, false);
 		if (autoClear &&  !(prevState & (POWER_PIN << 8)))
 		{
-			MULTI_vSetPIN(Position1, POWER_PIN, true);
-			MULTI_vSetPIN(Position2, POWER_PIN, true);
-			MULTI_vSetPIN(Position4, POWER_PIN, true);
+			MULTI_vSetPIN(handle, Position1, POWER_PIN, true);
+			MULTI_vSetPIN(handle, Position2, POWER_PIN, true);
+			MULTI_vSetPIN(handle, Position4, POWER_PIN, true);
 			return;
 		}
 	}
 	else{
-		MULTI_vSetPIN(Position3, POWER_PIN, true);
+		MULTI_vSetPIN(handle, Position3, POWER_PIN, true);
 	}
 	
 	if (pins & (POWER_PIN << 12))
 	{
-		MULTI_vSetPIN(Position4, POWER_PIN, false);
+		MULTI_vSetPIN(handle, Position4, POWER_PIN, false);
 		if (autoClear &&  !(prevState & (POWER_PIN << 12)))
 		{
-			MULTI_vSetPIN(Position1, POWER_PIN, true);
-			MULTI_vSetPIN(Position2, POWER_PIN, true);
-			MULTI_vSetPIN(Position3, POWER_PIN, true);
+			MULTI_vSetPIN(handle, Position1, POWER_PIN, true);
+			MULTI_vSetPIN(handle, Position2, POWER_PIN, true);
+			MULTI_vSetPIN(handle, Position3, POWER_PIN, true);
 			return;
 		}
 	}
 	else{
-		MULTI_vSetPIN(Position4, POWER_PIN, true);
+		MULTI_vSetPIN(handle, Position4, POWER_PIN, true);
 	}
 
 }
@@ -231,18 +231,18 @@ void MULTI_vSetChannelPowerPins(const uint16_t pins){
 /*
  * Enable/Disable the nReset line.
 */
-void MULTI_vSetChannelnReset(channel_id_t channel, bool ena){
-	MULTI_vSetPIN(channel, nRESET_PIN, ena);
+void MULTI_vSetChannelnReset(multitester_t * handle, channel_id_t channel, bool ena){
+	MULTI_vSetPIN(handle, channel, nRESET_PIN, ena);
 }
 
 /*
  * Enable/Disable the fan
 */
-void MULTI_vSetChannelFan(channel_id_t channel, bool ena){
-	MULTI_vSetPIN(channel, FAN_PIN, ena);
+void MULTI_vSetChannelFan(multitester_t * handle, channel_id_t channel, bool ena){
+	MULTI_vSetPIN(handle, channel, FAN_PIN, ena);
 }
 
-bool MULTI_bGetChannelFan(const channel_id_t channel){
+bool MULTI_bGetChannelFan(multitester_t * handle, const channel_id_t channel){
 	uint8_t pin_offset =0;
 	switch (channel){
 		case Position1:
@@ -262,7 +262,7 @@ bool MULTI_bGetChannelFan(const channel_id_t channel){
 	return ((portbits >> pin_offset) & FAN_PIN)> 0;
 }
 
-static void MULTI_vSetPIN(channel_id_t channel, uint16_t pin_mask, bool ena){
+static void MULTI_vSetPIN(multitester_t * handle, channel_id_t channel, uint16_t pin_mask, bool ena){
 	uint8_t pin_offset =0;
 	switch (channel){
 		case Position1:
@@ -289,7 +289,7 @@ static void MULTI_vSetPIN(channel_id_t channel, uint16_t pin_mask, bool ena){
 	bitsUpdated = true;
 }
 
-static bool MULTI_bGetPIN(channel_id_t channel, uint16_t pin_mask){
+static bool MULTI_bGetPIN(multitester_t * handle, channel_id_t channel, uint16_t pin_mask){
 	uint8_t pin_offset =0;
 	switch (channel){
 		case Position1:
@@ -309,21 +309,21 @@ static bool MULTI_bGetPIN(channel_id_t channel, uint16_t pin_mask){
 	return (portbits & (pin_mask << pin_offset)) > 0;
 }
 
-inline void MULTI_vSetEnabled(bool ena) 
+inline void MULTI_vSetEnabled(multitester_t * handle, bool ena) 
 {
 	desiredState = ena;
 }
 
-inline bool MULTI_bGetEnabled(){
+inline bool MULTI_bGetEnabled(multitester_t * handle){
 	return currentState;
 }
 
 
-inline void MULTI_vSetAutoClear(bool ena){
+inline void MULTI_vSetAutoClear(multitester_t * handle, bool ena){
 	autoClear = ena;
 }
 
-inline bool MULTI_bGetAutoClear(){
+inline bool MULTI_bGetAutoClear(multitester_t * handle){
 	return autoClear;
 }
 
@@ -331,27 +331,27 @@ inline bool MULTI_bGetAutoClear(){
 Get all the pins.
 */
 
-uint32_t MULTI_u32GetPins(){
+uint32_t MULTI_u32GetPins(multitester_t * handle){
 	// We need to invert the power pins. 
 	return portbits ^ ((POWER_PIN) | (POWER_PIN<<4) | (POWER_PIN<< 8)| (POWER_PIN<<12));
 }
 
 
 
-inline bool MULTI_bGetRfSwitchEnabled(void){
+inline bool MULTI_bGetRfSwitchEnabled(multitester_t * handle){
 	return rfSwitchEnabled;
 }
 
-void MULTI_vSetRfSwitchEnabled(bool value){
+void MULTI_vSetRfSwitchEnabled(multitester_t * handle, bool value){
 	rfSwitchDesiredState = value;
 }
 
 
-inline uint8_t MULTI_u8GetRFSwitchChannel(void){
+inline uint8_t MULTI_u8GetRFSwitchChannel(multitester_t * handle){
 	return rfSwitchChannel;
 }
 
-void MULTI_vSetRFSwitchChannel(uint8_t channel){
+void MULTI_vSetRFSwitchChannel(multitester_t * handle, uint8_t channel){
 	if (channel > 4){
 		return;
 	}
@@ -362,28 +362,30 @@ void MULTI_vSetRFSwitchChannel(uint8_t channel){
  * Initialize the RF Switch. Returns true if it answered.
  * This function will also set it to the desired channel.
 */
-bool MULTI_bInitRFSwitch(void){
+bool MULTI_bInitRFSwitch(multitester_t * handle){
 	
-	uint8_t buffer[] = {0x00, 0x00};
+	uint8_t buffer[] = {PCA9555_CMD_OUT_PORT0, 0x00, 0x00};
 	// First write all 0s to output ports
-	I2C_DRIVER_bWritePlain(I2C_psGetDriver(), PCA9555_RFSWITCH_ADDR, PCA9555_CMD_OUT_PORT0, buffer, 2);
+	handle->i2c_write_function(handle->i2c_handle, PCA9555_RFSWITCH_ADDR, buffer, 3);
 		
 	// Then make all pins outputs
-	buffer[0] = 0xF0;
-	buffer[1] = 0xFF;
-	I2C_DRIVER_bWritePlain(I2C_psGetDriver(), PCA9555_RFSWITCH_ADDR, PCA9555_CMD_CFG_PORT0, buffer, 2);
+	buffer[0] = PCA9555_CMD_CFG_PORT0;
+	buffer[1] = 0xF0;
+	buffer[2] = 0xFF;
+	handle->i2c_write_function(handle->i2c_handle, PCA9555_RFSWITCH_ADDR, buffer, 3);
 	
-	// Read the answer back in 
-	buffer[0] = 0x00;
-	buffer[0] = 0x00;
-	bool answer = I2C_DRIVER_bReadLocal(I2C_psGetDriver(), PCA9555_RFSWITCH_ADDR, PCA9555_CMD_OUT_PORT0, buffer, 3);
+	// Read the answer back in
+	buffer[0] = PCA9555_CMD_CFG_PORT0;
+	buffer[1] = 0x00;
+	buffer[2] = 0x00;
+	bool answer = handle->i2c_read_function(handle->i2c_handle, PCA9555_RFSWITCH_ADDR, buffer,1,&buffer[1], 2);
 	
-	if ((!answer) && (buffer[0] == 0xF0) && (buffer[1] == 0xFF)){
+	if ((!answer) && (buffer[1] == 0xF0) && (buffer[2] == 0xFF)){
 		return false;
 	}
 	
 	// Device answered - we can switch channel
-	return MULTI_vSetRfSwitchChannel(rfSwitchDesiredChannel);
+	return MULTI_vSetRfSwitchChannel(handle, rfSwitchDesiredChannel);
 
 }
 
@@ -391,16 +393,16 @@ bool MULTI_bInitRFSwitch(void){
  * Set the RF Control board to the specified channel. Returns true if the 
  * I2C Comms was successful - false otherwise
 */
-bool MULTI_vSetRfSwitchChannel(uint8_t channel){
-	uint8_t tx_buffer[] = {0x00, 0x00};
+bool MULTI_vSetRfSwitchChannel(multitester_t * handle, uint8_t channel){
+	uint8_t tx_buffer[] = {PCA9555_CMD_OUT_PORT0, 0x00, 0x00};
 		
 	if (rfSwitchDesiredChannel != 0){
-		tx_buffer[0] = 0x1 << (rfSwitchDesiredChannel-1);
+		tx_buffer[1] = 0x1 << (rfSwitchDesiredChannel-1);
 	}
 		
-	return I2C_DRIVER_bWritePlain(I2C_psGetDriver(), PCA9555_RFSWITCH_ADDR, PCA9555_CMD_OUT_PORT0, tx_buffer, 2);
+	return handle->i2c_write_function(handle->i2c_handle, PCA9555_RFSWITCH_ADDR, tx_buffer, 3);
 }
 
-void MULTI_vDeinitRFSwitch(void){
-	MULTI_vSetRfSwitchChannel(0);
+void MULTI_vDeinitRFSwitch(multitester_t * handle){
+	MULTI_vSetRfSwitchChannel(handle, 0);
 }

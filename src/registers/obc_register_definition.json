@@ -1,0 +1,796 @@
+{
+	"generator": {
+		"languages": ["c", "c#"],
+		"c#": {
+			"namespace": "Devices.Models"
+		},
+		"filename": "OBC",
+		"filenames":{
+			"c_header": "../../inc/OBC.h",
+			"c_source": "OBC.c",
+			"cs": "OBC.cs"
+		}
+	},
+	"module":
+	{
+		"name": "OBC",
+		"registers": [
+			{
+
+				"name": "ID", 
+				"address": "0x01", 
+				"width": "32",
+				"c#": { "type": "UInt32"},
+				"fields":[]
+			},
+			{
+				"name": "Serial", 
+				"address": "0x02", 
+				"width": "32",
+				"c#": { "type": "UInt32"},
+				"fields":[]
+			},
+			{
+				"name": "SW_Version", 
+				"address": "0x03", 
+				"width": "32",
+				"c#": { "type": "UInt32"},
+				"fields":"Version"
+			},
+			{
+				"name": "HW_Version", 
+				"address": "0x05", 
+				"width": "32",
+				"c#": { "type": "UInt32"},
+				"fields":"Version"
+			},
+			{
+				"name": "Uptime", 
+				"address": "0x06", 
+				"width": "32",
+				"c#": { "type": "UInt32"},
+				"fields":[]
+			},
+
+			{
+				"name": "Scratchpad", 
+				"address": "0x07", 
+				"width": "32",
+				"c#": { "type": "UInt32"},
+				"fields":[]
+			},
+			{
+				"name": "Timeout", 
+				"address": "0x0A", 
+				"width": "32",
+				"c#": { "type": "UInt32"},
+				"fields":[]
+			},
+			{
+				"name": "Reset", 
+				"address": "0x0B",
+				"width": "32",
+				"c#": { "type": "UInt32"},
+				"fields":[]
+			},
+			{
+
+				"name": "Board_ID",
+				"address": "0x10",
+				"dir": "r",
+				"width": "32",
+				"c#": {
+					"type": "UInt32"
+				},
+				"fields": [
+					{
+						"name": "ccIdentifier",
+						"description": "Identifier for the device",
+						"bit": "31-24",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						},
+						"c": {"type": "uint8_t"}
+					},
+					{
+						"name": "id0",
+						"description": "Identifier for the device",
+						"bit": "23-16",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						},
+						"c": {"type": "uint8_t"}
+					},
+					{
+						"name": "id1",
+						"description": "Identifier for the device",
+						"bit": "15-8",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						},
+						"c": {"type": "uint8_t"}
+					},
+					{
+						"name": "id2",
+						"description": "Identifier for the device",
+						"bit": "7-0",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						},
+						"c": {"type": "uint8_t"}
+					}
+				]
+			},
+			{
+				"name": "FW_Version",
+				"address": "0x11",
+				"dir": "rw",
+				"width": "32",
+				"fields": "Version",
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name": "HW_Version",
+				"address": "0x12",
+				"dir": "rw",
+				"width": "32",
+				"fields": "Version",
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name":"Scratchpad",
+				"address": "0x13",
+				"dir": "rw",
+				"width": "32",
+				"fields": [],
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name": "Supported_Boards",
+				"address": "0x14",
+				"dir": "r",
+				"width": "32",
+				"c#": {
+					"type": "UInt32"
+				},
+				"fields": []
+			},
+			{
+				"name":"Configured_Boards",
+				"address": "0x15",
+				"dir": "r",
+				"width": "32",
+				"c#": {
+					"type": "UInt32"
+				},
+				"fields": [],
+				"options": "BoardIdentifier"
+			},
+			{
+				"name": "Uptime",
+				"address": "0x16",
+				"dir": "rw",
+				"width": "32",
+				"fields": [],
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name": "Event_ConfA",
+				"address": "0x17",
+				"dir": "rw",
+				"width": "32",
+				"fields": [
+					{
+						"name": "count",
+						"description": "Number of events in the system",
+						"bit": "15-0",
+						"c#": {
+							"hasminmax": "false",
+							"type": "short"
+						},
+						"c": {"type": "uint16_t"}
+					}
+				],
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name": "Event",
+				"address": "0x18",
+				"dir": "rw",
+				"width": "32",
+				"fields": [
+					{
+						"name": "section",
+						"description": "Which section of the OBC caused the event",
+						"bit": "31-24",
+						"c#": {
+							"hasminmax": "false",
+							"type": "short"
+						},
+						"c": {"type": "uint16_t"}
+					},
+					{
+						"name": "detail",
+						"description": "Details of the event",
+						"bit": "23-16",
+						"c#": {
+							"hasminmax": "false",
+							"type": "short"
+						},
+						"c": {"type": "uint16_t"}
+					},
+					{
+						"name": "timestamp",
+						"description": "Event timestamp, in milliseconds. Use in combination with Uptime to get timestamp",
+						"bit": "15-0",
+						"c#": {
+							"hasminmax": "false",
+							"type": "short"
+						},
+						"c": {"type": "uint16_t"}
+					}
+				],
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name": "ConfPower",
+				"address": "0x20",
+				"dir": "rw",
+				"width": "8",
+				"c#": {
+					"type": "byte"
+				},
+				"fields": [
+					{
+						"name": "voltage5Toggle",
+						"bit": "0",
+						"options": "Enabled",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						},
+						"c": {"type": "bool"}
+					},
+					{
+						"name": "voltage3Toggle",
+						"bit": "1",
+						"options": "Enabled",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						},
+						"c": {"type": "bool"}
+					},
+					{
+						"name": "voltageVBatToggle",
+						"bit": "2",
+						"options": "Enabled",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						},
+						"c": {"type": "bool"}
+					},
+					{
+						"name": "voltageVBatAltToggle",
+						"bit": "3",
+						"options": "Enabled",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						},
+						"c": {"type": "bool"}
+					}
+				]
+			},
+			{
+				"name":"MeasureVI_V3",
+				"address": "0x21",
+				"dir": "rw",
+				"width": "32",
+				"fields": "MeasureVI",
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name":"MeasurePower_V3",
+				"address": "0x22",
+				"dir": "rw",
+				"width": "32",
+				"fields": "MeasurePower",
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name":"MeasureVI_V5",
+				"address": "0x23",
+				"dir": "rw",
+				"width": "32",
+				"fields": "MeasureVI",
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name":"MeasurePower_V5",
+				"address": "0x24",
+				"dir": "rw",
+				"width": "32",
+				"fields": "MeasurePower",
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name":"MeasureVI_VBat",
+				"address": "0x25",
+				"dir": "rw",
+				"width": "32",
+				"fields": "MeasureVI",
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name":"MeasurePower_VBat",
+				"address": "0x26",
+				"dir": "rw",
+				"width": "32",
+				"fields": "MeasurePower",
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name":"MeasureVI_VBatAlt",
+				"address": "0x27",
+				"dir": "rw",
+				"width": "32",
+				"fields": "MeasureVI",
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name":"MeasurePower_VBatAlt",
+				"address": "0x28",
+				"dir": "rw",
+				"width": "32",
+				"fields": "MeasurePower",
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name": "I2CConfA",
+				"address": "0x29",
+				"dir": "rw",
+				"width": "32",
+				"fields": [
+					{
+						"name": "TRDEL",
+						"pretty-name": "Transaction delay",
+						"description": "Delay in ms, between transactions",
+						"bit": "23-16",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						},
+						"c": {"type": "uint8_t"}
+					},
+					{
+						"name": "WRDEL",
+						"pretty-name": "Write-Read Delay",
+						"description": "Sets the delay, in 10 us increments, between performing an adress write and it's subsequent read. Only used on reads. Set to 0 to disable.",
+						"bit": "15-8",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						},
+						"c": {"type": "uint8_t"}
+					},
+					{
+						"name": "SPD",
+						"pretty-name": "I2C Speed",
+						"description": "Sets the I2C speed in 10kb/s intervals. (1 = 10 kb/s, 40 = 400 kb/s)",
+						"bit": "7-0",
+						"c#": {
+							"hasminmax": "true",
+							"min": 1,
+							"max": 40,
+							"type": "byte"
+						},
+						"c": {"type": "uint8_t"}
+					}
+				],
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name": "I2CConfB",
+				"address": "0x2A",
+				"dir": "rw",
+				"width": "32",
+				"fields": [
+					{
+						"name": "ADDR",
+						"pretty-name": "I2C Address",
+						"description": "The address of the I2C device. This is set by the OBC when a new board is configured, but can also be set by the user.",
+						"bit": "7-0",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						},
+						"c": {"type": "uint8_t"}
+					}
+				],
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name" : "ConfMulti",
+				"address": "0x2B",
+				"dir": "rw",
+				"width": "32",
+				"fields": [
+					{
+						"name": "MEnabled",
+						"pretty-name": "Multitester Enabled",
+						"description": "Enable the multi tester interface.",
+						"bit": "0",
+						"options": "Enabled",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						},
+						"c": {"type": "bool"}
+					},
+					{
+						"name": "AutoCLR",
+						"pretty-name": "",
+						"description": "Auto clear the other positions when changing",
+						"bit": "1",
+						"options": "Enabled",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						},
+						"c": {"type": "bool"}
+					},
+					{
+						"name": "RfSwENA",
+						"pretty-name": "",
+						"description": "Enables Toggling the RF Switch as well",
+						"bit": "2",
+						"options": "Enabled",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						},
+						"c": {"type": "bool"}
+					},
+					{ "name": "FanPos1", "bit": "4", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+					{ "name": "FanPos2", "bit": "5",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+					{ "name": "FanPos3", "bit": "6",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"}},
+					{ "name": "FanPos4", "bit": "7",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+					{
+						"name": "RfSwChan",
+						"description": "Enables the selected channel on the RF Switch. 0 Disables all",
+						"bit": "15-8",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						},
+						"c": {"type": "uint8_t"}
+					}
+				],
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name":"ConfTempSense",
+				"address": "0x2C",
+				"dir": "rw",
+				"width": "32",
+				"fields": [
+					{ "name": "EnableMeasurements", "bit": "0", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" },
+						"c": {"type": "bool"} 
+					}
+				],
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name": "XTXpins",
+				"address": "0x30",
+				"dir": "rw",
+				"width": "32",
+				"fields": [
+					{
+						"name": "ENA",
+						"pretty-name": "XTX Enable",
+						"description": "XTX has an Enable line, which must be held HIGH to enable communications",
+						"bit": "0",
+						"options": "Enabled",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						},
+						"c": {"type": "bool"} 
+					},
+					{
+						"name": "nRST",
+						"pretty-name": "XTX notReset.",
+						"bit": "1",
+						"options": "Enabled",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						},
+						"c": {"type": "bool"}
+					},
+					{
+						"name": "RDY",
+						"bit": "2",
+						"options": "Enabled",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						},
+						"c": {"type": "bool"}
+					}
+				],
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name": "XTXMultitester",
+				"address": "0x31",
+				"dir": "rw",
+				"width": "32",
+				"fields": [
+					{ "name": "POS1_XTX_EN", "bit": "0", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+					{ "name": "POS1_XTX_Power", "bit": "1",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+					{ "name": "POS1_XTX_nReset", "bit": "2",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+
+					{ "name": "POS2_XTX_EN", "bit": "4", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+					{ "name": "POS2_XTX_Power", "bit": "5",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+					{ "name": "POS2_XTX_nReset", "bit": "6",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+
+					{ "name": "POS3_XTX_EN", "bit": "8", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+					{ "name": "POS3_XTX_Power", "bit": "9",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+					{ "name": "POS3_XTX_nReset", "bit": "10",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+					
+					{ "name": "POS4_XTX_EN", "bit": "12", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+					{ "name": "POS4_XTX_Power", "bit": "13",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+					{ "name": "POS4_XTX_nReset", "bit": "14",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} }
+				],
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name": "XDCConfig",
+				"address": "0x40",
+				"dir": "rw",
+				"width": "32",
+				"fields": [
+					{
+						"name": "ADDR",
+						"pretty-name": "I2C Address",
+						"description": "Set the I2C address of the XDC connected to the OBC. Wil default to 0x52",
+						"bit": "7-0",
+						"options": "Enabled",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						}, 
+						"c": {"type": "byte"}
+					}
+				],
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{ "name":"CSBoard_T0", "address": "0x50", "dir": "r", "width": "32", "fields": [], "c#": {"type": "Int32" }, "c": {"type": "int32_t"} },
+			{ "name":"CSBoard_T1", "address": "0x51", "dir": "r", "width": "32", "fields": [], "c#": {"type": "Int32" }, "c": {"type": "int32_t"} },
+			{ "name":"CSBoard_T2", "address": "0x52", "dir": "r", "width": "32", "fields": [], "c#": {"type": "Int32" }, "c": {"type": "int32_t"} },
+			{ "name":"CSBoard_T3", "address": "0x53", "dir": "r", "width": "32", "fields": [], "c#": {"type": "Int32" }, "c": {"type": "int32_t"} },
+			{ "name":"CSBoard_T4", "address": "0x54", "dir": "r", "width": "32", "fields": [], "c#": {"type": "Int32" }, "c": {"type": "int32_t"} },
+			{ "name":"CSBoard_T5", "address": "0x55", "dir": "r", "width": "32", "fields": [], "c#": {"type": "Int32" }, "c": {"type": "int32_t"} },
+			{ "name":"CSBoard_T6", "address": "0x56", "dir": "r", "width": "32", "fields": [], "c#": {"type": "Int32" }, "c": {"type": "int32_t"} },
+			{ "name":"CSBoard_T7", "address": "0x57", "dir": "r", "width": "32", "fields": [], "c#": {"type": "Int32" }, "c": {"type": "int32_t"} },
+			{ "name":"CSBoard_Current0I0", "address": "0x58", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current0I1", "address": "0x59", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current0I2", "address": "0x5A", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current1I0", "address": "0x5B", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current1I1", "address": "0x5C", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current1I2", "address": "0x5D", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current2I0", "address": "0x5E", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current2I1", "address": "0x5F", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current2I2", "address": "0x60", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current3I0", "address": "0x61", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current3I1", "address": "0x62", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current3I2", "address": "0x63", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current4I0", "address": "0x64", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current4I1", "address": "0x65", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current4I2", "address": "0x66", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current5I0", "address": "0x67", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current5I1", "address": "0x68", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current5I2", "address": "0x69", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current6I0", "address": "0x6A", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current6I1", "address": "0x6B", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current6I2", "address": "0x6C", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current7I0", "address": "0x6D", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current7I1", "address": "0x6E", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"CSBoard_Current7I2", "address": "0x6F", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+
+			
+			{ "name":"TE_Addr_0",     "address": "0x80", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"TE_Addr_0_Set", "address": "0x80", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"TE_Addr_0_Clr", "address": "0x80", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+
+			{ "name":"TE_Addr_1",     "address": "0x80", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"TE_Addr_1_Set", "address": "0x80", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"TE_Addr_1_Clr", "address": "0x80", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+
+			{ "name":"TE_Addr_2",     "address": "0x80", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"TE_Addr_2_Set", "address": "0x80", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"TE_Addr_2_Clr", "address": "0x80", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+
+			{ "name":"TE_Addr_3",     "address": "0x80", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"TE_Addr_3_Set", "address": "0x80", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"TE_Addr_3_Clr", "address": "0x80", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } }
+		],
+		"generic_fields":{
+			"boardflag": [
+				{
+					"name": "boards",
+					"bit": "7-0",
+					"c#": {
+						"hasminmax": "false",
+						"type": "byte"
+					}, 
+					"c": {"type": "uint8_t"}
+				}
+			],
+			"Version" : [
+				{
+					"name": "major_version",
+					"description": "Identifier for the device",
+					"bit": "23-16",
+					"c#": {
+						"hasminmax": "false",
+						"type": "byte"
+					}, 
+					"c": {"type": "uint8_t"}
+				},
+				{
+					"name": "minor_version",
+					"description": "Identifier for the device",
+					"bit": "15-8",
+					"c#": {
+						"hasminmax": "false",
+						"type": "byte"
+					}, 
+					"c": {"type": "uint8_t"}
+				},
+				{
+					"name": "patch_version",
+					"description": "Identifier for the device",
+					"bit": "7-0",
+					"c#": {
+						"hasminmax": "false",
+						"type": "byte"
+					}, 
+					"c": {"type": "uint8_t"}
+				}
+			],
+			"MeasureVI": [
+				{
+					"name": "voltage",
+					"description": "The voltage measurement, in mV",
+					"bit": "31-16",
+					"c#": {
+						"hasminmax": "false",
+						"type": "UInt32"
+					}, 
+					"c": {"type": "uint16_t"}
+				},
+				{
+					"name": "current",
+					"description": "The current measurement, in mA",
+					"bit": "15-0",
+					"c#": {
+						"hasminmax": "false",
+						"type": "UInt32"
+					}, 
+					"c": {"type": "uint16_t"}
+				}
+			],
+			"MeasurePower": [
+				{
+					"name": "power",
+					"description": "The power measurement",
+					"bit": "31-0",
+					"c#": {
+						"hasminmax": "false",
+						"type": "UInt32"
+					}, 
+					"c": {"type": "uint32_t"}
+				}
+			] ,
+			"TE_Config": [
+				{ "bit": "0",     "name": "SEL_CAN0",  "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"} },
+				{ "bit": "1",     "name": "SEL_CAN1",  "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"} },
+				{ "bit": "2",     "name": "SEL_RS485", "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"} },
+				{ "bit": "3",     "name": "SEL_I2C",   "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"} },
+				{ "bit": "4",     "name": "SEL_RS422", "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"} },
+				{ "bit": "5",     "name": "SEL_SPI",   "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"} },
+				{ "bit": "6",     "name": "SEL_UART",  "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"} },
+
+				{ "bit": "8",     "name": "Power",    "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"} },
+				{ "bit": "9",     "name": "Enable",   "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"} },
+				{ "bit": "10",    "name": "nReset",   "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"} },
+				{ "bit": "11",    "name": "COMM_TR",  "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"} },
+
+				{ "bit": "12-15", "name": "Type",     "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"}, "options": "TE_Types" }
+   			] 
+		},
+		"options" :{
+			"Enabled": {
+				"name": "Enabled",
+				"type" : "byte",
+				"options": [
+					{"name": "Enabled", "value": "1", "pretty_name": "Enabled"},
+					{"name": "Disabled", "value": "0",  "pretty_name": "Disabled"}
+				]
+			},
+			"BoardIdentifier": {
+					"name": "BoardIdentifier",
+					"type" : "byte",
+					"options": [
+						{"name": "None", "value": "0",  "pretty_name": "Disabled"},
+						{"name": "XTX", "value": "1",  "pretty_name": "XTX"},
+						{"name": "XSteer", "value": "2",  "pretty_name": "XSTEER"},
+						{"name": "XDC", "value": "4",  "pretty_name": "XDC"},
+						{"name": "HDRTX_DFA", "value": "8",  "pretty_name": "HDRTX(DFA)"},
+						{"name": "HDRTX", "value": "16",  "pretty_name": "HDRTX"},
+						{"name": "GEN2", "value": "32",  "pretty_name": "GEN2"}
+					]
+				},
+			"TE_Types":{
+				"name": "TE_Types",
+				"type" : "byte",
+				"options": [
+					{"name": "PC104", "value": "0",  "pretty_name": "PC104 Adaptor"},
+					{"name": "uD", "value": "1",  "pretty_name": "uD Adaptor"},
+					{"name": "Gecko", "value": "2",  "pretty_name": "Gecko Adaptor"}
+				]	
+			}
+		}
+	}
+}

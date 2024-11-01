@@ -52,6 +52,9 @@
  * running the ASF driver selector tool. Any changes will be discarded.
  */
 
+// From module: CAN - Control Area Network Controller
+#include <mcan.h>
+
 // From module: Common SAM compiler driver
 #include <compiler.h>
 #include <status_codes.h>
@@ -78,11 +81,36 @@
 // From module: Part identification macros
 #include <parts.h>
 
+// From module: RSTC - Reset Controller
+#include <rstc.h>
+
+// From module: RTC - Real Time Clock
+#include <rtc.h>
+
 // From module: SAM FPU driver
 #include <fpu.h>
 
+// From module: SPI - SAM Implementation
+#include <spi_master.h>
+#include <spi_master.h>
+
+// From module: SPI - Serial Peripheral Interface
+#include <spi.h>
+
 // From module: System Clock Control - SAMV71 implementation
 #include <sysclk.h>
+
+// From module: TC - Timer Counter
+#include <tc.h>
+
+// From module: TWI - Two-wire Interface High Speed
+#include <twihs.h>
+
+// From module: TWIHS - Two-Wire Interface High Speed- SAM implementation
+#include <sam_twihs/twihs_master.h>
+#include <sam_twihs/twihs_slave.h>
+#include <twihs_master.h>
+#include <twihs_slave.h>
 
 // From module: UART - Univ. Async Rec/Trans
 #include <uart.h>
@@ -92,5 +120,10 @@
 
 // From module: USART - Univ. Syn Async Rec/Trans
 #include <usart.h>
+
+// From module: WDT - Watchdog Timer
+#include <wdt.h>
+
+#include <xdmac.h>
 
 #endif // ASF_H
