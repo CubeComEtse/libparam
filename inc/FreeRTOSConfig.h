@@ -114,7 +114,7 @@
 /* configMAX_PRIORITIES Sets the number of available task priorities.  Tasks can
  * be assigned priorities of 0 to (configMAX_PRIORITIES - 1).  Zero is the lowest
  * priority. */
-#define configMAX_PRIORITIES                       (7)
+#define configMAX_PRIORITIES                       (5)
 
 /* configMINIMAL_STACK_SIZE defines the size of the stack used by the Idle task
  * (in words, not in bytes!).  The kernel does not use this constant for any other
@@ -230,7 +230,7 @@
  * task, so its priority is set like any other task.  See
  * https://www.freertos.org/RTOS-software-timer-service-daemon-task.html  Only used
  * if configUSE_TIMERS is set to 1. */
-#define configTIMER_TASK_PRIORITY       ( configMAX_PRIORITIES - 2 )
+#define configTIMER_TASK_PRIORITY       ( configMAX_PRIORITIES - 1 )
 
 /* configTIMER_TASK_STACK_DEPTH sets the size of the stack allocated to the
  * timer task (in words, not in bytes!).  The timer task is a standard FreeRTOS
@@ -324,7 +324,7 @@
  * highest interrupt priority (0).  Not supported by all FreeRTOS ports.
  * See https://www.freertos.org/RTOS-Cortex-M3-M4.html for information specific to
  * ARM Cortex-M devices. */
-#define configMAX_SYSCALL_INTERRUPT_PRIORITY     (1 << (8 - __NVIC_PRIO_BITS))
+#define configMAX_SYSCALL_INTERRUPT_PRIORITY     (3 << (8 - __NVIC_PRIO_BITS))
 
 /* Another name for configMAX_SYSCALL_INTERRUPT_PRIORITY - the name used depends
  * on the FreeRTOS port. */

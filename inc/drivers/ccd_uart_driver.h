@@ -13,7 +13,7 @@
 #include "task.h"
 #include "stream_buffer.h"
 
-#define UART_HOLDING_BUFFER_SIZE 50
+#define UART_HOLDING_BUFFER_SIZE 32
 
 #include <asf.h>
 
@@ -23,12 +23,12 @@ typedef struct {
 	StreamBufferHandle_t uart_tx_buffer;
 	
 	uint8_t tx_holding_buffer[UART_HOLDING_BUFFER_SIZE];
-	size_t tx_buffer_read;
-	size_t tx_buffer_write;
+	volatile size_t tx_buffer_read;
+	volatile size_t tx_buffer_write;
 	
 	uint8_t rx_holding_buffer[UART_HOLDING_BUFFER_SIZE];
-	size_t rx_buffer_read;
-	size_t rx_buffer_write;
+	volatile size_t rx_buffer_read;
+	volatile size_t rx_buffer_write;
 	
 	Usart * base_usart;
 	

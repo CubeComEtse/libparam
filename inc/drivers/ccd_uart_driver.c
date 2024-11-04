@@ -74,6 +74,56 @@ void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart, const uint32_t baud)
 
 	ccd_uart_SetCTS(driver, false);
 	
+	/*
+		#define XDMAC_CH 0
+		
+	pmc_enable_periph_clk(ID_XDMAC);
+	
+	NVIC_ClearPendingIRQ(XDMAC_IRQn);
+	NVIC_SetPriority(XDMAC_IRQn, 1);
+	NVIC_EnableIRQ(XDMAC_IRQn);
+	
+	xdmac_channel_config_t xdmac_channel_cfg;
+	
+	xdmac_channel_cfg.mbr_ubc = UART_HOLDING_BUFFER_SIZE;
+
+	xdmac_channel_cfg.mbr_sa = (uint32_t)&(USART2->US_RHR);
+	xdmac_channel_cfg.mbr_da = (uint32_t)driver->rx_holding_buffer;
+	xdmac_channel_cfg.mbr_cfg = XDMAC_CC_TYPE_PER_TRAN  |
+		XDMAC_CC_MBSIZE_SINGLE |
+		
+		XDMAC_CC_SAM_FIXED_AM |
+		XDMAC_CC_DAM_INCREMENTED_AM |
+		
+		XDMAC_CC_DSYNC_PER2MEM |
+		XDMAC_CC_CSIZE_CHK_1 |
+		XDMAC_CC_DWIDTH_BYTE |
+		
+		XDMAC_CC_SIF_AHB_IF1 |
+		XDMAC_CC_DIF_AHB_IF0 |
+		
+		XDMAC_CC_PERID(XDMAC_CHANNEL_HWID_USART2_RX) ;
+
+	xdmac_channel_cfg.mbr_bc = 0;
+	xdmac_channel_cfg.mbr_ds =  0;
+	xdmac_channel_cfg.mbr_sus = 0;
+	xdmac_channel_cfg.mbr_dus = 0;
+
+	xdmac_configure_transfer(XDMAC, XDMAC_CH, &xdmac_channel_cfg);
+
+	xdmac_channel_set_descriptor_control(XDMAC, XDMAC_CH, 0);
+
+	xdmac_enable_interrupt(XDMAC, XDMAC_CH);
+	uint32_t xdmaint =  (XDMAC_CIE_BIE   |
+				XDMAC_CIE_DIE   |
+				XDMAC_CIE_FIE   |
+				XDMAC_CIE_RBIE  |
+				XDMAC_CIE_WBIE  |
+				XDMAC_CIE_ROIE);
+
+	xdmac_channel_enable_interrupt(XDMAC, XDMAC_CH, xdmaint);
+	xdmac_channel_enable(XDMAC, XDMAC_CH);*/
+	
 }
 
 void ccd_uart_SetCTS(ccd_uart_t * driver, bool dir){
@@ -88,7 +138,6 @@ void ccd_uart_EnableTXInterrupt(ccd_uart_t * driver) {
 	usart_enable_interrupt(driver->base_usart, US_IER_TXEMPTY);
 }
 
-#include "bsp.h"
 /*
  * So: This chip is not fast enough to service the UART interrupt AND
  * add the data to a FreeRTOS message buffer. Instead add the data to a
@@ -102,12 +151,9 @@ void ccd_usart_RXProcessingTask(void * parameters)
 	
 	while(1)
 	{
-		// Wait forever until the task notification is set.
-		ulTaskNotifyTakeIndexed(0, pdTRUE, portMAX_DELAY);
-		
 		// Check if there are more bytes in the buffer since the previous time -
-		//if (driver->rx_buffer_read != driver->rx_buffer_write)
-		//{
+		if (driver->rx_buffer_read != driver->rx_buffer_write)
+		{
 			// Make a copy of the write location - interrupt can still increment it 
 			volatile size_t copied_write = driver->rx_buffer_write;
 			
@@ -126,9 +172,14 @@ void ccd_usart_RXProcessingTask(void * parameters)
 				driver->rx_buffer_read = (driver->rx_buffer_read + bytes_sent) % UART_HOLDING_BUFFER_SIZE;
 			}
 			
-			// We just copied data out of the buffer, there should be space
-			ccd_uart_SetCTS(driver, false);
-		//}	
+			// Check if there is space, then clear CTS
+			if ((UART_HOLDING_BUFFER_SIZE - driver->rx_buffer_write + driver->rx_buffer_read - 1)% UART_HOLDING_BUFFER_SIZE > 5)
+			{
+				ccd_uart_SetCTS(driver, false);
+			}
+		}	
+		
+		vTaskDelay(pdMS_TO_TICKS(1));
 	}
 }
 
@@ -151,48 +202,11 @@ void ccd_usart_TXProcessingTask(void * parameters)
 		driver->tx_buffer_write = (driver->tx_buffer_write + read_size) % UART_HOLDING_BUFFER_SIZE;
 		
 		// If we copied any data into the buffer, enable the interrupt
-		if (read_size > 1){
+		if (read_size > 0){
 			usart_enable_interrupt(driver->base_usart, US_IER_TXEMPTY);
 		}
-		
-		/*
-		if (xStreamBufferBytesAvailable(driver->uart_tx_buffer))
-		{
-			volatile size_t copied_read = driver->tx_buffer_read;
-			
-			size_t space_available = (UART_HOLDING_BUFFER_SIZE - driver->tx_buffer_write + copied_read - 1)% UART_HOLDING_BUFFER_SIZE;
-			
-			//Check if there is space in the buffer - more than 10 spaces.
-			if (space_available > 10){
-				if (driver->tx_buffer_write >= copied_read)
-				{
-					// If Read pointer is at 0 we can't fill to the end of the buffer, so get the minimum
-					// possible size here.
-					size_t bytes_to_read = min(space_available, UART_HOLDING_BUFFER_SIZE - driver->tx_buffer_write);
-					size_t read_size = xStreamBufferReceive(driver->uart_tx_buffer, &driver->tx_holding_buffer[driver->tx_buffer_write], bytes_to_read, 0);
-					driver->tx_buffer_write = (driver->tx_buffer_write + read_size) % UART_HOLDING_BUFFER_SIZE;
-					usart_enable_interrupt(driver->base_usart, US_IER_TXEMPTY);
-				}
-				
-				
-				// If the write pointer was smaller than the read pointer, or we just filled up that part of the buffer.
-				if (driver->tx_buffer_write < copied_read)
-				{
-					// Fill until the copied read
-					size_t read_size = xStreamBufferReceive(driver->uart_tx_buffer, &driver->tx_holding_buffer[driver->tx_buffer_write], (copied_read - driver->tx_buffer_write - 1), 0);
-					driver->tx_buffer_write = (driver->tx_buffer_write + read_size) % UART_HOLDING_BUFFER_SIZE;
-					
-					usart_enable_interrupt(driver->base_usart, US_IER_TXEMPTY);
-				}
-			}		
-		}		
-		
-		vTaskDelay(pdMS_TO_TICKS(1));*/
 	}
 }
-
-
-
 
 
 /*
@@ -200,12 +214,11 @@ void ccd_usart_TXProcessingTask(void * parameters)
 */
 inline void ccd_uart_InterruptHandler(ccd_uart_t * driver)
 {
-	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 	uint32_t dw_status = usart_get_status(driver->base_usart);
-	//ioport_set_pin_level(PIN_DEBUG_1, 1);
 
 	// A Value is received
 	if (dw_status & US_CSR_RXRDY) {
+
 		uint32_t received_byte_u32;
 
 		while (usart_read(driver->base_usart, &received_byte_u32) == 0)
@@ -213,19 +226,13 @@ inline void ccd_uart_InterruptHandler(ccd_uart_t * driver)
 			// Add the received byte to the holding buffer
 			driver->rx_holding_buffer[driver->rx_buffer_write] = received_byte_u32;
 			driver->rx_buffer_write = (driver->rx_buffer_write + 1) % UART_HOLDING_BUFFER_SIZE;
-			
-			// Todo: Is this timeout correct?
-		
-			// Todo: We should set CTS here if the buffer is close to full.
+					
 			// Todo: Raise an event if no bytes could be written.
 			size_t space_available = (UART_HOLDING_BUFFER_SIZE - driver->rx_buffer_write + driver->rx_buffer_read - 1) % UART_HOLDING_BUFFER_SIZE;
 			if (space_available < 10)
 			{
 				ccd_uart_SetCTS(driver, true);
 			}
-			
-			// Notify the task that we received some values.
-			vTaskNotifyGiveIndexedFromISR (driver->task_reference, 0, &xHigherPriorityTaskWoken );  
 		}
 	}
 
@@ -240,7 +247,4 @@ inline void ccd_uart_InterruptHandler(ccd_uart_t * driver)
 			usart_disable_interrupt(driver->base_usart, US_IER_TXEMPTY);
 		}
 	}
-	
-	//ioport_set_pin_level(PIN_DEBUG_1, 0);
-	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }

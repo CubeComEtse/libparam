@@ -42,7 +42,6 @@ void LOCALTARGET_Init(local_target_t * handle)
 	
 }
 
-#include "bsp.h"
 
 void LOCALTARGET_Task(void *handle)
 {
@@ -59,7 +58,7 @@ void LOCALTARGET_Task(void *handle)
 	
 	while(1){
 		// Wait indefinitely to receive a message
-		size_t rx_length =  xMessageBufferReceive(pHandle->incoming_messages, rx_buffer, 16, pdMS_TO_TICKS(50));
+		size_t rx_length =  xMessageBufferReceive(pHandle->incoming_messages, rx_buffer, 16, portMAX_DELAY);
 		
 		if (rx_length == 0){
 			continue;
@@ -71,8 +70,6 @@ void LOCALTARGET_Task(void *handle)
 			continue;
 		}
 		
-		
-		ioport_set_pin_level(PIN_DEBUG_0, 1);
 		if (in_message.is_read){
 			
 			// Ensure there is enough data in this message to be a read
@@ -117,8 +114,6 @@ void LOCALTARGET_Task(void *handle)
 			REG_vWriteToAddress(address, &in_message.data[2], 4);
 			// Todo: Register handler respond with a read/write result.
 			// Our messages don't support that yet.
-		}
-		ioport_set_pin_level(PIN_DEBUG_0, 0);
-		
+		}		
 	}
 }

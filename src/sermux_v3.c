@@ -56,27 +56,20 @@ void SERMUX_V3_AddTarget(sermux_v3_t * handle, const uint8_t number, MessageBuff
 	handle->num_targets += 1;
 }
 
-#include "bsp.h"
-
 void SERMUX_V3_ReceiveTask(void * handle)
 {
 	sermux_v3_t* hnd = (sermux_v3_t *) handle;
 	
 	uint8_t rx_buffer[16];
 	
-	// These are here for temporary debugging
-	uint8_t tx_buffer[128];
-	
 	while(1)
 	{
 		// Try receiving data from the UART - Wait up to 100ms for data
 		size_t rx_length = xStreamBufferReceive(hnd->in_stream, rx_buffer, 16, portMAX_DELAY);
 		
-		xStreamBufferSend(hnd->out_stream, rx_buffer, rx_length, 0);
-		
 		for (uint32_t i = 0; i< rx_length; i++)
 		{
-			uint8_t rx_byte = 0; //rx_buffer[i];
+			uint8_t rx_byte = rx_buffer[i];
 		
 			switch (hnd->state)
 			{
@@ -119,7 +112,6 @@ void SERMUX_V3_ReceiveTask(void * handle)
 					
 					// Todo: Verify the CRC
 					
-					/*
 					// Process all the messages in this block
 					uint8_t curr_msg_index = 0;
 					while (curr_msg_index < hnd->rx_block.length)
@@ -151,20 +143,7 @@ void SERMUX_V3_ReceiveTask(void * handle)
 						curr_msg_index += msg_len;
 					}
 					hnd->state = V2_WAITING_1;
-					break;*/
-					
-					// Debugging. Send back exactly what we receive
-				
-					tx_buffer[0] = 0xC3;
-					tx_buffer[1] = 0xA9;
-					tx_buffer[2] = 2; //Version 2
-					tx_buffer[3] = hnd->rx_block.length;
-					
-					memcpy(&tx_buffer[4], &hnd->rx_block.buffer, hnd->rx_block.length);
-					tx_buffer[4 + hnd->rx_block.length] = 0; // CRC
-					
-					xStreamBufferSend(hnd->out_stream, tx_buffer, 5 + hnd->rx_block.length, 0);
-					
+					break;
 					
 					hnd->state = V2_WAITING_1;
 					break;
@@ -209,6 +188,7 @@ void SERMUX_V3_TransmitTask(void * handle)
 		{
 			//Todo: CRC
 			tx_buffer[tx_buffer_pos] = 0x00;
+			tx_buffer[3] = tx_buffer_pos - 4;
 			tx_buffer_pos += 1;
 			
 			//Todo: This timeout should be set?
