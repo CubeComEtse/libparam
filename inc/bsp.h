@@ -48,6 +48,7 @@ uint64_t BSP_u64GetTimestamp(void);
 void BSP_vUsbReset(void);
 
 void BSP_vTelemetrySetCTS(bool dir);
+uint8_t BSP_u8GetVersion(void);
 void BSP_vSetTestPin(bool level);
 
 // These should live in their own xtx file

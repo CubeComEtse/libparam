@@ -72,62 +72,7 @@ void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart, const uint32_t baud)
 		NVIC_EnableIRQ(USART2_IRQn);
 		}
 
-	ccd_uart_SetCTS(driver, false);
-	
-	/*
-		#define XDMAC_CH 0
-		
-	pmc_enable_periph_clk(ID_XDMAC);
-	
-	NVIC_ClearPendingIRQ(XDMAC_IRQn);
-	NVIC_SetPriority(XDMAC_IRQn, 1);
-	NVIC_EnableIRQ(XDMAC_IRQn);
-	
-	xdmac_channel_config_t xdmac_channel_cfg;
-	
-	xdmac_channel_cfg.mbr_ubc = UART_HOLDING_BUFFER_SIZE;
-
-	xdmac_channel_cfg.mbr_sa = (uint32_t)&(USART2->US_RHR);
-	xdmac_channel_cfg.mbr_da = (uint32_t)driver->rx_holding_buffer;
-	xdmac_channel_cfg.mbr_cfg = XDMAC_CC_TYPE_PER_TRAN  |
-		XDMAC_CC_MBSIZE_SINGLE |
-		
-		XDMAC_CC_SAM_FIXED_AM |
-		XDMAC_CC_DAM_INCREMENTED_AM |
-		
-		XDMAC_CC_DSYNC_PER2MEM |
-		XDMAC_CC_CSIZE_CHK_1 |
-		XDMAC_CC_DWIDTH_BYTE |
-		
-		XDMAC_CC_SIF_AHB_IF1 |
-		XDMAC_CC_DIF_AHB_IF0 |
-		
-		XDMAC_CC_PERID(XDMAC_CHANNEL_HWID_USART2_RX) ;
-
-	xdmac_channel_cfg.mbr_bc = 0;
-	xdmac_channel_cfg.mbr_ds =  0;
-	xdmac_channel_cfg.mbr_sus = 0;
-	xdmac_channel_cfg.mbr_dus = 0;
-
-	xdmac_configure_transfer(XDMAC, XDMAC_CH, &xdmac_channel_cfg);
-
-	xdmac_channel_set_descriptor_control(XDMAC, XDMAC_CH, 0);
-
-	xdmac_enable_interrupt(XDMAC, XDMAC_CH);
-	uint32_t xdmaint =  (XDMAC_CIE_BIE   |
-				XDMAC_CIE_DIE   |
-				XDMAC_CIE_FIE   |
-				XDMAC_CIE_RBIE  |
-				XDMAC_CIE_WBIE  |
-				XDMAC_CIE_ROIE);
-
-	xdmac_channel_enable_interrupt(XDMAC, XDMAC_CH, xdmaint);
-	xdmac_channel_enable(XDMAC, XDMAC_CH);*/
-	
-}
-
-void ccd_uart_SetCTS(ccd_uart_t * driver, bool dir){
-	ioport_set_pin_level(driver->cts_pin, dir);
+	ccd_uart_StartFlowControl(driver);
 }
 
 /*
@@ -136,6 +81,19 @@ void ccd_uart_SetCTS(ccd_uart_t * driver, bool dir){
 */
 void ccd_uart_EnableTXInterrupt(ccd_uart_t * driver) {
 	usart_enable_interrupt(driver->base_usart, US_IER_TXEMPTY);
+}
+
+inline void ccd_uart_StopFlowControl(ccd_uart_t * driver)
+{
+	ioport_set_pin_level(driver->cts_pin, true);
+}
+
+inline void ccd_uart_StartFlowControl(ccd_uart_t * driver)
+{
+	if ((UART_HOLDING_BUFFER_SIZE - driver->rx_buffer_write + driver->rx_buffer_read - 1)% UART_HOLDING_BUFFER_SIZE > 5)
+	{
+		ioport_set_pin_level(driver->cts_pin, false);
+	}
 }
 
 /*
@@ -173,10 +131,7 @@ void ccd_usart_RXProcessingTask(void * parameters)
 			}
 			
 			// Check if there is space, then clear CTS
-			if ((UART_HOLDING_BUFFER_SIZE - driver->rx_buffer_write + driver->rx_buffer_read - 1)% UART_HOLDING_BUFFER_SIZE > 5)
-			{
-				ccd_uart_SetCTS(driver, false);
-			}
+			ccd_uart_StartFlowControl(driver);
 		}	
 		
 		vTaskDelay(pdMS_TO_TICKS(1));
@@ -231,7 +186,7 @@ inline void ccd_uart_InterruptHandler(ccd_uart_t * driver)
 			size_t space_available = (UART_HOLDING_BUFFER_SIZE - driver->rx_buffer_write + driver->rx_buffer_read - 1) % UART_HOLDING_BUFFER_SIZE;
 			if (space_available < 10)
 			{
-				ccd_uart_SetCTS(driver, true);
+				ccd_uart_StopFlowControl(driver);
 			}
 		}
 	}

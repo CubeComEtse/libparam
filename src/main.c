@@ -34,6 +34,8 @@ static local_target_t local_target;
 static i2c_target_t i2c_target;
 static can_target_t can_target;
 
+static led_driver_t led_driver;
+
 sermux_v3_t sermux_v3;
 static bsp_t bsp;
 
@@ -55,20 +57,29 @@ int main (void)
 	
 	// NEW! IMPROVED! SHINY!
 	
-	LED_DRIVER_Setup();
-	
-	//The LTC2992's are independent of i2c functions, so setup them
-	power_measure_1.i2c_write_function = ccd_i2c_driver_Write;
-	power_measure_1.i2c_read_function = ccd_i2c_driver_Read;
-	power_measure_1.i2c_handle = bsp.local_i2c;
-	power_measure_2.i2c_write_function = ccd_i2c_driver_Write;
-	power_measure_2.i2c_read_function = ccd_i2c_driver_Read;
-	power_measure_1.i2c_handle = bsp.local_i2c;
-	
-	// Todo: This all depends on the type of board this code is for
-	// LTC2992_vNormalSetup(&power_measure_1, LTC2992_u8GenAddr(0, 0));
-	// LTC2992_vNormalSetup(&power_measure_2, LTC2992_u8GenAddr(0, 2));
-	
+	uint8_t version = BSP_u8GetVersion();
+	if (version == 0)
+	{
+		//The LTC2992's are independent of i2c functions, so setup them
+		power_measure_1.i2c_write_function = ccd_i2c_driver_Write;
+		power_measure_1.i2c_read_function = ccd_i2c_driver_Read;
+		power_measure_1.i2c_handle = bsp.local_i2c;
+		power_measure_2.i2c_write_function = ccd_i2c_driver_Write;
+		power_measure_2.i2c_read_function = ccd_i2c_driver_Read;
+		power_measure_1.i2c_handle = bsp.local_i2c;
+		
+		LTC2992_vNormalSetup(&power_measure_1, LTC2992_u8GenAddr(0, 0));
+		LTC2992_vNormalSetup(&power_measure_2, LTC2992_u8GenAddr(0, 2));
+	}
+	if (version == 1){
+		//The LTC2992's are independent of i2c functions, so setup them
+		power_measure_1.i2c_write_function = ccd_i2c_driver_Write;
+		power_measure_1.i2c_read_function = ccd_i2c_driver_Read;
+		power_measure_1.i2c_handle = bsp.local_i2c;
+		
+		LTC2992_vNormalSetup(&power_measure_1, LTC2992_u8GenAddr(0, 0));
+	}
+
 	cs_board.i2c_read_function = ccd_i2c_driver_Read;
 	cs_board.i2c_write_function = ccd_i2c_driver_Write;
 	LTC2499_vInit(&cs_board);
@@ -76,7 +87,15 @@ int main (void)
 	gse_manager.power_measure_1  = &power_measure_1;
 	gse_manager.power_measure_2 = &power_measure_2;
 	gse_manager.cs_board = &cs_board;
+	gse_manager.board_version = BSP_u8GetVersion();
 	GSE_MANAGER_Init(&gse_manager);
+	
+	
+	led_driver.uart_disable_fc = ccd_uart_StopFlowControl;
+	led_driver.uart_enable_fc = ccd_uart_StartFlowControl;
+	led_driver.uart_handle = bsp.telemetry_uart;
+	LED_DRIVER_Setup(&led_driver);
+	
 	
 	LOCALTARGET_Init(&local_target);
 
@@ -108,7 +127,7 @@ int main (void)
 	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_I2C_CC_2, can_target.incoming_messages, can_target.outgoing_messages);
 	
 
-	//xTaskCreate(GSE_MANAGER_Task, "GSE Manager", 1024, (void*) &gse_manager, tskIDLE_PRIORITY + 1, NULL );
+	xTaskCreate(GSE_MANAGER_Task, "GSE Manager", 1024, (void*) &gse_manager, tskIDLE_PRIORITY + 1, NULL );
 	
 	xTaskCreate(SERMUX_V3_ReceiveTask, "Serial MUX RX", 512, (void*) &sermux_v3, tskIDLE_PRIORITY+4, NULL);
 	xTaskCreate(SERMUX_V3_TransmitTask, "Serial MUX TX", 512, (void*) &sermux_v3, tskIDLE_PRIORITY+4, NULL);
@@ -121,23 +140,12 @@ int main (void)
 	xTaskCreate(ccd_usart_TXProcessingTask, "UART TX", 512, (void*) bsp.telemetry_uart, tskIDLE_PRIORITY + 4, NULL);
 	
 	// LED task has lowest priority
-	// xTaskCreate(LED_DRIVER_UpdateTask, "LED", 512, (void*) NULL, tskIDLE_PRIORITY, NULL);
+	xTaskCreate(LED_DRIVER_UpdateTask, "LED", 512, (void*) &led_driver, tskIDLE_PRIORITY+1, NULL);
 	
 	vTaskStartScheduler();
 	
-	//Todo: Reboot!
+	//Todo: Reboot is we get here!
 	while(1);
-	
-	// Might be needed:
-	// BSP_vTelemetrySetCTS(false);
-	
-
-
-
-
-
-
-
 }
 
 

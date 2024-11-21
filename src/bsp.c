@@ -38,6 +38,9 @@ static volatile uint32_t fifo_receive_index = 0;
 static ccd_uart_t telemetry_uart;
 static ccd_i2c_t  bus_i2c;
 
+// The version is only read and set once, during startup
+static uint8_t version;
+
 void BSP_Init(bsp_t * bsp) {
 
 	// System Initialization
@@ -47,6 +50,23 @@ void BSP_Init(bsp_t * bsp) {
 	
 	// General GPIO is handled here - not in a driver
 	ioport_init();
+	
+	// Get the version. This is the first thing we do - it might affect the code later.
+	ioport_set_pin_dir(PIN_VERSION_0, IOPORT_DIR_INPUT);
+	ioport_set_pin_dir(PIN_VERSION_1, IOPORT_DIR_INPUT);
+	ioport_set_pin_dir(PIN_VERSION_2, IOPORT_DIR_INPUT);
+	
+	ioport_set_pin_mode(PIN_VERSION_0, IOPORT_MODE_PULLDOWN);
+	ioport_set_pin_mode(PIN_VERSION_1, IOPORT_MODE_PULLDOWN);
+	ioport_set_pin_mode(PIN_VERSION_2, IOPORT_MODE_PULLDOWN);
+	
+	ioport_enable_pin(PIN_VERSION_0);
+	ioport_enable_pin(PIN_VERSION_1);
+	ioport_enable_pin(PIN_VERSION_2);
+	
+	delay_ms(1);
+	version = (ioport_get_pin_level(PIN_VERSION_2) << 2) | (ioport_get_pin_level(PIN_VERSION_1) << 1) | ioport_get_pin_level(PIN_VERSION_0);
+
 
 	//Telemetry UART
 	ioport_set_pin_mode(T_USART_RX_PIN, IOPORT_MODE_MUX_B);
@@ -83,7 +103,9 @@ void BSP_Init(bsp_t * bsp) {
     BSP_vInitCan();
 
     //BSP_vInit1MsTimer();
+	
 
+	
     
     ioport_enable_pin(USB_RESET_PIN);
     ioport_set_pin_level(USB_RESET_PIN, 0);
@@ -131,6 +153,10 @@ void BSP_Init(bsp_t * bsp) {
 	// Set the systick to the lowest possible interrupt level
     SysTick_Config(300000);
 	NVIC_SetPriority(SysTick_IRQn, (1<<__NVIC_PRIO_BITS) -1 );
+}
+
+uint8_t BSP_u8GetVersion(){
+	return version;
 }
 
 void BSP_vSetTestPin(bool level) {

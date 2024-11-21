@@ -16,65 +16,6 @@
 		"name": "OBC",
 		"registers": [
 			{
-
-				"name": "ID", 
-				"address": "0x01", 
-				"width": "32",
-				"c#": { "type": "UInt32"},
-				"fields":[]
-			},
-			{
-				"name": "Serial", 
-				"address": "0x02", 
-				"width": "32",
-				"c#": { "type": "UInt32"},
-				"fields":[]
-			},
-			{
-				"name": "SW_Version", 
-				"address": "0x03", 
-				"width": "32",
-				"c#": { "type": "UInt32"},
-				"fields":"Version"
-			},
-			{
-				"name": "HW_Version", 
-				"address": "0x05", 
-				"width": "32",
-				"c#": { "type": "UInt32"},
-				"fields":"Version"
-			},
-			{
-				"name": "Uptime", 
-				"address": "0x06", 
-				"width": "32",
-				"c#": { "type": "UInt32"},
-				"fields":[]
-			},
-
-			{
-				"name": "Scratchpad", 
-				"address": "0x07", 
-				"width": "32",
-				"c#": { "type": "UInt32"},
-				"fields":[]
-			},
-			{
-				"name": "Timeout", 
-				"address": "0x0A", 
-				"width": "32",
-				"c#": { "type": "UInt32"},
-				"fields":[]
-			},
-			{
-				"name": "Reset", 
-				"address": "0x0B",
-				"width": "32",
-				"c#": { "type": "UInt32"},
-				"fields":[]
-			},
-			{
-
 				"name": "Board_ID",
 				"address": "0x10",
 				"dir": "r",
@@ -154,27 +95,6 @@
 				"c#": {
 					"type": "UInt32"
 				}
-			},
-			{
-				"name": "Supported_Boards",
-				"address": "0x14",
-				"dir": "r",
-				"width": "32",
-				"c#": {
-					"type": "UInt32"
-				},
-				"fields": []
-			},
-			{
-				"name":"Configured_Boards",
-				"address": "0x15",
-				"dir": "r",
-				"width": "32",
-				"c#": {
-					"type": "UInt32"
-				},
-				"fields": [],
-				"options": "BoardIdentifier"
 			},
 			{
 				"name": "Uptime",

@@ -38,10 +38,12 @@ typedef struct {
 }ccd_uart_t;
 
 void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart, const uint32_t baud);
-void ccd_uart_SetCTS(ccd_uart_t * driver, bool dir);
 void ccd_uart_EnableTXInterrupt(ccd_uart_t * driver);
 void ccd_uart_InterruptHandler(ccd_uart_t * driver);
 void ccd_usart_RXProcessingTask(void * parameters);
 void ccd_usart_TXProcessingTask(void * parameters);
+
+void ccd_uart_StartFlowControl(ccd_uart_t * driver);
+void ccd_uart_StopFlowControl(ccd_uart_t * driver);
 
 #endif /* CCD_UART_DRIVER_H_ */

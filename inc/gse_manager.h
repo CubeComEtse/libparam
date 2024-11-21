@@ -29,6 +29,8 @@ typedef struct {
 	void (*set_gpio_pin) (void * handle, const uint32_t pint, const bool value);
 	void * gpio_handle;
 	
+	uint8_t board_version;
+	
 	bool bCSBoardenabled;
 }gse_manager_t;
 

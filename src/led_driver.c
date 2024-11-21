@@ -50,7 +50,8 @@ void setup_pwm_for_the_damn_led(void){
 	pwm->PWM_IER1 |= PWM_IER1_CHID3;
 }
 
-void LED_DRIVER_Setup(void){
+void LED_DRIVER_Setup(led_driver_t * handle){
+	//Todo: Factor out to BSP.
 	setup_pwm_for_the_damn_led();
 	
     green_blue_bounce.num_control_points = 4;
@@ -71,13 +72,14 @@ void LED_DRIVER_Setup(void){
     gb_points[3].coordinate      = (vec3_t) {.x=1.0, .y=0.0, .z=1.0};
     gb_points[3].forward_toggle  = (vec3_t) {.x=0.0, .y=0.0, .z=0.9};
     gb_points[3].backward_toggle = (vec3_t) {.x=0.9, .y=0.0, .z=0.0};
-    
 }
 
 
 void LED_DRIVER_UpdateTask(void * parameters)
 {
 
+	led_driver_t * handle = (led_driver_t*) parameters;
+	
     vec3_t new_led = {0};
     double t = 0;
     uint32_t pattern1 = 0;
@@ -132,12 +134,12 @@ void LED_DRIVER_UpdateTask(void * parameters)
                     (((uint32_t)(new_led.y * 255) << 8)  & 0x00FF00) | 
                     (((uint32_t)(new_led.z * 255))       & 0x0000FF);*/
 
-        write_led_value_over_pwm(pattern1);
+        write_led_value_over_pwm(handle, pattern1);
         vTaskDelay(pdMS_TO_TICKS(20)); 
     }
 }
 
-void write_led_value_over_pwm(uint32_t value)
+void write_led_value_over_pwm(led_driver_t * handle, uint32_t value)
 {
     Pwm * pwm = PWM0;
 	
@@ -153,8 +155,20 @@ void write_led_value_over_pwm(uint32_t value)
 
     int short_period = 30;
     int long_period = 90;
-	taskENTER_CRITICAL();
 	
+	
+	// Hacks: The UART interrupt is very important to respond to, otherwise we miss
+	// messages from the PC. It is so important it gets priority above the RTOS. 
+	// But if it triggers in the middle of an LED update, the LED is borked, and that
+	// looks bad, which is somehow even worse. So just for this short while, disable 
+	// the UART interrupt. By setting flow control.
+	
+	if (handle->uart_disable_fc){
+		handle->uart_disable_fc(handle->uart_handle);
+	}
+	
+	taskENTER_CRITICAL();
+	__disable_irq();
 
     // Start by setting the duty cycle to 0 so that the first cycle
     // doesn't count as a bit
@@ -188,5 +202,10 @@ void write_led_value_over_pwm(uint32_t value)
 	pwm->PWM_CH_NUM[3].PWM_CDTY = 0;
 	pwm->PWM_CH_NUM[3].PWM_CDTYUPD = 0;
 
+	__enable_irq();
 	taskEXIT_CRITICAL();
+	
+	if (handle->uart_enable_fc){
+		handle->uart_enable_fc(handle->uart_handle);
+	}
 }

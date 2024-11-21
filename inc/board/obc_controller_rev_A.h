@@ -97,6 +97,11 @@
 // Pin 51
 #define TEST_PIN_3              PIO_PA14_IDX
 
+//Version Pins
+#define PIN_VERSION_0			PIO_PC7_IDX
+#define PIN_VERSION_1			PIO_PC8_IDX
+#define PIN_VERSION_2			PIO_PC9_IDX
+
 // H1.8
 #define XTX_nRST_PIN            PIO_PC1_IDX
 // H1.18

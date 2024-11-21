@@ -56,6 +56,8 @@ void SERMUX_V3_AddTarget(sermux_v3_t * handle, const uint8_t number, MessageBuff
 	handle->num_targets += 1;
 }
 
+#include "bsp.h"
+
 void SERMUX_V3_ReceiveTask(void * handle)
 {
 	sermux_v3_t* hnd = (sermux_v3_t *) handle;
@@ -142,9 +144,6 @@ void SERMUX_V3_ReceiveTask(void * handle)
 						// Increment by the message count
 						curr_msg_index += msg_len;
 					}
-					hnd->state = V2_WAITING_1;
-					break;
-					
 					hnd->state = V2_WAITING_1;
 					break;
 					
