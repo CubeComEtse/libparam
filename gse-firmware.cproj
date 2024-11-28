@@ -700,7 +700,6 @@
     <Folder Include="src\freertos\portable\GCC\ARM_CM7\" />
     <Folder Include="src\freertos\portable\GCC\ARM_CM7\r0p1\" />
     <Folder Include="src\freertos\portable\MemMang\" />
-    <Folder Include="src\registers\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="inc\board\obc_controller_rev_A.h">
@@ -853,13 +852,16 @@
     <Compile Include="inc\Multitester.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\OBC.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="inc\pc_messages.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="inc\Platform.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="inc\register_handler.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\register_map.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\sermux_v3.h">
@@ -937,6 +939,12 @@
     <Compile Include="src\multitester.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\Platform.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\register_map.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\sermux_v3.c">
       <SubType>compile</SubType>
     </Compile>
@@ -950,9 +958,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\pc_messages.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\registers\OBC.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\register_handler.c">

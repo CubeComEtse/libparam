@@ -35,7 +35,15 @@ static volatile uint32_t fifo_receive_index = 0;
 
 
 // Post cleanup
+
+// Local functions
+static void BSP_vInitUART(bsp_t * bsp);
+static void BSP_vInitBusI2C(bsp_t * bsp);
+static void BSP_vInitUtilI2C(bsp_t * bsp);
+
+// Post cleanup
 static ccd_uart_t telemetry_uart;
+static ccd_i2c_t  util_i2c;
 static ccd_i2c_t  bus_i2c;
 
 // The version is only read and set once, during startup
@@ -67,40 +75,21 @@ void BSP_Init(bsp_t * bsp) {
 	delay_ms(1);
 	version = (ioport_get_pin_level(PIN_VERSION_2) << 2) | (ioport_get_pin_level(PIN_VERSION_1) << 1) | ioport_get_pin_level(PIN_VERSION_0);
 
+	BSP_vInitUART(bsp);
+	BSP_vInitBusI2C(bsp);
+	BSP_vInitUtilI2C(bsp);
+	
 
-	//Telemetry UART
-	ioport_set_pin_mode(T_USART_RX_PIN, IOPORT_MODE_MUX_B);
-	ioport_disable_pin(T_USART_RX_PIN);
 
-	ioport_set_pin_mode(T_USART_TX_PIN, IOPORT_MODE_MUX_B);
-	ioport_disable_pin(T_USART_TX_PIN);
-
-	ioport_enable_pin(T_USART_RTS_PIN);
-	ioport_set_pin_dir(T_USART_RTS_PIN, IOPORT_DIR_INPUT);
-	ioport_enable_pin(T_USART_CTS_PIN);
-	ioport_set_pin_dir(T_USART_CTS_PIN, IOPORT_DIR_OUTPUT);
-	telemetry_uart.cts_pin = T_USART_CTS_PIN;
-	ccd_uart_Init(&telemetry_uart, T_USART, T_USART_SPEED);
-	bsp->telemetry_uart = &telemetry_uart;
-
-	// Board I2C
-	ioport_set_pin_mode(I2C_BOARD_SDA_PIN, I2C_BOARD_SDA_MUX);
-	ioport_disable_pin(I2C_BOARD_SDA_PIN);
-
-	ioport_set_pin_mode(I2C_BOARD_SCL_PIN, I2C_BOARD_SCL_MUX);
-	ioport_disable_pin(I2C_BOARD_SCL_PIN);
-	ccd_i2c_driver_Init(&bus_i2c, I2C_BOARD_DEVICE);
-	bsp->bus_i2c = &bus_i2c;
-	bsp->local_i2c = &bus_i2c;
 
 
 
 	
-
+	/*
     BSP_vInitSPI();
     BSP_vInitPowerSenseGPIO();
     BSP_vInitPowerGPIO();
-    BSP_vInitCan();
+    BSP_vInitCan();*/
 
     //BSP_vInit1MsTimer();
 	
@@ -159,9 +148,68 @@ uint8_t BSP_u8GetVersion(){
 	return version;
 }
 
+
+void inline BSP_vSetPin(uint32_t pin, bool value){
+	ioport_set_pin_level(pin, value);
+}
+
+
+static void BSP_vInitUART(bsp_t * bsp){
+	//Telemetry UART
+	ioport_set_pin_mode(T_USART_RX_PIN, IOPORT_MODE_MUX_B);
+	ioport_disable_pin(T_USART_RX_PIN);
+
+	ioport_set_pin_mode(T_USART_TX_PIN, IOPORT_MODE_MUX_B);
+	ioport_disable_pin(T_USART_TX_PIN);
+
+	ioport_enable_pin(T_USART_RTS_PIN);
+	ioport_set_pin_dir(T_USART_RTS_PIN, IOPORT_DIR_INPUT);
+	ioport_enable_pin(T_USART_CTS_PIN);
+	ioport_set_pin_dir(T_USART_CTS_PIN, IOPORT_DIR_OUTPUT);
+	
+	telemetry_uart.cts_pin = T_USART_CTS_PIN;
+	ccd_uart_Init(&telemetry_uart, T_USART, T_USART_SPEED);
+	
+	bsp->telemetry_uart = &telemetry_uart;
+}
+
+static void BSP_vInitBusI2C(bsp_t * bsp){
+	// Board I2C
+	ioport_set_pin_mode(I2C_BOARD_SDA_PIN, I2C_BOARD_SDA_MUX);
+	ioport_disable_pin(I2C_BOARD_SDA_PIN);
+
+	ioport_set_pin_mode(I2C_BOARD_SCL_PIN, I2C_BOARD_SCL_MUX);
+	ioport_disable_pin(I2C_BOARD_SCL_PIN);
+	ccd_i2c_driver_Init(&bus_i2c, I2C_BOARD_DEVICE);
+	bsp->bus_i2c = &bus_i2c;
+}
+
+static void BSP_vInitUtilI2C(bsp_t * bsp){
+	if (BSP_u8GetVersion() == 0){
+		bsp->local_i2c = bsp->bus_i2c;
+		return;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void BSP_vSetTestPin(bool level) {
     ioport_set_pin_level(TEST_PIN_0, level);
 }
+
+
 
 void BSP_vInitSPI(void) { 
     spi_disable_interrupt(SPI_DEVICE, ALL_INTERRUPT_MASK);

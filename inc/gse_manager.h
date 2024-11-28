@@ -19,23 +19,26 @@ typedef enum{
 	POWER_VBAT_ALT,
 }power_rail_id_t;
 
-
 typedef struct {
 	// Pointers to devices on the GSE board
 	ltc2992_device_t * power_measure_1;
 	ltc2992_device_t * power_measure_2;
 	ltc2499_device_t  * cs_board;
 	
-	void (*set_gpio_pin) (void * handle, const uint32_t pint, const bool value);
-	void * gpio_handle;
+	void (*set_gpio_pin) (uint32_t pin, bool value);
+	uint32_t enable_3v3_pin;
+	uint32_t enable_5v_pin;
+	uint32_t enable_vbat_pin;
+	uint32_t enable_vbatalt_pin;
 	
 	uint8_t board_version;
 	
 	bool bCSBoardenabled;
 }gse_manager_t;
 
+
 void GSE_MANAGER_Init(gse_manager_t * handle);
-void GSE_MANAGER_SetPower(gse_manager_t * handle, const power_rail_id_t power, const bool setting);
+void GSE_MANAGER_SetBusPowerSwitch(gse_manager_t * handle, const power_rail_id_t power, const bool setting);
 void GSE_MANAGER_Task(void * taskptr);
 
 

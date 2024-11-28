@@ -4,16 +4,16 @@
 		"c#": {
 			"namespace": "Devices.Models"
 		},
-		"filename": "OBC",
+		"filename": "register_map",
 		"filenames":{
-			"c_header": "../../inc/OBC.h",
-			"c_source": "OBC.c",
+			"c_header": "../inc/register_map.h",
+			"c_source": "../src/register_map.c",
 			"cs": "OBC.cs"
 		}
 	},
 	"module":
 	{
-		"name": "OBC",
+		"name": "register_map",
 		"registers": [
 			{
 				"name": "Board_ID",
@@ -95,6 +95,17 @@
 				"c#": {
 					"type": "UInt32"
 				}
+			},
+			{
+				"name":"Configured_Boards",
+				"address": "0x15",
+				"dir": "r",
+				"width": "32",
+				"c#": {
+					"type": "UInt32"
+				},
+				"fields": [],
+				"options": "BoardIdentifier"
 			},
 			{
 				"name": "Uptime",
@@ -397,32 +408,10 @@
 						},
 						"c": {"type": "bool"}
 					},
-					{
-						"name": "RfSwENA",
-						"pretty-name": "",
-						"description": "Enables Toggling the RF Switch as well",
-						"bit": "2",
-						"options": "Enabled",
-						"c#": {
-							"hasminmax": "false",
-							"type": "byte"
-						},
-						"c": {"type": "bool"}
-					},
 					{ "name": "FanPos1", "bit": "4", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
 					{ "name": "FanPos2", "bit": "5",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
 					{ "name": "FanPos3", "bit": "6",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"}},
-					{ "name": "FanPos4", "bit": "7",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
-					{
-						"name": "RfSwChan",
-						"description": "Enables the selected channel on the RF Switch. 0 Disables all",
-						"bit": "15-8",
-						"c#": {
-							"hasminmax": "false",
-							"type": "byte"
-						},
-						"c": {"type": "uint8_t"}
-					}
+					{ "name": "FanPos4", "bit": "7",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} }
 				],
 				"c#": {
 					"type": "UInt32"
@@ -436,6 +425,23 @@
 				"fields": [
 					{ "name": "EnableMeasurements", "bit": "0", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" },
 						"c": {"type": "bool"} 
+					}
+				],
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name":"CANConfA",
+				"address": "0x2D",
+				"dir": "rw",
+				"width": "32",
+				"fields": [
+					{ 
+						"name": "BaudRate", 
+						"bit": "31-0", 
+						"c#": {"hasminmax": "false", "type": "UInt32" },
+						"c": {"type": "uint32_t"} 
 					}
 				],
 				"c#": {
@@ -513,6 +519,47 @@
 				}
 			},
 			{
+				"name": "RFRelaysConf",
+				"address": "0x32",
+				"dir": "rw",
+				"width": "32",
+				"c#": {"type": "UInt32" },
+				"fields": [
+					{
+						"name": "RFSW1_Detected",
+						"pretty-name": "",
+						"description": "Set when RFSW1 is detected on the utility I2C",
+						"bit": "0",
+						"options": "Enabled",
+						"c#": {"hasminmax": "false","type": "byte"},
+						"c": {"type": "bool"}
+					},
+					{
+						"name": "RFSW2_Detected",
+						"pretty-name": "",
+						"description": "Set when RFSW2 is detected on the utility I2C",
+						"bit": "1",
+						"options": "Enabled",
+						"c#": {"hasminmax": "false", "type": "byte"},
+						"c": {"type": "bool"}
+					},
+					{
+						"name": "RfSw1Chan",
+						"description": "Enables the selected channel on the RF Switch 1. 0 Disables all",
+						"bit": "15-8",
+						"c#": { "hasminmax": "false","type": "byte"},
+						"c": {"type": "uint8_t"}
+					},
+					{
+						"name": "RfSw2Chan",
+						"description": "Enables the selected channel on the RF Switch 2. 0 Disables all",
+						"bit": "23-16",
+						"c#": { "hasminmax": "false","type": "byte"},
+						"c": {"type": "uint8_t"}
+					}
+				]
+			},
+			{
 				"name": "XDCConfig",
 				"address": "0x40",
 				"dir": "rw",
@@ -570,20 +617,20 @@
 
 			
 			{ "name":"TE_Addr_0",     "address": "0x80", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
-			{ "name":"TE_Addr_0_Set", "address": "0x80", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
-			{ "name":"TE_Addr_0_Clr", "address": "0x80", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"TE_Addr_0_Set", "address": "0x81", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"TE_Addr_0_Clr", "address": "0x82", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
 
-			{ "name":"TE_Addr_1",     "address": "0x80", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
-			{ "name":"TE_Addr_1_Set", "address": "0x80", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
-			{ "name":"TE_Addr_1_Clr", "address": "0x80", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"TE_Addr_1",     "address": "0x83", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"TE_Addr_1_Set", "address": "0x84", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"TE_Addr_1_Clr", "address": "0x85", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
 
-			{ "name":"TE_Addr_2",     "address": "0x80", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
-			{ "name":"TE_Addr_2_Set", "address": "0x80", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
-			{ "name":"TE_Addr_2_Clr", "address": "0x80", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"TE_Addr_2",     "address": "0x86", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"TE_Addr_2_Set", "address": "0x87", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"TE_Addr_2_Clr", "address": "0x88", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
 
-			{ "name":"TE_Addr_3",     "address": "0x80", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
-			{ "name":"TE_Addr_3_Set", "address": "0x80", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
-			{ "name":"TE_Addr_3_Clr", "address": "0x80", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } }
+			{ "name":"TE_Addr_3",     "address": "0x89", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"TE_Addr_3_Set", "address": "0x8A", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"TE_Addr_3_Clr", "address": "0x8B", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } }
 		],
 		"generic_fields":{
 			"boardflag": [
@@ -677,7 +724,7 @@
 				{ "bit": "10",    "name": "nReset",   "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"} },
 				{ "bit": "11",    "name": "COMM_TR",  "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"} },
 
-				{ "bit": "12-15", "name": "Type",     "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"}, "options": "TE_Types" }
+				{ "bit": "15-12", "name": "Type",     "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"}, "options": "TE_Types" }
    			] 
 		},
 		"options" :{

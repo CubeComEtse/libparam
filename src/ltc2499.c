@@ -10,7 +10,7 @@
 #include <assert.h>
 #include <math.h>
 
-#include "OBC.h"
+#include "register_map.h"
 
 void LTC2499_vInit(ltc2499_device_t * dev) {
 	assert(dev->i2c_read_function);

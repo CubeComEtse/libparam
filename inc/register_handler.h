@@ -13,10 +13,13 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#include "OBC.h"
+#include "register_map.h"
+#include "platform.h"
 
-
-void REG_vInit(void);
+/*
+This is required for the register handler setup.
+*/
+void REG_vSetPlatformPointer(platform_t * handle);
 
 /*
  * Checks if the provided register address is a valid one. Returns true if it 

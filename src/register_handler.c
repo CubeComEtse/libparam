@@ -2,14 +2,21 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "register_handler.h"
+
 #include "event.h"
 #include "Multitester.h"
 #include "config.h"
-#include "register_handler.h"
+#include "platform.h"
 
-#include "OBC.h"
+
+#include "gse_manager.h"
+#include "register_map.h"
   
 static uint32_t REG_CopyArrayToU32(const uint8_t* data);
+
+static platform_t * platform;
+
 
 /*
  * This module handles the register interface exposed to the outside.
@@ -28,7 +35,6 @@ static addres_to_func_map_t address_to_func_map[] = {
 	{ reg_FW_Version_addr, mm_getFW_Version},
 	{ reg_HW_Version_addr, mm_getHW_Version},
 	{ reg_Scratchpad_addr, mm_getScratchpad},
-	{ reg_Supported_Boards_addr, mm_getSupported_Boards},
 	{ reg_Configured_Boards_addr, mm_getConfigured_Boards},
 	{ reg_Uptime_addr, mm_getUptime},
 	{ reg_Event_ConfA_addr, mm_getEvent_ConfA},
@@ -89,19 +95,8 @@ static addres_to_func_map_t address_to_func_map[] = {
 };
 
 
-void REG_vInit(){
-    // Some values are fixed
-	// Todo: This initialization can only be done when the freertso scheduler is running
-	/*
-	mm_setBoard_ID(0x634F4243);
-	mm_setFW_Version(0x00020203);
-	mm_setHW_Version(0x00000001);
-	
-	mm_setI2CConfA_SPD(0x5);
-	mm_setI2CConfA_TRDEL(10);
-	mm_setXDCConfig_ADDR(0x52);
-	mm_setConfMulti(0x1111);
-	*/
+void REG_vSetPlatformPointer(platform_t * handle){
+	platform = handle;
 }
 
 
@@ -209,10 +204,7 @@ bool REG_vReadFromAddress(const uint32_t address, uint8_t * buff, uint8_t * size
 			mm_setConfMulti_FanPos2(MULTI_bGetChannelFan(multitester, Position2));
 			mm_setConfMulti_FanPos3(MULTI_bGetChannelFan(multitester, Position3));
 			mm_setConfMulti_FanPos4(MULTI_bGetChannelFan(multitester, Position4));
-			
-			mm_setConfMulti_RfSwENA(MULTI_bGetRfSwitchEnabled(multitester));
-			mm_setConfMulti_RfSwChan(MULTI_u8GetRFSwitchChannel(multitester));
-			
+						
 			
 			uint32_t read_successful = mm_getConfMulti(&destination);
 			if (read_successful == mm_OK){
@@ -285,7 +277,6 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 		case reg_Board_ID_addr:
 		case reg_FW_Version_addr:
 		case reg_HW_Version_addr:
-		case reg_Supported_Boards_addr:
 		case reg_Uptime_addr:
 		case reg_MeasureVI_V3_addr:
 		case reg_MeasurePower_V3_addr:
@@ -328,20 +319,44 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 		case reg_CSBoard_Current7I1_addr:
 		case reg_CSBoard_Current7I2_addr:
 			break;
-
 		case reg_Scratchpad_addr:
 			mm_setScratchpad(deserialized);
-			break;
-
+		break;
+		
 		case reg_Configured_Boards_addr:
 			mm_setConfigured_Boards(deserialized);
-			//CONFIG_vDecodeBoardSet(0, (uint8_t) deserialized);
 			break;
-
+		
+		case reg_Event_ConfA_addr:
+			break;
+		
 		case reg_ConfPower_addr:
-			mm_setConfPower(deserialized);
-			//CONFIG_vDecodePower((uint8_t) deserialized);
-			break;
+		{
+			mm_enabled_t powerEn = reg_enabled_disabled;
+			
+			// Only V0 has these pins
+			if (BSP_u8GetVersion() == 0)
+			{
+				mm_getConfPower_voltage5ToggleFrom(&powerEn, deserialized);
+				GSE_MANAGER_SetBusPowerSwitch(platform->gse_manager, POWER_5V, powerEn == reg_enabled_enabled);
+				mm_setConfPower_voltage5Toggle(powerEn);
+				
+				mm_getConfPower_voltageVBatAltToggleFrom(&powerEn, deserialized);
+				GSE_MANAGER_SetBusPowerSwitch(platform->gse_manager, POWER_VBAT_ALT, powerEn == reg_enabled_enabled);
+				mm_setConfPower_voltageVBatAltToggle(powerEn);
+				
+			}
+			mm_getConfPower_voltage3ToggleFrom(&powerEn, deserialized);
+			GSE_MANAGER_SetBusPowerSwitch(platform->gse_manager, POWER_3V3, powerEn == reg_enabled_enabled);
+			mm_setConfPower_voltage3Toggle(powerEn);
+			
+			
+			mm_getConfPower_voltageVBatToggleFrom(&powerEn, deserialized);
+			GSE_MANAGER_SetBusPowerSwitch(platform->gse_manager, POWER_VBAT, powerEn == reg_enabled_enabled);
+			mm_setConfPower_voltageVBatToggle(powerEn);
+			
+		}
+		break;
 				
 		case reg_I2CConfA_addr:
 		{
@@ -388,14 +403,7 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 				
 			mm_getConfMulti_FanPos4From( &fanEnabled, deserialized);
 			MULTI_vSetChannelFan(multitester, Position4, fanEnabled == reg_enabled_enabled);
-				
-			mm_enabled_t RfSwEna;
-			mm_getConfMulti_RfSwENAFrom( &RfSwEna, deserialized);
-			MULTI_vSetRfSwitchEnabled(multitester, RfSwEna == reg_enabled_enabled);
-				
-			uint8_t RfSwChan;
-			mm_getConfMulti_RfSwChanFrom(&RfSwChan, deserialized);
-			MULTI_vSetRFSwitchChannel(multitester, RfSwChan);
+			
 				
 			mm_setConfMulti(deserialized);
 		}

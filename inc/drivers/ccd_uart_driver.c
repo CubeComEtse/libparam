@@ -83,13 +83,16 @@ void ccd_uart_EnableTXInterrupt(ccd_uart_t * driver) {
 	usart_enable_interrupt(driver->base_usart, US_IER_TXEMPTY);
 }
 
-inline void ccd_uart_StopFlowControl(ccd_uart_t * driver)
+inline void ccd_uart_StopFlowControl(void * handle)
 {
+	ccd_uart_t * driver =  (ccd_uart_t *) handle;
 	ioport_set_pin_level(driver->cts_pin, true);
 }
 
-inline void ccd_uart_StartFlowControl(ccd_uart_t * driver)
+inline void ccd_uart_StartFlowControl(void * handle)
 {
+	ccd_uart_t * driver =  (ccd_uart_t *) handle;
+	
 	if ((UART_HOLDING_BUFFER_SIZE - driver->rx_buffer_write + driver->rx_buffer_read - 1)% UART_HOLDING_BUFFER_SIZE > 5)
 	{
 		ioport_set_pin_level(driver->cts_pin, false);

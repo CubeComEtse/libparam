@@ -1,4 +1,4 @@
-#include "OBC.h"
+#include "register_map.h"
 #include "FreeRTOS.h"
 #include "semphr.h"
 
@@ -352,32 +352,6 @@ mm_response_t mm_getScratchpad(uint32_t * dest) {
     return response;
 }
 mm_response_t mm_getScratchpadFrom(uint32_t * dest, const uint32_t source) {
-    *dest = source;
-    return mm_OK;
-}
-
-
-/*************** Get/Set functions for Supported_Boards register **************************************************************/
-mm_response_t mm_setSupported_Boards(const uint32_t val) {
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        mm.Supported_Boards = val;
-        xSemaphoreGive(_mm_mutex);
-        return mm_OK;
-    }
-    else {
-        return mm_NotReady;
-    }
-}
-mm_response_t mm_getSupported_Boards(uint32_t * dest) {
-    mm_response_t response = mm_NotReady;
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        *dest = mm.Supported_Boards;
-        response = mm_OK;
-        xSemaphoreGive(_mm_mutex);
-    }
-    return response;
-}
-mm_response_t mm_getSupported_BoardsFrom(uint32_t * dest, const uint32_t source) {
     *dest = source;
     return mm_OK;
 }
@@ -1365,31 +1339,6 @@ mm_response_t mm_getConfMulti_AutoCLRFrom(mm_enabled_t * dest, const uint32_t so
     *dest = (mm_enabled_t) ((source & REG_CONFMULTI_AUTOCLR_Msk) >> REG_CONFMULTI_AUTOCLR_Pos);
     return mm_OK;
 }
-mm_response_t mm_setConfMulti_RfSwENA(const mm_enabled_t val) {
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        mm.ConfMulti = (mm.ConfMulti & ~REG_CONFMULTI_RFSWENA_Msk) | (val << REG_CONFMULTI_RFSWENA_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return  mm_OK;
-    }
-        else{
-        return mm_NotReady;
-    }
-}
-mm_response_t mm_getConfMulti_RfSwENA(mm_enabled_t * dest) {
-    mm_response_t response = mm_NotReady;
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
-    {
-        *dest = (mm_enabled_t) ((mm.ConfMulti & REG_CONFMULTI_RFSWENA_Msk) >> REG_CONFMULTI_RFSWENA_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return mm_OK;
-    }
-    return response;
-}
-
-mm_response_t mm_getConfMulti_RfSwENAFrom(mm_enabled_t * dest, const uint32_t source) {
-    *dest = (mm_enabled_t) ((source & REG_CONFMULTI_RFSWENA_Msk) >> REG_CONFMULTI_RFSWENA_Pos);
-    return mm_OK;
-}
 mm_response_t mm_setConfMulti_FanPos1(const mm_enabled_t val) {
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
         mm.ConfMulti = (mm.ConfMulti & ~REG_CONFMULTI_FANPOS1_Msk) | (val << REG_CONFMULTI_FANPOS1_Pos);
@@ -1490,31 +1439,6 @@ mm_response_t mm_getConfMulti_FanPos4From(mm_enabled_t * dest, const uint32_t so
     *dest = (mm_enabled_t) ((source & REG_CONFMULTI_FANPOS4_Msk) >> REG_CONFMULTI_FANPOS4_Pos);
     return mm_OK;
 }
-mm_response_t mm_setConfMulti_RfSwChan(const uint8_t val) {
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        mm.ConfMulti = (mm.ConfMulti & ~REG_CONFMULTI_RFSWCHAN_Msk) | (val << REG_CONFMULTI_RFSWCHAN_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return  mm_OK;
-    }
-        else{
-        return mm_NotReady;
-    }
-}
-mm_response_t mm_getConfMulti_RfSwChan(uint8_t * dest) {
-    mm_response_t response = mm_NotReady;
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
-    {
-        *dest = (uint8_t) ((mm.ConfMulti & REG_CONFMULTI_RFSWCHAN_Msk) >> REG_CONFMULTI_RFSWCHAN_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return mm_OK;
-    }
-    return response;
-}
-
-mm_response_t mm_getConfMulti_RfSwChanFrom(uint8_t * dest, const uint32_t source) {
-    *dest = (uint8_t) ((source & REG_CONFMULTI_RFSWCHAN_Msk) >> REG_CONFMULTI_RFSWCHAN_Pos);
-    return mm_OK;
-}
 /*************** Get/Set functions for ConfTempSense register *****************************************************************/
 mm_response_t mm_setConfTempSense(const uint32_t val) {
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
@@ -1558,6 +1482,51 @@ mm_response_t mm_getConfTempSense_EnableMeasurements(mm_enabled_t * dest) {
 
 mm_response_t mm_getConfTempSense_EnableMeasurementsFrom(mm_enabled_t * dest, const uint32_t source) {
     *dest = (mm_enabled_t) ((source & REG_CONFTEMPSENSE_ENABLEMEASUREMENTS_Msk) >> REG_CONFTEMPSENSE_ENABLEMEASUREMENTS_Pos);
+    return mm_OK;
+}
+/*************** Get/Set functions for CANConfA register **********************************************************************/
+mm_response_t mm_setCANConfA(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.CANConfA = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getCANConfA(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.CANConfA;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_setCANConfA_BaudRate(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.CANConfA = (mm.CANConfA & ~REG_CANCONFA_BAUDRATE_Msk) | (val << REG_CANCONFA_BAUDRATE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getCANConfA_BaudRate(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (uint32_t) ((mm.CANConfA & REG_CANCONFA_BAUDRATE_Msk) >> REG_CANCONFA_BAUDRATE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getCANConfA_BaudRateFrom(uint32_t * dest, const uint32_t source) {
+    *dest = (uint32_t) ((source & REG_CANCONFA_BAUDRATE_Msk) >> REG_CANCONFA_BAUDRATE_Pos);
     return mm_OK;
 }
 /*************** Get/Set functions for XTXpins register ***********************************************************************/
@@ -1973,6 +1942,126 @@ mm_response_t mm_getXTXMultitester_POS4_XTX_nReset(mm_enabled_t * dest) {
 
 mm_response_t mm_getXTXMultitester_POS4_XTX_nResetFrom(mm_enabled_t * dest, const uint32_t source) {
     *dest = (mm_enabled_t) ((source & REG_XTXMULTITESTER_POS4_XTX_NRESET_Msk) >> REG_XTXMULTITESTER_POS4_XTX_NRESET_Pos);
+    return mm_OK;
+}
+/*************** Get/Set functions for RFRelaysConf register ******************************************************************/
+mm_response_t mm_setRFRelaysConf(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.RFRelaysConf = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getRFRelaysConf(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.RFRelaysConf;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_setRFRelaysConf_RFSW1_Detected(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.RFRelaysConf = (mm.RFRelaysConf & ~REG_RFRELAYSCONF_RFSW1_DETECTED_Msk) | (val << REG_RFRELAYSCONF_RFSW1_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getRFRelaysConf_RFSW1_Detected(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.RFRelaysConf & REG_RFRELAYSCONF_RFSW1_DETECTED_Msk) >> REG_RFRELAYSCONF_RFSW1_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getRFRelaysConf_RFSW1_DetectedFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_RFRELAYSCONF_RFSW1_DETECTED_Msk) >> REG_RFRELAYSCONF_RFSW1_DETECTED_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setRFRelaysConf_RFSW2_Detected(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.RFRelaysConf = (mm.RFRelaysConf & ~REG_RFRELAYSCONF_RFSW2_DETECTED_Msk) | (val << REG_RFRELAYSCONF_RFSW2_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getRFRelaysConf_RFSW2_Detected(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.RFRelaysConf & REG_RFRELAYSCONF_RFSW2_DETECTED_Msk) >> REG_RFRELAYSCONF_RFSW2_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getRFRelaysConf_RFSW2_DetectedFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_RFRELAYSCONF_RFSW2_DETECTED_Msk) >> REG_RFRELAYSCONF_RFSW2_DETECTED_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setRFRelaysConf_RfSw1Chan(const uint8_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.RFRelaysConf = (mm.RFRelaysConf & ~REG_RFRELAYSCONF_RFSW1CHAN_Msk) | (val << REG_RFRELAYSCONF_RFSW1CHAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getRFRelaysConf_RfSw1Chan(uint8_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (uint8_t) ((mm.RFRelaysConf & REG_RFRELAYSCONF_RFSW1CHAN_Msk) >> REG_RFRELAYSCONF_RFSW1CHAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getRFRelaysConf_RfSw1ChanFrom(uint8_t * dest, const uint32_t source) {
+    *dest = (uint8_t) ((source & REG_RFRELAYSCONF_RFSW1CHAN_Msk) >> REG_RFRELAYSCONF_RFSW1CHAN_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setRFRelaysConf_RfSw2Chan(const uint8_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.RFRelaysConf = (mm.RFRelaysConf & ~REG_RFRELAYSCONF_RFSW2CHAN_Msk) | (val << REG_RFRELAYSCONF_RFSW2CHAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getRFRelaysConf_RfSw2Chan(uint8_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (uint8_t) ((mm.RFRelaysConf & REG_RFRELAYSCONF_RFSW2CHAN_Msk) >> REG_RFRELAYSCONF_RFSW2CHAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getRFRelaysConf_RfSw2ChanFrom(uint8_t * dest, const uint32_t source) {
+    *dest = (uint8_t) ((source & REG_RFRELAYSCONF_RFSW2CHAN_Msk) >> REG_RFRELAYSCONF_RFSW2CHAN_Pos);
     return mm_OK;
 }
 /*************** Get/Set functions for XDCConfig register *********************************************************************/
@@ -2847,6 +2936,318 @@ mm_response_t mm_getCSBoard_Current7I2(uint32_t * dest) {
     return response;
 }
 mm_response_t mm_getCSBoard_Current7I2From(uint32_t * dest, const uint32_t source) {
+    *dest = source;
+    return mm_OK;
+}
+
+
+/*************** Get/Set functions for TE_Addr_0 register *********************************************************************/
+mm_response_t mm_setTE_Addr_0(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.TE_Addr_0 = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getTE_Addr_0(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.TE_Addr_0;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_getTE_Addr_0From(uint32_t * dest, const uint32_t source) {
+    *dest = source;
+    return mm_OK;
+}
+
+
+/*************** Get/Set functions for TE_Addr_0_Set register *****************************************************************/
+mm_response_t mm_setTE_Addr_0_Set(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.TE_Addr_0_Set = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getTE_Addr_0_Set(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.TE_Addr_0_Set;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_getTE_Addr_0_SetFrom(uint32_t * dest, const uint32_t source) {
+    *dest = source;
+    return mm_OK;
+}
+
+
+/*************** Get/Set functions for TE_Addr_0_Clr register *****************************************************************/
+mm_response_t mm_setTE_Addr_0_Clr(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.TE_Addr_0_Clr = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getTE_Addr_0_Clr(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.TE_Addr_0_Clr;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_getTE_Addr_0_ClrFrom(uint32_t * dest, const uint32_t source) {
+    *dest = source;
+    return mm_OK;
+}
+
+
+/*************** Get/Set functions for TE_Addr_1 register *********************************************************************/
+mm_response_t mm_setTE_Addr_1(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.TE_Addr_1 = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getTE_Addr_1(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.TE_Addr_1;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_getTE_Addr_1From(uint32_t * dest, const uint32_t source) {
+    *dest = source;
+    return mm_OK;
+}
+
+
+/*************** Get/Set functions for TE_Addr_1_Set register *****************************************************************/
+mm_response_t mm_setTE_Addr_1_Set(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.TE_Addr_1_Set = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getTE_Addr_1_Set(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.TE_Addr_1_Set;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_getTE_Addr_1_SetFrom(uint32_t * dest, const uint32_t source) {
+    *dest = source;
+    return mm_OK;
+}
+
+
+/*************** Get/Set functions for TE_Addr_1_Clr register *****************************************************************/
+mm_response_t mm_setTE_Addr_1_Clr(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.TE_Addr_1_Clr = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getTE_Addr_1_Clr(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.TE_Addr_1_Clr;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_getTE_Addr_1_ClrFrom(uint32_t * dest, const uint32_t source) {
+    *dest = source;
+    return mm_OK;
+}
+
+
+/*************** Get/Set functions for TE_Addr_2 register *********************************************************************/
+mm_response_t mm_setTE_Addr_2(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.TE_Addr_2 = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getTE_Addr_2(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.TE_Addr_2;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_getTE_Addr_2From(uint32_t * dest, const uint32_t source) {
+    *dest = source;
+    return mm_OK;
+}
+
+
+/*************** Get/Set functions for TE_Addr_2_Set register *****************************************************************/
+mm_response_t mm_setTE_Addr_2_Set(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.TE_Addr_2_Set = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getTE_Addr_2_Set(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.TE_Addr_2_Set;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_getTE_Addr_2_SetFrom(uint32_t * dest, const uint32_t source) {
+    *dest = source;
+    return mm_OK;
+}
+
+
+/*************** Get/Set functions for TE_Addr_2_Clr register *****************************************************************/
+mm_response_t mm_setTE_Addr_2_Clr(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.TE_Addr_2_Clr = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getTE_Addr_2_Clr(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.TE_Addr_2_Clr;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_getTE_Addr_2_ClrFrom(uint32_t * dest, const uint32_t source) {
+    *dest = source;
+    return mm_OK;
+}
+
+
+/*************** Get/Set functions for TE_Addr_3 register *********************************************************************/
+mm_response_t mm_setTE_Addr_3(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.TE_Addr_3 = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getTE_Addr_3(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.TE_Addr_3;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_getTE_Addr_3From(uint32_t * dest, const uint32_t source) {
+    *dest = source;
+    return mm_OK;
+}
+
+
+/*************** Get/Set functions for TE_Addr_3_Set register *****************************************************************/
+mm_response_t mm_setTE_Addr_3_Set(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.TE_Addr_3_Set = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getTE_Addr_3_Set(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.TE_Addr_3_Set;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_getTE_Addr_3_SetFrom(uint32_t * dest, const uint32_t source) {
+    *dest = source;
+    return mm_OK;
+}
+
+
+/*************** Get/Set functions for TE_Addr_3_Clr register *****************************************************************/
+mm_response_t mm_setTE_Addr_3_Clr(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.TE_Addr_3_Clr = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getTE_Addr_3_Clr(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.TE_Addr_3_Clr;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_getTE_Addr_3_ClrFrom(uint32_t * dest, const uint32_t source) {
     *dest = source;
     return mm_OK;
 }

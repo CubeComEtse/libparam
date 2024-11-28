@@ -6,17 +6,6 @@
  *  Author: Kolijn
  */ 
 
-/*
- * This is the I2C Target. All messages that should be sent over I2C are 
- * received and processed here.
- * 
- * This instance has a stream buffer which receives messages. A FreeRTOS 
- * task checks this buffer and sends messages if required. This instance
- * requires function pointers to I2C read and write functions.
- *
- * Created: 2024/10/03 17:08:40
- * Author: Kolijn
- */ 
 
 #include "local_target.h"
 

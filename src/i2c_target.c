@@ -173,7 +173,7 @@ void I2CTARGET_Task(void * handle)
 			// Version 3 is another upgrade on the i2c endpoint, with the i2c bus address 
 			// included in the message. The register address can be 1 or 2 bytes.
 			uint8_t bus_address = in_message.data[0];
-			uint8_t addres_length = 2;
+			uint8_t addres_length = 2; 
 			
 			// This is an i2c message with either
 			if (in_message.is_read)

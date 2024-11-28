@@ -34,7 +34,6 @@ typedef enum  {
     EN_VBATALT_BUS = EN_VBATALT_BUS_PIN,
 }power_pin_t;
 
-void BSP_Init(bsp_t * bsp);
 
 struct spi_device* BSP_psGetSpiDriver(void);
 void BSP_vCanSetAddressFilter(uint32_t filter, uint32_t mask);
@@ -48,9 +47,15 @@ uint64_t BSP_u64GetTimestamp(void);
 void BSP_vUsbReset(void);
 
 void BSP_vTelemetrySetCTS(bool dir);
-uint8_t BSP_u8GetVersion(void);
 void BSP_vSetTestPin(bool level);
 
 // These should live in their own xtx file
 void XTX_vConfigBoard(void);
+
+
+//Used in the NEW SHINY codebase
+void BSP_Init(bsp_t * bsp);
+uint8_t BSP_u8GetVersion(void);
+void BSP_vSetPin(uint32_t pin, bool value);
+
 #endif /* BSP_H_ */

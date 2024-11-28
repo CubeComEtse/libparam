@@ -1,5 +1,5 @@
-#ifndef memory_map_h
-#define memory_map_h
+#ifndef REGISTER_MAP_H
+#define REGISTER_MAP_H
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -60,8 +60,6 @@ typedef enum {
 #define REG_CONFMULTI_MENABLED_Msk                   (0x0001 << REG_CONFMULTI_MENABLED_Pos)
 #define REG_CONFMULTI_AUTOCLR_Pos                    (1UL)
 #define REG_CONFMULTI_AUTOCLR_Msk                    (0x0001 << REG_CONFMULTI_AUTOCLR_Pos)
-#define REG_CONFMULTI_RFSWENA_Pos                    (2UL)
-#define REG_CONFMULTI_RFSWENA_Msk                    (0x0001 << REG_CONFMULTI_RFSWENA_Pos)
 #define REG_CONFMULTI_FANPOS1_Pos                    (4UL)
 #define REG_CONFMULTI_FANPOS1_Msk                    (0x0001 << REG_CONFMULTI_FANPOS1_Pos)
 #define REG_CONFMULTI_FANPOS2_Pos                    (5UL)
@@ -70,12 +68,14 @@ typedef enum {
 #define REG_CONFMULTI_FANPOS3_Msk                    (0x0001 << REG_CONFMULTI_FANPOS3_Pos)
 #define REG_CONFMULTI_FANPOS4_Pos                    (7UL)
 #define REG_CONFMULTI_FANPOS4_Msk                    (0x0001 << REG_CONFMULTI_FANPOS4_Pos)
-#define REG_CONFMULTI_RFSWCHAN_Pos                   (8UL)
-#define REG_CONFMULTI_RFSWCHAN_Msk                   (0x00ff << REG_CONFMULTI_RFSWCHAN_Pos)
 
 /*************** Bit definition for ConfTempSense register *******************/
 #define REG_CONFTEMPSENSE_ENABLEMEASUREMENTS_Pos     (0UL)
 #define REG_CONFTEMPSENSE_ENABLEMEASUREMENTS_Msk     (0x0001 << REG_CONFTEMPSENSE_ENABLEMEASUREMENTS_Pos)
+
+/*************** Bit definition for CANConfA register ************************/
+#define REG_CANCONFA_BAUDRATE_Pos                    (0UL)
+#define REG_CANCONFA_BAUDRATE_Msk                    (0xffffffff << REG_CANCONFA_BAUDRATE_Pos)
 
 /*************** Bit definition for XTXpins register *************************/
 #define REG_XTXPINS_ENA_Pos                          (0UL)
@@ -111,6 +111,16 @@ typedef enum {
 #define REG_XTXMULTITESTER_POS4_XTX_NRESET_Pos       (14UL)
 #define REG_XTXMULTITESTER_POS4_XTX_NRESET_Msk       (0x0001 << REG_XTXMULTITESTER_POS4_XTX_NRESET_Pos)
 
+/*************** Bit definition for RFRelaysConf register ********************/
+#define REG_RFRELAYSCONF_RFSW1_DETECTED_Pos          (0UL)
+#define REG_RFRELAYSCONF_RFSW1_DETECTED_Msk          (0x0001 << REG_RFRELAYSCONF_RFSW1_DETECTED_Pos)
+#define REG_RFRELAYSCONF_RFSW2_DETECTED_Pos          (1UL)
+#define REG_RFRELAYSCONF_RFSW2_DETECTED_Msk          (0x0001 << REG_RFRELAYSCONF_RFSW2_DETECTED_Pos)
+#define REG_RFRELAYSCONF_RFSW1CHAN_Pos               (8UL)
+#define REG_RFRELAYSCONF_RFSW1CHAN_Msk               (0x00ff << REG_RFRELAYSCONF_RFSW1CHAN_Pos)
+#define REG_RFRELAYSCONF_RFSW2CHAN_Pos               (16UL)
+#define REG_RFRELAYSCONF_RFSW2CHAN_Msk               (0x00ff << REG_RFRELAYSCONF_RFSW2CHAN_Pos)
+
 /*************** Bit definition for XDCConfig register ***********************/
 #define REG_XDCCONFIG_ADDR_Pos                       (0UL)
 #define REG_XDCCONFIG_ADDR_Msk                       (0x00ff << REG_XDCCONFIG_ADDR_Pos)
@@ -137,13 +147,38 @@ typedef enum {
 #define REG_MEASUREPOWER_POWER_Pos                   (0UL)
 #define REG_MEASUREPOWER_POWER_Msk                   (0xffffffff << REG_MEASUREPOWER_POWER_Pos)
 
+/*************** Bit definition for TE_Config register ***********************/
+#define REG_TE_CONFIG_SEL_CAN0_Pos                   (0UL)
+#define REG_TE_CONFIG_SEL_CAN0_Msk                   (0x0001 << REG_TE_CONFIG_SEL_CAN0_Pos)
+#define REG_TE_CONFIG_SEL_CAN1_Pos                   (1UL)
+#define REG_TE_CONFIG_SEL_CAN1_Msk                   (0x0001 << REG_TE_CONFIG_SEL_CAN1_Pos)
+#define REG_TE_CONFIG_SEL_RS485_Pos                  (2UL)
+#define REG_TE_CONFIG_SEL_RS485_Msk                  (0x0001 << REG_TE_CONFIG_SEL_RS485_Pos)
+#define REG_TE_CONFIG_SEL_I2C_Pos                    (3UL)
+#define REG_TE_CONFIG_SEL_I2C_Msk                    (0x0001 << REG_TE_CONFIG_SEL_I2C_Pos)
+#define REG_TE_CONFIG_SEL_RS422_Pos                  (4UL)
+#define REG_TE_CONFIG_SEL_RS422_Msk                  (0x0001 << REG_TE_CONFIG_SEL_RS422_Pos)
+#define REG_TE_CONFIG_SEL_SPI_Pos                    (5UL)
+#define REG_TE_CONFIG_SEL_SPI_Msk                    (0x0001 << REG_TE_CONFIG_SEL_SPI_Pos)
+#define REG_TE_CONFIG_SEL_UART_Pos                   (6UL)
+#define REG_TE_CONFIG_SEL_UART_Msk                   (0x0001 << REG_TE_CONFIG_SEL_UART_Pos)
+#define REG_TE_CONFIG_POWER_Pos                      (8UL)
+#define REG_TE_CONFIG_POWER_Msk                      (0x0001 << REG_TE_CONFIG_POWER_Pos)
+#define REG_TE_CONFIG_ENABLE_Pos                     (9UL)
+#define REG_TE_CONFIG_ENABLE_Msk                     (0x0001 << REG_TE_CONFIG_ENABLE_Pos)
+#define REG_TE_CONFIG_NRESET_Pos                     (10UL)
+#define REG_TE_CONFIG_NRESET_Msk                     (0x0001 << REG_TE_CONFIG_NRESET_Pos)
+#define REG_TE_CONFIG_COMM_TR_Pos                    (11UL)
+#define REG_TE_CONFIG_COMM_TR_Msk                    (0x0001 << REG_TE_CONFIG_COMM_TR_Pos)
+#define REG_TE_CONFIG_TYPE_Pos                       (12UL)
+#define REG_TE_CONFIG_TYPE_Msk                       (0x000f << REG_TE_CONFIG_TYPE_Pos)
+
 
 typedef struct {
     uint32_t Board_ID;
     uint32_t FW_Version;
     uint32_t HW_Version;
     uint32_t Scratchpad;
-    uint32_t Supported_Boards;
     uint32_t Configured_Boards;
     uint32_t Uptime;
     uint32_t Event_ConfA;
@@ -161,8 +196,10 @@ typedef struct {
     uint32_t I2CConfB;
     uint32_t ConfMulti;
     uint32_t ConfTempSense;
+    uint32_t CANConfA;
     uint32_t XTXpins;
     uint32_t XTXMultitester;
+    uint32_t RFRelaysConf;
     uint32_t XDCConfig;
     uint32_t CSBoard_T0;
     uint32_t CSBoard_T1;
@@ -196,6 +233,18 @@ typedef struct {
     uint32_t CSBoard_Current7I0;
     uint32_t CSBoard_Current7I1;
     uint32_t CSBoard_Current7I2;
+    uint32_t TE_Addr_0;
+    uint32_t TE_Addr_0_Set;
+    uint32_t TE_Addr_0_Clr;
+    uint32_t TE_Addr_1;
+    uint32_t TE_Addr_1_Set;
+    uint32_t TE_Addr_1_Clr;
+    uint32_t TE_Addr_2;
+    uint32_t TE_Addr_2_Set;
+    uint32_t TE_Addr_2_Clr;
+    uint32_t TE_Addr_3;
+    uint32_t TE_Addr_3_Set;
+    uint32_t TE_Addr_3_Clr;
 } mm_t;
 
 typedef enum {
@@ -203,7 +252,6 @@ typedef enum {
     reg_FW_Version_addr = 0x11,
     reg_HW_Version_addr = 0x12,
     reg_Scratchpad_addr = 0x13,
-    reg_Supported_Boards_addr = 0x14,
     reg_Configured_Boards_addr = 0x15,
     reg_Uptime_addr = 0x16,
     reg_Event_ConfA_addr = 0x17,
@@ -221,8 +269,10 @@ typedef enum {
     reg_I2CConfB_addr = 0x2A,
     reg_ConfMulti_addr = 0x2B,
     reg_ConfTempSense_addr = 0x2C,
+    reg_CANConfA_addr = 0x2D,
     reg_XTXpins_addr = 0x30,
     reg_XTXMultitester_addr = 0x31,
+    reg_RFRelaysConf_addr = 0x32,
     reg_XDCConfig_addr = 0x40,
     reg_CSBoard_T0_addr = 0x50,
     reg_CSBoard_T1_addr = 0x51,
@@ -256,6 +306,18 @@ typedef enum {
     reg_CSBoard_Current7I0_addr = 0x6D,
     reg_CSBoard_Current7I1_addr = 0x6E,
     reg_CSBoard_Current7I2_addr = 0x6F,
+    reg_TE_Addr_0_addr = 0x80,
+    reg_TE_Addr_0_Set_addr = 0x81,
+    reg_TE_Addr_0_Clr_addr = 0x82,
+    reg_TE_Addr_1_addr = 0x83,
+    reg_TE_Addr_1_Set_addr = 0x84,
+    reg_TE_Addr_1_Clr_addr = 0x85,
+    reg_TE_Addr_2_addr = 0x86,
+    reg_TE_Addr_2_Set_addr = 0x87,
+    reg_TE_Addr_2_Clr_addr = 0x88,
+    reg_TE_Addr_3_addr = 0x89,
+    reg_TE_Addr_3_Set_addr = 0x8A,
+    reg_TE_Addr_3_Clr_addr = 0x8B,
 } mm_register_address_t;
 
 typedef enum {
@@ -272,6 +334,12 @@ typedef enum {
     reg_boardidentifier_hdrtx = 16,                 // HDRTX
     reg_boardidentifier_gen2 = 32,                  // GEN2
 } mm_boardidentifier_t;
+
+typedef enum {
+    reg_te_types_pc104 = 0,                         // PC104 Adaptor
+    reg_te_types_ud = 1,                            // uD Adaptor
+    reg_te_types_gecko = 2,                         // Gecko Adaptor
+} mm_te_types_t;
 
 void mm_init(void);
 mm_t * get_mm_ptr(void);
@@ -322,11 +390,6 @@ mm_response_t mm_getHW_Version_patch_versionFrom(uint8_t * dest, const uint32_t 
 mm_response_t mm_setScratchpad(const uint32_t val);
 mm_response_t mm_getScratchpad(uint32_t * dest);
 mm_response_t mm_getScratchpadFrom(uint32_t * dest, const uint32_t source);
-
-/*************** Get/Set functions for Supported_Boards register **************************************************************/
-mm_response_t mm_setSupported_Boards(const uint32_t val);
-mm_response_t mm_getSupported_Boards(uint32_t * dest);
-mm_response_t mm_getSupported_BoardsFrom(uint32_t * dest, const uint32_t source);
 
 /*************** Get/Set functions for Configured_Boards register *************************************************************/
 mm_response_t mm_setConfigured_Boards(const uint32_t val);
@@ -471,9 +534,6 @@ mm_response_t mm_getConfMulti_MEnabledFrom(mm_enabled_t * dest, const uint32_t s
 mm_response_t mm_setConfMulti_AutoCLR(const mm_enabled_t val);
 mm_response_t mm_getConfMulti_AutoCLR(mm_enabled_t * dest);
 mm_response_t mm_getConfMulti_AutoCLRFrom(mm_enabled_t * dest, const uint32_t source);
-mm_response_t mm_setConfMulti_RfSwENA(const mm_enabled_t val);
-mm_response_t mm_getConfMulti_RfSwENA(mm_enabled_t * dest);
-mm_response_t mm_getConfMulti_RfSwENAFrom(mm_enabled_t * dest, const uint32_t source);
 mm_response_t mm_setConfMulti_FanPos1(const mm_enabled_t val);
 mm_response_t mm_getConfMulti_FanPos1(mm_enabled_t * dest);
 mm_response_t mm_getConfMulti_FanPos1From(mm_enabled_t * dest, const uint32_t source);
@@ -486,9 +546,6 @@ mm_response_t mm_getConfMulti_FanPos3From(mm_enabled_t * dest, const uint32_t so
 mm_response_t mm_setConfMulti_FanPos4(const mm_enabled_t val);
 mm_response_t mm_getConfMulti_FanPos4(mm_enabled_t * dest);
 mm_response_t mm_getConfMulti_FanPos4From(mm_enabled_t * dest, const uint32_t source);
-mm_response_t mm_setConfMulti_RfSwChan(const uint8_t val);
-mm_response_t mm_getConfMulti_RfSwChan(uint8_t * dest);
-mm_response_t mm_getConfMulti_RfSwChanFrom(uint8_t * dest, const uint32_t source);
 
 /*************** Get/Set functions for ConfTempSense register *****************************************************************/
 mm_response_t mm_setConfTempSense(const uint32_t val);
@@ -496,6 +553,13 @@ mm_response_t mm_getConfTempSense(uint32_t * dest);
 mm_response_t mm_setConfTempSense_EnableMeasurements(const mm_enabled_t val);
 mm_response_t mm_getConfTempSense_EnableMeasurements(mm_enabled_t * dest);
 mm_response_t mm_getConfTempSense_EnableMeasurementsFrom(mm_enabled_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CANConfA register **********************************************************************/
+mm_response_t mm_setCANConfA(const uint32_t val);
+mm_response_t mm_getCANConfA(uint32_t * dest);
+mm_response_t mm_setCANConfA_BaudRate(const uint32_t val);
+mm_response_t mm_getCANConfA_BaudRate(uint32_t * dest);
+mm_response_t mm_getCANConfA_BaudRateFrom(uint32_t * dest, const uint32_t source);
 
 /*************** Get/Set functions for XTXpins register ***********************************************************************/
 mm_response_t mm_setXTXpins(const uint32_t val);
@@ -549,6 +613,22 @@ mm_response_t mm_getXTXMultitester_POS4_XTX_PowerFrom(mm_enabled_t * dest, const
 mm_response_t mm_setXTXMultitester_POS4_XTX_nReset(const mm_enabled_t val);
 mm_response_t mm_getXTXMultitester_POS4_XTX_nReset(mm_enabled_t * dest);
 mm_response_t mm_getXTXMultitester_POS4_XTX_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for RFRelaysConf register ******************************************************************/
+mm_response_t mm_setRFRelaysConf(const uint32_t val);
+mm_response_t mm_getRFRelaysConf(uint32_t * dest);
+mm_response_t mm_setRFRelaysConf_RFSW1_Detected(const mm_enabled_t val);
+mm_response_t mm_getRFRelaysConf_RFSW1_Detected(mm_enabled_t * dest);
+mm_response_t mm_getRFRelaysConf_RFSW1_DetectedFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setRFRelaysConf_RFSW2_Detected(const mm_enabled_t val);
+mm_response_t mm_getRFRelaysConf_RFSW2_Detected(mm_enabled_t * dest);
+mm_response_t mm_getRFRelaysConf_RFSW2_DetectedFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setRFRelaysConf_RfSw1Chan(const uint8_t val);
+mm_response_t mm_getRFRelaysConf_RfSw1Chan(uint8_t * dest);
+mm_response_t mm_getRFRelaysConf_RfSw1ChanFrom(uint8_t * dest, const uint32_t source);
+mm_response_t mm_setRFRelaysConf_RfSw2Chan(const uint8_t val);
+mm_response_t mm_getRFRelaysConf_RfSw2Chan(uint8_t * dest);
+mm_response_t mm_getRFRelaysConf_RfSw2ChanFrom(uint8_t * dest, const uint32_t source);
 
 /*************** Get/Set functions for XDCConfig register *********************************************************************/
 mm_response_t mm_setXDCConfig(const uint32_t val);
@@ -716,6 +796,66 @@ mm_response_t mm_getCSBoard_Current7I1From(uint32_t * dest, const uint32_t sourc
 mm_response_t mm_setCSBoard_Current7I2(const uint32_t val);
 mm_response_t mm_getCSBoard_Current7I2(uint32_t * dest);
 mm_response_t mm_getCSBoard_Current7I2From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for TE_Addr_0 register *********************************************************************/
+mm_response_t mm_setTE_Addr_0(const uint32_t val);
+mm_response_t mm_getTE_Addr_0(uint32_t * dest);
+mm_response_t mm_getTE_Addr_0From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for TE_Addr_0_Set register *****************************************************************/
+mm_response_t mm_setTE_Addr_0_Set(const uint32_t val);
+mm_response_t mm_getTE_Addr_0_Set(uint32_t * dest);
+mm_response_t mm_getTE_Addr_0_SetFrom(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for TE_Addr_0_Clr register *****************************************************************/
+mm_response_t mm_setTE_Addr_0_Clr(const uint32_t val);
+mm_response_t mm_getTE_Addr_0_Clr(uint32_t * dest);
+mm_response_t mm_getTE_Addr_0_ClrFrom(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for TE_Addr_1 register *********************************************************************/
+mm_response_t mm_setTE_Addr_1(const uint32_t val);
+mm_response_t mm_getTE_Addr_1(uint32_t * dest);
+mm_response_t mm_getTE_Addr_1From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for TE_Addr_1_Set register *****************************************************************/
+mm_response_t mm_setTE_Addr_1_Set(const uint32_t val);
+mm_response_t mm_getTE_Addr_1_Set(uint32_t * dest);
+mm_response_t mm_getTE_Addr_1_SetFrom(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for TE_Addr_1_Clr register *****************************************************************/
+mm_response_t mm_setTE_Addr_1_Clr(const uint32_t val);
+mm_response_t mm_getTE_Addr_1_Clr(uint32_t * dest);
+mm_response_t mm_getTE_Addr_1_ClrFrom(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for TE_Addr_2 register *********************************************************************/
+mm_response_t mm_setTE_Addr_2(const uint32_t val);
+mm_response_t mm_getTE_Addr_2(uint32_t * dest);
+mm_response_t mm_getTE_Addr_2From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for TE_Addr_2_Set register *****************************************************************/
+mm_response_t mm_setTE_Addr_2_Set(const uint32_t val);
+mm_response_t mm_getTE_Addr_2_Set(uint32_t * dest);
+mm_response_t mm_getTE_Addr_2_SetFrom(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for TE_Addr_2_Clr register *****************************************************************/
+mm_response_t mm_setTE_Addr_2_Clr(const uint32_t val);
+mm_response_t mm_getTE_Addr_2_Clr(uint32_t * dest);
+mm_response_t mm_getTE_Addr_2_ClrFrom(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for TE_Addr_3 register *********************************************************************/
+mm_response_t mm_setTE_Addr_3(const uint32_t val);
+mm_response_t mm_getTE_Addr_3(uint32_t * dest);
+mm_response_t mm_getTE_Addr_3From(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for TE_Addr_3_Set register *****************************************************************/
+mm_response_t mm_setTE_Addr_3_Set(const uint32_t val);
+mm_response_t mm_getTE_Addr_3_Set(uint32_t * dest);
+mm_response_t mm_getTE_Addr_3_SetFrom(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for TE_Addr_3_Clr register *****************************************************************/
+mm_response_t mm_setTE_Addr_3_Clr(const uint32_t val);
+mm_response_t mm_getTE_Addr_3_Clr(uint32_t * dest);
+mm_response_t mm_getTE_Addr_3_ClrFrom(uint32_t * dest, const uint32_t source);
 
 
 #endif /* memory_map_h */

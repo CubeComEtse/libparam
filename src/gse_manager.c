@@ -1,7 +1,6 @@
 /*
- * The config endpoint is responsible for all the obc-controller settings.
- * It will report which boards are supported, and provide and interface to 
- * enable and measure power to the board.
+ * This module handles all the local GSE features, such as power measurement,
+ * power switches and more.
  */ 
  
 #include <stdbool.h>
@@ -17,10 +16,7 @@
 
 
 // Todo: This goes somewhere else
-#define GSE_EN_3V3_BUS_PIN 0
-#define GSE_EN_5_BUS_PIN 0
-#define GSE_EN_VBAT_BUS_PIN 0
-#define GSE_EN_VBATALT_BUS_PIN 0
+
 
 
 void GSE_MANAGER_Init(gse_manager_t * handle)
@@ -29,29 +25,37 @@ void GSE_MANAGER_Init(gse_manager_t * handle)
 }
 
 /*
- * Set a power rail on the GSE
+ * This function immediately enables power to the PC104 header, or the TE cable.
 */
-void GSE_MANAGER_SetPower(gse_manager_t * handle, const power_rail_id_t power, const bool setting) {
+void GSE_MANAGER_SetBusPowerSwitch(gse_manager_t * handle, const power_rail_id_t power, const bool setting) {
 
 	if (power == POWER_3V3)
 	{
-		handle->set_gpio_pin(handle->gpio_handle, GSE_EN_3V3_BUS_PIN, setting);
-	}
-	if (power == POWER_5V)
-	{
-		handle->set_gpio_pin(handle->gpio_handle, GSE_EN_5_BUS_PIN, setting);
+		handle->set_gpio_pin(handle->enable_3v3_pin, setting);
 	}
 	if (power == POWER_VBAT)
 	{
-		handle->set_gpio_pin(handle->gpio_handle, GSE_EN_VBAT_BUS_PIN, setting);
+		handle->set_gpio_pin(handle->enable_vbat_pin, setting);
 	}
-	if (power == POWER_VBAT_ALT)
+	if (handle->board_version == 0)
 	{
-		handle->set_gpio_pin(handle->gpio_handle, GSE_EN_VBATALT_BUS_PIN, setting);
+		if (power == POWER_5V)
+		{
+			handle->set_gpio_pin(handle->enable_5v_pin, setting);
+		}
+		if (power == POWER_VBAT_ALT)
+		{
+			handle->set_gpio_pin(handle->enable_vbatalt_pin, setting);
+		}
 	}
 }
 
 
+/*
+ * This main task samples the power sensor measurements at regular intervals.
+ *
+ * This is a FreeRTOS task that needs to be added to the scheduler.
+*/
 void GSE_MANAGER_Task(void * taskptr){
 	gse_manager_t * hdl = (gse_manager_t *) taskptr;
 	
@@ -72,7 +76,6 @@ void GSE_MANAGER_Task(void * taskptr){
     uint16_t current1 = 0;
     uint16_t current2 = 0;
 	
-		
 	while(1)
 	{
 		if (hdl->board_version == 0){
@@ -134,13 +137,9 @@ void GSE_MANAGER_Task(void * taskptr){
 			mm_setMeasurePower_V3_power(power1);
 			mm_setMeasurePower_VBat(power2);
 		}
-	
-		// Todo:
-		// Task Sleep!
 		
 		//Todo:
 		// Current Sense board
-		
 		if (hdl->bCSBoardenabled){
 			LTC2499_getSample(hdl->cs_board);
 		}
@@ -149,8 +148,3 @@ void GSE_MANAGER_Task(void * taskptr){
 		vTaskDelay(pdMS_TO_TICKS(200));
 	}
 }
-
-/*
-void CONFIG_SetCurrentSenseBoardEnabled(bool value){
-	bCSBoardenabled = value;
-}*/

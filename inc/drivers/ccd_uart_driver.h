@@ -43,7 +43,7 @@ void ccd_uart_InterruptHandler(ccd_uart_t * driver);
 void ccd_usart_RXProcessingTask(void * parameters);
 void ccd_usart_TXProcessingTask(void * parameters);
 
-void ccd_uart_StartFlowControl(ccd_uart_t * driver);
-void ccd_uart_StopFlowControl(ccd_uart_t * driver);
+void ccd_uart_StartFlowControl(void * driver);
+void ccd_uart_StopFlowControl(void * driver);
 
 #endif /* CCD_UART_DRIVER_H_ */
