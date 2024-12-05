@@ -20,8 +20,7 @@
 // Local functions
 void BSP_vInitSPI(void);
 void BSP_vInitBoardI2C(void);
-void BSP_vInitPowerSenseGPIO(void);
-void BSP_vInitPowerGPIO(void);
+void BSP_vInitGPIO(void);
 void BSP_vInitCan(void);
 void BSP_vInit1MsTimer(void);
 
@@ -78,7 +77,8 @@ void BSP_Init(bsp_t * bsp) {
 	BSP_vInitUART(bsp);
 	BSP_vInitBusI2C(bsp);
 	BSP_vInitUtilI2C(bsp);
-	
+
+	BSP_vInitGPIO();
 
 
 
@@ -87,8 +87,7 @@ void BSP_Init(bsp_t * bsp) {
 	
 	/*
     BSP_vInitSPI();
-    BSP_vInitPowerSenseGPIO();
-    BSP_vInitPowerGPIO();
+    
     BSP_vInitCan();*/
 
     //BSP_vInit1MsTimer();
@@ -96,43 +95,11 @@ void BSP_Init(bsp_t * bsp) {
 
 	
     
-    ioport_enable_pin(USB_RESET_PIN);
-    ioport_set_pin_level(USB_RESET_PIN, 0);
-    ioport_set_pin_dir(USB_RESET_PIN, IOPORT_DIR_OUTPUT);
     
-    
-    ioport_enable_pin(TEST_PIN_0);
-    ioport_set_pin_dir(TEST_PIN_0, IOPORT_DIR_OUTPUT);
-    ioport_set_pin_level(TEST_PIN_0, 0);
 	
-	ioport_enable_pin(TEST_PIN_1);
-	ioport_set_pin_dir(TEST_PIN_1, IOPORT_DIR_OUTPUT);
-	ioport_set_pin_level(TEST_PIN_1, 0);
-	
-	ioport_enable_pin(TEST_PIN_2);
-	ioport_set_pin_dir(TEST_PIN_2, IOPORT_DIR_OUTPUT);
-	ioport_set_pin_level(TEST_PIN_2, 0);
-	
-	ioport_enable_pin(TEST_PIN_3);
-	ioport_set_pin_dir(TEST_PIN_3, IOPORT_DIR_OUTPUT);
-	ioport_set_pin_level(TEST_PIN_3, 0);
-	
-	ioport_enable_pin(PIN_DEBUG_0);
-	ioport_enable_pin(PIN_DEBUG_1);
-	ioport_enable_pin(PIN_DEBUG_2);
-	ioport_enable_pin(PIN_DEBUG_3);
-	
-	ioport_set_pin_level(PIN_DEBUG_0, 0);
-	ioport_set_pin_level(PIN_DEBUG_1, 0);
-	ioport_set_pin_level(PIN_DEBUG_2, 0);
-	ioport_set_pin_level(PIN_DEBUG_3, 0);
 
-	ioport_set_pin_dir(PIN_DEBUG_0, IOPORT_DIR_OUTPUT);
-	ioport_set_pin_dir(PIN_DEBUG_1, IOPORT_DIR_OUTPUT);
-	ioport_set_pin_dir(PIN_DEBUG_2, IOPORT_DIR_OUTPUT);
-	ioport_set_pin_dir(PIN_DEBUG_3, IOPORT_DIR_OUTPUT);
-
-    BSP_vUsbReset();
+	// So - we used to reset the USB connection when we power cycle. I don't think this is needed anymore?
+    //BSP_vUsbReset();
 	
 	// Make all interrupt prioirty bits preempt bits, rather than sub-prioirty bits.
 	// According to https://www.freertos.org/Documentation/02-Kernel/03-Supported-devices/04-Demos/ARM-Cortex/RTOS-Cortex-M3-M4
@@ -175,39 +142,100 @@ static void BSP_vInitUART(bsp_t * bsp){
 
 static void BSP_vInitBusI2C(bsp_t * bsp){
 	// Board I2C
-	ioport_set_pin_mode(I2C_BOARD_SDA_PIN, I2C_BOARD_SDA_MUX);
-	ioport_disable_pin(I2C_BOARD_SDA_PIN);
+	ioport_set_pin_mode(I2C_BUS_SDA_PIN, I2C_BUS_SDA_MUX);
+	ioport_disable_pin(I2C_BUS_SDA_PIN);
 
-	ioport_set_pin_mode(I2C_BOARD_SCL_PIN, I2C_BOARD_SCL_MUX);
-	ioport_disable_pin(I2C_BOARD_SCL_PIN);
-	ccd_i2c_driver_Init(&bus_i2c, I2C_BOARD_DEVICE);
+	ioport_set_pin_mode(I2C_BUS_SCL_PIN, I2C_BUS_SCL_MUX);
+	ioport_disable_pin(I2C_BUS_SCL_PIN);
+	
+	ccd_i2c_driver_Init(&bus_i2c, I2C_BUS_DEVICE);
 	bsp->bus_i2c = &bus_i2c;
 }
 
 static void BSP_vInitUtilI2C(bsp_t * bsp){
-	if (BSP_u8GetVersion() == 0){
-		bsp->local_i2c = bsp->bus_i2c;
-		return;
+	ioport_set_pin_mode(I2C_UTIL_SDA_PIN, I2C_UTIL_SDA_MUX);
+	ioport_disable_pin(I2C_UTIL_SDA_PIN);
+
+	ioport_set_pin_mode(I2C_UTIL_SCL_PIN, I2C_UTIL_SCL_MUX);
+	ioport_disable_pin(I2C_UTIL_SCL_PIN);
+	
+	ccd_i2c_driver_Init(&util_i2c, I2C_UTIL_DEVICE);
+	bsp->bus_i2c = &util_i2c;
+}
+
+/*
+ * Initialize all the general purpose GPIO pins
+*/
+void BSP_vInitGPIO(void) {
+		
+	uint8_t version = BSP_u8GetVersion();
+	
+	if (version == 0){
+		// Version 0 had VBatAlt and 5V lines
+		ioport_enable_pin(EN_VBATALT_BUS_PIN);
+		ioport_set_pin_level(EN_VBATALT_BUS_PIN, 0);
+		ioport_set_pin_dir(EN_VBATALT_BUS_PIN, IOPORT_DIR_OUTPUT);
+		
+		ioport_enable_pin(EN_5V_BUS_PIN);
+		ioport_set_pin_level(EN_5V_BUS_PIN, 0);
+		ioport_set_pin_dir(EN_5V_BUS_PIN, IOPORT_DIR_OUTPUT);
+	}
+
+	ioport_enable_pin(EN_3V3_BUS_PIN);
+	ioport_set_pin_level(EN_3V3_BUS_PIN, 0);
+	ioport_set_pin_dir(EN_3V3_BUS_PIN, IOPORT_DIR_OUTPUT);
+
+	ioport_enable_pin(EN_VBAT_BUS_PIN);
+	ioport_set_pin_level(EN_VBAT_BUS_PIN, 0);
+	ioport_set_pin_dir(EN_VBAT_BUS_PIN, IOPORT_DIR_OUTPUT);
+	
+	// USB Reset pin	
+	ioport_enable_pin(USB_RESET_PIN);
+	ioport_set_pin_level(USB_RESET_PIN, 1);
+	ioport_set_pin_dir(USB_RESET_PIN, IOPORT_DIR_OUTPUT);
+	
+	// GSE version 2 has 4 debug pins
+	if (version == 1){
+		ioport_enable_pin(PIN_DEBUG_0);
+		ioport_set_pin_level(PIN_DEBUG_0, 0);
+		ioport_set_pin_dir(PIN_DEBUG_0, IOPORT_DIR_OUTPUT);
+		
+		ioport_enable_pin(PIN_DEBUG_1);
+		ioport_set_pin_level(PIN_DEBUG_1, 0);
+		ioport_set_pin_dir(PIN_DEBUG_1, IOPORT_DIR_OUTPUT);
+		
+		ioport_enable_pin(PIN_DEBUG_2);
+		ioport_set_pin_level(PIN_DEBUG_2, 0);
+		ioport_set_pin_dir(PIN_DEBUG_2, IOPORT_DIR_OUTPUT);
+		
+		ioport_enable_pin(PIN_DEBUG_3);
+		ioport_set_pin_level(PIN_DEBUG_3, 0);
+		ioport_set_pin_dir(PIN_DEBUG_3, IOPORT_DIR_OUTPUT);
 	}
 }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-void BSP_vSetTestPin(bool level) {
-    ioport_set_pin_level(TEST_PIN_0, level);
+void BSP_vUsbReset(void) {
+	ioport_set_pin_level(USB_RESET_PIN, 0);
+	delay_ms(100);
+	ioport_set_pin_level(USB_RESET_PIN, 1);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -246,42 +274,7 @@ struct spi_device* BSP_psGetSpiDriver(void) {
     return &sSpiDevice; 
 }
 
-void BSP_vInitPowerSenseGPIO(void) {
-    // LTC2992 1 - U7
-    ioport_enable_pin(LTC2992_1_DATARDY_PIN);
-    ioport_set_pin_dir(LTC2992_1_DATARDY_PIN, IOPORT_DIR_INPUT);
 
-    ioport_enable_pin(LTC2992_1_ALERT_PIN);
-    ioport_set_pin_dir(LTC2992_1_ALERT_PIN, IOPORT_DIR_INPUT);
-
-    // LTC2992 1 - U9
-    ioport_enable_pin(LTC2992_2_DATARDY_PIN);
-    ioport_set_pin_dir(LTC2992_2_DATARDY_PIN, IOPORT_DIR_INPUT);
-
-    ioport_enable_pin(LTC2992_2_ALERT_PIN);
-    ioport_set_pin_dir(LTC2992_2_ALERT_PIN, IOPORT_DIR_INPUT);
-}
-
-void BSP_vInitPowerGPIO(void) {
-    uint32_t power_pins[] = {EN_5V_BUS_PIN, EN_3V3_BUS_PIN, EN_VBAT_BUS_PIN, EN_VBATALT_BUS_PIN};
-
-    for (uint8_t i = 0; i < 4; i++) {
-        ioport_enable_pin(power_pins[i]);
-        ioport_set_pin_level(power_pins[i], 0);
-        ioport_set_pin_dir(power_pins[i], IOPORT_DIR_OUTPUT);
-    }
-}
-
-void BSP_vSetPowerEn(power_pin_t pin, uint8_t level) {
-    ioport_set_pin_level(pin, level);
-}
-
-
-void BSP_vUsbReset(void) {
-    ioport_set_pin_level(USB_RESET_PIN, 0);
-    delay_ms(100);
-    ioport_set_pin_level(USB_RESET_PIN, 1);
-}
 
 /*
 * All functions for CAN operation

@@ -55,19 +55,13 @@ typedef enum {
 #define REG_I2CCONFB_ADDR_Pos                        (0UL)
 #define REG_I2CCONFB_ADDR_Msk                        (0x00ff << REG_I2CCONFB_ADDR_Pos)
 
-/*************** Bit definition for ConfMulti register ***********************/
-#define REG_CONFMULTI_MENABLED_Pos                   (0UL)
-#define REG_CONFMULTI_MENABLED_Msk                   (0x0001 << REG_CONFMULTI_MENABLED_Pos)
-#define REG_CONFMULTI_AUTOCLR_Pos                    (1UL)
-#define REG_CONFMULTI_AUTOCLR_Msk                    (0x0001 << REG_CONFMULTI_AUTOCLR_Pos)
-#define REG_CONFMULTI_FANPOS1_Pos                    (4UL)
-#define REG_CONFMULTI_FANPOS1_Msk                    (0x0001 << REG_CONFMULTI_FANPOS1_Pos)
-#define REG_CONFMULTI_FANPOS2_Pos                    (5UL)
-#define REG_CONFMULTI_FANPOS2_Msk                    (0x0001 << REG_CONFMULTI_FANPOS2_Pos)
-#define REG_CONFMULTI_FANPOS3_Pos                    (6UL)
-#define REG_CONFMULTI_FANPOS3_Msk                    (0x0001 << REG_CONFMULTI_FANPOS3_Pos)
-#define REG_CONFMULTI_FANPOS4_Pos                    (7UL)
-#define REG_CONFMULTI_FANPOS4_Msk                    (0x0001 << REG_CONFMULTI_FANPOS4_Pos)
+/*************** Bit definition for MultiConf0 register **********************/
+#define REG_MULTICONF0_DETECTED_Pos                  (0UL)
+#define REG_MULTICONF0_DETECTED_Msk                  (0x0001 << REG_MULTICONF0_DETECTED_Pos)
+#define REG_MULTICONF0_AUTOCLR_Pos                   (1UL)
+#define REG_MULTICONF0_AUTOCLR_Msk                   (0x0001 << REG_MULTICONF0_AUTOCLR_Pos)
+#define REG_MULTICONF0_SCANENABLED_Pos               (2UL)
+#define REG_MULTICONF0_SCANENABLED_Msk               (0x0001 << REG_MULTICONF0_SCANENABLED_Pos)
 
 /*************** Bit definition for ConfTempSense register *******************/
 #define REG_CONFTEMPSENSE_ENABLEMEASUREMENTS_Pos     (0UL)
@@ -77,45 +71,21 @@ typedef enum {
 #define REG_CANCONFA_BAUDRATE_Pos                    (0UL)
 #define REG_CANCONFA_BAUDRATE_Msk                    (0xffffffff << REG_CANCONFA_BAUDRATE_Pos)
 
-/*************** Bit definition for XTXpins register *************************/
-#define REG_XTXPINS_ENA_Pos                          (0UL)
-#define REG_XTXPINS_ENA_Msk                          (0x0001 << REG_XTXPINS_ENA_Pos)
-#define REG_XTXPINS_NRST_Pos                         (1UL)
-#define REG_XTXPINS_NRST_Msk                         (0x0001 << REG_XTXPINS_NRST_Pos)
-#define REG_XTXPINS_RDY_Pos                          (2UL)
-#define REG_XTXPINS_RDY_Msk                          (0x0001 << REG_XTXPINS_RDY_Pos)
-
-/*************** Bit definition for XTXMultitester register ******************/
-#define REG_XTXMULTITESTER_POS1_XTX_EN_Pos           (0UL)
-#define REG_XTXMULTITESTER_POS1_XTX_EN_Msk           (0x0001 << REG_XTXMULTITESTER_POS1_XTX_EN_Pos)
-#define REG_XTXMULTITESTER_POS1_XTX_POWER_Pos        (1UL)
-#define REG_XTXMULTITESTER_POS1_XTX_POWER_Msk        (0x0001 << REG_XTXMULTITESTER_POS1_XTX_POWER_Pos)
-#define REG_XTXMULTITESTER_POS1_XTX_NRESET_Pos       (2UL)
-#define REG_XTXMULTITESTER_POS1_XTX_NRESET_Msk       (0x0001 << REG_XTXMULTITESTER_POS1_XTX_NRESET_Pos)
-#define REG_XTXMULTITESTER_POS2_XTX_EN_Pos           (4UL)
-#define REG_XTXMULTITESTER_POS2_XTX_EN_Msk           (0x0001 << REG_XTXMULTITESTER_POS2_XTX_EN_Pos)
-#define REG_XTXMULTITESTER_POS2_XTX_POWER_Pos        (5UL)
-#define REG_XTXMULTITESTER_POS2_XTX_POWER_Msk        (0x0001 << REG_XTXMULTITESTER_POS2_XTX_POWER_Pos)
-#define REG_XTXMULTITESTER_POS2_XTX_NRESET_Pos       (6UL)
-#define REG_XTXMULTITESTER_POS2_XTX_NRESET_Msk       (0x0001 << REG_XTXMULTITESTER_POS2_XTX_NRESET_Pos)
-#define REG_XTXMULTITESTER_POS3_XTX_EN_Pos           (8UL)
-#define REG_XTXMULTITESTER_POS3_XTX_EN_Msk           (0x0001 << REG_XTXMULTITESTER_POS3_XTX_EN_Pos)
-#define REG_XTXMULTITESTER_POS3_XTX_POWER_Pos        (9UL)
-#define REG_XTXMULTITESTER_POS3_XTX_POWER_Msk        (0x0001 << REG_XTXMULTITESTER_POS3_XTX_POWER_Pos)
-#define REG_XTXMULTITESTER_POS3_XTX_NRESET_Pos       (10UL)
-#define REG_XTXMULTITESTER_POS3_XTX_NRESET_Msk       (0x0001 << REG_XTXMULTITESTER_POS3_XTX_NRESET_Pos)
-#define REG_XTXMULTITESTER_POS4_XTX_EN_Pos           (12UL)
-#define REG_XTXMULTITESTER_POS4_XTX_EN_Msk           (0x0001 << REG_XTXMULTITESTER_POS4_XTX_EN_Pos)
-#define REG_XTXMULTITESTER_POS4_XTX_POWER_Pos        (13UL)
-#define REG_XTXMULTITESTER_POS4_XTX_POWER_Msk        (0x0001 << REG_XTXMULTITESTER_POS4_XTX_POWER_Pos)
-#define REG_XTXMULTITESTER_POS4_XTX_NRESET_Pos       (14UL)
-#define REG_XTXMULTITESTER_POS4_XTX_NRESET_Msk       (0x0001 << REG_XTXMULTITESTER_POS4_XTX_NRESET_Pos)
+/*************** Bit definition for PC104Pins register ***********************/
+#define REG_PC104PINS_ENA_Pos                        (0UL)
+#define REG_PC104PINS_ENA_Msk                        (0x0001 << REG_PC104PINS_ENA_Pos)
+#define REG_PC104PINS_NRST_Pos                       (1UL)
+#define REG_PC104PINS_NRST_Msk                       (0x0001 << REG_PC104PINS_NRST_Pos)
+#define REG_PC104PINS_RDY_Pos                        (2UL)
+#define REG_PC104PINS_RDY_Msk                        (0x0001 << REG_PC104PINS_RDY_Pos)
 
 /*************** Bit definition for RFRelaysConf register ********************/
 #define REG_RFRELAYSCONF_RFSW1_DETECTED_Pos          (0UL)
 #define REG_RFRELAYSCONF_RFSW1_DETECTED_Msk          (0x0001 << REG_RFRELAYSCONF_RFSW1_DETECTED_Pos)
 #define REG_RFRELAYSCONF_RFSW2_DETECTED_Pos          (1UL)
 #define REG_RFRELAYSCONF_RFSW2_DETECTED_Msk          (0x0001 << REG_RFRELAYSCONF_RFSW2_DETECTED_Pos)
+#define REG_RFRELAYSCONF_SCANENABLED_Pos             (2UL)
+#define REG_RFRELAYSCONF_SCANENABLED_Msk             (0x0001 << REG_RFRELAYSCONF_SCANENABLED_Pos)
 #define REG_RFRELAYSCONF_RFSW1CHAN_Pos               (8UL)
 #define REG_RFRELAYSCONF_RFSW1CHAN_Msk               (0x00ff << REG_RFRELAYSCONF_RFSW1CHAN_Pos)
 #define REG_RFRELAYSCONF_RFSW2CHAN_Pos               (16UL)
@@ -173,6 +143,40 @@ typedef enum {
 #define REG_TE_CONFIG_TYPE_Pos                       (12UL)
 #define REG_TE_CONFIG_TYPE_Msk                       (0x000f << REG_TE_CONFIG_TYPE_Pos)
 
+/*************** Bit definition for Multitester register *********************/
+#define REG_MULTITESTER_POS1_ENABLE_Pos              (0UL)
+#define REG_MULTITESTER_POS1_ENABLE_Msk              (0x0001 << REG_MULTITESTER_POS1_ENABLE_Pos)
+#define REG_MULTITESTER_POS1_POWER_Pos               (1UL)
+#define REG_MULTITESTER_POS1_POWER_Msk               (0x0001 << REG_MULTITESTER_POS1_POWER_Pos)
+#define REG_MULTITESTER_POS1_NRESET_Pos              (2UL)
+#define REG_MULTITESTER_POS1_NRESET_Msk              (0x0001 << REG_MULTITESTER_POS1_NRESET_Pos)
+#define REG_MULTITESTER_POS1_FAN_Pos                 (3UL)
+#define REG_MULTITESTER_POS1_FAN_Msk                 (0x0001 << REG_MULTITESTER_POS1_FAN_Pos)
+#define REG_MULTITESTER_POS2_ENABLE_Pos              (4UL)
+#define REG_MULTITESTER_POS2_ENABLE_Msk              (0x0001 << REG_MULTITESTER_POS2_ENABLE_Pos)
+#define REG_MULTITESTER_POS2_POWER_Pos               (5UL)
+#define REG_MULTITESTER_POS2_POWER_Msk               (0x0001 << REG_MULTITESTER_POS2_POWER_Pos)
+#define REG_MULTITESTER_POS2_NRESET_Pos              (6UL)
+#define REG_MULTITESTER_POS2_NRESET_Msk              (0x0001 << REG_MULTITESTER_POS2_NRESET_Pos)
+#define REG_MULTITESTER_POS2_FAN_Pos                 (7UL)
+#define REG_MULTITESTER_POS2_FAN_Msk                 (0x0001 << REG_MULTITESTER_POS2_FAN_Pos)
+#define REG_MULTITESTER_POS3_ENABLE_Pos              (8UL)
+#define REG_MULTITESTER_POS3_ENABLE_Msk              (0x0001 << REG_MULTITESTER_POS3_ENABLE_Pos)
+#define REG_MULTITESTER_POS3_POWER_Pos               (9UL)
+#define REG_MULTITESTER_POS3_POWER_Msk               (0x0001 << REG_MULTITESTER_POS3_POWER_Pos)
+#define REG_MULTITESTER_POS3_NRESET_Pos              (10UL)
+#define REG_MULTITESTER_POS3_NRESET_Msk              (0x0001 << REG_MULTITESTER_POS3_NRESET_Pos)
+#define REG_MULTITESTER_POS3_FAN_Pos                 (11UL)
+#define REG_MULTITESTER_POS3_FAN_Msk                 (0x0001 << REG_MULTITESTER_POS3_FAN_Pos)
+#define REG_MULTITESTER_POS4_ENABLE_Pos              (12UL)
+#define REG_MULTITESTER_POS4_ENABLE_Msk              (0x0001 << REG_MULTITESTER_POS4_ENABLE_Pos)
+#define REG_MULTITESTER_POS4_POWER_Pos               (13UL)
+#define REG_MULTITESTER_POS4_POWER_Msk               (0x0001 << REG_MULTITESTER_POS4_POWER_Pos)
+#define REG_MULTITESTER_POS4_NRESET_Pos              (14UL)
+#define REG_MULTITESTER_POS4_NRESET_Msk              (0x0001 << REG_MULTITESTER_POS4_NRESET_Pos)
+#define REG_MULTITESTER_POS4_FAN_Pos                 (15UL)
+#define REG_MULTITESTER_POS4_FAN_Msk                 (0x0001 << REG_MULTITESTER_POS4_FAN_Pos)
+
 
 typedef struct {
     uint32_t Board_ID;
@@ -194,12 +198,14 @@ typedef struct {
     uint32_t MeasurePower_VBatAlt;
     uint32_t I2CConfA;
     uint32_t I2CConfB;
-    uint32_t ConfMulti;
+    uint32_t MultiConf0;
     uint32_t ConfTempSense;
     uint32_t CANConfA;
-    uint32_t XTXpins;
-    uint32_t XTXMultitester;
+    uint32_t PC104Pins;
     uint32_t RFRelaysConf;
+    uint32_t MultiConf1_Status;
+    uint32_t MultiConf1_Set;
+    uint32_t MultiConf1_Clear;
     uint32_t XDCConfig;
     uint32_t CSBoard_T0;
     uint32_t CSBoard_T1;
@@ -267,12 +273,14 @@ typedef enum {
     reg_MeasurePower_VBatAlt_addr = 0x28,
     reg_I2CConfA_addr = 0x29,
     reg_I2CConfB_addr = 0x2A,
-    reg_ConfMulti_addr = 0x2B,
+    reg_MultiConf0_addr = 0x2B,
     reg_ConfTempSense_addr = 0x2C,
     reg_CANConfA_addr = 0x2D,
-    reg_XTXpins_addr = 0x30,
-    reg_XTXMultitester_addr = 0x31,
+    reg_PC104Pins_addr = 0x30,
     reg_RFRelaysConf_addr = 0x32,
+    reg_MultiConf1_Status_addr = 0x33,
+    reg_MultiConf1_Set_addr = 0x34,
+    reg_MultiConf1_Clear_addr = 0x35,
     reg_XDCConfig_addr = 0x40,
     reg_CSBoard_T0_addr = 0x50,
     reg_CSBoard_T1_addr = 0x51,
@@ -525,27 +533,18 @@ mm_response_t mm_setI2CConfB_ADDR(const uint8_t val);
 mm_response_t mm_getI2CConfB_ADDR(uint8_t * dest);
 mm_response_t mm_getI2CConfB_ADDRFrom(uint8_t * dest, const uint32_t source);
 
-/*************** Get/Set functions for ConfMulti register *********************************************************************/
-mm_response_t mm_setConfMulti(const uint32_t val);
-mm_response_t mm_getConfMulti(uint32_t * dest);
-mm_response_t mm_setConfMulti_MEnabled(const mm_enabled_t val);
-mm_response_t mm_getConfMulti_MEnabled(mm_enabled_t * dest);
-mm_response_t mm_getConfMulti_MEnabledFrom(mm_enabled_t * dest, const uint32_t source);
-mm_response_t mm_setConfMulti_AutoCLR(const mm_enabled_t val);
-mm_response_t mm_getConfMulti_AutoCLR(mm_enabled_t * dest);
-mm_response_t mm_getConfMulti_AutoCLRFrom(mm_enabled_t * dest, const uint32_t source);
-mm_response_t mm_setConfMulti_FanPos1(const mm_enabled_t val);
-mm_response_t mm_getConfMulti_FanPos1(mm_enabled_t * dest);
-mm_response_t mm_getConfMulti_FanPos1From(mm_enabled_t * dest, const uint32_t source);
-mm_response_t mm_setConfMulti_FanPos2(const mm_enabled_t val);
-mm_response_t mm_getConfMulti_FanPos2(mm_enabled_t * dest);
-mm_response_t mm_getConfMulti_FanPos2From(mm_enabled_t * dest, const uint32_t source);
-mm_response_t mm_setConfMulti_FanPos3(const mm_enabled_t val);
-mm_response_t mm_getConfMulti_FanPos3(mm_enabled_t * dest);
-mm_response_t mm_getConfMulti_FanPos3From(mm_enabled_t * dest, const uint32_t source);
-mm_response_t mm_setConfMulti_FanPos4(const mm_enabled_t val);
-mm_response_t mm_getConfMulti_FanPos4(mm_enabled_t * dest);
-mm_response_t mm_getConfMulti_FanPos4From(mm_enabled_t * dest, const uint32_t source);
+/*************** Get/Set functions for MultiConf0 register ********************************************************************/
+mm_response_t mm_setMultiConf0(const uint32_t val);
+mm_response_t mm_getMultiConf0(uint32_t * dest);
+mm_response_t mm_setMultiConf0_Detected(const mm_enabled_t val);
+mm_response_t mm_getMultiConf0_Detected(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf0_DetectedFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf0_AutoCLR(const mm_enabled_t val);
+mm_response_t mm_getMultiConf0_AutoCLR(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf0_AutoCLRFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf0_ScanEnabled(const mm_enabled_t val);
+mm_response_t mm_getMultiConf0_ScanEnabled(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf0_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source);
 
 /*************** Get/Set functions for ConfTempSense register *****************************************************************/
 mm_response_t mm_setConfTempSense(const uint32_t val);
@@ -561,58 +560,18 @@ mm_response_t mm_setCANConfA_BaudRate(const uint32_t val);
 mm_response_t mm_getCANConfA_BaudRate(uint32_t * dest);
 mm_response_t mm_getCANConfA_BaudRateFrom(uint32_t * dest, const uint32_t source);
 
-/*************** Get/Set functions for XTXpins register ***********************************************************************/
-mm_response_t mm_setXTXpins(const uint32_t val);
-mm_response_t mm_getXTXpins(uint32_t * dest);
-mm_response_t mm_setXTXpins_ENA(const mm_enabled_t val);
-mm_response_t mm_getXTXpins_ENA(mm_enabled_t * dest);
-mm_response_t mm_getXTXpins_ENAFrom(mm_enabled_t * dest, const uint32_t source);
-mm_response_t mm_setXTXpins_nRST(const mm_enabled_t val);
-mm_response_t mm_getXTXpins_nRST(mm_enabled_t * dest);
-mm_response_t mm_getXTXpins_nRSTFrom(mm_enabled_t * dest, const uint32_t source);
-mm_response_t mm_setXTXpins_RDY(const mm_enabled_t val);
-mm_response_t mm_getXTXpins_RDY(mm_enabled_t * dest);
-mm_response_t mm_getXTXpins_RDYFrom(mm_enabled_t * dest, const uint32_t source);
-
-/*************** Get/Set functions for XTXMultitester register ****************************************************************/
-mm_response_t mm_setXTXMultitester(const uint32_t val);
-mm_response_t mm_getXTXMultitester(uint32_t * dest);
-mm_response_t mm_setXTXMultitester_POS1_XTX_EN(const mm_enabled_t val);
-mm_response_t mm_getXTXMultitester_POS1_XTX_EN(mm_enabled_t * dest);
-mm_response_t mm_getXTXMultitester_POS1_XTX_ENFrom(mm_enabled_t * dest, const uint32_t source);
-mm_response_t mm_setXTXMultitester_POS1_XTX_Power(const mm_enabled_t val);
-mm_response_t mm_getXTXMultitester_POS1_XTX_Power(mm_enabled_t * dest);
-mm_response_t mm_getXTXMultitester_POS1_XTX_PowerFrom(mm_enabled_t * dest, const uint32_t source);
-mm_response_t mm_setXTXMultitester_POS1_XTX_nReset(const mm_enabled_t val);
-mm_response_t mm_getXTXMultitester_POS1_XTX_nReset(mm_enabled_t * dest);
-mm_response_t mm_getXTXMultitester_POS1_XTX_nResetFrom(mm_enabled_t * dest, const uint32_t source);
-mm_response_t mm_setXTXMultitester_POS2_XTX_EN(const mm_enabled_t val);
-mm_response_t mm_getXTXMultitester_POS2_XTX_EN(mm_enabled_t * dest);
-mm_response_t mm_getXTXMultitester_POS2_XTX_ENFrom(mm_enabled_t * dest, const uint32_t source);
-mm_response_t mm_setXTXMultitester_POS2_XTX_Power(const mm_enabled_t val);
-mm_response_t mm_getXTXMultitester_POS2_XTX_Power(mm_enabled_t * dest);
-mm_response_t mm_getXTXMultitester_POS2_XTX_PowerFrom(mm_enabled_t * dest, const uint32_t source);
-mm_response_t mm_setXTXMultitester_POS2_XTX_nReset(const mm_enabled_t val);
-mm_response_t mm_getXTXMultitester_POS2_XTX_nReset(mm_enabled_t * dest);
-mm_response_t mm_getXTXMultitester_POS2_XTX_nResetFrom(mm_enabled_t * dest, const uint32_t source);
-mm_response_t mm_setXTXMultitester_POS3_XTX_EN(const mm_enabled_t val);
-mm_response_t mm_getXTXMultitester_POS3_XTX_EN(mm_enabled_t * dest);
-mm_response_t mm_getXTXMultitester_POS3_XTX_ENFrom(mm_enabled_t * dest, const uint32_t source);
-mm_response_t mm_setXTXMultitester_POS3_XTX_Power(const mm_enabled_t val);
-mm_response_t mm_getXTXMultitester_POS3_XTX_Power(mm_enabled_t * dest);
-mm_response_t mm_getXTXMultitester_POS3_XTX_PowerFrom(mm_enabled_t * dest, const uint32_t source);
-mm_response_t mm_setXTXMultitester_POS3_XTX_nReset(const mm_enabled_t val);
-mm_response_t mm_getXTXMultitester_POS3_XTX_nReset(mm_enabled_t * dest);
-mm_response_t mm_getXTXMultitester_POS3_XTX_nResetFrom(mm_enabled_t * dest, const uint32_t source);
-mm_response_t mm_setXTXMultitester_POS4_XTX_EN(const mm_enabled_t val);
-mm_response_t mm_getXTXMultitester_POS4_XTX_EN(mm_enabled_t * dest);
-mm_response_t mm_getXTXMultitester_POS4_XTX_ENFrom(mm_enabled_t * dest, const uint32_t source);
-mm_response_t mm_setXTXMultitester_POS4_XTX_Power(const mm_enabled_t val);
-mm_response_t mm_getXTXMultitester_POS4_XTX_Power(mm_enabled_t * dest);
-mm_response_t mm_getXTXMultitester_POS4_XTX_PowerFrom(mm_enabled_t * dest, const uint32_t source);
-mm_response_t mm_setXTXMultitester_POS4_XTX_nReset(const mm_enabled_t val);
-mm_response_t mm_getXTXMultitester_POS4_XTX_nReset(mm_enabled_t * dest);
-mm_response_t mm_getXTXMultitester_POS4_XTX_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+/*************** Get/Set functions for PC104Pins register *********************************************************************/
+mm_response_t mm_setPC104Pins(const uint32_t val);
+mm_response_t mm_getPC104Pins(uint32_t * dest);
+mm_response_t mm_setPC104Pins_ENA(const mm_enabled_t val);
+mm_response_t mm_getPC104Pins_ENA(mm_enabled_t * dest);
+mm_response_t mm_getPC104Pins_ENAFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setPC104Pins_nRST(const mm_enabled_t val);
+mm_response_t mm_getPC104Pins_nRST(mm_enabled_t * dest);
+mm_response_t mm_getPC104Pins_nRSTFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setPC104Pins_RDY(const mm_enabled_t val);
+mm_response_t mm_getPC104Pins_RDY(mm_enabled_t * dest);
+mm_response_t mm_getPC104Pins_RDYFrom(mm_enabled_t * dest, const uint32_t source);
 
 /*************** Get/Set functions for RFRelaysConf register ******************************************************************/
 mm_response_t mm_setRFRelaysConf(const uint32_t val);
@@ -623,12 +582,171 @@ mm_response_t mm_getRFRelaysConf_RFSW1_DetectedFrom(mm_enabled_t * dest, const u
 mm_response_t mm_setRFRelaysConf_RFSW2_Detected(const mm_enabled_t val);
 mm_response_t mm_getRFRelaysConf_RFSW2_Detected(mm_enabled_t * dest);
 mm_response_t mm_getRFRelaysConf_RFSW2_DetectedFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setRFRelaysConf_ScanEnabled(const mm_enabled_t val);
+mm_response_t mm_getRFRelaysConf_ScanEnabled(mm_enabled_t * dest);
+mm_response_t mm_getRFRelaysConf_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source);
 mm_response_t mm_setRFRelaysConf_RfSw1Chan(const uint8_t val);
 mm_response_t mm_getRFRelaysConf_RfSw1Chan(uint8_t * dest);
 mm_response_t mm_getRFRelaysConf_RfSw1ChanFrom(uint8_t * dest, const uint32_t source);
 mm_response_t mm_setRFRelaysConf_RfSw2Chan(const uint8_t val);
 mm_response_t mm_getRFRelaysConf_RfSw2Chan(uint8_t * dest);
 mm_response_t mm_getRFRelaysConf_RfSw2ChanFrom(uint8_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for MultiConf1_Status register *************************************************************/
+mm_response_t mm_setMultiConf1_Status(const uint32_t val);
+mm_response_t mm_getMultiConf1_Status(uint32_t * dest);
+mm_response_t mm_setMultiConf1_Status_POS1_Enable(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Status_POS1_Enable(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Status_POS1_EnableFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Status_POS1_Power(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Status_POS1_Power(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Status_POS1_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Status_POS1_nReset(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Status_POS1_nReset(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Status_POS1_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Status_POS1_FAN(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Status_POS1_FAN(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Status_POS1_FANFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Status_POS2_Enable(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Status_POS2_Enable(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Status_POS2_EnableFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Status_POS2_Power(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Status_POS2_Power(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Status_POS2_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Status_POS2_nReset(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Status_POS2_nReset(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Status_POS2_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Status_POS2_FAN(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Status_POS2_FAN(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Status_POS2_FANFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Status_POS3_Enable(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Status_POS3_Enable(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Status_POS3_EnableFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Status_POS3_Power(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Status_POS3_Power(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Status_POS3_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Status_POS3_nReset(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Status_POS3_nReset(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Status_POS3_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Status_POS3_FAN(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Status_POS3_FAN(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Status_POS3_FANFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Status_POS4_Enable(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Status_POS4_Enable(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Status_POS4_EnableFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Status_POS4_Power(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Status_POS4_Power(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Status_POS4_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Status_POS4_nReset(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Status_POS4_nReset(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Status_POS4_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Status_POS4_FAN(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Status_POS4_FAN(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Status_POS4_FANFrom(mm_enabled_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for MultiConf1_Set register ****************************************************************/
+mm_response_t mm_setMultiConf1_Set(const uint32_t val);
+mm_response_t mm_getMultiConf1_Set(uint32_t * dest);
+mm_response_t mm_setMultiConf1_Set_POS1_Enable(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Set_POS1_Enable(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Set_POS1_EnableFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Set_POS1_Power(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Set_POS1_Power(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Set_POS1_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Set_POS1_nReset(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Set_POS1_nReset(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Set_POS1_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Set_POS1_FAN(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Set_POS1_FAN(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Set_POS1_FANFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Set_POS2_Enable(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Set_POS2_Enable(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Set_POS2_EnableFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Set_POS2_Power(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Set_POS2_Power(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Set_POS2_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Set_POS2_nReset(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Set_POS2_nReset(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Set_POS2_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Set_POS2_FAN(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Set_POS2_FAN(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Set_POS2_FANFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Set_POS3_Enable(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Set_POS3_Enable(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Set_POS3_EnableFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Set_POS3_Power(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Set_POS3_Power(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Set_POS3_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Set_POS3_nReset(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Set_POS3_nReset(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Set_POS3_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Set_POS3_FAN(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Set_POS3_FAN(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Set_POS3_FANFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Set_POS4_Enable(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Set_POS4_Enable(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Set_POS4_EnableFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Set_POS4_Power(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Set_POS4_Power(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Set_POS4_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Set_POS4_nReset(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Set_POS4_nReset(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Set_POS4_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Set_POS4_FAN(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Set_POS4_FAN(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Set_POS4_FANFrom(mm_enabled_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for MultiConf1_Clear register **************************************************************/
+mm_response_t mm_setMultiConf1_Clear(const uint32_t val);
+mm_response_t mm_getMultiConf1_Clear(uint32_t * dest);
+mm_response_t mm_setMultiConf1_Clear_POS1_Enable(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Clear_POS1_Enable(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Clear_POS1_EnableFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Clear_POS1_Power(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Clear_POS1_Power(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Clear_POS1_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Clear_POS1_nReset(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Clear_POS1_nReset(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Clear_POS1_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Clear_POS1_FAN(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Clear_POS1_FAN(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Clear_POS1_FANFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Clear_POS2_Enable(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Clear_POS2_Enable(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Clear_POS2_EnableFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Clear_POS2_Power(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Clear_POS2_Power(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Clear_POS2_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Clear_POS2_nReset(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Clear_POS2_nReset(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Clear_POS2_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Clear_POS2_FAN(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Clear_POS2_FAN(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Clear_POS2_FANFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Clear_POS3_Enable(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Clear_POS3_Enable(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Clear_POS3_EnableFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Clear_POS3_Power(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Clear_POS3_Power(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Clear_POS3_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Clear_POS3_nReset(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Clear_POS3_nReset(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Clear_POS3_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Clear_POS3_FAN(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Clear_POS3_FAN(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Clear_POS3_FANFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Clear_POS4_Enable(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Clear_POS4_Enable(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Clear_POS4_EnableFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Clear_POS4_Power(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Clear_POS4_Power(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Clear_POS4_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Clear_POS4_nReset(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Clear_POS4_nReset(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Clear_POS4_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf1_Clear_POS4_FAN(const mm_enabled_t val);
+mm_response_t mm_getMultiConf1_Clear_POS4_FAN(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf1_Clear_POS4_FANFrom(mm_enabled_t * dest, const uint32_t source);
 
 /*************** Get/Set functions for XDCConfig register *********************************************************************/
 mm_response_t mm_setXDCConfig(const uint32_t val);

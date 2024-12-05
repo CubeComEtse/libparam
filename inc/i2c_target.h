@@ -34,9 +34,30 @@ typedef struct {
 	MessageBufferHandle_t incoming_messages;
 	MessageBufferHandle_t outgoing_messages;
 	
+	//Previous versions of the I2C Endpoint had a target bus address that 
+	// was set  using a register, and not transferred using the UART 
+	// messages. This allows you to still do that.
+	uint8_t legacy_address;
+	
+	// Delay between a write and a read. This was used for ISISpace's
+	// non-repeated start config. A value of 0 means normal i2c config, so
+	// using a repeated start. Any other value set the delay in ms between 
+	// the write an read parts of the transaction.
+	uint8_t write_read_delay;
+	
+	// This sets a delay after any transaction. It was required for the XTX,
+	// which could not process that many messages quickly.
+	uint8_t tr_delay;
+	
+	
 }i2c_target_t;
 
 void I2CTARGET_Init(i2c_target_t * handle);
 void I2CTARGET_Task(void * handle);
+
+
+void I2CTARGET_SetBaud(i2c_target_t * handle, uint32_t baud);
+uint32_t I2CTARGET_GetBaud(i2c_target_t * handle);
+void I2CTarget_SetLegacyAddress(i2c_target_t * handle, uint8_t new_address);
 
 #endif /* I2C_TARGET_H_ */

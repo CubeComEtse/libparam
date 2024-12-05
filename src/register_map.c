@@ -1269,10 +1269,10 @@ mm_response_t mm_getI2CConfB_ADDRFrom(uint8_t * dest, const uint32_t source) {
     *dest = (uint8_t) ((source & REG_I2CCONFB_ADDR_Msk) >> REG_I2CCONFB_ADDR_Pos);
     return mm_OK;
 }
-/*************** Get/Set functions for ConfMulti register *********************************************************************/
-mm_response_t mm_setConfMulti(const uint32_t val) {
+/*************** Get/Set functions for MultiConf0 register ********************************************************************/
+mm_response_t mm_setMultiConf0(const uint32_t val) {
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        mm.ConfMulti = val;
+        mm.MultiConf0 = val;
         xSemaphoreGive(_mm_mutex);
         return mm_OK;
     }
@@ -1280,18 +1280,18 @@ mm_response_t mm_setConfMulti(const uint32_t val) {
         return mm_NotReady;
     }
 }
-mm_response_t mm_getConfMulti(uint32_t * dest) {
+mm_response_t mm_getMultiConf0(uint32_t * dest) {
     mm_response_t response = mm_NotReady;
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        *dest = mm.ConfMulti;
+        *dest = mm.MultiConf0;
         response = mm_OK;
         xSemaphoreGive(_mm_mutex);
     }
     return response;
 }
-mm_response_t mm_setConfMulti_MEnabled(const mm_enabled_t val) {
+mm_response_t mm_setMultiConf0_Detected(const mm_enabled_t val) {
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        mm.ConfMulti = (mm.ConfMulti & ~REG_CONFMULTI_MENABLED_Msk) | (val << REG_CONFMULTI_MENABLED_Pos);
+        mm.MultiConf0 = (mm.MultiConf0 & ~REG_MULTICONF0_DETECTED_Msk) | (val << REG_MULTICONF0_DETECTED_Pos);
         xSemaphoreGive(_mm_mutex);
         return  mm_OK;
     }
@@ -1299,24 +1299,24 @@ mm_response_t mm_setConfMulti_MEnabled(const mm_enabled_t val) {
         return mm_NotReady;
     }
 }
-mm_response_t mm_getConfMulti_MEnabled(mm_enabled_t * dest) {
+mm_response_t mm_getMultiConf0_Detected(mm_enabled_t * dest) {
     mm_response_t response = mm_NotReady;
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
     {
-        *dest = (mm_enabled_t) ((mm.ConfMulti & REG_CONFMULTI_MENABLED_Msk) >> REG_CONFMULTI_MENABLED_Pos);
+        *dest = (mm_enabled_t) ((mm.MultiConf0 & REG_MULTICONF0_DETECTED_Msk) >> REG_MULTICONF0_DETECTED_Pos);
         xSemaphoreGive(_mm_mutex);
         return mm_OK;
     }
     return response;
 }
 
-mm_response_t mm_getConfMulti_MEnabledFrom(mm_enabled_t * dest, const uint32_t source) {
-    *dest = (mm_enabled_t) ((source & REG_CONFMULTI_MENABLED_Msk) >> REG_CONFMULTI_MENABLED_Pos);
+mm_response_t mm_getMultiConf0_DetectedFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTICONF0_DETECTED_Msk) >> REG_MULTICONF0_DETECTED_Pos);
     return mm_OK;
 }
-mm_response_t mm_setConfMulti_AutoCLR(const mm_enabled_t val) {
+mm_response_t mm_setMultiConf0_AutoCLR(const mm_enabled_t val) {
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        mm.ConfMulti = (mm.ConfMulti & ~REG_CONFMULTI_AUTOCLR_Msk) | (val << REG_CONFMULTI_AUTOCLR_Pos);
+        mm.MultiConf0 = (mm.MultiConf0 & ~REG_MULTICONF0_AUTOCLR_Msk) | (val << REG_MULTICONF0_AUTOCLR_Pos);
         xSemaphoreGive(_mm_mutex);
         return  mm_OK;
     }
@@ -1324,24 +1324,24 @@ mm_response_t mm_setConfMulti_AutoCLR(const mm_enabled_t val) {
         return mm_NotReady;
     }
 }
-mm_response_t mm_getConfMulti_AutoCLR(mm_enabled_t * dest) {
+mm_response_t mm_getMultiConf0_AutoCLR(mm_enabled_t * dest) {
     mm_response_t response = mm_NotReady;
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
     {
-        *dest = (mm_enabled_t) ((mm.ConfMulti & REG_CONFMULTI_AUTOCLR_Msk) >> REG_CONFMULTI_AUTOCLR_Pos);
+        *dest = (mm_enabled_t) ((mm.MultiConf0 & REG_MULTICONF0_AUTOCLR_Msk) >> REG_MULTICONF0_AUTOCLR_Pos);
         xSemaphoreGive(_mm_mutex);
         return mm_OK;
     }
     return response;
 }
 
-mm_response_t mm_getConfMulti_AutoCLRFrom(mm_enabled_t * dest, const uint32_t source) {
-    *dest = (mm_enabled_t) ((source & REG_CONFMULTI_AUTOCLR_Msk) >> REG_CONFMULTI_AUTOCLR_Pos);
+mm_response_t mm_getMultiConf0_AutoCLRFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTICONF0_AUTOCLR_Msk) >> REG_MULTICONF0_AUTOCLR_Pos);
     return mm_OK;
 }
-mm_response_t mm_setConfMulti_FanPos1(const mm_enabled_t val) {
+mm_response_t mm_setMultiConf0_ScanEnabled(const mm_enabled_t val) {
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        mm.ConfMulti = (mm.ConfMulti & ~REG_CONFMULTI_FANPOS1_Msk) | (val << REG_CONFMULTI_FANPOS1_Pos);
+        mm.MultiConf0 = (mm.MultiConf0 & ~REG_MULTICONF0_SCANENABLED_Msk) | (val << REG_MULTICONF0_SCANENABLED_Pos);
         xSemaphoreGive(_mm_mutex);
         return  mm_OK;
     }
@@ -1349,94 +1349,19 @@ mm_response_t mm_setConfMulti_FanPos1(const mm_enabled_t val) {
         return mm_NotReady;
     }
 }
-mm_response_t mm_getConfMulti_FanPos1(mm_enabled_t * dest) {
+mm_response_t mm_getMultiConf0_ScanEnabled(mm_enabled_t * dest) {
     mm_response_t response = mm_NotReady;
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
     {
-        *dest = (mm_enabled_t) ((mm.ConfMulti & REG_CONFMULTI_FANPOS1_Msk) >> REG_CONFMULTI_FANPOS1_Pos);
+        *dest = (mm_enabled_t) ((mm.MultiConf0 & REG_MULTICONF0_SCANENABLED_Msk) >> REG_MULTICONF0_SCANENABLED_Pos);
         xSemaphoreGive(_mm_mutex);
         return mm_OK;
     }
     return response;
 }
 
-mm_response_t mm_getConfMulti_FanPos1From(mm_enabled_t * dest, const uint32_t source) {
-    *dest = (mm_enabled_t) ((source & REG_CONFMULTI_FANPOS1_Msk) >> REG_CONFMULTI_FANPOS1_Pos);
-    return mm_OK;
-}
-mm_response_t mm_setConfMulti_FanPos2(const mm_enabled_t val) {
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        mm.ConfMulti = (mm.ConfMulti & ~REG_CONFMULTI_FANPOS2_Msk) | (val << REG_CONFMULTI_FANPOS2_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return  mm_OK;
-    }
-        else{
-        return mm_NotReady;
-    }
-}
-mm_response_t mm_getConfMulti_FanPos2(mm_enabled_t * dest) {
-    mm_response_t response = mm_NotReady;
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
-    {
-        *dest = (mm_enabled_t) ((mm.ConfMulti & REG_CONFMULTI_FANPOS2_Msk) >> REG_CONFMULTI_FANPOS2_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return mm_OK;
-    }
-    return response;
-}
-
-mm_response_t mm_getConfMulti_FanPos2From(mm_enabled_t * dest, const uint32_t source) {
-    *dest = (mm_enabled_t) ((source & REG_CONFMULTI_FANPOS2_Msk) >> REG_CONFMULTI_FANPOS2_Pos);
-    return mm_OK;
-}
-mm_response_t mm_setConfMulti_FanPos3(const mm_enabled_t val) {
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        mm.ConfMulti = (mm.ConfMulti & ~REG_CONFMULTI_FANPOS3_Msk) | (val << REG_CONFMULTI_FANPOS3_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return  mm_OK;
-    }
-        else{
-        return mm_NotReady;
-    }
-}
-mm_response_t mm_getConfMulti_FanPos3(mm_enabled_t * dest) {
-    mm_response_t response = mm_NotReady;
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
-    {
-        *dest = (mm_enabled_t) ((mm.ConfMulti & REG_CONFMULTI_FANPOS3_Msk) >> REG_CONFMULTI_FANPOS3_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return mm_OK;
-    }
-    return response;
-}
-
-mm_response_t mm_getConfMulti_FanPos3From(mm_enabled_t * dest, const uint32_t source) {
-    *dest = (mm_enabled_t) ((source & REG_CONFMULTI_FANPOS3_Msk) >> REG_CONFMULTI_FANPOS3_Pos);
-    return mm_OK;
-}
-mm_response_t mm_setConfMulti_FanPos4(const mm_enabled_t val) {
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        mm.ConfMulti = (mm.ConfMulti & ~REG_CONFMULTI_FANPOS4_Msk) | (val << REG_CONFMULTI_FANPOS4_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return  mm_OK;
-    }
-        else{
-        return mm_NotReady;
-    }
-}
-mm_response_t mm_getConfMulti_FanPos4(mm_enabled_t * dest) {
-    mm_response_t response = mm_NotReady;
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
-    {
-        *dest = (mm_enabled_t) ((mm.ConfMulti & REG_CONFMULTI_FANPOS4_Msk) >> REG_CONFMULTI_FANPOS4_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return mm_OK;
-    }
-    return response;
-}
-
-mm_response_t mm_getConfMulti_FanPos4From(mm_enabled_t * dest, const uint32_t source) {
-    *dest = (mm_enabled_t) ((source & REG_CONFMULTI_FANPOS4_Msk) >> REG_CONFMULTI_FANPOS4_Pos);
+mm_response_t mm_getMultiConf0_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTICONF0_SCANENABLED_Msk) >> REG_MULTICONF0_SCANENABLED_Pos);
     return mm_OK;
 }
 /*************** Get/Set functions for ConfTempSense register *****************************************************************/
@@ -1529,10 +1454,10 @@ mm_response_t mm_getCANConfA_BaudRateFrom(uint32_t * dest, const uint32_t source
     *dest = (uint32_t) ((source & REG_CANCONFA_BAUDRATE_Msk) >> REG_CANCONFA_BAUDRATE_Pos);
     return mm_OK;
 }
-/*************** Get/Set functions for XTXpins register ***********************************************************************/
-mm_response_t mm_setXTXpins(const uint32_t val) {
+/*************** Get/Set functions for PC104Pins register *********************************************************************/
+mm_response_t mm_setPC104Pins(const uint32_t val) {
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        mm.XTXpins = val;
+        mm.PC104Pins = val;
         xSemaphoreGive(_mm_mutex);
         return mm_OK;
     }
@@ -1540,18 +1465,18 @@ mm_response_t mm_setXTXpins(const uint32_t val) {
         return mm_NotReady;
     }
 }
-mm_response_t mm_getXTXpins(uint32_t * dest) {
+mm_response_t mm_getPC104Pins(uint32_t * dest) {
     mm_response_t response = mm_NotReady;
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        *dest = mm.XTXpins;
+        *dest = mm.PC104Pins;
         response = mm_OK;
         xSemaphoreGive(_mm_mutex);
     }
     return response;
 }
-mm_response_t mm_setXTXpins_ENA(const mm_enabled_t val) {
+mm_response_t mm_setPC104Pins_ENA(const mm_enabled_t val) {
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        mm.XTXpins = (mm.XTXpins & ~REG_XTXPINS_ENA_Msk) | (val << REG_XTXPINS_ENA_Pos);
+        mm.PC104Pins = (mm.PC104Pins & ~REG_PC104PINS_ENA_Msk) | (val << REG_PC104PINS_ENA_Pos);
         xSemaphoreGive(_mm_mutex);
         return  mm_OK;
     }
@@ -1559,24 +1484,24 @@ mm_response_t mm_setXTXpins_ENA(const mm_enabled_t val) {
         return mm_NotReady;
     }
 }
-mm_response_t mm_getXTXpins_ENA(mm_enabled_t * dest) {
+mm_response_t mm_getPC104Pins_ENA(mm_enabled_t * dest) {
     mm_response_t response = mm_NotReady;
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
     {
-        *dest = (mm_enabled_t) ((mm.XTXpins & REG_XTXPINS_ENA_Msk) >> REG_XTXPINS_ENA_Pos);
+        *dest = (mm_enabled_t) ((mm.PC104Pins & REG_PC104PINS_ENA_Msk) >> REG_PC104PINS_ENA_Pos);
         xSemaphoreGive(_mm_mutex);
         return mm_OK;
     }
     return response;
 }
 
-mm_response_t mm_getXTXpins_ENAFrom(mm_enabled_t * dest, const uint32_t source) {
-    *dest = (mm_enabled_t) ((source & REG_XTXPINS_ENA_Msk) >> REG_XTXPINS_ENA_Pos);
+mm_response_t mm_getPC104Pins_ENAFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_PC104PINS_ENA_Msk) >> REG_PC104PINS_ENA_Pos);
     return mm_OK;
 }
-mm_response_t mm_setXTXpins_nRST(const mm_enabled_t val) {
+mm_response_t mm_setPC104Pins_nRST(const mm_enabled_t val) {
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        mm.XTXpins = (mm.XTXpins & ~REG_XTXPINS_NRST_Msk) | (val << REG_XTXPINS_NRST_Pos);
+        mm.PC104Pins = (mm.PC104Pins & ~REG_PC104PINS_NRST_Msk) | (val << REG_PC104PINS_NRST_Pos);
         xSemaphoreGive(_mm_mutex);
         return  mm_OK;
     }
@@ -1584,24 +1509,24 @@ mm_response_t mm_setXTXpins_nRST(const mm_enabled_t val) {
         return mm_NotReady;
     }
 }
-mm_response_t mm_getXTXpins_nRST(mm_enabled_t * dest) {
+mm_response_t mm_getPC104Pins_nRST(mm_enabled_t * dest) {
     mm_response_t response = mm_NotReady;
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
     {
-        *dest = (mm_enabled_t) ((mm.XTXpins & REG_XTXPINS_NRST_Msk) >> REG_XTXPINS_NRST_Pos);
+        *dest = (mm_enabled_t) ((mm.PC104Pins & REG_PC104PINS_NRST_Msk) >> REG_PC104PINS_NRST_Pos);
         xSemaphoreGive(_mm_mutex);
         return mm_OK;
     }
     return response;
 }
 
-mm_response_t mm_getXTXpins_nRSTFrom(mm_enabled_t * dest, const uint32_t source) {
-    *dest = (mm_enabled_t) ((source & REG_XTXPINS_NRST_Msk) >> REG_XTXPINS_NRST_Pos);
+mm_response_t mm_getPC104Pins_nRSTFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_PC104PINS_NRST_Msk) >> REG_PC104PINS_NRST_Pos);
     return mm_OK;
 }
-mm_response_t mm_setXTXpins_RDY(const mm_enabled_t val) {
+mm_response_t mm_setPC104Pins_RDY(const mm_enabled_t val) {
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        mm.XTXpins = (mm.XTXpins & ~REG_XTXPINS_RDY_Msk) | (val << REG_XTXPINS_RDY_Pos);
+        mm.PC104Pins = (mm.PC104Pins & ~REG_PC104PINS_RDY_Msk) | (val << REG_PC104PINS_RDY_Pos);
         xSemaphoreGive(_mm_mutex);
         return  mm_OK;
     }
@@ -1609,339 +1534,19 @@ mm_response_t mm_setXTXpins_RDY(const mm_enabled_t val) {
         return mm_NotReady;
     }
 }
-mm_response_t mm_getXTXpins_RDY(mm_enabled_t * dest) {
+mm_response_t mm_getPC104Pins_RDY(mm_enabled_t * dest) {
     mm_response_t response = mm_NotReady;
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
     {
-        *dest = (mm_enabled_t) ((mm.XTXpins & REG_XTXPINS_RDY_Msk) >> REG_XTXPINS_RDY_Pos);
+        *dest = (mm_enabled_t) ((mm.PC104Pins & REG_PC104PINS_RDY_Msk) >> REG_PC104PINS_RDY_Pos);
         xSemaphoreGive(_mm_mutex);
         return mm_OK;
     }
     return response;
 }
 
-mm_response_t mm_getXTXpins_RDYFrom(mm_enabled_t * dest, const uint32_t source) {
-    *dest = (mm_enabled_t) ((source & REG_XTXPINS_RDY_Msk) >> REG_XTXPINS_RDY_Pos);
-    return mm_OK;
-}
-/*************** Get/Set functions for XTXMultitester register ****************************************************************/
-mm_response_t mm_setXTXMultitester(const uint32_t val) {
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        mm.XTXMultitester = val;
-        xSemaphoreGive(_mm_mutex);
-        return mm_OK;
-    }
-    else {
-        return mm_NotReady;
-    }
-}
-mm_response_t mm_getXTXMultitester(uint32_t * dest) {
-    mm_response_t response = mm_NotReady;
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        *dest = mm.XTXMultitester;
-        response = mm_OK;
-        xSemaphoreGive(_mm_mutex);
-    }
-    return response;
-}
-mm_response_t mm_setXTXMultitester_POS1_XTX_EN(const mm_enabled_t val) {
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        mm.XTXMultitester = (mm.XTXMultitester & ~REG_XTXMULTITESTER_POS1_XTX_EN_Msk) | (val << REG_XTXMULTITESTER_POS1_XTX_EN_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return  mm_OK;
-    }
-        else{
-        return mm_NotReady;
-    }
-}
-mm_response_t mm_getXTXMultitester_POS1_XTX_EN(mm_enabled_t * dest) {
-    mm_response_t response = mm_NotReady;
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
-    {
-        *dest = (mm_enabled_t) ((mm.XTXMultitester & REG_XTXMULTITESTER_POS1_XTX_EN_Msk) >> REG_XTXMULTITESTER_POS1_XTX_EN_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return mm_OK;
-    }
-    return response;
-}
-
-mm_response_t mm_getXTXMultitester_POS1_XTX_ENFrom(mm_enabled_t * dest, const uint32_t source) {
-    *dest = (mm_enabled_t) ((source & REG_XTXMULTITESTER_POS1_XTX_EN_Msk) >> REG_XTXMULTITESTER_POS1_XTX_EN_Pos);
-    return mm_OK;
-}
-mm_response_t mm_setXTXMultitester_POS1_XTX_Power(const mm_enabled_t val) {
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        mm.XTXMultitester = (mm.XTXMultitester & ~REG_XTXMULTITESTER_POS1_XTX_POWER_Msk) | (val << REG_XTXMULTITESTER_POS1_XTX_POWER_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return  mm_OK;
-    }
-        else{
-        return mm_NotReady;
-    }
-}
-mm_response_t mm_getXTXMultitester_POS1_XTX_Power(mm_enabled_t * dest) {
-    mm_response_t response = mm_NotReady;
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
-    {
-        *dest = (mm_enabled_t) ((mm.XTXMultitester & REG_XTXMULTITESTER_POS1_XTX_POWER_Msk) >> REG_XTXMULTITESTER_POS1_XTX_POWER_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return mm_OK;
-    }
-    return response;
-}
-
-mm_response_t mm_getXTXMultitester_POS1_XTX_PowerFrom(mm_enabled_t * dest, const uint32_t source) {
-    *dest = (mm_enabled_t) ((source & REG_XTXMULTITESTER_POS1_XTX_POWER_Msk) >> REG_XTXMULTITESTER_POS1_XTX_POWER_Pos);
-    return mm_OK;
-}
-mm_response_t mm_setXTXMultitester_POS1_XTX_nReset(const mm_enabled_t val) {
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        mm.XTXMultitester = (mm.XTXMultitester & ~REG_XTXMULTITESTER_POS1_XTX_NRESET_Msk) | (val << REG_XTXMULTITESTER_POS1_XTX_NRESET_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return  mm_OK;
-    }
-        else{
-        return mm_NotReady;
-    }
-}
-mm_response_t mm_getXTXMultitester_POS1_XTX_nReset(mm_enabled_t * dest) {
-    mm_response_t response = mm_NotReady;
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
-    {
-        *dest = (mm_enabled_t) ((mm.XTXMultitester & REG_XTXMULTITESTER_POS1_XTX_NRESET_Msk) >> REG_XTXMULTITESTER_POS1_XTX_NRESET_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return mm_OK;
-    }
-    return response;
-}
-
-mm_response_t mm_getXTXMultitester_POS1_XTX_nResetFrom(mm_enabled_t * dest, const uint32_t source) {
-    *dest = (mm_enabled_t) ((source & REG_XTXMULTITESTER_POS1_XTX_NRESET_Msk) >> REG_XTXMULTITESTER_POS1_XTX_NRESET_Pos);
-    return mm_OK;
-}
-mm_response_t mm_setXTXMultitester_POS2_XTX_EN(const mm_enabled_t val) {
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        mm.XTXMultitester = (mm.XTXMultitester & ~REG_XTXMULTITESTER_POS2_XTX_EN_Msk) | (val << REG_XTXMULTITESTER_POS2_XTX_EN_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return  mm_OK;
-    }
-        else{
-        return mm_NotReady;
-    }
-}
-mm_response_t mm_getXTXMultitester_POS2_XTX_EN(mm_enabled_t * dest) {
-    mm_response_t response = mm_NotReady;
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
-    {
-        *dest = (mm_enabled_t) ((mm.XTXMultitester & REG_XTXMULTITESTER_POS2_XTX_EN_Msk) >> REG_XTXMULTITESTER_POS2_XTX_EN_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return mm_OK;
-    }
-    return response;
-}
-
-mm_response_t mm_getXTXMultitester_POS2_XTX_ENFrom(mm_enabled_t * dest, const uint32_t source) {
-    *dest = (mm_enabled_t) ((source & REG_XTXMULTITESTER_POS2_XTX_EN_Msk) >> REG_XTXMULTITESTER_POS2_XTX_EN_Pos);
-    return mm_OK;
-}
-mm_response_t mm_setXTXMultitester_POS2_XTX_Power(const mm_enabled_t val) {
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        mm.XTXMultitester = (mm.XTXMultitester & ~REG_XTXMULTITESTER_POS2_XTX_POWER_Msk) | (val << REG_XTXMULTITESTER_POS2_XTX_POWER_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return  mm_OK;
-    }
-        else{
-        return mm_NotReady;
-    }
-}
-mm_response_t mm_getXTXMultitester_POS2_XTX_Power(mm_enabled_t * dest) {
-    mm_response_t response = mm_NotReady;
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
-    {
-        *dest = (mm_enabled_t) ((mm.XTXMultitester & REG_XTXMULTITESTER_POS2_XTX_POWER_Msk) >> REG_XTXMULTITESTER_POS2_XTX_POWER_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return mm_OK;
-    }
-    return response;
-}
-
-mm_response_t mm_getXTXMultitester_POS2_XTX_PowerFrom(mm_enabled_t * dest, const uint32_t source) {
-    *dest = (mm_enabled_t) ((source & REG_XTXMULTITESTER_POS2_XTX_POWER_Msk) >> REG_XTXMULTITESTER_POS2_XTX_POWER_Pos);
-    return mm_OK;
-}
-mm_response_t mm_setXTXMultitester_POS2_XTX_nReset(const mm_enabled_t val) {
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        mm.XTXMultitester = (mm.XTXMultitester & ~REG_XTXMULTITESTER_POS2_XTX_NRESET_Msk) | (val << REG_XTXMULTITESTER_POS2_XTX_NRESET_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return  mm_OK;
-    }
-        else{
-        return mm_NotReady;
-    }
-}
-mm_response_t mm_getXTXMultitester_POS2_XTX_nReset(mm_enabled_t * dest) {
-    mm_response_t response = mm_NotReady;
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
-    {
-        *dest = (mm_enabled_t) ((mm.XTXMultitester & REG_XTXMULTITESTER_POS2_XTX_NRESET_Msk) >> REG_XTXMULTITESTER_POS2_XTX_NRESET_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return mm_OK;
-    }
-    return response;
-}
-
-mm_response_t mm_getXTXMultitester_POS2_XTX_nResetFrom(mm_enabled_t * dest, const uint32_t source) {
-    *dest = (mm_enabled_t) ((source & REG_XTXMULTITESTER_POS2_XTX_NRESET_Msk) >> REG_XTXMULTITESTER_POS2_XTX_NRESET_Pos);
-    return mm_OK;
-}
-mm_response_t mm_setXTXMultitester_POS3_XTX_EN(const mm_enabled_t val) {
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        mm.XTXMultitester = (mm.XTXMultitester & ~REG_XTXMULTITESTER_POS3_XTX_EN_Msk) | (val << REG_XTXMULTITESTER_POS3_XTX_EN_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return  mm_OK;
-    }
-        else{
-        return mm_NotReady;
-    }
-}
-mm_response_t mm_getXTXMultitester_POS3_XTX_EN(mm_enabled_t * dest) {
-    mm_response_t response = mm_NotReady;
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
-    {
-        *dest = (mm_enabled_t) ((mm.XTXMultitester & REG_XTXMULTITESTER_POS3_XTX_EN_Msk) >> REG_XTXMULTITESTER_POS3_XTX_EN_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return mm_OK;
-    }
-    return response;
-}
-
-mm_response_t mm_getXTXMultitester_POS3_XTX_ENFrom(mm_enabled_t * dest, const uint32_t source) {
-    *dest = (mm_enabled_t) ((source & REG_XTXMULTITESTER_POS3_XTX_EN_Msk) >> REG_XTXMULTITESTER_POS3_XTX_EN_Pos);
-    return mm_OK;
-}
-mm_response_t mm_setXTXMultitester_POS3_XTX_Power(const mm_enabled_t val) {
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        mm.XTXMultitester = (mm.XTXMultitester & ~REG_XTXMULTITESTER_POS3_XTX_POWER_Msk) | (val << REG_XTXMULTITESTER_POS3_XTX_POWER_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return  mm_OK;
-    }
-        else{
-        return mm_NotReady;
-    }
-}
-mm_response_t mm_getXTXMultitester_POS3_XTX_Power(mm_enabled_t * dest) {
-    mm_response_t response = mm_NotReady;
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
-    {
-        *dest = (mm_enabled_t) ((mm.XTXMultitester & REG_XTXMULTITESTER_POS3_XTX_POWER_Msk) >> REG_XTXMULTITESTER_POS3_XTX_POWER_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return mm_OK;
-    }
-    return response;
-}
-
-mm_response_t mm_getXTXMultitester_POS3_XTX_PowerFrom(mm_enabled_t * dest, const uint32_t source) {
-    *dest = (mm_enabled_t) ((source & REG_XTXMULTITESTER_POS3_XTX_POWER_Msk) >> REG_XTXMULTITESTER_POS3_XTX_POWER_Pos);
-    return mm_OK;
-}
-mm_response_t mm_setXTXMultitester_POS3_XTX_nReset(const mm_enabled_t val) {
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        mm.XTXMultitester = (mm.XTXMultitester & ~REG_XTXMULTITESTER_POS3_XTX_NRESET_Msk) | (val << REG_XTXMULTITESTER_POS3_XTX_NRESET_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return  mm_OK;
-    }
-        else{
-        return mm_NotReady;
-    }
-}
-mm_response_t mm_getXTXMultitester_POS3_XTX_nReset(mm_enabled_t * dest) {
-    mm_response_t response = mm_NotReady;
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
-    {
-        *dest = (mm_enabled_t) ((mm.XTXMultitester & REG_XTXMULTITESTER_POS3_XTX_NRESET_Msk) >> REG_XTXMULTITESTER_POS3_XTX_NRESET_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return mm_OK;
-    }
-    return response;
-}
-
-mm_response_t mm_getXTXMultitester_POS3_XTX_nResetFrom(mm_enabled_t * dest, const uint32_t source) {
-    *dest = (mm_enabled_t) ((source & REG_XTXMULTITESTER_POS3_XTX_NRESET_Msk) >> REG_XTXMULTITESTER_POS3_XTX_NRESET_Pos);
-    return mm_OK;
-}
-mm_response_t mm_setXTXMultitester_POS4_XTX_EN(const mm_enabled_t val) {
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        mm.XTXMultitester = (mm.XTXMultitester & ~REG_XTXMULTITESTER_POS4_XTX_EN_Msk) | (val << REG_XTXMULTITESTER_POS4_XTX_EN_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return  mm_OK;
-    }
-        else{
-        return mm_NotReady;
-    }
-}
-mm_response_t mm_getXTXMultitester_POS4_XTX_EN(mm_enabled_t * dest) {
-    mm_response_t response = mm_NotReady;
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
-    {
-        *dest = (mm_enabled_t) ((mm.XTXMultitester & REG_XTXMULTITESTER_POS4_XTX_EN_Msk) >> REG_XTXMULTITESTER_POS4_XTX_EN_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return mm_OK;
-    }
-    return response;
-}
-
-mm_response_t mm_getXTXMultitester_POS4_XTX_ENFrom(mm_enabled_t * dest, const uint32_t source) {
-    *dest = (mm_enabled_t) ((source & REG_XTXMULTITESTER_POS4_XTX_EN_Msk) >> REG_XTXMULTITESTER_POS4_XTX_EN_Pos);
-    return mm_OK;
-}
-mm_response_t mm_setXTXMultitester_POS4_XTX_Power(const mm_enabled_t val) {
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        mm.XTXMultitester = (mm.XTXMultitester & ~REG_XTXMULTITESTER_POS4_XTX_POWER_Msk) | (val << REG_XTXMULTITESTER_POS4_XTX_POWER_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return  mm_OK;
-    }
-        else{
-        return mm_NotReady;
-    }
-}
-mm_response_t mm_getXTXMultitester_POS4_XTX_Power(mm_enabled_t * dest) {
-    mm_response_t response = mm_NotReady;
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
-    {
-        *dest = (mm_enabled_t) ((mm.XTXMultitester & REG_XTXMULTITESTER_POS4_XTX_POWER_Msk) >> REG_XTXMULTITESTER_POS4_XTX_POWER_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return mm_OK;
-    }
-    return response;
-}
-
-mm_response_t mm_getXTXMultitester_POS4_XTX_PowerFrom(mm_enabled_t * dest, const uint32_t source) {
-    *dest = (mm_enabled_t) ((source & REG_XTXMULTITESTER_POS4_XTX_POWER_Msk) >> REG_XTXMULTITESTER_POS4_XTX_POWER_Pos);
-    return mm_OK;
-}
-mm_response_t mm_setXTXMultitester_POS4_XTX_nReset(const mm_enabled_t val) {
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        mm.XTXMultitester = (mm.XTXMultitester & ~REG_XTXMULTITESTER_POS4_XTX_NRESET_Msk) | (val << REG_XTXMULTITESTER_POS4_XTX_NRESET_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return  mm_OK;
-    }
-        else{
-        return mm_NotReady;
-    }
-}
-mm_response_t mm_getXTXMultitester_POS4_XTX_nReset(mm_enabled_t * dest) {
-    mm_response_t response = mm_NotReady;
-    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
-    {
-        *dest = (mm_enabled_t) ((mm.XTXMultitester & REG_XTXMULTITESTER_POS4_XTX_NRESET_Msk) >> REG_XTXMULTITESTER_POS4_XTX_NRESET_Pos);
-        xSemaphoreGive(_mm_mutex);
-        return mm_OK;
-    }
-    return response;
-}
-
-mm_response_t mm_getXTXMultitester_POS4_XTX_nResetFrom(mm_enabled_t * dest, const uint32_t source) {
-    *dest = (mm_enabled_t) ((source & REG_XTXMULTITESTER_POS4_XTX_NRESET_Msk) >> REG_XTXMULTITESTER_POS4_XTX_NRESET_Pos);
+mm_response_t mm_getPC104Pins_RDYFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_PC104PINS_RDY_Msk) >> REG_PC104PINS_RDY_Pos);
     return mm_OK;
 }
 /*************** Get/Set functions for RFRelaysConf register ******************************************************************/
@@ -2014,6 +1619,31 @@ mm_response_t mm_getRFRelaysConf_RFSW2_DetectedFrom(mm_enabled_t * dest, const u
     *dest = (mm_enabled_t) ((source & REG_RFRELAYSCONF_RFSW2_DETECTED_Msk) >> REG_RFRELAYSCONF_RFSW2_DETECTED_Pos);
     return mm_OK;
 }
+mm_response_t mm_setRFRelaysConf_ScanEnabled(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.RFRelaysConf = (mm.RFRelaysConf & ~REG_RFRELAYSCONF_SCANENABLED_Msk) | (val << REG_RFRELAYSCONF_SCANENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getRFRelaysConf_ScanEnabled(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.RFRelaysConf & REG_RFRELAYSCONF_SCANENABLED_Msk) >> REG_RFRELAYSCONF_SCANENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getRFRelaysConf_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_RFRELAYSCONF_SCANENABLED_Msk) >> REG_RFRELAYSCONF_SCANENABLED_Pos);
+    return mm_OK;
+}
 mm_response_t mm_setRFRelaysConf_RfSw1Chan(const uint8_t val) {
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
         mm.RFRelaysConf = (mm.RFRelaysConf & ~REG_RFRELAYSCONF_RFSW1CHAN_Msk) | (val << REG_RFRELAYSCONF_RFSW1CHAN_Pos);
@@ -2062,6 +1692,1266 @@ mm_response_t mm_getRFRelaysConf_RfSw2Chan(uint8_t * dest) {
 
 mm_response_t mm_getRFRelaysConf_RfSw2ChanFrom(uint8_t * dest, const uint32_t source) {
     *dest = (uint8_t) ((source & REG_RFRELAYSCONF_RFSW2CHAN_Msk) >> REG_RFRELAYSCONF_RFSW2CHAN_Pos);
+    return mm_OK;
+}
+/*************** Get/Set functions for MultiConf1_Status register *************************************************************/
+mm_response_t mm_setMultiConf1_Status(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Status = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Status(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.MultiConf1_Status;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_setMultiConf1_Status_POS1_Enable(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS1_ENABLE_Msk) | (val << REG_MULTITESTER_POS1_ENABLE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Status_POS1_Enable(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS1_ENABLE_Msk) >> REG_MULTITESTER_POS1_ENABLE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Status_POS1_EnableFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS1_ENABLE_Msk) >> REG_MULTITESTER_POS1_ENABLE_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Status_POS1_Power(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS1_POWER_Msk) | (val << REG_MULTITESTER_POS1_POWER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Status_POS1_Power(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS1_POWER_Msk) >> REG_MULTITESTER_POS1_POWER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Status_POS1_PowerFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS1_POWER_Msk) >> REG_MULTITESTER_POS1_POWER_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Status_POS1_nReset(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS1_NRESET_Msk) | (val << REG_MULTITESTER_POS1_NRESET_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Status_POS1_nReset(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS1_NRESET_Msk) >> REG_MULTITESTER_POS1_NRESET_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Status_POS1_nResetFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS1_NRESET_Msk) >> REG_MULTITESTER_POS1_NRESET_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Status_POS1_FAN(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS1_FAN_Msk) | (val << REG_MULTITESTER_POS1_FAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Status_POS1_FAN(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS1_FAN_Msk) >> REG_MULTITESTER_POS1_FAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Status_POS1_FANFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS1_FAN_Msk) >> REG_MULTITESTER_POS1_FAN_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Status_POS2_Enable(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS2_ENABLE_Msk) | (val << REG_MULTITESTER_POS2_ENABLE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Status_POS2_Enable(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS2_ENABLE_Msk) >> REG_MULTITESTER_POS2_ENABLE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Status_POS2_EnableFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS2_ENABLE_Msk) >> REG_MULTITESTER_POS2_ENABLE_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Status_POS2_Power(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS2_POWER_Msk) | (val << REG_MULTITESTER_POS2_POWER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Status_POS2_Power(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS2_POWER_Msk) >> REG_MULTITESTER_POS2_POWER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Status_POS2_PowerFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS2_POWER_Msk) >> REG_MULTITESTER_POS2_POWER_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Status_POS2_nReset(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS2_NRESET_Msk) | (val << REG_MULTITESTER_POS2_NRESET_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Status_POS2_nReset(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS2_NRESET_Msk) >> REG_MULTITESTER_POS2_NRESET_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Status_POS2_nResetFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS2_NRESET_Msk) >> REG_MULTITESTER_POS2_NRESET_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Status_POS2_FAN(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS2_FAN_Msk) | (val << REG_MULTITESTER_POS2_FAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Status_POS2_FAN(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS2_FAN_Msk) >> REG_MULTITESTER_POS2_FAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Status_POS2_FANFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS2_FAN_Msk) >> REG_MULTITESTER_POS2_FAN_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Status_POS3_Enable(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS3_ENABLE_Msk) | (val << REG_MULTITESTER_POS3_ENABLE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Status_POS3_Enable(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS3_ENABLE_Msk) >> REG_MULTITESTER_POS3_ENABLE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Status_POS3_EnableFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS3_ENABLE_Msk) >> REG_MULTITESTER_POS3_ENABLE_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Status_POS3_Power(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS3_POWER_Msk) | (val << REG_MULTITESTER_POS3_POWER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Status_POS3_Power(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS3_POWER_Msk) >> REG_MULTITESTER_POS3_POWER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Status_POS3_PowerFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS3_POWER_Msk) >> REG_MULTITESTER_POS3_POWER_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Status_POS3_nReset(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS3_NRESET_Msk) | (val << REG_MULTITESTER_POS3_NRESET_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Status_POS3_nReset(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS3_NRESET_Msk) >> REG_MULTITESTER_POS3_NRESET_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Status_POS3_nResetFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS3_NRESET_Msk) >> REG_MULTITESTER_POS3_NRESET_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Status_POS3_FAN(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS3_FAN_Msk) | (val << REG_MULTITESTER_POS3_FAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Status_POS3_FAN(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS3_FAN_Msk) >> REG_MULTITESTER_POS3_FAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Status_POS3_FANFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS3_FAN_Msk) >> REG_MULTITESTER_POS3_FAN_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Status_POS4_Enable(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS4_ENABLE_Msk) | (val << REG_MULTITESTER_POS4_ENABLE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Status_POS4_Enable(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS4_ENABLE_Msk) >> REG_MULTITESTER_POS4_ENABLE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Status_POS4_EnableFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS4_ENABLE_Msk) >> REG_MULTITESTER_POS4_ENABLE_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Status_POS4_Power(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS4_POWER_Msk) | (val << REG_MULTITESTER_POS4_POWER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Status_POS4_Power(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS4_POWER_Msk) >> REG_MULTITESTER_POS4_POWER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Status_POS4_PowerFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS4_POWER_Msk) >> REG_MULTITESTER_POS4_POWER_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Status_POS4_nReset(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS4_NRESET_Msk) | (val << REG_MULTITESTER_POS4_NRESET_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Status_POS4_nReset(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS4_NRESET_Msk) >> REG_MULTITESTER_POS4_NRESET_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Status_POS4_nResetFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS4_NRESET_Msk) >> REG_MULTITESTER_POS4_NRESET_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Status_POS4_FAN(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS4_FAN_Msk) | (val << REG_MULTITESTER_POS4_FAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Status_POS4_FAN(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS4_FAN_Msk) >> REG_MULTITESTER_POS4_FAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Status_POS4_FANFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS4_FAN_Msk) >> REG_MULTITESTER_POS4_FAN_Pos);
+    return mm_OK;
+}
+/*************** Get/Set functions for MultiConf1_Set register ****************************************************************/
+mm_response_t mm_setMultiConf1_Set(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Set = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Set(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.MultiConf1_Set;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_setMultiConf1_Set_POS1_Enable(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS1_ENABLE_Msk) | (val << REG_MULTITESTER_POS1_ENABLE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Set_POS1_Enable(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS1_ENABLE_Msk) >> REG_MULTITESTER_POS1_ENABLE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Set_POS1_EnableFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS1_ENABLE_Msk) >> REG_MULTITESTER_POS1_ENABLE_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Set_POS1_Power(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS1_POWER_Msk) | (val << REG_MULTITESTER_POS1_POWER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Set_POS1_Power(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS1_POWER_Msk) >> REG_MULTITESTER_POS1_POWER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Set_POS1_PowerFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS1_POWER_Msk) >> REG_MULTITESTER_POS1_POWER_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Set_POS1_nReset(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS1_NRESET_Msk) | (val << REG_MULTITESTER_POS1_NRESET_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Set_POS1_nReset(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS1_NRESET_Msk) >> REG_MULTITESTER_POS1_NRESET_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Set_POS1_nResetFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS1_NRESET_Msk) >> REG_MULTITESTER_POS1_NRESET_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Set_POS1_FAN(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS1_FAN_Msk) | (val << REG_MULTITESTER_POS1_FAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Set_POS1_FAN(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS1_FAN_Msk) >> REG_MULTITESTER_POS1_FAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Set_POS1_FANFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS1_FAN_Msk) >> REG_MULTITESTER_POS1_FAN_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Set_POS2_Enable(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS2_ENABLE_Msk) | (val << REG_MULTITESTER_POS2_ENABLE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Set_POS2_Enable(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS2_ENABLE_Msk) >> REG_MULTITESTER_POS2_ENABLE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Set_POS2_EnableFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS2_ENABLE_Msk) >> REG_MULTITESTER_POS2_ENABLE_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Set_POS2_Power(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS2_POWER_Msk) | (val << REG_MULTITESTER_POS2_POWER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Set_POS2_Power(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS2_POWER_Msk) >> REG_MULTITESTER_POS2_POWER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Set_POS2_PowerFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS2_POWER_Msk) >> REG_MULTITESTER_POS2_POWER_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Set_POS2_nReset(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS2_NRESET_Msk) | (val << REG_MULTITESTER_POS2_NRESET_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Set_POS2_nReset(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS2_NRESET_Msk) >> REG_MULTITESTER_POS2_NRESET_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Set_POS2_nResetFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS2_NRESET_Msk) >> REG_MULTITESTER_POS2_NRESET_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Set_POS2_FAN(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS2_FAN_Msk) | (val << REG_MULTITESTER_POS2_FAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Set_POS2_FAN(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS2_FAN_Msk) >> REG_MULTITESTER_POS2_FAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Set_POS2_FANFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS2_FAN_Msk) >> REG_MULTITESTER_POS2_FAN_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Set_POS3_Enable(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS3_ENABLE_Msk) | (val << REG_MULTITESTER_POS3_ENABLE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Set_POS3_Enable(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS3_ENABLE_Msk) >> REG_MULTITESTER_POS3_ENABLE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Set_POS3_EnableFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS3_ENABLE_Msk) >> REG_MULTITESTER_POS3_ENABLE_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Set_POS3_Power(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS3_POWER_Msk) | (val << REG_MULTITESTER_POS3_POWER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Set_POS3_Power(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS3_POWER_Msk) >> REG_MULTITESTER_POS3_POWER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Set_POS3_PowerFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS3_POWER_Msk) >> REG_MULTITESTER_POS3_POWER_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Set_POS3_nReset(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS3_NRESET_Msk) | (val << REG_MULTITESTER_POS3_NRESET_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Set_POS3_nReset(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS3_NRESET_Msk) >> REG_MULTITESTER_POS3_NRESET_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Set_POS3_nResetFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS3_NRESET_Msk) >> REG_MULTITESTER_POS3_NRESET_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Set_POS3_FAN(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS3_FAN_Msk) | (val << REG_MULTITESTER_POS3_FAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Set_POS3_FAN(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS3_FAN_Msk) >> REG_MULTITESTER_POS3_FAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Set_POS3_FANFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS3_FAN_Msk) >> REG_MULTITESTER_POS3_FAN_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Set_POS4_Enable(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS4_ENABLE_Msk) | (val << REG_MULTITESTER_POS4_ENABLE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Set_POS4_Enable(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS4_ENABLE_Msk) >> REG_MULTITESTER_POS4_ENABLE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Set_POS4_EnableFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS4_ENABLE_Msk) >> REG_MULTITESTER_POS4_ENABLE_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Set_POS4_Power(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS4_POWER_Msk) | (val << REG_MULTITESTER_POS4_POWER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Set_POS4_Power(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS4_POWER_Msk) >> REG_MULTITESTER_POS4_POWER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Set_POS4_PowerFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS4_POWER_Msk) >> REG_MULTITESTER_POS4_POWER_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Set_POS4_nReset(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS4_NRESET_Msk) | (val << REG_MULTITESTER_POS4_NRESET_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Set_POS4_nReset(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS4_NRESET_Msk) >> REG_MULTITESTER_POS4_NRESET_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Set_POS4_nResetFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS4_NRESET_Msk) >> REG_MULTITESTER_POS4_NRESET_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Set_POS4_FAN(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS4_FAN_Msk) | (val << REG_MULTITESTER_POS4_FAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Set_POS4_FAN(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS4_FAN_Msk) >> REG_MULTITESTER_POS4_FAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Set_POS4_FANFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS4_FAN_Msk) >> REG_MULTITESTER_POS4_FAN_Pos);
+    return mm_OK;
+}
+/*************** Get/Set functions for MultiConf1_Clear register **************************************************************/
+mm_response_t mm_setMultiConf1_Clear(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Clear = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Clear(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.MultiConf1_Clear;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_setMultiConf1_Clear_POS1_Enable(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS1_ENABLE_Msk) | (val << REG_MULTITESTER_POS1_ENABLE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Clear_POS1_Enable(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS1_ENABLE_Msk) >> REG_MULTITESTER_POS1_ENABLE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Clear_POS1_EnableFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS1_ENABLE_Msk) >> REG_MULTITESTER_POS1_ENABLE_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Clear_POS1_Power(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS1_POWER_Msk) | (val << REG_MULTITESTER_POS1_POWER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Clear_POS1_Power(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS1_POWER_Msk) >> REG_MULTITESTER_POS1_POWER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Clear_POS1_PowerFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS1_POWER_Msk) >> REG_MULTITESTER_POS1_POWER_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Clear_POS1_nReset(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS1_NRESET_Msk) | (val << REG_MULTITESTER_POS1_NRESET_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Clear_POS1_nReset(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS1_NRESET_Msk) >> REG_MULTITESTER_POS1_NRESET_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Clear_POS1_nResetFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS1_NRESET_Msk) >> REG_MULTITESTER_POS1_NRESET_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Clear_POS1_FAN(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS1_FAN_Msk) | (val << REG_MULTITESTER_POS1_FAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Clear_POS1_FAN(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS1_FAN_Msk) >> REG_MULTITESTER_POS1_FAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Clear_POS1_FANFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS1_FAN_Msk) >> REG_MULTITESTER_POS1_FAN_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Clear_POS2_Enable(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS2_ENABLE_Msk) | (val << REG_MULTITESTER_POS2_ENABLE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Clear_POS2_Enable(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS2_ENABLE_Msk) >> REG_MULTITESTER_POS2_ENABLE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Clear_POS2_EnableFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS2_ENABLE_Msk) >> REG_MULTITESTER_POS2_ENABLE_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Clear_POS2_Power(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS2_POWER_Msk) | (val << REG_MULTITESTER_POS2_POWER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Clear_POS2_Power(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS2_POWER_Msk) >> REG_MULTITESTER_POS2_POWER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Clear_POS2_PowerFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS2_POWER_Msk) >> REG_MULTITESTER_POS2_POWER_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Clear_POS2_nReset(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS2_NRESET_Msk) | (val << REG_MULTITESTER_POS2_NRESET_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Clear_POS2_nReset(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS2_NRESET_Msk) >> REG_MULTITESTER_POS2_NRESET_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Clear_POS2_nResetFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS2_NRESET_Msk) >> REG_MULTITESTER_POS2_NRESET_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Clear_POS2_FAN(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS2_FAN_Msk) | (val << REG_MULTITESTER_POS2_FAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Clear_POS2_FAN(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS2_FAN_Msk) >> REG_MULTITESTER_POS2_FAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Clear_POS2_FANFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS2_FAN_Msk) >> REG_MULTITESTER_POS2_FAN_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Clear_POS3_Enable(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS3_ENABLE_Msk) | (val << REG_MULTITESTER_POS3_ENABLE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Clear_POS3_Enable(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS3_ENABLE_Msk) >> REG_MULTITESTER_POS3_ENABLE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Clear_POS3_EnableFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS3_ENABLE_Msk) >> REG_MULTITESTER_POS3_ENABLE_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Clear_POS3_Power(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS3_POWER_Msk) | (val << REG_MULTITESTER_POS3_POWER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Clear_POS3_Power(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS3_POWER_Msk) >> REG_MULTITESTER_POS3_POWER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Clear_POS3_PowerFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS3_POWER_Msk) >> REG_MULTITESTER_POS3_POWER_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Clear_POS3_nReset(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS3_NRESET_Msk) | (val << REG_MULTITESTER_POS3_NRESET_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Clear_POS3_nReset(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS3_NRESET_Msk) >> REG_MULTITESTER_POS3_NRESET_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Clear_POS3_nResetFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS3_NRESET_Msk) >> REG_MULTITESTER_POS3_NRESET_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Clear_POS3_FAN(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS3_FAN_Msk) | (val << REG_MULTITESTER_POS3_FAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Clear_POS3_FAN(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS3_FAN_Msk) >> REG_MULTITESTER_POS3_FAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Clear_POS3_FANFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS3_FAN_Msk) >> REG_MULTITESTER_POS3_FAN_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Clear_POS4_Enable(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS4_ENABLE_Msk) | (val << REG_MULTITESTER_POS4_ENABLE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Clear_POS4_Enable(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS4_ENABLE_Msk) >> REG_MULTITESTER_POS4_ENABLE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Clear_POS4_EnableFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS4_ENABLE_Msk) >> REG_MULTITESTER_POS4_ENABLE_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Clear_POS4_Power(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS4_POWER_Msk) | (val << REG_MULTITESTER_POS4_POWER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Clear_POS4_Power(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS4_POWER_Msk) >> REG_MULTITESTER_POS4_POWER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Clear_POS4_PowerFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS4_POWER_Msk) >> REG_MULTITESTER_POS4_POWER_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Clear_POS4_nReset(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS4_NRESET_Msk) | (val << REG_MULTITESTER_POS4_NRESET_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Clear_POS4_nReset(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS4_NRESET_Msk) >> REG_MULTITESTER_POS4_NRESET_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Clear_POS4_nResetFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS4_NRESET_Msk) >> REG_MULTITESTER_POS4_NRESET_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMultiConf1_Clear_POS4_FAN(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS4_FAN_Msk) | (val << REG_MULTITESTER_POS4_FAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMultiConf1_Clear_POS4_FAN(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS4_FAN_Msk) >> REG_MULTITESTER_POS4_FAN_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMultiConf1_Clear_POS4_FANFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MULTITESTER_POS4_FAN_Msk) >> REG_MULTITESTER_POS4_FAN_Pos);
     return mm_OK;
 }
 /*************** Get/Set functions for XDCConfig register *********************************************************************/

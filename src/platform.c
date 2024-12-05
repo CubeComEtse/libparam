@@ -20,8 +20,12 @@ static can_target_t can_target;
 static led_driver_t led_driver;
 static sermux_v3_t sermux_v3;
 
+
+static rf_relay_config_t rf_relay_1;
+static rf_relay_config_t rf_relay_2;
+static multitester_t multitester;
+
 static platform_t platform;
-//9764
 
 /*
  * This function configures all the pointers and functions for the platform, 
@@ -49,17 +53,17 @@ void PLATFORM_vInit(bsp_t * bsp)
 		//The LTC2992's are independent of i2c functions, so setup them
 		power_measure_1.i2c_write_function = ccd_i2c_driver_Write;
 		power_measure_1.i2c_read_function = ccd_i2c_driver_Read;
-		power_measure_1.i2c_handle = bsp->local_i2c;
+		power_measure_1.i2c_handle = bsp->util_i2c;
 		power_measure_2.i2c_write_function = ccd_i2c_driver_Write;
 		power_measure_2.i2c_read_function = ccd_i2c_driver_Read;
-		power_measure_1.i2c_handle = bsp->local_i2c;
+		power_measure_1.i2c_handle = bsp->util_i2c;
 		
 	}
 	if (version == 1){
 		//The LTC2992's are independent of i2c functions, so setup them
 		power_measure_1.i2c_write_function = ccd_i2c_driver_Write;
 		power_measure_1.i2c_read_function = ccd_i2c_driver_Read;
-		power_measure_1.i2c_handle = bsp->local_i2c;
+		power_measure_1.i2c_handle = bsp->util_i2c;
 		
 	}
 
@@ -111,6 +115,31 @@ void PLATFORM_vInit(bsp_t * bsp)
 	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_I2C_CC_2, can_target.incoming_messages, can_target.outgoing_messages);
 	
 	REG_vSetPlatformPointer(&platform);
+		
+		
+	platform.rf_relay_1 = &rf_relay_1;		
+	rf_relay_1.i2c_write_function = ccd_i2c_driver_Write;
+	rf_relay_1.i2c_read_function = ccd_i2c_driver_Read;
+	rf_relay_1.i2c_handle = bsp->util_i2c;
+	RFRelay_Init(platform.rf_relay_1, 1);
+	
+	platform.rf_relay_2 = &rf_relay_2;
+	rf_relay_2.i2c_write_function = ccd_i2c_driver_Write;
+	rf_relay_2.i2c_read_function = ccd_i2c_driver_Read;
+	rf_relay_2.i2c_handle = bsp->util_i2c;
+	RFRelay_Init(platform.rf_relay_2, 2);
+	
+	
+	platform.multitester = &multitester;
+	platform.multitester->i2c_read_function = ccd_i2c_driver_Read;
+	platform.multitester->i2c_write_function = ccd_i2c_driver_Write;
+	platform.multitester->i2c_handle = bsp->util_i2c;
+	MULTI_Init(platform.multitester);
+	
+	// Use the FreeRTOS tick count as a timer source
+	// This does mean we can only use this timer from non-interrupt functions.
+	TMR_vRegisterSource(TMR_SOURCE_SYSTICK, xTaskGetTickCount);
+	
 }
 
 /*

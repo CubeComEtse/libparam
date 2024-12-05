@@ -867,7 +867,16 @@
     <Compile Include="inc\sermux_v3.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="inc\tmr.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="inc\version.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\File.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\tmr.c">
       <SubType>compile</SubType>
     </Compile>
     <None Include="src\asf.h">
@@ -922,9 +931,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\event.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\File.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\i2c_target.c">

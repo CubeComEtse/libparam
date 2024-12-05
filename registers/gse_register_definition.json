@@ -379,15 +379,15 @@
 				}
 			},
 			{
-				"name" : "ConfMulti",
+				"name" : "MultiConf0",
 				"address": "0x2B",
 				"dir": "rw",
 				"width": "32",
 				"fields": [
 					{
-						"name": "MEnabled",
-						"pretty-name": "Multitester Enabled",
-						"description": "Enable the multi tester interface.",
+						"name": "Detected",
+						"pretty-name": "Multitester Detected",
+						"description": "Set when the multitester is detected on the bus",
 						"bit": "0",
 						"options": "Enabled",
 						"c#": {
@@ -408,10 +408,20 @@
 						},
 						"c": {"type": "bool"}
 					},
-					{ "name": "FanPos1", "bit": "4", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
-					{ "name": "FanPos2", "bit": "5",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
-					{ "name": "FanPos3", "bit": "6",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"}},
-					{ "name": "FanPos4", "bit": "7",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} }
+					{
+						"name": "ScanEnabled",
+						"pretty-name": "",
+						"description": "Enables/Disables scanning the bus",
+						"bit": "2",
+						"options": "Enabled",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						},
+						"c": {"type": "bool"}
+					}
+
+					
 				],
 				"c#": {
 					"type": "UInt32"
@@ -449,7 +459,8 @@
 				}
 			},
 			{
-				"name": "XTXpins",
+				"name": "PC104Pins",
+				"comment": "Only used by the V0 OBC, to set the PC104 pins",
 				"address": "0x30",
 				"dir": "rw",
 				"width": "32",
@@ -493,32 +504,6 @@
 				}
 			},
 			{
-				"name": "XTXMultitester",
-				"address": "0x31",
-				"dir": "rw",
-				"width": "32",
-				"fields": [
-					{ "name": "POS1_XTX_EN", "bit": "0", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
-					{ "name": "POS1_XTX_Power", "bit": "1",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
-					{ "name": "POS1_XTX_nReset", "bit": "2",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
-
-					{ "name": "POS2_XTX_EN", "bit": "4", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
-					{ "name": "POS2_XTX_Power", "bit": "5",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
-					{ "name": "POS2_XTX_nReset", "bit": "6",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
-
-					{ "name": "POS3_XTX_EN", "bit": "8", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
-					{ "name": "POS3_XTX_Power", "bit": "9",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
-					{ "name": "POS3_XTX_nReset", "bit": "10",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
-					
-					{ "name": "POS4_XTX_EN", "bit": "12", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
-					{ "name": "POS4_XTX_Power", "bit": "13",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
-					{ "name": "POS4_XTX_nReset", "bit": "14",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} }
-				],
-				"c#": {
-					"type": "UInt32"
-				}
-			},
-			{
 				"name": "RFRelaysConf",
 				"address": "0x32",
 				"dir": "rw",
@@ -544,6 +529,18 @@
 						"c": {"type": "bool"}
 					},
 					{
+						"name": "ScanEnabled",
+						"pretty-name": "",
+						"description": "Enables/Disables scanning the bus",
+						"bit": "2",
+						"options": "Enabled",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						},
+						"c": {"type": "bool"}
+					},
+					{
 						"name": "RfSw1Chan",
 						"description": "Enables the selected channel on the RF Switch 1. 0 Disables all",
 						"bit": "15-8",
@@ -559,6 +556,37 @@
 					}
 				]
 			},
+			{
+				"name": "MultiConf1_Status",
+				"address": "0x33",
+				"dir": "rw",
+				"width": "32",
+				"fields": "Multitester",
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name": "MultiConf1_Set",
+				"address": "0x34",
+				"dir": "rw",
+				"width": "32",
+				"fields": "Multitester",
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
+				"name": "MultiConf1_Clear",
+				"address": "0x35",
+				"dir": "rw",
+				"width": "32",
+				"fields": "Multitester",
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+
 			{
 				"name": "XDCConfig",
 				"address": "0x40",
@@ -725,7 +753,29 @@
 				{ "bit": "11",    "name": "COMM_TR",  "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"} },
 
 				{ "bit": "15-12", "name": "Type",     "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"}, "options": "TE_Types" }
-   			] 
+   			],
+			"Multitester": [
+				{ "name": "POS1_Enable", "bit": "0", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+				{ "name": "POS1_Power", "bit": "1",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+				{ "name": "POS1_nReset", "bit": "2",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+				{ "name": "POS1_FAN", "bit": "3", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+
+				{ "name": "POS2_Enable", "bit": "4", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+				{ "name": "POS2_Power", "bit": "5",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+				{ "name": "POS2_nReset", "bit": "6",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+				{ "name": "POS2_FAN", "bit": "7",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+
+				{ "name": "POS3_Enable", "bit": "8", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+				{ "name": "POS3_Power", "bit": "9",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+				{ "name": "POS3_nReset", "bit": "10",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+				{ "name": "POS3_FAN", "bit": "11",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+				
+				{ "name": "POS4_Enable", "bit": "12", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+				{ "name": "POS4_Power", "bit": "13",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+				{ "name": "POS4_nReset", "bit": "14",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
+				{ "name": "POS4_FAN", "bit": "15",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} }
+			]
+
 		},
 		"options" :{
 			"Enabled": {

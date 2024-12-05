@@ -123,25 +123,61 @@ void I2CTARGET_Task(void * handle)
 			}
 		}
 		
-		if ((in_message.target == EP_V2_I2C_CC_2) || (in_message.target == EP_V2_I2C_CC))
-		{
-			uint8_t addres_length = 1;
-			if (in_message.target == EP_V2_I2C_CC_2){
-				addres_length = 2;
-			}
-			
+		if (in_message.target == EP_V2_I2C_CC)
+		{			
 			// This is an i2c message with either 1 or  2 address bytes, used by the HDRTX
-			if (in_message.is_read & (in_message.data_len == 4)) {
-				// Copy the i2c header to the out message data
-				memcpy(read_buffer, in_message.data, 4);
+			if (in_message.is_read & (in_message.data_len == 2)) {
+				uint8_t device_address = pHandle->legacy_address; // Hard coded, from a register
+				uint8_t * address = &in_message.data[0];
+				uint8_t read_length = in_message.data[1];
+							
+				// Copy the register address and length to the buffer
+				memcpy(read_buffer, in_message.data, 2);
 
-				if (pHandle->i2c_read(pHandle->i2c_handle, in_message.data[0], &in_message.data[1], addres_length, &read_buffer[4], in_message.data[3])){
+				if (pHandle->i2c_read(pHandle->i2c_handle, device_address, address, 1, &read_buffer[2], read_length)){
 					// Create the received message
 					out_message.target = in_message.target;
 					out_message.is_read = true;
 					out_message.msg_id = in_message.msg_id;
 					out_message.data = read_buffer;
-					out_message.data_len = in_message.data[3] + 4;
+					// Final length is the 3 bytes already in the header plus the (length) bytes we just read.
+					out_message.data_len = 2 + read_length;
+								
+					// encode the out message to a buffer, and transmit
+					size_t encoded_len = encode_v2_message(encoded, &out_message);
+								
+					if (encoded_len > 0){
+						xMessageBufferSend(pHandle->outgoing_messages, encoded, encoded_len, 0);
+						//Todo: Do something if buffer is full.
+					}
+				}
+			}
+			if (!in_message.is_read)
+			{
+				in_message.data[2] = in_message.data[1];
+				pHandle->i2c_write(pHandle->i2c_handle, in_message.data[0], &in_message.data[1], in_message.data_len - 2);
+			}
+		}
+		if (in_message.target == EP_V2_I2C_CC_2)
+		{
+		
+			// This is an i2c message with either 1 or  2 address bytes, used by the HDRTX
+			if (in_message.is_read & (in_message.data_len == 3)) {
+				uint8_t device_address = pHandle->legacy_address; // Hard coded, from a register
+				uint8_t * address = &in_message.data[0];
+				uint8_t read_length = in_message.data[2];
+				
+				// Copy the register address and length to the buffer
+				memcpy(read_buffer, in_message.data, 3);
+
+				if (pHandle->i2c_read(pHandle->i2c_handle, device_address, address, 2, &read_buffer[3], read_length)){
+					// Create the received message
+					out_message.target = in_message.target;
+					out_message.is_read = true;
+					out_message.msg_id = in_message.msg_id;
+					out_message.data = read_buffer;
+					// Final length is the 3 bytes already in the header plus the (length) bytes we just read.
+					out_message.data_len = 3 + read_length;
 					
 					// encode the out message to a buffer, and transmit
 					size_t encoded_len = encode_v2_message(encoded, &out_message);
@@ -208,4 +244,22 @@ void I2CTARGET_Task(void * handle)
 		}
 	
 	}
+}
+
+
+void I2CTARGET_SetBaud(i2c_target_t * handle, uint32_t baud){
+	
+}
+
+uint32_t I2CTARGET_GetBaud(i2c_target_t * handle){
+	return 0;
+}
+
+/*
+ * Previous versions of the I2C Endpoint had a target bus address that was set
+ * using a register, and not transferred using the UART messages. This 
+ * function allows you to still do that.
+*/
+void I2CTarget_SetLegacyAddress(i2c_target_t * handle, uint8_t new_address){
+	handle->legacy_address = new_address;
 }

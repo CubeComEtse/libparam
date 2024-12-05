@@ -25,6 +25,8 @@
 #include "i2c_target.h"
 #include "local_target.h"
 
+#include "Multitester.h"
+
 typedef struct
 {
 	ltc2992_device_t * power_measure_1;
@@ -41,6 +43,10 @@ typedef struct
 	
 	
 	sermux_v3_t * sermux_v3;
+	
+	rf_relay_config_t * rf_relay_1;
+	rf_relay_config_t * rf_relay_2;
+	multitester_t * multitester;
 
 }platform_t;
 
