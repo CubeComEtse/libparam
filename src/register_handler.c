@@ -57,11 +57,8 @@ static addres_to_func_map_t address_to_func_map[] = {
 	{ reg_PC104Pins_addr, mm_getMultiConf0 },
 		
 		
-	{ reg_RFRelaysConf_addr, mm_getMultiConf0 },
-	{ reg_MultiConf1_Status_addr, mm_getMultiConf0 },
-	{ reg_MultiConf1_Set_addr, mm_getMultiConf1_Status},
-	{ reg_MultiConf1_Clear_addr, mm_getMultiConf1_Status},
-		
+	{ reg_RFRelaysConf_addr, mm_getRFRelaysConf },
+	{ reg_MultiConf1_Status_addr, mm_getMultiConf1_Status },	
 		
 	
 		

@@ -108,7 +108,7 @@ void RFRelay_Process(rf_relay_config_t * pHandle)
 			buffer[2] = 0x00;
 			result = pHandle->i2c_read_function(pHandle->i2c_handle, pHandle->i2c_address, buffer, 1, &buffer[1], 2);
 			
-			if ((result) && (buffer[0] == 0xF0) && (buffer[1] == 0xFF)){
+			if ((result) && (buffer[1] == 0xF0) && (buffer[2] == 0xFF)){
 				pHandle->state = IDLE;
 			}
 			else {
@@ -200,6 +200,7 @@ void MULTI_Init(multitester_t * handle)
 	TMR_vCreate(&handle->update_timer, TMR_SOURCE_SYSTICK);
 	handle->i2c_address = PCA9555_MULTITESTER_ADDR;
 	
+	handle->scan_enabled = true;
 	handle->new_portbits = 0x00;
 	handle->previous_portbits = 0x00;
 	handle->auto_clear = true;
@@ -230,34 +231,21 @@ void MULTI_Process(multitester_t * pHandle)
 		break;
 		case INITIALIZING:
 		{
-				// First, set ENA lines and Fan lines to 1
-				buffer[0] = PCA9555_CMD_CFG_PORT0;
-				buffer[1] = 0x22;
-				buffer[2] = 0x22;
+				// Write the desired state
+				uint16_t inverted_bits = pHandle->new_portbits ^ MULTITESTER_INVERT_MASK;
+				buffer[0] = PCA9555_CMD_OUT_PORT0;
+				buffer[1] = inverted_bits & 0xFF;
+				buffer[2] = (inverted_bits >> 8) & 0xFF;
 				pHandle->i2c_write_function(pHandle->i2c_handle, pHandle->i2c_address, buffer, 3);
 				
-				// Read the registers back in, to make sure it was written correctly
-				buffer[0] = PCA9555_CMD_CFG_PORT0;
-				buffer[1] = 0x00;
-				buffer[2] = 0x00;
-				bool result = pHandle->i2c_read_function(pHandle->i2c_handle, pHandle->i2c_address, buffer, 1, &buffer[1], 2);
 			
-
-				if ((result) && (buffer[1] == 0x22) && (buffer[2] == 0x22)){
-					pHandle->state = IDLE;
-				}
-				else {
-					// TODO: More elegant error here
-					pHandle->state = UNINITIALIZED;
-					
-					EVENT_AddEvent(EVENT_SECTION_MULTI, MULTITESTER_DID_NOT_RESPOND);
-				}
-				
-				// Then make all pins outputs
+				// Make all pins outputs
 				buffer[0] = PCA9555_CMD_CFG_PORT0;
 				buffer[1] = 0x00;
 				buffer[2] = 0x00;
 				pHandle->i2c_write_function(pHandle->i2c_handle, pHandle->i2c_address, buffer, 3);
+				
+				pHandle->state = IDLE;
 		}
 		break;
 		case IDLE:
@@ -269,9 +257,10 @@ void MULTI_Process(multitester_t * pHandle)
 				
 				buffer[0] = PCA9555_CMD_OUT_PORT0;
 				buffer[1] = inverted_bits & 0xFF;
-				buffer[1] = (inverted_bits >> 8) & 0xFF;
+				buffer[2] = (inverted_bits >> 8) & 0xFF;
 				pHandle->i2c_write_function(pHandle->i2c_handle, pHandle->i2c_address, buffer, 3);
 						
+				mm_setMultiConf1_Status(pHandle->new_portbits);
 				pHandle->previous_portbits = pHandle->new_portbits;
 			}
 			
@@ -300,27 +289,29 @@ void MULTI_SetBitsFrom(multitester_t * pHandle, uint16_t set_bits)
 	uint32_t new_bits = (pHandle->new_portbits | set_bits);
 	
 	if (pHandle->auto_clear){
-		if (new_bits & (POWER_PIN << 0))
+		if (set_bits & (POWER_PIN << 0))
 		{
 			// Clear all the other pins (except fans)
-			new_bits = (new_bits & ~0x777F);
+			new_bits = (new_bits & ~0x7770);
 		}
-		if (new_bits & (POWER_PIN << 4))
+		if (set_bits & (POWER_PIN << 4))
 		{
 			// Clear all the other pins (except fans)
-			new_bits = (new_bits & ~0x77F7);
+			new_bits = (new_bits & ~0x7707);
 		}
-		if (new_bits & (POWER_PIN << 8))
+		if (set_bits & (POWER_PIN << 8))
 		{
 			// Clear all the other pins (except fans)
-			new_bits = (new_bits & ~0x7F77);
+			new_bits = (new_bits & ~0x7077);
 		}
-		if (new_bits & (POWER_PIN << 12))
+		if (set_bits & (POWER_PIN << 12))
 		{
 			// Clear all the other pins (except fans)
-			new_bits = (new_bits & ~0xF777);
+			new_bits = (new_bits & ~0x0777);
 		}
 	}
+	
+	pHandle->new_portbits = new_bits;
 }
 
 void MULTI_ClearBitsFrom(multitester_t * pHandle, uint16_t clear_bits)

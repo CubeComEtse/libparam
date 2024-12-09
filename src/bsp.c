@@ -76,7 +76,15 @@ void BSP_Init(bsp_t * bsp) {
 
 	BSP_vInitUART(bsp);
 	BSP_vInitBusI2C(bsp);
-	BSP_vInitUtilI2C(bsp);
+	if (version == 0){
+		// Version 0 uses the same I2C device across stuff.
+		bsp->util_i2c = bsp->bus_i2c;
+	}
+	else
+	{
+		BSP_vInitUtilI2C(bsp);
+		
+	}
 
 	BSP_vInitGPIO();
 
@@ -160,7 +168,7 @@ static void BSP_vInitUtilI2C(bsp_t * bsp){
 	ioport_disable_pin(I2C_UTIL_SCL_PIN);
 	
 	ccd_i2c_driver_Init(&util_i2c, I2C_UTIL_DEVICE);
-	bsp->bus_i2c = &util_i2c;
+	bsp->util_i2c = &util_i2c;
 }
 
 /*
