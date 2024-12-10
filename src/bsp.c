@@ -39,6 +39,7 @@ static volatile uint32_t fifo_receive_index = 0;
 static void BSP_vInitUART(bsp_t * bsp);
 static void BSP_vInitBusI2C(bsp_t * bsp);
 static void BSP_vInitUtilI2C(bsp_t * bsp);
+static void BSP_InitRTC(void);
 
 // Post cleanup
 static ccd_uart_t telemetry_uart;
@@ -76,20 +77,11 @@ void BSP_Init(bsp_t * bsp) {
 
 	BSP_vInitUART(bsp);
 	BSP_vInitBusI2C(bsp);
-	if (version == 0){
-		// Version 0 uses the same I2C device across stuff.
-		bsp->util_i2c = bsp->bus_i2c;
-	}
-	else
-	{
-		BSP_vInitUtilI2C(bsp);
-		
-	}
+	BSP_vInitUtilI2C(bsp);	
 
 	BSP_vInitGPIO();
-
-
-
+	
+	BSP_InitRTC();
 
 
 	
@@ -175,10 +167,8 @@ static void BSP_vInitUtilI2C(bsp_t * bsp){
  * Initialize all the general purpose GPIO pins
 */
 void BSP_vInitGPIO(void) {
-		
-	uint8_t version = BSP_u8GetVersion();
 	
-	if (version == 0){
+	if (BSP_u8GetVersion() == 0){
 		// Version 0 had VBatAlt and 5V lines
 		ioport_enable_pin(EN_VBATALT_BUS_PIN);
 		ioport_set_pin_level(EN_VBATALT_BUS_PIN, 0);
@@ -203,7 +193,7 @@ void BSP_vInitGPIO(void) {
 	ioport_set_pin_dir(USB_RESET_PIN, IOPORT_DIR_OUTPUT);
 	
 	// GSE version 2 has 4 debug pins
-	if (version == 1){
+	if (BSP_u8GetVersion() == 1){
 		ioport_enable_pin(PIN_DEBUG_0);
 		ioport_set_pin_level(PIN_DEBUG_0, 0);
 		ioport_set_pin_dir(PIN_DEBUG_0, IOPORT_DIR_OUTPUT);
@@ -230,16 +220,63 @@ void BSP_vUsbReset(void) {
 	ioport_set_pin_level(USB_RESET_PIN, 1);
 }
 
+void BSP_InitRTC(void){
+	// Configure the PIO lines to use the crystal
+	ioport_disable_pin(PIN_XIN32);
+	ioport_disable_pin(PIN_XOUT32);
+	
+	// The PIO crystal is connected to the Alternate function, this in not handled by 
+	// the peripheral mux
+    //ioport_set_pin_mode(PIN_XIN32, IOPORT_MODE_MUX_C);
+	//ioport_set_pin_mode(PIN_XOUT32, IOPORT_MODE_MUX_C);
+	
+	// Switch to the crystal
+	SUPC->SUPC_CR = SUPC_CR_XTALSEL | SUPC_CR_KEY_PASSWD;
+	
+	// Wait a number of cycles for the clock to be set
+	while (!((SUPC->SUPC_SR & SUPC_SR_OSCSEL) && (PMC->PMC_SR & PMC_SR_OSCSELS))){
+		//Todo: Timeout here!	
+	}	
+	
+	// Reset all the RTC values
+	// First wait for the SEC status bit
+	while ((RTC->RTC_SR & RTC_SR_SEC) == 0){
+		
+	}
+	
+	// Stop the RTC, request update
+	RTC->RTC_CR = RTC->RTC_CR | RTC_CR_UPDCAL | RTC_CR_UPDTIM;
+	
+	// Wait for the ACKUPD bit
+	while ((RTC->RTC_SR & RTC_SR_ACKUPD) == 0){
+	}
+	// Clear the ACKUPD bit
+	RTC->RTC_SCCR = RTC_SR_ACKUPD;
+	
+	//Clear values
+	RTC->RTC_TIMR = 0;
+	RTC->RTC_CALR = 0;
+	
+	// Clear update request bits
+	RTC->RTC_CR = RTC->RTC_CR & ~(RTC_CR_UPDCAL | RTC_CR_UPDTIM);
+}
 
-
-
-
-
-
-
-
-
-
+uint32_t BSP_GetUptime(void){
+	uint32_t seconds = ( (RTC->RTC_TIMR & RTC_TIMR_SEC_Msk) >> RTC_TIMR_SEC_Pos);
+	uint32_t minutes = ( (RTC->RTC_TIMR & RTC_TIMR_MIN_Msk) >> RTC_TIMR_MIN_Pos);
+	uint32_t hours = ( (RTC->RTC_TIMR & RTC_TIMR_HOUR_Msk) >> RTC_TIMR_HOUR_Pos);
+	
+	// Welcome to the most screwed-up method of storing numbers.
+	// Stupid Binary Coded Decimal
+	// Bottom four bits count to 9, then the top bit gets incremented.
+	// This means displaying the hex as a string 'looks' correct.
+	
+	seconds = (seconds & 0xF) + ((seconds & 0xF0) >> 4) * 10;
+	minutes = (minutes & 0xF) + ((minutes & 0xF0) >> 4) * 10;
+	hours = (hours & 0xF) + ((hours & 0xF0) >> 4) * 10;
+	
+	return seconds + minutes*60 + hours *60 * 60;
+}
 
 
 
@@ -349,13 +386,6 @@ struct mcan_module* BSP_psGetCanDriver(void) {
     return &sCanModule;
 }
 
-void BSP_vInitRTC(void){
-    Rtc rtc0 = {0};
-}
-
-void RTC_HANDLER(void){
-
-}
 
 void CAN_HANDLER(void)
 {

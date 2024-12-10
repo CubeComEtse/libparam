@@ -122,4 +122,7 @@
 #define PIN_DEBUG_2             PIO_PD25_IDX
 #define PIN_DEBUG_3             PIO_PD26_IDX
 
+#define PIN_XIN32				PIO_PA7_IDX
+#define PIN_XOUT32				PIO_PA8_IDX
+
 #endif /* OBC_CONTROLLER_REV_A_H_ */

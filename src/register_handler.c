@@ -34,7 +34,6 @@ static addres_to_func_map_t address_to_func_map[] = {
 	{ reg_HW_Version_addr, mm_getHW_Version},
 	{ reg_Scratchpad_addr, mm_getScratchpad},
 	{ reg_Configured_Boards_addr, mm_getConfigured_Boards},
-	{ reg_Uptime_addr, mm_getUptime},
 	{ reg_Event_ConfA_addr, mm_getEvent_ConfA},
 	{ reg_Event_addr, mm_getEvent},
 	{ reg_ConfPower_addr, mm_getConfPower},
@@ -153,7 +152,12 @@ bool REG_vReadFromAddress(const uint32_t address, uint8_t * buff, uint8_t * size
 
 	switch (address)
 	{
-		
+		case reg_Uptime_addr:
+			REG_Copyu32ToArray(BSP_GetUptime(), buff);
+			*size = 4;
+			return_value = true;
+			break;
+			
 		case reg_Event_ConfA_addr:
 		{
 			// Update the event count
