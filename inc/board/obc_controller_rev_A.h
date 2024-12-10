@@ -22,6 +22,8 @@
 #define SPI_CS_PIN_6            IOPORT_CREATE_PIN(PIOC, 19)
 #define SPI_CS_PIN_7            IOPORT_CREATE_PIN(PIOC, 18)
 
+#define ETH_nRST				PIO_PA29_IDX
+
 #define SPI1_SCK                PIO_PC24_IDX
 #define SPI1_MOSI               PIO_PC27_IDX
 #define SPI1_MISO               PIO_PC26_IDX
@@ -45,6 +47,8 @@
 #define I2C_BUS_SCL_PIN			PIO_PA4_IDX
 #define I2C_BUS_SCL_MUX			IOPORT_MODE_MUX_A
 #define I2C_BUS_DEFAULT_SPEED   400000
+
+#define I2C_DEFAULT_ADDRESS		(0x26)
 
 #define I2C_UTIL_DEVICE			TWIHS2
 #define I2C_UTIL_DEVICE_ID		ID_TWIHS2
@@ -124,5 +128,6 @@
 
 #define PIN_XIN32				PIO_PA7_IDX
 #define PIN_XOUT32				PIO_PA8_IDX
+
 
 #endif /* OBC_CONTROLLER_REV_A_H_ */

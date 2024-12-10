@@ -177,6 +177,10 @@ void BSP_vInitGPIO(void) {
 		ioport_enable_pin(EN_5V_BUS_PIN);
 		ioport_set_pin_level(EN_5V_BUS_PIN, 0);
 		ioport_set_pin_dir(EN_5V_BUS_PIN, IOPORT_DIR_OUTPUT);
+		
+		ioport_enable_pin(ETH_nRST);
+		ioport_set_pin_level(ETH_nRST, 0);
+		ioport_set_pin_dir(ETH_nRST, IOPORT_DIR_OUTPUT);
 	}
 
 	ioport_enable_pin(EN_3V3_BUS_PIN);

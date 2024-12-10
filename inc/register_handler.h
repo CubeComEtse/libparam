@@ -55,10 +55,5 @@ void REG_Copyu32ToArray(const uint32_t value, uint8_t* data);
 
 
 uint8_t REG_GetI2CSpeed(void);
-void REG_SetI2CSpeed(uint32_t newSpeed);
-
-uint32_t REG_GetI2CAddress(void);
-void REG_vSetI2CAddress(uint8_t address);
-
 
 #endif /* REGISTER_HANDLER_H_ */

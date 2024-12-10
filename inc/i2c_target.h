@@ -18,11 +18,13 @@
 
 typedef bool (*i2c_write_function_t)(void * handle, const uint8_t dev_addr, const uint8_t * data, const size_t data_len);
 typedef bool (*i2c_read_function_t)(void * handle, const uint8_t dev_addr, const uint8_t * addr, const size_t addr_len, uint8_t * read_buffer, size_t read_len);
+typedef void (*i2c_set_baud_function_f)(void * handle, uint32_t new_baud);
 
 typedef struct {
 	// Used to communicate over i2c
 	i2c_read_function_t i2c_read;
 	i2c_write_function_t i2c_write;
+	i2c_set_baud_function_f i2c_set_baud;
 	void * i2c_handle;
 	
 	// These buffers are used to talk to the controller. The controller
@@ -55,9 +57,7 @@ typedef struct {
 void I2CTARGET_Init(i2c_target_t * handle);
 void I2CTARGET_Task(void * handle);
 
-
 void I2CTARGET_SetBaud(i2c_target_t * handle, uint32_t baud);
-uint32_t I2CTARGET_GetBaud(i2c_target_t * handle);
 void I2CTarget_SetLegacyAddress(i2c_target_t * handle, uint8_t new_address);
 
 #endif /* I2C_TARGET_H_ */

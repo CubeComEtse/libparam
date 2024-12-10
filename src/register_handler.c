@@ -326,17 +326,18 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 			if ((spd >= 1) && (spd <= 40)){
 				I2CTARGET_SetBaud(platform->i2c_target, spd * 10000);
 				
-				uint32_t newBaud = I2CTARGET_GetBaud(platform->i2c_target);
-				mm_setI2CConfA_SPD(newBaud/10000);
+				mm_setI2CConfA_SPD(spd);
 			}
 			
 			uint8_t wrdel = 0 ;
 			mm_getI2CConfA_WRDELFrom(&wrdel, deserialized);
 			platform->i2c_target->write_read_delay = wrdel;
+			mm_setI2CConfA_WRDEL(wrdel);
 				
 			uint8_t trdel = 0 ;
-			mm_getI2CConfA_WRDELFrom(&trdel, deserialized);
+			mm_getI2CConfA_TRDELFrom(&trdel, deserialized);
 			platform->i2c_target->tr_delay = trdel;
+			mm_setI2CConfA_TRDEL(trdel);
 		}
 			break;
 				
@@ -395,46 +396,4 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 			break;
 		
 	}        
-}
-
-
-/*
- * Returns the current I2C Speed
-*/
-inline uint8_t REG_GetI2CSpeed(void){
-	uint8_t speed;
-	mm_getI2CConfA_SPD(&speed);
-    return speed;
-}
-
-
-/*
- * Updates the I2C speed in the register data and updates the module settings
-*/
-void REG_SetI2CSpeed(uint32_t newSpeed)
-{
-	mm_setI2CConfA_SPD(newSpeed / 10000);
-	// Todo:
-    //I2C_SetEndpointSpeed(newSpeed);
-}
-
-/*
- * Get the current I2C Address
-*/
-inline uint32_t REG_GetI2CAddress(void)
-{
-	uint8_t addr;
-	mm_getI2CConfB_ADDR(&addr);
-    return addr;
-}
-
-/*
- * Update the address in the register data, and update the I2C module to use 
- * the new setting
-*/
-void REG_vSetI2CAddress(uint8_t address)
-{
-	mm_setI2CConfB_ADDR(address);
-	//Todo
-    //I2C_SetEndpointAddress(address);
 }

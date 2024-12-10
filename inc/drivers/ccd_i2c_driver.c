@@ -38,7 +38,7 @@ void ccd_i2c_driver_Init(ccd_i2c_t * driver, Twihs * instance)
 	twihs_master_init(driver->base_twihs, &i2cOptions);
 }
 
-void ccd_i2c_driver_vSetBaud(ccd_i2c_t * driver, uint32_t new_baud){
+void ccd_i2c_driver_SetBaud(ccd_i2c_t * driver, uint32_t new_baud){
 	twihs_set_speed(driver->base_twihs, new_baud, sysclk_get_peripheral_hz());
 }
 

@@ -30,8 +30,8 @@
 static bsp_t bsp;
 static platform_t * platform;
 
-static void SetupRegisters(void);
 static void DEVTOOLS_Task(void * handle);
+static void SETUP_Task(void* handle);
 
 StackType_t exampleTaskStack[512] = {0};
 StaticTask_t sermux_task;
@@ -46,32 +46,12 @@ int main (void)
 	platform = PLATFORM_get();
 	
 	//Initialize memory map
-	
-	// Setup registers to their defaults.
-    SetupRegisters();
+	mm_init();
 	
 	// Configure all external ICs
 	PLATFORM_vConfigureAll(platform);
 	
-	
-	// Create all the FreeRTOS Tasks
-	xTaskCreate(GSE_MANAGER_Task, "GSE Manager", 1024, (void*) platform->gse_manager, tskIDLE_PRIORITY + 1, NULL );
-	
-	xTaskCreate(SERMUX_V3_ReceiveTask, "Serial MUX RX", 512, (void*) platform->sermux_v3, tskIDLE_PRIORITY+4, NULL);
-	xTaskCreate(SERMUX_V3_TransmitTask, "Serial MUX TX", 512, (void*) platform->sermux_v3, tskIDLE_PRIORITY+4, NULL);
-	
-	xTaskCreate(I2CTARGET_Task, "I2C Target", 512, (void*) platform->i2c_target,  tskIDLE_PRIORITY+1, NULL);
-	xTaskCreate(LOCALTARGET_Task, "Local Target", 512, (void*) platform->local_target,  tskIDLE_PRIORITY+3, NULL);
-	
-	// High priority for this, to always keep the RX buffer empty and not loose data.
-	xTaskCreate(ccd_usart_RXProcessingTask, "UART RX", 512, (void*) bsp.telemetry_uart, tskIDLE_PRIORITY + 4, &(bsp.telemetry_uart->task_reference));
-	xTaskCreate(ccd_usart_TXProcessingTask, "UART TX", 512, (void*) bsp.telemetry_uart, tskIDLE_PRIORITY + 4, NULL);
-	
-	// Process RF Relay and multitester
-	xTaskCreate(DEVTOOLS_Task, "RF Tools", 512, (void *) platform, tskIDLE_PRIORITY+2, NULL);
-	
-	// LED task has lowest priority
-	xTaskCreate(LED_DRIVER_UpdateTask, "LED", 512, (void*) platform->led_driver, tskIDLE_PRIORITY+1, NULL);
+	xTaskCreate(SETUP_Task, "Startup", 1024, NULL, tskIDLE_PRIORITY + 1, NULL );
 	
 	vTaskStartScheduler();
 	
@@ -95,19 +75,44 @@ static void DEVTOOLS_Task(void * handle){
 }
 
 /*
- * Setup the registers to all the default values, and set all the peripherals
- * to the same values. This is done with direct access to the memory map, because
- * the normal memory map functions can only be used when the task scheduler is 
- * running
+ * This function calls all the sub-modules to store their configured values in 
+ * the memory map. This is a FreeRTOS task which runs one at startup, then 
+ * configures the rest
 */
-void SetupRegisters(void){
-	mm_init();
+void SETUP_Task(void* handle)
+{
 	
-	mm_t * register_map =  get_mm_ptr();
+	mm_setBoard_ID(0x634F4243);
+	mm_setFW_Version(0x00020203);
+	mm_setHW_Version_major_version(BSP_u8GetVersion());
 	
-	register_map->Board_ID = 0x634F4243;
-	register_map->FW_Version = 0x00020203;
-	register_map->HW_Version = 0x00000001;
+	mm_setI2CConfA_SPD(40);
+	mm_setI2CConfA_WRDEL(platform->i2c_target->write_read_delay);
+	mm_setI2CConfA_TRDEL(platform->i2c_target->tr_delay);
+	
+	mm_setI2CConfB_ADDR(platform->i2c_target->legacy_address);
+		
+	// Create all the FreeRTOS Tasks
+	xTaskCreate(GSE_MANAGER_Task, "GSE Manager", 1024, (void*) platform->gse_manager, tskIDLE_PRIORITY + 1, NULL );
+	
+	xTaskCreate(SERMUX_V3_ReceiveTask, "Serial MUX RX", 512, (void*) platform->sermux_v3, tskIDLE_PRIORITY+4, NULL);
+	xTaskCreate(SERMUX_V3_TransmitTask, "Serial MUX TX", 512, (void*) platform->sermux_v3, tskIDLE_PRIORITY+4, NULL);
+	
+	xTaskCreate(I2CTARGET_Task, "I2C Target", 512, (void*) platform->i2c_target,  tskIDLE_PRIORITY+1, NULL);
+	xTaskCreate(LOCALTARGET_Task, "Local Target", 512, (void*) platform->local_target,  tskIDLE_PRIORITY+3, NULL);
+	
+	// High priority for this, to always keep the RX buffer empty and not loose data.
+	xTaskCreate(ccd_usart_RXProcessingTask, "UART RX", 512, (void*) bsp.telemetry_uart, tskIDLE_PRIORITY + 4, &(bsp.telemetry_uart->task_reference));
+	xTaskCreate(ccd_usart_TXProcessingTask, "UART TX", 512, (void*) bsp.telemetry_uart, tskIDLE_PRIORITY + 4, NULL);
+	
+	// Process RF Relay and multitester
+	xTaskCreate(DEVTOOLS_Task, "RF Tools", 512, (void *) platform, tskIDLE_PRIORITY+2, NULL);
+	
+	// LED task has lowest priority
+	xTaskCreate(LED_DRIVER_UpdateTask, "LED", 512, (void*) platform->led_driver, tskIDLE_PRIORITY+1, NULL);
+	
+	// Delete the setup task
+	vTaskDelete( NULL );
 }
 
 void vApplicationStackOverflowHook( TaskHandle_t xTask,char * pcTaskName )

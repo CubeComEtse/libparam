@@ -32,6 +32,9 @@ void I2CTARGET_Init(i2c_target_t * handle)
 	handle->incoming_messages = xMessageBufferCreate(256);
 	handle->outgoing_messages = xMessageBufferCreate(256);
 	
+	handle->legacy_address = 0x26;
+	handle->tr_delay = 0;
+	handle->write_read_delay = 0;
 }
 
 
@@ -246,13 +249,14 @@ void I2CTARGET_Task(void * handle)
 	}
 }
 
-
+/*
+ * Set the new baud of the I2C Device
+*/
 void I2CTARGET_SetBaud(i2c_target_t * handle, uint32_t baud){
-	
-}
-
-uint32_t I2CTARGET_GetBaud(i2c_target_t * handle){
-	return 0;
+	if (handle->i2c_set_baud == 0){
+		return;
+	}
+	handle->i2c_set_baud(handle->i2c_handle, baud);
 }
 
 /*

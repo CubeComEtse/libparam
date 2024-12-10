@@ -54,9 +54,10 @@ void PLATFORM_vInit(bsp_t * bsp)
 		power_measure_1.i2c_write_function = ccd_i2c_driver_Write;
 		power_measure_1.i2c_read_function = ccd_i2c_driver_Read;
 		power_measure_1.i2c_handle = bsp->util_i2c;
+		
 		power_measure_2.i2c_write_function = ccd_i2c_driver_Write;
 		power_measure_2.i2c_read_function = ccd_i2c_driver_Read;
-		power_measure_1.i2c_handle = bsp->util_i2c;
+		power_measure_2.i2c_handle = bsp->util_i2c;
 		
 	}
 	if (version == 1){
@@ -90,6 +91,7 @@ void PLATFORM_vInit(bsp_t * bsp)
 
 	i2c_target.i2c_read = ccd_i2c_driver_Read;
 	i2c_target.i2c_write = ccd_i2c_driver_Write;
+	i2c_target.i2c_set_baud = ccd_i2c_driver_SetBaud;
 	i2c_target.i2c_handle = bsp->bus_i2c;
 	I2CTARGET_Init(&i2c_target);
 	
@@ -120,21 +122,30 @@ void PLATFORM_vInit(bsp_t * bsp)
 	platform.rf_relay_1 = &rf_relay_1;		
 	rf_relay_1.i2c_write_function = ccd_i2c_driver_Write;
 	rf_relay_1.i2c_read_function = ccd_i2c_driver_Read;
-	rf_relay_1.i2c_handle = bsp->util_i2c;
 	RFRelay_Init(platform.rf_relay_1, 1);
 	
 	platform.rf_relay_2 = &rf_relay_2;
 	rf_relay_2.i2c_write_function = ccd_i2c_driver_Write;
 	rf_relay_2.i2c_read_function = ccd_i2c_driver_Read;
-	rf_relay_2.i2c_handle = bsp->util_i2c;
 	RFRelay_Init(platform.rf_relay_2, 2);
-	
-	
+		
 	platform.multitester = &multitester;
 	platform.multitester->i2c_read_function = ccd_i2c_driver_Read;
 	platform.multitester->i2c_write_function = ccd_i2c_driver_Write;
-	platform.multitester->i2c_handle = bsp->util_i2c;
 	MULTI_Init(platform.multitester);
+	
+	
+	if (version == 0){
+		rf_relay_1.i2c_handle = bsp->bus_i2c;
+		rf_relay_2.i2c_handle = bsp->bus_i2c;
+		platform.multitester->i2c_handle = bsp->bus_i2c;
+	}
+	
+	if (version == 1){
+		rf_relay_1.i2c_handle = bsp->util_i2c;
+		rf_relay_2.i2c_handle = bsp->util_i2c;
+		platform.multitester->i2c_handle = bsp->util_i2c;
+	}
 	
 	// Use the FreeRTOS tick count as a timer source
 	// This does mean we can only use this timer from non-interrupt functions.
