@@ -9,6 +9,9 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "FreeRTOS.h"
+#include "semphr.h"
+
 #include "ccd_i2c_driver.h"
 
 #include <asf.h>
@@ -17,6 +20,8 @@
 void ccd_i2c_driver_Init(ccd_i2c_t * driver, Twihs * instance)
 {
 	driver->base_twihs = instance;
+	
+	driver->threadMutex =  xSemaphoreCreateMutex();
  
 	// Disable interrupts while we setup
 	twihs_disable_interrupt(driver->base_twihs, 0xFFFFFFFF);
@@ -38,7 +43,9 @@ void ccd_i2c_driver_Init(ccd_i2c_t * driver, Twihs * instance)
 	twihs_master_init(driver->base_twihs, &i2cOptions);
 }
 
-void ccd_i2c_driver_SetBaud(ccd_i2c_t * driver, uint32_t new_baud){
+void ccd_i2c_driver_SetBaud(void * handle, uint32_t new_baud){
+	ccd_i2c_t * driver = (ccd_i2c_t *) handle;
+	
 	twihs_set_speed(driver->base_twihs, new_baud, sysclk_get_peripheral_hz());
 }
 
@@ -47,6 +54,7 @@ bool ccd_i2c_driver_Write(void * handle, const uint8_t dev_addr, const uint8_t *
 {
 	ccd_i2c_t * driver = (ccd_i2c_t *) handle;
 	
+
 	twihs_packet_t write_packet;
 	write_packet.chip = dev_addr;
 	memcpy(write_packet.addr, data, 1);
@@ -55,9 +63,10 @@ bool ccd_i2c_driver_Write(void * handle, const uint8_t dev_addr, const uint8_t *
 	write_packet.length = ((uint32_t) data_len-1);
 
 
+	xSemaphoreTake(driver->threadMutex, pdMS_TO_TICKS(100));
 	uint32_t result = twihs_master_write(driver->base_twihs, &write_packet);
 	twihs_read_byte(driver->base_twihs);
-
+	xSemaphoreGive(driver->threadMutex);
 	return (result == TWIHS_SUCCESS);
 }
 
@@ -73,7 +82,10 @@ bool ccd_i2c_driver_Read(void * handle, const uint8_t dev_addr, const uint8_t * 
 	read_packet.length = ((uint32_t) read_len);
 	uint32_t result =0;
 
+
+	xSemaphoreTake(driver->threadMutex, pdMS_TO_TICKS(100));
 	result = twihs_master_read(driver->base_twihs, &read_packet);
+	xSemaphoreGive(driver->threadMutex);
 	
 
 	// Clear buffer

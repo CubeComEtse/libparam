@@ -16,6 +16,7 @@
 #include "register_map.h"
 #include "ltc2499.h"
 #include "ltc2992.h"
+#include "pc104.h"
 #include "gse_manager.h"
 #include "sermux_v3.h"
 #include "pc_messages.h"
@@ -47,6 +48,8 @@ typedef struct
 	rf_relay_config_t * rf_relay_1;
 	rf_relay_config_t * rf_relay_2;
 	multitester_t * multitester;
+	
+	pc104_t * pc104;
 
 }platform_t;
 

@@ -108,9 +108,9 @@
 #define PIN_VERSION_2			PIO_PC9_IDX
 
 // H1.8
-#define XTX_nRST_PIN            PIO_PC1_IDX
+#define PC104_nRST_PIN          PIO_PC1_IDX
 // H1.18
-#define XTX_EN_PIN              PIO_PC0_IDX
+#define PC104_EN_PIN            PIO_PC0_IDX
 // H1.7 
 #define XTX_RDY_PIN             PIO_PC2_IDX
 // H1.11

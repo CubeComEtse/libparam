@@ -39,7 +39,7 @@ typedef struct {
 }can_target_t;
 
 void CANTARGET_Init(can_target_t * handle);
-void CANTARGET_Task(void * handle);
-
+void CANTARGET_TxTask(void * handle);
+void CANTARGET_RxTask(void * handle);
 
 #endif /* CAN_TARGET_H_ */

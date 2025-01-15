@@ -852,6 +852,9 @@
     <Compile Include="inc\Multitester.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="inc\pc104.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="inc\pc_messages.h">
       <SubType>compile</SubType>
     </Compile>

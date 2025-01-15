@@ -34,8 +34,11 @@ static addres_to_func_map_t address_to_func_map[] = {
 	{ reg_HW_Version_addr, mm_getHW_Version},
 	{ reg_Scratchpad_addr, mm_getScratchpad},
 	{ reg_Configured_Boards_addr, mm_getConfigured_Boards},
-	{ reg_Event_ConfA_addr, mm_getEvent_ConfA},
-	{ reg_Event_addr, mm_getEvent},
+	// Uptime handled separately
+	// { reg_Uptime_addr, mm_getUptime},
+	// Event conf handled seperately
+	// { reg_Event_ConfA_addr, mm_getEvent_ConfA},
+	// { reg_Event_addr, mm_getEvent},
 	{ reg_ConfPower_addr, mm_getConfPower},
 	
 	{ reg_MeasureVI_V3_addr, mm_getMeasureVI_V3},
@@ -52,17 +55,13 @@ static addres_to_func_map_t address_to_func_map[] = {
 	{ reg_I2CConfB_addr, mm_getI2CConfB },
 	{ reg_MultiConf0_addr, mm_getMultiConf0 },
 	{ reg_ConfTempSense_addr, mm_getConfTempSense },
-	{ reg_CANConfA_addr, mm_getMultiConf0 },
-	{ reg_PC104Pins_addr, mm_getMultiConf0 },
+	{ reg_CANConfA_addr, mm_getCANConfA },
+	{ reg_PC104Pins_addr, mm_getPC104Pins },
 		
 		
 	{ reg_RFRelaysConf_addr, mm_getRFRelaysConf },
 	{ reg_MultiConf1_Status_addr, mm_getMultiConf1_Status },	
 		
-	
-		
-	{ reg_XDCConfig_addr, mm_getXDCConfig },
-	
 	{ reg_CSBoard_T0_addr, mm_getCSBoard_T0 },
 	{ reg_CSBoard_T1_addr, mm_getCSBoard_T1 },
 	{ reg_CSBoard_T2_addr, mm_getCSBoard_T2 },
@@ -367,7 +366,18 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 			break;
 		case reg_CANConfA_addr:
 			break;
-		case reg_PC104Pins_addr: 
+		case reg_PC104Pins_addr:
+			{
+				mm_enabled_t ena;
+				mm_getPC104Pins_ENAFrom(&ena, deserialized);
+				PC104_setEnaPin(platform->pc104, ena == reg_enabled_enabled);
+				mm_setPC104Pins_ENA(ena);
+				
+				mm_getPC104Pins_nRSTFrom(&ena, deserialized);
+				PC104_setnRstPin(platform->pc104, ena == reg_enabled_enabled);
+				mm_setPC104Pins_nRST(ena);
+			}
+			
 			break;
 		case reg_RFRelaysConf_addr:
 			{

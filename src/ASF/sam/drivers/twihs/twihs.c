@@ -346,6 +346,9 @@ uint32_t twihs_master_read(Twihs *p_twihs, twihs_packet_t *p_packet)
     if (cnt==1){
         p_twihs->TWIHS_CR = TWIHS_CR_STOP;
     }
+	
+	// More Kolijn mods. ASF is not a good framework
+	cnt -= 1;
 
 
 	while (cnt > 0) {
@@ -373,8 +376,9 @@ uint32_t twihs_master_read(Twihs *p_twihs, twihs_packet_t *p_packet)
 	while (!(p_twihs->TWIHS_SR & TWIHS_SR_TXCOMP)) {
 	}
 
-    //Kolijn mods : Store the final byte as well
-    // Added in for XTX read again, why was it removed?
+    // Kolijn mods : Store the final byte as well
+	// For some reason the i2c driver will output a final read cycle, but not
+	// store the value. So reduce length by one, and store the value here.
     *buffer = p_twihs->TWIHS_RHR;
 
 	p_twihs->TWIHS_SR;

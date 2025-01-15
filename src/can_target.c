@@ -9,11 +9,8 @@
  */ 
 
 #include "can_target.h"
-
-#include "assert.h"
-
+#include <assert.h>
 #include "pc_messages.h"
-
 
 #define CAN_TELECOMMAND_REQUEST 0x01
 #define CAN_TELEMETRY_REQUEST 0x04
@@ -26,7 +23,7 @@
 void CANTARGET_Init(can_target_t * handle)
 {
 	assert(handle->can_send);
-	// Do not assert the handle, it might be void.
+	// Do not assert the handle, it might be void. 
 	
 	// This buffer size is an initial guess. Feel free to update it later.
 	handle->incoming_messages = xMessageBufferCreate(256);
@@ -34,7 +31,7 @@ void CANTARGET_Init(can_target_t * handle)
 	
 }
 
-void CANTARGET_Task(void * handle)
+void CANTARGET_TxTask(void * handle)
 {
 	assert(handle);
 	can_target_t * hnd = (can_target_t *) handle;
@@ -59,13 +56,19 @@ void CANTARGET_Task(void * handle)
 		}
 		
 		
-		// There is a little disconnect here: The CAN driver is only configured
-		// to send messages in a certain mode, since it needs to setup its
-		// filters. The Target can receive messages for any target and still send
-		// them.
-		
+		// So: At the moment the different CAN endpoints all use the same position in the header
+		// for the address. This means the CAN driver does not need to be re-configured between
+		// modes. However. The CAN target still needs to know what endpoint we're using, since
+		// otherwise it would not know how to send the message back to the PC. So unfortunately
+		// we are stuck with only supporting one mode at a time.
+		//
+		// It is possible to send messages in any mode, so do that. On the receive side, only 
+		// receive in the format that we're set up for.
 		if (in_message.target == EP_V2_CAN_CC)
 		{
+			/*
+			uint8_t destination_address = in_message.data[0];
+			
 			uint32_t can_header = 0;
 			can_header |= hnd->our_can_address << 8;
 			can_header |= in_message.data[0];
@@ -76,7 +79,7 @@ void CANTARGET_Task(void * handle)
 			else
 			{
 				can_header |= CAN_TELECOMMAND_REQUEST << 24;
-			}
+			}*/
 		}
 		if (in_message.target == EP_V2_CAN_CC_2)
 		{
@@ -101,5 +104,21 @@ void CANTARGET_Task(void * handle)
 			uint32_t can_header = ((in_message.data[1] << 24) | (in_message.msg_id << 16) | (hnd->our_can_address << 8) | (in_message.data[0] << 0));
 			hnd->can_send(hnd->can_handle, can_header, &in_message.data[3], in_message.data[2]);
 		}
+	}
+}
+
+
+void CANTARGET_RxTask(void * handle)
+{
+	assert(handle);
+	can_target_t * hnd = (can_target_t *) handle;
+		
+	uint8_t rx_buffer[32];
+	v2_msg_t in_message;
+		
+	bool decode_successfull;
+		
+	while(1){
+		
 	}
 }

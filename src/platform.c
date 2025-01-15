@@ -20,6 +20,7 @@ static can_target_t can_target;
 static led_driver_t led_driver;
 static sermux_v3_t sermux_v3;
 
+static pc104_t pc104;
 
 static rf_relay_config_t rf_relay_1;
 static rf_relay_config_t rf_relay_2;
@@ -45,6 +46,8 @@ void PLATFORM_vInit(bsp_t * bsp)
 	platform.can_target = &can_target;
 	platform.led_driver = &led_driver;
 	platform.sermux_v3 = &sermux_v3;
+	
+	platform.pc104 = &pc104;
 
 	
 	uint8_t version = BSP_u8GetVersion();
@@ -96,12 +99,20 @@ void PLATFORM_vInit(bsp_t * bsp)
 	I2CTARGET_Init(&i2c_target);
 	
 	can_target.can_send = ccd_can_Send_message;
+	can_target.can_handle = bsp->bus_can;
+	can_target.radio_can_address = 0x26;
+	can_target.our_can_address = 0xE9;
 	CANTARGET_Init(&can_target);
 	
 	sermux_v3.in_stream = bsp->telemetry_uart->uart_rx_buffer;
 	sermux_v3.out_stream = bsp->telemetry_uart->uart_tx_buffer;
 	SERMUX_V3_Init(&sermux_v3);
-
+	
+	pc104.set_pin = ioport_set_pin_level;
+	pc104.ena_Pin = PC104_EN_PIN;
+	pc104.nrst_Pin = PC104_nRST_PIN;
+	platform.pc104 = &pc104;
+	
 	//Add Local Targets
 	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_GSE, local_target.incoming_messages, local_target.outgoing_messages);
 	
@@ -112,9 +123,8 @@ void PLATFORM_vInit(bsp_t * bsp)
 	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_I2C_CC_3, i2c_target.incoming_messages, i2c_target.outgoing_messages);
 
 	// Add CAN Targets
-	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_I2C_CC, can_target.incoming_messages, can_target.outgoing_messages);
-	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_I2C_CC_CHECKSUM, can_target.incoming_messages, can_target.outgoing_messages);
-	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_I2C_CC_2, can_target.incoming_messages, can_target.outgoing_messages);
+	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_CAN_CC_2, can_target.incoming_messages, can_target.outgoing_messages);
+	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_CAN_CC_3, can_target.incoming_messages, can_target.outgoing_messages);
 	
 	REG_vSetPlatformPointer(&platform);
 		

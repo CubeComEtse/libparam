@@ -16,12 +16,13 @@
 #include "ccd_i2c_driver.h"
 #include "ccd_can_driver.h"
 #include "ccd_uart_driver.h"
-
+#include "ccd_can_driver.h"
 
 typedef struct {
 	ccd_uart_t * telemetry_uart;
 	ccd_i2c_t * bus_i2c;
 	ccd_i2c_t * util_i2c;
+	ccd_can_t * bus_can;
 } bsp_t;
 
 
@@ -44,11 +45,8 @@ uint32_t BSP_GetUptime(void);
 
 struct spi_device* BSP_psGetSpiDriver(void);
 void BSP_vCanSetAddressFilter(uint32_t filter, uint32_t mask);
-struct mcan_module* BSP_psGetCanDriver(void);
 void BSP_vEnableUartTXInterrupt(void);
 
-
-uint16_t BSP_u16TmrGetTick(void);
 uint64_t BSP_u64GetTimestamp(void);
 void BSP_vUsbReset(void);
 

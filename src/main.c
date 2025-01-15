@@ -93,20 +93,24 @@ void SETUP_Task(void* handle)
 	mm_setI2CConfB_ADDR(platform->i2c_target->legacy_address);
 		
 	// Create all the FreeRTOS Tasks
-	xTaskCreate(GSE_MANAGER_Task, "GSE Manager", 1024, (void*) platform->gse_manager, tskIDLE_PRIORITY + 1, NULL );
+	// xTaskCreate(GSE_MANAGER_Task, "GSE Manager", 1024, (void*) platform->gse_manager, tskIDLE_PRIORITY + 2, NULL );
 	
-	xTaskCreate(SERMUX_V3_ReceiveTask, "Serial MUX RX", 512, (void*) platform->sermux_v3, tskIDLE_PRIORITY+4, NULL);
-	xTaskCreate(SERMUX_V3_TransmitTask, "Serial MUX TX", 512, (void*) platform->sermux_v3, tskIDLE_PRIORITY+4, NULL);
+	xTaskCreate(SERMUX_V3_ReceiveTask, "Serial MUX RX", 512, (void*) platform->sermux_v3, tskIDLE_PRIORITY+2, NULL);
+	xTaskCreate(SERMUX_V3_TransmitTask, "Serial MUX TX", 512, (void*) platform->sermux_v3, tskIDLE_PRIORITY+2, NULL);
 	
-	xTaskCreate(I2CTARGET_Task, "I2C Target", 512, (void*) platform->i2c_target,  tskIDLE_PRIORITY+1, NULL);
-	xTaskCreate(LOCALTARGET_Task, "Local Target", 512, (void*) platform->local_target,  tskIDLE_PRIORITY+3, NULL);
+	xTaskCreate(I2CTARGET_Task, "I2C Target", 512, (void*) platform->i2c_target,  tskIDLE_PRIORITY+3, NULL);
+	
+	xTaskCreate(CANTARGET_TxTask, "CAN TX Task", 512, (void *) platform->can_target, tskIDLE_PRIORITY+3, NULL);
+	// xTaskCreate(CANTARGET_RxTask, "CAN RX Task", 512, (void *) platform->can_target, tskIDLE_PRIORITY+1, NULL);
+	
+	xTaskCreate(LOCALTARGET_Task, "Local Target", 512, (void*) platform->local_target,  tskIDLE_PRIORITY+2, NULL);
 	
 	// High priority for this, to always keep the RX buffer empty and not loose data.
 	xTaskCreate(ccd_usart_RXProcessingTask, "UART RX", 512, (void*) bsp.telemetry_uart, tskIDLE_PRIORITY + 4, &(bsp.telemetry_uart->task_reference));
 	xTaskCreate(ccd_usart_TXProcessingTask, "UART TX", 512, (void*) bsp.telemetry_uart, tskIDLE_PRIORITY + 4, NULL);
 	
 	// Process RF Relay and multitester
-	xTaskCreate(DEVTOOLS_Task, "RF Tools", 512, (void *) platform, tskIDLE_PRIORITY+2, NULL);
+	// xTaskCreate(DEVTOOLS_Task, "RF Tools", 512, (void *) platform, tskIDLE_PRIORITY+2, NULL);
 	
 	// LED task has lowest priority
 	xTaskCreate(LED_DRIVER_UpdateTask, "LED", 512, (void*) platform->led_driver, tskIDLE_PRIORITY+1, NULL);

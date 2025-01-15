@@ -18,19 +18,12 @@
 #define ALL_INTERRUPT_MASK  0xffffffff
 
 // Local functions
-void BSP_vInitSPI(void);
-void BSP_vInitBoardI2C(void);
-void BSP_vInitGPIO(void);
-void BSP_vInitCan(void);
-void BSP_vInit1MsTimer(void);
-
-
-
+// void BSP_vInitSPI(void);
 
 // Local variables
-static struct spi_device sSpiDevice;
-static struct mcan_module sCanModule;
-static volatile uint32_t fifo_receive_index = 0;
+// static struct spi_device sSpiDevice;
+
+
 
 
 // Post cleanup
@@ -39,12 +32,15 @@ static volatile uint32_t fifo_receive_index = 0;
 static void BSP_vInitUART(bsp_t * bsp);
 static void BSP_vInitBusI2C(bsp_t * bsp);
 static void BSP_vInitUtilI2C(bsp_t * bsp);
+static void BSP_vInitGPIO(void);
 static void BSP_InitRTC(void);
+static void BSP_vInitCan(bsp_t * bsp);
 
 // Post cleanup
 static ccd_uart_t telemetry_uart;
 static ccd_i2c_t  util_i2c;
 static ccd_i2c_t  bus_i2c;
+static ccd_can_t  bus_can;
 
 // The version is only read and set once, during startup
 static uint8_t version;
@@ -83,18 +79,16 @@ void BSP_Init(bsp_t * bsp) {
 	
 	BSP_InitRTC();
 
+	BSP_vInitCan(bsp);
 
 	
 	/*
     BSP_vInitSPI();
-    
-    BSP_vInitCan();*/
-
-    //BSP_vInit1MsTimer();
+    */
 	
 
-	
-    
+
+
     
 	
 
@@ -138,6 +132,10 @@ static void BSP_vInitUART(bsp_t * bsp){
 	ccd_uart_Init(&telemetry_uart, T_USART, T_USART_SPEED);
 	
 	bsp->telemetry_uart = &telemetry_uart;
+}
+
+void USART2_Handler(void){
+	ccd_uart_InterruptHandler(&telemetry_uart);
 }
 
 static void BSP_vInitBusI2C(bsp_t * bsp){
@@ -214,6 +212,17 @@ void BSP_vInitGPIO(void) {
 		ioport_set_pin_level(PIN_DEBUG_3, 0);
 		ioport_set_pin_dir(PIN_DEBUG_3, IOPORT_DIR_OUTPUT);
 	}
+	
+	if (BSP_u8GetVersion() == 0){
+		ioport_set_pin_level(PC104_EN_PIN, 0);
+		ioport_enable_pin(PC104_EN_PIN);
+		ioport_set_pin_dir(PC104_EN_PIN, IOPORT_DIR_OUTPUT);
+		
+		ioport_set_pin_level(PC104_nRST_PIN, 0);
+		ioport_enable_pin(PC104_nRST_PIN);
+		ioport_set_pin_dir(PC104_nRST_PIN, IOPORT_DIR_OUTPUT);
+		
+	}
 }
 
 
@@ -228,12 +237,7 @@ void BSP_InitRTC(void){
 	// Configure the PIO lines to use the crystal
 	ioport_disable_pin(PIN_XIN32);
 	ioport_disable_pin(PIN_XOUT32);
-	
-	// The PIO crystal is connected to the Alternate function, this in not handled by 
-	// the peripheral mux
-    //ioport_set_pin_mode(PIN_XIN32, IOPORT_MODE_MUX_C);
-	//ioport_set_pin_mode(PIN_XOUT32, IOPORT_MODE_MUX_C);
-	
+		
 	// Switch to the crystal
 	SUPC->SUPC_CR = SUPC_CR_XTALSEL | SUPC_CR_KEY_PASSWD;
 	
@@ -282,11 +286,57 @@ uint32_t BSP_GetUptime(void){
 	return seconds + minutes*60 + hours *60 * 60;
 }
 
+void BSP_vInitCan(bsp_t * bsp) {
+
+	// Configure pins, disable GPIO mode
+	ioport_disable_pin(CAN_PIN_TX);
+	ioport_set_pin_mode(CAN_PIN_TX, CAN_PIN_TX_MUX);
+	ioport_disable_pin(CAN_PIN_RX);
+	ioport_set_pin_mode(CAN_PIN_RX, CAN_PIN_RX_MUX);
+
+	// Enable clock to CAN module
+	sysclk_enable_peripheral_clock(CAN_DEVICE_ID);
+	
+	bus_can.gse_address = 0x26;
+	bus_can.gse_address_mask = 0xFF;
+	bus_can.baudrate = 1000000;
+	ccd_can_Init(&bus_can, MCAN0);
+	bsp->bus_can = &bus_can;
+}
+
+
+void MCAN0_INT0_Handler(void) {
+	ccd_can_driver_ReceiveCallback(&bus_can);
+}
+
+void MCAN0_INT1_Handler(void) {
+	asm("nop");
+}
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 
 void BSP_vInitSPI(void) { 
     spi_disable_interrupt(SPI_DEVICE, ALL_INTERRUPT_MASK);
@@ -322,184 +372,4 @@ void BSP_vInitSPI(void) {
 struct spi_device* BSP_psGetSpiDriver(void) {
     return &sSpiDevice; 
 }
-
-
-
-/*
-* All functions for CAN operation
 */
-void BSP_vInitCan(void) {
-
-    // configure pins, disable gpio mode
-    ioport_disable_pin(CAN_PIN_TX);
-    ioport_set_pin_mode(CAN_PIN_TX, CAN_PIN_TX_MUX);
-    ioport_disable_pin(CAN_PIN_RX);
-    ioport_set_pin_mode(CAN_PIN_RX, CAN_PIN_RX_MUX);
-
-    // Enable clock to CAN module
-    // Peripheral clock controls register set/get, etc.
-    sysclk_enable_peripheral_clock(CAN_DEVICE_ID);
-
-    // Enable and configure CAN module
-    struct mcan_config sCanConfig;
-    mcan_get_config_defaults(&sCanConfig);
-    sCanConfig.automatic_retransmission = false;
-    sCanConfig.nonmatching_frames_action_extended = MCAN_NONMATCHING_FRAMES_FIFO_1;
-    mcan_init(&sCanModule, CAN_DEVICE, &sCanConfig);
-
-    // The MCAN_init function sets the PCK 5 clock, to 30MHz
-    // Enable PMC_PCK_5. This controls CAN clock generation
-    // Prescaler = 300/ (14+1) = 20MHz
-    
-    //pmc_pck_set_prescaler(PMC_PCK_5, PMC_PCK_PRES(14));
-    // Prescaler = 60 / (2+1) = 20Mhz
-	
-	// Prescaler = 300Mhz / (14+1) = 20mhz
-    pmc_pck_set_prescaler(PMC_PCK_5, PMC_PCK_PRES(14));
-    pmc_pck_set_source(PMC_PCK_5, PMC_PCK_CSS_PLLA_CLK);
-    pmc_enable_pck(PMC_PCK_5);
-
-    mcan_set_baudrate(CAN_DEVICE, 1000000);
-
-    // Will set CCCR.INIT bit to 1, so configuration is possible,
-    // mcan_enable_test_mode(&sCanModule);
-
-    // Will set CCR.INIT bit to 0, so module runs
-    mcan_start(&sCanModule);
-
-    // Set up the filter for an extended message
-    // We receive messages at OBC_CAN_ADRESS,
-    // the XTX will receive messages on it's own address
-	BSP_vCanSetAddressFilter(OBC_CAN_ADRESS, OBC_CAN_MASK);
-	
-    irq_register_handler(CAN_INTERRUPT, 1);
-    mcan_enable_interrupt(&sCanModule, MCAN_RX_BUFFER_NEW_MESSAGE | MCAN_RX_FIFO_0_NEW_MESSAGE | MCAN_RX_FIFO_1_NEW_MESSAGE | MCAN_FORMAT_ERROR | MCAN_ACKNOWLEDGE_ERROR | MCAN_BUS_OFF);
-}
-
-void BSP_vCanSetAddressFilter(uint32_t filter, uint32_t mask){
-	struct mcan_extended_message_filter_element et_filter;
-	mcan_get_extended_message_filter_element_default(&et_filter);
-	et_filter.F0.reg = MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F0_EFID1(filter) | MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F0_EFEC(1);
-	et_filter.F1.reg = MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F1_EFID2(mask) | MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F1_EFT_CLASSIC;
-
-	mcan_set_rx_extended_filter(&sCanModule, &et_filter, 0);
-	mcan_set_rx_extended_filter(&sCanModule, &et_filter, 1);
-}
-
-struct mcan_module* BSP_psGetCanDriver(void) {
-    return &sCanModule;
-}
-
-
-void CAN_HANDLER(void)
-{
-    volatile uint32_t status, i;
-    status = mcan_read_interrupt_status(&sCanModule);
-
-    if (status & MCAN_RX_BUFFER_NEW_MESSAGE ) {
-        mcan_clear_interrupt_status(&sCanModule, MCAN_RX_BUFFER_NEW_MESSAGE);
-        static struct mcan_rx_element_buffer rx_element_buffer;
-
-        for (i = 0; i < CONF_MCAN0_RX_BUFFER_NUM; i++) {
-            if (mcan_rx_get_buffer_status(&sCanModule, i)) {
-                mcan_rx_clear_buffer_status(&sCanModule, i);
-                mcan_get_rx_buffer_element(&sCanModule, &rx_element_buffer, i);
-            }
-        }
-    }
-
-    if (status & MCAN_RX_FIFO_0_NEW_MESSAGE) {
-        struct mcan_rx_element_fifo_0 rx_element_fifo_0;
-        mcan_get_rx_fifo_0_element(&sCanModule, &rx_element_fifo_0, fifo_receive_index);
-		
-		// Send message to driver
-		CAN_DRIVER_vMessageInFifo0(rx_element_fifo_0);
-		
-		// Ack the message, Suspect this allows a new message to be received
-        mcan_rx_fifo_acknowledge(&sCanModule, 0, fifo_receive_index);
-
-        fifo_receive_index++;
-        if(fifo_receive_index == CONF_MCAN0_RX_FIFO_0_NUM)
-        {
-            fifo_receive_index = 0;
-        }
-		
-		// Finally, clear interupt flag
-        mcan_clear_interrupt_status(&sCanModule, MCAN_RX_FIFO_0_NEW_MESSAGE);
-    }
-
-    if (status & MCAN_RX_FIFO_1_NEW_MESSAGE) {
-        mcan_clear_interrupt_status(&sCanModule, MCAN_RX_FIFO_1_NEW_MESSAGE);
-        mcan_rx_fifo_acknowledge(&sCanModule, 1, 0);
-
-        struct mcan_rx_element_fifo_1 rx_element_fifo_1;
-
-        mcan_get_rx_fifo_1_element(&sCanModule, &rx_element_fifo_1, 0);
-        mcan_rx_fifo_acknowledge(&sCanModule, 0, 0);
-    }
-
-    if (status & MCAN_BUS_OFF) {
-        mcan_clear_interrupt_status(&sCanModule, MCAN_BUS_OFF);
-    }
-
-    if (status & MCAN_ACKNOWLEDGE_ERROR) {
-        mcan_clear_interrupt_status(&sCanModule, MCAN_ACKNOWLEDGE_ERROR);
-    }
-
-    if (status & MCAN_FORMAT_ERROR) {
-        mcan_clear_interrupt_status(&sCanModule, MCAN_FORMAT_ERROR);
-    }
-}
-
-void MCAN0_INT1_Handler(void){
-    asm("nop");
-};
-
-
-
-
-void BSP_vInit1MsTimer(void) {
-
-    int32_t timerChannel = 0;
-
-    // Setup timer
-    // TC_CMR_TCCLKS_TIMER_CLOCK3 : Mclk/32
-    // TC_CMR_CPCTRG : Set RC compare to trigger a timer counter reset
-    sysclk_enable_peripheral_clock(ID_TC0);
-    tc_init(TC0, timerChannel, TC_CMR_TCCLKS_TIMER_CLOCK3 | TC_CMR_CPCTRG);
-    uint16_t prescaler = sysclk_get_main_hz() /64 / 1000;
-    tc_write_rc(TC0, timerChannel, prescaler);
-
-    tc_enable_interrupt(TC0, timerChannel, TC_IER_CPCS);
-
-    // Actually enable the interupt
-    NVIC_DisableIRQ(TC0_IRQn);
-    NVIC_ClearPendingIRQ(TC0_IRQn);
-    NVIC_SetPriority(TC0_IRQn, 0);
-    NVIC_EnableIRQ(TC0_IRQn);
-    
-    tc_start(TC0, timerChannel);
-}
-
-// ToDo: Refactor
-static uint64_t msTimeCounter;
-
-void TC0_Handler(void)
-{
-    if (tc_get_status(TC0, 0) & TC_SR_CPCS) {
-        msTimeCounter +=1;
-    }
-}
-
-uint16_t BSP_u16TmrGetTick(void){
-    return (uint16_t)msTimeCounter;
-}
-
-uint64_t BSP_u64GetTimestamp(void){
-    return msTimeCounter;
-}
-
-
-void USART2_Handler(void){
-	ccd_uart_InterruptHandler(&telemetry_uart);
-}
