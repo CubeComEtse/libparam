@@ -3,6 +3,9 @@ Debug
 tests/executables
 tests/obj
 
+jlink.config
+jlink*log
+
 .vs
 .vscode
 *.code-workspace

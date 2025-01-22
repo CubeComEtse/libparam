@@ -7,16 +7,7 @@
  * The spline definition cointains multiple spline coordinates with their 
  * control toggles. 
 */
-void E_MATH_CalculateSplinePoint(const spline_definition_t* spline, const double t, vec3_t * out){
-    // First, calulate which spline points we are using from the t parameters
-    uint32_t start_index = ((uint32_t) t) % spline->num_control_points;
-    uint32_t end_point = (((uint32_t) t) + 1) % spline->num_control_points;
-
-    vec3_t * A = &spline->control_points[start_index].coordinate;
-    vec3_t * B = &spline->control_points[start_index].forward_toggle;
-    vec3_t * C = &spline->control_points[end_point].backward_toggle;
-    vec3_t * D = &spline->control_points[end_point].coordinate;
-
+void E_MATH_CalculateSplinePoint(const control_point_t * from, const control_point_t * to, const double t, vec3_t * out){
     vec3_t a;
     vec3_t b;
     vec3_t c;
@@ -25,9 +16,9 @@ void E_MATH_CalculateSplinePoint(const spline_definition_t* spline, const double
     vec3_t e;
 
     double t_lim = t - (uint32_t)(t);
-    E_MATH_Lerp3D(A, B, t_lim, &a);
-    E_MATH_Lerp3D(B, C, t_lim, &b);
-    E_MATH_Lerp3D(C, D, t_lim, &c);
+    E_MATH_Lerp3D(&from->coordinate, &from->forward_toggle, t_lim, &a);
+    E_MATH_Lerp3D(&from->forward_toggle, &to->backward_toggle, t_lim, &b);
+    E_MATH_Lerp3D(&to->backward_toggle, &to->coordinate, t_lim, &c);
 
     E_MATH_Lerp3D(&a, &b, t_lim, &d);
     E_MATH_Lerp3D(&b, &c, t_lim, &e);

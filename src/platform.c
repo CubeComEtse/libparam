@@ -17,7 +17,7 @@ static local_target_t local_target;
 static i2c_target_t i2c_target;
 static can_target_t can_target;
 
-static led_driver_t led_driver;
+static led_indicator_t led_indicator;
 static sermux_v3_t sermux_v3;
 
 static pc104_t pc104;
@@ -44,7 +44,7 @@ void PLATFORM_vInit(bsp_t * bsp)
 	platform.local_target = &local_target;
 	platform.i2c_target = &i2c_target;
 	platform.can_target = &can_target;
-	platform.led_driver = &led_driver;
+	platform.led_indicator = &led_indicator;
 	platform.sermux_v3 = &sermux_v3;
 	
 	platform.pc104 = &pc104;
@@ -85,11 +85,6 @@ void PLATFORM_vInit(bsp_t * bsp)
 	gse_manager.enable_vbatalt_pin = EN_VBATALT_BUS_PIN;
 	GSE_MANAGER_Init(&gse_manager);
 	
-	led_driver.uart_disable_fc = ccd_uart_StopFlowControl;
-	led_driver.uart_enable_fc = ccd_uart_StartFlowControl;
-	led_driver.uart_handle = bsp->telemetry_uart;
-	LED_DRIVER_Setup(&led_driver);
-	
 	LOCALTARGET_Init(&local_target);
 
 	i2c_target.i2c_read = ccd_i2c_driver_Read;
@@ -112,6 +107,10 @@ void PLATFORM_vInit(bsp_t * bsp)
 	pc104.ena_Pin = PC104_EN_PIN;
 	pc104.nrst_Pin = PC104_nRST_PIN;
 	platform.pc104 = &pc104;
+	
+	led_indicator.led_driver = bsp->led_driver;
+	LEDIndicator_Setup(&led_indicator);
+	platform.led_indicator = &led_indicator;
 	
 	//Add Local Targets
 	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_GSE, local_target.incoming_messages, local_target.outgoing_messages);
@@ -172,6 +171,7 @@ void PLATFORM_vConfigureAll(platform_t * handle){
 	
 	// GSE Local Power monitors
 	uint8_t version = BSP_u8GetVersion();
+	// Commented out until we get the correct ICs
 	if (version == 0)
 	{
 		LTC2992_vNormalSetup(&power_measure_1, LTC2992_u8GenAddr(0, 0));

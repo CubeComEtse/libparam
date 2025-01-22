@@ -35,12 +35,14 @@ static void BSP_vInitUtilI2C(bsp_t * bsp);
 static void BSP_vInitGPIO(void);
 static void BSP_InitRTC(void);
 static void BSP_vInitCan(bsp_t * bsp);
+static void BSP_vInitLEDPWM(bsp_t * bsp);
 
 // Post cleanup
 static ccd_uart_t telemetry_uart;
 static ccd_i2c_t  util_i2c;
 static ccd_i2c_t  bus_i2c;
 static ccd_can_t  bus_can;
+static ccd_led_t led_driver;
 
 // The version is only read and set once, during startup
 static uint8_t version;
@@ -80,17 +82,8 @@ void BSP_Init(bsp_t * bsp) {
 	BSP_InitRTC();
 
 	BSP_vInitCan(bsp);
-
 	
-	/*
-    BSP_vInitSPI();
-    */
-	
-
-
-
-    
-	
+	BSP_vInitLEDPWM(bsp);
 
 	// So - we used to reset the USB connection when we power cycle. I don't think this is needed anymore?
     //BSP_vUsbReset();
@@ -314,7 +307,25 @@ void MCAN0_INT1_Handler(void) {
 }
 
 
+void BSP_vInitLEDPWM(bsp_t * bsp)
+{
+	// Setup GPIO pin
+	// Pin PA15 - supports PWMC0_ PWML3 on Peripheral C
+	PIOA->PIO_ABCDSR[0] &= ~PIO_ABCDSR_P15;
+	PIOA->PIO_ABCDSR[1] |= PIO_ABCDSR_P15;
 
+	// Set Pin to Peripheral mode
+	PIOA->PIO_PDR |= PIO_PDR_P15;
+
+	// Enable clock to PWM module
+	PMC->PMC_PCER0 = PMC_PCER0_PID31;
+	
+	led_driver.uart_disable_fc = ccd_uart_StopFlowControl;
+	led_driver.uart_enable_fc = ccd_uart_StartFlowControl;
+	led_driver.uart_handle = bsp->telemetry_uart;
+	ccd_led_driver_Init(&led_driver, PWM0);
+	bsp->led_driver = &led_driver;
+}
 
 
 

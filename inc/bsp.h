@@ -17,12 +17,14 @@
 #include "ccd_can_driver.h"
 #include "ccd_uart_driver.h"
 #include "ccd_can_driver.h"
+#include "ccd_led_driver.h"
 
 typedef struct {
 	ccd_uart_t * telemetry_uart;
 	ccd_i2c_t * bus_i2c;
 	ccd_i2c_t * util_i2c;
 	ccd_can_t * bus_can;
+	ccd_led_t * led_driver;
 } bsp_t;
 
 

@@ -20,7 +20,7 @@
 #include "gse_manager.h"
 #include "sermux_v3.h"
 #include "pc_messages.h"
-#include "led_driver.h"
+#include "led_indicator.h"
 
 #include "can_target.h"
 #include "i2c_target.h"
@@ -100,7 +100,7 @@ void SETUP_Task(void* handle)
 	
 	xTaskCreate(I2CTARGET_Task, "I2C Target", 512, (void*) platform->i2c_target,  tskIDLE_PRIORITY+3, NULL);
 	
-	xTaskCreate(CANTARGET_TxTask, "CAN TX Task", 512, (void *) platform->can_target, tskIDLE_PRIORITY+3, NULL);
+	// xTaskCreate(CANTARGET_TxTask, "CAN TX Task", 512, (void *) platform->can_target, tskIDLE_PRIORITY+3, NULL);
 	// xTaskCreate(CANTARGET_RxTask, "CAN RX Task", 512, (void *) platform->can_target, tskIDLE_PRIORITY+1, NULL);
 	
 	xTaskCreate(LOCALTARGET_Task, "Local Target", 512, (void*) platform->local_target,  tskIDLE_PRIORITY+2, NULL);
@@ -113,7 +113,9 @@ void SETUP_Task(void* handle)
 	// xTaskCreate(DEVTOOLS_Task, "RF Tools", 512, (void *) platform, tskIDLE_PRIORITY+2, NULL);
 	
 	// LED task has lowest priority
-	xTaskCreate(LED_DRIVER_UpdateTask, "LED", 512, (void*) platform->led_driver, tskIDLE_PRIORITY+1, NULL);
+	xTaskCreate(LEDIndicator_UpdateTask, "LED", 512, (void*) platform->led_indicator, tskIDLE_PRIORITY+1, NULL);
+	
+	LEDIndicator_SetNextState(platform->led_indicator, LED_POWER_ON);
 	
 	// Delete the setup task
 	vTaskDelete( NULL );

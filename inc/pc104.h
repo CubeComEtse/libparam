@@ -12,7 +12,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-typedef void (*set_pin_function_t)(uint32_t * pin, bool dir);
+typedef void (*set_pin_function_t)(uint32_t pin, bool dir);
 
 typedef struct {
 	set_pin_function_t set_pin;

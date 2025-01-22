@@ -288,14 +288,14 @@
         <board id="board.user_board.samv71q21" value="Add" config="" content-id="Atmel.ASF" />
       </framework-data>
     </AsfFrameworkConfig>
-    <avrtool>com.atmel.avrdbg.tool.atmelice</avrtool>
-    <avrtoolserialnumber>J41800023473</avrtoolserialnumber>
+    <avrtool>com.atmel.avrdbg.tool.samice</avrtool>
+    <avrtoolserialnumber>801037113</avrtoolserialnumber>
     <avrdeviceexpectedsignature>0xA1220E00</avrdeviceexpectedsignature>
     <com_atmel_avrdbg_tool_atmelice>
       <ToolOptions>
         <InterfaceProperties>
           <JtagDbgClock>7500000</JtagDbgClock>
-          <SwdClock>2000000</SwdClock>
+          <SwdClock>0</SwdClock>
         </InterfaceProperties>
         <InterfaceName>SWD</InterfaceName>
       </ToolOptions>
@@ -304,7 +304,7 @@
       <ToolName>Atmel-ICE</ToolName>
     </com_atmel_avrdbg_tool_atmelice>
     <avrtoolinterface>SWD</avrtoolinterface>
-    <avrtoolinterfaceclock>2000000</avrtoolinterfaceclock>
+    <avrtoolinterfaceclock>4000000</avrtoolinterfaceclock>
     <custom>
       <ToolOptions xmlns="">
         <InterfaceProperties>
@@ -316,6 +316,18 @@
       </ToolNumber>
       <ToolName xmlns="">Custom Programming Tool</ToolName>
     </custom>
+    <com_atmel_avrdbg_tool_samice>
+      <ToolOptions>
+        <InterfaceProperties>
+          <SwdClock>4000000</SwdClock>
+        </InterfaceProperties>
+        <InterfaceName>SWD</InterfaceName>
+        <JlinkConfigFile>C:\Users\Kolijn\Work\Repos\gse-firmware\jlink.config</JlinkConfigFile>
+      </ToolOptions>
+      <ToolType>com.atmel.avrdbg.tool.samice</ToolType>
+      <ToolNumber>801037113</ToolNumber>
+      <ToolName>J-Link</ToolName>
+    </com_atmel_avrdbg_tool_samice>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>
@@ -744,6 +756,12 @@
     <Compile Include="inc\drivers\ccd_i2c_driver.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="inc\drivers\ccd_led_driver.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\drivers\ccd_led_driver.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="inc\drivers\ccd_uart_driver.h">
       <SubType>compile</SubType>
     </Compile>
@@ -834,7 +852,7 @@
     <Compile Include="inc\i2c_target.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\led_driver.h">
+    <Compile Include="inc\led_indicator.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\local_target.h">
@@ -939,7 +957,7 @@
     <Compile Include="src\i2c_target.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\led_driver.c">
+    <Compile Include="src\led_indicator.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\local_target.c">

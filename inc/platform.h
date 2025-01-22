@@ -20,7 +20,7 @@
 #include "gse_manager.h"
 #include "sermux_v3.h"
 #include "pc_messages.h"
-#include "led_driver.h"
+#include "led_indicator.h"
 
 #include "can_target.h"
 #include "i2c_target.h"
@@ -40,8 +40,7 @@ typedef struct
 	i2c_target_t * i2c_target;
 	can_target_t * can_target;
 
-	led_driver_t * led_driver;
-	
+	led_indicator_t * led_indicator;
 	
 	sermux_v3_t * sermux_v3;
 	
