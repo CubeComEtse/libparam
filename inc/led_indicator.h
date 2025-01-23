@@ -49,6 +49,7 @@ typedef struct {
 
 void LEDIndicator_Setup(led_indicator_t * handle);
 void LEDIndicator_UpdateTask(void * parameters);
-void LEDIndicator_SetNextState(led_indicator_t * handle, led_board_state_t new_state);
+void LEDIndicator_SetStatic(led_indicator_t * handle);
+void LEDIndicator_SetNextState( led_board_state_t new_state);
 
 #endif /* LED_DRIVER_H_ */

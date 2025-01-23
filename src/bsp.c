@@ -86,7 +86,7 @@ void BSP_Init(bsp_t * bsp) {
 	BSP_vInitLEDPWM(bsp);
 
 	// So - we used to reset the USB connection when we power cycle. I don't think this is needed anymore?
-    //BSP_vUsbReset();
+	BSP_vUsbReset();
 	
 	// Make all interrupt prioirty bits preempt bits, rather than sub-prioirty bits.
 	// According to https://www.freertos.org/Documentation/02-Kernel/03-Supported-devices/04-Demos/ARM-Cortex/RTOS-Cortex-M3-M4
@@ -206,7 +206,11 @@ void BSP_vInitGPIO(void) {
 		ioport_set_pin_dir(PIN_DEBUG_3, IOPORT_DIR_OUTPUT);
 	}
 	
-	if (BSP_u8GetVersion() == 0){
+	// Todo: This needs to be cleaned up. In the old OBC we referred to PC104 pins,
+	// in the new GSE there are Bus pins, which happen to map to the same pins,
+	// but won't always be the same for all adaptors.
+	//if (BSP_u8GetVersion() == 0)
+	{
 		ioport_set_pin_level(PC104_EN_PIN, 0);
 		ioport_enable_pin(PC104_EN_PIN);
 		ioport_set_pin_dir(PC104_EN_PIN, IOPORT_DIR_OUTPUT);
@@ -214,7 +218,6 @@ void BSP_vInitGPIO(void) {
 		ioport_set_pin_level(PC104_nRST_PIN, 0);
 		ioport_enable_pin(PC104_nRST_PIN);
 		ioport_set_pin_dir(PC104_nRST_PIN, IOPORT_DIR_OUTPUT);
-		
 	}
 }
 
@@ -281,20 +284,40 @@ uint32_t BSP_GetUptime(void){
 
 void BSP_vInitCan(bsp_t * bsp) {
 
-	// Configure pins, disable GPIO mode
-	ioport_disable_pin(CAN_PIN_TX);
-	ioport_set_pin_mode(CAN_PIN_TX, CAN_PIN_TX_MUX);
-	ioport_disable_pin(CAN_PIN_RX);
-	ioport_set_pin_mode(CAN_PIN_RX, CAN_PIN_RX_MUX);
+	if (BSP_u8GetVersion() == 0)
+	{
+		// Configure pins, disable GPIO mode
+		ioport_disable_pin(CAN_PIN_TX);
+		ioport_set_pin_mode(CAN_PIN_TX, CAN_PIN_TX_MUX);
+		ioport_disable_pin(CAN_PIN_RX);
+		ioport_set_pin_mode(CAN_PIN_RX, CAN_PIN_RX_MUX);
 
-	// Enable clock to CAN module
-	sysclk_enable_peripheral_clock(CAN_DEVICE_ID);
+		// Enable clock to CAN module
+		sysclk_enable_peripheral_clock(CAN_DEVICE_ID);
 	
-	bus_can.gse_address = 0x26;
-	bus_can.gse_address_mask = 0xFF;
-	bus_can.baudrate = 1000000;
-	ccd_can_Init(&bus_can, MCAN0);
-	bsp->bus_can = &bus_can;
+		bus_can.gse_address = 0x26;
+		bus_can.gse_address_mask = 0xFF;
+		bus_can.baudrate = 1000000;
+		ccd_can_Init(&bus_can, MCAN0);
+		bsp->bus_can = &bus_can;
+	}
+	if (BSP_u8GetVersion() == 1)
+	{
+		// Configure pins, disable GPIO mode
+		ioport_disable_pin(CAN_PIN_TX_V2);
+		ioport_set_pin_mode(CAN_PIN_TX_V2, CAN_PIN_TX_MUX_V2);
+		ioport_disable_pin(CAN_PIN_RX_V2);
+		ioport_set_pin_mode(CAN_PIN_RX_V2, CAN_PIN_RX_MUX_V2);
+
+		// Enable clock to CAN module
+		sysclk_enable_peripheral_clock(CAN_DEVICE_ID_V2);
+	
+		bus_can.gse_address = 0x26;
+		bus_can.gse_address_mask = 0xFF;
+		bus_can.baudrate = 1000000;
+		ccd_can_Init(&bus_can, CAN_DEVICE_V2);
+		bsp->bus_can = &bus_can;
+	}
 }
 
 
@@ -306,6 +329,13 @@ void MCAN0_INT1_Handler(void) {
 	asm("nop");
 }
 
+void MCAN1_INT0_Handler(void) {
+	ccd_can_driver_ReceiveCallback(&bus_can);
+}
+
+void MCAN1_INT1_Handler(void) {
+	asm("nop");
+}
 
 void BSP_vInitLEDPWM(bsp_t * bsp)
 {

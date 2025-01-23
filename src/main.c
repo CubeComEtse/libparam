@@ -100,8 +100,8 @@ void SETUP_Task(void* handle)
 	
 	xTaskCreate(I2CTARGET_Task, "I2C Target", 512, (void*) platform->i2c_target,  tskIDLE_PRIORITY+3, NULL);
 	
-	// xTaskCreate(CANTARGET_TxTask, "CAN TX Task", 512, (void *) platform->can_target, tskIDLE_PRIORITY+3, NULL);
-	// xTaskCreate(CANTARGET_RxTask, "CAN RX Task", 512, (void *) platform->can_target, tskIDLE_PRIORITY+1, NULL);
+	xTaskCreate(CANTARGET_TxTask, "CAN TX Task", 512, (void *) platform->can_target, tskIDLE_PRIORITY+3, NULL);
+	xTaskCreate(CANTARGET_RxTask, "CAN RX Task", 512, (void *) platform->can_target, tskIDLE_PRIORITY+1, NULL);
 	
 	xTaskCreate(LOCALTARGET_Task, "Local Target", 512, (void*) platform->local_target,  tskIDLE_PRIORITY+2, NULL);
 	
@@ -115,7 +115,7 @@ void SETUP_Task(void* handle)
 	// LED task has lowest priority
 	xTaskCreate(LEDIndicator_UpdateTask, "LED", 512, (void*) platform->led_indicator, tskIDLE_PRIORITY+1, NULL);
 	
-	LEDIndicator_SetNextState(platform->led_indicator, LED_POWER_ON);
+	LEDIndicator_SetNextState(LED_POWER_ON);
 	
 	// Delete the setup task
 	vTaskDelete( NULL );

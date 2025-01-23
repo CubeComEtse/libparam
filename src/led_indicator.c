@@ -10,6 +10,8 @@ static spline_definition_t power_on_breathing;
 static spline_definition_t uart_comms_breathing;
 static spline_definition_t comms_active_bounce;
 
+static led_indicator_t * static_ref;
+
 control_point_t points[] ={
 	
 	//Statup point
@@ -36,6 +38,22 @@ control_point_t points[] ={
 		.ticks_to_stay_on = 100,
 		.ticks_speed = 1700,
 	},
+	//Bright Green - Comms Breathing 1
+	{
+		.coordinate      = (vec3_t) {.x=0.100, .y=0.900, .z=0.010},
+		.forward_toggle  = (vec3_t) {.x=0.000, .y=0.800, .z=0.000},
+		.backward_toggle = (vec3_t) {.x=0.000, .y=0.800, .z=0.000},
+		.ticks_to_stay_on = 200,
+		.ticks_speed = 500,
+	},
+	//Dark Green - breathing 2
+	{
+		.coordinate      = (vec3_t) {.x=0.000, .y=0.100, .z=0.000},
+		.forward_toggle  = (vec3_t) {.x=0.000, .y=0.200, .z=0.000},
+		.backward_toggle = (vec3_t) {.x=0.000, .y=0.200, .z=0.000},
+		.ticks_to_stay_on = 100,
+		.ticks_speed = 1700,
+	}
 };
 
 control_point_t green_blue_bounce[] ={
@@ -80,6 +98,9 @@ void LEDIndicator_Setup(led_indicator_t * handle)
 	power_on_breathing.num_control_points = 2;
 	power_on_breathing.control_points = &points[1];
 	
+	uart_comms_breathing.num_control_points=2;
+	uart_comms_breathing.control_points= &points[3];
+	
 	handle->state = LED_STATE_IDLE;
 	handle->state_start_tick = 0;
 	handle->current_point = &points[0];
@@ -88,15 +109,19 @@ void LEDIndicator_Setup(led_indicator_t * handle)
 	handle->spline_to_use = &power_on_breathing;
 	handle->desired_board_state = LED_UNUSED;
 	handle->board_state = LED_UNUSED;
-
 }
 
-void LEDIndicator_SetNextState(led_indicator_t * handle, led_board_state_t new_state)
+void LEDIndicator_SetStatic(led_indicator_t * handle)
 {
-	handle->desired_board_state = new_state;
+	static_ref = handle;
+}
+
+void LEDIndicator_SetNextState(led_board_state_t new_state)
+{
+	static_ref->desired_board_state = new_state;
 	
-	if (handle->state == LED_STATE_IDLE){
-		handle->state = LED_STATE_CALCULATE_NEXT_POINT;
+	if (static_ref->state == LED_STATE_IDLE){
+		static_ref->state = LED_STATE_CALCULATE_NEXT_POINT;
 	}
 }
 

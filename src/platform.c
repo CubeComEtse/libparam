@@ -111,6 +111,7 @@ void PLATFORM_vInit(bsp_t * bsp)
 	led_indicator.led_driver = bsp->led_driver;
 	LEDIndicator_Setup(&led_indicator);
 	platform.led_indicator = &led_indicator;
+	LEDIndicator_SetStatic(&led_indicator);
 	
 	//Add Local Targets
 	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_GSE, local_target.incoming_messages, local_target.outgoing_messages);

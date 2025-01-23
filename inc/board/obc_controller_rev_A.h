@@ -82,6 +82,17 @@
 #define CAN_HANDLER             MCAN0_INT0_Handler
 #define CAN_HANDLER2            MCAN0_INT1_Handler
 
+#define CAN_PIN_TX_V2           IOPORT_CREATE_PIN(PIOC, 14)
+#define CAN_PIN_TX_MUX_V2       IOPORT_MODE_MUX_C
+#define CAN_PIN_RX_V2           IOPORT_CREATE_PIN(PIOC, 12)
+#define CAN_PIN_RX_MUX_V2       IOPORT_MODE_MUX_C
+
+#define CAN_DEVICE_V2           MCAN1
+#define CAN_DEVICE_ID_V2        ID_MCAN1
+#define CAN_INTERRUPT_V2        MCAN1_INT0_IRQn
+#define CAN_HANDLER_V2          MCAN1_INT0_Handler
+#define CAN_HANDLER2_V2         MCAN1_INT1_Handler
+
 // The XTX uses the bottom 8 bits as the address
 #define XTX_CAN_ADRESS          0x0000026
 #define HDRTX_CAN_ADRESS		(65)
@@ -119,6 +130,13 @@
 #define XSTEER_ADRESS           0x0000027
 
 #define XDC_ADDRESS             0x0000028
+
+
+#define PIN_BUS_GPIO0			PIO_PC0_IDX
+#define PIN_BUS_GPIO1			PIO_PC1_IDX
+#define PIN_BUS_GPIO2			PIO_PC2_IDX
+#define PIN_BUS_GPIO3			PIO_PC3_IDX
+
 
 
 #define PIN_DEBUG_0             PIO_PD20_IDX
