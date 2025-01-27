@@ -25,6 +25,7 @@ void CANTARGET_Init(can_target_t * handle)
 	assert(handle->can_send);
 	// Do not assert the handle, it might be void. 
 	
+	// These buffers are for SERCOM messages
 	// This buffer size is an initial guess. Feel free to update it later.
 	handle->incoming_messages = xMessageBufferCreate(256);
 	handle->outgoing_messages = xMessageBufferCreate(256);
@@ -108,10 +109,10 @@ void CANTARGET_TxTask(void * handle)
 }
 
 
-void CANTARGET_RxTask(void * handle)
+void CANTARGET_RxTask(void * vHandle)
 {
-	assert(handle);
-	can_target_t * hnd = (can_target_t *) handle;
+	assert(vHandle);
+	can_target_t * pHandle = (can_target_t *) vHandle;
 		
 	uint8_t rx_buffer[32];
 	v2_msg_t in_message;
@@ -120,5 +121,36 @@ void CANTARGET_RxTask(void * handle)
 		
 	while(1){
 		
+		// Wait for a message to be received over CAN
+		uint32_t header;
+		uint8_t data[16];
+		size_t receive_size;
+		uint8_t * ptr = &data[2];
+		if (pHandle->can_receive(pHandle->can_handle, &header, &ptr, &receive_size))
+		{
+			
+			v2_msg_t out_message;
+			out_message.msg_id = (uint8_t) ((header >> 16) & 0xFF);
+			out_message.is_read = false;
+			out_message.data = data;
+			out_message.data_len = 2 + receive_size;
+			
+			{
+				out_message.target = EP_V2_CAN_CC_2;
+			
+				// CAN MsgType
+				data[0] = (uint8_t) ((header >> 24) & 0x1F);
+				//
+				data[1] = (uint8_t) receive_size;
+			}
+			
+			uint8_t encoded[20];
+			size_t encoded_size = encode_v2_message(encoded, &out_message);
+			
+			//Todo: What to do if a message is dropped?
+			xMessageBufferSend(pHandle->outgoing_messages, &encoded, encoded_size, 0);			
+			
+		}
+	
 	}
 }

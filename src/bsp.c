@@ -37,6 +37,7 @@ static void BSP_InitRTC(void);
 static void BSP_vInitCan(bsp_t * bsp);
 static void BSP_vInitLEDPWM(bsp_t * bsp);
 
+
 // Post cleanup
 static ccd_uart_t telemetry_uart;
 static ccd_i2c_t  util_i2c;
@@ -295,7 +296,7 @@ void BSP_vInitCan(bsp_t * bsp) {
 		// Enable clock to CAN module
 		sysclk_enable_peripheral_clock(CAN_DEVICE_ID);
 	
-		bus_can.gse_address = 0x26;
+		bus_can.gse_address = 0xE9;
 		bus_can.gse_address_mask = 0xFF;
 		bus_can.baudrate = 1000000;
 		ccd_can_Init(&bus_can, MCAN0);
@@ -312,7 +313,7 @@ void BSP_vInitCan(bsp_t * bsp) {
 		// Enable clock to CAN module
 		sysclk_enable_peripheral_clock(CAN_DEVICE_ID_V2);
 	
-		bus_can.gse_address = 0x26;
+		bus_can.gse_address = 0xE9;
 		bus_can.gse_address_mask = 0xFF;
 		bus_can.baudrate = 1000000;
 		ccd_can_Init(&bus_can, CAN_DEVICE_V2);
@@ -373,7 +374,12 @@ void BSP_vInitLEDPWM(bsp_t * bsp)
 
 
 
-
+void debug(uint8_t val){
+	ioport_set_pin_level(PIN_DEBUG_0, val & 0x01);
+	ioport_set_pin_level(PIN_DEBUG_1, val & 0x02);
+	ioport_set_pin_level(PIN_DEBUG_2, val & 0x04);
+	ioport_set_pin_level(PIN_DEBUG_3, val & 0x08);
+}
 
 
 

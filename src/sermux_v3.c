@@ -57,8 +57,6 @@ void SERMUX_V3_AddTarget(sermux_v3_t * handle, const uint8_t number, MessageBuff
 	handle->num_targets += 1;
 }
 
-#include "bsp.h"
-void debug(uint8_t val);
 
 void SERMUX_V3_ReceiveTask(void * handle)
 {
@@ -89,7 +87,6 @@ void SERMUX_V3_ReceiveTask(void * handle)
 					if (rx_byte == 0xC3) {
 						hnd->state = V2_WAITING_2;
 					}
-					debug(0);
 					break;
 					
 				case V2_WAITING_2:
@@ -99,20 +96,17 @@ void SERMUX_V3_ReceiveTask(void * handle)
 					else {
 						hnd->state = V2_WAITING_1;
 					}
-					debug(1);
 					break;
 			
 				case V2_STORE_VERSION:
 					hnd->rx_block.version = rx_byte;
 					hnd->state = V2_STORE_LENGTH;
-					debug(2);
 					break;
 			
 				case V2_STORE_LENGTH:
 					hnd->rx_block.length = rx_byte;
 					hnd->rx_block.rx_count = 0;
 					hnd->state = V2_STORE_DATA;
-					debug(3);
 					break;
 			
 				case V2_STORE_DATA:
@@ -125,7 +119,6 @@ void SERMUX_V3_ReceiveTask(void * handle)
 				case V2_STORE_CRC:
 					// Store CRC
 					hnd->rx_block.crc = rx_byte;
-					debug(4);
 					
 					// Todo: Verify the CRC
 					
@@ -165,19 +158,12 @@ void SERMUX_V3_ReceiveTask(void * handle)
 					
 				default:
 					hnd->state = V2_WAITING_1;
-					//ioport_set_pin_level(PIN_DEBUG_0, 0);
 					break;
 			}
 		}
 	}
 }
 
-void debug(uint8_t val){
-ioport_set_pin_level(PIN_DEBUG_0, val & 0x01);
-ioport_set_pin_level(PIN_DEBUG_1, val & 0x02);
-ioport_set_pin_level(PIN_DEBUG_2, val & 0x04);
-ioport_set_pin_level(PIN_DEBUG_3, val & 0x08);
-}
 		
 void SERMUX_V3_TransmitTask(void * handle)
 {

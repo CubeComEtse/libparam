@@ -15,13 +15,11 @@ static void ccd_can_driver_SetAddress(ccd_can_t * pHandle, uint32_t filter, uint
 
 void ccd_can_Init(ccd_can_t * pHandle, Mcan * can_device)
 {
-	pHandle->receivedMessageRead = 0;
-	pHandle->receivedMessageWrite = 0;
 	
 	struct mcan_config sCanConfig;
 	mcan_get_config_defaults(&sCanConfig);
-	sCanConfig.automatic_retransmission = false;
-	sCanConfig.nonmatching_frames_action_extended = MCAN_NONMATCHING_FRAMES_FIFO_1;
+	sCanConfig.automatic_retransmission = true;
+	sCanConfig.nonmatching_frames_action_extended = MCAN_NONMATCHING_FRAMES_REJECT;
 	mcan_init(&pHandle->can_module, can_device, &sCanConfig);
 	
 	pmc_pck_set_prescaler(PMC_PCK_5, PMC_PCK_PRES(14));
@@ -37,16 +35,18 @@ void ccd_can_Init(ccd_can_t * pHandle, Mcan * can_device)
 	if (can_device == MCAN0)
 	{
 		irq_register_handler(MCAN0_INT0_IRQn, 1);
+		NVIC_SetPriority(MCAN0_INT0_IRQn, 4);
 		mcan_enable_interrupt(&pHandle->can_module, MCAN_RX_BUFFER_NEW_MESSAGE | MCAN_RX_FIFO_0_NEW_MESSAGE | MCAN_RX_FIFO_1_NEW_MESSAGE | MCAN_FORMAT_ERROR | MCAN_ACKNOWLEDGE_ERROR | MCAN_BUS_OFF);
 	}
 	if (can_device == MCAN1)
 	{
 		irq_register_handler(MCAN1_INT0_IRQn, 1);
+		NVIC_SetPriority(MCAN1_INT0_IRQn, 4);
 		mcan_enable_interrupt(&pHandle->can_module, MCAN_RX_BUFFER_NEW_MESSAGE | MCAN_RX_FIFO_0_NEW_MESSAGE | MCAN_RX_FIFO_1_NEW_MESSAGE | MCAN_FORMAT_ERROR | MCAN_ACKNOWLEDGE_ERROR | MCAN_BUS_OFF);
 	}
+	
+	pHandle->receiveMessageBuffer = xMessageBufferCreate(sizeof(struct mcan_rx_element_fifo_0) * 32);
 }
-
-
 
 void ccd_can_Send_message(void * vHandle, uint32_t header, uint8_t * data, size_t data_len)
 {
@@ -71,11 +71,25 @@ void ccd_can_Send_message(void * vHandle, uint32_t header, uint8_t * data, size_
 	// tfqpi should indicate where to write to next, and what bit to set to send?
 	// Datasheet 49.5.5.3 Tx FIFO, page 1416
 	uint32_t buffer_index = ((pHandle->can_module.hw->MCAN_TXFQS & MCAN_TXFQS_TFQPI_Msk) >> MCAN_TXFQS_TFQPI_Pos);
-	
 	// Code copied from the mcan_set_tx_buffer_element function
      mcan_set_tx_buffer_element(&pHandle->can_module, &tx_element, buffer_index);
-     
+	
 	 while (mcan_tx_transfer_request(&pHandle->can_module, 1 << buffer_index) == ERR_BUSY);
+}
+
+bool cc_can_Receive_message(void * vHandle, uint32_t * header, uint8_t ** data, size_t * data_len)
+{
+	ccd_can_t * pHandle = (ccd_can_t*) vHandle;
+	struct mcan_rx_element_fifo_0 rx_element;
+	
+	if (xMessageBufferReceive(pHandle->receiveMessageBuffer, &rx_element, sizeof(rx_element), pdMS_TO_TICKS(200)) > 0)
+	{
+		*header = rx_element.R0.reg;
+		*data_len = rx_element.R1.bit.DLC;
+		memcpy(*data, rx_element.data, *data_len);
+		return true;
+	}	
+	return false;
 }
 
 
@@ -95,6 +109,9 @@ static void ccd_can_driver_SetAddress(ccd_can_t * pHandle, uint32_t filter, uint
 // Called from interrupt
 void ccd_can_driver_ReceiveCallback(ccd_can_t* pHandle)
 {
+	
+	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+	
 	// Static here is dodgy
 	static uint32_t fifo_receive_index = 0;
 	
@@ -121,10 +138,10 @@ void ccd_can_driver_ReceiveCallback(ccd_can_t* pHandle)
 		// See 48.6.28 in the datasheet
 		
 		// Copy the message from the mcan buffer, to our own buffer.
-		mcan_get_rx_fifo_0_element(&pHandle->can_module, 
-								pHandle->rx_buffer,
-								fifo_receive_index);
-		pHandle->receivedMessageWrite = (pHandle->receivedMessageWrite + 1) % CAN_DRIVER_BUF_SIZE;
+		struct mcan_rx_element_fifo_0 rx_element;
+		mcan_get_rx_fifo_0_element(&pHandle->can_module, &rx_element, fifo_receive_index);
+		
+		xMessageBufferSendFromISR(pHandle->receiveMessageBuffer, &rx_element, sizeof(struct mcan_rx_element_fifo_0), &xHigherPriorityTaskWoken);
 
 		// Ack the message, Suspect this allows a new message to be received
 		mcan_rx_fifo_acknowledge(&pHandle->can_module, 0, fifo_receive_index);
@@ -134,7 +151,7 @@ void ccd_can_driver_ReceiveCallback(ccd_can_t* pHandle)
 		{
 			fifo_receive_index = 0;
 		}
-		
+	
 		// Finally, clear interupt flag
 		mcan_clear_interrupt_status(&pHandle->can_module, MCAN_RX_FIFO_0_NEW_MESSAGE);
 	}
@@ -160,4 +177,6 @@ void ccd_can_driver_ReceiveCallback(ccd_can_t* pHandle)
 	if (status & MCAN_FORMAT_ERROR) {
 		mcan_clear_interrupt_status(&pHandle->can_module, MCAN_FORMAT_ERROR);
 	}
+	
+	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
