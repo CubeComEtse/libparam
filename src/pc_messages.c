@@ -14,11 +14,11 @@ bool decode_v2_message(v2_msg_t * dest, uint8_t * buffer, size_t buffer_len){
 		return false;
 	}
 	
-	dest->target = buffer[1] & 0x7F;
-	dest->is_read = (buffer[1] & 0x80) > 0;
+	dest->target = buffer[1] & 0x7F; // endpoint
+	dest->is_read = (buffer[1] & 0x80) > 0; // read or write operation
 	dest->msg_id = buffer[2];
-	dest->data = &buffer[3];
-	dest->data_len = buffer_len - 3;
+	dest->data = &buffer[3]; // pointer to payload
+	dest->data_len = buffer_len - 3; // subtract header size
 	
 	return true;
 }

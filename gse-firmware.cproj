@@ -288,14 +288,14 @@
         <board id="board.user_board.samv71q21" value="Add" config="" content-id="Atmel.ASF" />
       </framework-data>
     </AsfFrameworkConfig>
-    <avrtool>com.atmel.avrdbg.tool.samice</avrtool>
-    <avrtoolserialnumber>801037113</avrtoolserialnumber>
+    <avrtool>com.atmel.avrdbg.tool.atmelice</avrtool>
+    <avrtoolserialnumber>J41800023473</avrtoolserialnumber>
     <avrdeviceexpectedsignature>0xA1220E00</avrdeviceexpectedsignature>
     <com_atmel_avrdbg_tool_atmelice>
       <ToolOptions>
         <InterfaceProperties>
           <JtagDbgClock>7500000</JtagDbgClock>
-          <SwdClock>0</SwdClock>
+          <SwdClock>2000000</SwdClock>
         </InterfaceProperties>
         <InterfaceName>SWD</InterfaceName>
       </ToolOptions>
@@ -304,7 +304,7 @@
       <ToolName>Atmel-ICE</ToolName>
     </com_atmel_avrdbg_tool_atmelice>
     <avrtoolinterface>SWD</avrtoolinterface>
-    <avrtoolinterfaceclock>4000000</avrtoolinterfaceclock>
+    <avrtoolinterfaceclock>2000000</avrtoolinterfaceclock>
     <custom>
       <ToolOptions xmlns="">
         <InterfaceProperties>
@@ -319,7 +319,7 @@
     <com_atmel_avrdbg_tool_samice>
       <ToolOptions>
         <InterfaceProperties>
-          <SwdClock>4000000</SwdClock>
+          <SwdClock>0</SwdClock>
         </InterfaceProperties>
         <InterfaceName>SWD</InterfaceName>
         <JlinkConfigFile>C:\Users\Kolijn\Work\Repos\gse-firmware\jlink.config</JlinkConfigFile>
@@ -891,6 +891,9 @@
     <Compile Include="inc\tmr.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="inc\uart_target.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="inc\version.h">
       <SubType>compile</SubType>
     </Compile>
@@ -898,6 +901,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\tmr.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\uart_target.c">
       <SubType>compile</SubType>
     </Compile>
     <None Include="src\asf.h">

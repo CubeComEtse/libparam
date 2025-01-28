@@ -25,6 +25,8 @@
 #include "can_target.h"
 #include "i2c_target.h"
 #include "local_target.h"
+#include "uart_target.h"
+
 
 #include "Multitester.h"
 
@@ -39,6 +41,7 @@ typedef struct
 	local_target_t * local_target;
 	i2c_target_t * i2c_target;
 	can_target_t * can_target;
+	uart_target_t * uart_target;
 
 	led_indicator_t * led_indicator;
 	

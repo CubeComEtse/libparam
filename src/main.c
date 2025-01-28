@@ -25,6 +25,7 @@
 #include "can_target.h"
 #include "i2c_target.h"
 #include "local_target.h"
+#include "uart_target.h"
 
 
 static bsp_t bsp;
@@ -93,7 +94,7 @@ void SETUP_Task(void* handle)
 	mm_setI2CConfB_ADDR(platform->i2c_target->legacy_address);
 		
 	// Create all the FreeRTOS Tasks
-	// xTaskCreate(GSE_MANAGER_Task, "GSE Manager", 1024, (void*) platform->gse_manager, tskIDLE_PRIORITY + 2, NULL );
+	xTaskCreate(GSE_MANAGER_Task, "GSE Manager", 1024, (void*) platform->gse_manager, tskIDLE_PRIORITY + 2, NULL );
 	
 	xTaskCreate(SERMUX_V3_ReceiveTask, "Serial MUX RX", 512, (void*) platform->sermux_v3, tskIDLE_PRIORITY+2, NULL);
 	xTaskCreate(SERMUX_V3_TransmitTask, "Serial MUX TX", 512, (void*) platform->sermux_v3, tskIDLE_PRIORITY+2, NULL);
@@ -102,6 +103,8 @@ void SETUP_Task(void* handle)
 	
 	xTaskCreate(CANTARGET_TxTask, "CAN TX Task", 512, (void *) platform->can_target, tskIDLE_PRIORITY+3, NULL);
 	xTaskCreate(CANTARGET_RxTask, "CAN RX Task", 512, (void *) platform->can_target, tskIDLE_PRIORITY+1, NULL);
+	
+	xTaskCreate(UARTTARGET_TxTask, "UART TX Task", 512, (void *) platform->uart_target, tskIDLE_PRIORITY+3, NULL);
 	
 	xTaskCreate(LOCALTARGET_Task, "Local Target", 512, (void*) platform->local_target,  tskIDLE_PRIORITY+2, NULL);
 	

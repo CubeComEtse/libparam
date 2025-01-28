@@ -74,6 +74,7 @@ void I2CTARGET_Task(void * handle)
 		
 		if (in_message.target == EP_V2_I2C_CC_CHECKSUM)
 		{
+
 			// This is a i2c message with "checksums". Used by the XTX
 			if ((in_message.is_read) & (in_message.data_len == 4)) {
 
@@ -127,7 +128,7 @@ void I2CTARGET_Task(void * handle)
 		}
 		
 		if (in_message.target == EP_V2_I2C_CC)
-		{			
+		{		
 			// This is an i2c message with either 1 or  2 address bytes, used by the HDRTX
 			if (in_message.is_read & (in_message.data_len == 2)) {
 				uint8_t device_address = pHandle->legacy_address; // Hard coded, from a register
@@ -163,7 +164,6 @@ void I2CTARGET_Task(void * handle)
 		}
 		if (in_message.target == EP_V2_I2C_CC_2)
 		{
-		
 			// This is an i2c message with either 1 or  2 address bytes, used by the HDRTX
 			if (in_message.is_read & (in_message.data_len == 3)) {
 				uint8_t device_address = pHandle->legacy_address; // Hard coded, from a register
