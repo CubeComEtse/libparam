@@ -12,11 +12,10 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "FreeRTOS.h"
+#include "message_buffer.h"
 #include "mcan.h"
 
-
-//Shiny, NEW!
-#define CAN_DRIVER_BUF_SIZE 32
 
 typedef struct {
 	// There are many CAN functions that take the module, not the MCAN instance itself.
@@ -28,14 +27,13 @@ typedef struct {
 	uint32_t gse_address;
 	uint32_t gse_address_mask;
 	
-	uint32_t receivedMessageRead;
-	uint32_t receivedMessageWrite;
-	struct mcan_rx_element_fifo_0 rx_buffer[CAN_DRIVER_BUF_SIZE];
+	MessageBufferHandle_t receiveMessageBuffer;
 } ccd_can_t;
 
 
 void ccd_can_Init(ccd_can_t * pHandle, Mcan * can_device);
 void ccd_can_Send_message(void * vHandle, uint32_t header, uint8_t * data, size_t data_len);
+bool cc_can_Receive_message(void * vHandle, uint32_t * header, uint8_t ** data, size_t * data_len);
 void ccd_can_driver_ReceiveCallback(ccd_can_t* pHandle);
 
 #endif /* CAN_DRIVER_H_ */

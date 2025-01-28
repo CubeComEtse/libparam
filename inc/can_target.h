@@ -15,12 +15,15 @@
 
 #include "FreeRTOS.h"
 #include "message_buffer.h"
+#include "stream_buffer.h"
 
 typedef void (*can_send_message_t)(void * handle, uint32_t header, uint8_t * data, size_t data_len);
+typedef bool (*can_receive_message_t)(void * handle, uint32_t * header, uint8_t ** data, size_t * data_len);
 
 typedef struct {
 	// Used to communicate over i2c
 	can_send_message_t can_send;
+	can_receive_message_t can_receive;
 	void * can_handle;
 	
 	// These values used to be set with a register. They are being deprecated

@@ -35,7 +35,7 @@ uint8_t BSP_u8GetVersion(void);
 void BSP_vSetPin(uint32_t pin, bool value);
 uint32_t BSP_GetUptime(void);
 
-
+void debug(uint8_t val);
 
 
 

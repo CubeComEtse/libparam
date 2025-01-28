@@ -63,7 +63,7 @@
 /** Range: 1..64 */          
 #define CONF_MCAN1_RX_BUFFER_NUM         16      
 /** Range: 1..16 */     
-#define CONF_MCAN1_TX_BUFFER_NUM         4 
+#define CONF_MCAN1_TX_BUFFER_NUM         8 
 /** Range: 1..16 */     
 #define CONF_MCAN1_TX_FIFO_QUEUE_NUM     4     
 /** Range: 1..32 */        
