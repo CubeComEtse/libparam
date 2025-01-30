@@ -16,6 +16,7 @@ static gse_manager_t gse_manager;
 static local_target_t local_target;
 static i2c_target_t i2c_target;
 static can_target_t can_target;
+static uart_target_t uart_target;
 
 static led_indicator_t led_indicator;
 static sermux_v3_t sermux_v3;
@@ -44,6 +45,7 @@ void PLATFORM_vInit(bsp_t * bsp)
 	platform.local_target = &local_target;
 	platform.i2c_target = &i2c_target;
 	platform.can_target = &can_target;
+	platform.uart_target = &uart_target;
 	platform.led_indicator = &led_indicator;
 	platform.sermux_v3 = &sermux_v3;
 	
@@ -101,6 +103,9 @@ void PLATFORM_vInit(bsp_t * bsp)
 	can_target.our_can_address = 0xE9;
 	CANTARGET_Init(&can_target);
 	
+	// TODO: UART
+	UARTTARGET_Init(&uart_target);
+	
 	sermux_v3.in_stream = bsp->telemetry_uart->uart_rx_buffer;
 	sermux_v3.out_stream = bsp->telemetry_uart->uart_tx_buffer;
 	SERMUX_V3_Init(&sermux_v3);
@@ -127,6 +132,9 @@ void PLATFORM_vInit(bsp_t * bsp)
 	// Add CAN Targets
 	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_CAN_CC_2, can_target.incoming_messages, can_target.outgoing_messages);
 	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_CAN_CC_3, can_target.incoming_messages, can_target.outgoing_messages);
+	
+	// Add UART Targets
+	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_UART_CC_2, uart_target.incoming_messages, uart_target.outgoing_messages);
 	
 	REG_vSetPlatformPointer(&platform);
 		

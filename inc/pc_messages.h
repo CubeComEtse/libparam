@@ -26,6 +26,8 @@
 #define EP_V2_CAN_DFA			0x35
 #define EP_V2_CAN_CC_3			0x36
 
+#define EP_V2_UART_CC_2			0x40		
+
 typedef struct{
 	uint8_t target;
 	bool is_read;
