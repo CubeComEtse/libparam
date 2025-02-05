@@ -59,6 +59,12 @@ void ccd_led_driver_SetLed(ccd_led_t * driver, uint8_t r, uint8_t g, uint8_t b){
 	if (driver->uart_disable_fc){
 		driver->uart_disable_fc(driver->uart_handle);
 	}
+	
+	// More hacks:
+	// After disabling the FC, there are still UART bytes on the line that need to 
+	// received and reacted to. This delay allows the UART interrupt to still
+	// fire when these bytes come in. The delay is roughly equal to 2 uart bytes.
+	delay_us(20);
 	    
 	taskENTER_CRITICAL();
 	__disable_irq();

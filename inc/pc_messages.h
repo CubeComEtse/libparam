@@ -19,12 +19,12 @@
 #define EP_V2_I2C_CC			0x30
 #define EP_V2_I2C_CC_CHECKSUM	0x31
 #define EP_V2_I2C_CC_2			0x32
-#define EP_V2_I2C_CC_3			0x33
 
 #define EP_V2_CAN_CC			0x33
 #define EP_V2_CAN_CC_2			0x34
-#define EP_V2_CAN_DFA			0x35
 #define EP_V2_CAN_CC_3			0x36
+
+#define EP_V2_I2C_CC_3			0x37
 
 #define EP_V2_UART_CC_2			0x40		
 

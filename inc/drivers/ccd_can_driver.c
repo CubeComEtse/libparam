@@ -18,7 +18,7 @@ void ccd_can_Init(ccd_can_t * pHandle, Mcan * can_device)
 	
 	struct mcan_config sCanConfig;
 	mcan_get_config_defaults(&sCanConfig);
-	sCanConfig.automatic_retransmission = true;
+	sCanConfig.automatic_retransmission = false;
 	sCanConfig.nonmatching_frames_action_extended = MCAN_NONMATCHING_FRAMES_REJECT;
 	mcan_init(&pHandle->can_module, can_device, &sCanConfig);
 	
