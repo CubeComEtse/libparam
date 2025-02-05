@@ -25,6 +25,7 @@ typedef struct {
 	ccd_i2c_t * util_i2c;
 	ccd_can_t * bus_can;
 	ccd_led_t * led_driver;
+	ccd_uart_t * bus_uart;
 } bsp_t;
 
 

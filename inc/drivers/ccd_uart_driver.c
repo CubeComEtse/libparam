@@ -18,7 +18,10 @@
 
 void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart, const uint32_t baud)
 {
-	assert(driver->cts_pin);
+	if (driver->doFlowControl){
+		assert(driver->cts_pin);	
+	}
+	
 	
 	// Todo: These buffer levels are guesses. Monitor and adjust them
 	driver->uart_rx_buffer = xStreamBufferCreate(512, 1);
@@ -56,6 +59,8 @@ void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart, const uint32_t baud)
 	usart_enable_rx(driver->base_usart);
 
 	// Re-enable Interrupts
+	// US_IER_RXRDY when data is received
+	// US_IER_TXEMPTY when the transmit buffer is empty
 	usart_enable_interrupt(driver->base_usart, US_IER_RXRDY | US_IER_TXEMPTY);
 	
 	// UART needs a priority above FreeRTOS tasks - there is a very small window to copy the received byte out of the register.
@@ -71,8 +76,11 @@ void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart, const uint32_t baud)
 		NVIC_SetPriority(USART2_IRQn, 1);
 		NVIC_EnableIRQ(USART2_IRQn);
 		}
-
-	ccd_uart_StartFlowControl(driver);
+	
+	if (driver->doFlowControl){
+		ccd_uart_StartFlowControl(driver);	
+	}
+	
 }
 
 /*
@@ -89,6 +97,7 @@ inline void ccd_uart_StopFlowControl(void * handle)
 	ioport_set_pin_level(driver->cts_pin, true);
 }
 
+//
 inline void ccd_uart_StartFlowControl(void * handle)
 {
 	ccd_uart_t * driver =  (ccd_uart_t *) handle;
@@ -205,4 +214,35 @@ inline void ccd_uart_InterruptHandler(ccd_uart_t * driver)
 			usart_disable_interrupt(driver->base_usart, US_IER_TXEMPTY);
 		}
 	}
+}
+
+void ccd_b_uart_Send_message(void * vHandle, uint8_t * data, size_t data_len)
+{
+	
+	ccd_uart_t * pHandle = (ccd_uart_t*) vHandle;
+	
+	size_t bytes_sent = xStreamBufferSend(pHandle->uart_tx_buffer, data, data_len, 0);
+	
+	if (bytes_sent > 0){
+		ccd_uart_EnableTXInterrupt(pHandle);
+	}
+
+}
+
+bool ccd_b_uart_Receive_message(void * vHandle, uint8_t ** data, size_t * data_len) 
+{
+	
+	// Tené se nota: double pointers (**) used when a fnc needs to modify the pointer itself 
+	// (i.e. reassign it to point to a different memory location).
+	
+	ccd_uart_t * pHandle = (ccd_uart_t*) vHandle;
+	
+	if (xMessageBufferReceive(pHandle->receiveMessageBuffer, *data, data_len, pdMS_TO_TICKS(200)) > 0)
+	{
+		
+	}
+	
+	//size_t xStreamBufferReceive( StreamBufferHandle_t xStreamBuffer, void * pvRxData, nsize_t xBufferLengthBytes, TickType_t xTicksToWait )
+	//size_t bytes_receive = xStreamBufferReceive(pHandle->uart_rx_buffer, data, data_len, 0);
+	
 }

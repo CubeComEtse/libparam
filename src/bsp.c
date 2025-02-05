@@ -38,12 +38,14 @@ static void BSP_vInitCan(bsp_t * bsp);
 static void BSP_vInitLEDPWM(bsp_t * bsp);
 
 
+
 // Post cleanup
 static ccd_uart_t telemetry_uart;
 static ccd_i2c_t  util_i2c;
 static ccd_i2c_t  bus_i2c;
 static ccd_can_t  bus_can;
 static ccd_led_t led_driver;
+static ccd_uart_t bus_uart;
 
 // The version is only read and set once, during startup
 static uint8_t version;
@@ -122,14 +124,31 @@ static void BSP_vInitUART(bsp_t * bsp){
 	ioport_enable_pin(T_USART_CTS_PIN);
 	ioport_set_pin_dir(T_USART_CTS_PIN, IOPORT_DIR_OUTPUT);
 	
+	telemetry_uart.doFlowControl = 1;
 	telemetry_uart.cts_pin = T_USART_CTS_PIN;
 	ccd_uart_Init(&telemetry_uart, T_USART, T_USART_SPEED);
 	
 	bsp->telemetry_uart = &telemetry_uart;
+	
+	//Board UART
+	ioport_set_pin_mode(B_USART_RX_PIN, IOPORT_MODE_MUX_C);
+	ioport_disable_pin(B_USART_RX_PIN);
+
+	ioport_set_pin_mode(B_USART_TX_PIN, IOPORT_MODE_MUX_C);
+	ioport_disable_pin(B_USART_TX_PIN);
+	
+	bus_uart.doFlowControl = 0;
+	ccd_uart_Init(&bus_uart, B_USART, B_USART_SPEED);
+	
+	bsp->bus_uart = &bus_uart; 
 }
 
 void USART2_Handler(void){
 	ccd_uart_InterruptHandler(&telemetry_uart);
+}
+
+void USART0_Handler(void){
+	ccd_uart_InterruptHandler(&bus_uart);
 }
 
 static void BSP_vInitBusI2C(bsp_t * bsp){

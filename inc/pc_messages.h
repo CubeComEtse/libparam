@@ -34,6 +34,7 @@ typedef struct{
 	uint8_t msg_id;
 	uint8_t * data;
 	uint8_t data_len;
+	uint8_t msg_type;
 } v2_msg_t;
 
 

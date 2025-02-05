@@ -14,29 +14,28 @@
 
 #include "FreeRTOS.h"
 #include "message_buffer.h"
+#include "stream_buffer.h"
 
-// UART Message Structure:
-// Byte 0   - Message Type
-// Byte 1   - Message ID
-// Byte 2   - Destination Address
-// Byte 3   - Source Address
-// Byte 4-5 - Register Address (2 bytes, MSB first)
-// Byte 6-9 - Optional Data (If it is a write)
-
-//typedef void (*uart_send_message_t)(void * handle, uint32_t header, uint8_t * data, size_t data_len);
-// set baud?
+typedef void (*uart_send_message_t)(void * handle, uint8_t * data, size_t data_len);
+typedef bool (*uart_receive_message_t)(void * handle, uint8_t * data, size_t data_len);
 
 typedef struct {
-	//uart_send_message_t uart_send;
+	uart_send_message_t uart_send;
+	uart_receive_message_t uart_receive;
 	
 	void * uart_handle;
+	
+	uint8_t radio_uart_address;
+	uint8_t gse_uart_address;
 	
 	MessageBufferHandle_t incoming_messages;
 	MessageBufferHandle_t outgoing_messages;
 	
 }uart_target_t;
 
+
 void UARTTARGET_Init(uart_target_t * handle);
 void UARTTARGET_TxTask(void * handle);
+void UARTTARGET_RxTask(void * handle);
 
 #endif /* UART_TARGET_H_ */
