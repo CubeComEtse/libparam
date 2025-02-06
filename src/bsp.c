@@ -82,7 +82,11 @@ void BSP_Init(bsp_t * bsp) {
 
 	BSP_vInitGPIO();
 	
+	ioport_set_pin_level(PIN_DEBUG_0, 0);
+	ioport_set_pin_level(PIN_DEBUG_1, 0);
+	ioport_set_pin_level(PIN_DEBUG_2, 0);
 	BSP_InitRTC();
+	ioport_set_pin_level(PIN_DEBUG_0, 1);
 
 	BSP_vInitCan(bsp);
 	
@@ -249,10 +253,19 @@ void BSP_vUsbReset(void) {
 	ioport_set_pin_level(USB_RESET_PIN, 1);
 }
 
+
+enum rtc_setup_state_t{
+	RTC_WAIT_FOR_SEC_STATUS = 0,
+	RTC_REQUEST_UPDATE = 1,
+	RTC_SETUP_DONE = 2,
+};
+
+static enum rtc_setup_state_t rtc_setup_state;
+
 void BSP_InitRTC(void){
 	/*
 	 Since this waits for the RTC's second tick, it can take quite a while to
-	 execute. Instead start this process and use the interruptto do the rest.
+	 execute. Instead start this process and use the interrupt to do the rest.
 	*/
 	// Configure the PIO lines to use the crystal
 	ioport_disable_pin(PIN_XIN32);
@@ -266,30 +279,57 @@ void BSP_InitRTC(void){
 		//Todo: Timeout here!	
 	}	
 	
-	// Reset all the RTC values
-	// First wait for the SEC status bit
-	while ((RTC->RTC_SR & RTC_SR_SEC) == 0){
-		
-	}
+	rtc_setup_state = RTC_WAIT_FOR_SEC_STATUS;
+	// Enable the interrupts required for the upcoming section
+	RTC->RTC_IER |= RTC_IER_SECEN | RTC_IER_ACKEN;
+	NVIC_SetPriority(RTC_IRQn, 3);
+	NVIC_EnableIRQ(RTC_IRQn);
 	
-	// Stop the RTC, request update
-	RTC->RTC_CR = RTC->RTC_CR | RTC_CR_UPDCAL | RTC_CR_UPDTIM;
+
+	/* 
+		We want to reset the Time and Calendar registers. For this, refer to 
+		Figure 27.2 Time/Calendar Update Timing Diagram in the data sheet.
 	
-	// Wait for the ACKUPD bit
-	while ((RTC->RTC_SR & RTC_SR_ACKUPD) == 0){
-	}
-	// Clear the ACKUPD bit
-	RTC->RTC_SCCR = RTC_SR_ACKUPD;
+		We want to do this update in the interrupt, since it takes almost 500 mS, and
+		we want to get the board operational before that.
+	*/
 	
-	//Clear values
-	RTC->RTC_TIMR = 0;
-	RTC->RTC_CALR = 0;
-	
-	// Clear update request bits
-	RTC->RTC_CR = RTC->RTC_CR & ~(RTC_CR_UPDCAL | RTC_CR_UPDTIM);
 }
 
-void RTC_Interrupt (){
+
+void RTC_Handler(){
+	uint32_t status = RTC->RTC_SR;
+	switch (rtc_setup_state)
+	{
+		case RTC_WAIT_FOR_SEC_STATUS:
+			if((status & RTC_SR_SEC) > 0)
+			{
+				// Step 1 Stop the RTC, request update
+				RTC->RTC_CR = RTC->RTC_CR | RTC_CR_UPDCAL | RTC_CR_UPDTIM;
+				rtc_setup_state = RTC_REQUEST_UPDATE;
+			}
+		break;
+		case RTC_REQUEST_UPDATE:
+			if((status & RTC_SR_ACKUPD) > 0)
+			{
+				// Step 2 - Clear the ACKUPD bit
+				RTC->RTC_SCCR = RTC_SR_ACKUPD;
+			
+				// Step 3 Clear values
+				RTC->RTC_TIMR = 0;
+				RTC->RTC_CALR = 0;
+			
+				// Step 4 Clear update request bits
+				RTC->RTC_CR = RTC->RTC_CR & ~(RTC_CR_UPDCAL | RTC_CR_UPDTIM);
+				rtc_setup_state = RTC_SETUP_DONE;
+				RTC->RTC_IER = 0;
+				NVIC_DisableIRQ(RTC_IRQn);
+				
+			}
+			break;
+		case RTC_SETUP_DONE:
+		break;
+	}
 	
 }
 

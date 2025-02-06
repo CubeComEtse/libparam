@@ -43,9 +43,11 @@ int main (void)
 	// 580 ms
 	BSP_Init(&bsp);
 	
+	
 	// Platform Initialization
 	// Takes about 215 uS
 	PLATFORM_vInit(&bsp);
+
 	platform = PLATFORM_get();
 	
 	//Initialize memory map
@@ -53,10 +55,13 @@ int main (void)
 	mm_init();
 	
 	// Configure all external ICs
-	// About 100 us?
+	// About 100 ms?
 	PLATFORM_vConfigureAll(platform);
+	ioport_set_pin_level(PIN_DEBUG_0, 1);
 	
+	// Task creation seems to take 60 uS
 	xTaskCreate(SETUP_Task, "Startup", 1024, NULL, tskIDLE_PRIORITY + 1, NULL );
+	ioport_set_pin_level(PIN_DEBUG_1, 1);
 	
 	vTaskStartScheduler();
 	
@@ -86,6 +91,7 @@ static void DEVTOOLS_Task(void * handle){
 */
 void SETUP_Task(void* handle)
 {
+	ioport_set_pin_level(PIN_DEBUG_2, 1);
 	
 	mm_setBoard_ID(0x634F4243);
 	mm_setFW_Version(0x00020203);
