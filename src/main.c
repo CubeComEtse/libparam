@@ -39,17 +39,21 @@ StaticTask_t sermux_task;
 
 int main (void)
 {
-    // Board initialization
-    BSP_Init(&bsp);
+	// Board initialization
+	// 580 ms
+	BSP_Init(&bsp);
 	
 	// Platform Initialization
+	// Takes about 215 uS
 	PLATFORM_vInit(&bsp);
 	platform = PLATFORM_get();
 	
 	//Initialize memory map
+	// Takes about 3uS
 	mm_init();
 	
 	// Configure all external ICs
+	// About 100 us?
 	PLATFORM_vConfigureAll(platform);
 	
 	xTaskCreate(SETUP_Task, "Startup", 1024, NULL, tskIDLE_PRIORITY + 1, NULL );
@@ -92,6 +96,9 @@ void SETUP_Task(void* handle)
 	mm_setI2CConfA_TRDEL(platform->i2c_target->tr_delay);
 	
 	mm_setI2CConfB_ADDR(platform->i2c_target->legacy_address);
+	
+	mm_setRFRelaysConf_ScanEnabled(true);
+	mm_setMultiConf0_ScanEnabled(true);
 		
 	// Create all the FreeRTOS Tasks
 	xTaskCreate(GSE_MANAGER_Task, "GSE Manager", 1024, (void*) platform->gse_manager, tskIDLE_PRIORITY + 2, NULL );

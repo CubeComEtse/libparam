@@ -53,6 +53,7 @@ void RFRelay_Init(rf_relay_config_t * handle, const uint32_t relay_number)
 	handle->set_channel = 0;
 	handle->desired_channel = 0;
 	handle->channel_num = relay_number;
+	handle->scan_enabled = true;
 	TMR_vCreate(&handle->update_timer, TMR_SOURCE_SYSTICK);
 	if (relay_number == 1){
 		handle->i2c_address = PCA9555_RFSWITCH1_ADDR;
@@ -74,17 +75,20 @@ void RFRelay_Process(rf_relay_config_t * pHandle)
 		case UNINITIALIZED:
 			if (TMR_bIsExpired(&pHandle->update_timer)){
 				TMR_vStart(& pHandle->update_timer, 100);
-				uint8_t register_address = PCA9555_CMD_OUT_PORT0;
-				result = pHandle->i2c_read_function(pHandle->i2c_handle, pHandle->i2c_address, &register_address, 1, buffer, 2);
 				
-				if (result){
-					pHandle->state = INITIALIZING;
-				}
-				if (pHandle->channel_num == 1){
-					mm_setRFRelaysConf_RFSW1_Detected(result);
-				}
-				if (pHandle->channel_num == 2){
-					mm_setRFRelaysConf_RFSW2_Detected(result);
+				if (pHandle->scan_enabled){
+					uint8_t register_address = PCA9555_CMD_OUT_PORT0;
+					result = pHandle->i2c_read_function(pHandle->i2c_handle, pHandle->i2c_address, &register_address, 1, buffer, 2);
+					
+					if (result){
+						pHandle->state = INITIALIZING;
+					}
+					if (pHandle->channel_num == 1){
+						mm_setRFRelaysConf_RFSW1_Detected(result);
+					}
+					if (pHandle->channel_num == 2){
+						mm_setRFRelaysConf_RFSW2_Detected(result);
+					}
 				}
 			}
 				
@@ -143,13 +147,16 @@ void RFRelay_Process(rf_relay_config_t * pHandle)
 			{
 				TMR_vStart(&pHandle->update_timer, 1000);
 					
-				buffer[0] = PCA9555_CMD_OUT_PORT0;
-				buffer[1] = 0x00;
-				buffer[2] = 0x00;
-				result = pHandle->i2c_read_function(pHandle->i2c_handle, pHandle->i2c_address, buffer, 1, &buffer[1], 2);
+				if (pHandle->scan_enabled)
+				{
+					buffer[0] = PCA9555_CMD_OUT_PORT0;
+					buffer[1] = 0x00;
+					buffer[2] = 0x00;
+					result = pHandle->i2c_read_function(pHandle->i2c_handle, pHandle->i2c_address, buffer, 1, &buffer[1], 2);
 					
-				if (!result){
-					pHandle->state = UNINITIALIZED;
+					if (!result){
+						pHandle->state = UNINITIALIZED;
+					}
 				}
 			}
 		
