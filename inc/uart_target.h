@@ -17,7 +17,7 @@
 #include "stream_buffer.h"
 
 typedef void (*uart_send_message_t)(void * handle, uint8_t * data, size_t data_len);
-typedef bool (*uart_receive_message_t)(void * handle, uint8_t * data, size_t data_len);
+typedef size_t (*uart_receive_message_t)(void * handle, uint8_t * data, size_t data_len);
 
 typedef struct {
 	uart_send_message_t uart_send;

@@ -229,20 +229,15 @@ void ccd_b_uart_Send_message(void * vHandle, uint8_t * data, size_t data_len)
 
 }
 
-bool ccd_b_uart_Receive_message(void * vHandle, uint8_t ** data, size_t * data_len) 
+size_t ccd_b_uart_Receive_message(void * vHandle, uint8_t * data, size_t data_len) 
 {
 	
-	// Tené se nota: double pointers (**) used when a fnc needs to modify the pointer itself 
-	// (i.e. reassign it to point to a different memory location).
-	
 	ccd_uart_t * pHandle = (ccd_uart_t*) vHandle;
+
+	size_t bytes_received = xStreamBufferReceive(pHandle->uart_rx_buffer, data, data_len, pdMS_TO_TICKS(500));
 	
-	if (xMessageBufferReceive(pHandle->receiveMessageBuffer, *data, data_len, pdMS_TO_TICKS(200)) > 0)
-	{
-		
-	}
+	return bytes_received;
 	
-	//size_t xStreamBufferReceive( StreamBufferHandle_t xStreamBuffer, void * pvRxData, nsize_t xBufferLengthBytes, TickType_t xTicksToWait )
-	//size_t bytes_receive = xStreamBufferReceive(pHandle->uart_rx_buffer, data, data_len, 0);
+	// returns size of actual streambuffer received
 	
 }

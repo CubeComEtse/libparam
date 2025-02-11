@@ -51,6 +51,6 @@ void ccd_uart_StartFlowControl(void * driver);
 void ccd_uart_StopFlowControl(void * driver);
 
 void ccd_b_uart_Send_message(void * vHandle, uint8_t * data, size_t data_len);
-bool ccd_b_uart_Receive_message(void * vHandle, uint8_t ** data, size_t * data_len);
+size_t ccd_b_uart_Receive_message(void * vHandle, uint8_t * data, size_t data_len);
 
 #endif /* CCD_UART_DRIVER_H_ */

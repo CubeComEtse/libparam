@@ -5,19 +5,21 @@
  *  Author: Tené
  */ 
 
-#include "uart_target.h"
 #include <string.h>
 #include <assert.h>
-#include "pc_messages.h"
+#include <stdio.h>
+#include <stdlib.h>
 
+#include "uart_target.h"
+#include "pc_messages.h"
 #include "FreeRTOS.h"
 #include "task.h"
 
 // Special characters:
-#define FEND	0xC0
-#define FESC    0xDB
-#define TFEND   0xDC
-#define TFESC   0xDD
+#define FEND	0xC0 // 192
+#define FESC    0xDB // 219
+#define TFEND   0xDC // 220 
+#define TFESC   0xDD // 221
 
 
 /*
@@ -89,34 +91,39 @@ void UARTTARGET_TxTask(void * handle)
 			uart_msg_kiss_packet[0] = FEND;
 				
 			//uart_msg_kiss_packet[1] = in_message.msg_id;
-			uart_msg_kiss_packet[1] = in_message.msg_type;
+			uart_msg_kiss_packet[1] = in_message.data[0]; // msg_type
 			uart_msg_kiss_packet[2] = in_message.msg_id;
 			uart_msg_kiss_packet[3] = hnd->gse_uart_address;
 			uart_msg_kiss_packet[4] = hnd->radio_uart_address;
 			uart_msg_kiss_packet[5] = in_message.data[2]; 
 			uart_msg_kiss_packet[6] = in_message.data[3];
 			
-			// Loop through data and replace special characters
-			uint8_t processed_data[4];
-			uint8_t processed_index = 0;
-			for (uint8_t i = 0; i < 4; i++) {
-				if (in_message.data[4 + i] == FEND) {
-					processed_data[processed_index++] = FESC;
-					processed_data[processed_index++] = TFEND;
-					} else if (in_message.data[4 + i] == FESC) {
-					processed_data[processed_index++] = FESC;
-					processed_data[processed_index++] = TFESC;
-					} else {
-					processed_data[processed_index++] = in_message.data[4 + i];
+			// write
+			if (!in_message.is_read)
+			{
+				// Loop through data and replace special characters
+				uint8_t processed_data[4];
+				uint8_t processed_index = 0;
+				for (uint8_t i = 0; i < 4; i++) {
+					if (in_message.data[4 + i] == FEND) {
+						processed_data[processed_index++] = FESC;
+						processed_data[processed_index++] = TFEND;
+						} else if (in_message.data[4 + i] == FESC) {
+						processed_data[processed_index++] = FESC;
+						processed_data[processed_index++] = TFESC;
+						} else {
+						processed_data[processed_index++] = in_message.data[4 + i];
+					}
 				}
+			
+				memcpy(&uart_msg_kiss_packet[7], processed_data, processed_index);
+				uart_msg_kiss_packet[7 + processed_index] = FEND;
+				hnd->uart_send(hnd->uart_handle, uart_msg_kiss_packet, 8 + processed_index);
+			} else {
+				uart_msg_kiss_packet[7] = FEND;
+				hnd->uart_send(hnd->uart_handle, uart_msg_kiss_packet, 8);
 			}
-			
-			memcpy(&uart_msg_kiss_packet[7], processed_data, processed_index);
-			uart_msg_kiss_packet[7 + processed_index] = FEND;
-
-			
-			hnd->uart_send(hnd->uart_handle, uart_msg_kiss_packet, 8 + processed_index);
-			//hnd->uart_send(hnd->uart_handle, &in_message.data[2], in_message.data[1]);	
+				
 		}
 		
 	}
@@ -127,62 +134,112 @@ void UARTTARGET_RxTask(void * handle)
 {
 	uart_target_t * hnd = (uart_target_t *) handle;
 	
-	uint8_t rx_buffer[32] = {0};
-	v2_msg_t out_message;
-	size_t rx_length;
+	uint8_t rx_buffer[32];
+	size_t rx_max_length = 32;
+	uint8_t uart_msg_kiss_packet[32];
+	uint8_t out_message_data[32];
+	size_t packet_index = 0;
+	bool receiving = false;
+	bool escaped = false;
+
 	
 	while(1){
 		vTaskDelay(pdMS_TO_TICKS(200));
 		
+		//1. call uart_receive to get bytes
 		
-		//if (!hnd->uart_receive(hnd->uart_handle, rx_buffer, sizeof(rx_buffer))) {
-			//continue;
-		//}
-		//
-		//if (rx_length == 0)
-		//{
-			//continue;
-		//}
-		//
-		//if (rx_buffer[0] != FEND || rx_buffer[rx_length - 1] != FEND) {
-			//continue; // Invalid frame
-		//}
-		//
-		//// Process the packet
-		//uint8_t processed_data[32] = {0};
-		//uint8_t processed_index = 0;
-		//
-		//for (size_t i = 1; i < rx_length - 1; i++) {
-			//if (rx_buffer[i] == FESC) {
-				//if (rx_buffer[i + 1] == TFEND) {
-					//processed_data[processed_index++] = FEND;
-					//} else if (rx_buffer[i + 1] == TFESC) {
-					//processed_data[processed_index++] = FESC;
-				//}
-				//i++; // Skip next byte since it's part of escape sequence
-				//} else {
-				//processed_data[processed_index++] = rx_buffer[i];
-			//}
-		//}
-		//
-		//// Populate v2_msg_t structure
-		//out_message.msg_type = processed_data[0];
-		//out_message.msg_id = processed_data[1];
-		//out_message.target = EP_V2_UART_CC_2; 
-		//out_message.is_read = (processed_data[5] == 0); // Determine read/write
-		//out_message.data = &processed_data[5];
-		//out_message.data_len = processed_index - 5;
-		//
-		//// Encode and send to message buffer
-		//uint8_t encoded_message[32];
-		//size_t encoded_length = encode_v2_message(encoded_message, &out_message);
-		//
-		//if (encoded_length > 0) {
-			//xMessageBufferSend(hnd->incoming_messages, encoded_message, encoded_length, portMAX_DELAY);
-		//}
+		size_t received_bytes_length = hnd->uart_receive(hnd->uart_handle, rx_buffer, rx_max_length);
 		
+		if (received_bytes_length == 0){
+			continue;
+		}
+		
+		//3. disassemble kiss packet -> out_message
+		for (size_t i = 0; i < received_bytes_length; i++)
+		{
+			uint8_t rx_byte = rx_buffer[i];
+			
+			//start receiving only when start byte (FEND) is received
+			if (!receiving){
+				if (rx_byte == FEND){
+					receiving = true;
+					packet_index = 0;
+					continue;
+				}
+			} else {
+				
+				if (rx_byte == FEND){
+					// End of packet received
+					
+					if (packet_index < 6){
+						// Invalid length, expecting (excluding the start&end FEND):
+						//[0] msg type
+						//[1] msg id
+						//[2] src address
+						//[3] dest address
+						//[4] reg. address msb
+						//[5] reg. address lsb
+						//[6-x] data
 
-		
+						// "throw away" message, restart receiving
+						receiving = false;
+						continue;
+					}
+					
+					// Full packet received
+					v2_msg_t out_message;
+					out_message.msg_id = uart_msg_kiss_packet[1];
+					out_message.target = EP_V2_UART_CC_2;
+					out_message.data_len = packet_index - 2; // data length of entire msg (not only data+addresses)
+					out_message.data = out_message_data;
+					
+					out_message.data[0] = uart_msg_kiss_packet[0]; // msg type
+					out_message.data[1] = 6; // can this be hardcoded?
+					out_message.data[2] = uart_msg_kiss_packet[4]; // address msb
+					out_message.data[3] = uart_msg_kiss_packet[5]; // address lsb
+					
+					uint8_t index = 4;
+					for (size_t j = 6; j < packet_index; j++) {
+						out_message.data[index++] = uart_msg_kiss_packet[j];
+					}
+					
+					uint8_t encoded[32];
+					size_t encoded_len = encode_v2_message(encoded, &out_message);
+					
+					xMessageBufferSend(hnd->outgoing_messages, encoded, encoded_len, 0);
+					
+					//xMessageBufferSend(hnd->outgoing_messages, &out_message, sizeof(out_message), portMAX_DELAY);
+					receiving = false;
+					continue;
+					
+					
+				}
+				
+				// Handle escaping
+				if (rx_byte == FESC) {
+					escaped = true;
+					continue;
+				}
+				
+				// fix
+				if (escaped) {
+					if (rx_byte == TFEND) {
+						rx_byte = FEND;
+						} else if (rx_byte == TFESC) {
+						rx_byte = FESC;
+					}
+					escaped = false;
+				}
+				
+				// Store received bytes
+				if (packet_index < sizeof(uart_msg_kiss_packet)){
+					uart_msg_kiss_packet[packet_index++] = rx_byte;
+				}		
+				
+			}
+			
+		}
+
 	}
 
 }

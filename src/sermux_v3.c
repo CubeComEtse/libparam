@@ -57,7 +57,7 @@ void SERMUX_V3_AddTarget(sermux_v3_t * handle, const uint8_t number, MessageBuff
 	handle->num_targets += 1;
 }
 
-
+// PC->GSE
 void SERMUX_V3_ReceiveTask(void * handle)
 {
 	sermux_v3_t* hnd = (sermux_v3_t *) handle;

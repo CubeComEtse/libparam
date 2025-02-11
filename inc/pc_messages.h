@@ -34,7 +34,7 @@ typedef struct{
 	uint8_t msg_id;
 	uint8_t * data;
 	uint8_t data_len;
-	uint8_t msg_type;
+	//uint8_t msg_type; //i2c doesn't have msg_type
 } v2_msg_t;
 
 
