@@ -76,17 +76,16 @@ void I2CTARGET_Task(void * handle)
 		{
 
 			// This is a i2c message with "checksums". Used by the XTX
-			if ((in_message.is_read) & (in_message.data_len == 4)) {
+			if ((in_message.is_read)) {
 
-				memcpy(read_buffer, in_message.data, 4);
+				memcpy(read_buffer, in_message.data, in_message.data_len);
 
 				uint8_t address_with_checksum[3];
 				address_with_checksum[0] = in_message.data[1];
-				address_with_checksum[1] = 0;
-				address_with_checksum[2] = in_message.data[1];
+				address_with_checksum[1] = in_message.data[1];
+				address_with_checksum[2] = 0;
 				
-				if (pHandle->i2c_read(pHandle->i2c_handle, in_message.data[0], address_with_checksum, 3, &read_buffer[4], in_message.data[3] + 2)){
-					// Todo: verify the checksum
+				if (pHandle->i2c_read(pHandle->i2c_handle, pHandle->legacy_address, address_with_checksum, 3, &read_buffer[4], in_message.data[3] + 2)){
 					
 					// Create the received message
 					out_message.target = in_message.target;
@@ -103,7 +102,7 @@ void I2CTARGET_Task(void * handle)
 					}
 				}
 			}
-			if (!in_message.is_read)
+			else
 			{
 				// Its a write
 				
@@ -164,10 +163,15 @@ void I2CTARGET_Task(void * handle)
 		}
 		if (in_message.target == EP_V2_I2C_CC_2)
 		{
+			
 			// This is an i2c message with either 1 or  2 address bytes, used by the HDRTX
 			if (in_message.is_read & (in_message.data_len == 3)) {
 				uint8_t device_address = pHandle->legacy_address; // Hard coded, from a register
+				
+				// Byte 0 & Byte 1 - Address
 				uint8_t * address = &in_message.data[0];
+				
+				// Byte 2 - Read length
 				uint8_t read_length = in_message.data[2];
 				
 				// Copy the register address and length to the buffer
@@ -197,7 +201,8 @@ void I2CTARGET_Task(void * handle)
 				
 				if (in_message.target == EP_V2_I2C_CC_2)
 				{
-					// Its a write, just do it directly. The PC will place the address and data next to each other
+					// Its a write, just do it directly. The address bytes and the data
+					// bytes are already next to each other.
 					pHandle->i2c_write(pHandle->i2c_handle, device_address, in_message.data, in_message.data_len);
 				}
 			}

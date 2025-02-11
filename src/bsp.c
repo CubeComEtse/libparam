@@ -250,6 +250,10 @@ void BSP_vUsbReset(void) {
 }
 
 void BSP_InitRTC(void){
+	/*
+	 Since this waits for the RTC's second tick, it can take quite a while to
+	 execute. Instead start this process and use the interruptto do the rest.
+	*/
 	// Configure the PIO lines to use the crystal
 	ioport_disable_pin(PIN_XIN32);
 	ioport_disable_pin(PIN_XOUT32);
@@ -283,6 +287,10 @@ void BSP_InitRTC(void){
 	
 	// Clear update request bits
 	RTC->RTC_CR = RTC->RTC_CR & ~(RTC_CR_UPDCAL | RTC_CR_UPDTIM);
+}
+
+void RTC_Interrupt (){
+	
 }
 
 uint32_t BSP_GetUptime(void){

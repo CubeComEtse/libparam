@@ -706,6 +706,8 @@
     <Folder Include="src\ASF\thirdparty\CMSIS\Include\" />
     <Folder Include="src\ASF\thirdparty\CMSIS\Lib\" />
     <Folder Include="src\ASF\thirdparty\CMSIS\Lib\GCC\" />
+    <Folder Include="src\FreeRTOS-Plus-Trace\" />
+    <Folder Include="src\FreeRTOS-Plus-Trace\Include\" />
     <Folder Include="src\freertos\" />
     <Folder Include="src\freertos\portable\" />
     <Folder Include="src\freertos\portable\GCC\" />
