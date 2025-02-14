@@ -109,6 +109,8 @@ void LEDIndicator_Setup(led_indicator_t * handle)
 	handle->spline_to_use = &power_on_breathing;
 	handle->desired_board_state = LED_UNUSED;
 	handle->board_state = LED_UNUSED;
+	
+	ccd_led_driver_SetLed(handle->led_driver, 0, 0, 0);
 }
 
 void LEDIndicator_SetStatic(led_indicator_t * handle)

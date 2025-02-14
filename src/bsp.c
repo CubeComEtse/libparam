@@ -86,14 +86,13 @@ void BSP_Init(bsp_t * bsp) {
 	ioport_set_pin_level(PIN_DEBUG_1, 0);
 	ioport_set_pin_level(PIN_DEBUG_2, 0);
 	BSP_InitRTC();
-	ioport_set_pin_level(PIN_DEBUG_0, 1);
 
 	BSP_vInitCan(bsp);
 	
 	BSP_vInitLEDPWM(bsp);
 
 	// So - we used to reset the USB connection when we power cycle. I don't think this is needed anymore?
-	BSP_vUsbReset();
+	// BSP_vUsbReset();
 	
 	// Make all interrupt prioirty bits preempt bits, rather than sub-prioirty bits.
 	// According to https://www.freertos.org/Documentation/02-Kernel/03-Supported-devices/04-Demos/ARM-Cortex/RTOS-Cortex-M3-M4
