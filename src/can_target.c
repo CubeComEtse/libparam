@@ -114,11 +114,6 @@ void CANTARGET_RxTask(void * vHandle)
 	assert(vHandle);
 	can_target_t * pHandle = (can_target_t *) vHandle;
 		
-	uint8_t rx_buffer[32];
-	v2_msg_t in_message;
-		
-	bool decode_successfull;
-		
 	while(1){
 		
 		// Wait for a message to be received over CAN

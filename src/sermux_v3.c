@@ -128,7 +128,7 @@ void SERMUX_V3_ReceiveTask(void * handle)
 					{
 						uint8_t msg_len = hnd->rx_block.buffer[curr_msg_index];
 						uint8_t msg_target = hnd->rx_block.buffer[curr_msg_index +1];
-						uint8_t msg_id = hnd->rx_block.buffer[curr_msg_index + 2];
+						//uint8_t msg_id = hnd->rx_block.buffer[curr_msg_index + 2];
 						// bool dirBit = ((msg_target & 0x80) > 0);
 						msg_target = msg_target & 0x7F;
 						
