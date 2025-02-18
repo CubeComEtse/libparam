@@ -1,5 +1,5 @@
-#ifndef REGISTER_MAP_H
-#define REGISTER_MAP_H
+#ifndef OBC_H
+#define OBC_H
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -62,6 +62,14 @@ typedef enum {
 #define REG_MULTICONF0_AUTOCLR_Msk                   (0x0001 << REG_MULTICONF0_AUTOCLR_Pos)
 #define REG_MULTICONF0_SCANENABLED_Pos               (2UL)
 #define REG_MULTICONF0_SCANENABLED_Msk               (0x0001 << REG_MULTICONF0_SCANENABLED_Pos)
+#define REG_MULTICONF0_FANPOS1_Pos                   (4UL)
+#define REG_MULTICONF0_FANPOS1_Msk                   (0x0001 << REG_MULTICONF0_FANPOS1_Pos)
+#define REG_MULTICONF0_FANPOS2_Pos                   (5UL)
+#define REG_MULTICONF0_FANPOS2_Msk                   (0x0001 << REG_MULTICONF0_FANPOS2_Pos)
+#define REG_MULTICONF0_FANPOS3_Pos                   (6UL)
+#define REG_MULTICONF0_FANPOS3_Msk                   (0x0001 << REG_MULTICONF0_FANPOS3_Pos)
+#define REG_MULTICONF0_FANPOS4_Pos                   (7UL)
+#define REG_MULTICONF0_FANPOS4_Msk                   (0x0001 << REG_MULTICONF0_FANPOS4_Pos)
 
 /*************** Bit definition for ConfTempSense register *******************/
 #define REG_CONFTEMPSENSE_ENABLEMEASUREMENTS_Pos     (0UL)
@@ -78,6 +86,32 @@ typedef enum {
 #define REG_PC104PINS_NRST_Msk                       (0x0001 << REG_PC104PINS_NRST_Pos)
 #define REG_PC104PINS_RDY_Pos                        (2UL)
 #define REG_PC104PINS_RDY_Msk                        (0x0001 << REG_PC104PINS_RDY_Pos)
+
+/*************** Bit definition for XTXMultitester register ******************/
+#define REG_XTXMULTITESTER_POS1_XTX_EN_Pos           (0UL)
+#define REG_XTXMULTITESTER_POS1_XTX_EN_Msk           (0x0001 << REG_XTXMULTITESTER_POS1_XTX_EN_Pos)
+#define REG_XTXMULTITESTER_POS1_XTX_POWER_Pos        (1UL)
+#define REG_XTXMULTITESTER_POS1_XTX_POWER_Msk        (0x0001 << REG_XTXMULTITESTER_POS1_XTX_POWER_Pos)
+#define REG_XTXMULTITESTER_POS1_XTX_NRESET_Pos       (2UL)
+#define REG_XTXMULTITESTER_POS1_XTX_NRESET_Msk       (0x0001 << REG_XTXMULTITESTER_POS1_XTX_NRESET_Pos)
+#define REG_XTXMULTITESTER_POS2_XTX_EN_Pos           (4UL)
+#define REG_XTXMULTITESTER_POS2_XTX_EN_Msk           (0x0001 << REG_XTXMULTITESTER_POS2_XTX_EN_Pos)
+#define REG_XTXMULTITESTER_POS2_XTX_POWER_Pos        (5UL)
+#define REG_XTXMULTITESTER_POS2_XTX_POWER_Msk        (0x0001 << REG_XTXMULTITESTER_POS2_XTX_POWER_Pos)
+#define REG_XTXMULTITESTER_POS2_XTX_NRESET_Pos       (6UL)
+#define REG_XTXMULTITESTER_POS2_XTX_NRESET_Msk       (0x0001 << REG_XTXMULTITESTER_POS2_XTX_NRESET_Pos)
+#define REG_XTXMULTITESTER_POS3_XTX_EN_Pos           (8UL)
+#define REG_XTXMULTITESTER_POS3_XTX_EN_Msk           (0x0001 << REG_XTXMULTITESTER_POS3_XTX_EN_Pos)
+#define REG_XTXMULTITESTER_POS3_XTX_POWER_Pos        (9UL)
+#define REG_XTXMULTITESTER_POS3_XTX_POWER_Msk        (0x0001 << REG_XTXMULTITESTER_POS3_XTX_POWER_Pos)
+#define REG_XTXMULTITESTER_POS3_XTX_NRESET_Pos       (10UL)
+#define REG_XTXMULTITESTER_POS3_XTX_NRESET_Msk       (0x0001 << REG_XTXMULTITESTER_POS3_XTX_NRESET_Pos)
+#define REG_XTXMULTITESTER_POS4_XTX_EN_Pos           (12UL)
+#define REG_XTXMULTITESTER_POS4_XTX_EN_Msk           (0x0001 << REG_XTXMULTITESTER_POS4_XTX_EN_Pos)
+#define REG_XTXMULTITESTER_POS4_XTX_POWER_Pos        (13UL)
+#define REG_XTXMULTITESTER_POS4_XTX_POWER_Msk        (0x0001 << REG_XTXMULTITESTER_POS4_XTX_POWER_Pos)
+#define REG_XTXMULTITESTER_POS4_XTX_NRESET_Pos       (14UL)
+#define REG_XTXMULTITESTER_POS4_XTX_NRESET_Msk       (0x0001 << REG_XTXMULTITESTER_POS4_XTX_NRESET_Pos)
 
 /*************** Bit definition for RFRelaysConf register ********************/
 #define REG_RFRELAYSCONF_RFSW1_DETECTED_Pos          (0UL)
@@ -118,30 +152,34 @@ typedef enum {
 #define REG_MEASUREPOWER_POWER_Msk                   (0xffffffff << REG_MEASUREPOWER_POWER_Pos)
 
 /*************** Bit definition for TE_Config register ***********************/
-#define REG_TE_CONFIG_SEL_CAN0_Pos                   (0UL)
-#define REG_TE_CONFIG_SEL_CAN0_Msk                   (0x0001 << REG_TE_CONFIG_SEL_CAN0_Pos)
-#define REG_TE_CONFIG_SEL_CAN1_Pos                   (1UL)
-#define REG_TE_CONFIG_SEL_CAN1_Msk                   (0x0001 << REG_TE_CONFIG_SEL_CAN1_Pos)
-#define REG_TE_CONFIG_SEL_RS485_Pos                  (2UL)
-#define REG_TE_CONFIG_SEL_RS485_Msk                  (0x0001 << REG_TE_CONFIG_SEL_RS485_Pos)
-#define REG_TE_CONFIG_SEL_I2C_Pos                    (3UL)
-#define REG_TE_CONFIG_SEL_I2C_Msk                    (0x0001 << REG_TE_CONFIG_SEL_I2C_Pos)
-#define REG_TE_CONFIG_SEL_RS422_Pos                  (4UL)
-#define REG_TE_CONFIG_SEL_RS422_Msk                  (0x0001 << REG_TE_CONFIG_SEL_RS422_Pos)
-#define REG_TE_CONFIG_SEL_SPI_Pos                    (5UL)
-#define REG_TE_CONFIG_SEL_SPI_Msk                    (0x0001 << REG_TE_CONFIG_SEL_SPI_Pos)
-#define REG_TE_CONFIG_SEL_UART_Pos                   (6UL)
-#define REG_TE_CONFIG_SEL_UART_Msk                   (0x0001 << REG_TE_CONFIG_SEL_UART_Pos)
-#define REG_TE_CONFIG_POWER_Pos                      (8UL)
-#define REG_TE_CONFIG_POWER_Msk                      (0x0001 << REG_TE_CONFIG_POWER_Pos)
-#define REG_TE_CONFIG_ENABLE_Pos                     (9UL)
-#define REG_TE_CONFIG_ENABLE_Msk                     (0x0001 << REG_TE_CONFIG_ENABLE_Pos)
-#define REG_TE_CONFIG_NRESET_Pos                     (10UL)
-#define REG_TE_CONFIG_NRESET_Msk                     (0x0001 << REG_TE_CONFIG_NRESET_Pos)
-#define REG_TE_CONFIG_COMM_TR_Pos                    (11UL)
-#define REG_TE_CONFIG_COMM_TR_Msk                    (0x0001 << REG_TE_CONFIG_COMM_TR_Pos)
-#define REG_TE_CONFIG_TYPE_Pos                       (12UL)
+#define REG_TE_CONFIG_SCANENABLED_Pos                (0UL)
+#define REG_TE_CONFIG_SCANENABLED_Msk                (0x0001 << REG_TE_CONFIG_SCANENABLED_Pos)
+#define REG_TE_CONFIG_DETECTED_Pos                   (1UL)
+#define REG_TE_CONFIG_DETECTED_Msk                   (0x0001 << REG_TE_CONFIG_DETECTED_Pos)
+#define REG_TE_CONFIG_TYPE_Pos                       (2UL)
 #define REG_TE_CONFIG_TYPE_Msk                       (0x000f << REG_TE_CONFIG_TYPE_Pos)
+#define REG_TE_CONFIG_SEL_CAN0_Pos                   (16UL)
+#define REG_TE_CONFIG_SEL_CAN0_Msk                   (0x0001 << REG_TE_CONFIG_SEL_CAN0_Pos)
+#define REG_TE_CONFIG_SEL_CAN1_Pos                   (17UL)
+#define REG_TE_CONFIG_SEL_CAN1_Msk                   (0x0001 << REG_TE_CONFIG_SEL_CAN1_Pos)
+#define REG_TE_CONFIG_SEL_RS485_Pos                  (18UL)
+#define REG_TE_CONFIG_SEL_RS485_Msk                  (0x0001 << REG_TE_CONFIG_SEL_RS485_Pos)
+#define REG_TE_CONFIG_SEL_I2C_Pos                    (19UL)
+#define REG_TE_CONFIG_SEL_I2C_Msk                    (0x0001 << REG_TE_CONFIG_SEL_I2C_Pos)
+#define REG_TE_CONFIG_SEL_RS422_Pos                  (20UL)
+#define REG_TE_CONFIG_SEL_RS422_Msk                  (0x0001 << REG_TE_CONFIG_SEL_RS422_Pos)
+#define REG_TE_CONFIG_SEL_SPI_Pos                    (21UL)
+#define REG_TE_CONFIG_SEL_SPI_Msk                    (0x0001 << REG_TE_CONFIG_SEL_SPI_Pos)
+#define REG_TE_CONFIG_SEL_UART_Pos                   (22UL)
+#define REG_TE_CONFIG_SEL_UART_Msk                   (0x0001 << REG_TE_CONFIG_SEL_UART_Pos)
+#define REG_TE_CONFIG_POWER_Pos                      (24UL)
+#define REG_TE_CONFIG_POWER_Msk                      (0x0001 << REG_TE_CONFIG_POWER_Pos)
+#define REG_TE_CONFIG_ENABLE_Pos                     (25UL)
+#define REG_TE_CONFIG_ENABLE_Msk                     (0x0001 << REG_TE_CONFIG_ENABLE_Pos)
+#define REG_TE_CONFIG_NRESET_Pos                     (26UL)
+#define REG_TE_CONFIG_NRESET_Msk                     (0x0001 << REG_TE_CONFIG_NRESET_Pos)
+#define REG_TE_CONFIG_COMM_TR_Pos                    (27UL)
+#define REG_TE_CONFIG_COMM_TR_Msk                    (0x0001 << REG_TE_CONFIG_COMM_TR_Pos)
 
 /*************** Bit definition for Multitester register *********************/
 #define REG_MULTITESTER_POS1_ENABLE_Pos              (0UL)
@@ -183,6 +221,7 @@ typedef struct {
     uint32_t FW_Version;
     uint32_t HW_Version;
     uint32_t Scratchpad;
+    uint32_t Supported_Boards;
     uint32_t Configured_Boards;
     uint32_t Uptime;
     uint32_t Event_ConfA;
@@ -202,6 +241,7 @@ typedef struct {
     uint32_t ConfTempSense;
     uint32_t CANConfA;
     uint32_t PC104Pins;
+    uint32_t XTXMultitester;
     uint32_t RFRelaysConf;
     uint32_t MultiConf1_Status;
     uint32_t MultiConf1_Set;
@@ -241,16 +281,16 @@ typedef struct {
     uint32_t CSBoard_Current7I2;
     uint32_t TE_Addr_0;
     uint32_t TE_Addr_0_Set;
-    uint32_t TE_Addr_0_Clr;
+    uint32_t TE_Addr_0_Clear;
     uint32_t TE_Addr_1;
     uint32_t TE_Addr_1_Set;
-    uint32_t TE_Addr_1_Clr;
+    uint32_t TE_Addr_1_Clear;
     uint32_t TE_Addr_2;
     uint32_t TE_Addr_2_Set;
-    uint32_t TE_Addr_2_Clr;
+    uint32_t TE_Addr_2_Clear;
     uint32_t TE_Addr_3;
     uint32_t TE_Addr_3_Set;
-    uint32_t TE_Addr_3_Clr;
+    uint32_t TE_Addr_3_Clear;
 } mm_t;
 
 typedef enum {
@@ -258,6 +298,7 @@ typedef enum {
     reg_FW_Version_addr = 0x11,
     reg_HW_Version_addr = 0x12,
     reg_Scratchpad_addr = 0x13,
+    reg_Supported_Boards_addr = 0x14,
     reg_Configured_Boards_addr = 0x15,
     reg_Uptime_addr = 0x16,
     reg_Event_ConfA_addr = 0x17,
@@ -277,6 +318,7 @@ typedef enum {
     reg_ConfTempSense_addr = 0x2C,
     reg_CANConfA_addr = 0x2D,
     reg_PC104Pins_addr = 0x30,
+    reg_XTXMultitester_addr = 0x31,
     reg_RFRelaysConf_addr = 0x32,
     reg_MultiConf1_Status_addr = 0x33,
     reg_MultiConf1_Set_addr = 0x34,
@@ -316,16 +358,16 @@ typedef enum {
     reg_CSBoard_Current7I2_addr = 0x6F,
     reg_TE_Addr_0_addr = 0x80,
     reg_TE_Addr_0_Set_addr = 0x81,
-    reg_TE_Addr_0_Clr_addr = 0x82,
+    reg_TE_Addr_0_Clear_addr = 0x82,
     reg_TE_Addr_1_addr = 0x83,
     reg_TE_Addr_1_Set_addr = 0x84,
-    reg_TE_Addr_1_Clr_addr = 0x85,
+    reg_TE_Addr_1_Clear_addr = 0x85,
     reg_TE_Addr_2_addr = 0x86,
     reg_TE_Addr_2_Set_addr = 0x87,
-    reg_TE_Addr_2_Clr_addr = 0x88,
+    reg_TE_Addr_2_Clear_addr = 0x88,
     reg_TE_Addr_3_addr = 0x89,
     reg_TE_Addr_3_Set_addr = 0x8A,
-    reg_TE_Addr_3_Clr_addr = 0x8B,
+    reg_TE_Addr_3_Clear_addr = 0x8B,
 } mm_register_address_t;
 
 typedef enum {
@@ -398,6 +440,11 @@ mm_response_t mm_getHW_Version_patch_versionFrom(uint8_t * dest, const uint32_t 
 mm_response_t mm_setScratchpad(const uint32_t val);
 mm_response_t mm_getScratchpad(uint32_t * dest);
 mm_response_t mm_getScratchpadFrom(uint32_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for Supported_Boards register **************************************************************/
+mm_response_t mm_setSupported_Boards(const uint32_t val);
+mm_response_t mm_getSupported_Boards(uint32_t * dest);
+mm_response_t mm_getSupported_BoardsFrom(uint32_t * dest, const uint32_t source);
 
 /*************** Get/Set functions for Configured_Boards register *************************************************************/
 mm_response_t mm_setConfigured_Boards(const uint32_t val);
@@ -545,6 +592,18 @@ mm_response_t mm_getMultiConf0_AutoCLRFrom(mm_enabled_t * dest, const uint32_t s
 mm_response_t mm_setMultiConf0_ScanEnabled(const mm_enabled_t val);
 mm_response_t mm_getMultiConf0_ScanEnabled(mm_enabled_t * dest);
 mm_response_t mm_getMultiConf0_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf0_FanPos1(const mm_enabled_t val);
+mm_response_t mm_getMultiConf0_FanPos1(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf0_FanPos1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf0_FanPos2(const mm_enabled_t val);
+mm_response_t mm_getMultiConf0_FanPos2(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf0_FanPos2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf0_FanPos3(const mm_enabled_t val);
+mm_response_t mm_getMultiConf0_FanPos3(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf0_FanPos3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMultiConf0_FanPos4(const mm_enabled_t val);
+mm_response_t mm_getMultiConf0_FanPos4(mm_enabled_t * dest);
+mm_response_t mm_getMultiConf0_FanPos4From(mm_enabled_t * dest, const uint32_t source);
 
 /*************** Get/Set functions for ConfTempSense register *****************************************************************/
 mm_response_t mm_setConfTempSense(const uint32_t val);
@@ -572,6 +631,46 @@ mm_response_t mm_getPC104Pins_nRSTFrom(mm_enabled_t * dest, const uint32_t sourc
 mm_response_t mm_setPC104Pins_RDY(const mm_enabled_t val);
 mm_response_t mm_getPC104Pins_RDY(mm_enabled_t * dest);
 mm_response_t mm_getPC104Pins_RDYFrom(mm_enabled_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for XTXMultitester register ****************************************************************/
+mm_response_t mm_setXTXMultitester(const uint32_t val);
+mm_response_t mm_getXTXMultitester(uint32_t * dest);
+mm_response_t mm_setXTXMultitester_POS1_XTX_EN(const mm_enabled_t val);
+mm_response_t mm_getXTXMultitester_POS1_XTX_EN(mm_enabled_t * dest);
+mm_response_t mm_getXTXMultitester_POS1_XTX_ENFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setXTXMultitester_POS1_XTX_Power(const mm_enabled_t val);
+mm_response_t mm_getXTXMultitester_POS1_XTX_Power(mm_enabled_t * dest);
+mm_response_t mm_getXTXMultitester_POS1_XTX_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setXTXMultitester_POS1_XTX_nReset(const mm_enabled_t val);
+mm_response_t mm_getXTXMultitester_POS1_XTX_nReset(mm_enabled_t * dest);
+mm_response_t mm_getXTXMultitester_POS1_XTX_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setXTXMultitester_POS2_XTX_EN(const mm_enabled_t val);
+mm_response_t mm_getXTXMultitester_POS2_XTX_EN(mm_enabled_t * dest);
+mm_response_t mm_getXTXMultitester_POS2_XTX_ENFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setXTXMultitester_POS2_XTX_Power(const mm_enabled_t val);
+mm_response_t mm_getXTXMultitester_POS2_XTX_Power(mm_enabled_t * dest);
+mm_response_t mm_getXTXMultitester_POS2_XTX_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setXTXMultitester_POS2_XTX_nReset(const mm_enabled_t val);
+mm_response_t mm_getXTXMultitester_POS2_XTX_nReset(mm_enabled_t * dest);
+mm_response_t mm_getXTXMultitester_POS2_XTX_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setXTXMultitester_POS3_XTX_EN(const mm_enabled_t val);
+mm_response_t mm_getXTXMultitester_POS3_XTX_EN(mm_enabled_t * dest);
+mm_response_t mm_getXTXMultitester_POS3_XTX_ENFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setXTXMultitester_POS3_XTX_Power(const mm_enabled_t val);
+mm_response_t mm_getXTXMultitester_POS3_XTX_Power(mm_enabled_t * dest);
+mm_response_t mm_getXTXMultitester_POS3_XTX_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setXTXMultitester_POS3_XTX_nReset(const mm_enabled_t val);
+mm_response_t mm_getXTXMultitester_POS3_XTX_nReset(mm_enabled_t * dest);
+mm_response_t mm_getXTXMultitester_POS3_XTX_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setXTXMultitester_POS4_XTX_EN(const mm_enabled_t val);
+mm_response_t mm_getXTXMultitester_POS4_XTX_EN(mm_enabled_t * dest);
+mm_response_t mm_getXTXMultitester_POS4_XTX_ENFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setXTXMultitester_POS4_XTX_Power(const mm_enabled_t val);
+mm_response_t mm_getXTXMultitester_POS4_XTX_Power(mm_enabled_t * dest);
+mm_response_t mm_getXTXMultitester_POS4_XTX_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setXTXMultitester_POS4_XTX_nReset(const mm_enabled_t val);
+mm_response_t mm_getXTXMultitester_POS4_XTX_nReset(mm_enabled_t * dest);
+mm_response_t mm_getXTXMultitester_POS4_XTX_nResetFrom(mm_enabled_t * dest, const uint32_t source);
 
 /*************** Get/Set functions for RFRelaysConf register ******************************************************************/
 mm_response_t mm_setRFRelaysConf(const uint32_t val);
@@ -918,62 +1017,554 @@ mm_response_t mm_getCSBoard_Current7I2From(uint32_t * dest, const uint32_t sourc
 /*************** Get/Set functions for TE_Addr_0 register *********************************************************************/
 mm_response_t mm_setTE_Addr_0(const uint32_t val);
 mm_response_t mm_getTE_Addr_0(uint32_t * dest);
-mm_response_t mm_getTE_Addr_0From(uint32_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_ScanEnabled(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_ScanEnabled(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Detected(const bool val);
+mm_response_t mm_getTE_Addr_0_Detected(bool * dest);
+mm_response_t mm_getTE_Addr_0_DetectedFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Type(const mm_te_types_t val);
+mm_response_t mm_getTE_Addr_0_Type(mm_te_types_t * dest);
+mm_response_t mm_getTE_Addr_0_TypeFrom(mm_te_types_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_SEL_CAN0(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_SEL_CAN0(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_SEL_CAN0From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_SEL_CAN1(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_SEL_CAN1(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_SEL_CAN1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_SEL_RS485(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_SEL_RS485(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_SEL_RS485From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_SEL_I2C(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_SEL_I2C(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_SEL_I2CFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_SEL_RS422(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_SEL_RS422(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_SEL_RS422From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_SEL_SPI(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_SEL_SPI(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_SEL_SPIFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_SEL_UART(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_SEL_UART(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_SEL_UARTFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Power(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_Power(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Enable(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_Enable(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_EnableFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_nReset(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_nReset(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_COMM_TR(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_COMM_TR(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_COMM_TRFrom(mm_enabled_t * dest, const uint32_t source);
 
 /*************** Get/Set functions for TE_Addr_0_Set register *****************************************************************/
 mm_response_t mm_setTE_Addr_0_Set(const uint32_t val);
 mm_response_t mm_getTE_Addr_0_Set(uint32_t * dest);
-mm_response_t mm_getTE_Addr_0_SetFrom(uint32_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Set_ScanEnabled(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_Set_ScanEnabled(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_Set_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Set_Detected(const bool val);
+mm_response_t mm_getTE_Addr_0_Set_Detected(bool * dest);
+mm_response_t mm_getTE_Addr_0_Set_DetectedFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Set_Type(const mm_te_types_t val);
+mm_response_t mm_getTE_Addr_0_Set_Type(mm_te_types_t * dest);
+mm_response_t mm_getTE_Addr_0_Set_TypeFrom(mm_te_types_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Set_SEL_CAN0(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_Set_SEL_CAN0(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_Set_SEL_CAN0From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Set_SEL_CAN1(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_Set_SEL_CAN1(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_Set_SEL_CAN1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Set_SEL_RS485(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_Set_SEL_RS485(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_Set_SEL_RS485From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Set_SEL_I2C(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_Set_SEL_I2C(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_Set_SEL_I2CFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Set_SEL_RS422(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_Set_SEL_RS422(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_Set_SEL_RS422From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Set_SEL_SPI(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_Set_SEL_SPI(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_Set_SEL_SPIFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Set_SEL_UART(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_Set_SEL_UART(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_Set_SEL_UARTFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Set_Power(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_Set_Power(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_Set_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Set_Enable(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_Set_Enable(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_Set_EnableFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Set_nReset(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_Set_nReset(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_Set_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Set_COMM_TR(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_Set_COMM_TR(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_Set_COMM_TRFrom(mm_enabled_t * dest, const uint32_t source);
 
-/*************** Get/Set functions for TE_Addr_0_Clr register *****************************************************************/
-mm_response_t mm_setTE_Addr_0_Clr(const uint32_t val);
-mm_response_t mm_getTE_Addr_0_Clr(uint32_t * dest);
-mm_response_t mm_getTE_Addr_0_ClrFrom(uint32_t * dest, const uint32_t source);
+/*************** Get/Set functions for TE_Addr_0_Clear register ***************************************************************/
+mm_response_t mm_setTE_Addr_0_Clear(const uint32_t val);
+mm_response_t mm_getTE_Addr_0_Clear(uint32_t * dest);
+mm_response_t mm_setTE_Addr_0_Clear_ScanEnabled(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_Clear_ScanEnabled(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_Clear_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Clear_Detected(const bool val);
+mm_response_t mm_getTE_Addr_0_Clear_Detected(bool * dest);
+mm_response_t mm_getTE_Addr_0_Clear_DetectedFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Clear_Type(const mm_te_types_t val);
+mm_response_t mm_getTE_Addr_0_Clear_Type(mm_te_types_t * dest);
+mm_response_t mm_getTE_Addr_0_Clear_TypeFrom(mm_te_types_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Clear_SEL_CAN0(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_Clear_SEL_CAN0(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_Clear_SEL_CAN0From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Clear_SEL_CAN1(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_Clear_SEL_CAN1(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_Clear_SEL_CAN1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Clear_SEL_RS485(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_Clear_SEL_RS485(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_Clear_SEL_RS485From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Clear_SEL_I2C(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_Clear_SEL_I2C(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_Clear_SEL_I2CFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Clear_SEL_RS422(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_Clear_SEL_RS422(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_Clear_SEL_RS422From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Clear_SEL_SPI(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_Clear_SEL_SPI(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_Clear_SEL_SPIFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Clear_SEL_UART(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_Clear_SEL_UART(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_Clear_SEL_UARTFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Clear_Power(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_Clear_Power(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_Clear_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Clear_Enable(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_Clear_Enable(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_Clear_EnableFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Clear_nReset(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_Clear_nReset(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_Clear_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_0_Clear_COMM_TR(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_0_Clear_COMM_TR(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_0_Clear_COMM_TRFrom(mm_enabled_t * dest, const uint32_t source);
 
 /*************** Get/Set functions for TE_Addr_1 register *********************************************************************/
 mm_response_t mm_setTE_Addr_1(const uint32_t val);
 mm_response_t mm_getTE_Addr_1(uint32_t * dest);
-mm_response_t mm_getTE_Addr_1From(uint32_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_ScanEnabled(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_ScanEnabled(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Detected(const bool val);
+mm_response_t mm_getTE_Addr_1_Detected(bool * dest);
+mm_response_t mm_getTE_Addr_1_DetectedFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Type(const mm_te_types_t val);
+mm_response_t mm_getTE_Addr_1_Type(mm_te_types_t * dest);
+mm_response_t mm_getTE_Addr_1_TypeFrom(mm_te_types_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_SEL_CAN0(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_SEL_CAN0(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_SEL_CAN0From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_SEL_CAN1(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_SEL_CAN1(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_SEL_CAN1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_SEL_RS485(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_SEL_RS485(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_SEL_RS485From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_SEL_I2C(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_SEL_I2C(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_SEL_I2CFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_SEL_RS422(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_SEL_RS422(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_SEL_RS422From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_SEL_SPI(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_SEL_SPI(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_SEL_SPIFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_SEL_UART(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_SEL_UART(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_SEL_UARTFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Power(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_Power(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Enable(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_Enable(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_EnableFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_nReset(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_nReset(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_COMM_TR(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_COMM_TR(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_COMM_TRFrom(mm_enabled_t * dest, const uint32_t source);
 
 /*************** Get/Set functions for TE_Addr_1_Set register *****************************************************************/
 mm_response_t mm_setTE_Addr_1_Set(const uint32_t val);
 mm_response_t mm_getTE_Addr_1_Set(uint32_t * dest);
-mm_response_t mm_getTE_Addr_1_SetFrom(uint32_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Set_ScanEnabled(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_Set_ScanEnabled(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_Set_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Set_Detected(const bool val);
+mm_response_t mm_getTE_Addr_1_Set_Detected(bool * dest);
+mm_response_t mm_getTE_Addr_1_Set_DetectedFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Set_Type(const mm_te_types_t val);
+mm_response_t mm_getTE_Addr_1_Set_Type(mm_te_types_t * dest);
+mm_response_t mm_getTE_Addr_1_Set_TypeFrom(mm_te_types_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Set_SEL_CAN0(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_Set_SEL_CAN0(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_Set_SEL_CAN0From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Set_SEL_CAN1(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_Set_SEL_CAN1(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_Set_SEL_CAN1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Set_SEL_RS485(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_Set_SEL_RS485(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_Set_SEL_RS485From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Set_SEL_I2C(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_Set_SEL_I2C(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_Set_SEL_I2CFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Set_SEL_RS422(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_Set_SEL_RS422(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_Set_SEL_RS422From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Set_SEL_SPI(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_Set_SEL_SPI(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_Set_SEL_SPIFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Set_SEL_UART(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_Set_SEL_UART(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_Set_SEL_UARTFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Set_Power(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_Set_Power(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_Set_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Set_Enable(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_Set_Enable(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_Set_EnableFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Set_nReset(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_Set_nReset(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_Set_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Set_COMM_TR(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_Set_COMM_TR(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_Set_COMM_TRFrom(mm_enabled_t * dest, const uint32_t source);
 
-/*************** Get/Set functions for TE_Addr_1_Clr register *****************************************************************/
-mm_response_t mm_setTE_Addr_1_Clr(const uint32_t val);
-mm_response_t mm_getTE_Addr_1_Clr(uint32_t * dest);
-mm_response_t mm_getTE_Addr_1_ClrFrom(uint32_t * dest, const uint32_t source);
+/*************** Get/Set functions for TE_Addr_1_Clear register ***************************************************************/
+mm_response_t mm_setTE_Addr_1_Clear(const uint32_t val);
+mm_response_t mm_getTE_Addr_1_Clear(uint32_t * dest);
+mm_response_t mm_setTE_Addr_1_Clear_ScanEnabled(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_Clear_ScanEnabled(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_Clear_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Clear_Detected(const bool val);
+mm_response_t mm_getTE_Addr_1_Clear_Detected(bool * dest);
+mm_response_t mm_getTE_Addr_1_Clear_DetectedFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Clear_Type(const mm_te_types_t val);
+mm_response_t mm_getTE_Addr_1_Clear_Type(mm_te_types_t * dest);
+mm_response_t mm_getTE_Addr_1_Clear_TypeFrom(mm_te_types_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Clear_SEL_CAN0(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_Clear_SEL_CAN0(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_Clear_SEL_CAN0From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Clear_SEL_CAN1(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_Clear_SEL_CAN1(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_Clear_SEL_CAN1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Clear_SEL_RS485(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_Clear_SEL_RS485(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_Clear_SEL_RS485From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Clear_SEL_I2C(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_Clear_SEL_I2C(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_Clear_SEL_I2CFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Clear_SEL_RS422(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_Clear_SEL_RS422(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_Clear_SEL_RS422From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Clear_SEL_SPI(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_Clear_SEL_SPI(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_Clear_SEL_SPIFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Clear_SEL_UART(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_Clear_SEL_UART(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_Clear_SEL_UARTFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Clear_Power(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_Clear_Power(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_Clear_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Clear_Enable(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_Clear_Enable(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_Clear_EnableFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Clear_nReset(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_Clear_nReset(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_Clear_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_1_Clear_COMM_TR(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_1_Clear_COMM_TR(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_1_Clear_COMM_TRFrom(mm_enabled_t * dest, const uint32_t source);
 
 /*************** Get/Set functions for TE_Addr_2 register *********************************************************************/
 mm_response_t mm_setTE_Addr_2(const uint32_t val);
 mm_response_t mm_getTE_Addr_2(uint32_t * dest);
-mm_response_t mm_getTE_Addr_2From(uint32_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_ScanEnabled(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_ScanEnabled(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Detected(const bool val);
+mm_response_t mm_getTE_Addr_2_Detected(bool * dest);
+mm_response_t mm_getTE_Addr_2_DetectedFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Type(const mm_te_types_t val);
+mm_response_t mm_getTE_Addr_2_Type(mm_te_types_t * dest);
+mm_response_t mm_getTE_Addr_2_TypeFrom(mm_te_types_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_SEL_CAN0(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_SEL_CAN0(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_SEL_CAN0From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_SEL_CAN1(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_SEL_CAN1(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_SEL_CAN1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_SEL_RS485(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_SEL_RS485(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_SEL_RS485From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_SEL_I2C(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_SEL_I2C(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_SEL_I2CFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_SEL_RS422(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_SEL_RS422(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_SEL_RS422From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_SEL_SPI(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_SEL_SPI(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_SEL_SPIFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_SEL_UART(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_SEL_UART(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_SEL_UARTFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Power(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_Power(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Enable(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_Enable(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_EnableFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_nReset(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_nReset(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_COMM_TR(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_COMM_TR(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_COMM_TRFrom(mm_enabled_t * dest, const uint32_t source);
 
 /*************** Get/Set functions for TE_Addr_2_Set register *****************************************************************/
 mm_response_t mm_setTE_Addr_2_Set(const uint32_t val);
 mm_response_t mm_getTE_Addr_2_Set(uint32_t * dest);
-mm_response_t mm_getTE_Addr_2_SetFrom(uint32_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Set_ScanEnabled(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_Set_ScanEnabled(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_Set_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Set_Detected(const bool val);
+mm_response_t mm_getTE_Addr_2_Set_Detected(bool * dest);
+mm_response_t mm_getTE_Addr_2_Set_DetectedFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Set_Type(const mm_te_types_t val);
+mm_response_t mm_getTE_Addr_2_Set_Type(mm_te_types_t * dest);
+mm_response_t mm_getTE_Addr_2_Set_TypeFrom(mm_te_types_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Set_SEL_CAN0(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_Set_SEL_CAN0(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_Set_SEL_CAN0From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Set_SEL_CAN1(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_Set_SEL_CAN1(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_Set_SEL_CAN1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Set_SEL_RS485(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_Set_SEL_RS485(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_Set_SEL_RS485From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Set_SEL_I2C(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_Set_SEL_I2C(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_Set_SEL_I2CFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Set_SEL_RS422(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_Set_SEL_RS422(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_Set_SEL_RS422From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Set_SEL_SPI(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_Set_SEL_SPI(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_Set_SEL_SPIFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Set_SEL_UART(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_Set_SEL_UART(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_Set_SEL_UARTFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Set_Power(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_Set_Power(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_Set_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Set_Enable(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_Set_Enable(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_Set_EnableFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Set_nReset(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_Set_nReset(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_Set_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Set_COMM_TR(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_Set_COMM_TR(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_Set_COMM_TRFrom(mm_enabled_t * dest, const uint32_t source);
 
-/*************** Get/Set functions for TE_Addr_2_Clr register *****************************************************************/
-mm_response_t mm_setTE_Addr_2_Clr(const uint32_t val);
-mm_response_t mm_getTE_Addr_2_Clr(uint32_t * dest);
-mm_response_t mm_getTE_Addr_2_ClrFrom(uint32_t * dest, const uint32_t source);
+/*************** Get/Set functions for TE_Addr_2_Clear register ***************************************************************/
+mm_response_t mm_setTE_Addr_2_Clear(const uint32_t val);
+mm_response_t mm_getTE_Addr_2_Clear(uint32_t * dest);
+mm_response_t mm_setTE_Addr_2_Clear_ScanEnabled(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_Clear_ScanEnabled(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_Clear_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Clear_Detected(const bool val);
+mm_response_t mm_getTE_Addr_2_Clear_Detected(bool * dest);
+mm_response_t mm_getTE_Addr_2_Clear_DetectedFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Clear_Type(const mm_te_types_t val);
+mm_response_t mm_getTE_Addr_2_Clear_Type(mm_te_types_t * dest);
+mm_response_t mm_getTE_Addr_2_Clear_TypeFrom(mm_te_types_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Clear_SEL_CAN0(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_Clear_SEL_CAN0(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_Clear_SEL_CAN0From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Clear_SEL_CAN1(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_Clear_SEL_CAN1(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_Clear_SEL_CAN1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Clear_SEL_RS485(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_Clear_SEL_RS485(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_Clear_SEL_RS485From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Clear_SEL_I2C(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_Clear_SEL_I2C(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_Clear_SEL_I2CFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Clear_SEL_RS422(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_Clear_SEL_RS422(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_Clear_SEL_RS422From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Clear_SEL_SPI(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_Clear_SEL_SPI(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_Clear_SEL_SPIFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Clear_SEL_UART(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_Clear_SEL_UART(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_Clear_SEL_UARTFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Clear_Power(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_Clear_Power(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_Clear_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Clear_Enable(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_Clear_Enable(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_Clear_EnableFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Clear_nReset(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_Clear_nReset(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_Clear_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_2_Clear_COMM_TR(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_2_Clear_COMM_TR(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_2_Clear_COMM_TRFrom(mm_enabled_t * dest, const uint32_t source);
 
 /*************** Get/Set functions for TE_Addr_3 register *********************************************************************/
 mm_response_t mm_setTE_Addr_3(const uint32_t val);
 mm_response_t mm_getTE_Addr_3(uint32_t * dest);
-mm_response_t mm_getTE_Addr_3From(uint32_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_ScanEnabled(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_ScanEnabled(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Detected(const bool val);
+mm_response_t mm_getTE_Addr_3_Detected(bool * dest);
+mm_response_t mm_getTE_Addr_3_DetectedFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Type(const mm_te_types_t val);
+mm_response_t mm_getTE_Addr_3_Type(mm_te_types_t * dest);
+mm_response_t mm_getTE_Addr_3_TypeFrom(mm_te_types_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_SEL_CAN0(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_SEL_CAN0(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_SEL_CAN0From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_SEL_CAN1(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_SEL_CAN1(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_SEL_CAN1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_SEL_RS485(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_SEL_RS485(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_SEL_RS485From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_SEL_I2C(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_SEL_I2C(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_SEL_I2CFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_SEL_RS422(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_SEL_RS422(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_SEL_RS422From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_SEL_SPI(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_SEL_SPI(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_SEL_SPIFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_SEL_UART(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_SEL_UART(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_SEL_UARTFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Power(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_Power(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Enable(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_Enable(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_EnableFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_nReset(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_nReset(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_COMM_TR(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_COMM_TR(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_COMM_TRFrom(mm_enabled_t * dest, const uint32_t source);
 
 /*************** Get/Set functions for TE_Addr_3_Set register *****************************************************************/
 mm_response_t mm_setTE_Addr_3_Set(const uint32_t val);
 mm_response_t mm_getTE_Addr_3_Set(uint32_t * dest);
-mm_response_t mm_getTE_Addr_3_SetFrom(uint32_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Set_ScanEnabled(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_Set_ScanEnabled(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_Set_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Set_Detected(const bool val);
+mm_response_t mm_getTE_Addr_3_Set_Detected(bool * dest);
+mm_response_t mm_getTE_Addr_3_Set_DetectedFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Set_Type(const mm_te_types_t val);
+mm_response_t mm_getTE_Addr_3_Set_Type(mm_te_types_t * dest);
+mm_response_t mm_getTE_Addr_3_Set_TypeFrom(mm_te_types_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Set_SEL_CAN0(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_Set_SEL_CAN0(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_Set_SEL_CAN0From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Set_SEL_CAN1(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_Set_SEL_CAN1(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_Set_SEL_CAN1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Set_SEL_RS485(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_Set_SEL_RS485(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_Set_SEL_RS485From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Set_SEL_I2C(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_Set_SEL_I2C(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_Set_SEL_I2CFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Set_SEL_RS422(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_Set_SEL_RS422(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_Set_SEL_RS422From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Set_SEL_SPI(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_Set_SEL_SPI(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_Set_SEL_SPIFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Set_SEL_UART(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_Set_SEL_UART(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_Set_SEL_UARTFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Set_Power(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_Set_Power(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_Set_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Set_Enable(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_Set_Enable(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_Set_EnableFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Set_nReset(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_Set_nReset(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_Set_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Set_COMM_TR(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_Set_COMM_TR(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_Set_COMM_TRFrom(mm_enabled_t * dest, const uint32_t source);
 
-/*************** Get/Set functions for TE_Addr_3_Clr register *****************************************************************/
-mm_response_t mm_setTE_Addr_3_Clr(const uint32_t val);
-mm_response_t mm_getTE_Addr_3_Clr(uint32_t * dest);
-mm_response_t mm_getTE_Addr_3_ClrFrom(uint32_t * dest, const uint32_t source);
+/*************** Get/Set functions for TE_Addr_3_Clear register ***************************************************************/
+mm_response_t mm_setTE_Addr_3_Clear(const uint32_t val);
+mm_response_t mm_getTE_Addr_3_Clear(uint32_t * dest);
+mm_response_t mm_setTE_Addr_3_Clear_ScanEnabled(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_Clear_ScanEnabled(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_Clear_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Clear_Detected(const bool val);
+mm_response_t mm_getTE_Addr_3_Clear_Detected(bool * dest);
+mm_response_t mm_getTE_Addr_3_Clear_DetectedFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Clear_Type(const mm_te_types_t val);
+mm_response_t mm_getTE_Addr_3_Clear_Type(mm_te_types_t * dest);
+mm_response_t mm_getTE_Addr_3_Clear_TypeFrom(mm_te_types_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Clear_SEL_CAN0(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_Clear_SEL_CAN0(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_Clear_SEL_CAN0From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Clear_SEL_CAN1(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_Clear_SEL_CAN1(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_Clear_SEL_CAN1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Clear_SEL_RS485(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_Clear_SEL_RS485(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_Clear_SEL_RS485From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Clear_SEL_I2C(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_Clear_SEL_I2C(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_Clear_SEL_I2CFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Clear_SEL_RS422(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_Clear_SEL_RS422(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_Clear_SEL_RS422From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Clear_SEL_SPI(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_Clear_SEL_SPI(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_Clear_SEL_SPIFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Clear_SEL_UART(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_Clear_SEL_UART(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_Clear_SEL_UARTFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Clear_Power(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_Clear_Power(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_Clear_PowerFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Clear_Enable(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_Clear_Enable(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_Clear_EnableFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Clear_nReset(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_Clear_nReset(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_Clear_nResetFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setTE_Addr_3_Clear_COMM_TR(const mm_enabled_t val);
+mm_response_t mm_getTE_Addr_3_Clear_COMM_TR(mm_enabled_t * dest);
+mm_response_t mm_getTE_Addr_3_Clear_COMM_TRFrom(mm_enabled_t * dest, const uint32_t source);
 
 
 #endif /* memory_map_h */

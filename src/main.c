@@ -26,6 +26,7 @@
 #include "i2c_target.h"
 #include "local_target.h"
 #include "uart_target.h"
+#include "te_adaptors.h"
 
 
 static bsp_t bsp;
@@ -97,6 +98,11 @@ void SETUP_Task(void* handle)
 	
 	mm_setRFRelaysConf_ScanEnabled(true);
 	mm_setMultiConf0_ScanEnabled(true);
+	
+	mm_setTE_Addr_0_ScanEnabled(true);
+	mm_setTE_Addr_1_ScanEnabled(true);
+	mm_setTE_Addr_2_ScanEnabled(true);
+	mm_setTE_Addr_3_ScanEnabled(true);
 		
 	// Create all the FreeRTOS Tasks
 	xTaskCreate(GSE_MANAGER_Task, "GSE Manager", 1024, (void*) platform->gse_manager, tskIDLE_PRIORITY + 2, NULL );
@@ -121,11 +127,13 @@ void SETUP_Task(void* handle)
 	xTaskCreate(ccd_usart_TXProcessingTask, "UART TX", 512, (void*) bsp.bus_uart, tskIDLE_PRIORITY + 2, NULL);
 	xTaskCreate(ccd_usart_RXProcessingTask, "UART RX", 512, (void*) bsp.bus_uart, tskIDLE_PRIORITY + 2, NULL);
 	
-	// Process RF Relay and multitester
-	// xTaskCreate(DEVTOOLS_Task, "RF Tools", 512, (void *) platform, tskIDLE_PRIORITY+2, NULL);
+	// Process RF Relay, multitester and TE Adaptors
+	xTaskCreate(DEVTOOLS_Task, "RF Tools", 512, (void *) platform, tskIDLE_PRIORITY+2, NULL);
+	xTaskCreate(TE_Adaptors_Task, "TE Adapters", 512, (void *) platform->te_scanner, tskIDLE_PRIORITY + 2, NULL);
 	
 	// LED task has lowest priority
 	xTaskCreate(LEDIndicator_UpdateTask, "LED", 512, (void*) platform->led_indicator, tskIDLE_PRIORITY+1, NULL);
+	
 	
 	LEDIndicator_SetNextState(LED_POWER_ON);
 	

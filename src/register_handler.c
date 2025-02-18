@@ -94,6 +94,10 @@ static addres_to_func_map_t address_to_func_map[] = {
 	{ reg_CSBoard_Current7I0_addr, mm_getCSBoard_Current7I0},
 	{ reg_CSBoard_Current7I1_addr, mm_getCSBoard_Current7I1},
 	{ reg_CSBoard_Current7I2_addr, mm_getCSBoard_Current7I2},
+    { reg_TE_Addr_0_addr, mm_getTE_Addr_0},
+    { reg_TE_Addr_1_addr, mm_getTE_Addr_1},
+    { reg_TE_Addr_2_addr, mm_getTE_Addr_2},
+    { reg_TE_Addr_3_addr, mm_getTE_Addr_3},
 };
 
 
@@ -404,6 +408,31 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 		case reg_MultiConf1_Clear_addr:
 			MULTI_ClearBitsFrom(platform->multitester, deserialized);
 			break;
-		
+			
+		case reg_TE_Addr_0_Set_addr:
+			{
+				bool scanEnabled = false;
+				mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
+				if (scanEnabled){
+					TE_Adaptor_SetScanEnabled(platform->te_scanner, 0);
+				}
+				
+				// We have deliberately made the bits align perfectly so we could do this.
+				TE_Adaptor_SetTeBits(platform->te_scanner, 0, (deserialized >> 16) & 0x0FFF);
+			}
+			break;
+		case reg_TE_Addr_0_Clear_addr:
+			{
+				bool scanEnabled = false;
+				mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
+				if (scanEnabled){
+					TE_Adaptor_ClearScanEnabled(platform->te_scanner, 0);
+				}
+			
+				// We have deliberately made the bits align perfectly so we could do this.
+				TE_Adaptor_ClearTeBits(platform->te_scanner, 0, (deserialized >> 16) & 0x0FFF);
+			}
+			break;
+					
 	}        
 }

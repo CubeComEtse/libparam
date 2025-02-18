@@ -175,6 +175,8 @@ void LEDIndicator_UpdateTask(void * parameters)
 					(uint8_t)(new_led.x * 255),
 					(uint8_t)(new_led.y * 255),
 					(uint8_t)(new_led.z * 255));
+					
+					ccd_led_driver_SetLed(handle->led_driver,0,0,0);
 				}
 			}
 			break;

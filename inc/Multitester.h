@@ -17,13 +17,10 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+#include "pca9555.h"
 #include "tmr.h"
 
-enum relay_state {
-	UNINITIALIZED,
-	INITIALIZING,
-	IDLE
-};
+
 
 typedef struct {
 	bool (*i2c_write_function)(void * handle, const uint8_t dev_addr, const uint8_t * data, const size_t data_len);
@@ -33,7 +30,7 @@ typedef struct {
 	uint8_t i2c_address;
 	
 	// The multi-tester has similar state to the RF relays. 
-	enum relay_state state;
+	enum pca_device_state state;
 	
 	// Timer tells us when to check for updates
 	tmr_t update_timer;
@@ -62,7 +59,7 @@ typedef struct {
 	void * i2c_handle;
 	
 	// Track state. 0 - Disconnected. 1 - Connected and configured.
-	enum relay_state state;
+	enum pca_device_state state;
 	
 	// Set from the register handler. We update the register handler when a channel was set.
 	uint8_t set_channel;

@@ -9,6 +9,7 @@
 
 #include <assert.h>
 #include "register_map.h"
+#include "pca9555.h"
 
 #include "event.h"
 
@@ -19,29 +20,10 @@
 #define nRESET_PIN		(1 << 2)
 #define FAN_PIN			(1 << 3)
 
-#define PCA9555_CMD_IN_PORT0	0
-#define PCA9555_CMD_IN_PORT1	1
-#define PCA9555_CMD_OUT_PORT0	2
-#define PCA9555_CMD_OUT_PORT1	3
-#define PCA9555_CMD_PI_PORT0	4
-#define PCA9555_CMD_PI_PORT1	5
-#define PCA9555_CMD_CFG_PORT0	6
-#define PCA9555_CMD_CFG_PORT1	7
-
-#define PCA9555_MULTITESTER_ADDR	0b0100000
-#define PCA9555_RFSWITCH1_ADDR		0b0100001
-#define PCA9555_RFSWITCH2_ADDR		0b0100010
-
-
 #define MULTITESTER_INVERT_MASK 0x2222
-
-
-
 
 // Static Functions
 static bool MULTI_vSetRfSwitchChannel(rf_relay_config_t * handle);
-
-
 
 
 void RFRelay_Init(rf_relay_config_t * handle, const uint32_t relay_number)

@@ -29,6 +29,7 @@
 
 
 #include "Multitester.h"
+#include "te_adaptors.h"
 
 typedef struct
 {
@@ -50,6 +51,7 @@ typedef struct
 	rf_relay_config_t * rf_relay_1;
 	rf_relay_config_t * rf_relay_2;
 	multitester_t * multitester;
+	te_scanner_t * te_scanner;
 	
 	pc104_t * pc104;
 

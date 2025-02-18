@@ -26,6 +26,7 @@ static pc104_t pc104;
 static rf_relay_config_t rf_relay_1;
 static rf_relay_config_t rf_relay_2;
 static multitester_t multitester;
+static te_scanner_t te_scanner;
 
 static platform_t platform;
 
@@ -171,6 +172,12 @@ void PLATFORM_vInit(bsp_t * bsp)
 		rf_relay_2.i2c_handle = bsp->util_i2c;
 		platform.multitester->i2c_handle = bsp->util_i2c;
 	}
+	
+	platform.te_scanner = &te_scanner;
+	platform.te_scanner->i2c_read_function = ccd_i2c_driver_Read;
+	platform.te_scanner->i2c_write_function = ccd_i2c_driver_Write;
+	platform.te_scanner->i2c_handle = bsp->util_i2c;
+	TE_Adaptors_Setup(platform.te_scanner);
 	
 	// Use the FreeRTOS tick count as a timer source
 	// This does mean we can only use this timer from non-interrupt functions.

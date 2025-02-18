@@ -13,7 +13,7 @@
 	},
 	"module":
 	{
-		"name": "register_map",
+		"name": "OBC",
 		"registers": [
 			{
 				"name": "Board_ID",
@@ -614,7 +614,8 @@
 				"width": "32",
 				"fields": "Multitester",
 				"c#": {
-					"type": "UInt32"
+					"type": "UInt32", 
+					"special": "clearOnWrite"
 				}
 			},
 			{
@@ -624,7 +625,8 @@
 				"width": "32",
 				"fields": "Multitester",
 				"c#": {
-					"type": "UInt32"
+					"type": "UInt32", 
+					"special": "clearOnWrite"
 				}
 			},
 
@@ -685,21 +687,21 @@
 			{ "name":"CSBoard_Current7I2", "address": "0x6F", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
 
 			
-			{ "name":"TE_Addr_0",     "address": "0x80", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
-			{ "name":"TE_Addr_0_Set", "address": "0x81", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
-			{ "name":"TE_Addr_0_Clear", "address": "0x82", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"TE_Addr_0",     "address": "0x80", "dir": "r", "width": "32", "fields": "TE_Config", "c#": {"type": "UInt32" } },
+			{ "name":"TE_Addr_0_Set", "address": "0x81", "dir": "rw", "width": "32", "fields": "TE_Config", "c#": {"type": "UInt32", "special": "clearOnWrite"} },
+			{ "name":"TE_Addr_0_Clear", "address": "0x82", "dir": "rw", "width": "32", "fields": "TE_Config", "c#": {"type": "UInt32", "special": "clearOnWrite" } },
 
-			{ "name":"TE_Addr_1",     "address": "0x83", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
-			{ "name":"TE_Addr_1_Set", "address": "0x84", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
-			{ "name":"TE_Addr_1_Clear", "address": "0x85", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"TE_Addr_1",     "address": "0x83", "dir": "r", "width": "32", "fields": "TE_Config", "c#": {"type": "UInt32" } },
+			{ "name":"TE_Addr_1_Set", "address": "0x84", "dir": "w", "width": "32", "fields": "TE_Config", "c#": {"type": "UInt32", "special": "clearOnWrite" } },
+			{ "name":"TE_Addr_1_Clear", "address": "0x85", "dir": "w", "width": "32", "fields": "TE_Config", "c#": {"type": "UInt32", "special": "clearOnWrite" } },
 
-			{ "name":"TE_Addr_2",     "address": "0x86", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
-			{ "name":"TE_Addr_2_Set", "address": "0x87", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
-			{ "name":"TE_Addr_2_Clear", "address": "0x88", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
+			{ "name":"TE_Addr_2",     "address": "0x86", "dir": "r", "width": "32", "fields": "TE_Config", "c#": {"type": "UInt32" } },
+			{ "name":"TE_Addr_2_Set", "address": "0x87", "dir": "w", "width": "32", "fields": "TE_Config", "c#": {"type": "UInt32", "special": "clearOnWrite" } },
+			{ "name":"TE_Addr_2_Clear", "address": "0x88", "dir": "w", "width": "32", "fields": "TE_Config", "c#": {"type": "UInt32", "special": "clearOnWrite" } },
 
-			{ "name":"TE_Addr_3",     "address": "0x89", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
-			{ "name":"TE_Addr_3_Set", "address": "0x8A", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } },
-			{ "name":"TE_Addr_3_Clear", "address": "0x8B", "dir": "r", "width": "32", "fields": [], "c#": {"type": "UInt32" } }
+			{ "name":"TE_Addr_3",     "address": "0x89", "dir": "w", "width": "32", "fields": "TE_Config", "c#": {"type": "UInt32" } },
+			{ "name":"TE_Addr_3_Set", "address": "0x8A", "dir": "r", "width": "32", "fields": "TE_Config", "c#": {"type": "UInt32", "special": "clearOnWrite" } },
+			{ "name":"TE_Addr_3_Clear", "address": "0x8B", "dir": "w", "width": "32", "fields": "TE_Config", "c#": {"type": "UInt32", "special": "clearOnWrite" } }
 		],
 		"generic_fields":{
 			"boardflag": [
@@ -780,20 +782,22 @@
 				}
 			] ,
 			"TE_Config": [
-				{ "bit": "0",     "name": "SEL_CAN0",  "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"} },
-				{ "bit": "1",     "name": "SEL_CAN1",  "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"} },
-				{ "bit": "2",     "name": "SEL_RS485", "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"} },
-				{ "bit": "3",     "name": "SEL_I2C",   "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"} },
-				{ "bit": "4",     "name": "SEL_RS422", "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"} },
-				{ "bit": "5",     "name": "SEL_SPI",   "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"} },
-				{ "bit": "6",     "name": "SEL_UART",  "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"} },
+				{ "bit": "0",      "name": "ScanEnabled", "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "1",      "name": "Detected",    "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "5-2",    "name": "Type",        "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"}, "options": "TE_Types" },
 
-				{ "bit": "8",     "name": "Power",    "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"} },
-				{ "bit": "9",     "name": "Enable",   "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"} },
-				{ "bit": "10",    "name": "nReset",   "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"} },
-				{ "bit": "11",    "name": "COMM_TR",  "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"} },
+				{ "bit": "16",     "name": "SEL_CAN0",    "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "17",     "name": "SEL_CAN1",    "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "18",     "name": "SEL_RS485",   "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "19",     "name": "SEL_I2C",     "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "20",     "name": "SEL_RS422",   "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "21",     "name": "SEL_SPI",     "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "22",     "name": "SEL_UART",    "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
 
-				{ "bit": "15-12", "name": "Type",     "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"}, "options": "TE_Types" }
+				{ "bit": "24",     "name": "Power",       "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "25",     "name": "Enable",      "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "26",     "name": "nReset",      "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "27",     "name": "COMM_TR",     "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} }
    			],
 			"Multitester": [
 				{ "name": "POS1_Enable", "bit": "0", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
