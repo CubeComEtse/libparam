@@ -170,8 +170,9 @@ void SERMUX_V3_TransmitTask(void * handle)
 	sermux_v3_t* hnd = (sermux_v3_t *) handle;
 	
 	// This buffer hold messages as we construct them.
-	uint8_t tx_buffer[128];
+	uint8_t tx_buffer[256];
 	size_t tx_buffer_pos = 0;
+	size_t buffer_size_without_overhead = 245;
 	
 	while(1)
 	{
@@ -181,11 +182,11 @@ void SERMUX_V3_TransmitTask(void * handle)
 		tx_buffer_pos = 4;
 		
 		uint32_t j =0;
-		while ((j < hnd->num_targets) && (tx_buffer_pos < 120))
+		while ((j < hnd->num_targets) && (tx_buffer_pos < buffer_size_without_overhead))
 		{
 			size_t rx_size = 0;
 			do {
-				rx_size = xMessageBufferReceive (hnd->targets[j].out, &tx_buffer[tx_buffer_pos], 120-tx_buffer_pos,0);
+				rx_size = xMessageBufferReceive (hnd->targets[j].out, &tx_buffer[tx_buffer_pos], buffer_size_without_overhead-tx_buffer_pos,0);
 				tx_buffer_pos += rx_size;
 			}
 			while(rx_size > 0);
@@ -203,7 +204,7 @@ void SERMUX_V3_TransmitTask(void * handle)
 			//Todo: This timeout should be set?
 			xStreamBufferSend(hnd->out_stream, tx_buffer, tx_buffer_pos, 0);
 		}
-		
-		vTaskDelay(pdMS_TO_TICKS(1));
+		// 8 seems fine?
+		vTaskDelay(pdMS_TO_TICKS(8));
 	}
 }
