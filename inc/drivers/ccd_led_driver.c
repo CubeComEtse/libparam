@@ -30,6 +30,39 @@ void ccd_led_driver_Init(ccd_led_t * driver, Pwm * pwm_instance)
 	driver->pwm->PWM_IER1 |= PWM_IER1_CHID3;
 }
 
+void ccd_led_driver_DisableInterrupts(ccd_led_t * driver, bool value)
+{
+	if (value){  
+		// Hacks: The UART interrupt is very important to respond to, otherwise we miss
+		// messages from the PC. It is so important it gets priority above the RTOS.
+		// But if it triggers in the middle of an LED update, the LED is borked, and that
+		// looks bad, which is somehow even worse. So just for this short while, disable
+		// the UART interrupt. By setting flow control.
+			    
+		if (driver->uart_disable_fc){
+			driver->uart_disable_fc(driver->uart_handle);
+		}
+			    
+		// More hacks:
+		// After disabling the FC, there are still UART bytes on the line that need to
+		// received and reacted to. This delay allows the UART interrupt to still
+		// fire when these bytes come in. The delay is roughly equal to 2 uart bytes.
+		delay_us(20);
+			    
+		taskENTER_CRITICAL();
+		__disable_irq();
+	}
+	else{
+		__enable_irq();
+		taskEXIT_CRITICAL();
+		
+		if (driver->uart_enable_fc){
+			driver->uart_enable_fc(driver->uart_handle);
+		}
+	}
+	
+}
+
 
 void ccd_led_driver_SetLed(ccd_led_t * driver, uint8_t r, uint8_t g, uint8_t b){
 	Pwm * pwm = PWM0;
@@ -49,25 +82,7 @@ void ccd_led_driver_SetLed(ccd_led_t * driver, uint8_t r, uint8_t g, uint8_t b){
 	int short_period = 30;
 	int long_period = 90;
 	    
-	    
-	// Hacks: The UART interrupt is very important to respond to, otherwise we miss
-	// messages from the PC. It is so important it gets priority above the RTOS.
-	// But if it triggers in the middle of an LED update, the LED is borked, and that
-	// looks bad, which is somehow even worse. So just for this short while, disable
-	// the UART interrupt. By setting flow control.
-	    
-	if (driver->uart_disable_fc){
-		driver->uart_disable_fc(driver->uart_handle);
-	}
-	
-	// More hacks:
-	// After disabling the FC, there are still UART bytes on the line that need to 
-	// received and reacted to. This delay allows the UART interrupt to still
-	// fire when these bytes come in. The delay is roughly equal to 2 uart bytes.
-	delay_us(20);
-	    
-	taskENTER_CRITICAL();
-	__disable_irq();
+
 
 	// Start by setting the duty cycle to 0 so that the first cycle
 	// doesn't count as a bit
@@ -100,11 +115,4 @@ void ccd_led_driver_SetLed(ccd_led_t * driver, uint8_t r, uint8_t g, uint8_t b){
 	pwm->PWM_DIS = PWM_ENA_CHID3;
 	pwm->PWM_CH_NUM[3].PWM_CDTY = 0;
 	pwm->PWM_CH_NUM[3].PWM_CDTYUPD = 0;
-
-	__enable_irq();
-	taskEXIT_CRITICAL();
-	    
-	if (driver->uart_enable_fc){
-		driver->uart_enable_fc(driver->uart_handle);
-	}
 }

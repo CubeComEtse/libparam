@@ -473,6 +473,25 @@
 				}
 			},
 			{
+				"name":"CANConfB",
+				"address": "0x2E",
+				"dir": "rw",
+				"width": "32",
+				"fields": [
+					{ 
+						"name": "FlipCanBytes", 
+						"description": "Flips CAN Destination and ID fields around for Plan S Compatibility",
+						"bit": "31",
+						"options": "Enabled",
+						"c#": {"hasminmax": "false", "type": "UInt32" },
+						"c": {"type": "bool"} 
+					}
+				],
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
 				"name": "PC104Pins",
 				"comment": "Only used by the V0 OBC, to set the PC104 pins",
 				"address": "0x30",

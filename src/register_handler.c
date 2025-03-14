@@ -411,9 +411,9 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 			
 		case reg_TE_Addr_0_Set_addr:
 			{
-				bool scanEnabled = false;
+				mm_enabled_t scanEnabled;
 				mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
-				if (scanEnabled){
+				if (scanEnabled == reg_enabled_enabled){
 					TE_Adaptor_SetScanEnabled(platform->te_scanner, 0);
 				}
 				
@@ -423,9 +423,9 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 			break;
 		case reg_TE_Addr_0_Clear_addr:
 			{
-				bool scanEnabled = false;
+				mm_enabled_t scanEnabled;
 				mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
-				if (scanEnabled){
+				if (scanEnabled == reg_enabled_enabled){
 					TE_Adaptor_ClearScanEnabled(platform->te_scanner, 0);
 				}
 			

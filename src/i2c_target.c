@@ -28,9 +28,9 @@ void I2CTARGET_Init(i2c_target_t * handle)
 	assert(handle->i2c_write);
 	// Do not assert the handle, it might be void.
 	
-	// This buffer size is an initial guess. Feel free to update it later.
+	// These buffer sizes were increased to hold enough messages between UART transmissions
 	handle->incoming_messages = xMessageBufferCreate(1024);
-	handle->outgoing_messages = xMessageBufferCreate(256);
+	handle->outgoing_messages = xMessageBufferCreate(1024);
 	
 	handle->legacy_address = 0x26;
 	handle->tr_delay = 0;

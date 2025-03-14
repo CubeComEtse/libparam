@@ -11,26 +11,26 @@
 #include <string.h>
 #include "asf.h"
 
-static void ccd_can_driver_SetAddress(ccd_can_t * pHandle, uint32_t filter, uint32_t mask);
 
 void ccd_can_Init(ccd_can_t * pHandle, Mcan * can_device)
 {
-	
+	pmc_disable_pck(PMC_PCK_5);
+	pmc_pck_set_source(PMC_PCK_5, PMC_PCK_CSS_UPLL_CLK);
+	pmc_pck_set_prescaler(PMC_PCK_5, PMC_PCK_PRES(5));
+	pmc_enable_pck(PMC_PCK_5);
+		
 	struct mcan_config sCanConfig;
 	mcan_get_config_defaults(&sCanConfig);
 	sCanConfig.automatic_retransmission = false;
 	sCanConfig.nonmatching_frames_action_extended = MCAN_NONMATCHING_FRAMES_REJECT;
 	mcan_init(&pHandle->can_module, can_device, &sCanConfig);
 	
-	pmc_pck_set_prescaler(PMC_PCK_5, PMC_PCK_PRES(14));
-	pmc_pck_set_source(PMC_PCK_5, PMC_PCK_CSS_PLLA_CLK);
-	pmc_enable_pck(PMC_PCK_5);
 	mcan_set_baudrate(can_device, pHandle->baudrate);
 	
 	// Will set CCR.INIT bit to 0, so module runs
 	mcan_start(&pHandle->can_module);
 	
-	ccd_can_driver_SetAddress(pHandle, pHandle->gse_address, pHandle->gse_address_mask);
+	ccd_can_SetAddress(pHandle, pHandle->gse_address, pHandle->gse_address_mask);
 		
 	if (can_device == MCAN0)
 	{
@@ -45,8 +45,72 @@ void ccd_can_Init(ccd_can_t * pHandle, Mcan * can_device)
 		mcan_enable_interrupt(&pHandle->can_module, MCAN_RX_BUFFER_NEW_MESSAGE | MCAN_RX_FIFO_0_NEW_MESSAGE | MCAN_RX_FIFO_1_NEW_MESSAGE | MCAN_FORMAT_ERROR | MCAN_ACKNOWLEDGE_ERROR | MCAN_BUS_OFF);
 	}
 	
-	pHandle->receiveMessageBuffer = xMessageBufferCreate(sizeof(struct mcan_rx_element_fifo_0) * 32);
+	// pHandle->receiveMessageBuffer = xMessageBufferCreate(sizeof(struct mcan_rx_element_fifo_0) * 32);
 }
+
+
+
+void ccd_can_SetAddress(ccd_can_t * pHandle, uint32_t filter, uint32_t mask)
+{
+	struct mcan_extended_message_filter_element et_filter;
+	mcan_get_extended_message_filter_element_default(&et_filter);
+	et_filter.F0.reg = MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F0_EFID1(filter) | MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F0_EFEC(MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F0_EFEC_STF0M_Val);
+	et_filter.F1.reg = MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F1_EFID2(mask) | MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F1_EFT_CLASSIC;
+
+	mcan_set_rx_extended_filter(&pHandle->can_module, &et_filter, 0);
+}
+
+
+/*
+	Enables or disable retries in the CAN module.
+	This is a hardware feature of the CAN module. If enabled it will automatically
+	resend any messages that it did not detect on its RX line. it does sometimes cause
+	crashes because the CAN module keeps resending a message.
+	 
+    When this is ported to FreeRTOS there should also be a lock on the CAN module to make
+	sure we don't change it while transmitting a message.
+*/
+void ccd_can_SetRetries(ccd_can_t * pHandle, bool enabled)
+{
+	mcan_stop(&pHandle->can_module);	
+	
+	pHandle->can_module.hw->MCAN_CCCR |= MCAN_CCCR_CCE;
+	
+	while (!(pHandle->can_module.hw->MCAN_CCCR & MCAN_CCCR_CCE));
+	
+	if (!enabled) {
+		pHandle->can_module.hw->MCAN_CCCR |= MCAN_CCCR_DAR;
+	}
+	
+	pHandle->can_module.hw->MCAN_CCCR &= ~MCAN_CCCR_CCE;
+	while (pHandle->can_module.hw->MCAN_CCCR & MCAN_CCCR_CCE);
+
+	mcan_start(&pHandle->can_module);
+}
+
+bool ccd_can_SetBaudRate(ccd_can_t * pHandle, uint16_t baud)
+{
+	// There are very specific accepted values for the baud rate.
+	if (baud != 2000 && baud != 1000 && baud != 500){
+		return false;
+	}
+	pHandle->baudrate = baud * 1000;
+	
+	mcan_stop(&pHandle->can_module);
+	
+	pHandle->can_module.hw->MCAN_CCCR |= MCAN_CCCR_CCE;
+	while (!(pHandle->can_module.hw->MCAN_CCCR & MCAN_CCCR_CCE));
+	
+	mcan_set_baudrate(pHandle->can_module.hw, pHandle->baudrate);
+	
+	pHandle->can_module.hw->MCAN_CCCR &= ~MCAN_CCCR_CCE;
+	while (pHandle->can_module.hw->MCAN_CCCR & MCAN_CCCR_CCE);
+	
+	mcan_start(&pHandle->can_module);
+	
+	return true;
+}
+
 
 void ccd_can_Send_message(void * vHandle, uint32_t header, uint8_t * data, size_t data_len)
 {
@@ -77,7 +141,7 @@ void ccd_can_Send_message(void * vHandle, uint32_t header, uint8_t * data, size_
 	 while (mcan_tx_transfer_request(&pHandle->can_module, 1 << buffer_index) == ERR_BUSY);
 }
 
-bool cc_can_Receive_message(void * vHandle, uint32_t * header, uint8_t ** data, size_t * data_len)
+bool ccd_can_Receive_message(void * vHandle, uint32_t * header, uint8_t ** data, size_t * data_len)
 {
 	ccd_can_t * pHandle = (ccd_can_t*) vHandle;
 	struct mcan_rx_element_fifo_0 rx_element;
@@ -94,26 +158,12 @@ bool cc_can_Receive_message(void * vHandle, uint32_t * header, uint8_t ** data, 
 
 
 
-static void ccd_can_driver_SetAddress(ccd_can_t * pHandle, uint32_t filter, uint32_t mask){
-	struct mcan_extended_message_filter_element et_filter;
-	mcan_get_extended_message_filter_element_default(&et_filter);
-	et_filter.F0.reg = MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F0_EFID1(filter) | MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F0_EFEC(1);
-	et_filter.F1.reg = MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F1_EFID2(mask) | MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F1_EFT_CLASSIC;
-
-	mcan_set_rx_extended_filter(&pHandle->can_module, &et_filter, 0);
-	mcan_set_rx_extended_filter(&pHandle->can_module, &et_filter, 1);
-}
-
 
 
 // Called from interrupt
-void ccd_can_driver_ReceiveCallback(ccd_can_t* pHandle)
+void ccd_can_ReceiveCallback(ccd_can_t* pHandle)
 {
-	
 	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-	
-	// Static here is dodgy
-	static uint32_t fifo_receive_index = 0;
 	
 	volatile uint32_t status, i;
 	status = mcan_read_interrupt_status(&pHandle->can_module);
@@ -129,41 +179,33 @@ void ccd_can_driver_ReceiveCallback(ccd_can_t* pHandle)
 			}
 		}
 	}
-
+	
 	if (status & MCAN_RX_FIFO_0_NEW_MESSAGE) {
-		
-		// Rather than fifo_receive_index, this should probably be
-		// (MCAN0->MCAN_RXF0S & ~MCAN_RXF0S_F0GI_Msk)
-		// This is the read index pointer.
-		// See 48.6.28 in the datasheet
-		
-		// Copy the message from the mcan buffer, to our own buffer.
-		struct mcan_rx_element_fifo_0 rx_element;
-		mcan_get_rx_fifo_0_element(&pHandle->can_module, &rx_element, fifo_receive_index);
-		
-		xMessageBufferSendFromISR(pHandle->receiveMessageBuffer, &rx_element, sizeof(struct mcan_rx_element_fifo_0), &xHigherPriorityTaskWoken);
-
+		struct mcan_rx_element_fifo_0 rx_element_fifo_0;
+		uint32_t fifo_receive_index = (pHandle->can_module.hw->MCAN_RXF0S & MCAN_RXF0S_F0GI_Msk) >> MCAN_RXF0S_F0GI_Pos;
+			
+		mcan_get_rx_fifo_0_element(&pHandle->can_module, &rx_element_fifo_0, fifo_receive_index);
+			
+		// Send message to driver
+		xMessageBufferSendFromISR(pHandle->receiveMessageBuffer, &rx_element_fifo_0, sizeof(struct mcan_rx_element_fifo_0), &xHigherPriorityTaskWoken);
+			
 		// Ack the message, Suspect this allows a new message to be received
 		mcan_rx_fifo_acknowledge(&pHandle->can_module, 0, fifo_receive_index);
 
-		fifo_receive_index++;
-		if(fifo_receive_index == CONF_MCAN0_RX_FIFO_0_NUM)
-		{
-			fifo_receive_index = 0;
-		}
-	
 		// Finally, clear interupt flag
 		mcan_clear_interrupt_status(&pHandle->can_module, MCAN_RX_FIFO_0_NEW_MESSAGE);
 	}
+	
 
 	if (status & MCAN_RX_FIFO_1_NEW_MESSAGE) {
-		mcan_clear_interrupt_status(&pHandle->can_module, MCAN_RX_FIFO_1_NEW_MESSAGE);
-		mcan_rx_fifo_acknowledge(&pHandle->can_module, 1, 0);
-
+		
 		struct mcan_rx_element_fifo_1 rx_element_fifo_1;
+		uint32_t fifo_receive_index = (pHandle->can_module.hw->MCAN_RXF1S & MCAN_RXF1S_F1GI_Msk) >> MCAN_RXF1S_F1GI_Pos;
 
-		mcan_get_rx_fifo_1_element(&pHandle->can_module, &rx_element_fifo_1, 0);
-		mcan_rx_fifo_acknowledge(&pHandle->can_module, 0, 0);
+		mcan_get_rx_fifo_1_element(&pHandle->can_module, &rx_element_fifo_1, fifo_receive_index);
+		mcan_rx_fifo_acknowledge(&pHandle->can_module, 1, fifo_receive_index);
+		
+		mcan_clear_interrupt_status(&pHandle->can_module, MCAN_RX_FIFO_1_NEW_MESSAGE);
 	}
 
 	if (status & MCAN_BUS_OFF) {

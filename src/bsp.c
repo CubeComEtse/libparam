@@ -9,6 +9,7 @@
 
 #include "bsp.h"
 
+#include "sysclk.h"
 #include "genclk.h"
 #include "ioport.h"
 #include "obc_controller_rev_A.h"
@@ -50,12 +51,13 @@ static ccd_uart_t bus_uart;
 // The version is only read and set once, during startup
 static uint8_t version;
 
-void BSP_Init(bsp_t * bsp) {
-
+void BSP_Init(bsp_t * bsp) {		
 	// System Initialization
-	sysclk_init();    
+	sysclk_init();
+	// This initializes the USB clock - used by the CAN
+	sysclk_enable_usb();
 	
-	wdt_disable(WDT);
+	wdt_disable(WDT); 
 	
 	// General GPIO is handled here - not in a driver
 	ioport_init();
@@ -75,7 +77,8 @@ void BSP_Init(bsp_t * bsp) {
 	
 	delay_ms(1);
 	version = (ioport_get_pin_level(PIN_VERSION_2) << 2) | (ioport_get_pin_level(PIN_VERSION_1) << 1) | ioport_get_pin_level(PIN_VERSION_0);
-
+    
+	
 	BSP_vInitUART(bsp);
 	BSP_vInitBusI2C(bsp);
 	BSP_vInitUtilI2C(bsp);	
@@ -97,10 +100,10 @@ void BSP_Init(bsp_t * bsp) {
 	// Make all interrupt prioirty bits preempt bits, rather than sub-prioirty bits.
 	// According to https://www.freertos.org/Documentation/02-Kernel/03-Supported-devices/04-Demos/ARM-Cortex/RTOS-Cortex-M3-M4
 	NVIC_SetPriorityGrouping(4);
-    Enable_global_interrupt();
+	Enable_global_interrupt();
 	
 	// Set the systick to the lowest possible interrupt level
-    SysTick_Config(300000);
+	SysTick_Config(300000);
 	NVIC_SetPriority(SysTick_IRQn, (1<<__NVIC_PRIO_BITS) -1 );
 }
 
@@ -375,7 +378,7 @@ void BSP_vInitCan(bsp_t * bsp) {
 		ioport_set_pin_mode(CAN_PIN_TX_V2, CAN_PIN_TX_MUX_V2);
 		ioport_disable_pin(CAN_PIN_RX_V2);
 		ioport_set_pin_mode(CAN_PIN_RX_V2, CAN_PIN_RX_MUX_V2);
-
+		
 		// Enable clock to CAN module
 		sysclk_enable_peripheral_clock(CAN_DEVICE_ID_V2);
 	
@@ -384,12 +387,13 @@ void BSP_vInitCan(bsp_t * bsp) {
 		bus_can.baudrate = 1000000;
 		ccd_can_Init(&bus_can, CAN_DEVICE_V2);
 		bsp->bus_can = &bus_can;
+		
 	}
 }
 
 
 void MCAN0_INT0_Handler(void) {
-	ccd_can_driver_ReceiveCallback(&bus_can);
+	ccd_can_ReceiveCallback(&bus_can);
 }
 
 void MCAN0_INT1_Handler(void) {
@@ -397,7 +401,7 @@ void MCAN0_INT1_Handler(void) {
 }
 
 void MCAN1_INT0_Handler(void) {
-	ccd_can_driver_ReceiveCallback(&bus_can);
+	ccd_can_ReceiveCallback(&bus_can);
 }
 
 void MCAN1_INT1_Handler(void) {

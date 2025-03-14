@@ -320,6 +320,16 @@
       <ToolOptions>
         <InterfaceProperties>
           <SwdClock>4000000</SwdClock>
+          <JtagEnableExtResetOnStartSession>true</JtagEnableExtResetOnStartSession>
+          <JtagInChain>false</JtagInChain>
+          <JtagDevicesBefore>0</JtagDevicesBefore>
+          <JtagDevicesAfter>0</JtagDevicesAfter>
+          <JtagInstrBitsBefore>0</JtagInstrBitsBefore>
+          <JtagInstrBitsAfter>0</JtagInstrBitsAfter>
+          <JtagSelectedDeviceIndexInChain>0</JtagSelectedDeviceIndexInChain>
+          <JtagDbgClock>4000000</JtagDbgClock>
+          <JtagDaisyChainDevices>
+          </JtagDaisyChainDevices>
         </InterfaceProperties>
         <InterfaceName>SWD</InterfaceName>
         <JlinkConfigFile>C:\Users\Kolijn\Work\Repos\gse-firmware\jlink.config</JlinkConfigFile>
@@ -556,7 +566,7 @@
   </armgcc.linker.libraries.LibrarySearchPaths>
   <armgcc.linker.optimization.GarbageCollectUnusedSections>True</armgcc.linker.optimization.GarbageCollectUnusedSections>
   <armgcc.linker.memorysettings.ExternalRAM />
-  <armgcc.linker.miscellaneous.LinkerFlags>-Wl,--entry=Reset_Handler -Wl,--cref -mthumb -T../src/ASF/sam/utils/linker_scripts/samv71/samv71q21/gcc/flash.ld</armgcc.linker.miscellaneous.LinkerFlags>
+  <armgcc.linker.miscellaneous.LinkerFlags>-Wl,--entry=Reset_Handler -Wl,--cref -mthumb -T../linker/flash.ld</armgcc.linker.miscellaneous.LinkerFlags>
   <armgcc.assembler.general.IncludePaths>
     <ListValues>
       <Value>../src/ASF/common/boards</Value>
@@ -647,6 +657,7 @@
     <Folder Include="inc\config\" />
     <Folder Include="inc\drivers\" />
     <Folder Include="inc\freertos\" />
+    <Folder Include="linker\" />
     <Folder Include="src\" />
     <Folder Include="src\ASF\" />
     <Folder Include="src\ASF\common\" />
@@ -908,6 +919,9 @@
     <Compile Include="src\File.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\freertos\portable\MemMang\heap_4.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\te_adaptors.c">
       <SubType>compile</SubType>
     </Compile>
@@ -917,6 +931,9 @@
     <Compile Include="src\uart_target.c">
       <SubType>compile</SubType>
     </Compile>
+    <None Include="linker\flash.ld">
+      <SubType>compile</SubType>
+    </None>
     <None Include="src\asf.h">
       <SubType>compile</SubType>
     </None>
@@ -948,9 +965,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\freertos\portable\GCC\ARM_CM7\r0p1\portmacro.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\freertos\portable\MemMang\heap_4.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\freertos\queue.c">

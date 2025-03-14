@@ -35,6 +35,7 @@ typedef struct {
 }ccd_led_t;
 
 void ccd_led_driver_Init(ccd_led_t * driver, Pwm * pwm_instance);
+void ccd_led_driver_DisableInterrupts(ccd_led_t * driver, bool value);
 void ccd_led_driver_SetLed(ccd_led_t * driver, uint8_t r, uint8_t g, uint8_t b);
 
 #endif /* CCD_LED_DRIVER_H_ */

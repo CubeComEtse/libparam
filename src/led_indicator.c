@@ -171,12 +171,14 @@ void LEDIndicator_UpdateTask(void * parameters)
 					if (new_led.z < 0)
 					new_led.z = 0;
 
+					ccd_led_driver_DisableInterrupts(handle->led_driver, true);
 					ccd_led_driver_SetLed(handle->led_driver,
 					(uint8_t)(new_led.x * 255),
 					(uint8_t)(new_led.y * 255),
 					(uint8_t)(new_led.z * 255));
 					
 					ccd_led_driver_SetLed(handle->led_driver,0,0,0);
+					ccd_led_driver_DisableInterrupts(handle->led_driver, false);
 				}
 			}
 			break;

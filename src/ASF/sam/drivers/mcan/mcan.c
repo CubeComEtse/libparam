@@ -53,35 +53,38 @@ extern "C" {
 /* Get a value of 2 to 15 bit. */
 #define BIT_2_TO_15_MASK         0x0000fffc
 
+#define COMPILER_LOW_ADDRESS __attribute__((section (".low_address")))
+
 /* Message ram definition. */
-COMPILER_ALIGNED(4)
+COMPILER_ALIGNED(4) COMPILER_LOW_ADDRESS
 static struct mcan_rx_element_buffer mcan0_rx_buffer[CONF_MCAN0_RX_BUFFER_NUM];
-COMPILER_ALIGNED(4)
+COMPILER_ALIGNED(4) COMPILER_LOW_ADDRESS
 static struct mcan_rx_element_fifo_0 mcan0_rx_fifo_0[CONF_MCAN0_RX_FIFO_0_NUM];
-COMPILER_ALIGNED(4)
+COMPILER_ALIGNED(4) COMPILER_LOW_ADDRESS
 static struct mcan_rx_element_fifo_1 mcan0_rx_fifo_1[CONF_MCAN0_RX_FIFO_1_NUM];
-COMPILER_ALIGNED(4)
+COMPILER_ALIGNED(4) COMPILER_LOW_ADDRESS
 static struct mcan_tx_element mcan0_tx_buffer[CONF_MCAN0_TX_BUFFER_NUM + CONF_MCAN0_TX_FIFO_QUEUE_NUM];
-COMPILER_ALIGNED(4)
+COMPILER_ALIGNED(4) COMPILER_LOW_ADDRESS
 static struct mcan_tx_event_element mcan0_tx_event_fifo[CONF_MCAN0_TX_EVENT_FIFO];
-COMPILER_ALIGNED(4)
+COMPILER_ALIGNED(4) COMPILER_LOW_ADDRESS
 static struct mcan_standard_message_filter_element mcan0_rx_standard_filter[CONF_MCAN0_RX_STANDARD_ID_FILTER_NUM];
-COMPILER_ALIGNED(4)
+COMPILER_ALIGNED(4) COMPILER_LOW_ADDRESS
 static struct mcan_extended_message_filter_element mcan0_rx_extended_filter[CONF_MCAN0_RX_EXTENDED_ID_FILTER_NUM];
 
-COMPILER_ALIGNED(4)
+COMPILER_ALIGNED(4) COMPILER_LOW_ADDRESS
 static struct mcan_rx_element_buffer mcan1_rx_buffer[CONF_MCAN1_RX_BUFFER_NUM];
-COMPILER_ALIGNED(4)
+COMPILER_ALIGNED(4) COMPILER_LOW_ADDRESS
 static struct mcan_rx_element_fifo_0 mcan1_rx_fifo_0[CONF_MCAN1_RX_FIFO_0_NUM];
-COMPILER_ALIGNED(4)
+COMPILER_ALIGNED(4) COMPILER_LOW_ADDRESS
 static struct mcan_rx_element_fifo_1 mcan1_rx_fifo_1[CONF_MCAN1_RX_FIFO_1_NUM];
-COMPILER_ALIGNED(4)
+COMPILER_ALIGNED(4) COMPILER_LOW_ADDRESS
 static struct mcan_tx_element mcan1_tx_buffer[CONF_MCAN1_TX_BUFFER_NUM + CONF_MCAN1_TX_FIFO_QUEUE_NUM];
-COMPILER_ALIGNED(4)
+
+COMPILER_ALIGNED(4) COMPILER_LOW_ADDRESS
 static struct mcan_tx_event_element mcan1_tx_event_fifo[CONF_MCAN1_TX_EVENT_FIFO];
-COMPILER_ALIGNED(4)
+COMPILER_ALIGNED(4) COMPILER_LOW_ADDRESS
 static struct mcan_standard_message_filter_element mcan1_rx_standard_filter[CONF_MCAN1_RX_STANDARD_ID_FILTER_NUM];
-COMPILER_ALIGNED(4)
+COMPILER_ALIGNED(4) COMPILER_LOW_ADDRESS
 static struct mcan_extended_message_filter_element mcan1_rx_extended_filter[CONF_MCAN1_RX_EXTENDED_ID_FILTER_NUM];
 
 /**
@@ -141,6 +144,7 @@ static void _mcan_message_memory_init(Mcan *hw)
 				MCAN_RXESC_F1DS((CONF_MCAN_ELEMENT_DATA_SIZE - 32) / 16 + 5);
 		hw->MCAN_TXESC = MCAN_TXESC_TBDS((CONF_MCAN_ELEMENT_DATA_SIZE - 32) / 16 + 5);
 	}
+		
 }
 
 /**
@@ -267,14 +271,8 @@ void mcan_init(struct mcan_module *const module_inst, Mcan *hw,
 	/* Associate the software module instance with the hardware module */
 	module_inst->hw = hw;
 
-	pmc_disable_pck(PMC_PCK_5);
-
-	pmc_switch_pck_to_pllack(PMC_PCK_5, PMC_PCK_PRES(9));
-	pmc_enable_pck(PMC_PCK_5);
-
 	/* Enable peripheral clock */
 	_mcan_enable_peripheral_clock(module_inst);
-
 
 	/* Configuration Change Enable. */
 	hw->MCAN_CCCR |= MCAN_CCCR_CCE;
@@ -672,6 +670,7 @@ enum status_code mcan_set_tx_buffer_element(
 		for (i = 0; i < CONF_MCAN_ELEMENT_DATA_SIZE; i++) {
 			mcan1_tx_buffer[index].data[i] = tx_element->data[i];
 		}
+		
 		return STATUS_OK;
 	}
 	return ERR_INVALID_ARG;

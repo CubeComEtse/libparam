@@ -97,7 +97,7 @@ void PLATFORM_vInit(bsp_t * bsp)
 	I2CTARGET_Init(&i2c_target);
 	
 	can_target.can_send = ccd_can_Send_message;
-	can_target.can_receive = cc_can_Receive_message;
+	can_target.can_receive = ccd_can_Receive_message;
 	can_target.can_handle = bsp->bus_can;
 	can_target.radio_can_address = 0x26;
 	// This has to align with the BSP version, otherwise issues.
