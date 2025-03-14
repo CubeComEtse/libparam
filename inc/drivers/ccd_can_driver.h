@@ -32,9 +32,9 @@ typedef struct {
 
 
 void ccd_can_Init(ccd_can_t * pHandle, Mcan * can_device);
-void ccd_can_SetAddress(ccd_can_t * pHandle, uint32_t filter, uint32_t mask);
-void ccd_can_SetRetries(ccd_can_t * pHandle, bool enabled);
-bool ccd_can_SetBaudRate(ccd_can_t * pHandle, uint16_t baud);
+void ccd_can_SetAddress(void * vHandle, uint32_t filter, uint32_t mask);
+void ccd_can_SetRetries(void * vHandle, bool enabled);
+bool ccd_can_SetBaudRate(void * vHandle, uint32_t baud);
 void ccd_can_Send_message(void * vHandle, uint32_t header, uint8_t * data, size_t data_len);
 bool ccd_can_Receive_message(void * vHandle, uint32_t * header, uint8_t ** data, size_t * data_len);
 void ccd_can_ReceiveCallback(ccd_can_t* pHandle);

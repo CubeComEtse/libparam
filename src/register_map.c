@@ -1555,7 +1555,7 @@ mm_response_t mm_getCANConfA(uint32_t * dest) {
     }
     return response;
 }
-mm_response_t mm_setCANConfA_BaudRate(const uint32_t val) {
+mm_response_t mm_setCANConfA_BaudRate(const uint16_t val) {
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
         mm.CANConfA = (mm.CANConfA & ~REG_CANCONFA_BAUDRATE_Msk) | (val << REG_CANCONFA_BAUDRATE_Pos);
         xSemaphoreGive(_mm_mutex);
@@ -1565,21 +1565,97 @@ mm_response_t mm_setCANConfA_BaudRate(const uint32_t val) {
         return mm_NotReady;
     }
 }
-mm_response_t mm_getCANConfA_BaudRate(uint32_t * dest) {
+mm_response_t mm_getCANConfA_BaudRate(uint16_t * dest) {
     mm_response_t response = mm_NotReady;
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
     {
-        *dest = (uint32_t) ((mm.CANConfA & REG_CANCONFA_BAUDRATE_Msk) >> REG_CANCONFA_BAUDRATE_Pos);
+        *dest = (uint16_t) ((mm.CANConfA & REG_CANCONFA_BAUDRATE_Msk) >> REG_CANCONFA_BAUDRATE_Pos);
         xSemaphoreGive(_mm_mutex);
         return mm_OK;
     }
     return response;
 }
 
-mm_response_t mm_getCANConfA_BaudRateFrom(uint32_t * dest, const uint32_t source) {
-    *dest = (uint32_t) ((source & REG_CANCONFA_BAUDRATE_Msk) >> REG_CANCONFA_BAUDRATE_Pos);
+mm_response_t mm_getCANConfA_BaudRateFrom(uint16_t * dest, const uint32_t source) {
+    *dest = (uint16_t) ((source & REG_CANCONFA_BAUDRATE_Msk) >> REG_CANCONFA_BAUDRATE_Pos);
     return mm_OK;
 }
+mm_response_t mm_setCANConfA_EnableRetries(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.CANConfA = (mm.CANConfA & ~REG_CANCONFA_ENABLERETRIES_Msk) | (val << REG_CANCONFA_ENABLERETRIES_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getCANConfA_EnableRetries(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.CANConfA & REG_CANCONFA_ENABLERETRIES_Msk) >> REG_CANCONFA_ENABLERETRIES_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getCANConfA_EnableRetriesFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_CANCONFA_ENABLERETRIES_Msk) >> REG_CANCONFA_ENABLERETRIES_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setCANConfA_FlipCanBytes(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.CANConfA = (mm.CANConfA & ~REG_CANCONFA_FLIPCANBYTES_Msk) | (val << REG_CANCONFA_FLIPCANBYTES_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getCANConfA_FlipCanBytes(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.CANConfA & REG_CANCONFA_FLIPCANBYTES_Msk) >> REG_CANCONFA_FLIPCANBYTES_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getCANConfA_FlipCanBytesFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_CANCONFA_FLIPCANBYTES_Msk) >> REG_CANCONFA_FLIPCANBYTES_Pos);
+    return mm_OK;
+}
+/*************** Get/Set functions for CANConfB register **********************************************************************/
+mm_response_t mm_setCANConfB(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.CANConfB = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getCANConfB(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.CANConfB;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_getCANConfBFrom(uint32_t * dest, const uint32_t source) {
+    *dest = source;
+    return mm_OK;
+}
+
+
 /*************** Get/Set functions for PC104Pins register *********************************************************************/
 mm_response_t mm_setPC104Pins(const uint32_t val) {
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {

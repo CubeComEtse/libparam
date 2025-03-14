@@ -364,9 +364,6 @@ void BSP_vInitCan(bsp_t * bsp) {
 
 		// Enable clock to CAN module
 		sysclk_enable_peripheral_clock(CAN_DEVICE_ID);
-	
-		bus_can.gse_address = 0xE9;
-		bus_can.gse_address_mask = 0xFF;
 		bus_can.baudrate = 1000000;
 		ccd_can_Init(&bus_can, MCAN0);
 		bsp->bus_can = &bus_can;
@@ -381,9 +378,6 @@ void BSP_vInitCan(bsp_t * bsp) {
 		
 		// Enable clock to CAN module
 		sysclk_enable_peripheral_clock(CAN_DEVICE_ID_V2);
-	
-		bus_can.gse_address = 0xE9;
-		bus_can.gse_address_mask = 0xFF;
 		bus_can.baudrate = 1000000;
 		ccd_can_Init(&bus_can, CAN_DEVICE_V2);
 		bsp->bus_can = &bus_can;

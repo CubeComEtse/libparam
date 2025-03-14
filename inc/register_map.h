@@ -77,7 +77,11 @@ typedef enum {
 
 /*************** Bit definition for CANConfA register ************************/
 #define REG_CANCONFA_BAUDRATE_Pos                    (0UL)
-#define REG_CANCONFA_BAUDRATE_Msk                    (0xffffffff << REG_CANCONFA_BAUDRATE_Pos)
+#define REG_CANCONFA_BAUDRATE_Msk                    (0xffff << REG_CANCONFA_BAUDRATE_Pos)
+#define REG_CANCONFA_ENABLERETRIES_Pos               (16UL)
+#define REG_CANCONFA_ENABLERETRIES_Msk               (0x0001 << REG_CANCONFA_ENABLERETRIES_Pos)
+#define REG_CANCONFA_FLIPCANBYTES_Pos                (31UL)
+#define REG_CANCONFA_FLIPCANBYTES_Msk                (0x0001 << REG_CANCONFA_FLIPCANBYTES_Pos)
 
 /*************** Bit definition for PC104Pins register ***********************/
 #define REG_PC104PINS_ENA_Pos                        (0UL)
@@ -240,6 +244,7 @@ typedef struct {
     uint32_t MultiConf0;
     uint32_t ConfTempSense;
     uint32_t CANConfA;
+    uint32_t CANConfB;
     uint32_t PC104Pins;
     uint32_t XTXMultitester;
     uint32_t RFRelaysConf;
@@ -317,6 +322,7 @@ typedef enum {
     reg_MultiConf0_addr = 0x2B,
     reg_ConfTempSense_addr = 0x2C,
     reg_CANConfA_addr = 0x2D,
+    reg_CANConfB_addr = 0x2E,
     reg_PC104Pins_addr = 0x30,
     reg_XTXMultitester_addr = 0x31,
     reg_RFRelaysConf_addr = 0x32,
@@ -615,9 +621,20 @@ mm_response_t mm_getConfTempSense_EnableMeasurementsFrom(mm_enabled_t * dest, co
 /*************** Get/Set functions for CANConfA register **********************************************************************/
 mm_response_t mm_setCANConfA(const uint32_t val);
 mm_response_t mm_getCANConfA(uint32_t * dest);
-mm_response_t mm_setCANConfA_BaudRate(const uint32_t val);
-mm_response_t mm_getCANConfA_BaudRate(uint32_t * dest);
-mm_response_t mm_getCANConfA_BaudRateFrom(uint32_t * dest, const uint32_t source);
+mm_response_t mm_setCANConfA_BaudRate(const uint16_t val);
+mm_response_t mm_getCANConfA_BaudRate(uint16_t * dest);
+mm_response_t mm_getCANConfA_BaudRateFrom(uint16_t * dest, const uint32_t source);
+mm_response_t mm_setCANConfA_EnableRetries(const mm_enabled_t val);
+mm_response_t mm_getCANConfA_EnableRetries(mm_enabled_t * dest);
+mm_response_t mm_getCANConfA_EnableRetriesFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setCANConfA_FlipCanBytes(const mm_enabled_t val);
+mm_response_t mm_getCANConfA_FlipCanBytes(mm_enabled_t * dest);
+mm_response_t mm_getCANConfA_FlipCanBytesFrom(mm_enabled_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for CANConfB register **********************************************************************/
+mm_response_t mm_setCANConfB(const uint32_t val);
+mm_response_t mm_getCANConfB(uint32_t * dest);
+mm_response_t mm_getCANConfBFrom(uint32_t * dest, const uint32_t source);
 
 /*************** Get/Set functions for PC104Pins register *********************************************************************/
 mm_response_t mm_setPC104Pins(const uint32_t val);

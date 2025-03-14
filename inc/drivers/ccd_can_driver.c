@@ -29,8 +29,6 @@ void ccd_can_Init(ccd_can_t * pHandle, Mcan * can_device)
 	
 	// Will set CCR.INIT bit to 0, so module runs
 	mcan_start(&pHandle->can_module);
-	
-	ccd_can_SetAddress(pHandle, pHandle->gse_address, pHandle->gse_address_mask);
 		
 	if (can_device == MCAN0)
 	{
@@ -45,13 +43,18 @@ void ccd_can_Init(ccd_can_t * pHandle, Mcan * can_device)
 		mcan_enable_interrupt(&pHandle->can_module, MCAN_RX_BUFFER_NEW_MESSAGE | MCAN_RX_FIFO_0_NEW_MESSAGE | MCAN_RX_FIFO_1_NEW_MESSAGE | MCAN_FORMAT_ERROR | MCAN_ACKNOWLEDGE_ERROR | MCAN_BUS_OFF);
 	}
 	
-	// pHandle->receiveMessageBuffer = xMessageBufferCreate(sizeof(struct mcan_rx_element_fifo_0) * 32);
+	pHandle->receiveMessageBuffer = xMessageBufferCreate(sizeof(struct mcan_rx_element_fifo_0) * 32);
 }
 
 
 
-void ccd_can_SetAddress(ccd_can_t * pHandle, uint32_t filter, uint32_t mask)
+void ccd_can_SetAddress(void * vHandle, uint32_t filter, uint32_t mask)
 {
+	ccd_can_t * pHandle = (ccd_can_t*) vHandle;
+	
+	pHandle->gse_address = filter;
+	pHandle->gse_address_mask = mask;
+	
 	struct mcan_extended_message_filter_element et_filter;
 	mcan_get_extended_message_filter_element_default(&et_filter);
 	et_filter.F0.reg = MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F0_EFID1(filter) | MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F0_EFEC(MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F0_EFEC_STF0M_Val);
@@ -70,8 +73,10 @@ void ccd_can_SetAddress(ccd_can_t * pHandle, uint32_t filter, uint32_t mask)
     When this is ported to FreeRTOS there should also be a lock on the CAN module to make
 	sure we don't change it while transmitting a message.
 */
-void ccd_can_SetRetries(ccd_can_t * pHandle, bool enabled)
+void ccd_can_SetRetries(void * vHandle, bool enabled)
 {
+	ccd_can_t * pHandle = (ccd_can_t*) vHandle;
+	
 	mcan_stop(&pHandle->can_module);	
 	
 	pHandle->can_module.hw->MCAN_CCCR |= MCAN_CCCR_CCE;
@@ -88,13 +93,15 @@ void ccd_can_SetRetries(ccd_can_t * pHandle, bool enabled)
 	mcan_start(&pHandle->can_module);
 }
 
-bool ccd_can_SetBaudRate(ccd_can_t * pHandle, uint16_t baud)
+bool ccd_can_SetBaudRate(void * vHandle, uint32_t baud)
 {
 	// There are very specific accepted values for the baud rate.
-	if (baud != 2000 && baud != 1000 && baud != 500){
+	if (baud != 2000000 && baud != 1000000 && baud != 500000){
 		return false;
 	}
-	pHandle->baudrate = baud * 1000;
+	
+	ccd_can_t * pHandle = (ccd_can_t *) vHandle;
+	pHandle->baudrate = baud;
 	
 	mcan_stop(&pHandle->can_module);
 	

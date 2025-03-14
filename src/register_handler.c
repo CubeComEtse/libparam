@@ -56,6 +56,7 @@ static addres_to_func_map_t address_to_func_map[] = {
 	{ reg_MultiConf0_addr, mm_getMultiConf0 },
 	{ reg_ConfTempSense_addr, mm_getConfTempSense },
 	{ reg_CANConfA_addr, mm_getCANConfA },
+	{ reg_CANConfB_addr, mm_getCANConfB },
 	{ reg_PC104Pins_addr, mm_getPC104Pins },
 		
 		
@@ -368,8 +369,36 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 				mm_setMultiConf0_ScanEnabled(scan_enabled);
 			}
 			break;
-		case reg_CANConfA_addr:
-			break;
+			case reg_CANConfA_addr:
+			{
+				uint16_t baudrate_kbps = 0;
+				mm_getCANConfA_BaudRateFrom(&baudrate_kbps, deserialized);
+				if (CANTARGET_SetBaud(platform->can_target, ((uint32_t)baudrate_kbps) * 1000))
+				{
+					mm_setCANConfA_BaudRate( baudrate_kbps);
+				}
+				
+				mm_enabled_t FlipCanBytes;
+				mm_getCANConfA_FlipCanBytesFrom(&FlipCanBytes, deserialized);
+				if (FlipCanBytes)
+				{
+					if (CANTARGET_SetMode(platform->can_target, PLAN_S_COMPATIBILITY)){
+						mm_setCANConfA_FlipCanBytes(FlipCanBytes);
+					}
+				}
+				else {
+					if (CANTARGET_SetMode(platform->can_target, CUBECOM_MODE)){
+						mm_setCANConfA_FlipCanBytes(FlipCanBytes);
+					}
+				}
+				
+				mm_enabled_t EnableRetries;
+				mm_getCANConfA_EnableRetriesFrom(&EnableRetries, deserialized);
+				if (CANTARGET_EnableRetries(platform->can_target, EnableRetries == reg_enabled_enabled))
+				{
+					mm_setCANConfA_EnableRetries(EnableRetries);
+				}
+			}
 		case reg_PC104Pins_addr:
 			{
 				mm_enabled_t ena;

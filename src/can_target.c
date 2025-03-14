@@ -12,6 +12,9 @@
 #include <assert.h>
 #include "pc_messages.h"
 
+// This include should not be here, there should be function pointers
+#include "ccd_can_driver.h"
+
 #define CAN_TELECOMMAND_REQUEST 0x01
 #define CAN_TELEMETRY_REQUEST 0x04
 
@@ -20,22 +23,26 @@
  *
  * Before calling this function the following should be set
 */
-void CANTARGET_Init(can_target_t * handle)
+void CANTARGET_Init(can_target_t * pHandle)
 {
-	assert(handle->can_send);
+	assert(pHandle->can_send);
 	// Do not assert the handle, it might be void. 
 	
 	// These buffers are for SERCOM messages
 	// This buffer size is an initial guess. Feel free to update it later.
-	handle->incoming_messages = xMessageBufferCreate(256);
-	handle->outgoing_messages = xMessageBufferCreate(256);
+	pHandle->incoming_messages = xMessageBufferCreate(256);
+	pHandle->outgoing_messages = xMessageBufferCreate(256);
 	
+	pHandle->can_semaphore = xSemaphoreCreateMutex();
+	
+	pHandle->mode = CUBECOM_MODE;
+	ccd_can_SetAddress(pHandle->can_handle, pHandle->our_can_address, 0xFF);
 }
 
-void CANTARGET_TxTask(void * handle)
+void CANTARGET_TxTask(void * vHandle)
 {
-	assert(handle);
-	can_target_t * hnd = (can_target_t *) handle;
+	assert(vHandle);
+	can_target_t * pHandle = (can_target_t *) vHandle;
 	
 	uint8_t rx_buffer[32];
 	v2_msg_t in_message;
@@ -44,7 +51,7 @@ void CANTARGET_TxTask(void * handle)
 	
 	while(1){
 		// Wait indefinitely to receive a message 
-		size_t rx_length = xMessageBufferReceive(hnd->incoming_messages, rx_buffer, 16, portMAX_DELAY);
+		size_t rx_length = xMessageBufferReceive(pHandle->incoming_messages, rx_buffer, 16, portMAX_DELAY);
 		
 		if (rx_length == 0){
 			continue;
@@ -88,9 +95,18 @@ void CANTARGET_TxTask(void * handle)
 			// 0 - MsgType
 			// 1 - Length
 			// 2 - Data (containing register address)
-			uint32_t can_header = ((in_message.data[0] << 24) | (in_message.msg_id << 16) | (hnd->our_can_address << 8) | (hnd->radio_can_address << 0));
+			uint32_t can_header = 0;
+			switch (pHandle->mode)
+			{
+				case CUBECOM_MODE:
+					can_header = ((in_message.data[0] << 24) | (in_message.msg_id << 16) | (pHandle->our_can_address << 8) | (pHandle->radio_can_address << 0));
+					break;
+				case PLAN_S_COMPATIBILITY:
+					can_header = ((in_message.data[0] << 24) | (pHandle->radio_can_address << 16) | (pHandle->our_can_address << 8) |  (in_message.msg_id));
+					break;
+			}
 
-			hnd->can_send(hnd->can_handle, can_header, &in_message.data[2], in_message.data[1]);
+			pHandle->can_send(pHandle->can_handle, can_header, &in_message.data[2], in_message.data[1]);
 		}
 		if (in_message.target == EP_V2_CAN_CC_3)
 		{
@@ -102,8 +118,8 @@ void CANTARGET_TxTask(void * handle)
 			// 2 - Length
 			// 3 - Data. Data can contain the address
 			
-			uint32_t can_header = ((in_message.data[1] << 24) | (in_message.msg_id << 16) | (hnd->our_can_address << 8) | (in_message.data[0] << 0));
-			hnd->can_send(hnd->can_handle, can_header, &in_message.data[3], in_message.data[2]);
+			uint32_t can_header = ((in_message.data[1] << 24) | (in_message.msg_id << 16) | (pHandle->our_can_address << 8) | (in_message.data[0] << 0));
+			pHandle->can_send(pHandle->can_handle, can_header, &in_message.data[3], in_message.data[2]);
 		}
 	}
 }
@@ -148,4 +164,49 @@ void CANTARGET_RxTask(void * vHandle)
 		}
 	
 	}
+}
+
+bool CANTARGET_SetBaud(can_target_t * pHandle, uint32_t baud)
+{
+	// Should we wait for the buffer to be empty?
+	
+	xSemaphoreTake(pHandle->can_semaphore, pdMS_TO_TICKS(200));
+	bool retval = ccd_can_SetBaudRate(pHandle->can_handle, baud);
+	xSemaphoreGive(pHandle->can_semaphore);
+	
+	return retval;
+}
+
+bool CANTARGET_EnableRetries(can_target_t * pHandle, bool retries)
+{
+	// Should we wait for the buffer to be empty?
+	
+	xSemaphoreTake(pHandle->can_semaphore, pdMS_TO_TICKS(200));
+	ccd_can_SetRetries(pHandle->can_handle, retries);
+	xSemaphoreGive(pHandle->can_semaphore);
+	
+	return true;
+}
+
+bool CANTARGET_SetMode(can_target_t * pHandle, can_mode_t mode)
+{
+	// Should we wait for the buffer to be empty?
+	
+	xSemaphoreTake(pHandle->can_semaphore, pdMS_TO_TICKS(200));
+	switch (mode)
+	{
+		case CUBECOM_MODE:
+			pHandle->mode = CUBECOM_MODE;
+			// Change the address filter as well
+			ccd_can_SetAddress(pHandle->can_handle, pHandle->our_can_address, 0xFF);
+		break;	
+		case PLAN_S_COMPATIBILITY:
+			pHandle->mode = PLAN_S_COMPATIBILITY;
+			ccd_can_SetAddress(pHandle->can_handle, pHandle->our_can_address << 16, 0xFF << 16);
+		break;
+	}
+	xSemaphoreGive(pHandle->can_semaphore);
+	
+	return true;
+	
 }

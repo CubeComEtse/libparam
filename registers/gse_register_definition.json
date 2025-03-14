@@ -463,9 +463,26 @@
 				"fields": [
 					{ 
 						"name": "BaudRate", 
-						"bit": "31-0", 
+						"description": "Baud rate in 10kbps increments. 100 = 1Mbps, 50 = 500 kbps",
+						"bit": "15-0", 
 						"c#": {"hasminmax": "false", "type": "UInt32" },
-						"c": {"type": "uint32_t"} 
+						"c": {"type": "uint16_t"} 
+					},
+					{ 
+						"name": "EnableRetries", 
+						"description": "Enable CAN message retires - tends to crash",
+						"bit": "16", 
+						"options": "Enabled",
+						"c#": {"hasminmax": "false", "type": "UInt32" },
+						"c": {"type": "bool"} 
+					},
+					{ 
+						"name": "FlipCanBytes", 
+						"description": "Flips CAN Destination and ID fields around for Plan S Compatibility",
+						"bit": "31",
+						"options": "Enabled",
+						"c#": {"hasminmax": "false", "type": "UInt32" },
+						"c": {"type": "bool"} 
 					}
 				],
 				"c#": {
@@ -478,14 +495,7 @@
 				"dir": "rw",
 				"width": "32",
 				"fields": [
-					{ 
-						"name": "FlipCanBytes", 
-						"description": "Flips CAN Destination and ID fields around for Plan S Compatibility",
-						"bit": "31",
-						"options": "Enabled",
-						"c#": {"hasminmax": "false", "type": "UInt32" },
-						"c": {"type": "bool"} 
-					}
+					
 				],
 				"c#": {
 					"type": "UInt32"

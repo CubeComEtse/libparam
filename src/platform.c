@@ -100,7 +100,6 @@ void PLATFORM_vInit(bsp_t * bsp)
 	can_target.can_receive = ccd_can_Receive_message;
 	can_target.can_handle = bsp->bus_can;
 	can_target.radio_can_address = 0x26;
-	// This has to align with the BSP version, otherwise issues.
 	can_target.our_can_address = 0xE9;
 	CANTARGET_Init(&can_target);
 	
