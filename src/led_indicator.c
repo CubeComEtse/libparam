@@ -12,6 +12,7 @@ static spline_definition_t comms_active_bounce;
 
 static led_indicator_t * static_ref;
 
+/*
 control_point_t points[] ={
 	
 	//Statup point
@@ -89,7 +90,53 @@ control_point_t green_blue_bounce[] ={
 		.ticks_to_stay_on = 1000,
 		.ticks_speed = 2000,
 	}
+};*/
+
+
+control_point_t points[] ={
+	
+	//Statup point
+	{
+		.coordinate      = (vec3_t) {.x=0.0, .y=0.0, .z=0.0},
+		.forward_toggle  = (vec3_t) {.x=0.0, .y=0.0, .z=0.0},
+		.backward_toggle = (vec3_t) {.x=0.0, .y=0.0, .z=0.0},
+		.ticks_to_stay_on = 0,
+		.ticks_speed = 1000,
+	},
+	//Bright 
+	{
+		.coordinate      = (vec3_t) {.x=0.9, .y=0, .z=0},
+		.forward_toggle  = (vec3_t) {.x=0.75, .y=0, .z=0},
+		.backward_toggle = (vec3_t) {.x=0.75, .y=0, .z=0},
+		.ticks_to_stay_on = 50,
+		.ticks_speed = 500,
+	},
+	//Less bright
+	{
+		.coordinate      = (vec3_t) {.x=0.2, .y=0, .z=0},
+		.forward_toggle  = (vec3_t) {.x=0.7, .y=0, .z=0},
+		.backward_toggle = (vec3_t) {.x=0.7, .y=0, .z=0},
+		.ticks_to_stay_on = 4000,
+		.ticks_speed = 500,
+	},
+	//Bright Green - Comms Breathing 1
+	{
+		.coordinate      = (vec3_t) {.x=0.1, .y=0, .z=0},
+		.forward_toggle  = (vec3_t) {.x=0.7, .y=0, .z=0},
+		.backward_toggle = (vec3_t) {.x=0.7, .y=0, .z=0},
+		.ticks_to_stay_on = 500,
+		.ticks_speed = 200,
+	},
+	//Dark Green - breathing 2
+	{
+		.coordinate      = (vec3_t) {.x=1.0, .y=0, .z=0.000},
+		.forward_toggle  = (vec3_t) {.x=0.9, .y=0, .z=0.000},
+		.backward_toggle = (vec3_t) {.x=0.9, .y=0, .z=0.000},
+		.ticks_to_stay_on = 20,
+		.ticks_speed = 200,
+	}
 };
+
 
 void LEDIndicator_Setup(led_indicator_t * handle)
 {	
@@ -176,8 +223,6 @@ void LEDIndicator_UpdateTask(void * parameters)
 					(uint8_t)(new_led.x * 255),
 					(uint8_t)(new_led.y * 255),
 					(uint8_t)(new_led.z * 255));
-					
-					ccd_led_driver_SetLed(handle->led_driver,0,0,0);
 					ccd_led_driver_DisableInterrupts(handle->led_driver, false);
 				}
 			}

@@ -43,7 +43,8 @@ void ccd_can_Init(ccd_can_t * pHandle, Mcan * can_device)
 		mcan_enable_interrupt(&pHandle->can_module, MCAN_RX_BUFFER_NEW_MESSAGE | MCAN_RX_FIFO_0_NEW_MESSAGE | MCAN_RX_FIFO_1_NEW_MESSAGE | MCAN_FORMAT_ERROR | MCAN_ACKNOWLEDGE_ERROR | MCAN_BUS_OFF);
 	}
 	
-	pHandle->receiveMessageBuffer = xMessageBufferCreate(sizeof(struct mcan_rx_element_fifo_0) * 32);
+	// This buffer was too small once, got incremented from 32 to 64.
+	pHandle->receiveMessageBuffer = xMessageBufferCreate(sizeof(struct mcan_rx_element_fifo_0) * 64);
 }
 
 
@@ -79,13 +80,20 @@ void ccd_can_SetRetries(void * vHandle, bool enabled)
 	
 	mcan_stop(&pHandle->can_module);	
 	
-	pHandle->can_module.hw->MCAN_CCCR |= MCAN_CCCR_CCE;
-	
+	// Allow us to make change to registers
+	pHandle->can_module.hw->MCAN_CCCR |= MCAN_CCCR_CCE;	
 	while (!(pHandle->can_module.hw->MCAN_CCCR & MCAN_CCCR_CCE));
 	
-	if (!enabled) {
+	// DAR 0 - Automatic retransmission enabled
+	// DAR 1 - Automatic retransmission disabled
+	if (enabled) {
+		pHandle->can_module.hw->MCAN_CCCR &= ~MCAN_CCCR_DAR;
+	}
+	else
+	{
 		pHandle->can_module.hw->MCAN_CCCR |= MCAN_CCCR_DAR;
 	}
+		
 	
 	pHandle->can_module.hw->MCAN_CCCR &= ~MCAN_CCCR_CCE;
 	while (pHandle->can_module.hw->MCAN_CCCR & MCAN_CCCR_CCE);

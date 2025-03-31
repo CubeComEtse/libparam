@@ -134,7 +134,6 @@ void SETUP_Task(void* handle)
 	// LED task has lowest priority
 	xTaskCreate(LEDIndicator_UpdateTask, "LED", 512, (void*) platform->led_indicator, tskIDLE_PRIORITY+1, NULL);
 	
-	
 	LEDIndicator_SetNextState(LED_POWER_ON);
 	
 	// Delete the setup task

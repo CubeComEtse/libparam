@@ -23,7 +23,8 @@ void ccd_led_driver_Init(ccd_led_t * driver, Pwm * pwm_instance)
 	driver->pwm->PWM_CH_NUM[3].PWM_CMR = PWM_CMR_DPOLI;
 
 	// Set to 100 for now - 1 Mhz. Poor LED
-	driver->pwm->PWM_CH_NUM[3].PWM_CPRD = 120;
+	// driver->pwm->PWM_CH_NUM[3].PWM_CPRD = 120;
+	driver->pwm->PWM_CH_NUM[3].PWM_CPRD = 256;
 	driver->pwm->PWM_CH_NUM[3].PWM_CDTYUPD = 0;
 
 	// Enable interrupts on the channel
@@ -65,7 +66,13 @@ void ccd_led_driver_DisableInterrupts(ccd_led_t * driver, bool value)
 
 
 void ccd_led_driver_SetLed(ccd_led_t * driver, uint8_t r, uint8_t g, uint8_t b){
-	Pwm * pwm = PWM0;
+	
+	driver->pwm->PWM_ENA = PWM_ENA_CHID3;
+	driver->pwm->PWM_CH_NUM[3].PWM_CDTYUPD = r;
+	return;
+	
+	
+	Pwm * pwm = driver->pwm;
 	
 	uint32_t value = (r << 16) | (g << 8) | (b);
 	    

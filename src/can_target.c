@@ -30,8 +30,8 @@ void CANTARGET_Init(can_target_t * pHandle)
 	
 	// These buffers are for SERCOM messages
 	// This buffer size is an initial guess. Feel free to update it later.
-	pHandle->incoming_messages = xMessageBufferCreate(256);
-	pHandle->outgoing_messages = xMessageBufferCreate(256);
+	pHandle->incoming_messages = xMessageBufferCreate(1024);
+	pHandle->outgoing_messages = xMessageBufferCreate(1024);
 	
 	pHandle->can_semaphore = xSemaphoreCreateMutex();
 	
@@ -141,18 +141,23 @@ void CANTARGET_RxTask(void * vHandle)
 		{
 			
 			v2_msg_t out_message;
-			out_message.msg_id = (uint8_t) ((header >> 16) & 0xFF);
 			out_message.is_read = false;
 			out_message.data = data;
 			out_message.data_len = 2 + receive_size;
+			out_message.target = EP_V2_CAN_CC_2;
 			
+			// CAN MsgType
+			data[0] = (uint8_t) ((header >> 24) & 0x1F);
+			// Message Length
+			data[1] = (uint8_t) receive_size;
+			
+			if (pHandle->mode == CUBECOM_MODE)
 			{
-				out_message.target = EP_V2_CAN_CC_2;
-			
-				// CAN MsgType
-				data[0] = (uint8_t) ((header >> 24) & 0x1F);
-				//
-				data[1] = (uint8_t) receive_size;
+				out_message.msg_id = (uint8_t) ((header >> 16) & 0xFF);
+			}
+			if (pHandle->mode == PLAN_S_COMPATIBILITY)
+			{
+				out_message.msg_id = (uint8_t) ((header) & 0xFF);
 			}
 			
 			uint8_t encoded[20];

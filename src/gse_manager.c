@@ -129,7 +129,7 @@ void GSE_MANAGER_Task(void * taskptr){
 			current1 = (uint16_t) ((double)current1 * 1.25);
 			current2 = (uint16_t) ((double)current2 * 1.25);
 			mm_setMeasureVI_V3_current(current1);
-			mm_setMeasureVI_VBat_current(current1);
+			mm_setMeasureVI_VBat_current(current2);
 			
 			LTC2992_vReadPower(hdl->power_measure_1, &power1, &power2);
 			power1 = (uint16_t) ((double)power1 * 31.875e-3);

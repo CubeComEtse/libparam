@@ -399,6 +399,7 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 					mm_setCANConfA_EnableRetries(EnableRetries);
 				}
 			}
+			break;
 		case reg_PC104Pins_addr:
 			{
 				mm_enabled_t ena;
