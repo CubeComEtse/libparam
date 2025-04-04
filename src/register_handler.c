@@ -369,7 +369,8 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 				mm_setMultiConf0_ScanEnabled(scan_enabled);
 			}
 			break;
-			case reg_CANConfA_addr:
+			
+		case reg_CANConfA_addr:
 			{
 				uint16_t baudrate_kbps = 0;
 				mm_getCANConfA_BaudRateFrom(&baudrate_kbps, deserialized);
@@ -398,6 +399,17 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 				{
 					mm_setCANConfA_EnableRetries(EnableRetries);
 				}
+			}
+			break;
+		case reg_CANConfB_addr:
+			{
+				uint8_t new_address = 0;
+				mm_getCANConfB_AddressFrom(&new_address, deserialized);
+				
+				if (CANTARGET_vSetAddress(platform->can_target, new_address)){
+					mm_setCANConfB_Address(new_address);	
+				}
+				
 			}
 			break;
 		case reg_PC104Pins_addr:

@@ -495,7 +495,13 @@
 				"dir": "rw",
 				"width": "32",
 				"fields": [
-					
+					{ 
+						"name": "Address", 
+						"description": "8 bit CAN address",
+						"bit": "7-0", 
+						"c#": { "hasminmax": "false", "type": "UInt32" },
+						"c": { "type": "uint8_t" } 
+					}
 				],
 				"c#": {
 					"type": "UInt32"

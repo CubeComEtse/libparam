@@ -83,6 +83,10 @@ typedef enum {
 #define REG_CANCONFA_FLIPCANBYTES_Pos                (31UL)
 #define REG_CANCONFA_FLIPCANBYTES_Msk                (0x0001 << REG_CANCONFA_FLIPCANBYTES_Pos)
 
+/*************** Bit definition for CANConfB register ************************/
+#define REG_CANCONFB_ADDRESS_Pos                     (0UL)
+#define REG_CANCONFB_ADDRESS_Msk                     (0x00ff << REG_CANCONFB_ADDRESS_Pos)
+
 /*************** Bit definition for PC104Pins register ***********************/
 #define REG_PC104PINS_ENA_Pos                        (0UL)
 #define REG_PC104PINS_ENA_Msk                        (0x0001 << REG_PC104PINS_ENA_Pos)
@@ -634,7 +638,9 @@ mm_response_t mm_getCANConfA_FlipCanBytesFrom(mm_enabled_t * dest, const uint32_
 /*************** Get/Set functions for CANConfB register **********************************************************************/
 mm_response_t mm_setCANConfB(const uint32_t val);
 mm_response_t mm_getCANConfB(uint32_t * dest);
-mm_response_t mm_getCANConfBFrom(uint32_t * dest, const uint32_t source);
+mm_response_t mm_setCANConfB_Address(const uint8_t val);
+mm_response_t mm_getCANConfB_Address(uint8_t * dest);
+mm_response_t mm_getCANConfB_AddressFrom(uint8_t * dest, const uint32_t source);
 
 /*************** Get/Set functions for PC104Pins register *********************************************************************/
 mm_response_t mm_setPC104Pins(const uint32_t val);

@@ -1650,12 +1650,31 @@ mm_response_t mm_getCANConfB(uint32_t * dest) {
     }
     return response;
 }
-mm_response_t mm_getCANConfBFrom(uint32_t * dest, const uint32_t source) {
-    *dest = source;
-    return mm_OK;
+mm_response_t mm_setCANConfB_Address(const uint8_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.CANConfB = (mm.CANConfB & ~REG_CANCONFB_ADDRESS_Msk) | (val << REG_CANCONFB_ADDRESS_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getCANConfB_Address(uint8_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (uint8_t) ((mm.CANConfB & REG_CANCONFB_ADDRESS_Msk) >> REG_CANCONFB_ADDRESS_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
 }
 
-
+mm_response_t mm_getCANConfB_AddressFrom(uint8_t * dest, const uint32_t source) {
+    *dest = (uint8_t) ((source & REG_CANCONFB_ADDRESS_Msk) >> REG_CANCONFB_ADDRESS_Pos);
+    return mm_OK;
+}
 /*************** Get/Set functions for PC104Pins register *********************************************************************/
 mm_response_t mm_setPC104Pins(const uint32_t val) {
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {

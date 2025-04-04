@@ -57,5 +57,6 @@ void CANTARGET_RxTask(void * handle);
 bool CANTARGET_SetBaud(can_target_t * handle, uint32_t baud);
 bool CANTARGET_EnableRetries(can_target_t * handle, bool retries);
 bool CANTARGET_SetMode(can_target_t * handle, can_mode_t mode);
+bool CANTARGET_vSetAddress(can_target_t * pHandle, uint8_t new_address);
 
 #endif /* CAN_TARGET_H_ */

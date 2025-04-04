@@ -30,8 +30,8 @@ void CANTARGET_Init(can_target_t * pHandle)
 	
 	// These buffers are for SERCOM messages
 	// This buffer size is an initial guess. Feel free to update it later.
-	pHandle->incoming_messages = xMessageBufferCreate(1024);
-	pHandle->outgoing_messages = xMessageBufferCreate(1024);
+	pHandle->incoming_messages = xMessageBufferCreate(4096);
+	pHandle->outgoing_messages = xMessageBufferCreate(4096);
 	
 	pHandle->can_semaphore = xSemaphoreCreateMutex();
 	
@@ -164,7 +164,7 @@ void CANTARGET_RxTask(void * vHandle)
 			size_t encoded_size = encode_v2_message(encoded, &out_message);
 			
 			//Todo: What to do if a message is dropped?
-			xMessageBufferSend(pHandle->outgoing_messages, &encoded, encoded_size, 0);			
+			xMessageBufferSend(pHandle->outgoing_messages, &encoded, encoded_size, pdMS_TO_TICKS(20));			
 			
 		}
 	
@@ -213,5 +213,16 @@ bool CANTARGET_SetMode(can_target_t * pHandle, can_mode_t mode)
 	xSemaphoreGive(pHandle->can_semaphore);
 	
 	return true;
+	
+}
+
+bool CANTARGET_vSetAddress(can_target_t * pHandle, uint8_t new_address){
+	if (xSemaphoreTake(pHandle->can_semaphore, pdMS_TO_TICKS(500)) == pdTRUE)
+	{
+		pHandle->radio_can_address = new_address;
+		xSemaphoreGive(pHandle->can_semaphore);
+		return true;
+	}
+	return false;
 	
 }

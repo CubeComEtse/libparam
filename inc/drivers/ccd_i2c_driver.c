@@ -62,11 +62,13 @@ bool ccd_i2c_driver_Write(void * handle, const uint8_t dev_addr, const uint8_t *
 	write_packet.buffer = &data[1];
 	write_packet.length = ((uint32_t) data_len-1);
 
-
-	xSemaphoreTake(driver->threadMutex, pdMS_TO_TICKS(100));
-	uint32_t result = twihs_master_write(driver->base_twihs, &write_packet);
-	twihs_read_byte(driver->base_twihs);
-	xSemaphoreGive(driver->threadMutex);
+	uint32_t result = TWIHS_ERROR_TIMEOUT;
+	if (xSemaphoreTake(driver->threadMutex, pdMS_TO_TICKS(500)) == pdTRUE)
+	{
+		result = twihs_master_write(driver->base_twihs, &write_packet);
+		twihs_read_byte(driver->base_twihs);
+		xSemaphoreGive(driver->threadMutex);
+	}
 	return (result == TWIHS_SUCCESS);
 }
 
@@ -83,9 +85,11 @@ bool ccd_i2c_driver_Read(void * handle, const uint8_t dev_addr, const uint8_t * 
 	uint32_t result =0;
 
 
-	xSemaphoreTake(driver->threadMutex, pdMS_TO_TICKS(100));
-	result = twihs_master_read(driver->base_twihs, &read_packet);
-	xSemaphoreGive(driver->threadMutex);
+	if (xSemaphoreTake(driver->threadMutex, pdMS_TO_TICKS(500)) == pdTRUE)
+	{
+		result = twihs_master_read(driver->base_twihs, &read_packet);
+		xSemaphoreGive(driver->threadMutex);	
+	}
 	
 
 	// Clear buffer
@@ -108,7 +112,5 @@ bool ccd_i2c_driver_Read(void * handle, const uint8_t dev_addr, const uint8_t * 
 	}
 	*/
 
-	bool retVal = (result == TWIHS_SUCCESS);
-
-	return retVal;
+	return (result == TWIHS_SUCCESS);
 }
