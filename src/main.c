@@ -115,7 +115,7 @@ void SETUP_Task(void* handle)
 	xTaskCreate(I2CTARGET_Task, "I2C Target", 512, (void*) platform->i2c_target,  tskIDLE_PRIORITY+3, NULL);
 	
 	xTaskCreate(CANTARGET_TxTask, "CAN TX Task", 512, (void *) platform->can_target, tskIDLE_PRIORITY+3, NULL);
-	xTaskCreate(CANTARGET_RxTask, "CAN RX Task", 512, (void *) platform->can_target, tskIDLE_PRIORITY+1, NULL);
+	xTaskCreate(CANTARGET_RxTask, "CAN RX Task", 512, (void *) platform->can_target, tskIDLE_PRIORITY+2, NULL);
 	
 	xTaskCreate(UARTTARGET_TxTask, "UART TX Task", 512, (void *) platform->uart_target, tskIDLE_PRIORITY+2, NULL);
 	xTaskCreate(UARTTARGET_RxTask, "UART RX Task", 512, (void *) platform->uart_target, tskIDLE_PRIORITY+2, NULL); // !

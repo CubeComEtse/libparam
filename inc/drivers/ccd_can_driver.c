@@ -174,7 +174,6 @@ bool ccd_can_Receive_message(void * vHandle, uint32_t * header, uint8_t ** data,
 
 
 
-
 // Called from interrupt
 void ccd_can_ReceiveCallback(ccd_can_t* pHandle)
 {

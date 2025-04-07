@@ -88,6 +88,7 @@ void BSP_Init(bsp_t * bsp) {
 	ioport_set_pin_level(PIN_DEBUG_0, 0);
 	ioport_set_pin_level(PIN_DEBUG_1, 0);
 	ioport_set_pin_level(PIN_DEBUG_2, 0);
+	ioport_set_pin_level(PIN_DEBUG_3, 0);
 	BSP_InitRTC();
 
 	BSP_vInitCan(bsp);
