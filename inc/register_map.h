@@ -137,6 +137,26 @@ typedef enum {
 #define REG_XDCCONFIG_ADDR_Pos                       (0UL)
 #define REG_XDCCONFIG_ADDR_Msk                       (0x00ff << REG_XDCCONFIG_ADDR_Pos)
 
+/*************** Bit definition for RTOS_Status0 register ********************/
+#define REG_RTOS_STATUS0_UARTRXHBOVERFLOW_Pos        (0UL)
+#define REG_RTOS_STATUS0_UARTRXHBOVERFLOW_Msk        (0x0001 << REG_RTOS_STATUS0_UARTRXHBOVERFLOW_Pos)
+#define REG_RTOS_STATUS0_UARTRXSBOVERFLOW_Pos        (1UL)
+#define REG_RTOS_STATUS0_UARTRXSBOVERFLOW_Msk        (0x0001 << REG_RTOS_STATUS0_UARTRXSBOVERFLOW_Pos)
+#define REG_RTOS_STATUS0_UARTTXSBOVERFLOW_Pos        (2UL)
+#define REG_RTOS_STATUS0_UARTTXSBOVERFLOW_Msk        (0x0001 << REG_RTOS_STATUS0_UARTTXSBOVERFLOW_Pos)
+#define REG_RTOS_STATUS0_UARTTXHBOVERFLOW_Pos        (3UL)
+#define REG_RTOS_STATUS0_UARTTXHBOVERFLOW_Msk        (0x0001 << REG_RTOS_STATUS0_UARTTXHBOVERFLOW_Pos)
+#define REG_RTOS_STATUS0_I2CTARGETINCOMINGOVERFLOW_Pos (4UL)
+#define REG_RTOS_STATUS0_I2CTARGETINCOMINGOVERFLOW_Msk (0x0001 << REG_RTOS_STATUS0_I2CTARGETINCOMINGOVERFLOW_Pos)
+#define REG_RTOS_STATUS0_I2CTARGETOUTGOINGOVERFLOW_Pos (5UL)
+#define REG_RTOS_STATUS0_I2CTARGETOUTGOINGOVERFLOW_Msk (0x0001 << REG_RTOS_STATUS0_I2CTARGETOUTGOINGOVERFLOW_Pos)
+#define REG_RTOS_STATUS0_CANTARGETINCOMINGOVERFLOW_Pos (6UL)
+#define REG_RTOS_STATUS0_CANTARGETINCOMINGOVERFLOW_Msk (0x0001 << REG_RTOS_STATUS0_CANTARGETINCOMINGOVERFLOW_Pos)
+#define REG_RTOS_STATUS0_CANINTERRUPTBUFFEROVERFLOW_Pos (7UL)
+#define REG_RTOS_STATUS0_CANINTERRUPTBUFFEROVERFLOW_Msk (0x0001 << REG_RTOS_STATUS0_CANINTERRUPTBUFFEROVERFLOW_Pos)
+#define REG_RTOS_STATUS0_CANTARGETOUTGOINGOVERFLOW_Pos (8UL)
+#define REG_RTOS_STATUS0_CANTARGETOUTGOINGOVERFLOW_Msk (0x0001 << REG_RTOS_STATUS0_CANTARGETOUTGOINGOVERFLOW_Pos)
+
 /*************** Bit definition for boardflag register ***********************/
 #define REG_BOARDFLAG_BOARDS_Pos                     (0UL)
 #define REG_BOARDFLAG_BOARDS_Msk                     (0x00ff << REG_BOARDFLAG_BOARDS_Pos)
@@ -300,6 +320,7 @@ typedef struct {
     uint32_t TE_Addr_3;
     uint32_t TE_Addr_3_Set;
     uint32_t TE_Addr_3_Clear;
+    uint32_t RTOS_Status0;
 } mm_t;
 
 typedef enum {
@@ -378,6 +399,7 @@ typedef enum {
     reg_TE_Addr_3_addr = 0x89,
     reg_TE_Addr_3_Set_addr = 0x8A,
     reg_TE_Addr_3_Clear_addr = 0x8B,
+    reg_RTOS_Status0_addr = 0x90,
 } mm_register_address_t;
 
 typedef enum {
@@ -1588,6 +1610,37 @@ mm_response_t mm_getTE_Addr_3_Clear_nResetFrom(mm_enabled_t * dest, const uint32
 mm_response_t mm_setTE_Addr_3_Clear_COMM_TR(const mm_enabled_t val);
 mm_response_t mm_getTE_Addr_3_Clear_COMM_TR(mm_enabled_t * dest);
 mm_response_t mm_getTE_Addr_3_Clear_COMM_TRFrom(mm_enabled_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for RTOS_Status0 register ******************************************************************/
+mm_response_t mm_setRTOS_Status0(const uint32_t val);
+mm_response_t mm_getRTOS_Status0(uint32_t * dest);
+mm_response_t mm_setRTOS_Status0_uartRxHBOverflow(const bool val);
+mm_response_t mm_getRTOS_Status0_uartRxHBOverflow(bool * dest);
+mm_response_t mm_getRTOS_Status0_uartRxHBOverflowFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setRTOS_Status0_uartRxSBOverflow(const bool val);
+mm_response_t mm_getRTOS_Status0_uartRxSBOverflow(bool * dest);
+mm_response_t mm_getRTOS_Status0_uartRxSBOverflowFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setRTOS_Status0_uartTxSBOverflow(const bool val);
+mm_response_t mm_getRTOS_Status0_uartTxSBOverflow(bool * dest);
+mm_response_t mm_getRTOS_Status0_uartTxSBOverflowFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setRTOS_Status0_uartTxHBOverflow(const bool val);
+mm_response_t mm_getRTOS_Status0_uartTxHBOverflow(bool * dest);
+mm_response_t mm_getRTOS_Status0_uartTxHBOverflowFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setRTOS_Status0_I2CTargetIncomingOverflow(const bool val);
+mm_response_t mm_getRTOS_Status0_I2CTargetIncomingOverflow(bool * dest);
+mm_response_t mm_getRTOS_Status0_I2CTargetIncomingOverflowFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setRTOS_Status0_I2CTargetOutgoingOverflow(const bool val);
+mm_response_t mm_getRTOS_Status0_I2CTargetOutgoingOverflow(bool * dest);
+mm_response_t mm_getRTOS_Status0_I2CTargetOutgoingOverflowFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setRTOS_Status0_CANTargetIncomingOverflow(const bool val);
+mm_response_t mm_getRTOS_Status0_CANTargetIncomingOverflow(bool * dest);
+mm_response_t mm_getRTOS_Status0_CANTargetIncomingOverflowFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setRTOS_Status0_CANInterruptBufferOverflow(const bool val);
+mm_response_t mm_getRTOS_Status0_CANInterruptBufferOverflow(bool * dest);
+mm_response_t mm_getRTOS_Status0_CANInterruptBufferOverflowFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setRTOS_Status0_CANTargetOutgoingOverflow(const bool val);
+mm_response_t mm_getRTOS_Status0_CANTargetOutgoingOverflow(bool * dest);
+mm_response_t mm_getRTOS_Status0_CANTargetOutgoingOverflowFrom(bool * dest, const uint32_t source);
 
 
 #endif /* memory_map_h */

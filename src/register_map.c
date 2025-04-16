@@ -8812,3 +8812,248 @@ mm_response_t mm_getTE_Addr_3_Clear_COMM_TRFrom(mm_enabled_t * dest, const uint3
     *dest = (mm_enabled_t) ((source & REG_TE_CONFIG_COMM_TR_Msk) >> REG_TE_CONFIG_COMM_TR_Pos);
     return mm_OK;
 }
+/*************** Get/Set functions for RTOS_Status0 register ******************************************************************/
+mm_response_t mm_setRTOS_Status0(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.RTOS_Status0 = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getRTOS_Status0(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.RTOS_Status0;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_setRTOS_Status0_uartRxHBOverflow(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_UARTRXHBOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_UARTRXHBOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getRTOS_Status0_uartRxHBOverflow(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_UARTRXHBOVERFLOW_Msk) >> REG_RTOS_STATUS0_UARTRXHBOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getRTOS_Status0_uartRxHBOverflowFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_RTOS_STATUS0_UARTRXHBOVERFLOW_Msk) >> REG_RTOS_STATUS0_UARTRXHBOVERFLOW_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setRTOS_Status0_uartRxSBOverflow(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_UARTRXSBOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_UARTRXSBOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getRTOS_Status0_uartRxSBOverflow(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_UARTRXSBOVERFLOW_Msk) >> REG_RTOS_STATUS0_UARTRXSBOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getRTOS_Status0_uartRxSBOverflowFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_RTOS_STATUS0_UARTRXSBOVERFLOW_Msk) >> REG_RTOS_STATUS0_UARTRXSBOVERFLOW_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setRTOS_Status0_uartTxSBOverflow(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_UARTTXSBOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_UARTTXSBOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getRTOS_Status0_uartTxSBOverflow(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_UARTTXSBOVERFLOW_Msk) >> REG_RTOS_STATUS0_UARTTXSBOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getRTOS_Status0_uartTxSBOverflowFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_RTOS_STATUS0_UARTTXSBOVERFLOW_Msk) >> REG_RTOS_STATUS0_UARTTXSBOVERFLOW_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setRTOS_Status0_uartTxHBOverflow(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_UARTTXHBOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_UARTTXHBOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getRTOS_Status0_uartTxHBOverflow(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_UARTTXHBOVERFLOW_Msk) >> REG_RTOS_STATUS0_UARTTXHBOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getRTOS_Status0_uartTxHBOverflowFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_RTOS_STATUS0_UARTTXHBOVERFLOW_Msk) >> REG_RTOS_STATUS0_UARTTXHBOVERFLOW_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setRTOS_Status0_I2CTargetIncomingOverflow(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_I2CTARGETINCOMINGOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_I2CTARGETINCOMINGOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getRTOS_Status0_I2CTargetIncomingOverflow(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_I2CTARGETINCOMINGOVERFLOW_Msk) >> REG_RTOS_STATUS0_I2CTARGETINCOMINGOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getRTOS_Status0_I2CTargetIncomingOverflowFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_RTOS_STATUS0_I2CTARGETINCOMINGOVERFLOW_Msk) >> REG_RTOS_STATUS0_I2CTARGETINCOMINGOVERFLOW_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setRTOS_Status0_I2CTargetOutgoingOverflow(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_I2CTARGETOUTGOINGOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_I2CTARGETOUTGOINGOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getRTOS_Status0_I2CTargetOutgoingOverflow(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_I2CTARGETOUTGOINGOVERFLOW_Msk) >> REG_RTOS_STATUS0_I2CTARGETOUTGOINGOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getRTOS_Status0_I2CTargetOutgoingOverflowFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_RTOS_STATUS0_I2CTARGETOUTGOINGOVERFLOW_Msk) >> REG_RTOS_STATUS0_I2CTARGETOUTGOINGOVERFLOW_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setRTOS_Status0_CANTargetIncomingOverflow(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_CANTARGETINCOMINGOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_CANTARGETINCOMINGOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getRTOS_Status0_CANTargetIncomingOverflow(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_CANTARGETINCOMINGOVERFLOW_Msk) >> REG_RTOS_STATUS0_CANTARGETINCOMINGOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getRTOS_Status0_CANTargetIncomingOverflowFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_RTOS_STATUS0_CANTARGETINCOMINGOVERFLOW_Msk) >> REG_RTOS_STATUS0_CANTARGETINCOMINGOVERFLOW_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setRTOS_Status0_CANInterruptBufferOverflow(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_CANINTERRUPTBUFFEROVERFLOW_Msk) | (val << REG_RTOS_STATUS0_CANINTERRUPTBUFFEROVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getRTOS_Status0_CANInterruptBufferOverflow(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_CANINTERRUPTBUFFEROVERFLOW_Msk) >> REG_RTOS_STATUS0_CANINTERRUPTBUFFEROVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getRTOS_Status0_CANInterruptBufferOverflowFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_RTOS_STATUS0_CANINTERRUPTBUFFEROVERFLOW_Msk) >> REG_RTOS_STATUS0_CANINTERRUPTBUFFEROVERFLOW_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setRTOS_Status0_CANTargetOutgoingOverflow(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_CANTARGETOUTGOINGOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_CANTARGETOUTGOINGOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getRTOS_Status0_CANTargetOutgoingOverflow(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_CANTARGETOUTGOINGOVERFLOW_Msk) >> REG_RTOS_STATUS0_CANTARGETOUTGOINGOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getRTOS_Status0_CANTargetOutgoingOverflowFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_RTOS_STATUS0_CANTARGETOUTGOINGOVERFLOW_Msk) >> REG_RTOS_STATUS0_CANTARGETOUTGOINGOVERFLOW_Pos);
+    return mm_OK;
+}

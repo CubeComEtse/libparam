@@ -22,7 +22,6 @@ void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart, const uint32_t baud)
 		assert(driver->cts_pin);	
 	}
 	
-	
 	// Todo: These buffer levels are guesses. Monitor and adjust them
 	driver->uart_rx_buffer = xStreamBufferCreate(512, 1);
 	driver->uart_tx_buffer = xStreamBufferCreate(512, 1);

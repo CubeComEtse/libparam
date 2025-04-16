@@ -16,7 +16,7 @@ void LTC2992_vNormalSetup(ltc2992_device_t* dev, uint8_t bus_address) {
     LTC2992_vSetRegister(dev, LTC2992_CTRLA, \
         CTRLA_CALIBRATE_EVERY_CONV | \
         CTRLA_MEASUREMENT_MODE_CONTINUOUS | \
-        CTRLA_V_CONT_MODE_SENSE);
+        CTRLA_V_CONT_MODE_ALL);
 }
 
 uint8_t LTC2992_u8GenAddr(uint8_t adr0, uint8_t adr1) {

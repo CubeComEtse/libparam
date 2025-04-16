@@ -77,7 +77,7 @@ void TE_Adaptors_Task(void * vHandle)
 				
 					// Write output ports
 				
-					// 0 is output, 1 is inpuit
+					// 0 is output, 1 is input
 					buffer[0] = PCA9555_CMD_CFG_PORT0;
 					buffer[1] = 0x00;
 					buffer[2] = 0xF8;
@@ -105,6 +105,21 @@ void TE_Adaptors_Task(void * vHandle)
 							mm_setTE_Addr_0_Detected(true);
 							mm_setTE_Addr_0_Type(type);
 						}
+						if (a_index == 1)
+						{
+							mm_setTE_Addr_1_Detected(true);
+							mm_setTE_Addr_1_Type(type);
+						}
+						if (a_index == 2)
+						{
+							mm_setTE_Addr_2_Detected(true);
+							mm_setTE_Addr_2_Type(type);
+						}
+						if (a_index == 3)
+						{
+							mm_setTE_Addr_3_Detected(true);
+							mm_setTE_Addr_3_Type(type);
+						}
 						
 						curr->state = IDLE;
 					}
@@ -113,6 +128,18 @@ void TE_Adaptors_Task(void * vHandle)
 						if (a_index == 0)
 						{
 							mm_setTE_Addr_0_Detected(false);
+						}
+						if (a_index == 1)
+						{
+							mm_setTE_Addr_1_Detected(false);
+						}
+						if (a_index == 2)
+						{
+							mm_setTE_Addr_2_Detected(false);
+						}
+						if (a_index == 3)
+						{
+							mm_setTE_Addr_3_Detected(false);
 						}
 						curr->state = UNINITIALIZED;
 					}
@@ -127,12 +154,31 @@ void TE_Adaptors_Task(void * vHandle)
 				
 						curr->previous_portbits = curr->new_portbits;
 						
+						uint32_t existing = 0;
 						//This calculation really shouldn't be here.
 						if (a_index == 0){
-							uint32_t existing = 0;
+							existing = 0;
 							mm_getTE_Addr_0(&existing);
 							existing = (existing & 0x0000000F) | (curr->new_portbits << 16);
 							mm_setTE_Addr_0(existing);
+						}
+						if (a_index == 1){
+							existing = 0;
+							mm_getTE_Addr_1(&existing);
+							existing = (existing & 0x0000000F) | (curr->new_portbits << 16);
+							mm_setTE_Addr_1(existing);
+						}
+						if (a_index == 2){
+							existing = 0;
+							mm_getTE_Addr_2(&existing);
+							existing = (existing & 0x0000000F) | (curr->new_portbits << 16);
+							mm_setTE_Addr_2(existing);
+						}
+						if (a_index == 3){
+							existing = 0;
+							mm_getTE_Addr_3(&existing);
+							existing = (existing & 0x0000000F) | (curr->new_portbits << 16);
+							mm_setTE_Addr_3(existing);
 						}
 					}
 			
@@ -148,8 +194,22 @@ void TE_Adaptors_Task(void * vHandle)
 				
 						if (!result){
 							// Todo: EVENT!
-							mm_setTE_Addr_0_Detected(false);
-							curr->state = UNINITIALIZED;
+							if (a_index == 0){
+								mm_setTE_Addr_0_Detected(false);
+								curr->state = UNINITIALIZED;
+							}
+							if (a_index == 1){
+								mm_setTE_Addr_1_Detected(false);
+								curr->state = UNINITIALIZED;
+							}
+							if (a_index == 2){
+								mm_setTE_Addr_2_Detected(false);
+								curr->state = UNINITIALIZED;
+							}
+							if (a_index == 3){
+								mm_setTE_Addr_3_Detected(false);
+								curr->state = UNINITIALIZED;
+							}
 						}
 					}
 				break;

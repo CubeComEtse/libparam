@@ -736,7 +736,22 @@
 
 			{ "name":"TE_Addr_3",     "address": "0x89", "dir": "w", "width": "32", "fields": "TE_Config", "c#": {"type": "UInt32" } },
 			{ "name":"TE_Addr_3_Set", "address": "0x8A", "dir": "r", "width": "32", "fields": "TE_Config", "c#": {"type": "UInt32", "special": "clearOnWrite" } },
-			{ "name":"TE_Addr_3_Clear", "address": "0x8B", "dir": "w", "width": "32", "fields": "TE_Config", "c#": {"type": "UInt32", "special": "clearOnWrite" } }
+			{ "name":"TE_Addr_3_Clear", "address": "0x8B", "dir": "w", "width": "32", "fields": "TE_Config", "c#": {"type": "UInt32", "special": "clearOnWrite" } },
+
+			{"name": "RTOS_Status0", "address": "0x90", "dir":"r", "width": "32", "c#": {"type": "UInt32" }, "fields": [
+				{ "name": "uartRxHBOverflow",  "bit": "0", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} },
+				{ "name": "uartRxSBOverflow",  "bit": "1", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} },
+				{ "name" : "uartTxSBOverflow", "bit": "2", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} },
+				{ "name" : "uartTxHBOverflow", "bit": "3", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} },
+
+				{ "name" : "I2CTargetIncomingOverflow", "bit": "4", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} },
+				{ "name" : "I2CTargetOutgoingOverflow", "bit": "5", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} },
+
+				{ "name" : "CANTargetIncomingOverflow", "bit": "6", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} },
+				{ "name" : "CANInterruptBufferOverflow", "bit": "7", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} },
+				{ "name" : "CANTargetOutgoingOverflow", "bit": "8", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} }
+
+			] }
 		],
 		"generic_fields":{
 			"boardflag": [

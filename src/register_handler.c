@@ -99,6 +99,8 @@ static addres_to_func_map_t address_to_func_map[] = {
     { reg_TE_Addr_1_addr, mm_getTE_Addr_1},
     { reg_TE_Addr_2_addr, mm_getTE_Addr_2},
     { reg_TE_Addr_3_addr, mm_getTE_Addr_3},
+		
+	{ reg_RTOS_Status0_addr, mm_getRTOS_Status0},
 };
 
 
@@ -154,7 +156,8 @@ bool REG_vReadFromAddress(const uint32_t address, uint8_t * buff, uint8_t * size
 		}
 	}
 
-	switch (address)
+	// Special actions to take when reading a specific address
+	switch (address) 
 	{
 		case reg_Uptime_addr:
 			REG_Copyu32ToArray(BSP_GetUptime(), buff);
@@ -203,6 +206,11 @@ bool REG_vReadFromAddress(const uint32_t address, uint8_t * buff, uint8_t * size
 			}
 			
 		}
+		case reg_RTOS_Status0_addr:
+			// This register gets cleared on read
+			mm_setRTOS_Status0(0);
+			
+		break;
 		
 	}
 	
@@ -473,6 +481,82 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 			
 				// We have deliberately made the bits align perfectly so we could do this.
 				TE_Adaptor_ClearTeBits(platform->te_scanner, 0, (deserialized >> 16) & 0x0FFF);
+			}
+			break;
+			
+		case reg_TE_Addr_1_Set_addr:
+			{
+				mm_enabled_t scanEnabled;
+				mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
+				if (scanEnabled == reg_enabled_enabled){
+					TE_Adaptor_SetScanEnabled(platform->te_scanner, 1);
+				}
+				
+				// We have deliberately made the bits align perfectly so we could do this.
+				TE_Adaptor_SetTeBits(platform->te_scanner, 1, (deserialized >> 16) & 0x0FFF);
+			}
+			break;
+		case reg_TE_Addr_1_Clear_addr:
+			{
+				mm_enabled_t scanEnabled;
+				mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
+				if (scanEnabled == reg_enabled_enabled){
+					TE_Adaptor_ClearScanEnabled(platform->te_scanner, 1);
+				}
+			
+				// We have deliberately made the bits align perfectly so we could do this.
+				TE_Adaptor_ClearTeBits(platform->te_scanner, 1, (deserialized >> 16) & 0x0FFF);
+			}
+			break;
+			
+		case reg_TE_Addr_2_Set_addr:
+			{
+				mm_enabled_t scanEnabled;
+				mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
+				if (scanEnabled == reg_enabled_enabled){
+					TE_Adaptor_SetScanEnabled(platform->te_scanner, 2);
+				}
+				
+				// We have deliberately made the bits align perfectly so we could do this.
+				TE_Adaptor_SetTeBits(platform->te_scanner, 2, (deserialized >> 16) & 0x0FFF);
+			}
+			break;
+		case reg_TE_Addr_2_Clear_addr:
+			{
+				mm_enabled_t scanEnabled;
+				mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
+				if (scanEnabled == reg_enabled_enabled){
+					TE_Adaptor_ClearScanEnabled(platform->te_scanner, 2);
+				}
+			
+				// We have deliberately made the bits align perfectly so we could do this.
+				TE_Adaptor_ClearTeBits(platform->te_scanner, 2, (deserialized >> 16) & 0x0FFF);
+			}
+			break;
+			
+			
+		case reg_TE_Addr_3_Set_addr:
+			{
+				mm_enabled_t scanEnabled;
+				mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
+				if (scanEnabled == reg_enabled_enabled){
+					TE_Adaptor_SetScanEnabled(platform->te_scanner, 2);
+				}
+				
+				// We have deliberately made the bits align perfectly so we could do this.
+				TE_Adaptor_SetTeBits(platform->te_scanner, 3, (deserialized >> 16) & 0x0FFF);
+			}
+			break;
+		case reg_TE_Addr_3_Clear_addr:
+			{
+				mm_enabled_t scanEnabled;
+				mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
+				if (scanEnabled == reg_enabled_enabled){
+					TE_Adaptor_ClearScanEnabled(platform->te_scanner, 2);
+				}
+			
+				// We have deliberately made the bits align perfectly so we could do this.
+				TE_Adaptor_ClearTeBits(platform->te_scanner, 3, (deserialized >> 16) & 0x0FFF);
 			}
 			break;
 					
