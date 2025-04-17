@@ -87,7 +87,7 @@ static void DEVTOOLS_Task(void * handle){
 void SETUP_Task(void* handle)
 {	
 	mm_setBoard_ID(0x634F4243);
-	mm_setFW_Version(0x00020203);
+	mm_setFW_Version(0x00020205);
 	mm_setHW_Version_major_version(BSP_u8GetVersion());
 	
 	mm_setI2CConfA_SPD(40);
