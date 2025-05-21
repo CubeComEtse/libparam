@@ -13,6 +13,8 @@
 
 #include <string.h>
 #include <assert.h>
+#include <task.h>
+#include "delay.h"
 
 #include "pc_messages.h"
 
@@ -79,50 +81,87 @@ void I2CTARGET_Task(void * handle)
 			if ((in_message.is_read)) {
 
 				memcpy(read_buffer, in_message.data, in_message.data_len);
+				uint8_t reg_address = in_message.data[0];
+				uint8_t read_length = in_message.data[1];
+				
+				read_buffer[0] = reg_address;
+				read_buffer[1] = read_length;
 
 				uint8_t address_with_checksum[3];
-				address_with_checksum[0] = in_message.data[1];
-				address_with_checksum[1] = in_message.data[1];
+				address_with_checksum[0] = in_message.data[0];
+				address_with_checksum[1] = in_message.data[0];
 				address_with_checksum[2] = 0;
 				
-				if (pHandle->i2c_read(pHandle->i2c_handle, pHandle->legacy_address, address_with_checksum, 3, &read_buffer[4], in_message.data[3] + 2)){
+				if (pHandle->write_read_delay ==0)
+				{
+					if (pHandle->i2c_read(pHandle->i2c_handle, pHandle->legacy_address, address_with_checksum, 3, &read_buffer[2], read_length + 2)){
 					
-					// Create the received message
-					out_message.target = in_message.target;
-					out_message.is_read = true;
-					out_message.msg_id = in_message.msg_id;
-					out_message.data = read_buffer;
-					out_message.data_len = in_message.data[3] + 4;
+						// Create the received message
+						out_message.target = in_message.target;
+						out_message.is_read = true;
+						out_message.msg_id = in_message.msg_id;
+						out_message.data = read_buffer;
+						out_message.data_len = read_length + 2;
 					
-					size_t encoded_len = encode_v2_message(encoded, &out_message);
+						size_t encoded_len = encode_v2_message(encoded, &out_message);
 					
-					if (encoded_len > 0){
-						xMessageBufferSend(pHandle->outgoing_messages, encoded, encoded_len, 0);
-						//Todo: Do something if buffer is full.
+						if (encoded_len > 0){
+							xMessageBufferSend(pHandle->outgoing_messages, encoded, encoded_len, 0);
+							//Todo: Do something if buffer is full.
+						}
 					}
+				}
+				else
+				{
+					// Split the transaction into two parts, for isiSpace compatibility
+					// Write the address first, delay, then do a read.
+					pHandle->i2c_write(pHandle->i2c_handle, pHandle->legacy_address, address_with_checksum, 3);
+					
+					delay_us(pHandle->write_read_delay);
+					
+					if (pHandle->i2c_read(pHandle->i2c_handle, pHandle->legacy_address, address_with_checksum, 0, &read_buffer[2], read_length + 2)){
+											
+						// Create the received message
+						out_message.target = in_message.target;
+						out_message.is_read = true;
+						out_message.msg_id = in_message.msg_id;
+						out_message.data = read_buffer;
+						out_message.data_len = read_length + 2;
+											
+						size_t encoded_len = encode_v2_message(encoded, &out_message);
+											
+						if (encoded_len > 0){
+							xMessageBufferSend(pHandle->outgoing_messages, encoded, encoded_len, 0);
+							//Todo: Do something if buffer is full.
+						}
+					}
+					
 				}
 			}
 			else
 			{
 				// Its a write
+				uint8_t data_length = in_message.data[1];
 				
-				// Calculate the checksum and just place it in the rx_buffer. Should be fine.
-				uint16_t checksum  = 0;
-				for (uint8_t i = 0 ; i < in_message.data_len - 3; i ++) {
-					checksum += (uint16_t) in_message.data[3 + i];
+				// Construct the TX buffer
+				uint8_t tx_buffer[32];
+				tx_buffer[0] = in_message.data[0];
+				memcpy(&tx_buffer[1], &in_message.data[2], data_length);
+				
+				// Calculate the checksum and just place it in the TX buffer. Should be fine.
+				uint16_t checksum = 0;
+				for (uint8_t i = 0 ; i < data_length + 1; i ++) {
+					checksum += (uint16_t) tx_buffer[i];
 				}
-				// Add the register address
-				checksum += in_message.data[1];
+				tx_buffer[data_length + 1] = checksum & 0xFF ;
+				tx_buffer[data_length + 2] = (checksum << 8) & 0xFF;
 
-				in_message.data[in_message.data_len] = checksum & 0xFF ;
-				in_message.data[in_message.data_len+1] = (checksum << 8) & 0xFF;
-
-				// Bit hacky:
-				// The message we receive has the address as 2 bytes, but we only send 1.
-				// Rather than copy everything, just move the address 1 over
-				in_message.data[2] = in_message.data[1];
-
-				pHandle->i2c_write(pHandle->i2c_handle, in_message.data[0], &in_message.data[1], in_message.data_len);
+				pHandle->i2c_write(pHandle->i2c_handle, pHandle->legacy_address, tx_buffer, data_length+3);
+				
+				if (pHandle->tr_delay > 0)
+				{
+					vTaskDelay(pdMS_TO_TICKS(pHandle->tr_delay));
+				}
 			}
 		}
 		
