@@ -21,7 +21,7 @@
 
 typedef struct {
 	Twihs * base_twihs;
-	SemaphoreHandle_t threadMutex;
+	SemaphoreHandle_t driver_mutex;
 }ccd_i2c_t;
 
 void ccd_i2c_driver_Init(ccd_i2c_t * driver, Twihs * instance);

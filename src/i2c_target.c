@@ -135,7 +135,6 @@ void I2CTARGET_Task(void * handle)
 							//Todo: Do something if buffer is full.
 						}
 					}
-					
 				}
 			}
 			else
@@ -154,7 +153,7 @@ void I2CTARGET_Task(void * handle)
 					checksum += (uint16_t) tx_buffer[i];
 				}
 				tx_buffer[data_length + 1] = checksum & 0xFF ;
-				tx_buffer[data_length + 2] = (checksum << 8) & 0xFF;
+				tx_buffer[data_length + 2] = (checksum >> 8) & 0xFF;
 
 				pHandle->i2c_write(pHandle->i2c_handle, pHandle->legacy_address, tx_buffer, data_length+3);
 				
@@ -201,8 +200,7 @@ void I2CTARGET_Task(void * handle)
 			}
 		}
 		if (in_message.target == EP_V2_I2C_CC_2)
-		{
-			
+		{			
 			// This is an i2c message with either 1 or  2 address bytes, used by the HDRTX
 			if (in_message.is_read & (in_message.data_len == 3)) {
 				uint8_t device_address = pHandle->legacy_address; // Hard coded, from a register

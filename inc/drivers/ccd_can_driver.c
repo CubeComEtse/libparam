@@ -14,6 +14,9 @@
 
 void ccd_can_Init(ccd_can_t * pHandle, Mcan * can_device)
 {
+	pHandle->driver_mutex = xSemaphoreCreateMutex();
+	pHandle->ioctl_timeout = 200;
+	
 	pmc_disable_pck(PMC_PCK_5);
 	pmc_pck_set_source(PMC_PCK_5, PMC_PCK_CSS_UPLL_CLK);
 	pmc_pck_set_prescaler(PMC_PCK_5, PMC_PCK_PRES(5));
@@ -49,19 +52,28 @@ void ccd_can_Init(ccd_can_t * pHandle, Mcan * can_device)
 
 
 
-void ccd_can_SetAddress(void * vHandle, uint32_t filter, uint32_t mask)
+bool ccd_can_SetAddress(void * vHandle, uint32_t filter, uint32_t mask)
 {
 	ccd_can_t * pHandle = (ccd_can_t*) vHandle;
 	
-	pHandle->gse_address = filter;
-	pHandle->gse_address_mask = mask;
 	
-	struct mcan_extended_message_filter_element et_filter;
-	mcan_get_extended_message_filter_element_default(&et_filter);
-	et_filter.F0.reg = MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F0_EFID1(filter) | MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F0_EFEC(MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F0_EFEC_STF0M_Val);
-	et_filter.F1.reg = MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F1_EFID2(mask) | MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F1_EFT_CLASSIC;
+	if (xSemaphoreTake(pHandle->driver_mutex, pdMS_TO_TICKS(pHandle->ioctl_timeout))){
+		
+		pHandle->gse_address = filter;
+		pHandle->gse_address_mask = mask;
+		
+		struct mcan_extended_message_filter_element et_filter;
+		mcan_get_extended_message_filter_element_default(&et_filter);
+		et_filter.F0.reg = MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F0_EFID1(filter) | MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F0_EFEC(MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F0_EFEC_STF0M_Val);
+		et_filter.F1.reg = MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F1_EFID2(mask) | MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F1_EFT_CLASSIC;
 
-	mcan_set_rx_extended_filter(&pHandle->can_module, &et_filter, 0);
+		mcan_set_rx_extended_filter(&pHandle->can_module, &et_filter, 0);
+		
+		xSemaphoreGive(pHandle->driver_mutex);
+		return true;
+	}
+	
+	return false;
 }
 
 
@@ -74,31 +86,38 @@ void ccd_can_SetAddress(void * vHandle, uint32_t filter, uint32_t mask)
     When this is ported to FreeRTOS there should also be a lock on the CAN module to make
 	sure we don't change it while transmitting a message.
 */
-void ccd_can_SetRetries(void * vHandle, bool enabled)
+bool ccd_can_SetRetries(void * vHandle, bool enabled)
 {
 	ccd_can_t * pHandle = (ccd_can_t*) vHandle;
 	
-	mcan_stop(&pHandle->can_module);	
 	
-	// Allow us to make change to registers
-	pHandle->can_module.hw->MCAN_CCCR |= MCAN_CCCR_CCE;	
-	while (!(pHandle->can_module.hw->MCAN_CCCR & MCAN_CCCR_CCE));
+	if (xSemaphoreTake(pHandle->driver_mutex, pdMS_TO_TICKS(pHandle->ioctl_timeout))){
+		mcan_stop(&pHandle->can_module);	
 	
-	// DAR 0 - Automatic retransmission enabled
-	// DAR 1 - Automatic retransmission disabled
-	if (enabled) {
-		pHandle->can_module.hw->MCAN_CCCR &= ~MCAN_CCCR_DAR;
-	}
-	else
-	{
-		pHandle->can_module.hw->MCAN_CCCR |= MCAN_CCCR_DAR;
-	}
+		// Allow us to make change to registers
+		pHandle->can_module.hw->MCAN_CCCR |= MCAN_CCCR_CCE;	
+		while (!(pHandle->can_module.hw->MCAN_CCCR & MCAN_CCCR_CCE));
+	
+		// DAR 0 - Automatic retransmission enabled
+		// DAR 1 - Automatic retransmission disabled
+		if (enabled) {
+			pHandle->can_module.hw->MCAN_CCCR &= ~MCAN_CCCR_DAR;
+		}
+		else
+		{
+			pHandle->can_module.hw->MCAN_CCCR |= MCAN_CCCR_DAR;
+		}
 		
 	
-	pHandle->can_module.hw->MCAN_CCCR &= ~MCAN_CCCR_CCE;
-	while (pHandle->can_module.hw->MCAN_CCCR & MCAN_CCCR_CCE);
+		pHandle->can_module.hw->MCAN_CCCR &= ~MCAN_CCCR_CCE;
+		while (pHandle->can_module.hw->MCAN_CCCR & MCAN_CCCR_CCE);
 
-	mcan_start(&pHandle->can_module);
+		mcan_start(&pHandle->can_module);
+		
+		xSemaphoreGive(pHandle->driver_mutex);
+		return true;
+	}
+	return false;
 }
 
 bool ccd_can_SetBaudRate(void * vHandle, uint32_t baud)
@@ -109,21 +128,28 @@ bool ccd_can_SetBaudRate(void * vHandle, uint32_t baud)
 	}
 	
 	ccd_can_t * pHandle = (ccd_can_t *) vHandle;
-	pHandle->baudrate = baud;
 	
-	mcan_stop(&pHandle->can_module);
+	if (xSemaphoreTake(pHandle->driver_mutex, pdMS_TO_TICKS(pHandle->ioctl_timeout)))
+	{
+		pHandle->baudrate = baud;
+		
+		mcan_stop(&pHandle->can_module);
+		
+		pHandle->can_module.hw->MCAN_CCCR |= MCAN_CCCR_CCE;
+		while (!(pHandle->can_module.hw->MCAN_CCCR & MCAN_CCCR_CCE));
+		
+		mcan_set_baudrate(pHandle->can_module.hw, pHandle->baudrate);
+		
+		pHandle->can_module.hw->MCAN_CCCR &= ~MCAN_CCCR_CCE;
+		while (pHandle->can_module.hw->MCAN_CCCR & MCAN_CCCR_CCE);
+		
+		mcan_start(&pHandle->can_module);
+		
+		xSemaphoreGive(pHandle->driver_mutex);
+		return true;
+	}
 	
-	pHandle->can_module.hw->MCAN_CCCR |= MCAN_CCCR_CCE;
-	while (!(pHandle->can_module.hw->MCAN_CCCR & MCAN_CCCR_CCE));
-	
-	mcan_set_baudrate(pHandle->can_module.hw, pHandle->baudrate);
-	
-	pHandle->can_module.hw->MCAN_CCCR &= ~MCAN_CCCR_CCE;
-	while (pHandle->can_module.hw->MCAN_CCCR & MCAN_CCCR_CCE);
-	
-	mcan_start(&pHandle->can_module);
-	
-	return true;
+	return false;
 }
 
 
@@ -143,17 +169,23 @@ void ccd_can_Send_message(void * vHandle, uint32_t header, uint8_t * data, size_
     tx_element.T1.bit.DLC = data_len;
     memcpy(tx_element.data, data, data_len);
 	
-	// Wait for the TX Buffer to be open
-	// Todo: THis might need a timeout?
-	while (((pHandle->can_module.hw->MCAN_TXFQS) & MCAN_TXFQS_TFQF)  > 1);
+	if (xSemaphoreTake(pHandle->driver_mutex, pdMS_TO_TICKS(500)) == pdTRUE) 
+	{
+		// Wait for the TX Buffer to be open
+		// Todo: THis might need a timeout?
+		while (((pHandle->can_module.hw->MCAN_TXFQS) & MCAN_TXFQS_TFQF)  > 1);
 	
-	// tfqpi should indicate where to write to next, and what bit to set to send?
-	// Datasheet 49.5.5.3 Tx FIFO, page 1416
-	uint32_t buffer_index = ((pHandle->can_module.hw->MCAN_TXFQS & MCAN_TXFQS_TFQPI_Msk) >> MCAN_TXFQS_TFQPI_Pos);
-	// Code copied from the mcan_set_tx_buffer_element function
-     mcan_set_tx_buffer_element(&pHandle->can_module, &tx_element, buffer_index);
+		// tfqpi should indicate where to write to next, and what bit to set to send?
+		// Datasheet 49.5.5.3 Tx FIFO, page 1416
+		uint32_t buffer_index = ((pHandle->can_module.hw->MCAN_TXFQS & MCAN_TXFQS_TFQPI_Msk) >> MCAN_TXFQS_TFQPI_Pos);
+		// Code copied from the mcan_set_tx_buffer_element function
+		 mcan_set_tx_buffer_element(&pHandle->can_module, &tx_element, buffer_index);
 	
-	 while (mcan_tx_transfer_request(&pHandle->can_module, 1 << buffer_index) == ERR_BUSY);
+		 while (mcan_tx_transfer_request(&pHandle->can_module, 1 << buffer_index) == ERR_BUSY);
+		 
+		 xSemaphoreGive(pHandle->driver_mutex);
+	}
+	//Todo: Need to raise alarms if we need to drop messages
 }
 
 bool ccd_can_Receive_message(void * vHandle, uint32_t * header, uint8_t ** data, size_t * data_len)
