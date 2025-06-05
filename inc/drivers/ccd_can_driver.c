@@ -30,21 +30,24 @@ void ccd_can_Init(ccd_can_t * pHandle, Mcan * can_device)
 	
 	mcan_set_baudrate(can_device, pHandle->baudrate);
 	
-	// Will set CCR.INIT bit to 0, so module runs
-	mcan_start(&pHandle->can_module);
 		
 	if (can_device == MCAN0)
 	{
 		irq_register_handler(MCAN0_INT0_IRQn, 1);
+		irq_register_handler(MCAN0_INT1_IRQn, 1);
 		NVIC_SetPriority(MCAN0_INT0_IRQn, 4);
-		mcan_enable_interrupt(&pHandle->can_module, MCAN_RX_BUFFER_NEW_MESSAGE | MCAN_RX_FIFO_0_NEW_MESSAGE | MCAN_RX_FIFO_1_NEW_MESSAGE | MCAN_FORMAT_ERROR | MCAN_ACKNOWLEDGE_ERROR | MCAN_BUS_OFF);
+		mcan_enable_interrupt(&pHandle->can_module, MCAN_RX_BUFFER_NEW_MESSAGE | MCAN_TX_FIFO_EMPTY | MCAN_RX_FIFO_0_NEW_MESSAGE | MCAN_RX_FIFO_1_NEW_MESSAGE | MCAN_ACKNOWLEDGE_ERROR | MCAN_BUS_OFF | MCAN_ERROR_PASSIVE);
 	}
 	if (can_device == MCAN1)
 	{
 		irq_register_handler(MCAN1_INT0_IRQn, 1);
+		irq_register_handler(MCAN1_INT1_IRQn, 1);
 		NVIC_SetPriority(MCAN1_INT0_IRQn, 4);
-		mcan_enable_interrupt(&pHandle->can_module, MCAN_RX_BUFFER_NEW_MESSAGE | MCAN_RX_FIFO_0_NEW_MESSAGE | MCAN_RX_FIFO_1_NEW_MESSAGE | MCAN_FORMAT_ERROR | MCAN_ACKNOWLEDGE_ERROR | MCAN_BUS_OFF);
+		mcan_enable_interrupt(&pHandle->can_module, MCAN_RX_BUFFER_NEW_MESSAGE | MCAN_TX_FIFO_EMPTY |  MCAN_RX_FIFO_0_NEW_MESSAGE | MCAN_RX_FIFO_1_NEW_MESSAGE | MCAN_ACKNOWLEDGE_ERROR | MCAN_BUS_OFF | MCAN_ERROR_PASSIVE);
 	}
+	
+	// Will set CCR.INIT bit to 0, so module runs
+	mcan_start(&pHandle->can_module);
 	
 	// This buffer was too small once, got incremented from 32 to 64.
 	pHandle->receiveMessageBuffer = xMessageBufferCreate(sizeof(struct mcan_rx_element_fifo_0) * 64);
@@ -126,11 +129,48 @@ bool ccd_can_SetBaudRate(void * vHandle, uint32_t baud)
 	if (baud != 2000000 && baud != 1000000 && baud != 500000){
 		return false;
 	}
-	
 	ccd_can_t * pHandle = (ccd_can_t *) vHandle;
-	
+		
+	// First take the semaphore, so no one else can write to the module.
 	if (xSemaphoreTake(pHandle->driver_mutex, pdMS_TO_TICKS(pHandle->ioctl_timeout)))
 	{
+		// Now wait for the buffer to be empty
+		bool buffer_empty = false;
+		uint8_t max_number_of_delays = 3;
+		while (! buffer_empty && max_number_of_delays > 0)
+		{
+			buffer_empty = MCAN_TXBUFFER_EMPTY(pHandle->can_module.hw);
+
+			if (!buffer_empty)
+			{
+				max_number_of_delays -= 1;
+				vTaskDelay(pdMS_TO_TICKS(5));
+			}
+		}
+
+		if (max_number_of_delays == 0)
+		{
+			xSemaphoreGive(pHandle->driver_mutex);
+			return false;
+		}
+		
+		// Next wait for the line to be clear
+		bool bus_clear = false;
+		max_number_of_delays = 3;
+		while (! bus_clear && max_number_of_delays > 0)
+		{
+			bus_clear = (pHandle->can_module.hw->MCAN_PSR & MCAN_PSR_ACT_Msk) == MCAN_PSR_ACT_IDLE;
+			if (!bus_clear)
+			{
+				max_number_of_delays -= 1;
+				vTaskDelay(pdMS_TO_TICKS(5));
+			}
+		}
+		if (max_number_of_delays == 0)
+		{
+			xSemaphoreGive(pHandle->driver_mutex);
+			return false;
+		}
 		pHandle->baudrate = baud;
 		
 		mcan_stop(&pHandle->can_module);
@@ -207,7 +247,7 @@ bool ccd_can_Receive_message(void * vHandle, uint32_t * header, uint8_t ** data,
 
 
 // Called from interrupt
-void ccd_can_ReceiveCallback(ccd_can_t* pHandle)
+void ccd_can_InterruptCallback(ccd_can_t* pHandle)
 {
 	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 	
@@ -260,11 +300,28 @@ void ccd_can_ReceiveCallback(ccd_can_t* pHandle)
 
 	if (status & MCAN_ACKNOWLEDGE_ERROR) {
 		mcan_clear_interrupt_status(&pHandle->can_module, MCAN_ACKNOWLEDGE_ERROR);
+		
+		// This message was not acked.
+		uint32_t fifo_transmit_index = (pHandle->can_module.hw->MCAN_TXFQS & MCAN_TXFQS_TFGI_Msk) >> MCAN_TXFQS_TFGI_Pos;
+		
+		mcan_tx_cancel_request(&pHandle->can_module,fifo_transmit_index);
 	}
 
 	if (status & MCAN_FORMAT_ERROR) {
 		mcan_clear_interrupt_status(&pHandle->can_module, MCAN_FORMAT_ERROR);
 	}
 	
+	if (status & MCAN_ERROR_PASSIVE) {
+		
+		mcan_clear_interrupt_status(&pHandle->can_module, MCAN_ERROR_PASSIVE);
+	}
+	
+	if (status & MCAN_TX_FIFO_EMPTY) {
+		mcan_clear_interrupt_status(&pHandle->can_module, MCAN_TX_FIFO_EMPTY);
+	}
+	
+	
+
+	ioport_set_pin_level(PIN_DEBUG_2, 0);
 	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
