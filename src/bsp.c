@@ -388,19 +388,19 @@ void BSP_vInitCan(bsp_t * bsp) {
 
 
 void MCAN0_INT0_Handler(void) {
-	ccd_can_InterruptCallback(&bus_can);
+	ccd_can_ReceiveCallback(&bus_can);
 }
 
 void MCAN0_INT1_Handler(void) {
-	ccd_can_InterruptCallback(&bus_can);
+	asm("nop");
 }
 
 void MCAN1_INT0_Handler(void) {
-	ccd_can_InterruptCallback(&bus_can);
+	ccd_can_ReceiveCallback(&bus_can);
 }
 
 void MCAN1_INT1_Handler(void) {
-	ccd_can_InterruptCallback(&bus_can);
+	asm("nop");
 }
 
 void BSP_vInitLEDPWM(bsp_t * bsp)
