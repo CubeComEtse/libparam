@@ -74,7 +74,7 @@ static void DEVTOOLS_Task(void * handle){
 		RFRelay_Process(pHandle->rf_relay_2);
 		MULTI_Process(pHandle->multitester);
 		
-		vTaskDelay(pdMS_TO_TICKS(9));
+		vTaskDelay(pdMS_TO_TICKS(20));
 	}
 	
 }
