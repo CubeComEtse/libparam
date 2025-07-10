@@ -31,6 +31,7 @@ typedef struct {
 	can_send_message_t can_send;
 	can_receive_message_t can_receive;
 	void * can_handle;
+	SemaphoreHandle_t can_semaphore;
 	
 	// These values used to be set with a register. They are being deprecated
 	uint8_t radio_can_address;

@@ -33,6 +33,8 @@ void CANTARGET_Init(can_target_t * pHandle)
 	pHandle->incoming_messages = xMessageBufferCreate(4096);
 	pHandle->outgoing_messages = xMessageBufferCreate(4096);
 	
+	pHandle->can_semaphore = xSemaphoreCreateMutex();
+	
 	pHandle->mode = CUBECOM_MODE;
 	ccd_can_SetAddress(pHandle->can_handle, pHandle->our_can_address, 0xFF);
 }
@@ -117,9 +119,7 @@ void CANTARGET_TxTask(void * vHandle)
 			// 3 - Data. Data can contain the address
 			
 			uint32_t can_header = ((in_message.data[1] << 24) | (in_message.msg_id << 16) | (pHandle->our_can_address << 8) | (in_message.data[0] << 0));
-			
 			pHandle->can_send(pHandle->can_handle, can_header, &in_message.data[3], in_message.data[2]);
-			
 		}
 	}
 }
@@ -174,44 +174,55 @@ void CANTARGET_RxTask(void * vHandle)
 bool CANTARGET_SetBaud(can_target_t * pHandle, uint32_t baud)
 {
 	// Should we wait for the buffer to be empty?
-	return ccd_can_SetBaudRate(pHandle->can_handle, baud);
+	
+	xSemaphoreTake(pHandle->can_semaphore, pdMS_TO_TICKS(200));
+	bool retval = ccd_can_SetBaudRate(pHandle->can_handle, baud);
+	xSemaphoreGive(pHandle->can_semaphore);
+	
+	return retval;
 }
 
 bool CANTARGET_EnableRetries(can_target_t * pHandle, bool retries)
 {
 	// Should we wait for the buffer to be empty?
-	return ccd_can_SetRetries(pHandle->can_handle, retries);
+	
+	xSemaphoreTake(pHandle->can_semaphore, pdMS_TO_TICKS(200));
+	ccd_can_SetRetries(pHandle->can_handle, retries);
+	xSemaphoreGive(pHandle->can_semaphore);
+	
+	return true;
 }
 
 bool CANTARGET_SetMode(can_target_t * pHandle, can_mode_t mode)
 {
 	// Should we wait for the buffer to be empty?
 	
+	xSemaphoreTake(pHandle->can_semaphore, pdMS_TO_TICKS(200));
 	switch (mode)
 	{
 		case CUBECOM_MODE:
+			pHandle->mode = CUBECOM_MODE;
 			// Change the address filter as well
-			if (ccd_can_SetAddress(pHandle->can_handle, pHandle->our_can_address, 0xFF))
-			{
-				pHandle->mode = CUBECOM_MODE;
-				return true;
-			}
-			return false;
+			ccd_can_SetAddress(pHandle->can_handle, pHandle->our_can_address, 0xFF);
 		break;	
 		case PLAN_S_COMPATIBILITY:
-			if (ccd_can_SetAddress(pHandle->can_handle, pHandle->our_can_address << 16, 0xFF << 16))
-			{
-				pHandle->mode = PLAN_S_COMPATIBILITY;
-				return true;
-			}
-			return false;
+			pHandle->mode = PLAN_S_COMPATIBILITY;
+			ccd_can_SetAddress(pHandle->can_handle, pHandle->our_can_address << 16, 0xFF << 16);
 		break;
 	}
-	return false;
+	xSemaphoreGive(pHandle->can_semaphore);
+	
+	return true;
+	
 }
 
-bool CANTARGET_vSetAddress(can_target_t * pHandle, uint8_t new_address)
-{
-	pHandle->radio_can_address = new_address;
-	return true;
+bool CANTARGET_vSetAddress(can_target_t * pHandle, uint8_t new_address){
+	if (xSemaphoreTake(pHandle->can_semaphore, pdMS_TO_TICKS(500)) == pdTRUE)
+	{
+		pHandle->radio_can_address = new_address;
+		xSemaphoreGive(pHandle->can_semaphore);
+		return true;
+	}
+	return false;
+	
 }
