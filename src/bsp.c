@@ -76,8 +76,9 @@ void BSP_Init(bsp_t * bsp) {
 	ioport_enable_pin(PIN_VERSION_2);
 	
 	delay_ms(1);
-	//version = (ioport_get_pin_level(PIN_VERSION_2) << 2) | (ioport_get_pin_level(PIN_VERSION_1) << 1) | ioport_get_pin_level(PIN_VERSION_0);
-    version = 1;
+	version = (ioport_get_pin_level(PIN_VERSION_2) << 2) | (ioport_get_pin_level(PIN_VERSION_1) << 1) | ioport_get_pin_level(PIN_VERSION_0);
+	//version = 1;
+    
 	
 	BSP_vInitUART(bsp);
 	BSP_vInitBusI2C(bsp);
@@ -216,6 +217,18 @@ static void BSP_vInitUtilI2C(bsp_t * bsp){
  * Initialize all the general purpose GPIO pins
 */
 void BSP_vInitGPIO(void) {
+
+	// The four GPIO pins are not enabled and set.
+
+	// PA19
+	ioport_enable_pin(EN_VBAT_BUS_PIN);
+	ioport_set_pin_level(EN_VBAT_BUS_PIN, 0);
+	ioport_set_pin_dir(EN_VBAT_BUS_PIN, IOPORT_DIR_OUTPUT);
+			
+	// USB Reset pin PD14
+	ioport_enable_pin(USB_RESET_PIN);
+	ioport_set_pin_level(USB_RESET_PIN, 1);
+	ioport_set_pin_dir(USB_RESET_PIN, IOPORT_DIR_OUTPUT);
 	
 	if (BSP_u8GetVersion() == 0){
 		// Version 0 had VBatAlt and 5V lines
@@ -230,20 +243,13 @@ void BSP_vInitGPIO(void) {
 		ioport_enable_pin(ETH_nRST);
 		ioport_set_pin_level(ETH_nRST, 0);
 		ioport_set_pin_dir(ETH_nRST, IOPORT_DIR_OUTPUT);
+		
+		// PA20
+		ioport_enable_pin(EN_3V3_BUS_PIN);
+		ioport_set_pin_level(EN_3V3_BUS_PIN, 0);
+		ioport_set_pin_dir(EN_3V3_BUS_PIN, IOPORT_DIR_OUTPUT);	
+		
 	}
-
-	ioport_enable_pin(EN_3V3_BUS_PIN);
-	ioport_set_pin_level(EN_3V3_BUS_PIN, 0);
-	ioport_set_pin_dir(EN_3V3_BUS_PIN, IOPORT_DIR_OUTPUT);
-
-	ioport_enable_pin(EN_VBAT_BUS_PIN);
-	ioport_set_pin_level(EN_VBAT_BUS_PIN, 0);
-	ioport_set_pin_dir(EN_VBAT_BUS_PIN, IOPORT_DIR_OUTPUT);
-	
-	// USB Reset pin	
-	ioport_enable_pin(USB_RESET_PIN);
-	ioport_set_pin_level(USB_RESET_PIN, 1);
-	ioport_set_pin_dir(USB_RESET_PIN, IOPORT_DIR_OUTPUT);
 	
 	// GSE version 2 has 4 debug pins
 	if (BSP_u8GetVersion() == 1){
@@ -262,6 +268,12 @@ void BSP_vInitGPIO(void) {
 		ioport_enable_pin(PIN_DEBUG_3);
 		ioport_set_pin_level(PIN_DEBUG_3, 0);
 		ioport_set_pin_dir(PIN_DEBUG_3, IOPORT_DIR_OUTPUT);
+		
+		// PA20
+		ioport_enable_pin(EN_3V3_BUS_PIN);
+		ioport_set_pin_level(EN_3V3_BUS_PIN, 0);
+		ioport_set_pin_dir(EN_3V3_BUS_PIN, IOPORT_DIR_OUTPUT);
+
 	}
 	
 	// Todo: This needs to be cleaned up. In the old OBC we referred to PC104 pins,
@@ -269,13 +281,27 @@ void BSP_vInitGPIO(void) {
 	// but won't always be the same for all adaptors.
 	//if (BSP_u8GetVersion() == 0)
 	{
+		// GPIO 1: PC01
 		ioport_set_pin_level(PC104_EN_PIN, 0);
 		ioport_enable_pin(PC104_EN_PIN);
 		ioport_set_pin_dir(PC104_EN_PIN, IOPORT_DIR_OUTPUT);
 		
+		// GPIO 0: PC00
 		ioport_set_pin_level(PC104_nRST_PIN, 0);
 		ioport_enable_pin(PC104_nRST_PIN);
 		ioport_set_pin_dir(PC104_nRST_PIN, IOPORT_DIR_OUTPUT);
+	}
+	
+	// Revision B2 of the EGSE
+	if (BSP_u8GetVersion() == 2) {
+		
+		ioport_enable_pin(EN_3V3_EXT_PIN);
+		ioport_set_pin_level(EN_3V3_EXT_PIN, 0);
+		ioport_set_pin_dir(EN_3V3_EXT_PIN, IOPORT_DIR_OUTPUT);
+		
+		ioport_enable_pin(EN_3V3_UTIL_PIN);
+		ioport_set_pin_level(EN_3V3_UTIL_PIN, 0);
+		ioport_set_pin_dir(EN_3V3_UTIL_PIN, IOPORT_DIR_OUTPUT);
 	}
 }
 
@@ -400,7 +426,7 @@ void BSP_vInitCan(bsp_t * bsp) {
 		ccd_can_Init(&bus_can, MCAN0);
 		bsp->bus_can = &bus_can;
 	}
-	if (BSP_u8GetVersion() == 1)
+	if ((BSP_u8GetVersion() == 1) || (BSP_u8GetVersion() == 2))
 	{
 		// Configure pins, disable GPIO mode
 		ioport_disable_pin(CAN_PIN_TX_V2);

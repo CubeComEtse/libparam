@@ -695,6 +695,31 @@ mm_response_t mm_getConfPower_voltageVBatAltToggleFrom(mm_enabled_t * dest, cons
     *dest = (mm_enabled_t) ((source & REG_CONFPOWER_VOLTAGEVBATALTTOGGLE_Msk) >> REG_CONFPOWER_VOLTAGEVBATALTTOGGLE_Pos);
     return mm_OK;
 }
+mm_response_t mm_setConfPower_voltage3UtilToggle(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.ConfPower = (mm.ConfPower & ~REG_CONFPOWER_VOLTAGE3UTILTOGGLE_Msk) | (val << REG_CONFPOWER_VOLTAGE3UTILTOGGLE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getConfPower_voltage3UtilToggle(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.ConfPower & REG_CONFPOWER_VOLTAGE3UTILTOGGLE_Msk) >> REG_CONFPOWER_VOLTAGE3UTILTOGGLE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getConfPower_voltage3UtilToggleFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_CONFPOWER_VOLTAGE3UTILTOGGLE_Msk) >> REG_CONFPOWER_VOLTAGE3UTILTOGGLE_Pos);
+    return mm_OK;
+}
 /*************** Get/Set functions for MeasureVI_V3 register ******************************************************************/
 mm_response_t mm_setMeasureVI_V3(const uint32_t val) {
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {

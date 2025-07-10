@@ -42,6 +42,8 @@ typedef enum {
 #define REG_CONFPOWER_VOLTAGEVBATTOGGLE_Msk          (0x0001 << REG_CONFPOWER_VOLTAGEVBATTOGGLE_Pos)
 #define REG_CONFPOWER_VOLTAGEVBATALTTOGGLE_Pos       (3UL)
 #define REG_CONFPOWER_VOLTAGEVBATALTTOGGLE_Msk       (0x0001 << REG_CONFPOWER_VOLTAGEVBATALTTOGGLE_Pos)
+#define REG_CONFPOWER_VOLTAGE3UTILTOGGLE_Pos         (4UL)
+#define REG_CONFPOWER_VOLTAGE3UTILTOGGLE_Msk         (0x0001 << REG_CONFPOWER_VOLTAGE3UTILTOGGLE_Pos)
 
 /*************** Bit definition for I2CConfA register ************************/
 #define REG_I2CCONFA_TRDEL_Pos                       (16UL)
@@ -535,6 +537,9 @@ mm_response_t mm_getConfPower_voltageVBatToggleFrom(mm_enabled_t * dest, const u
 mm_response_t mm_setConfPower_voltageVBatAltToggle(const mm_enabled_t val);
 mm_response_t mm_getConfPower_voltageVBatAltToggle(mm_enabled_t * dest);
 mm_response_t mm_getConfPower_voltageVBatAltToggleFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setConfPower_voltage3UtilToggle(const mm_enabled_t val);
+mm_response_t mm_getConfPower_voltage3UtilToggle(mm_enabled_t * dest);
+mm_response_t mm_getConfPower_voltage3UtilToggleFrom(mm_enabled_t * dest, const uint32_t source);
 
 /*************** Get/Set functions for MeasureVI_V3 register ******************************************************************/
 mm_response_t mm_setMeasureVI_V3(const uint32_t val);
