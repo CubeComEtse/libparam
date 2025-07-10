@@ -19,7 +19,7 @@
 #include <asf.h>
 
 typedef enum {
-	UART = 1,
+	UART = 0,
 	RS485,
 	RS422,
 }uart_comm_mode_t;

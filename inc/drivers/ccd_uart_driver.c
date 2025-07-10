@@ -91,6 +91,28 @@ void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart)
 	
 }
 
+void ccd_uart_ReInit(ccd_uart_t * driver) {
+	sam_usart_opt_t sUsartOptions;
+	sUsartOptions.baudrate = driver->baudrate;
+	sUsartOptions.char_length = US_MR_CHRL_8_BIT;
+	sUsartOptions.parity_type = US_MR_PAR_NO;
+	sUsartOptions.stop_bits = US_MR_NBSTOP_1_BIT;
+	
+	if ((driver->uart_comm_mode == UART) || (driver->uart_comm_mode == RS422))
+	{
+		sUsartOptions.channel_mode = US_MR_CHMODE_NORMAL;
+		usart_init_rs232(driver->base_usart, &sUsartOptions, sysclk_get_peripheral_hz());
+	}
+	if (driver->uart_comm_mode == RS485)
+	{
+		sUsartOptions.channel_mode = US_MR_USART_MODE_RS485;
+		usart_init_rs485(driver->base_usart, &sUsartOptions, sysclk_get_peripheral_hz());
+	}
+	usart_enable_tx(driver->base_usart);
+	usart_enable_rx(driver->base_usart);	
+	usart_enable_interrupt(driver->base_usart, US_IER_RXRDY | US_IER_TXEMPTY);
+}
+
 void ccd_uart_setCommMode(void * vHandle, uart_comm_mode_t uart_comm_mode) {
 	ccd_uart_t * driver = (ccd_uart_t*) vHandle;
 	driver->uart_comm_mode = uart_comm_mode;
@@ -113,9 +135,10 @@ void ccd_uart_setCommMode(void * vHandle, uart_comm_mode_t uart_comm_mode) {
 		driver->set_gpio_pin(driver->rs422_de_pin, 0);
 		driver->set_gpio_pin(driver->rs485_de_pin, 1);
 	}
+	
 	driver->disable_pin(driver->uart_tx_pin);
 	driver->disable_pin(driver->uart_rx_pin);
-	ccd_uart_Init(driver, driver->base_usart);
+	ccd_uart_ReInit(driver);
 }
 
 /*

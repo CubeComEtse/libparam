@@ -526,6 +526,12 @@ namespace Devices.Models
                 set { data0 = (byte)((data0 & ~(byte)0x00000008) | (( (byte)(value) & 0x00000001) << 3)); }
             }
 
+            public byte voltage3UtilToggle
+            {
+                get { return (byte)((data0 & (byte)0x00000010) >> 4); } 
+                set { data0 = (byte)((data0 & ~(byte)0x00000010) | (( (byte)(value) & 0x00000001) << 4)); }
+            }
+
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
@@ -2119,6 +2125,17 @@ namespace Devices.Models
         public Enabled ConfPower_voltageVBatAltToggle {
             get => _ConfPower_voltageVBatAltToggle;
             set => _ = Set(ref _ConfPower_voltageVBatAltToggle, value);
+        }
+        
+        private bool _ConfPower_voltage3UtilToggleIsSet;
+        public bool ConfPower_voltage3UtilToggleIsSet {
+            get => _ConfPower_voltage3UtilToggleIsSet;
+            set => _ = Set(ref _ConfPower_voltage3UtilToggleIsSet, value); 
+        }
+        private Enabled _ConfPower_voltage3UtilToggle;
+        public Enabled ConfPower_voltage3UtilToggle {
+            get => _ConfPower_voltage3UtilToggle;
+            set => _ = Set(ref _ConfPower_voltage3UtilToggle, value);
         }
         
         /*************** Min and Max Properties for MeasureVI_V3 types ***************************/
@@ -5635,6 +5652,7 @@ namespace Devices.Models
                     ConfPower_voltage3Toggle = (Enabled) register.RegConfPower.voltage3Toggle;
                     ConfPower_voltageVBatToggle = (Enabled) register.RegConfPower.voltageVBatToggle;
                     ConfPower_voltageVBatAltToggle = (Enabled) register.RegConfPower.voltageVBatAltToggle;
+                    ConfPower_voltage3UtilToggle = (Enabled) register.RegConfPower.voltage3UtilToggle;
                     break;
 
                 case OBCRegisterAddress.OBC_REG_MEASUREVI_V3:
@@ -6269,6 +6287,7 @@ namespace Devices.Models
                     register.RegConfPower.voltage3Toggle = (byte) ConfPower_voltage3Toggle;
                     register.RegConfPower.voltageVBatToggle = (byte) ConfPower_voltageVBatToggle;
                     register.RegConfPower.voltageVBatAltToggle = (byte) ConfPower_voltageVBatAltToggle;
+                    register.RegConfPower.voltage3UtilToggle = (byte) ConfPower_voltage3UtilToggle;
                     break;
 
                 case OBCRegisterAddress.OBC_REG_MEASUREVI_V3:
@@ -7422,6 +7441,8 @@ namespace Devices.Models
             ConfPower_voltageVBatToggleIsSet = false;
             ConfPower_voltageVBatAltToggle = 0;
             ConfPower_voltageVBatAltToggleIsSet = false;
+            ConfPower_voltage3UtilToggle = 0;
+            ConfPower_voltage3UtilToggleIsSet = false;
 
             MeasureVI_V3_voltage = 0;
             MeasureVI_V3_voltageIsSet = false;
