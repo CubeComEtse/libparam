@@ -508,6 +508,26 @@
 				}
 			},
 			{
+				"name":"SerialConf",
+				"address": "0x2F",
+				"dir": "rw",
+				"width": "32",
+				"fields": [
+					{
+						"name": "SerialMode",
+						"pretty-name": "Serial Comm Mode",
+						"description": "Serial Communication mode (UART, RS485, RS422)",
+						"options": "SerialModes",
+						"bit": "1-0",
+						"c#": { "hasminmax": "false", "type": "UInt32" },
+						"c": { "type": "byte"}
+					}
+				],
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
 				"name": "PC104Pins",
 				"comment": "Only used by the V0 OBC, to set the PC104 pins",
 				"address": "0x30",
@@ -902,6 +922,15 @@
 					{"name": "uD", "value": "1",  "pretty_name": "uD Adaptor"},
 					{"name": "Gecko", "value": "2",  "pretty_name": "Gecko Adaptor"}
 				]	
+			},
+			"SerialModes":{
+				"name": "SerialMode",
+				"type": "byte",
+				"options": [
+					{"name": "UART", "value": "0", "pretty_name": "UART"},
+					{"name": "RS485", "value": "1", "pretty_name": "RS485"},
+					{"name": "RS422", "value": "2", "pretty_name": "RS422"}
+				]
 			}
 		}
 	}

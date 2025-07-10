@@ -18,6 +18,12 @@
 
 #include <asf.h>
 
+typedef enum {
+	UART = 1,
+	RS485,
+	RS422,
+}uart_comm_mode_t;
+
 typedef struct {
 	// Buffers containing the incoming and outgoing data.
 	StreamBufferHandle_t uart_rx_buffer;
@@ -39,9 +45,24 @@ typedef struct {
 	TaskHandle_t task_reference;
 	
 	MessageBufferHandle_t receiveMessageBuffer;
+	
+	// Usart details
+	uart_comm_mode_t uart_comm_mode;
+	uint32_t baudrate;
+	
+	void (*set_gpio_pin) (uint32_t pin, bool value);
+	void (*disable_pin) (uint32_t pin);
+	uint32_t rs422_nre_pin;
+	uint32_t rs422_de_pin;
+	uint32_t rs485_de_pin;
+	uint32_t uart_tx_pin;
+	uint32_t uart_rx_pin;
 }ccd_uart_t;
 
-void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart, const uint32_t baud);
+void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart);
+
+void ccd_uart_setCommMode(void * vHandle, uart_comm_mode_t uart_comm_mode);
+
 void ccd_uart_EnableTXInterrupt(ccd_uart_t * driver);
 void ccd_uart_InterruptHandler(ccd_uart_t * driver);
 void ccd_usart_RXProcessingTask(void * parameters);

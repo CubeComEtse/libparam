@@ -67,9 +67,10 @@ void ccd_led_driver_DisableInterrupts(ccd_led_t * driver, bool value)
 
 void ccd_led_driver_SetLed(ccd_led_t * driver, uint8_t r, uint8_t g, uint8_t b){
 	
+	/*
 	driver->pwm->PWM_ENA = PWM_ENA_CHID3;
 	driver->pwm->PWM_CH_NUM[3].PWM_CDTYUPD = r;
-	return;
+	return;*/
 	
 	
 	Pwm * pwm = driver->pwm;

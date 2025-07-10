@@ -87,6 +87,10 @@ typedef enum {
 #define REG_CANCONFB_ADDRESS_Pos                     (0UL)
 #define REG_CANCONFB_ADDRESS_Msk                     (0x00ff << REG_CANCONFB_ADDRESS_Pos)
 
+/*************** Bit definition for SerialConf register **********************/
+#define REG_SERIALCONF_SERIALMODE_Pos                (0UL)
+#define REG_SERIALCONF_SERIALMODE_Msk                (0x0003 << REG_SERIALCONF_SERIALMODE_Pos)
+
 /*************** Bit definition for PC104Pins register ***********************/
 #define REG_PC104PINS_ENA_Pos                        (0UL)
 #define REG_PC104PINS_ENA_Msk                        (0x0001 << REG_PC104PINS_ENA_Pos)
@@ -269,6 +273,7 @@ typedef struct {
     uint32_t ConfTempSense;
     uint32_t CANConfA;
     uint32_t CANConfB;
+    uint32_t SerialConf;
     uint32_t PC104Pins;
     uint32_t XTXMultitester;
     uint32_t RFRelaysConf;
@@ -348,6 +353,7 @@ typedef enum {
     reg_ConfTempSense_addr = 0x2C,
     reg_CANConfA_addr = 0x2D,
     reg_CANConfB_addr = 0x2E,
+    reg_SerialConf_addr = 0x2F,
     reg_PC104Pins_addr = 0x30,
     reg_XTXMultitester_addr = 0x31,
     reg_RFRelaysConf_addr = 0x32,
@@ -422,6 +428,12 @@ typedef enum {
     reg_te_types_ud = 1,                            // uD Adaptor
     reg_te_types_gecko = 2,                         // Gecko Adaptor
 } mm_te_types_t;
+
+typedef enum {
+    reg_serialmode_uart = 0,                        // UART
+    reg_serialmode_rs485 = 1,                       // RS485
+    reg_serialmode_rs422 = 2,                       // RS422
+} mm_serialmode_t;
 
 void mm_init(void);
 mm_t * get_mm_ptr(void);
@@ -663,6 +675,13 @@ mm_response_t mm_getCANConfB(uint32_t * dest);
 mm_response_t mm_setCANConfB_Address(const uint8_t val);
 mm_response_t mm_getCANConfB_Address(uint8_t * dest);
 mm_response_t mm_getCANConfB_AddressFrom(uint8_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for SerialConf register ********************************************************************/
+mm_response_t mm_setSerialConf(const uint32_t val);
+mm_response_t mm_getSerialConf(uint32_t * dest);
+mm_response_t mm_setSerialConf_SerialMode(const mm_serialmode_t val);
+mm_response_t mm_getSerialConf_SerialMode(mm_serialmode_t * dest);
+mm_response_t mm_getSerialConf_SerialModeFrom(mm_serialmode_t * dest, const uint32_t source);
 
 /*************** Get/Set functions for PC104Pins register *********************************************************************/
 mm_response_t mm_setPC104Pins(const uint32_t val);

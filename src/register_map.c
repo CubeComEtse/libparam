@@ -1675,6 +1675,51 @@ mm_response_t mm_getCANConfB_AddressFrom(uint8_t * dest, const uint32_t source) 
     *dest = (uint8_t) ((source & REG_CANCONFB_ADDRESS_Msk) >> REG_CANCONFB_ADDRESS_Pos);
     return mm_OK;
 }
+/*************** Get/Set functions for SerialConf register ********************************************************************/
+mm_response_t mm_setSerialConf(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.SerialConf = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getSerialConf(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.SerialConf;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_setSerialConf_SerialMode(const mm_serialmode_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.SerialConf = (mm.SerialConf & ~REG_SERIALCONF_SERIALMODE_Msk) | (val << REG_SERIALCONF_SERIALMODE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getSerialConf_SerialMode(mm_serialmode_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_serialmode_t) ((mm.SerialConf & REG_SERIALCONF_SERIALMODE_Msk) >> REG_SERIALCONF_SERIALMODE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getSerialConf_SerialModeFrom(mm_serialmode_t * dest, const uint32_t source) {
+    *dest = (mm_serialmode_t) ((source & REG_SERIALCONF_SERIALMODE_Msk) >> REG_SERIALCONF_SERIALMODE_Pos);
+    return mm_OK;
+}
 /*************** Get/Set functions for PC104Pins register *********************************************************************/
 mm_response_t mm_setPC104Pins(const uint32_t val) {
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {

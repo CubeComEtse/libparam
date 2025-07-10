@@ -58,6 +58,7 @@ static addres_to_func_map_t address_to_func_map[] = {
 	{ reg_CANConfA_addr, mm_getCANConfA },
 	{ reg_CANConfB_addr, mm_getCANConfB },
 	{ reg_PC104Pins_addr, mm_getPC104Pins },
+	{ reg_SerialConf_addr, mm_getSerialConf },
 		
 		
 	{ reg_RFRelaysConf_addr, mm_getRFRelaysConf },
@@ -418,6 +419,15 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 					mm_setCANConfB_Address(new_address);	
 				}
 				
+			}
+			break;
+		case reg_SerialConf_addr:
+			{
+				mm_serialmode_t SerialCommMode;
+				mm_getSerialConf_SerialModeFrom(&SerialCommMode, deserialized);
+				if(UARTTARGET_SetCommMode(platform->uart_target, SerialCommMode)){
+					mm_setSerialConf_SerialMode(SerialCommMode);
+				}			
 			}
 			break;
 		case reg_PC104Pins_addr:

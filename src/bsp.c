@@ -76,8 +76,8 @@ void BSP_Init(bsp_t * bsp) {
 	ioport_enable_pin(PIN_VERSION_2);
 	
 	delay_ms(1);
-	version = (ioport_get_pin_level(PIN_VERSION_2) << 2) | (ioport_get_pin_level(PIN_VERSION_1) << 1) | ioport_get_pin_level(PIN_VERSION_0);
-    
+	//version = (ioport_get_pin_level(PIN_VERSION_2) << 2) | (ioport_get_pin_level(PIN_VERSION_1) << 1) | ioport_get_pin_level(PIN_VERSION_0);
+    version = 1;
 	
 	BSP_vInitUART(bsp);
 	BSP_vInitBusI2C(bsp);
@@ -117,6 +117,10 @@ void inline BSP_vSetPin(uint32_t pin, bool value){
 	ioport_set_pin_level(pin, value);
 }
 
+static inline void BSP_vDisablePin(uint32_t pin){
+	ioport_disable_pin(pin);
+}
+
 
 static void BSP_vInitUART(bsp_t * bsp){
 	//Telemetry UART
@@ -132,8 +136,10 @@ static void BSP_vInitUART(bsp_t * bsp){
 	ioport_set_pin_dir(T_USART_CTS_PIN, IOPORT_DIR_OUTPUT);
 	
 	telemetry_uart.doFlowControl = 1;
+	telemetry_uart.uart_comm_mode = UART;
 	telemetry_uart.cts_pin = T_USART_CTS_PIN;
-	ccd_uart_Init(&telemetry_uart, T_USART, T_USART_SPEED);
+	telemetry_uart.baudrate = T_USART_SPEED;
+	ccd_uart_Init(&telemetry_uart, T_USART);
 	
 	bsp->telemetry_uart = &telemetry_uart;
 	
@@ -144,8 +150,33 @@ static void BSP_vInitUART(bsp_t * bsp){
 	ioport_set_pin_mode(B_USART_TX_PIN, IOPORT_MODE_MUX_C);
 	ioport_disable_pin(B_USART_TX_PIN);
 	
+	// Default is UART/Normal Mode, RS485/RS422 Shutdown
+	ioport_enable_pin(PIN_RS422_nRE);
+	ioport_set_pin_level(PIN_RS422_nRE, 1);
+	ioport_set_pin_dir(PIN_RS422_nRE, IOPORT_DIR_OUTPUT);
+
+	ioport_enable_pin(PIN_RS422_DE);
+	ioport_set_pin_level(PIN_RS422_DE, 0);
+	ioport_set_pin_dir(PIN_RS422_DE, IOPORT_DIR_OUTPUT);
+
+	ioport_enable_pin(PIN_RS485_DE);
+	ioport_set_pin_level(PIN_RS485_DE, 0);
+	ioport_set_pin_dir(PIN_RS485_DE, IOPORT_DIR_OUTPUT);
+	
 	bus_uart.doFlowControl = 0;
-	ccd_uart_Init(&bus_uart, B_USART, B_USART_SPEED);
+	
+	bus_uart.uart_comm_mode = UART;
+	bus_uart.baudrate = B_USART_SPEED;
+	
+	bus_uart.set_gpio_pin = &BSP_vSetPin;
+	bus_uart.disable_pin = &BSP_vDisablePin;
+	bus_uart.rs422_nre_pin = PIN_RS422_nRE;
+	bus_uart.rs422_de_pin = PIN_RS422_DE;
+	bus_uart.rs485_de_pin = PIN_RS485_DE;
+	bus_uart.uart_tx_pin = B_USART_TX_PIN;
+	bus_uart.uart_rx_pin = B_USART_RX_PIN;
+	
+	ccd_uart_Init(&bus_uart, B_USART);
 	
 	bsp->bus_uart = &bus_uart; 
 }

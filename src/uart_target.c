@@ -36,6 +36,8 @@ void UARTTARGET_Init(uart_target_t * handle)
 	handle->incoming_messages = xMessageBufferCreate(256);
 	handle->outgoing_messages = xMessageBufferCreate(256);
 	
+	handle->uart_semaphore = xSemaphoreCreateMutex();
+	
 }
 
 void UARTTARGET_TxTask(void * handle) 
@@ -242,4 +244,15 @@ void UARTTARGET_RxTask(void * handle)
 
 	}
 
+}
+
+bool UARTTARGET_SetCommMode(uart_target_t * pHandle, uart_comm_mode_t CommMode)
+{
+	// Should we wait for the buffer to be empty?
+	if(xSemaphoreTake(pHandle->uart_semaphore, pdMS_TO_TICKS(200))) {
+		ccd_uart_setCommMode(pHandle->uart_handle, CommMode);
+		xSemaphoreGive(pHandle->uart_semaphore);
+		return true;	
+	}
+	return false;
 }

@@ -16,7 +16,7 @@
 #include "assert.h"
 
 
-void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart, const uint32_t baud)
+void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart)
 {
 	if (driver->doFlowControl){
 		assert(driver->cts_pin);	
@@ -47,13 +47,22 @@ void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart, const uint32_t baud)
 		
 	// Setup for Telemetry USART
 	sam_usart_opt_t sUsartOptions;
-	sUsartOptions.baudrate = baud;
+	sUsartOptions.baudrate = driver->baudrate;
 	sUsartOptions.char_length = US_MR_CHRL_8_BIT;
 	sUsartOptions.parity_type = US_MR_PAR_NO;
 	sUsartOptions.stop_bits = US_MR_NBSTOP_1_BIT;
-	sUsartOptions.channel_mode = US_MR_CHMODE_NORMAL;
-
-	usart_init_rs232(driver->base_usart, &sUsartOptions, sysclk_get_peripheral_hz());
+	
+	if ((driver->uart_comm_mode == UART) || (driver->uart_comm_mode == RS422))
+	{
+		sUsartOptions.channel_mode = US_MR_CHMODE_NORMAL;
+		usart_init_rs232(driver->base_usart, &sUsartOptions, sysclk_get_peripheral_hz());
+	}
+	if (driver->uart_comm_mode == RS485)
+	{
+		sUsartOptions.channel_mode = US_MR_USART_MODE_RS485;
+		usart_init_rs485(driver->base_usart, &sUsartOptions, sysclk_get_peripheral_hz());
+	}
+	
 	usart_enable_tx(driver->base_usart);
 	usart_enable_rx(driver->base_usart);
 
@@ -80,6 +89,33 @@ void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart, const uint32_t baud)
 		ccd_uart_StartFlowControl(driver);	
 	}
 	
+}
+
+void ccd_uart_setCommMode(void * vHandle, uart_comm_mode_t uart_comm_mode) {
+	ccd_uart_t * driver = (ccd_uart_t*) vHandle;
+	driver->uart_comm_mode = uart_comm_mode;
+	
+	if (uart_comm_mode == UART) {
+		// Shutdown mode for RS422/RS485
+		driver->set_gpio_pin(driver->rs422_nre_pin, 1);
+		driver->set_gpio_pin(driver->rs422_de_pin, 0);
+		driver->set_gpio_pin(driver->rs485_de_pin, 0);
+	}
+	if  (uart_comm_mode == RS485){
+		// RS485 mode, start in receiving mode
+		driver->set_gpio_pin(driver->rs422_nre_pin, 0);
+		driver->set_gpio_pin(driver->rs422_de_pin, 0);
+		driver->set_gpio_pin(driver->rs485_de_pin, 0);
+	}
+	if (uart_comm_mode == RS422){
+		// RS422 mode
+		driver->set_gpio_pin(driver->rs422_nre_pin, 0);
+		driver->set_gpio_pin(driver->rs422_de_pin, 0);
+		driver->set_gpio_pin(driver->rs485_de_pin, 1);
+	}
+	driver->disable_pin(driver->uart_tx_pin);
+	driver->disable_pin(driver->uart_rx_pin);
+	ccd_uart_Init(driver, driver->base_usart);
 }
 
 /*
