@@ -121,23 +121,31 @@ void ccd_uart_setCommMode(void * vHandle, uart_comm_mode_t uart_comm_mode) {
 		// Shutdown mode for RS422/RS485
 		driver->set_gpio_pin(driver->rs422_nre_pin, 1);
 		driver->set_gpio_pin(driver->rs422_de_pin, 0);
-		driver->set_gpio_pin(driver->rs485_de_pin, 0);
+		
+		// Disable Peripheral GPIO for non RS485 control
+		driver->enable_gpio_pin(driver->rs485_de_pin);
+		driver->set_gpio_pin_level(driver->rs485_de_pin, 0);
+		driver->set_gpio_pin_dir(driver->rs485_de_pin, IOPORT_DIR_OUTPUT);
 	}
 	if  (uart_comm_mode == RS485){
 		// RS485 mode, start in receiving mode
 		driver->set_gpio_pin(driver->rs422_nre_pin, 0);
 		driver->set_gpio_pin(driver->rs422_de_pin, 0);
-		driver->set_gpio_pin(driver->rs485_de_pin, 0);
+		
+		// Enable Peripheral GPIO for RS485 control
+		driver->set_gpio_pin_mode(driver->rs485_de_pin, IOPORT_MODE_MUX_C);
+		driver->disable_gpio_pin(driver->rs485_de_pin);
 	}
 	if (uart_comm_mode == RS422){
 		// RS422 mode
 		driver->set_gpio_pin(driver->rs422_nre_pin, 0);
-		driver->set_gpio_pin(driver->rs422_de_pin, 0);
-		driver->set_gpio_pin(driver->rs485_de_pin, 1);
+		driver->set_gpio_pin(driver->rs422_de_pin, 1);
+		
+		// Disable Peripheral GPIO for non RS485 control
+		driver->enable_gpio_pin(driver->rs485_de_pin);
+		driver->set_gpio_pin_level(driver->rs485_de_pin, 0);
+		driver->set_gpio_pin_dir(driver->rs485_de_pin, IOPORT_DIR_OUTPUT);
 	}
-	
-	driver->disable_pin(driver->uart_tx_pin);
-	driver->disable_pin(driver->uart_rx_pin);
 	ccd_uart_ReInit(driver);
 }
 

@@ -13,6 +13,7 @@
 #include "task.h"
 #include "stream_buffer.h"
 #include "message_buffer.h"
+#include "ioport.h"
 
 #define UART_HOLDING_BUFFER_SIZE 32
 
@@ -51,7 +52,11 @@ typedef struct {
 	uint32_t baudrate;
 	
 	void (*set_gpio_pin) (uint32_t pin, bool value);
-	void (*disable_pin) (uint32_t pin);
+	void (*enable_gpio_pin) (uint32_t pin);
+	void (*set_gpio_pin_level) (uint32_t pin, bool value);
+	void (*set_gpio_pin_dir) (uint32_t pin, enum ioport_direction dir);
+	void (*set_gpio_pin_mode) (uint32_t pin, ioport_mode_t mode);
+	void (*disable_gpio_pin) (uint32_t pin);
 	uint32_t rs422_nre_pin;
 	uint32_t rs422_de_pin;
 	uint32_t rs485_de_pin;
@@ -60,6 +65,7 @@ typedef struct {
 }ccd_uart_t;
 
 void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart);
+void ccd_uart_ReInit(ccd_uart_t * driver);
 
 void ccd_uart_setCommMode(void * vHandle, uart_comm_mode_t uart_comm_mode);
 
