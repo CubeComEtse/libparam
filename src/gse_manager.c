@@ -48,6 +48,15 @@ void GSE_MANAGER_SetBusPowerSwitch(gse_manager_t * handle, const power_rail_id_t
 			handle->set_gpio_pin(handle->enable_vbatalt_pin, setting);
 		}
 	}
+	if (handle->board_version == 2){
+		if (power == POWER_3V3_UTIL) {
+			handle->set_gpio_pin(handle->enable_3v3_util_pin, setting);
+		}
+	}
+}
+
+void GSE_MANAGER_SetBusPowerSwitch_V2(gse_manager_t * handle, const power_rail_id_t power, const bool setting) {
+	// Complete	
 }
 
 
@@ -65,7 +74,7 @@ void GSE_MANAGER_Task(void * taskptr){
 		assert(hdl->power_measure_1);
 		assert(hdl->power_measure_2);
 	}
-	if (hdl->board_version == 1){
+	if ((hdl->board_version == 1) || (hdl->board_version == 2)){
 		assert(hdl->power_measure_1);
 	}
 	
@@ -116,7 +125,7 @@ void GSE_MANAGER_Task(void * taskptr){
 			mm_setMeasurePower_VBatAlt(power1);
 			mm_setMeasurePower_VBat(power2);
 		}
-		if (hdl->board_version == 1) 
+		if ((hdl->board_version == 1) || (hdl->board_version == 2)) 
 		{
 			//Todo: Want to use current & voltage conversion on the board!
 			LTC2992_vReadVoltage(hdl->power_measure_1, &voltage1, &voltage2);

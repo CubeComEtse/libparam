@@ -318,6 +318,7 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 				mm_setConfPower_voltageVBatAltToggle(powerEn);
 				
 			}
+			
 			mm_getConfPower_voltage3ToggleFrom(&powerEn, deserialized);
 			GSE_MANAGER_SetBusPowerSwitch(platform->gse_manager, POWER_3V3, powerEn == reg_enabled_enabled);
 			mm_setConfPower_voltage3Toggle(powerEn);
@@ -326,6 +327,13 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 			mm_getConfPower_voltageVBatToggleFrom(&powerEn, deserialized);
 			GSE_MANAGER_SetBusPowerSwitch(platform->gse_manager, POWER_VBAT, powerEn == reg_enabled_enabled);
 			mm_setConfPower_voltageVBatToggle(powerEn);
+			
+			// Only version 2 has these pins
+			if (BSP_u8GetVersion() == 2) {
+				mm_getConfPower_voltage3UtilToggleFrom(&powerEn, deserialized);
+				GSE_MANAGER_SetBusPowerSwitch(platform->gse_manager, POWER_3V3_UTIL, powerEn == reg_enabled_enabled);
+				mm_setConfPower_voltage3UtilToggle(powerEn);
+			}
 			
 		}
 		break;

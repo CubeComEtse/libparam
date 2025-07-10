@@ -73,6 +73,8 @@
 #define EN_3V3_BUS_PIN          PIO_PA20_IDX
 #define EN_VBAT_BUS_PIN         PIO_PA19_IDX
 #define EN_VBATALT_BUS_PIN      PIO_PA18_IDX
+#define EN_3V3_EXT_PIN			PIO_PC18_IDX
+#define EN_3V3_UTIL_PIN			PIO_PC19_IDX
 
 #define USB_RESET_PIN           PIO_PD14_IDX
 

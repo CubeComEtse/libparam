@@ -17,6 +17,7 @@ typedef enum{
 	POWER_5V,
 	POWER_VBAT,
 	POWER_VBAT_ALT,
+	POWER_3V3_UTIL,
 }power_rail_id_t;
 
 typedef struct {
@@ -26,10 +27,13 @@ typedef struct {
 	ltc2499_device_t  * cs_board;
 	
 	void (*set_gpio_pin) (uint32_t pin, bool value);
-	uint32_t enable_3v3_pin;
-	uint32_t enable_5v_pin;
+	uint32_t enable_3v3_pin; // EGSE Version 2: 3v3 ext enable line
+	uint32_t enable_5v_pin; // Not used in EGSE Version 2
 	uint32_t enable_vbat_pin;
-	uint32_t enable_vbatalt_pin;
+	uint32_t enable_vbatalt_pin; // Not used in EGSE Version 2
+	
+	// EGSE Version 2:
+	uint32_t enable_3v3_util_pin;
 	
 	uint8_t board_version;
 	
@@ -39,6 +43,7 @@ typedef struct {
 
 void GSE_MANAGER_Init(gse_manager_t * handle);
 void GSE_MANAGER_SetBusPowerSwitch(gse_manager_t * handle, const power_rail_id_t power, const bool setting);
+void GSE_MANAGER_SetBusPowerSwitch_V2(gse_manager_t * handle, const power_rail_id_t power, const bool setting);
 void GSE_MANAGER_Task(void * taskptr);
 
 

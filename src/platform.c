@@ -66,7 +66,7 @@ void PLATFORM_vInit(bsp_t * bsp)
 		power_measure_2.i2c_handle = bsp->util_i2c;
 		
 	}
-	if (version == 1){
+	if ((version == 1) || (version == 2)){
 		//The LTC2992's are independent of i2c functions, so setup them
 		power_measure_1.i2c_write_function = ccd_i2c_driver_Write;
 		power_measure_1.i2c_read_function = ccd_i2c_driver_Read;
@@ -82,10 +82,18 @@ void PLATFORM_vInit(bsp_t * bsp)
 	gse_manager.cs_board = &cs_board;
 	gse_manager.board_version = BSP_u8GetVersion(); 
 	gse_manager.set_gpio_pin = &BSP_vSetPin;
-	gse_manager.enable_3v3_pin = EN_3V3_BUS_PIN;
-	gse_manager.enable_5v_pin = EN_5V_BUS_PIN;
-	gse_manager.enable_vbat_pin = EN_VBAT_BUS_PIN;
-	gse_manager.enable_vbatalt_pin = EN_VBATALT_BUS_PIN;
+	
+	if ((version == 0) || (version == 1)) {
+		gse_manager.enable_3v3_pin = EN_3V3_BUS_PIN; // Not used in Version 2
+		gse_manager.enable_5v_pin = EN_5V_BUS_PIN; // Not used in Version 2
+		gse_manager.enable_vbatalt_pin = EN_VBATALT_BUS_PIN; // Not used in Version 2
+	} 
+	if (version == 2) {
+		gse_manager.enable_3v3_pin = EN_3V3_EXT_PIN;
+		gse_manager.enable_3v3_util_pin = EN_3V3_UTIL_PIN;
+	}
+
+	gse_manager.enable_vbat_pin = EN_VBAT_BUS_PIN; 
 	GSE_MANAGER_Init(&gse_manager);
 	
 	LOCALTARGET_Init(&local_target);
@@ -103,7 +111,6 @@ void PLATFORM_vInit(bsp_t * bsp)
 	can_target.our_can_address = 0xE9;
 	CANTARGET_Init(&can_target);
 	
-	// TODO: UART
 	uart_target.uart_send = ccd_b_uart_Send_message;
 	uart_target.uart_receive = ccd_b_uart_Receive_message;
 	uart_target.uart_handle = bsp->bus_uart;
@@ -115,6 +122,7 @@ void PLATFORM_vInit(bsp_t * bsp)
 	sermux_v3.out_stream = bsp->telemetry_uart->uart_tx_buffer;
 	SERMUX_V3_Init(&sermux_v3);
 	
+	// ?
 	pc104.set_pin = ioport_set_pin_level;
 	pc104.ena_Pin = PC104_EN_PIN;
 	pc104.nrst_Pin = PC104_nRST_PIN;
@@ -166,7 +174,7 @@ void PLATFORM_vInit(bsp_t * bsp)
 		platform.multitester->i2c_handle = bsp->bus_i2c;
 	}
 	
-	if (version == 1){
+	if ((version == 1) || (version == 2)){
 		rf_relay_1.i2c_handle = bsp->util_i2c;
 		rf_relay_2.i2c_handle = bsp->util_i2c;
 		platform.multitester->i2c_handle = bsp->util_i2c;
@@ -199,7 +207,7 @@ void PLATFORM_vConfigureAll(platform_t * handle){
 		LTC2992_vNormalSetup(&power_measure_1, LTC2992_u8GenAddr(0, 0));
 		LTC2992_vNormalSetup(&power_measure_2, LTC2992_u8GenAddr(0, 2));
 	}
-	if (version == 1)
+	if ((version == 1) || (version == 2))
 	{
 		LTC2992_vNormalSetup(&power_measure_1, LTC2992_u8GenAddr(0, 0));
 	}

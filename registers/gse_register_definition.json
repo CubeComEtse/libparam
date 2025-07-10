@@ -238,6 +238,16 @@
 							"type": "byte"
 						},
 						"c": {"type": "bool"}
+					},
+					{
+						"name": "voltage3UtilToggle",
+						"bit": "4",
+						"options": "Enabled",
+						"c#": {
+							"hasminmax": "false",
+							"type": "byte"
+						},
+						"c": {"type": "bool"}
 					}
 				]
 			},
