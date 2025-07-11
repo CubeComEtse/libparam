@@ -1745,6 +1745,81 @@ mm_response_t mm_getSerialConf_SerialModeFrom(mm_serialmode_t * dest, const uint
     *dest = (mm_serialmode_t) ((source & REG_SERIALCONF_SERIALMODE_Msk) >> REG_SERIALCONF_SERIALMODE_Pos);
     return mm_OK;
 }
+mm_response_t mm_setSerialConf_ParityEnabled(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.SerialConf = (mm.SerialConf & ~REG_SERIALCONF_PARITYENABLED_Msk) | (val << REG_SERIALCONF_PARITYENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getSerialConf_ParityEnabled(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.SerialConf & REG_SERIALCONF_PARITYENABLED_Msk) >> REG_SERIALCONF_PARITYENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getSerialConf_ParityEnabledFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_SERIALCONF_PARITYENABLED_Msk) >> REG_SERIALCONF_PARITYENABLED_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setSerialConf_ParityMode(const mm_paritymodes_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.SerialConf = (mm.SerialConf & ~REG_SERIALCONF_PARITYMODE_Msk) | (val << REG_SERIALCONF_PARITYMODE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getSerialConf_ParityMode(mm_paritymodes_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_paritymodes_t) ((mm.SerialConf & REG_SERIALCONF_PARITYMODE_Msk) >> REG_SERIALCONF_PARITYMODE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getSerialConf_ParityModeFrom(mm_paritymodes_t * dest, const uint32_t source) {
+    *dest = (mm_paritymodes_t) ((source & REG_SERIALCONF_PARITYMODE_Msk) >> REG_SERIALCONF_PARITYMODE_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setSerialConf_BaudRates(const mm_usart_baudrates_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.SerialConf = (mm.SerialConf & ~REG_SERIALCONF_BAUDRATES_Msk) | (val << REG_SERIALCONF_BAUDRATES_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getSerialConf_BaudRates(mm_usart_baudrates_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_usart_baudrates_t) ((mm.SerialConf & REG_SERIALCONF_BAUDRATES_Msk) >> REG_SERIALCONF_BAUDRATES_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getSerialConf_BaudRatesFrom(mm_usart_baudrates_t * dest, const uint32_t source) {
+    *dest = (mm_usart_baudrates_t) ((source & REG_SERIALCONF_BAUDRATES_Msk) >> REG_SERIALCONF_BAUDRATES_Pos);
+    return mm_OK;
+}
 /*************** Get/Set functions for PC104Pins register *********************************************************************/
 mm_response_t mm_setPC104Pins(const uint32_t val) {
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {

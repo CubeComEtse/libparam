@@ -25,6 +25,23 @@ typedef enum {
 	RS422,
 }uart_comm_mode_t;
 
+typedef enum{
+	Disabled = 0,
+	Enabled,
+}uart_parity_enabled_t;
+
+typedef enum{
+	Odd = 0,
+	Even,
+}uart_parity_mode_t;
+
+typedef enum{
+	baud_115200 = 0,
+	baud_230400,
+	baud_460800,
+	baud_921600,
+}uart_baud_rates_t;
+
 typedef struct {
 	// Buffers containing the incoming and outgoing data.
 	StreamBufferHandle_t uart_rx_buffer;
@@ -49,6 +66,8 @@ typedef struct {
 	
 	// Usart details
 	uart_comm_mode_t uart_comm_mode;
+	uart_parity_enabled_t uart_parity_enabled;
+	uart_parity_mode_t uart_parity_mode;
 	uint32_t baudrate;
 	
 	void (*set_gpio_pin) (uint32_t pin, bool value);
@@ -68,6 +87,9 @@ void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart);
 void ccd_uart_ReInit(ccd_uart_t * driver);
 
 void ccd_uart_setCommMode(void * vHandle, uart_comm_mode_t uart_comm_mode);
+void ccd_uart_setParityEnabled(void * vHandle, uart_parity_enabled_t ParityEnabled);
+void ccd_uart_setParityMode(void * vHandle, uart_parity_mode_t ParityMode);
+void ccd_uart_setBaudRate(void * vHandle, uart_baud_rates_t BaudRate);
 
 void ccd_uart_EnableTXInterrupt(ccd_uart_t * driver);
 void ccd_uart_InterruptHandler(ccd_uart_t * driver);

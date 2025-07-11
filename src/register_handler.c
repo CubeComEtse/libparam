@@ -435,7 +435,25 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 				mm_getSerialConf_SerialModeFrom(&SerialCommMode, deserialized);
 				if(UARTTARGET_SetCommMode(platform->uart_target, SerialCommMode)){
 					mm_setSerialConf_SerialMode(SerialCommMode);
-				}			
+				}
+				
+				mm_enabled_t ParityEnabled;
+				mm_getSerialConf_ParityEnabledFrom(&ParityEnabled, deserialized);
+				if(UARTTARGET_SetParityEnabled(platform->uart_target, ParityEnabled)){
+					mm_setSerialConf_ParityEnabled(ParityEnabled);
+				}		
+				
+				mm_paritymodes_t ParityMode;
+				mm_getSerialConf_ParityModeFrom(&ParityMode, deserialized);
+				if(UARTTARGET_SetParityMode(platform->uart_target, ParityMode)){
+					mm_setSerialConf_ParityMode(ParityMode);
+				}
+				
+				mm_usart_baudrates_t BaudRate;
+				mm_getSerialConf_BaudRatesFrom(&BaudRate, deserialized);
+				if(UARTTARGET_SetBaudRate(platform->uart_target, BaudRate)){
+					mm_setSerialConf_BaudRates(BaudRate);
+				}
 			}
 			break;
 		case reg_PC104Pins_addr:

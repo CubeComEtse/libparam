@@ -256,3 +256,36 @@ bool UARTTARGET_SetCommMode(uart_target_t * pHandle, uart_comm_mode_t CommMode)
 	}
 	return false;
 }
+
+bool UARTTARGET_SetParityEnabled(uart_target_t * pHandle, uart_parity_enabled_t ParityEnabled)
+{
+	// Should we wait for the buffer to be empty?
+	if(xSemaphoreTake(pHandle->uart_semaphore, pdMS_TO_TICKS(200))) {
+		ccd_uart_setParityEnabled(pHandle->uart_handle, ParityEnabled);
+		xSemaphoreGive(pHandle->uart_semaphore);
+		return true;
+	}
+	return false;
+}
+
+bool UARTTARGET_SetParityMode(uart_target_t * pHandle, uart_parity_mode_t ParityMode)
+{
+	// Should we wait for the buffer to be empty?
+	if(xSemaphoreTake(pHandle->uart_semaphore, pdMS_TO_TICKS(200))) {
+		ccd_uart_setParityMode(pHandle->uart_handle, ParityMode);
+		xSemaphoreGive(pHandle->uart_semaphore);
+		return true;
+	}
+	return false;
+}
+
+bool UARTTARGET_SetBaudRate(uart_target_t * pHandle, uart_baud_rates_t BaudRate)
+{
+	// Should we wait for the buffer to be empty?
+	if(xSemaphoreTake(pHandle->uart_semaphore, pdMS_TO_TICKS(200))) {
+		ccd_uart_setBaudRate(pHandle->uart_handle, BaudRate);
+		xSemaphoreGive(pHandle->uart_semaphore);
+		return true;
+	}
+	return false;
+}
