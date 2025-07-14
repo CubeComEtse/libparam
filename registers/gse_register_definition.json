@@ -518,6 +518,53 @@
 				}
 			},
 			{
+				"name":"SerialConf",
+				"address": "0x2F",
+				"dir": "rw",
+				"width": "32",
+				"fields": [
+					{
+						"name": "SerialMode",
+						"pretty-name": "Serial Comm Mode",
+						"description": "Serial Communication mode (UART, RS485, RS422)",
+						"options": "SerialModes",
+						"bit": "1-0",
+						"c#": { "hasminmax": "false", "type": "UInt32" },
+						"c": { "type": "byte"}
+					},
+					{
+						"name": "ParityEnabled",
+						"pretty-name": "Serial Parity Enabled",
+						"description": "Is Serial Parity Enabled or Disabled",
+						"options": "Enabled",
+						"bit": "2",
+						"c#": { "hasminmax": "false", "type": "byte" },
+						"c": { "type": "bool"}
+					},
+					{
+						"name": "ParityMode",
+						"pretty-name": "Serial Parity Mode",
+						"description": "Serial Parity Modes (Odd/Even)",
+						"options": "ParityModes",
+						"bit": "3",
+						"c#": { "hasminmax": "false", "type": "byte" },
+						"c": { "type": "bool"}
+					},
+					{
+						"name": "BaudRates",
+						"pretty-name": "USART Baud Rates",
+						"description": "Standard supported USART Baud Rates",
+						"options": "USART_BaudRates",
+						"bit": "11-4",
+						"c#": { "hasminmax": "false", "type": "UInt32"},
+						"c": { "type": "uint8_t"}
+					}
+				],
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+			{
 				"name": "PC104Pins",
 				"comment": "Only used by the V0 OBC, to set the PC104 pins",
 				"address": "0x30",
@@ -748,6 +795,23 @@
 			{ "name":"TE_Addr_3_Set", "address": "0x8A", "dir": "r", "width": "32", "fields": "TE_Config", "c#": {"type": "UInt32", "special": "clearOnWrite" } },
 			{ "name":"TE_Addr_3_Clear", "address": "0x8B", "dir": "w", "width": "32", "fields": "TE_Config", "c#": {"type": "UInt32", "special": "clearOnWrite" } },
 
+			{ "name":"MTC_Addr_0",     "address": "0xB0", "dir": "w", "width": "32", "fields": "MTC_Config", "c#": {"type": "UInt32" } },
+			{ "name":"MTC_Addr_0_Set",     "address": "0xB1", "dir": "rw", "width": "32", "fields": "MTC_Config", "c#": {"type": "UInt32", "special": "clearOnWrite"  } },
+			{ "name":"MTC_Addr_0_Clear",     "address": "0xB2", "dir": "rw", "width": "32", "fields": "MTC_Config", "c#": {"type": "UInt32", "special": "clearOnWrite"  } },
+
+			{ "name":"MTC_Addr_1",     "address": "0xB3", "dir": "w", "width": "32", "fields": "MTC_Config", "c#": {"type": "UInt32" } },
+			{ "name":"MTC_Addr_1_Set",     "address": "0xB4", "dir": "rw", "width": "32", "fields": "MTC_Config", "c#": {"type": "UInt32", "special": "clearOnWrite"  } },
+			{ "name":"MTC_Addr_1_Clear",     "address": "0xB5", "dir": "rw", "width": "32", "fields": "MTC_Config", "c#": {"type": "UInt32", "special": "clearOnWrite"  } },
+			
+			{ "name":"MTC_Addr_2",     "address": "0xB6", "dir": "w", "width": "32", "fields": "MTC_Config", "c#": {"type": "UInt32" } },
+			{ "name":"MTC_Addr_2_Set",     "address": "0xB7", "dir": "rw", "width": "32", "fields": "MTC_Config", "c#": {"type": "UInt32", "special": "clearOnWrite"  } },
+			{ "name":"MTC_Addr_2_Clear",     "address": "0xB8", "dir": "rw", "width": "32", "fields": "MTC_Config", "c#": {"type": "UInt32", "special": "clearOnWrite"  } },
+
+			{ "name":"MTC_Addr_3",     "address": "0xB9", "dir": "w", "width": "32", "fields": "MTC_Config", "c#": {"type": "UInt32" } },
+			{ "name":"MTC_Addr_3_Set",     "address": "0xBA", "dir": "rw", "width": "32", "fields": "MTC_Config", "c#": {"type": "UInt32", "special": "clearOnWrite"  } },
+			{ "name":"MTC_Addr_3_Clear",     "address": "0xBB", "dir": "rw", "width": "32", "fields": "MTC_Config", "c#": {"type": "UInt32", "special": "clearOnWrite"  } },
+
+
 			{"name": "RTOS_Status0", "address": "0x90", "dir":"r", "width": "32", "c#": {"type": "UInt32" }, "fields": [
 				{ "name": "uartRxHBOverflow",  "bit": "0", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} },
 				{ "name": "uartRxSBOverflow",  "bit": "1", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} },
@@ -761,7 +825,28 @@
 				{ "name" : "CANInterruptBufferOverflow", "bit": "7", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} },
 				{ "name" : "CANTargetOutgoingOverflow", "bit": "8", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} }
 
-			] }
+			] },
+
+			{
+				"name":"PreviousEndpoint",
+				"address": "0xA0",
+				"dir": "r",
+				"width": "32",
+				"c#": {
+					"type": "UInt32"
+				},
+				"fields": [
+					{
+						"name": "Number",
+						"description": "Tell the EGSE what the endpoint was so that the GUI will auto-select it.",
+						"bit": "15-8",
+						"c#": { "hasminmax": "false","type": "byte"},
+						"c": {"type": "uint8_t"}
+					}
+				]
+			}
+
+
 		],
 		"generic_fields":{
 			"boardflag": [
@@ -844,7 +929,7 @@
 			"TE_Config": [
 				{ "bit": "0",      "name": "ScanEnabled", "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
 				{ "bit": "1",      "name": "Detected",    "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
-				{ "bit": "5-2",    "name": "Type",        "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"}, "options": "TE_Types" },
+				{ "bit": "3-2",    "name": "Type",        "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"}, "options": "TE_Types" },
 
 				{ "bit": "16",     "name": "SEL_CAN0",    "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
 				{ "bit": "17",     "name": "SEL_CAN1",    "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
@@ -859,6 +944,51 @@
 				{ "bit": "26",     "name": "nReset",      "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
 				{ "bit": "27",     "name": "COMM_TR",     "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} }
    			],
+			"MTC_Config": [
+				{ "bit": "0",      "name": "ScanEnabled", "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "1",      "name": "Detected",    "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "3-2",    "name": "Type",        "c#": { "hasminmax": "false", "type": "UInt32"}, "c": {"type": "uint32_t"}},
+
+				{ "bit": "4",     "name": "ENABLE_1",    "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "5",     "name": "ENABLE_2",    "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+
+				{ "bit": "6",     "name": "SEL_I2C_1",   "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "7",     "name": "SEL_I2C_2",    "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+
+				{ "bit": "8",     "name": "SEL_UART_1",    "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "9",     "name": "SEL_UART_2",   "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "10",     "name": "SEL_UART_3",    "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "11",     "name": "SEL_UART_4",    "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "12",     "name": "SEL_UART_5",   "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "13",     "name": "SEL_UART_6",    "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+
+				{ "bit": "14",     "name": "SEL_VBAT",    "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "15",     "name": "SEL_VBAT_ALT",   "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "16",     "name": "SEL_VBAT_FPGA",    "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+
+				{ "bit": "17",     "name": "SEL_nRESET_1",    "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "18",     "name": "SEL_nRESET_2",   "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "19",     "name": "SEL_nRESET_3",    "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+
+				{ "bit": "20",     "name": "SEL_CS_1",    "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "21",     "name": "SEL_CS_2",   "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "22",     "name": "SEL_CS_3",    "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "23",     "name": "SEL_CS_4",    "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "24",     "name": "SEL_CS_5",   "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "25",     "name": "SEL_CS_6",    "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+
+				{ "bit": "26",     "name": "SEL_SPI_1",    "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "27",     "name": "SEL_SPI_2",   "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+
+				{ "bit": "28",     "name": "SEL_CAN_1",    "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "29",     "name": "SEL_CAN_2",   "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+				{ "bit": "30",     "name": "SEL_CAN_3",    "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} },
+
+				{ "bit": "31",     "name": "SEL_RS422",    "options": "Enabled", "c#": { "hasminmax": "false", "type": "byte"}, "c": {"type": "bool"} }
+				
+
+
+			],
 			"Multitester": [
 				{ "name": "POS1_Enable", "bit": "0", "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
 				{ "name": "POS1_Power", "bit": "1",  "options": "Enabled", "c#": {"hasminmax": "false", "type": "byte" }, "c": {"type": "bool"} },
@@ -912,6 +1042,33 @@
 					{"name": "uD", "value": "1",  "pretty_name": "uD Adaptor"},
 					{"name": "Gecko", "value": "2",  "pretty_name": "Gecko Adaptor"}
 				]	
+			},
+			"SerialModes":{
+				"name": "SerialMode",
+				"type": "byte",
+				"options": [
+					{"name": "UART", "value": "0", "pretty_name": "UART"},
+					{"name": "RS485", "value": "1", "pretty_name": "RS485"},
+					{"name": "RS422", "value": "2", "pretty_name": "RS422"}
+				]
+			},
+			"ParityModes":{
+				"name": "ParityModes",
+				"type" : "byte",
+				"options": [
+					{"name": "Odd", "value": "0", "pretty_name": "Odd"},
+					{"name": "Even", "value": "1",  "pretty_name": "Even"}
+				]
+			},
+			"USART_BaudRates":{
+				"name": "USART_BaudRates",
+				"type": "byte",
+				"options": [
+					{"name": "baud_115200", "value": "0", "pretty_name": "115200"},
+					{"name": "baud_230400", "value": "1", "pretty_name": "230400"},
+					{"name": "baud_460800", "value": "2", "pretty_name": "460800"},
+					{"name": "baud_921600", "value": "3", "pretty_name": "921600"}
+				]
 			}
 		}
 	}
