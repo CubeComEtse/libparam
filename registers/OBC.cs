@@ -727,6 +727,24 @@ namespace Devices.Models
                 set { data0 = (UInt32)((data0 & ~(UInt32)0x00000003) | (( (UInt32)(value) & 0x00000003) << 0)); }
             }
 
+            public byte ParityEnabled
+            {
+                get { return (byte)((data0 & (UInt32)0x00000004) >> 2); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000004) | (( (UInt32)(value) & 0x00000001) << 2)); }
+            }
+
+            public byte ParityMode
+            {
+                get { return (byte)((data0 & (UInt32)0x00000008) >> 3); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000008) | (( (UInt32)(value) & 0x00000001) << 3)); }
+            }
+
+            public UInt32 BaudRates
+            {
+                get { return (UInt32)((data0 & (UInt32)0x00000ff0) >> 4); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000ff0) | (( (UInt32)(value) & 0x000000ff) << 4)); }
+            }
+
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
@@ -1427,6 +1445,26 @@ namespace Devices.Models
             RS485 = 1,
             [Description("RS422")]
             RS422 = 2,
+        }
+
+        public enum ParityModes : byte
+        {
+            [Description("Odd")]
+            Odd = 0,
+            [Description("Even")]
+            Even = 1,
+        }
+
+        public enum USART_BaudRates : byte
+        {
+            [Description("115200")]
+            baud_115200 = 0,
+            [Description("230400")]
+            baud_230400 = 1,
+            [Description("460800")]
+            baud_460800 = 2,
+            [Description("921600")]
+            baud_921600 = 3,
         }
 
         private UInt32 _fullRegister_Board_ID;
@@ -2497,6 +2535,39 @@ namespace Devices.Models
         public SerialMode SerialConf_SerialMode {
             get => _SerialConf_SerialMode;
             set => _ = Set(ref _SerialConf_SerialMode, value);
+        }
+        
+        private bool _SerialConf_ParityEnabledIsSet;
+        public bool SerialConf_ParityEnabledIsSet {
+            get => _SerialConf_ParityEnabledIsSet;
+            set => _ = Set(ref _SerialConf_ParityEnabledIsSet, value); 
+        }
+        private Enabled _SerialConf_ParityEnabled;
+        public Enabled SerialConf_ParityEnabled {
+            get => _SerialConf_ParityEnabled;
+            set => _ = Set(ref _SerialConf_ParityEnabled, value);
+        }
+        
+        private bool _SerialConf_ParityModeIsSet;
+        public bool SerialConf_ParityModeIsSet {
+            get => _SerialConf_ParityModeIsSet;
+            set => _ = Set(ref _SerialConf_ParityModeIsSet, value); 
+        }
+        private ParityModes _SerialConf_ParityMode;
+        public ParityModes SerialConf_ParityMode {
+            get => _SerialConf_ParityMode;
+            set => _ = Set(ref _SerialConf_ParityMode, value);
+        }
+        
+        private bool _SerialConf_BaudRatesIsSet;
+        public bool SerialConf_BaudRatesIsSet {
+            get => _SerialConf_BaudRatesIsSet;
+            set => _ = Set(ref _SerialConf_BaudRatesIsSet, value); 
+        }
+        private USART_BaudRates _SerialConf_BaudRates;
+        public USART_BaudRates SerialConf_BaudRates {
+            get => _SerialConf_BaudRates;
+            set => _ = Set(ref _SerialConf_BaudRates, value);
         }
         
         /*************** Properties for PC104Pins register ***************************************/
@@ -5777,6 +5848,9 @@ namespace Devices.Models
                 case OBCRegisterAddress.OBC_REG_SERIALCONF:
                     FullRegister_SerialConf  = register.RawValue; 
                     SerialConf_SerialMode = (SerialMode) register.RegSerialConf.SerialMode;
+                    SerialConf_ParityEnabled = (Enabled) register.RegSerialConf.ParityEnabled;
+                    SerialConf_ParityMode = (ParityModes) register.RegSerialConf.ParityMode;
+                    SerialConf_BaudRates = (USART_BaudRates) register.RegSerialConf.BaudRates;
                     break;
 
                 case OBCRegisterAddress.OBC_REG_PC104PINS:
@@ -6402,6 +6476,9 @@ namespace Devices.Models
 
                 case OBCRegisterAddress.OBC_REG_SERIALCONF:
                     register.RegSerialConf.SerialMode = (byte) SerialConf_SerialMode;
+                    register.RegSerialConf.ParityEnabled = (byte) SerialConf_ParityEnabled;
+                    register.RegSerialConf.ParityMode = (byte) SerialConf_ParityMode;
+                    register.RegSerialConf.BaudRates = (byte) SerialConf_BaudRates;
                     break;
 
                 case OBCRegisterAddress.OBC_REG_PC104PINS:
@@ -7560,6 +7637,12 @@ namespace Devices.Models
 
             SerialConf_SerialMode = 0;
             SerialConf_SerialModeIsSet = false;
+            SerialConf_ParityEnabled = 0;
+            SerialConf_ParityEnabledIsSet = false;
+            SerialConf_ParityMode = 0;
+            SerialConf_ParityModeIsSet = false;
+            SerialConf_BaudRates = 0;
+            SerialConf_BaudRatesIsSet = false;
 
             PC104Pins_ENA = 0;
             PC104Pins_ENAIsSet = false;

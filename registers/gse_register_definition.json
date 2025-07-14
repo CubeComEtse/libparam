@@ -531,6 +531,33 @@
 						"bit": "1-0",
 						"c#": { "hasminmax": "false", "type": "UInt32" },
 						"c": { "type": "byte"}
+					},
+					{
+						"name": "ParityEnabled",
+						"pretty-name": "Serial Parity Enabled",
+						"description": "Is Serial Parity Enabled or Disabled",
+						"options": "Enabled",
+						"bit": "2",
+						"c#": { "hasminmax": "false", "type": "byte" },
+						"c": { "type": "bool"}
+					},
+					{
+						"name": "ParityMode",
+						"pretty-name": "Serial Parity Mode",
+						"description": "Serial Parity Modes (Odd/Even)",
+						"options": "ParityModes",
+						"bit": "3",
+						"c#": { "hasminmax": "false", "type": "byte" },
+						"c": { "type": "bool"}
+					},
+					{
+						"name": "BaudRates",
+						"pretty-name": "USART Baud Rates",
+						"description": "Standard supported USART Baud Rates",
+						"options": "USART_BaudRates",
+						"bit": "11-4",
+						"c#": { "hasminmax": "false", "type": "UInt32"},
+						"c": { "type": "uint8_t"}
 					}
 				],
 				"c#": {
@@ -959,6 +986,24 @@
 					{"name": "UART", "value": "0", "pretty_name": "UART"},
 					{"name": "RS485", "value": "1", "pretty_name": "RS485"},
 					{"name": "RS422", "value": "2", "pretty_name": "RS422"}
+				]
+			},
+			"ParityModes":{
+				"name": "ParityModes",
+				"type" : "byte",
+				"options": [
+					{"name": "Odd", "value": "0", "pretty_name": "Odd"},
+					{"name": "Even", "value": "1",  "pretty_name": "Even"}
+				]
+			},
+			"USART_BaudRates":{
+				"name": "USART_BaudRates",
+				"type": "byte",
+				"options": [
+					{"name": "baud_115200", "value": "0", "pretty_name": "115200"},
+					{"name": "baud_230400", "value": "1", "pretty_name": "230400"},
+					{"name": "baud_460800", "value": "2", "pretty_name": "460800"},
+					{"name": "baud_921600", "value": "3", "pretty_name": "921600"}
 				]
 			}
 		}

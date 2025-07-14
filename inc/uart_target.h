@@ -42,5 +42,8 @@ void UARTTARGET_Init(uart_target_t * handle);
 void UARTTARGET_TxTask(void * handle);
 void UARTTARGET_RxTask(void * handle);
 bool UARTTARGET_SetCommMode(uart_target_t * pHandle, uart_comm_mode_t CommMode);
+bool UARTTARGET_SetParityEnabled(uart_target_t * pHandle, uart_parity_enabled_t ParityEnabled);
+bool UARTTARGET_SetParityMode(uart_target_t * pHandle, uart_parity_mode_t ParityMode);
+bool UARTTARGET_SetBaudRate(uart_target_t * pHandle, uart_baud_rates_t BaudRate);
 
 #endif /* UART_TARGET_H_ */

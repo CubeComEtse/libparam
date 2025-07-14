@@ -92,6 +92,12 @@ typedef enum {
 /*************** Bit definition for SerialConf register **********************/
 #define REG_SERIALCONF_SERIALMODE_Pos                (0UL)
 #define REG_SERIALCONF_SERIALMODE_Msk                (0x0003 << REG_SERIALCONF_SERIALMODE_Pos)
+#define REG_SERIALCONF_PARITYENABLED_Pos             (2UL)
+#define REG_SERIALCONF_PARITYENABLED_Msk             (0x0001 << REG_SERIALCONF_PARITYENABLED_Pos)
+#define REG_SERIALCONF_PARITYMODE_Pos                (3UL)
+#define REG_SERIALCONF_PARITYMODE_Msk                (0x0001 << REG_SERIALCONF_PARITYMODE_Pos)
+#define REG_SERIALCONF_BAUDRATES_Pos                 (4UL)
+#define REG_SERIALCONF_BAUDRATES_Msk                 (0x00ff << REG_SERIALCONF_BAUDRATES_Pos)
 
 /*************** Bit definition for PC104Pins register ***********************/
 #define REG_PC104PINS_ENA_Pos                        (0UL)
@@ -443,6 +449,18 @@ typedef enum {
     reg_serialmode_rs422 = 2,                       // RS422
 } mm_serialmode_t;
 
+typedef enum {
+    reg_paritymodes_odd = 0,                        // Odd
+    reg_paritymodes_even = 1,                       // Even
+} mm_paritymodes_t;
+
+typedef enum {
+    reg_usart_baudrates_baud_115200 = 0,            // 115200
+    reg_usart_baudrates_baud_230400 = 1,            // 230400
+    reg_usart_baudrates_baud_460800 = 2,            // 460800
+    reg_usart_baudrates_baud_921600 = 3,            // 921600
+} mm_usart_baudrates_t;
+
 void mm_init(void);
 mm_t * get_mm_ptr(void);
 
@@ -693,6 +711,15 @@ mm_response_t mm_getSerialConf(uint32_t * dest);
 mm_response_t mm_setSerialConf_SerialMode(const mm_serialmode_t val);
 mm_response_t mm_getSerialConf_SerialMode(mm_serialmode_t * dest);
 mm_response_t mm_getSerialConf_SerialModeFrom(mm_serialmode_t * dest, const uint32_t source);
+mm_response_t mm_setSerialConf_ParityEnabled(const mm_enabled_t val);
+mm_response_t mm_getSerialConf_ParityEnabled(mm_enabled_t * dest);
+mm_response_t mm_getSerialConf_ParityEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setSerialConf_ParityMode(const mm_paritymodes_t val);
+mm_response_t mm_getSerialConf_ParityMode(mm_paritymodes_t * dest);
+mm_response_t mm_getSerialConf_ParityModeFrom(mm_paritymodes_t * dest, const uint32_t source);
+mm_response_t mm_setSerialConf_BaudRates(const mm_usart_baudrates_t val);
+mm_response_t mm_getSerialConf_BaudRates(mm_usart_baudrates_t * dest);
+mm_response_t mm_getSerialConf_BaudRatesFrom(mm_usart_baudrates_t * dest, const uint32_t source);
 
 /*************** Get/Set functions for PC104Pins register *********************************************************************/
 mm_response_t mm_setPC104Pins(const uint32_t val);

@@ -107,13 +107,18 @@ void UARTTARGET_TxTask(void * handle)
 				uint8_t processed_data[4];
 				uint8_t processed_index = 0;
 				for (uint8_t i = 0; i < 4; i++) {
-					if (in_message.data[4 + i] == FEND) {
+					if (in_message.data[4 + i] == FEND) 
+					{
 						processed_data[processed_index++] = FESC;
 						processed_data[processed_index++] = TFEND;
-						} else if (in_message.data[4 + i] == FESC) {
+					} 
+					else if (in_message.data[4 + i] == FESC) 
+					{
 						processed_data[processed_index++] = FESC;
 						processed_data[processed_index++] = TFESC;
-						} else {
+					}
+					else 
+					{
 						processed_data[processed_index++] = in_message.data[4 + i];
 					}
 				}
@@ -121,7 +126,9 @@ void UARTTARGET_TxTask(void * handle)
 				memcpy(&uart_msg_kiss_packet[7], processed_data, processed_index);
 				uart_msg_kiss_packet[7 + processed_index] = FEND;
 				hnd->uart_send(hnd->uart_handle, uart_msg_kiss_packet, 8 + processed_index);
-			} else {
+			} 
+			else 
+			{
 				uart_msg_kiss_packet[7] = FEND;
 				hnd->uart_send(hnd->uart_handle, uart_msg_kiss_packet, 8);
 			}
@@ -253,6 +260,39 @@ bool UARTTARGET_SetCommMode(uart_target_t * pHandle, uart_comm_mode_t CommMode)
 		ccd_uart_setCommMode(pHandle->uart_handle, CommMode);
 		xSemaphoreGive(pHandle->uart_semaphore);
 		return true;	
+	}
+	return false;
+}
+
+bool UARTTARGET_SetParityEnabled(uart_target_t * pHandle, uart_parity_enabled_t ParityEnabled)
+{
+	// Should we wait for the buffer to be empty?
+	if(xSemaphoreTake(pHandle->uart_semaphore, pdMS_TO_TICKS(200))) {
+		ccd_uart_setParityEnabled(pHandle->uart_handle, ParityEnabled);
+		xSemaphoreGive(pHandle->uart_semaphore);
+		return true;
+	}
+	return false;
+}
+
+bool UARTTARGET_SetParityMode(uart_target_t * pHandle, uart_parity_mode_t ParityMode)
+{
+	// Should we wait for the buffer to be empty?
+	if(xSemaphoreTake(pHandle->uart_semaphore, pdMS_TO_TICKS(200))) {
+		ccd_uart_setParityMode(pHandle->uart_handle, ParityMode);
+		xSemaphoreGive(pHandle->uart_semaphore);
+		return true;
+	}
+	return false;
+}
+
+bool UARTTARGET_SetBaudRate(uart_target_t * pHandle, uart_baud_rates_t BaudRate)
+{
+	// Should we wait for the buffer to be empty?
+	if(xSemaphoreTake(pHandle->uart_semaphore, pdMS_TO_TICKS(200))) {
+		ccd_uart_setBaudRate(pHandle->uart_handle, BaudRate);
+		xSemaphoreGive(pHandle->uart_semaphore);
+		return true;
 	}
 	return false;
 }
