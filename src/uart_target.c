@@ -107,13 +107,18 @@ void UARTTARGET_TxTask(void * handle)
 				uint8_t processed_data[4];
 				uint8_t processed_index = 0;
 				for (uint8_t i = 0; i < 4; i++) {
-					if (in_message.data[4 + i] == FEND) {
+					if (in_message.data[4 + i] == FEND) 
+					{
 						processed_data[processed_index++] = FESC;
 						processed_data[processed_index++] = TFEND;
-						} else if (in_message.data[4 + i] == FESC) {
+					} 
+					else if (in_message.data[4 + i] == FESC) 
+					{
 						processed_data[processed_index++] = FESC;
 						processed_data[processed_index++] = TFESC;
-						} else {
+					}
+					else 
+					{
 						processed_data[processed_index++] = in_message.data[4 + i];
 					}
 				}
@@ -121,7 +126,9 @@ void UARTTARGET_TxTask(void * handle)
 				memcpy(&uart_msg_kiss_packet[7], processed_data, processed_index);
 				uart_msg_kiss_packet[7 + processed_index] = FEND;
 				hnd->uart_send(hnd->uart_handle, uart_msg_kiss_packet, 8 + processed_index);
-			} else {
+			} 
+			else 
+			{
 				uart_msg_kiss_packet[7] = FEND;
 				hnd->uart_send(hnd->uart_handle, uart_msg_kiss_packet, 8);
 			}

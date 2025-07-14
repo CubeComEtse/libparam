@@ -449,10 +449,10 @@ typedef enum {
 } mm_paritymodes_t;
 
 typedef enum {
-    reg_usart_baudrates_baud_115200 = 0,            // baud_115200
-    reg_usart_baudrates_baud_230400 = 1,            // baud_230400
-    reg_usart_baudrates_baud_460800 = 2,            // baud_460800
-    reg_usart_baudrates_baud_921600 = 3,            // baud_921600
+    reg_usart_baudrates_baud_115200 = 0,            // 115200
+    reg_usart_baudrates_baud_230400 = 1,            // 230400
+    reg_usart_baudrates_baud_460800 = 2,            // 460800
+    reg_usart_baudrates_baud_921600 = 3,            // 921600
 } mm_usart_baudrates_t;
 
 void mm_init(void);

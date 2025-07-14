@@ -100,20 +100,16 @@ void ccd_uart_ReInit(ccd_uart_t * driver) {
 	
 	sam_usart_opt_t sUsartOptions;
 	sUsartOptions.baudrate = driver->baudrate;
-	
-	//sUsartOptions.parity_type = US_MR_PAR_NO;
-	//sUsartOptions.char_length = US_MR_CHRL_8_BIT;
+	sUsartOptions.char_length = US_MR_CHRL_8_BIT;
 	
 	if (driver->uart_parity_enabled == Enabled)
 	{
 		if (driver->uart_parity_mode == Odd) sUsartOptions.parity_type = US_MR_PAR_ODD;
 		else sUsartOptions.parity_type = US_MR_PAR_EVEN;
-		sUsartOptions.char_length = US_MR_CHRL_7_BIT;
 	}
 	else
 	{
 		sUsartOptions.parity_type = US_MR_PAR_NO;
-		sUsartOptions.char_length = US_MR_CHRL_8_BIT;
 	}
 	sUsartOptions.stop_bits = US_MR_NBSTOP_1_BIT;
 	

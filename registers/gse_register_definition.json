@@ -981,10 +981,10 @@
 				"name": "USART_BaudRates",
 				"type": "byte",
 				"options": [
-					{"name": "baud_115200", "value": "0", "pretty_name": "baud_115200"},
-					{"name": "baud_230400", "value": "1", "pretty_name": "baud_230400"},
-					{"name": "baud_460800", "value": "2", "pretty_name": "baud_460800"},
-					{"name": "baud_921600", "value": "3", "pretty_name": "baud_921600"}
+					{"name": "baud_115200", "value": "0", "pretty_name": "115200"},
+					{"name": "baud_230400", "value": "1", "pretty_name": "230400"},
+					{"name": "baud_460800", "value": "2", "pretty_name": "460800"},
+					{"name": "baud_921600", "value": "3", "pretty_name": "921600"}
 				]
 			}
 		}

@@ -1440,13 +1440,13 @@ namespace Devices.Models
 
         public enum USART_BaudRates : byte
         {
-            [Description("baud_115200")]
+            [Description("115200")]
             baud_115200 = 0,
-            [Description("baud_230400")]
+            [Description("230400")]
             baud_230400 = 1,
-            [Description("baud_460800")]
+            [Description("460800")]
             baud_460800 = 2,
-            [Description("baud_921600")]
+            [Description("921600")]
             baud_921600 = 3,
         }
 
