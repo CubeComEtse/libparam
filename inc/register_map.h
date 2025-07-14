@@ -163,6 +163,10 @@ typedef enum {
 #define REG_RTOS_STATUS0_CANTARGETOUTGOINGOVERFLOW_Pos (8UL)
 #define REG_RTOS_STATUS0_CANTARGETOUTGOINGOVERFLOW_Msk (0x0001 << REG_RTOS_STATUS0_CANTARGETOUTGOINGOVERFLOW_Pos)
 
+/*************** Bit definition for PreviousEndpoint register ****************/
+#define REG_PREVIOUSENDPOINT_NUMBER_Pos              (8UL)
+#define REG_PREVIOUSENDPOINT_NUMBER_Msk              (0x00ff << REG_PREVIOUSENDPOINT_NUMBER_Pos)
+
 /*************** Bit definition for boardflag register ***********************/
 #define REG_BOARDFLAG_BOARDS_Pos                     (0UL)
 #define REG_BOARDFLAG_BOARDS_Msk                     (0x00ff << REG_BOARDFLAG_BOARDS_Pos)
@@ -328,6 +332,7 @@ typedef struct {
     uint32_t TE_Addr_3_Set;
     uint32_t TE_Addr_3_Clear;
     uint32_t RTOS_Status0;
+    uint32_t PreviousEndpoint;
 } mm_t;
 
 typedef enum {
@@ -408,6 +413,7 @@ typedef enum {
     reg_TE_Addr_3_Set_addr = 0x8A,
     reg_TE_Addr_3_Clear_addr = 0x8B,
     reg_RTOS_Status0_addr = 0x90,
+    reg_PreviousEndpoint_addr = 0xA0,
 } mm_register_address_t;
 
 typedef enum {
@@ -1665,6 +1671,13 @@ mm_response_t mm_getRTOS_Status0_CANInterruptBufferOverflowFrom(bool * dest, con
 mm_response_t mm_setRTOS_Status0_CANTargetOutgoingOverflow(const bool val);
 mm_response_t mm_getRTOS_Status0_CANTargetOutgoingOverflow(bool * dest);
 mm_response_t mm_getRTOS_Status0_CANTargetOutgoingOverflowFrom(bool * dest, const uint32_t source);
+
+/*************** Get/Set functions for PreviousEndpoint register **************************************************************/
+mm_response_t mm_setPreviousEndpoint(const uint32_t val);
+mm_response_t mm_getPreviousEndpoint(uint32_t * dest);
+mm_response_t mm_setPreviousEndpoint_Number(const uint8_t val);
+mm_response_t mm_getPreviousEndpoint_Number(uint8_t * dest);
+mm_response_t mm_getPreviousEndpoint_NumberFrom(uint8_t * dest, const uint32_t source);
 
 
 #endif /* memory_map_h */

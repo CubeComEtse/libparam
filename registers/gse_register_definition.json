@@ -781,7 +781,26 @@
 				{ "name" : "CANInterruptBufferOverflow", "bit": "7", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} },
 				{ "name" : "CANTargetOutgoingOverflow", "bit": "8", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} }
 
-			] }
+			] },
+
+			{
+				"name":"PreviousEndpoint",
+				"address": "0xA0",
+				"dir": "r",
+				"width": "32",
+				"c#": {
+					"type": "UInt32"
+				},
+				"fields": [
+					{
+						"name": "Number",
+						"description": "Tell the EGSE what the endpoint was so that the GUI will auto-select it.",
+						"bit": "15-8",
+						"c#": { "hasminmax": "false","type": "byte"},
+						"c": {"type": "uint8_t"}
+					}
+				]
+			}
 		],
 		"generic_fields":{
 			"boardflag": [

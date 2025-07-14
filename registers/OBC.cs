@@ -101,6 +101,7 @@ namespace Devices.Models
             OBC_REG_TE_ADDR_3_SET                    = 0x8a,
             OBC_REG_TE_ADDR_3_CLEAR                  = 0x8b,
             OBC_REG_RTOS_STATUS0                     = 0x90,
+            OBC_REG_PREVIOUSENDPOINT                 = 0xa0,
         }
 
         public enum OBC_SetClearField{
@@ -368,6 +369,8 @@ namespace Devices.Models
             public RegTE_Config RegTE_Config;
             [FieldOffset(0)]
             public RegRTOS_Status0 RegRTOS_Status0;
+            [FieldOffset(0)]
+            public RegPreviousEndpoint RegPreviousEndpoint;
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
@@ -1366,6 +1369,20 @@ namespace Devices.Models
 
         }
 
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegPreviousEndpoint
+        {
+            [FieldOffset(0)]
+            UInt32 data0;
+
+            public byte Number
+            {
+                get { return (byte)((data0 & (UInt32)0x0000ff00) >> 8); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x0000ff00) | (( (UInt32)(value) & 0x000000ff) << 8)); }
+            }
+
+        }
+
         public enum Enabled : byte
         {
             [Description("Enabled")]
@@ -1872,6 +1889,12 @@ namespace Devices.Models
         public UInt32 FullRegister_RTOS_Status0 {
             get => _fullRegister_RTOS_Status0;
             set => _ = Set(ref _fullRegister_RTOS_Status0, value); 
+        }
+
+        private UInt32 _fullRegister_PreviousEndpoint;
+        public UInt32 FullRegister_PreviousEndpoint {
+            get => _fullRegister_PreviousEndpoint;
+            set => _ = Set(ref _fullRegister_PreviousEndpoint, value); 
         }
 
         /*************** Properties for Board_ID register ****************************************/
@@ -5588,6 +5611,18 @@ namespace Devices.Models
             set => _ = Set(ref _RTOS_Status0_CANTargetOutgoingOverflow, value);
         }
         
+        /*************** Properties for PreviousEndpoint register ********************************/
+        private bool _PreviousEndpoint_NumberIsSet;
+        public bool PreviousEndpoint_NumberIsSet {
+            get => _PreviousEndpoint_NumberIsSet;
+            set => _ = Set(ref _PreviousEndpoint_NumberIsSet, value); 
+        }
+        private byte _PreviousEndpoint_Number;
+        public byte PreviousEndpoint_Number {
+            get => _PreviousEndpoint_Number;
+            set => _ = Set(ref _PreviousEndpoint_Number, value);
+        }
+        
         public void DecodeFrom(RegisterData register, OBCRegisterAddress address)
         {
             switch (address)
@@ -6230,6 +6265,11 @@ namespace Devices.Models
                     RTOS_Status0_CANTargetOutgoingOverflow =  register.RegRTOS_Status0.CANTargetOutgoingOverflow;
                     break;
 
+                case OBCRegisterAddress.OBC_REG_PREVIOUSENDPOINT:
+                    FullRegister_PreviousEndpoint  = register.RawValue; 
+                    PreviousEndpoint_Number =  register.RegPreviousEndpoint.Number;
+                    break;
+
             }
         }
 
@@ -6796,6 +6836,10 @@ namespace Devices.Models
                     register.RegRTOS_Status0.CANTargetIncomingOverflow = RTOS_Status0_CANTargetIncomingOverflow;
                     register.RegRTOS_Status0.CANInterruptBufferOverflow = RTOS_Status0_CANInterruptBufferOverflow;
                     register.RegRTOS_Status0.CANTargetOutgoingOverflow = RTOS_Status0_CANTargetOutgoingOverflow;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_PREVIOUSENDPOINT:
+                    register.RegPreviousEndpoint.Number = PreviousEndpoint_Number;
                     break;
 
             }
@@ -8124,6 +8168,9 @@ namespace Devices.Models
             RTOS_Status0_CANInterruptBufferOverflowIsSet = false;
             RTOS_Status0_CANTargetOutgoingOverflow = false;
             RTOS_Status0_CANTargetOutgoingOverflowIsSet = false;
+
+            PreviousEndpoint_Number = 0;
+            PreviousEndpoint_NumberIsSet = false;
 
         }
 

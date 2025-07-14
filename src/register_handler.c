@@ -102,6 +102,8 @@ static addres_to_func_map_t address_to_func_map[] = {
     { reg_TE_Addr_3_addr, mm_getTE_Addr_3},
 		
 	{ reg_RTOS_Status0_addr, mm_getRTOS_Status0},
+		
+	{ reg_PreviousEndpoint_addr, mm_getPreviousEndpoint}, 
 };
 
 
@@ -577,6 +579,12 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 				TE_Adaptor_ClearTeBits(platform->te_scanner, 3, (deserialized >> 16) & 0x0FFF);
 			}
 			break;
-					
+		case reg_PreviousEndpoint_addr:
+		{
+			// Just store the full value
+			mm_setPreviousEndpoint(deserialized);
+		}
+		break;
+		
 	}        
 }

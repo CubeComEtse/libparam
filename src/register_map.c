@@ -9127,3 +9127,48 @@ mm_response_t mm_getRTOS_Status0_CANTargetOutgoingOverflowFrom(bool * dest, cons
     *dest = (bool) ((source & REG_RTOS_STATUS0_CANTARGETOUTGOINGOVERFLOW_Msk) >> REG_RTOS_STATUS0_CANTARGETOUTGOINGOVERFLOW_Pos);
     return mm_OK;
 }
+/*************** Get/Set functions for PreviousEndpoint register **************************************************************/
+mm_response_t mm_setPreviousEndpoint(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.PreviousEndpoint = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getPreviousEndpoint(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.PreviousEndpoint;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_setPreviousEndpoint_Number(const uint8_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.PreviousEndpoint = (mm.PreviousEndpoint & ~REG_PREVIOUSENDPOINT_NUMBER_Msk) | (val << REG_PREVIOUSENDPOINT_NUMBER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getPreviousEndpoint_Number(uint8_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (uint8_t) ((mm.PreviousEndpoint & REG_PREVIOUSENDPOINT_NUMBER_Msk) >> REG_PREVIOUSENDPOINT_NUMBER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getPreviousEndpoint_NumberFrom(uint8_t * dest, const uint32_t source) {
+    *dest = (uint8_t) ((source & REG_PREVIOUSENDPOINT_NUMBER_Msk) >> REG_PREVIOUSENDPOINT_NUMBER_Pos);
+    return mm_OK;
+}
