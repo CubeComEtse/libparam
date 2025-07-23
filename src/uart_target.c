@@ -195,33 +195,29 @@ void UARTTARGET_RxTask(void * handle)
 						continue;
 					}
 					
+					size_t kiss_message_size = packet_index - 4;
+					
 					// Full packet received
 					v2_msg_t out_message;
 					out_message.msg_id = uart_msg_kiss_packet[1];
 					out_message.target = EP_V2_UART_CC_2;
-					out_message.data_len = packet_index - 2; // data length of entire msg (not only data+addresses)
+					// Packet_index stores the entire kiss packet length. Subtract 4 for the kiss header (type, id, src,dest),
+					// Then add 2 for the EGSE UART header (Type + Length)
+					out_message.data_len = kiss_message_size + 2; 
+					
 					out_message.data = out_message_data;
 					
 					out_message.data[0] = uart_msg_kiss_packet[0]; // msg type
-					out_message.data[1] = 6; // can this be hardcoded?
-					out_message.data[2] = uart_msg_kiss_packet[4]; // address msb
-					out_message.data[3] = uart_msg_kiss_packet[5]; // address lsb
-					
-					uint8_t index = 4;
-					for (size_t j = 6; j < packet_index; j++) {
-						out_message.data[index++] = uart_msg_kiss_packet[j];
-					}
-					
+					out_message.data[1] = kiss_message_size; // msg length
+					memcpy(&out_message.data[2], &uart_msg_kiss_packet[4], kiss_message_size);
+										
 					uint8_t encoded[32];
 					size_t encoded_len = encode_v2_message(encoded, &out_message);
 					
 					xMessageBufferSend(hnd->outgoing_messages, encoded, encoded_len, 0);
 					
-					//xMessageBufferSend(hnd->outgoing_messages, &out_message, sizeof(out_message), portMAX_DELAY);
 					receiving = false;
 					continue;
-					
-					
 				}
 				
 				// Handle escaping
@@ -242,7 +238,8 @@ void UARTTARGET_RxTask(void * handle)
 				
 				// Store received bytes
 				if (packet_index < sizeof(uart_msg_kiss_packet)){
-					uart_msg_kiss_packet[packet_index++] = rx_byte;
+					uart_msg_kiss_packet[packet_index] = rx_byte;
+					packet_index += 1;
 				}		
 				
 			}

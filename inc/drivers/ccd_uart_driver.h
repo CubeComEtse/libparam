@@ -71,14 +71,15 @@ typedef struct {
 	uint32_t baudrate;
 	
 	void (*set_gpio_pin) (uint32_t pin, bool value);
+	/*
 	void (*enable_gpio_pin) (uint32_t pin);
-	void (*set_gpio_pin_level) (uint32_t pin, bool value);
 	void (*set_gpio_pin_dir) (uint32_t pin, enum ioport_direction dir);
 	void (*set_gpio_pin_mode) (uint32_t pin, ioport_mode_t mode);
-	void (*disable_gpio_pin) (uint32_t pin);
-	uint32_t rs422_nre_pin;
-	uint32_t rs422_de_pin;
-	uint32_t rs485_de_pin;
+	void (*disable_gpio_pin) (uint32_t pin);*/
+	uint32_t sout_de_pin;
+	uint32_t sout_nre_pin;
+	uint32_t sin_de_pin;
+	uint32_t sin_nre_pin;
 	uint32_t uart_tx_pin;
 	uint32_t uart_rx_pin;
 }ccd_uart_t;

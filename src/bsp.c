@@ -122,10 +122,6 @@ static void inline BSP_vEnablePin(uint32_t pin){
 	ioport_enable_pin(pin);
 }
 
-static void inline BSP_vSetPinLevel(uint32_t pin, bool value){
-	ioport_set_pin_level(pin, value);
-}
-
 static void inline BSP_vSetPinDir(uint32_t pin, enum ioport_direction dir){
 	ioport_set_pin_dir(pin, dir);
 }
@@ -155,6 +151,10 @@ static void BSP_vInitUART(bsp_t * bsp){
 	telemetry_uart.uart_comm_mode = UART;
 	telemetry_uart.cts_pin = T_USART_CTS_PIN;
 	telemetry_uart.baudrate = T_USART_SPEED;
+	// Should not be used, but setting this guards against HardFault if the UART 
+	// accidentally lands in RS 485 mode.
+	telemetry_uart.set_gpio_pin = &BSP_vSetPin;
+	
 	ccd_uart_Init(&telemetry_uart, T_USART);
 	
 	bsp->telemetry_uart = &telemetry_uart;
@@ -162,40 +162,40 @@ static void BSP_vInitUART(bsp_t * bsp){
 	//Board UART
 	ioport_set_pin_mode(B_USART_RX_PIN, IOPORT_MODE_MUX_C);
 	ioport_disable_pin(B_USART_RX_PIN);
+	// When the RS422/RS485 driver is disabled this pin slowly floats low. 
+	// This pull-up stops that.
+	// ioport_set_pin_mode(B_USART_RX_PIN, IOPORT_MODE_PULLDOWN);
 
 	ioport_set_pin_mode(B_USART_TX_PIN, IOPORT_MODE_MUX_C);
 	ioport_disable_pin(B_USART_TX_PIN);
 	
+	
 	// Default is UART/Normal Mode, RS485/RS422 Shutdown
-	ioport_enable_pin(PIN_RS422_nRE);
-	ioport_set_pin_level(PIN_RS422_nRE, 1);
-	ioport_set_pin_dir(PIN_RS422_nRE, IOPORT_DIR_OUTPUT);
-
-	ioport_enable_pin(PIN_RS422_DE);
-	ioport_set_pin_level(PIN_RS422_DE, 0);
-	ioport_set_pin_dir(PIN_RS422_DE, IOPORT_DIR_OUTPUT);
-
-	ioport_enable_pin(PIN_RS485_DE);
-	ioport_set_pin_level(PIN_RS485_DE, 0);
-	ioport_set_pin_dir(PIN_RS485_DE, IOPORT_DIR_OUTPUT);
+	ioport_enable_pin(PIN_SOUT_DE);
+	ioport_set_pin_level(PIN_SOUT_DE, 0);
+	ioport_set_pin_dir(PIN_SOUT_DE, IOPORT_DIR_OUTPUT);
 	
-	//ioport_set_pin_mode(PIN_RS485_DE, IOPORT_MODE_MUX_C);
-	//ioport_disable_pin(PIN_RS485_DE);
-	
+	ioport_enable_pin(PIN_SOUT_nRE);
+	ioport_set_pin_level(PIN_SOUT_nRE, 1);
+	ioport_set_pin_dir(PIN_SOUT_nRE, IOPORT_DIR_OUTPUT);
+
+	ioport_enable_pin(PIN_SIN_DE);
+	ioport_set_pin_level(PIN_SIN_DE, 0);
+	ioport_set_pin_dir(PIN_SIN_DE, IOPORT_DIR_OUTPUT);
+
+	ioport_enable_pin(PIN_SIN_nRE);
+	ioport_set_pin_level(PIN_SIN_nRE, 1);
+	ioport_set_pin_dir(PIN_SIN_nRE, IOPORT_DIR_OUTPUT);
+		
 	bus_uart.doFlowControl = 0;
-	
 	bus_uart.uart_comm_mode = UART;
 	bus_uart.baudrate = B_USART_SPEED;
 	
 	bus_uart.set_gpio_pin = &BSP_vSetPin;
-	bus_uart.enable_gpio_pin = &BSP_vEnablePin;
-	bus_uart.set_gpio_pin_level = &BSP_vSetPinLevel;
-	bus_uart.set_gpio_pin_dir = &BSP_vSetPinDir;
-	bus_uart.set_gpio_pin_mode = &BSP_vSetPinMode;
-	bus_uart.disable_gpio_pin = &BSP_vDisablePin;
-	bus_uart.rs422_nre_pin = PIN_RS422_nRE;
-	bus_uart.rs422_de_pin = PIN_RS422_DE;
-	bus_uart.rs485_de_pin = PIN_RS485_DE;
+	bus_uart.sout_de_pin = PIN_SOUT_DE;
+	bus_uart.sout_nre_pin = PIN_SOUT_nRE;
+	bus_uart.sin_de_pin = PIN_SIN_DE;
+	bus_uart.sin_nre_pin = PIN_SIN_nRE;
 	bus_uart.uart_tx_pin = B_USART_TX_PIN;
 	bus_uart.uart_rx_pin = B_USART_RX_PIN;
 	

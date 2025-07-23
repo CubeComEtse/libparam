@@ -39,13 +39,23 @@ void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart)
 
 	// Enable Clock to this module
 	if (driver->base_usart == USART0)
+	{
 		sysclk_enable_peripheral_clock(ID_USART0); 
+	}
 	if (driver->base_usart == USART1)
-		sysclk_enable_peripheral_clock(ID_USART1); 
+	{
+		sysclk_enable_peripheral_clock(ID_USART1);
+	}
 	if (driver->base_usart == USART2)
+	{
 		sysclk_enable_peripheral_clock(ID_USART2);
+	}
 		
+	ccd_uart_setCommMode(driver, driver->uart_comm_mode);
+	ccd_uart_ReInit(driver);
+	
 	// Setup for Telemetry USART
+	/*
 	sam_usart_opt_t sUsartOptions;
 	sUsartOptions.baudrate = driver->baudrate;
 	sUsartOptions.char_length = US_MR_CHRL_8_BIT;
@@ -65,15 +75,15 @@ void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart)
 	{
 		sUsartOptions.channel_mode = US_MR_USART_MODE_RS485;
 		usart_init_rs485(driver->base_usart, &sUsartOptions, sysclk_get_peripheral_hz());
-	}
+	}*/
 	
-	usart_enable_tx(driver->base_usart);
-	usart_enable_rx(driver->base_usart);
+	//usart_enable_tx(driver->base_usart);
+	//usart_enable_rx(driver->base_usart);
 
 	// Re-enable Interrupts
 	// US_IER_RXRDY when data is received
 	// US_IER_TXEMPTY when the transmit buffer is empty
-	usart_enable_interrupt(driver->base_usart, US_IER_RXRDY | US_IER_TXEMPTY);
+	//usart_enable_interrupt(driver->base_usart, US_IER_RXRDY | US_IER_TXEMPTY);
 	
 	// UART needs a priority above FreeRTOS tasks - there is a very small window to copy the received byte out of the register.
 	if (driver->base_usart == USART0){
@@ -104,8 +114,12 @@ void ccd_uart_ReInit(ccd_uart_t * driver) {
 	
 	if (driver->uart_parity_enabled == Enabled)
 	{
-		if (driver->uart_parity_mode == Odd) sUsartOptions.parity_type = US_MR_PAR_ODD;
-		else sUsartOptions.parity_type = US_MR_PAR_EVEN;
+		if (driver->uart_parity_mode == Odd) {
+			sUsartOptions.parity_type = US_MR_PAR_ODD;
+		}
+		else {
+			sUsartOptions.parity_type = US_MR_PAR_EVEN;
+		}
 	}
 	else
 	{
@@ -113,18 +127,20 @@ void ccd_uart_ReInit(ccd_uart_t * driver) {
 	}
 	sUsartOptions.stop_bits = US_MR_NBSTOP_1_BIT;
 	
-	if ((driver->uart_comm_mode == UART) || (driver->uart_comm_mode == RS422))
-	{
+	//if ((driver->uart_comm_mode == UART) || (driver->uart_comm_mode == RS422))
+	//{
 		sUsartOptions.channel_mode = US_MR_CHMODE_NORMAL;
 		usart_init_rs232(driver->base_usart, &sUsartOptions, sysclk_get_peripheral_hz());
-	}
-	else if (driver->uart_comm_mode == RS485)
-	{
+	//}
+	//else if (driver->uart_comm_mode == RS485)
+	/*{
 		sUsartOptions.channel_mode = US_MR_USART_MODE_RS485;
 		usart_init_rs485(driver->base_usart, &sUsartOptions, sysclk_get_peripheral_hz());
-	}
+	}*/
+	
 	usart_enable_tx(driver->base_usart);
-	usart_enable_rx(driver->base_usart);	
+	usart_enable_rx(driver->base_usart);
+		
 	usart_enable_interrupt(driver->base_usart, US_IER_RXRDY | US_IER_TXEMPTY);
 }
 
@@ -133,35 +149,31 @@ void ccd_uart_setCommMode(void * vHandle, uart_comm_mode_t uart_comm_mode) {
 	driver->uart_comm_mode = uart_comm_mode;
 	
 	if (uart_comm_mode == UART) {
-		// Shutdown mode for RS422/RS485
-		driver->set_gpio_pin(driver->rs422_nre_pin, 1);
-		driver->set_gpio_pin(driver->rs422_de_pin, 0);
-		
-		// Disable Peripheral GPIO for non RS485 control
-		driver->enable_gpio_pin(driver->rs485_de_pin);
-		driver->set_gpio_pin_level(driver->rs485_de_pin, 0);
-		driver->set_gpio_pin_dir(driver->rs485_de_pin, IOPORT_DIR_OUTPUT);
+		// Both in shutdown mode for RS422/RS485
+		driver->set_gpio_pin(driver->sout_de_pin, 0);
+		driver->set_gpio_pin(driver->sout_nre_pin, 1);
+		driver->set_gpio_pin(driver->sin_de_pin, 0);
+		driver->set_gpio_pin(driver->sin_nre_pin, 1);
 	}
 	if  (uart_comm_mode == RS485){
 		// RS485 mode, start in receiving mode
-		driver->set_gpio_pin(driver->rs422_nre_pin, 0);
-		driver->set_gpio_pin(driver->rs422_de_pin, 0);
+		driver->set_gpio_pin(driver->sout_de_pin, 0);
+		driver->set_gpio_pin(driver->sout_nre_pin, 0);
 		
-		// Enable Peripheral GPIO for RS485 control
-		driver->set_gpio_pin_mode(driver->rs485_de_pin, IOPORT_MODE_MUX_C);
-		driver->disable_gpio_pin(driver->rs485_de_pin);
-	}
-	if (uart_comm_mode == RS422){
-		// RS422 mode
-		driver->set_gpio_pin(driver->rs422_nre_pin, 0);
-		driver->set_gpio_pin(driver->rs422_de_pin, 1);
+		// SIN lines are in shutdown 
+		driver->set_gpio_pin(driver->sin_de_pin, 0);
+		driver->set_gpio_pin(driver->sin_nre_pin, 1);
 		
-		// Disable Peripheral GPIO for non RS485 control
-		driver->enable_gpio_pin(driver->rs485_de_pin);
-		driver->set_gpio_pin_level(driver->rs485_de_pin, 0);
-		driver->set_gpio_pin_dir(driver->rs485_de_pin, IOPORT_DIR_OUTPUT);
 	}
-	ccd_uart_ReInit(driver);
+	if (uart_comm_mode == RS422){				
+		// RS422 SOUT IC in drive mode
+		driver->set_gpio_pin(driver->sout_de_pin, 1);
+		driver->set_gpio_pin(driver->sout_nre_pin, 1);
+		
+		// SIN Ic in receive mode
+		driver->set_gpio_pin(driver->sin_de_pin, 0);
+		driver->set_gpio_pin(driver->sin_nre_pin, 0);
+	}
 }
 
 void ccd_uart_setParityEnabled(void * vHandle, uart_parity_enabled_t ParityEnabled) {
@@ -179,10 +191,21 @@ void ccd_uart_setParityMode(void * vHandle, uart_parity_mode_t ParityMode) {
 void ccd_uart_setBaudRate(void * vHandle, uart_baud_rates_t BaudRate) {
 	ccd_uart_t * driver = (ccd_uart_t*) vHandle;
 	
-	if (BaudRate == baud_115200) driver->baudrate = 115200;
-	if (BaudRate == baud_230400) driver->baudrate = 230400;
-	if (BaudRate == baud_460800) driver->baudrate = 460800;
-	if (BaudRate == baud_921600) driver->baudrate = 921600;
+	if (BaudRate == baud_115200)
+	{
+		driver->baudrate = 115200;
+	}
+	if (BaudRate == baud_230400)
+	{
+		driver->baudrate = 230400;
+	}
+	if (BaudRate == baud_460800)
+	{
+		driver->baudrate = 460800;
+	}
+	if (BaudRate == baud_921600){
+		driver->baudrate = 921600;
+	}
 	ccd_uart_ReInit(driver);
 }
 
@@ -310,10 +333,20 @@ inline void ccd_uart_InterruptHandler(ccd_uart_t * driver)
 	if ((dw_status & US_CSR_TXEMPTY)) {
 		if (driver->tx_buffer_read != driver->tx_buffer_write)
 		{
+			if (driver->uart_comm_mode == RS485){
+				// One pin enables drive, the other disables receive.
+				// Otherwise we receive our own signal, a few microseconds later.
+				driver->set_gpio_pin(driver->sout_de_pin, 1);
+				driver->set_gpio_pin(driver->sout_nre_pin, 1);
+			}
 			usart_write(driver->base_usart, driver->tx_holding_buffer[driver->tx_buffer_read]);
 			driver->tx_buffer_read = (driver->tx_buffer_read + 1) % UART_HOLDING_BUFFER_SIZE;
 		}
 		else {
+			if (driver->uart_comm_mode == RS485){
+				driver->set_gpio_pin(driver->sout_de_pin, 0);
+				driver->set_gpio_pin(driver->sout_nre_pin, 0);
+			}
 			usart_disable_interrupt(driver->base_usart, US_IER_TXEMPTY);
 		}
 	}
