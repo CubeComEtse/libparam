@@ -1385,6 +1385,48 @@ namespace Devices.Models
                 set { data0 = (UInt32)((data0 & ~(UInt32)0x00000100) | (( Convert.ToUInt32(value) & 0x00000001) << 8)); }
             }
 
+            public bool UARTTargetIncomingOverflow
+            {
+                get { return Convert.ToBoolean((data0 & (UInt32)0x00000200) >> 9); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000200) | (( Convert.ToUInt32(value) & 0x00000001) << 9)); }
+            }
+
+            public bool UARTTargetTxHBOverflow
+            {
+                get { return Convert.ToBoolean((data0 & (UInt32)0x00000400) >> 10); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000400) | (( Convert.ToUInt32(value) & 0x00000001) << 10)); }
+            }
+
+            public bool UARTTargetRxHBOverflow
+            {
+                get { return Convert.ToBoolean((data0 & (UInt32)0x00000800) >> 11); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000800) | (( Convert.ToUInt32(value) & 0x00000001) << 11)); }
+            }
+
+            public bool UARTTargetOutgoingOverflow
+            {
+                get { return Convert.ToBoolean((data0 & (UInt32)0x00001000) >> 12); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00001000) | (( Convert.ToUInt32(value) & 0x00000001) << 12)); }
+            }
+
+            public bool GSETargetIncomingOverflow
+            {
+                get { return Convert.ToBoolean((data0 & (UInt32)0x00002000) >> 13); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00002000) | (( Convert.ToUInt32(value) & 0x00000001) << 13)); }
+            }
+
+            public bool GSETargetOutgoingOverflow
+            {
+                get { return Convert.ToBoolean((data0 & (UInt32)0x00004000) >> 14); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00004000) | (( Convert.ToUInt32(value) & 0x00000001) << 14)); }
+            }
+
+            public bool SERMUX_CRC_Error
+            {
+                get { return Convert.ToBoolean((data0 & (UInt32)0x00008000) >> 15); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00008000) | (( Convert.ToUInt32(value) & 0x00000001) << 15)); }
+            }
+
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
@@ -5682,6 +5724,83 @@ namespace Devices.Models
             set => _ = Set(ref _RTOS_Status0_CANTargetOutgoingOverflow, value);
         }
         
+        private bool _RTOS_Status0_UARTTargetIncomingOverflowIsSet;
+        public bool RTOS_Status0_UARTTargetIncomingOverflowIsSet {
+            get => _RTOS_Status0_UARTTargetIncomingOverflowIsSet;
+            set => _ = Set(ref _RTOS_Status0_UARTTargetIncomingOverflowIsSet, value); 
+        }
+        private bool _RTOS_Status0_UARTTargetIncomingOverflow;
+        public bool RTOS_Status0_UARTTargetIncomingOverflow {
+            get => _RTOS_Status0_UARTTargetIncomingOverflow;
+            set => _ = Set(ref _RTOS_Status0_UARTTargetIncomingOverflow, value);
+        }
+        
+        private bool _RTOS_Status0_UARTTargetTxHBOverflowIsSet;
+        public bool RTOS_Status0_UARTTargetTxHBOverflowIsSet {
+            get => _RTOS_Status0_UARTTargetTxHBOverflowIsSet;
+            set => _ = Set(ref _RTOS_Status0_UARTTargetTxHBOverflowIsSet, value); 
+        }
+        private bool _RTOS_Status0_UARTTargetTxHBOverflow;
+        public bool RTOS_Status0_UARTTargetTxHBOverflow {
+            get => _RTOS_Status0_UARTTargetTxHBOverflow;
+            set => _ = Set(ref _RTOS_Status0_UARTTargetTxHBOverflow, value);
+        }
+        
+        private bool _RTOS_Status0_UARTTargetRxHBOverflowIsSet;
+        public bool RTOS_Status0_UARTTargetRxHBOverflowIsSet {
+            get => _RTOS_Status0_UARTTargetRxHBOverflowIsSet;
+            set => _ = Set(ref _RTOS_Status0_UARTTargetRxHBOverflowIsSet, value); 
+        }
+        private bool _RTOS_Status0_UARTTargetRxHBOverflow;
+        public bool RTOS_Status0_UARTTargetRxHBOverflow {
+            get => _RTOS_Status0_UARTTargetRxHBOverflow;
+            set => _ = Set(ref _RTOS_Status0_UARTTargetRxHBOverflow, value);
+        }
+        
+        private bool _RTOS_Status0_UARTTargetOutgoingOverflowIsSet;
+        public bool RTOS_Status0_UARTTargetOutgoingOverflowIsSet {
+            get => _RTOS_Status0_UARTTargetOutgoingOverflowIsSet;
+            set => _ = Set(ref _RTOS_Status0_UARTTargetOutgoingOverflowIsSet, value); 
+        }
+        private bool _RTOS_Status0_UARTTargetOutgoingOverflow;
+        public bool RTOS_Status0_UARTTargetOutgoingOverflow {
+            get => _RTOS_Status0_UARTTargetOutgoingOverflow;
+            set => _ = Set(ref _RTOS_Status0_UARTTargetOutgoingOverflow, value);
+        }
+        
+        private bool _RTOS_Status0_GSETargetIncomingOverflowIsSet;
+        public bool RTOS_Status0_GSETargetIncomingOverflowIsSet {
+            get => _RTOS_Status0_GSETargetIncomingOverflowIsSet;
+            set => _ = Set(ref _RTOS_Status0_GSETargetIncomingOverflowIsSet, value); 
+        }
+        private bool _RTOS_Status0_GSETargetIncomingOverflow;
+        public bool RTOS_Status0_GSETargetIncomingOverflow {
+            get => _RTOS_Status0_GSETargetIncomingOverflow;
+            set => _ = Set(ref _RTOS_Status0_GSETargetIncomingOverflow, value);
+        }
+        
+        private bool _RTOS_Status0_GSETargetOutgoingOverflowIsSet;
+        public bool RTOS_Status0_GSETargetOutgoingOverflowIsSet {
+            get => _RTOS_Status0_GSETargetOutgoingOverflowIsSet;
+            set => _ = Set(ref _RTOS_Status0_GSETargetOutgoingOverflowIsSet, value); 
+        }
+        private bool _RTOS_Status0_GSETargetOutgoingOverflow;
+        public bool RTOS_Status0_GSETargetOutgoingOverflow {
+            get => _RTOS_Status0_GSETargetOutgoingOverflow;
+            set => _ = Set(ref _RTOS_Status0_GSETargetOutgoingOverflow, value);
+        }
+        
+        private bool _RTOS_Status0_SERMUX_CRC_ErrorIsSet;
+        public bool RTOS_Status0_SERMUX_CRC_ErrorIsSet {
+            get => _RTOS_Status0_SERMUX_CRC_ErrorIsSet;
+            set => _ = Set(ref _RTOS_Status0_SERMUX_CRC_ErrorIsSet, value); 
+        }
+        private bool _RTOS_Status0_SERMUX_CRC_Error;
+        public bool RTOS_Status0_SERMUX_CRC_Error {
+            get => _RTOS_Status0_SERMUX_CRC_Error;
+            set => _ = Set(ref _RTOS_Status0_SERMUX_CRC_Error, value);
+        }
+        
         /*************** Properties for PreviousEndpoint register ********************************/
         private bool _PreviousEndpoint_NumberIsSet;
         public bool PreviousEndpoint_NumberIsSet {
@@ -6337,6 +6456,13 @@ namespace Devices.Models
                     RTOS_Status0_CANTargetIncomingOverflow =  register.RegRTOS_Status0.CANTargetIncomingOverflow;
                     RTOS_Status0_CANInterruptBufferOverflow =  register.RegRTOS_Status0.CANInterruptBufferOverflow;
                     RTOS_Status0_CANTargetOutgoingOverflow =  register.RegRTOS_Status0.CANTargetOutgoingOverflow;
+                    RTOS_Status0_UARTTargetIncomingOverflow =  register.RegRTOS_Status0.UARTTargetIncomingOverflow;
+                    RTOS_Status0_UARTTargetTxHBOverflow =  register.RegRTOS_Status0.UARTTargetTxHBOverflow;
+                    RTOS_Status0_UARTTargetRxHBOverflow =  register.RegRTOS_Status0.UARTTargetRxHBOverflow;
+                    RTOS_Status0_UARTTargetOutgoingOverflow =  register.RegRTOS_Status0.UARTTargetOutgoingOverflow;
+                    RTOS_Status0_GSETargetIncomingOverflow =  register.RegRTOS_Status0.GSETargetIncomingOverflow;
+                    RTOS_Status0_GSETargetOutgoingOverflow =  register.RegRTOS_Status0.GSETargetOutgoingOverflow;
+                    RTOS_Status0_SERMUX_CRC_Error =  register.RegRTOS_Status0.SERMUX_CRC_Error;
                     break;
 
                 case OBCRegisterAddress.OBC_REG_PREVIOUSENDPOINT:
@@ -6913,6 +7039,13 @@ namespace Devices.Models
                     register.RegRTOS_Status0.CANTargetIncomingOverflow = RTOS_Status0_CANTargetIncomingOverflow;
                     register.RegRTOS_Status0.CANInterruptBufferOverflow = RTOS_Status0_CANInterruptBufferOverflow;
                     register.RegRTOS_Status0.CANTargetOutgoingOverflow = RTOS_Status0_CANTargetOutgoingOverflow;
+                    register.RegRTOS_Status0.UARTTargetIncomingOverflow = RTOS_Status0_UARTTargetIncomingOverflow;
+                    register.RegRTOS_Status0.UARTTargetTxHBOverflow = RTOS_Status0_UARTTargetTxHBOverflow;
+                    register.RegRTOS_Status0.UARTTargetRxHBOverflow = RTOS_Status0_UARTTargetRxHBOverflow;
+                    register.RegRTOS_Status0.UARTTargetOutgoingOverflow = RTOS_Status0_UARTTargetOutgoingOverflow;
+                    register.RegRTOS_Status0.GSETargetIncomingOverflow = RTOS_Status0_GSETargetIncomingOverflow;
+                    register.RegRTOS_Status0.GSETargetOutgoingOverflow = RTOS_Status0_GSETargetOutgoingOverflow;
+                    register.RegRTOS_Status0.SERMUX_CRC_Error = RTOS_Status0_SERMUX_CRC_Error;
                     break;
 
                 case OBCRegisterAddress.OBC_REG_PREVIOUSENDPOINT:
@@ -8251,6 +8384,20 @@ namespace Devices.Models
             RTOS_Status0_CANInterruptBufferOverflowIsSet = false;
             RTOS_Status0_CANTargetOutgoingOverflow = false;
             RTOS_Status0_CANTargetOutgoingOverflowIsSet = false;
+            RTOS_Status0_UARTTargetIncomingOverflow = false;
+            RTOS_Status0_UARTTargetIncomingOverflowIsSet = false;
+            RTOS_Status0_UARTTargetTxHBOverflow = false;
+            RTOS_Status0_UARTTargetTxHBOverflowIsSet = false;
+            RTOS_Status0_UARTTargetRxHBOverflow = false;
+            RTOS_Status0_UARTTargetRxHBOverflowIsSet = false;
+            RTOS_Status0_UARTTargetOutgoingOverflow = false;
+            RTOS_Status0_UARTTargetOutgoingOverflowIsSet = false;
+            RTOS_Status0_GSETargetIncomingOverflow = false;
+            RTOS_Status0_GSETargetIncomingOverflowIsSet = false;
+            RTOS_Status0_GSETargetOutgoingOverflow = false;
+            RTOS_Status0_GSETargetOutgoingOverflowIsSet = false;
+            RTOS_Status0_SERMUX_CRC_Error = false;
+            RTOS_Status0_SERMUX_CRC_ErrorIsSet = false;
 
             PreviousEndpoint_Number = 0;
             PreviousEndpoint_NumberIsSet = false;

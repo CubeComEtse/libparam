@@ -760,6 +760,9 @@
     <Compile Include="inc\config\conf_uart_serial.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="inc\crc8.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="inc\drivers\ccd_can_driver.c">
       <SubType>compile</SubType>
     </Compile>
@@ -914,6 +917,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\version.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\crc8.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\File.c">

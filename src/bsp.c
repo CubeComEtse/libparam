@@ -155,7 +155,10 @@ static void BSP_vInitUART(bsp_t * bsp){
 	// accidentally lands in RS 485 mode.
 	telemetry_uart.set_gpio_pin = &BSP_vSetPin;
 	
-	ccd_uart_Init(&telemetry_uart, T_USART);
+	// This UART's Interrupt is 1 - The 'highest' available, and outside the FreeRTOS
+	// priority ranges. It needs to be this high so that we don't miss bytes from the PC
+	
+	ccd_uart_Init(&telemetry_uart, T_USART, 1);
 	
 	bsp->telemetry_uart = &telemetry_uart;
 	
@@ -199,7 +202,8 @@ static void BSP_vInitUART(bsp_t * bsp){
 	bus_uart.uart_tx_pin = B_USART_TX_PIN;
 	bus_uart.uart_rx_pin = B_USART_RX_PIN;
 	
-	ccd_uart_Init(&bus_uart, B_USART);
+	// Priority 4- much lower
+	ccd_uart_Init(&bus_uart, B_USART, 4);
 	
 	bsp->bus_uart = &bus_uart; 
 }

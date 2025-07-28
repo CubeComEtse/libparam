@@ -53,7 +53,7 @@ void I2CTARGET_Task(void * handle)
 	
 	while(1){
 		// Wait indefinitely to receive a message 
-		size_t rx_length =  xMessageBufferReceive(pHandle->incoming_messages, rx_buffer, 16, pdMS_TO_TICKS(50));
+		size_t rx_length =  xMessageBufferReceive(pHandle->incoming_messages, rx_buffer, 32, pdMS_TO_TICKS(50));
 		
 		if (rx_length == 0){
 			continue;

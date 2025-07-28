@@ -28,7 +28,6 @@ void LOCALTARGET_Init(local_target_t * handle)
 	// This buffer size is an initial guess. Feel free to update it later.
 	handle->incoming_messages = xMessageBufferCreate(256);
 	handle->outgoing_messages= xMessageBufferCreate(256);
-	
 }
 
 
@@ -47,7 +46,7 @@ void LOCALTARGET_Task(void *handle)
 	
 	while(1){
 		// Wait indefinitely to receive a message
-		size_t rx_length =  xMessageBufferReceive(pHandle->incoming_messages, rx_buffer, 16, portMAX_DELAY);
+		size_t rx_length =  xMessageBufferReceive(pHandle->incoming_messages, rx_buffer, 32, portMAX_DELAY);
 		
 		if (rx_length == 0){
 			continue;
@@ -87,7 +86,10 @@ void LOCALTARGET_Task(void *handle)
 				out_message.is_read = out_message.is_read;
 				
 				size_t tx_size = encode_v2_message(tx_buffer, &out_message);
-				xMessageBufferSend(pHandle->outgoing_messages, tx_buffer, tx_size, pdMS_TO_TICKS(10));
+				size_t bytes_sent = xMessageBufferSend(pHandle->outgoing_messages, tx_buffer, tx_size, pdMS_TO_TICKS(10));
+				if ( bytes_sent == 0 ){
+					mm_setRTOS_Status0_GSETargetOutgoingOverflow(true);
+				}
 			}
 			
 		}

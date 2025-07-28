@@ -26,7 +26,7 @@
 void CANTARGET_Init(can_target_t * pHandle)
 {
 	assert(pHandle->can_send);
-	// Do not assert the handle, it might be void. 
+	// Do not assert the can handle, it might be void. 
 	
 	// These buffers are for SERCOM messages
 	// This buffer size is an initial guess. Feel free to update it later.
@@ -51,7 +51,7 @@ void CANTARGET_TxTask(void * vHandle)
 	
 	while(1){
 		// Wait indefinitely to receive a message 
-		size_t rx_length = xMessageBufferReceive(pHandle->incoming_messages, rx_buffer, 16, portMAX_DELAY);
+		size_t rx_length = xMessageBufferReceive(pHandle->incoming_messages, rx_buffer, 32, portMAX_DELAY);
 		
 		if (rx_length == 0){
 			continue;
