@@ -168,6 +168,24 @@ typedef enum {
 #define REG_RTOS_STATUS0_CANINTERRUPTBUFFEROVERFLOW_Msk (0x0001 << REG_RTOS_STATUS0_CANINTERRUPTBUFFEROVERFLOW_Pos)
 #define REG_RTOS_STATUS0_CANTARGETOUTGOINGOVERFLOW_Pos (8UL)
 #define REG_RTOS_STATUS0_CANTARGETOUTGOINGOVERFLOW_Msk (0x0001 << REG_RTOS_STATUS0_CANTARGETOUTGOINGOVERFLOW_Pos)
+#define REG_RTOS_STATUS0_UARTTARGETINCOMINGOVERFLOW_Pos (9UL)
+#define REG_RTOS_STATUS0_UARTTARGETINCOMINGOVERFLOW_Msk (0x0001 << REG_RTOS_STATUS0_UARTTARGETINCOMINGOVERFLOW_Pos)
+#define REG_RTOS_STATUS0_UARTTARGETTXHBOVERFLOW_Pos  (10UL)
+#define REG_RTOS_STATUS0_UARTTARGETTXHBOVERFLOW_Msk  (0x0001 << REG_RTOS_STATUS0_UARTTARGETTXHBOVERFLOW_Pos)
+#define REG_RTOS_STATUS0_UARTTARGETRXHBOVERFLOW_Pos  (11UL)
+#define REG_RTOS_STATUS0_UARTTARGETRXHBOVERFLOW_Msk  (0x0001 << REG_RTOS_STATUS0_UARTTARGETRXHBOVERFLOW_Pos)
+#define REG_RTOS_STATUS0_UARTTARGETOUTGOINGOVERFLOW_Pos (12UL)
+#define REG_RTOS_STATUS0_UARTTARGETOUTGOINGOVERFLOW_Msk (0x0001 << REG_RTOS_STATUS0_UARTTARGETOUTGOINGOVERFLOW_Pos)
+#define REG_RTOS_STATUS0_GSETARGETINCOMINGOVERFLOW_Pos (13UL)
+#define REG_RTOS_STATUS0_GSETARGETINCOMINGOVERFLOW_Msk (0x0001 << REG_RTOS_STATUS0_GSETARGETINCOMINGOVERFLOW_Pos)
+#define REG_RTOS_STATUS0_GSETARGETOUTGOINGOVERFLOW_Pos (14UL)
+#define REG_RTOS_STATUS0_GSETARGETOUTGOINGOVERFLOW_Msk (0x0001 << REG_RTOS_STATUS0_GSETARGETOUTGOINGOVERFLOW_Pos)
+#define REG_RTOS_STATUS0_SERMUX_CRC_ERROR_Pos        (15UL)
+#define REG_RTOS_STATUS0_SERMUX_CRC_ERROR_Msk        (0x0001 << REG_RTOS_STATUS0_SERMUX_CRC_ERROR_Pos)
+
+/*************** Bit definition for PreviousEndpoint register ****************/
+#define REG_PREVIOUSENDPOINT_NUMBER_Pos              (8UL)
+#define REG_PREVIOUSENDPOINT_NUMBER_Msk              (0x00ff << REG_PREVIOUSENDPOINT_NUMBER_Pos)
 
 /*************** Bit definition for PreviousEndpoint register ****************/
 #define REG_PREVIOUSENDPOINT_NUMBER_Pos              (8UL)
@@ -2950,6 +2968,34 @@ mm_response_t mm_getRTOS_Status0_CANInterruptBufferOverflowFrom(bool * dest, con
 mm_response_t mm_setRTOS_Status0_CANTargetOutgoingOverflow(const bool val);
 mm_response_t mm_getRTOS_Status0_CANTargetOutgoingOverflow(bool * dest);
 mm_response_t mm_getRTOS_Status0_CANTargetOutgoingOverflowFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setRTOS_Status0_UARTTargetIncomingOverflow(const bool val);
+mm_response_t mm_getRTOS_Status0_UARTTargetIncomingOverflow(bool * dest);
+mm_response_t mm_getRTOS_Status0_UARTTargetIncomingOverflowFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setRTOS_Status0_UARTTargetTxHBOverflow(const bool val);
+mm_response_t mm_getRTOS_Status0_UARTTargetTxHBOverflow(bool * dest);
+mm_response_t mm_getRTOS_Status0_UARTTargetTxHBOverflowFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setRTOS_Status0_UARTTargetRxHBOverflow(const bool val);
+mm_response_t mm_getRTOS_Status0_UARTTargetRxHBOverflow(bool * dest);
+mm_response_t mm_getRTOS_Status0_UARTTargetRxHBOverflowFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setRTOS_Status0_UARTTargetOutgoingOverflow(const bool val);
+mm_response_t mm_getRTOS_Status0_UARTTargetOutgoingOverflow(bool * dest);
+mm_response_t mm_getRTOS_Status0_UARTTargetOutgoingOverflowFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setRTOS_Status0_GSETargetIncomingOverflow(const bool val);
+mm_response_t mm_getRTOS_Status0_GSETargetIncomingOverflow(bool * dest);
+mm_response_t mm_getRTOS_Status0_GSETargetIncomingOverflowFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setRTOS_Status0_GSETargetOutgoingOverflow(const bool val);
+mm_response_t mm_getRTOS_Status0_GSETargetOutgoingOverflow(bool * dest);
+mm_response_t mm_getRTOS_Status0_GSETargetOutgoingOverflowFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setRTOS_Status0_SERMUX_CRC_Error(const bool val);
+mm_response_t mm_getRTOS_Status0_SERMUX_CRC_Error(bool * dest);
+mm_response_t mm_getRTOS_Status0_SERMUX_CRC_ErrorFrom(bool * dest, const uint32_t source);
+
+/*************** Get/Set functions for PreviousEndpoint register **************************************************************/
+mm_response_t mm_setPreviousEndpoint(const uint32_t val);
+mm_response_t mm_getPreviousEndpoint(uint32_t * dest);
+mm_response_t mm_setPreviousEndpoint_Number(const uint8_t val);
+mm_response_t mm_getPreviousEndpoint_Number(uint8_t * dest);
+mm_response_t mm_getPreviousEndpoint_NumberFrom(uint8_t * dest, const uint32_t source);
 
 /*************** Get/Set functions for PreviousEndpoint register **************************************************************/
 mm_response_t mm_setPreviousEndpoint(const uint32_t val);

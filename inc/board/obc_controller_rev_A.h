@@ -45,6 +45,12 @@
 #define B_USART_TX_PIN			PIO_PB1_IDX
 
 
+#define PIN_SOUT_nRE			PIO_PC29_IDX
+#define PIN_SOUT_DE				PIO_PB3_IDX
+#define PIN_SIN_DE				PIO_PC30_IDX
+#define PIN_SIN_nRE				PIO_PD9_IDX
+
+
 #define I2C_BUS_DEVICE			TWIHS0
 #define I2C_BUS_DEVICE_ID		ID_TWIHS0
 #define I2C_BUS_SDA_PIN			PIO_PA3_IDX

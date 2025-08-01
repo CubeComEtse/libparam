@@ -36,6 +36,8 @@ void UARTTARGET_Init(uart_target_t * handle)
 	handle->incoming_messages = xMessageBufferCreate(256);
 	handle->outgoing_messages = xMessageBufferCreate(256);
 	
+	handle->uart_semaphore = xSemaphoreCreateMutex();
+	
 }
 
 void UARTTARGET_TxTask(void * handle) 
@@ -105,13 +107,18 @@ void UARTTARGET_TxTask(void * handle)
 				uint8_t processed_data[4];
 				uint8_t processed_index = 0;
 				for (uint8_t i = 0; i < 4; i++) {
-					if (in_message.data[4 + i] == FEND) {
+					if (in_message.data[4 + i] == FEND) 
+					{
 						processed_data[processed_index++] = FESC;
 						processed_data[processed_index++] = TFEND;
-						} else if (in_message.data[4 + i] == FESC) {
+					} 
+					else if (in_message.data[4 + i] == FESC) 
+					{
 						processed_data[processed_index++] = FESC;
 						processed_data[processed_index++] = TFESC;
-						} else {
+					}
+					else 
+					{
 						processed_data[processed_index++] = in_message.data[4 + i];
 					}
 				}
@@ -119,7 +126,9 @@ void UARTTARGET_TxTask(void * handle)
 				memcpy(&uart_msg_kiss_packet[7], processed_data, processed_index);
 				uart_msg_kiss_packet[7 + processed_index] = FEND;
 				hnd->uart_send(hnd->uart_handle, uart_msg_kiss_packet, 8 + processed_index);
-			} else {
+			} 
+			else 
+			{
 				uart_msg_kiss_packet[7] = FEND;
 				hnd->uart_send(hnd->uart_handle, uart_msg_kiss_packet, 8);
 			}
@@ -186,33 +195,29 @@ void UARTTARGET_RxTask(void * handle)
 						continue;
 					}
 					
+					size_t kiss_message_size = packet_index - 4;
+					
 					// Full packet received
 					v2_msg_t out_message;
 					out_message.msg_id = uart_msg_kiss_packet[1];
 					out_message.target = EP_V2_UART_CC_2;
-					out_message.data_len = packet_index - 2; // data length of entire msg (not only data+addresses)
+					// Packet_index stores the entire kiss packet length. Subtract 4 for the kiss header (type, id, src,dest),
+					// Then add 2 for the EGSE UART header (Type + Length)
+					out_message.data_len = kiss_message_size + 2; 
+					
 					out_message.data = out_message_data;
 					
 					out_message.data[0] = uart_msg_kiss_packet[0]; // msg type
-					out_message.data[1] = 6; // can this be hardcoded?
-					out_message.data[2] = uart_msg_kiss_packet[4]; // address msb
-					out_message.data[3] = uart_msg_kiss_packet[5]; // address lsb
-					
-					uint8_t index = 4;
-					for (size_t j = 6; j < packet_index; j++) {
-						out_message.data[index++] = uart_msg_kiss_packet[j];
-					}
-					
+					out_message.data[1] = kiss_message_size; // msg length
+					memcpy(&out_message.data[2], &uart_msg_kiss_packet[4], kiss_message_size);
+										
 					uint8_t encoded[32];
 					size_t encoded_len = encode_v2_message(encoded, &out_message);
 					
 					xMessageBufferSend(hnd->outgoing_messages, encoded, encoded_len, 0);
 					
-					//xMessageBufferSend(hnd->outgoing_messages, &out_message, sizeof(out_message), portMAX_DELAY);
 					receiving = false;
 					continue;
-					
-					
 				}
 				
 				// Handle escaping
@@ -233,7 +238,8 @@ void UARTTARGET_RxTask(void * handle)
 				
 				// Store received bytes
 				if (packet_index < sizeof(uart_msg_kiss_packet)){
-					uart_msg_kiss_packet[packet_index++] = rx_byte;
+					uart_msg_kiss_packet[packet_index] = rx_byte;
+					packet_index += 1;
 				}		
 				
 			}
@@ -242,4 +248,48 @@ void UARTTARGET_RxTask(void * handle)
 
 	}
 
+}
+
+bool UARTTARGET_SetCommMode(uart_target_t * pHandle, uart_comm_mode_t CommMode)
+{
+	// Should we wait for the buffer to be empty?
+	if(xSemaphoreTake(pHandle->uart_semaphore, pdMS_TO_TICKS(200))) {
+		ccd_uart_setCommMode(pHandle->uart_handle, CommMode);
+		xSemaphoreGive(pHandle->uart_semaphore);
+		return true;	
+	}
+	return false;
+}
+
+bool UARTTARGET_SetParityEnabled(uart_target_t * pHandle, uart_parity_enabled_t ParityEnabled)
+{
+	// Should we wait for the buffer to be empty?
+	if(xSemaphoreTake(pHandle->uart_semaphore, pdMS_TO_TICKS(200))) {
+		ccd_uart_setParityEnabled(pHandle->uart_handle, ParityEnabled);
+		xSemaphoreGive(pHandle->uart_semaphore);
+		return true;
+	}
+	return false;
+}
+
+bool UARTTARGET_SetParityMode(uart_target_t * pHandle, uart_parity_mode_t ParityMode)
+{
+	// Should we wait for the buffer to be empty?
+	if(xSemaphoreTake(pHandle->uart_semaphore, pdMS_TO_TICKS(200))) {
+		ccd_uart_setParityMode(pHandle->uart_handle, ParityMode);
+		xSemaphoreGive(pHandle->uart_semaphore);
+		return true;
+	}
+	return false;
+}
+
+bool UARTTARGET_SetBaudRate(uart_target_t * pHandle, uart_baud_rates_t BaudRate)
+{
+	// Should we wait for the buffer to be empty?
+	if(xSemaphoreTake(pHandle->uart_semaphore, pdMS_TO_TICKS(200))) {
+		ccd_uart_setBaudRate(pHandle->uart_handle, BaudRate);
+		xSemaphoreGive(pHandle->uart_semaphore);
+		return true;
+	}
+	return false;
 }

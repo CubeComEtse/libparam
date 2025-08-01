@@ -15,6 +15,9 @@
 #include "FreeRTOS.h"
 #include "stream_buffer.h"
 #include "message_buffer.h"
+#include "register_map.h"
+
+#include "crc8.h"
 
 typedef enum {
 	V2_WAITING_1,
@@ -38,10 +41,14 @@ typedef struct {
 } v2_message_block_t;
 
 
+typedef mm_response_t (*set_overflow_flag_t)(bool flagValue);
+
 typedef struct {
 	uint8_t number;
 	MessageBufferHandle_t out;
 	MessageBufferHandle_t in;
+	set_overflow_flag_t set_overflow_flag;
+	
 } target_definition_t;
 
 
@@ -53,6 +60,9 @@ typedef struct {
 	StreamBufferHandle_t in_stream;
 	StreamBufferHandle_t out_stream;
 	
+	// Uart handle
+	void * uart_handle;
+	
 	// This is where we store incoming data until the whole thing is received
 	v2_message_block_t rx_block;
 	v2_message_block_t tx_block;
@@ -63,10 +73,12 @@ typedef struct {
 	// Targets to send messages to
 	target_definition_t targets[MAX_NUMBER_OF_TARGETS];
 	size_t num_targets;
+	
+	crc_module_t crc_checker;
 }sermux_v3_t;
 
 void SERMUX_V3_Init(sermux_v3_t * handle);
-void SERMUX_V3_AddTarget(sermux_v3_t * handle, const uint8_t number, MessageBufferHandle_t in, MessageBufferHandle_t out);
+void SERMUX_V3_AddTarget(sermux_v3_t * handle, const uint8_t number, MessageBufferHandle_t in, MessageBufferHandle_t out, set_overflow_flag_t overflow_flag_function);
 void SERMUX_V3_ReceiveTask(void * handle);
 void SERMUX_V3_TransmitTask(void * handle);
 

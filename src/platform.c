@@ -120,6 +120,7 @@ void PLATFORM_vInit(bsp_t * bsp)
 	
 	sermux_v3.in_stream = bsp->telemetry_uart->uart_rx_buffer;
 	sermux_v3.out_stream = bsp->telemetry_uart->uart_tx_buffer;
+	sermux_v3.uart_handle = bsp->telemetry_uart;
 	SERMUX_V3_Init(&sermux_v3);
 	
 	pc104.set_pin = ioport_set_pin_level;
@@ -133,20 +134,20 @@ void PLATFORM_vInit(bsp_t * bsp)
 	LEDIndicator_SetStatic(&led_indicator);
 	
 	//Add Local Targets
-	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_GSE, local_target.incoming_messages, local_target.outgoing_messages);
+	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_GSE, local_target.incoming_messages, local_target.outgoing_messages, mm_setRTOS_Status0_GSETargetIncomingOverflow);
 	
 	// Add I2C Targets
-	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_I2C_CC, i2c_target.incoming_messages, i2c_target.outgoing_messages);
-	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_I2C_CC_CHECKSUM, i2c_target.incoming_messages, i2c_target.outgoing_messages);
-	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_I2C_CC_2, i2c_target.incoming_messages, i2c_target.outgoing_messages);
-	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_I2C_CC_3, i2c_target.incoming_messages, i2c_target.outgoing_messages);
+	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_I2C_CC, i2c_target.incoming_messages, i2c_target.outgoing_messages, mm_setRTOS_Status0_I2CTargetIncomingOverflow);
+	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_I2C_CC_CHECKSUM, i2c_target.incoming_messages, i2c_target.outgoing_messages, mm_setRTOS_Status0_I2CTargetIncomingOverflow);
+	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_I2C_CC_2, i2c_target.incoming_messages, i2c_target.outgoing_messages, mm_setRTOS_Status0_I2CTargetIncomingOverflow);
+	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_I2C_CC_3, i2c_target.incoming_messages, i2c_target.outgoing_messages, mm_setRTOS_Status0_I2CTargetIncomingOverflow);
 
 	// Add CAN Targets
-	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_CAN_CC_2, can_target.incoming_messages, can_target.outgoing_messages);
-	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_CAN_CC_3, can_target.incoming_messages, can_target.outgoing_messages);
+	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_CAN_CC_2, can_target.incoming_messages, can_target.outgoing_messages, mm_setRTOS_Status0_CANTargetIncomingOverflow);
+	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_CAN_CC_3, can_target.incoming_messages, can_target.outgoing_messages, mm_setRTOS_Status0_CANTargetIncomingOverflow);
 	
 	// Add UART Targets
-	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_UART_CC_2, uart_target.incoming_messages, uart_target.outgoing_messages);
+	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_UART_CC_2, uart_target.incoming_messages, uart_target.outgoing_messages, mm_setRTOS_Status0_UARTTargetIncomingOverflow);
 	
 	REG_vSetPlatformPointer(&platform);
 		

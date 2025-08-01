@@ -825,6 +825,16 @@
 				{ "name" : "CANInterruptBufferOverflow", "bit": "7", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} },
 				{ "name" : "CANTargetOutgoingOverflow", "bit": "8", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} }
 
+				{ "name" : "UARTTargetIncomingOverflow", "bit": "9", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} },
+				{ "name" : "UARTTargetTxHBOverflow", "bit": "10", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} },
+				{ "name" : "UARTTargetRxHBOverflow", "bit": "11", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} },
+				{ "name" : "UARTTargetOutgoingOverflow", "bit": "12", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} },
+
+				{ "name" : "GSETargetIncomingOverflow", "bit": "13", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} },
+				{ "name" : "GSETargetOutgoingOverflow", "bit": "14", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} },
+
+				{ "name" : "SERMUX_CRC_Error", "bit": "15", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} }
+
 			] },
 
 			{
@@ -845,8 +855,6 @@
 					}
 				]
 			}
-
-
 		],
 		"generic_fields":{
 			"boardflag": [

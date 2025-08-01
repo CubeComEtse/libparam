@@ -12,8 +12,6 @@
 
 #include "gse_manager.h"
 #include "register_map.h"
-
-
   
 static uint32_t REG_CopyArrayToU32(const uint8_t* data);
 
@@ -60,6 +58,7 @@ static addres_to_func_map_t address_to_func_map[] = {
 	{ reg_CANConfA_addr, mm_getCANConfA },
 	{ reg_CANConfB_addr, mm_getCANConfB },
 	{ reg_PC104Pins_addr, mm_getPC104Pins },
+	{ reg_SerialConf_addr, mm_getSerialConf },
 		
 		
 	{ reg_RFRelaysConf_addr, mm_getRFRelaysConf },
@@ -73,7 +72,6 @@ static addres_to_func_map_t address_to_func_map[] = {
 	{ reg_CSBoard_T5_addr, mm_getCSBoard_T5 },
 	{ reg_CSBoard_T6_addr, mm_getCSBoard_T6 },
 	{ reg_CSBoard_T7_addr, mm_getCSBoard_T7 },
-		
 	{ reg_CSBoard_Current0I0_addr, mm_getCSBoard_Current0I0},
 	{ reg_CSBoard_Current0I1_addr, mm_getCSBoard_Current0I1},
 	{ reg_CSBoard_Current0I2_addr, mm_getCSBoard_Current0I2},
@@ -98,7 +96,6 @@ static addres_to_func_map_t address_to_func_map[] = {
 	{ reg_CSBoard_Current7I0_addr, mm_getCSBoard_Current7I0},
 	{ reg_CSBoard_Current7I1_addr, mm_getCSBoard_Current7I1},
 	{ reg_CSBoard_Current7I2_addr, mm_getCSBoard_Current7I2},
-		
     { reg_TE_Addr_0_addr, mm_getTE_Addr_0},
     { reg_TE_Addr_1_addr, mm_getTE_Addr_1},
     { reg_TE_Addr_2_addr, mm_getTE_Addr_2},
@@ -110,6 +107,7 @@ static addres_to_func_map_t address_to_func_map[] = {
 	{ reg_MTC_Addr_3_addr, mm_getMTC_Addr_3},
 		
 	{ reg_RTOS_Status0_addr, mm_getRTOS_Status0},
+	{ reg_PreviousEndpoint_addr, mm_getPreviousEndpoint}, 
 };
 
 
@@ -381,19 +379,19 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 		}
 			break;
 				
-// 		case reg_MultiConf0_addr:
-// 			{
-// 				mm_enabled_t autoclear = reg_enabled_disabled;
-// 				mm_getMultiConf0_AutoCLRFrom(&autoclear, deserialized);
-// 				MULTI_SetAutoClear(platform->multitester, autoclear==reg_enabled_enabled);
-// 				mm_setMultiConf0_AutoCLR(autoclear);
-// 			
-// 				mm_enabled_t scan_enabled = reg_enabled_disabled;
-// 				mm_getMultiConf0_ScanEnabledFrom(&scan_enabled, deserialized);
-// 				MULTI_SetScanEnabled(platform->multitester, scan_enabled==reg_enabled_enabled);
-// 				mm_setMultiConf0_ScanEnabled(scan_enabled);
-// 			}
-// 			break;
+		case reg_MultiConf0_addr:
+			{
+				mm_enabled_t autoclear = reg_enabled_disabled;
+				mm_getMultiConf0_AutoCLRFrom(&autoclear, deserialized);
+				MULTI_SetAutoClear(platform->multitester, autoclear==reg_enabled_enabled);
+				mm_setMultiConf0_AutoCLR(autoclear);
+			
+				mm_enabled_t scan_enabled = reg_enabled_disabled;
+				mm_getMultiConf0_ScanEnabledFrom(&scan_enabled, deserialized);
+				MULTI_SetScanEnabled(platform->multitester, scan_enabled==reg_enabled_enabled);
+				mm_setMultiConf0_ScanEnabled(scan_enabled);
+			}
+			break;
 			
 		case reg_CANConfA_addr:
 			{
@@ -435,6 +433,33 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 					mm_setCANConfB_Address(new_address);	
 				}
 				
+			}
+			break;
+		case reg_SerialConf_addr:
+			{
+				mm_serialmode_t SerialCommMode;
+				mm_getSerialConf_SerialModeFrom(&SerialCommMode, deserialized);
+				if(UARTTARGET_SetCommMode(platform->uart_target, SerialCommMode)){
+					mm_setSerialConf_SerialMode(SerialCommMode);
+				}
+				
+				mm_enabled_t ParityEnabled;
+				mm_getSerialConf_ParityEnabledFrom(&ParityEnabled, deserialized);
+				if(UARTTARGET_SetParityEnabled(platform->uart_target, ParityEnabled)){
+					mm_setSerialConf_ParityEnabled(ParityEnabled);
+				}		
+				
+				mm_paritymodes_t ParityMode;
+				mm_getSerialConf_ParityModeFrom(&ParityMode, deserialized);
+				if(UARTTARGET_SetParityMode(platform->uart_target, ParityMode)){
+					mm_setSerialConf_ParityMode(ParityMode);
+				}
+				
+				mm_usart_baudrates_t BaudRate;
+				mm_getSerialConf_BaudRatesFrom(&BaudRate, deserialized);
+				if(UARTTARGET_SetBaudRate(platform->uart_target, BaudRate)){
+					mm_setSerialConf_BaudRates(BaudRate);
+				}
 			}
 			break;
 		case reg_PC104Pins_addr:
@@ -610,6 +635,12 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 			MTCV2_ClearBits(platform->multitester, deserialized);
 			break;
 		}
+		case reg_PreviousEndpoint_addr:
+		{
+			// Just store the full value
+			mm_setPreviousEndpoint(deserialized);
+		}
+		break;
 		
 		
 					

@@ -12,7 +12,7 @@ static spline_definition_t comms_active_bounce;
 
 static led_indicator_t * static_ref;
 
-/*
+
 control_point_t points[] ={
 	
 	//Statup point
@@ -90,9 +90,9 @@ control_point_t green_blue_bounce[] ={
 		.ticks_to_stay_on = 1000,
 		.ticks_speed = 2000,
 	}
-};*/
+};
 
-
+/*
 control_point_t points[] ={
 	
 	//Statup point
@@ -135,7 +135,7 @@ control_point_t points[] ={
 		.ticks_to_stay_on = 20,
 		.ticks_speed = 200,
 	}
-};
+};*/
 
 
 void LEDIndicator_Setup(led_indicator_t * handle)
