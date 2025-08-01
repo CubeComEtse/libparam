@@ -124,7 +124,6 @@ void PLATFORM_vInit(bsp_t * bsp)
 	sermux_v3.uart_handle = bsp->telemetry_uart;
 	SERMUX_V3_Init(&sermux_v3);
 	
-	// ?
 	pc104.set_pin = ioport_set_pin_level;
 	pc104.ena_Pin = PC104_EN_PIN;
 	pc104.nrst_Pin = PC104_nRST_PIN;
@@ -164,10 +163,11 @@ void PLATFORM_vInit(bsp_t * bsp)
 	rf_relay_2.i2c_read_function = ccd_i2c_driver_Read;
 	RFRelay_Init(platform.rf_relay_2, 2);
 		
+	// Multitester
 	platform.multitester = &multitester;
 	platform.multitester->i2c_read_function = ccd_i2c_driver_Read;
 	platform.multitester->i2c_write_function = ccd_i2c_driver_Write;
-	MULTI_Init(platform.multitester);
+	//MULTI_Init(platform.multitester);
 	
 	
 	if (version == 0){
@@ -181,6 +181,9 @@ void PLATFORM_vInit(bsp_t * bsp)
 		rf_relay_2.i2c_handle = bsp->util_i2c;
 		platform.multitester->i2c_handle = bsp->util_i2c;
 	}
+	
+	// Multitester Version 2
+	MTCV2_Init(platform.multitester);
 	
 	platform.te_scanner = &te_scanner;
 	platform.te_scanner->i2c_read_function = ccd_i2c_driver_Read;

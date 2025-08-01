@@ -100,6 +100,18 @@ namespace Devices.Models
             OBC_REG_TE_ADDR_3                        = 0x89,
             OBC_REG_TE_ADDR_3_SET                    = 0x8a,
             OBC_REG_TE_ADDR_3_CLEAR                  = 0x8b,
+            OBC_REG_MTC_ADDR_0                       = 0xb0,
+            OBC_REG_MTC_ADDR_0_SET                   = 0xb1,
+            OBC_REG_MTC_ADDR_0_CLEAR                 = 0xb2,
+            OBC_REG_MTC_ADDR_1                       = 0xb3,
+            OBC_REG_MTC_ADDR_1_SET                   = 0xb4,
+            OBC_REG_MTC_ADDR_1_CLEAR                 = 0xb5,
+            OBC_REG_MTC_ADDR_2                       = 0xb6,
+            OBC_REG_MTC_ADDR_2_SET                   = 0xb7,
+            OBC_REG_MTC_ADDR_2_CLEAR                 = 0xb8,
+            OBC_REG_MTC_ADDR_3                       = 0xb9,
+            OBC_REG_MTC_ADDR_3_SET                   = 0xba,
+            OBC_REG_MTC_ADDR_3_CLEAR                 = 0xbb,
             OBC_REG_RTOS_STATUS0                     = 0x90,
             OBC_REG_PREVIOUSENDPOINT                 = 0xa0,
         }
@@ -249,6 +261,254 @@ namespace Devices.Models
             OBC_SCF_TE_Addr_3_Clear_Enable,
             OBC_SCF_TE_Addr_3_Clear_nReset,
             OBC_SCF_TE_Addr_3_Clear_COMM_TR,
+            OBC_SCF_MTC_Addr_0_Set_ScanEnabled,
+            OBC_SCF_MTC_Addr_0_Set_Detected,
+            OBC_SCF_MTC_Addr_0_Set_Type,
+            OBC_SCF_MTC_Addr_0_Set_ENABLE_1,
+            OBC_SCF_MTC_Addr_0_Set_ENABLE_2,
+            OBC_SCF_MTC_Addr_0_Set_SEL_I2C_1,
+            OBC_SCF_MTC_Addr_0_Set_SEL_I2C_2,
+            OBC_SCF_MTC_Addr_0_Set_SEL_UART_1,
+            OBC_SCF_MTC_Addr_0_Set_SEL_UART_2,
+            OBC_SCF_MTC_Addr_0_Set_SEL_UART_3,
+            OBC_SCF_MTC_Addr_0_Set_SEL_UART_4,
+            OBC_SCF_MTC_Addr_0_Set_SEL_UART_5,
+            OBC_SCF_MTC_Addr_0_Set_SEL_UART_6,
+            OBC_SCF_MTC_Addr_0_Set_SEL_VBAT,
+            OBC_SCF_MTC_Addr_0_Set_SEL_VBAT_ALT,
+            OBC_SCF_MTC_Addr_0_Set_SEL_VBAT_FPGA,
+            OBC_SCF_MTC_Addr_0_Set_SEL_nRESET_1,
+            OBC_SCF_MTC_Addr_0_Set_SEL_nRESET_2,
+            OBC_SCF_MTC_Addr_0_Set_SEL_nRESET_3,
+            OBC_SCF_MTC_Addr_0_Set_SEL_CS_1,
+            OBC_SCF_MTC_Addr_0_Set_SEL_CS_2,
+            OBC_SCF_MTC_Addr_0_Set_SEL_CS_3,
+            OBC_SCF_MTC_Addr_0_Set_SEL_CS_4,
+            OBC_SCF_MTC_Addr_0_Set_SEL_CS_5,
+            OBC_SCF_MTC_Addr_0_Set_SEL_CS_6,
+            OBC_SCF_MTC_Addr_0_Set_SEL_SPI_1,
+            OBC_SCF_MTC_Addr_0_Set_SEL_SPI_2,
+            OBC_SCF_MTC_Addr_0_Set_SEL_CAN_1,
+            OBC_SCF_MTC_Addr_0_Set_SEL_CAN_2,
+            OBC_SCF_MTC_Addr_0_Set_SEL_CAN_3,
+            OBC_SCF_MTC_Addr_0_Set_SEL_RS422,
+            OBC_SCF_MTC_Addr_0_Clear_ScanEnabled,
+            OBC_SCF_MTC_Addr_0_Clear_Detected,
+            OBC_SCF_MTC_Addr_0_Clear_Type,
+            OBC_SCF_MTC_Addr_0_Clear_ENABLE_1,
+            OBC_SCF_MTC_Addr_0_Clear_ENABLE_2,
+            OBC_SCF_MTC_Addr_0_Clear_SEL_I2C_1,
+            OBC_SCF_MTC_Addr_0_Clear_SEL_I2C_2,
+            OBC_SCF_MTC_Addr_0_Clear_SEL_UART_1,
+            OBC_SCF_MTC_Addr_0_Clear_SEL_UART_2,
+            OBC_SCF_MTC_Addr_0_Clear_SEL_UART_3,
+            OBC_SCF_MTC_Addr_0_Clear_SEL_UART_4,
+            OBC_SCF_MTC_Addr_0_Clear_SEL_UART_5,
+            OBC_SCF_MTC_Addr_0_Clear_SEL_UART_6,
+            OBC_SCF_MTC_Addr_0_Clear_SEL_VBAT,
+            OBC_SCF_MTC_Addr_0_Clear_SEL_VBAT_ALT,
+            OBC_SCF_MTC_Addr_0_Clear_SEL_VBAT_FPGA,
+            OBC_SCF_MTC_Addr_0_Clear_SEL_nRESET_1,
+            OBC_SCF_MTC_Addr_0_Clear_SEL_nRESET_2,
+            OBC_SCF_MTC_Addr_0_Clear_SEL_nRESET_3,
+            OBC_SCF_MTC_Addr_0_Clear_SEL_CS_1,
+            OBC_SCF_MTC_Addr_0_Clear_SEL_CS_2,
+            OBC_SCF_MTC_Addr_0_Clear_SEL_CS_3,
+            OBC_SCF_MTC_Addr_0_Clear_SEL_CS_4,
+            OBC_SCF_MTC_Addr_0_Clear_SEL_CS_5,
+            OBC_SCF_MTC_Addr_0_Clear_SEL_CS_6,
+            OBC_SCF_MTC_Addr_0_Clear_SEL_SPI_1,
+            OBC_SCF_MTC_Addr_0_Clear_SEL_SPI_2,
+            OBC_SCF_MTC_Addr_0_Clear_SEL_CAN_1,
+            OBC_SCF_MTC_Addr_0_Clear_SEL_CAN_2,
+            OBC_SCF_MTC_Addr_0_Clear_SEL_CAN_3,
+            OBC_SCF_MTC_Addr_0_Clear_SEL_RS422,
+            OBC_SCF_MTC_Addr_1_Set_ScanEnabled,
+            OBC_SCF_MTC_Addr_1_Set_Detected,
+            OBC_SCF_MTC_Addr_1_Set_Type,
+            OBC_SCF_MTC_Addr_1_Set_ENABLE_1,
+            OBC_SCF_MTC_Addr_1_Set_ENABLE_2,
+            OBC_SCF_MTC_Addr_1_Set_SEL_I2C_1,
+            OBC_SCF_MTC_Addr_1_Set_SEL_I2C_2,
+            OBC_SCF_MTC_Addr_1_Set_SEL_UART_1,
+            OBC_SCF_MTC_Addr_1_Set_SEL_UART_2,
+            OBC_SCF_MTC_Addr_1_Set_SEL_UART_3,
+            OBC_SCF_MTC_Addr_1_Set_SEL_UART_4,
+            OBC_SCF_MTC_Addr_1_Set_SEL_UART_5,
+            OBC_SCF_MTC_Addr_1_Set_SEL_UART_6,
+            OBC_SCF_MTC_Addr_1_Set_SEL_VBAT,
+            OBC_SCF_MTC_Addr_1_Set_SEL_VBAT_ALT,
+            OBC_SCF_MTC_Addr_1_Set_SEL_VBAT_FPGA,
+            OBC_SCF_MTC_Addr_1_Set_SEL_nRESET_1,
+            OBC_SCF_MTC_Addr_1_Set_SEL_nRESET_2,
+            OBC_SCF_MTC_Addr_1_Set_SEL_nRESET_3,
+            OBC_SCF_MTC_Addr_1_Set_SEL_CS_1,
+            OBC_SCF_MTC_Addr_1_Set_SEL_CS_2,
+            OBC_SCF_MTC_Addr_1_Set_SEL_CS_3,
+            OBC_SCF_MTC_Addr_1_Set_SEL_CS_4,
+            OBC_SCF_MTC_Addr_1_Set_SEL_CS_5,
+            OBC_SCF_MTC_Addr_1_Set_SEL_CS_6,
+            OBC_SCF_MTC_Addr_1_Set_SEL_SPI_1,
+            OBC_SCF_MTC_Addr_1_Set_SEL_SPI_2,
+            OBC_SCF_MTC_Addr_1_Set_SEL_CAN_1,
+            OBC_SCF_MTC_Addr_1_Set_SEL_CAN_2,
+            OBC_SCF_MTC_Addr_1_Set_SEL_CAN_3,
+            OBC_SCF_MTC_Addr_1_Set_SEL_RS422,
+            OBC_SCF_MTC_Addr_1_Clear_ScanEnabled,
+            OBC_SCF_MTC_Addr_1_Clear_Detected,
+            OBC_SCF_MTC_Addr_1_Clear_Type,
+            OBC_SCF_MTC_Addr_1_Clear_ENABLE_1,
+            OBC_SCF_MTC_Addr_1_Clear_ENABLE_2,
+            OBC_SCF_MTC_Addr_1_Clear_SEL_I2C_1,
+            OBC_SCF_MTC_Addr_1_Clear_SEL_I2C_2,
+            OBC_SCF_MTC_Addr_1_Clear_SEL_UART_1,
+            OBC_SCF_MTC_Addr_1_Clear_SEL_UART_2,
+            OBC_SCF_MTC_Addr_1_Clear_SEL_UART_3,
+            OBC_SCF_MTC_Addr_1_Clear_SEL_UART_4,
+            OBC_SCF_MTC_Addr_1_Clear_SEL_UART_5,
+            OBC_SCF_MTC_Addr_1_Clear_SEL_UART_6,
+            OBC_SCF_MTC_Addr_1_Clear_SEL_VBAT,
+            OBC_SCF_MTC_Addr_1_Clear_SEL_VBAT_ALT,
+            OBC_SCF_MTC_Addr_1_Clear_SEL_VBAT_FPGA,
+            OBC_SCF_MTC_Addr_1_Clear_SEL_nRESET_1,
+            OBC_SCF_MTC_Addr_1_Clear_SEL_nRESET_2,
+            OBC_SCF_MTC_Addr_1_Clear_SEL_nRESET_3,
+            OBC_SCF_MTC_Addr_1_Clear_SEL_CS_1,
+            OBC_SCF_MTC_Addr_1_Clear_SEL_CS_2,
+            OBC_SCF_MTC_Addr_1_Clear_SEL_CS_3,
+            OBC_SCF_MTC_Addr_1_Clear_SEL_CS_4,
+            OBC_SCF_MTC_Addr_1_Clear_SEL_CS_5,
+            OBC_SCF_MTC_Addr_1_Clear_SEL_CS_6,
+            OBC_SCF_MTC_Addr_1_Clear_SEL_SPI_1,
+            OBC_SCF_MTC_Addr_1_Clear_SEL_SPI_2,
+            OBC_SCF_MTC_Addr_1_Clear_SEL_CAN_1,
+            OBC_SCF_MTC_Addr_1_Clear_SEL_CAN_2,
+            OBC_SCF_MTC_Addr_1_Clear_SEL_CAN_3,
+            OBC_SCF_MTC_Addr_1_Clear_SEL_RS422,
+            OBC_SCF_MTC_Addr_2_Set_ScanEnabled,
+            OBC_SCF_MTC_Addr_2_Set_Detected,
+            OBC_SCF_MTC_Addr_2_Set_Type,
+            OBC_SCF_MTC_Addr_2_Set_ENABLE_1,
+            OBC_SCF_MTC_Addr_2_Set_ENABLE_2,
+            OBC_SCF_MTC_Addr_2_Set_SEL_I2C_1,
+            OBC_SCF_MTC_Addr_2_Set_SEL_I2C_2,
+            OBC_SCF_MTC_Addr_2_Set_SEL_UART_1,
+            OBC_SCF_MTC_Addr_2_Set_SEL_UART_2,
+            OBC_SCF_MTC_Addr_2_Set_SEL_UART_3,
+            OBC_SCF_MTC_Addr_2_Set_SEL_UART_4,
+            OBC_SCF_MTC_Addr_2_Set_SEL_UART_5,
+            OBC_SCF_MTC_Addr_2_Set_SEL_UART_6,
+            OBC_SCF_MTC_Addr_2_Set_SEL_VBAT,
+            OBC_SCF_MTC_Addr_2_Set_SEL_VBAT_ALT,
+            OBC_SCF_MTC_Addr_2_Set_SEL_VBAT_FPGA,
+            OBC_SCF_MTC_Addr_2_Set_SEL_nRESET_1,
+            OBC_SCF_MTC_Addr_2_Set_SEL_nRESET_2,
+            OBC_SCF_MTC_Addr_2_Set_SEL_nRESET_3,
+            OBC_SCF_MTC_Addr_2_Set_SEL_CS_1,
+            OBC_SCF_MTC_Addr_2_Set_SEL_CS_2,
+            OBC_SCF_MTC_Addr_2_Set_SEL_CS_3,
+            OBC_SCF_MTC_Addr_2_Set_SEL_CS_4,
+            OBC_SCF_MTC_Addr_2_Set_SEL_CS_5,
+            OBC_SCF_MTC_Addr_2_Set_SEL_CS_6,
+            OBC_SCF_MTC_Addr_2_Set_SEL_SPI_1,
+            OBC_SCF_MTC_Addr_2_Set_SEL_SPI_2,
+            OBC_SCF_MTC_Addr_2_Set_SEL_CAN_1,
+            OBC_SCF_MTC_Addr_2_Set_SEL_CAN_2,
+            OBC_SCF_MTC_Addr_2_Set_SEL_CAN_3,
+            OBC_SCF_MTC_Addr_2_Set_SEL_RS422,
+            OBC_SCF_MTC_Addr_2_Clear_ScanEnabled,
+            OBC_SCF_MTC_Addr_2_Clear_Detected,
+            OBC_SCF_MTC_Addr_2_Clear_Type,
+            OBC_SCF_MTC_Addr_2_Clear_ENABLE_1,
+            OBC_SCF_MTC_Addr_2_Clear_ENABLE_2,
+            OBC_SCF_MTC_Addr_2_Clear_SEL_I2C_1,
+            OBC_SCF_MTC_Addr_2_Clear_SEL_I2C_2,
+            OBC_SCF_MTC_Addr_2_Clear_SEL_UART_1,
+            OBC_SCF_MTC_Addr_2_Clear_SEL_UART_2,
+            OBC_SCF_MTC_Addr_2_Clear_SEL_UART_3,
+            OBC_SCF_MTC_Addr_2_Clear_SEL_UART_4,
+            OBC_SCF_MTC_Addr_2_Clear_SEL_UART_5,
+            OBC_SCF_MTC_Addr_2_Clear_SEL_UART_6,
+            OBC_SCF_MTC_Addr_2_Clear_SEL_VBAT,
+            OBC_SCF_MTC_Addr_2_Clear_SEL_VBAT_ALT,
+            OBC_SCF_MTC_Addr_2_Clear_SEL_VBAT_FPGA,
+            OBC_SCF_MTC_Addr_2_Clear_SEL_nRESET_1,
+            OBC_SCF_MTC_Addr_2_Clear_SEL_nRESET_2,
+            OBC_SCF_MTC_Addr_2_Clear_SEL_nRESET_3,
+            OBC_SCF_MTC_Addr_2_Clear_SEL_CS_1,
+            OBC_SCF_MTC_Addr_2_Clear_SEL_CS_2,
+            OBC_SCF_MTC_Addr_2_Clear_SEL_CS_3,
+            OBC_SCF_MTC_Addr_2_Clear_SEL_CS_4,
+            OBC_SCF_MTC_Addr_2_Clear_SEL_CS_5,
+            OBC_SCF_MTC_Addr_2_Clear_SEL_CS_6,
+            OBC_SCF_MTC_Addr_2_Clear_SEL_SPI_1,
+            OBC_SCF_MTC_Addr_2_Clear_SEL_SPI_2,
+            OBC_SCF_MTC_Addr_2_Clear_SEL_CAN_1,
+            OBC_SCF_MTC_Addr_2_Clear_SEL_CAN_2,
+            OBC_SCF_MTC_Addr_2_Clear_SEL_CAN_3,
+            OBC_SCF_MTC_Addr_2_Clear_SEL_RS422,
+            OBC_SCF_MTC_Addr_3_Set_ScanEnabled,
+            OBC_SCF_MTC_Addr_3_Set_Detected,
+            OBC_SCF_MTC_Addr_3_Set_Type,
+            OBC_SCF_MTC_Addr_3_Set_ENABLE_1,
+            OBC_SCF_MTC_Addr_3_Set_ENABLE_2,
+            OBC_SCF_MTC_Addr_3_Set_SEL_I2C_1,
+            OBC_SCF_MTC_Addr_3_Set_SEL_I2C_2,
+            OBC_SCF_MTC_Addr_3_Set_SEL_UART_1,
+            OBC_SCF_MTC_Addr_3_Set_SEL_UART_2,
+            OBC_SCF_MTC_Addr_3_Set_SEL_UART_3,
+            OBC_SCF_MTC_Addr_3_Set_SEL_UART_4,
+            OBC_SCF_MTC_Addr_3_Set_SEL_UART_5,
+            OBC_SCF_MTC_Addr_3_Set_SEL_UART_6,
+            OBC_SCF_MTC_Addr_3_Set_SEL_VBAT,
+            OBC_SCF_MTC_Addr_3_Set_SEL_VBAT_ALT,
+            OBC_SCF_MTC_Addr_3_Set_SEL_VBAT_FPGA,
+            OBC_SCF_MTC_Addr_3_Set_SEL_nRESET_1,
+            OBC_SCF_MTC_Addr_3_Set_SEL_nRESET_2,
+            OBC_SCF_MTC_Addr_3_Set_SEL_nRESET_3,
+            OBC_SCF_MTC_Addr_3_Set_SEL_CS_1,
+            OBC_SCF_MTC_Addr_3_Set_SEL_CS_2,
+            OBC_SCF_MTC_Addr_3_Set_SEL_CS_3,
+            OBC_SCF_MTC_Addr_3_Set_SEL_CS_4,
+            OBC_SCF_MTC_Addr_3_Set_SEL_CS_5,
+            OBC_SCF_MTC_Addr_3_Set_SEL_CS_6,
+            OBC_SCF_MTC_Addr_3_Set_SEL_SPI_1,
+            OBC_SCF_MTC_Addr_3_Set_SEL_SPI_2,
+            OBC_SCF_MTC_Addr_3_Set_SEL_CAN_1,
+            OBC_SCF_MTC_Addr_3_Set_SEL_CAN_2,
+            OBC_SCF_MTC_Addr_3_Set_SEL_CAN_3,
+            OBC_SCF_MTC_Addr_3_Set_SEL_RS422,
+            OBC_SCF_MTC_Addr_3_Clear_ScanEnabled,
+            OBC_SCF_MTC_Addr_3_Clear_Detected,
+            OBC_SCF_MTC_Addr_3_Clear_Type,
+            OBC_SCF_MTC_Addr_3_Clear_ENABLE_1,
+            OBC_SCF_MTC_Addr_3_Clear_ENABLE_2,
+            OBC_SCF_MTC_Addr_3_Clear_SEL_I2C_1,
+            OBC_SCF_MTC_Addr_3_Clear_SEL_I2C_2,
+            OBC_SCF_MTC_Addr_3_Clear_SEL_UART_1,
+            OBC_SCF_MTC_Addr_3_Clear_SEL_UART_2,
+            OBC_SCF_MTC_Addr_3_Clear_SEL_UART_3,
+            OBC_SCF_MTC_Addr_3_Clear_SEL_UART_4,
+            OBC_SCF_MTC_Addr_3_Clear_SEL_UART_5,
+            OBC_SCF_MTC_Addr_3_Clear_SEL_UART_6,
+            OBC_SCF_MTC_Addr_3_Clear_SEL_VBAT,
+            OBC_SCF_MTC_Addr_3_Clear_SEL_VBAT_ALT,
+            OBC_SCF_MTC_Addr_3_Clear_SEL_VBAT_FPGA,
+            OBC_SCF_MTC_Addr_3_Clear_SEL_nRESET_1,
+            OBC_SCF_MTC_Addr_3_Clear_SEL_nRESET_2,
+            OBC_SCF_MTC_Addr_3_Clear_SEL_nRESET_3,
+            OBC_SCF_MTC_Addr_3_Clear_SEL_CS_1,
+            OBC_SCF_MTC_Addr_3_Clear_SEL_CS_2,
+            OBC_SCF_MTC_Addr_3_Clear_SEL_CS_3,
+            OBC_SCF_MTC_Addr_3_Clear_SEL_CS_4,
+            OBC_SCF_MTC_Addr_3_Clear_SEL_CS_5,
+            OBC_SCF_MTC_Addr_3_Clear_SEL_CS_6,
+            OBC_SCF_MTC_Addr_3_Clear_SEL_SPI_1,
+            OBC_SCF_MTC_Addr_3_Clear_SEL_SPI_2,
+            OBC_SCF_MTC_Addr_3_Clear_SEL_CAN_1,
+            OBC_SCF_MTC_Addr_3_Clear_SEL_CAN_2,
+            OBC_SCF_MTC_Addr_3_Clear_SEL_CAN_3,
+            OBC_SCF_MTC_Addr_3_Clear_SEL_RS422,
         }
         [StructLayout(LayoutKind.Explicit, Pack = 1)]
         public struct RegisterData
@@ -367,6 +627,8 @@ namespace Devices.Models
             public RegCSBoard_Current7I2 RegCSBoard_Current7I2;
             [FieldOffset(0)]
             public RegTE_Config RegTE_Config;
+            [FieldOffset(0)]
+            public RegMTC_Config RegMTC_Config;
             [FieldOffset(0)]
             public RegRTOS_Status0 RegRTOS_Status0;
             [FieldOffset(0)]
@@ -1253,8 +1515,8 @@ namespace Devices.Models
 
             public UInt32 Type
             {
-                get { return (UInt32)((data0 & (UInt32)0x0000003c) >> 2); } 
-                set { data0 = (UInt32)((data0 & ~(UInt32)0x0000003c) | (( (UInt32)(value) & 0x0000000f) << 2)); }
+                get { return (UInt32)((data0 & (UInt32)0x0000000c) >> 2); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x0000000c) | (( (UInt32)(value) & 0x00000003) << 2)); }
             }
 
             public byte SEL_CAN0
@@ -1326,6 +1588,200 @@ namespace Devices.Models
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
+        public struct RegMTC_Config
+        {
+            [FieldOffset(0)]
+            UInt32 data0;
+
+            public byte ScanEnabled
+            {
+                get { return (byte)((data0 & (UInt32)0x00000001) >> 0); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
+            }
+
+            public byte Detected
+            {
+                get { return (byte)((data0 & (UInt32)0x00000002) >> 1); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000002) | (( (UInt32)(value) & 0x00000001) << 1)); }
+            }
+
+            public UInt32 Type
+            {
+                get { return (UInt32)((data0 & (UInt32)0x0000000c) >> 2); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x0000000c) | (( (UInt32)(value) & 0x00000003) << 2)); }
+            }
+
+            public byte ENABLE_1
+            {
+                get { return (byte)((data0 & (UInt32)0x00000010) >> 4); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000010) | (( (UInt32)(value) & 0x00000001) << 4)); }
+            }
+
+            public byte ENABLE_2
+            {
+                get { return (byte)((data0 & (UInt32)0x00000020) >> 5); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000020) | (( (UInt32)(value) & 0x00000001) << 5)); }
+            }
+
+            public byte SEL_I2C_1
+            {
+                get { return (byte)((data0 & (UInt32)0x00000040) >> 6); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000040) | (( (UInt32)(value) & 0x00000001) << 6)); }
+            }
+
+            public byte SEL_I2C_2
+            {
+                get { return (byte)((data0 & (UInt32)0x00000080) >> 7); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000080) | (( (UInt32)(value) & 0x00000001) << 7)); }
+            }
+
+            public byte SEL_UART_1
+            {
+                get { return (byte)((data0 & (UInt32)0x00000100) >> 8); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000100) | (( (UInt32)(value) & 0x00000001) << 8)); }
+            }
+
+            public byte SEL_UART_2
+            {
+                get { return (byte)((data0 & (UInt32)0x00000200) >> 9); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000200) | (( (UInt32)(value) & 0x00000001) << 9)); }
+            }
+
+            public byte SEL_UART_3
+            {
+                get { return (byte)((data0 & (UInt32)0x00000400) >> 10); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000400) | (( (UInt32)(value) & 0x00000001) << 10)); }
+            }
+
+            public byte SEL_UART_4
+            {
+                get { return (byte)((data0 & (UInt32)0x00000800) >> 11); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000800) | (( (UInt32)(value) & 0x00000001) << 11)); }
+            }
+
+            public byte SEL_UART_5
+            {
+                get { return (byte)((data0 & (UInt32)0x00001000) >> 12); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00001000) | (( (UInt32)(value) & 0x00000001) << 12)); }
+            }
+
+            public byte SEL_UART_6
+            {
+                get { return (byte)((data0 & (UInt32)0x00002000) >> 13); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00002000) | (( (UInt32)(value) & 0x00000001) << 13)); }
+            }
+
+            public byte SEL_VBAT
+            {
+                get { return (byte)((data0 & (UInt32)0x00004000) >> 14); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00004000) | (( (UInt32)(value) & 0x00000001) << 14)); }
+            }
+
+            public byte SEL_VBAT_ALT
+            {
+                get { return (byte)((data0 & (UInt32)0x00008000) >> 15); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00008000) | (( (UInt32)(value) & 0x00000001) << 15)); }
+            }
+
+            public byte SEL_VBAT_FPGA
+            {
+                get { return (byte)((data0 & (UInt32)0x00010000) >> 16); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00010000) | (( (UInt32)(value) & 0x00000001) << 16)); }
+            }
+
+            public byte SEL_nRESET_1
+            {
+                get { return (byte)((data0 & (UInt32)0x00020000) >> 17); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00020000) | (( (UInt32)(value) & 0x00000001) << 17)); }
+            }
+
+            public byte SEL_nRESET_2
+            {
+                get { return (byte)((data0 & (UInt32)0x00040000) >> 18); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00040000) | (( (UInt32)(value) & 0x00000001) << 18)); }
+            }
+
+            public byte SEL_nRESET_3
+            {
+                get { return (byte)((data0 & (UInt32)0x00080000) >> 19); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00080000) | (( (UInt32)(value) & 0x00000001) << 19)); }
+            }
+
+            public byte SEL_CS_1
+            {
+                get { return (byte)((data0 & (UInt32)0x00100000) >> 20); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00100000) | (( (UInt32)(value) & 0x00000001) << 20)); }
+            }
+
+            public byte SEL_CS_2
+            {
+                get { return (byte)((data0 & (UInt32)0x00200000) >> 21); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00200000) | (( (UInt32)(value) & 0x00000001) << 21)); }
+            }
+
+            public byte SEL_CS_3
+            {
+                get { return (byte)((data0 & (UInt32)0x00400000) >> 22); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00400000) | (( (UInt32)(value) & 0x00000001) << 22)); }
+            }
+
+            public byte SEL_CS_4
+            {
+                get { return (byte)((data0 & (UInt32)0x00800000) >> 23); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x00800000) | (( (UInt32)(value) & 0x00000001) << 23)); }
+            }
+
+            public byte SEL_CS_5
+            {
+                get { return (byte)((data0 & (UInt32)0x01000000) >> 24); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x01000000) | (( (UInt32)(value) & 0x00000001) << 24)); }
+            }
+
+            public byte SEL_CS_6
+            {
+                get { return (byte)((data0 & (UInt32)0x02000000) >> 25); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x02000000) | (( (UInt32)(value) & 0x00000001) << 25)); }
+            }
+
+            public byte SEL_SPI_1
+            {
+                get { return (byte)((data0 & (UInt32)0x04000000) >> 26); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x04000000) | (( (UInt32)(value) & 0x00000001) << 26)); }
+            }
+
+            public byte SEL_SPI_2
+            {
+                get { return (byte)((data0 & (UInt32)0x08000000) >> 27); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x08000000) | (( (UInt32)(value) & 0x00000001) << 27)); }
+            }
+
+            public byte SEL_CAN_1
+            {
+                get { return (byte)((data0 & (UInt32)0x10000000) >> 28); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x10000000) | (( (UInt32)(value) & 0x00000001) << 28)); }
+            }
+
+            public byte SEL_CAN_2
+            {
+                get { return (byte)((data0 & (UInt32)0x20000000) >> 29); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x20000000) | (( (UInt32)(value) & 0x00000001) << 29)); }
+            }
+
+            public byte SEL_CAN_3
+            {
+                get { return (byte)((data0 & (UInt32)0x40000000) >> 30); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x40000000) | (( (UInt32)(value) & 0x00000001) << 30)); }
+            }
+
+            public byte SEL_RS422
+            {
+                get { return (byte)((data0 & (UInt32)0x80000000) >> 31); } 
+                set { data0 = (UInt32)((data0 & ~(UInt32)0x80000000) | (( (UInt32)(value) & 0x00000001) << 31)); }
+            }
+
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 0)]
         public struct RegRTOS_Status0
         {
             [FieldOffset(0)]
@@ -1383,48 +1839,6 @@ namespace Devices.Models
             {
                 get { return Convert.ToBoolean((data0 & (UInt32)0x00000100) >> 8); } 
                 set { data0 = (UInt32)((data0 & ~(UInt32)0x00000100) | (( Convert.ToUInt32(value) & 0x00000001) << 8)); }
-            }
-
-            public bool UARTTargetIncomingOverflow
-            {
-                get { return Convert.ToBoolean((data0 & (UInt32)0x00000200) >> 9); } 
-                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000200) | (( Convert.ToUInt32(value) & 0x00000001) << 9)); }
-            }
-
-            public bool UARTTargetTxHBOverflow
-            {
-                get { return Convert.ToBoolean((data0 & (UInt32)0x00000400) >> 10); } 
-                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000400) | (( Convert.ToUInt32(value) & 0x00000001) << 10)); }
-            }
-
-            public bool UARTTargetRxHBOverflow
-            {
-                get { return Convert.ToBoolean((data0 & (UInt32)0x00000800) >> 11); } 
-                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000800) | (( Convert.ToUInt32(value) & 0x00000001) << 11)); }
-            }
-
-            public bool UARTTargetOutgoingOverflow
-            {
-                get { return Convert.ToBoolean((data0 & (UInt32)0x00001000) >> 12); } 
-                set { data0 = (UInt32)((data0 & ~(UInt32)0x00001000) | (( Convert.ToUInt32(value) & 0x00000001) << 12)); }
-            }
-
-            public bool GSETargetIncomingOverflow
-            {
-                get { return Convert.ToBoolean((data0 & (UInt32)0x00002000) >> 13); } 
-                set { data0 = (UInt32)((data0 & ~(UInt32)0x00002000) | (( Convert.ToUInt32(value) & 0x00000001) << 13)); }
-            }
-
-            public bool GSETargetOutgoingOverflow
-            {
-                get { return Convert.ToBoolean((data0 & (UInt32)0x00004000) >> 14); } 
-                set { data0 = (UInt32)((data0 & ~(UInt32)0x00004000) | (( Convert.ToUInt32(value) & 0x00000001) << 14)); }
-            }
-
-            public bool SERMUX_CRC_Error
-            {
-                get { return Convert.ToBoolean((data0 & (UInt32)0x00008000) >> 15); } 
-                set { data0 = (UInt32)((data0 & ~(UInt32)0x00008000) | (( Convert.ToUInt32(value) & 0x00000001) << 15)); }
             }
 
         }
@@ -1963,6 +2377,78 @@ namespace Devices.Models
         public UInt32 FullRegister_TE_Addr_3_Clear {
             get => _fullRegister_TE_Addr_3_Clear;
             set => _ = Set(ref _fullRegister_TE_Addr_3_Clear, value); 
+        }
+
+        private UInt32 _fullRegister_MTC_Addr_0;
+        public UInt32 FullRegister_MTC_Addr_0 {
+            get => _fullRegister_MTC_Addr_0;
+            set => _ = Set(ref _fullRegister_MTC_Addr_0, value); 
+        }
+
+        private UInt32 _fullRegister_MTC_Addr_0_Set;
+        public UInt32 FullRegister_MTC_Addr_0_Set {
+            get => _fullRegister_MTC_Addr_0_Set;
+            set => _ = Set(ref _fullRegister_MTC_Addr_0_Set, value); 
+        }
+
+        private UInt32 _fullRegister_MTC_Addr_0_Clear;
+        public UInt32 FullRegister_MTC_Addr_0_Clear {
+            get => _fullRegister_MTC_Addr_0_Clear;
+            set => _ = Set(ref _fullRegister_MTC_Addr_0_Clear, value); 
+        }
+
+        private UInt32 _fullRegister_MTC_Addr_1;
+        public UInt32 FullRegister_MTC_Addr_1 {
+            get => _fullRegister_MTC_Addr_1;
+            set => _ = Set(ref _fullRegister_MTC_Addr_1, value); 
+        }
+
+        private UInt32 _fullRegister_MTC_Addr_1_Set;
+        public UInt32 FullRegister_MTC_Addr_1_Set {
+            get => _fullRegister_MTC_Addr_1_Set;
+            set => _ = Set(ref _fullRegister_MTC_Addr_1_Set, value); 
+        }
+
+        private UInt32 _fullRegister_MTC_Addr_1_Clear;
+        public UInt32 FullRegister_MTC_Addr_1_Clear {
+            get => _fullRegister_MTC_Addr_1_Clear;
+            set => _ = Set(ref _fullRegister_MTC_Addr_1_Clear, value); 
+        }
+
+        private UInt32 _fullRegister_MTC_Addr_2;
+        public UInt32 FullRegister_MTC_Addr_2 {
+            get => _fullRegister_MTC_Addr_2;
+            set => _ = Set(ref _fullRegister_MTC_Addr_2, value); 
+        }
+
+        private UInt32 _fullRegister_MTC_Addr_2_Set;
+        public UInt32 FullRegister_MTC_Addr_2_Set {
+            get => _fullRegister_MTC_Addr_2_Set;
+            set => _ = Set(ref _fullRegister_MTC_Addr_2_Set, value); 
+        }
+
+        private UInt32 _fullRegister_MTC_Addr_2_Clear;
+        public UInt32 FullRegister_MTC_Addr_2_Clear {
+            get => _fullRegister_MTC_Addr_2_Clear;
+            set => _ = Set(ref _fullRegister_MTC_Addr_2_Clear, value); 
+        }
+
+        private UInt32 _fullRegister_MTC_Addr_3;
+        public UInt32 FullRegister_MTC_Addr_3 {
+            get => _fullRegister_MTC_Addr_3;
+            set => _ = Set(ref _fullRegister_MTC_Addr_3, value); 
+        }
+
+        private UInt32 _fullRegister_MTC_Addr_3_Set;
+        public UInt32 FullRegister_MTC_Addr_3_Set {
+            get => _fullRegister_MTC_Addr_3_Set;
+            set => _ = Set(ref _fullRegister_MTC_Addr_3_Set, value); 
+        }
+
+        private UInt32 _fullRegister_MTC_Addr_3_Clear;
+        public UInt32 FullRegister_MTC_Addr_3_Clear {
+            get => _fullRegister_MTC_Addr_3_Clear;
+            set => _ = Set(ref _fullRegister_MTC_Addr_3_Clear, value); 
         }
 
         private UInt32 _fullRegister_RTOS_Status0;
@@ -5624,6 +6110,4111 @@ namespace Devices.Models
             set => _ = Set(ref _TE_Addr_3_Clear_COMM_TR, value);
         }
         
+        /*************** Min and Max Properties for MTC_Addr_0 types *****************************/
+        /*************** Properties for MTC_Addr_0 register **************************************/
+        private bool _MTC_Addr_0_ScanEnabledIsSet;
+        public bool MTC_Addr_0_ScanEnabledIsSet {
+            get => _MTC_Addr_0_ScanEnabledIsSet;
+            set => _ = Set(ref _MTC_Addr_0_ScanEnabledIsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_ScanEnabled;
+        public Enabled MTC_Addr_0_ScanEnabled {
+            get => _MTC_Addr_0_ScanEnabled;
+            set => _ = Set(ref _MTC_Addr_0_ScanEnabled, value);
+        }
+        
+        private bool _MTC_Addr_0_DetectedIsSet;
+        public bool MTC_Addr_0_DetectedIsSet {
+            get => _MTC_Addr_0_DetectedIsSet;
+            set => _ = Set(ref _MTC_Addr_0_DetectedIsSet, value); 
+        }
+        private byte _MTC_Addr_0_Detected;
+        public byte MTC_Addr_0_Detected {
+            get => _MTC_Addr_0_Detected;
+            set => _ = Set(ref _MTC_Addr_0_Detected, value);
+        }
+        
+        private bool _MTC_Addr_0_TypeIsSet;
+        public bool MTC_Addr_0_TypeIsSet {
+            get => _MTC_Addr_0_TypeIsSet;
+            set => _ = Set(ref _MTC_Addr_0_TypeIsSet, value); 
+        }
+        private UInt32 _MTC_Addr_0_Type;
+        public UInt32 MTC_Addr_0_Type {
+            get => _MTC_Addr_0_Type;
+            set => _ = Set(ref _MTC_Addr_0_Type, value);
+        }
+        
+        private bool _MTC_Addr_0_ENABLE_1IsSet;
+        public bool MTC_Addr_0_ENABLE_1IsSet {
+            get => _MTC_Addr_0_ENABLE_1IsSet;
+            set => _ = Set(ref _MTC_Addr_0_ENABLE_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_ENABLE_1;
+        public Enabled MTC_Addr_0_ENABLE_1 {
+            get => _MTC_Addr_0_ENABLE_1;
+            set => _ = Set(ref _MTC_Addr_0_ENABLE_1, value);
+        }
+        
+        private bool _MTC_Addr_0_ENABLE_2IsSet;
+        public bool MTC_Addr_0_ENABLE_2IsSet {
+            get => _MTC_Addr_0_ENABLE_2IsSet;
+            set => _ = Set(ref _MTC_Addr_0_ENABLE_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_ENABLE_2;
+        public Enabled MTC_Addr_0_ENABLE_2 {
+            get => _MTC_Addr_0_ENABLE_2;
+            set => _ = Set(ref _MTC_Addr_0_ENABLE_2, value);
+        }
+        
+        private bool _MTC_Addr_0_SEL_I2C_1IsSet;
+        public bool MTC_Addr_0_SEL_I2C_1IsSet {
+            get => _MTC_Addr_0_SEL_I2C_1IsSet;
+            set => _ = Set(ref _MTC_Addr_0_SEL_I2C_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_SEL_I2C_1;
+        public Enabled MTC_Addr_0_SEL_I2C_1 {
+            get => _MTC_Addr_0_SEL_I2C_1;
+            set => _ = Set(ref _MTC_Addr_0_SEL_I2C_1, value);
+        }
+        
+        private bool _MTC_Addr_0_SEL_I2C_2IsSet;
+        public bool MTC_Addr_0_SEL_I2C_2IsSet {
+            get => _MTC_Addr_0_SEL_I2C_2IsSet;
+            set => _ = Set(ref _MTC_Addr_0_SEL_I2C_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_SEL_I2C_2;
+        public Enabled MTC_Addr_0_SEL_I2C_2 {
+            get => _MTC_Addr_0_SEL_I2C_2;
+            set => _ = Set(ref _MTC_Addr_0_SEL_I2C_2, value);
+        }
+        
+        private bool _MTC_Addr_0_SEL_UART_1IsSet;
+        public bool MTC_Addr_0_SEL_UART_1IsSet {
+            get => _MTC_Addr_0_SEL_UART_1IsSet;
+            set => _ = Set(ref _MTC_Addr_0_SEL_UART_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_SEL_UART_1;
+        public Enabled MTC_Addr_0_SEL_UART_1 {
+            get => _MTC_Addr_0_SEL_UART_1;
+            set => _ = Set(ref _MTC_Addr_0_SEL_UART_1, value);
+        }
+        
+        private bool _MTC_Addr_0_SEL_UART_2IsSet;
+        public bool MTC_Addr_0_SEL_UART_2IsSet {
+            get => _MTC_Addr_0_SEL_UART_2IsSet;
+            set => _ = Set(ref _MTC_Addr_0_SEL_UART_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_SEL_UART_2;
+        public Enabled MTC_Addr_0_SEL_UART_2 {
+            get => _MTC_Addr_0_SEL_UART_2;
+            set => _ = Set(ref _MTC_Addr_0_SEL_UART_2, value);
+        }
+        
+        private bool _MTC_Addr_0_SEL_UART_3IsSet;
+        public bool MTC_Addr_0_SEL_UART_3IsSet {
+            get => _MTC_Addr_0_SEL_UART_3IsSet;
+            set => _ = Set(ref _MTC_Addr_0_SEL_UART_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_SEL_UART_3;
+        public Enabled MTC_Addr_0_SEL_UART_3 {
+            get => _MTC_Addr_0_SEL_UART_3;
+            set => _ = Set(ref _MTC_Addr_0_SEL_UART_3, value);
+        }
+        
+        private bool _MTC_Addr_0_SEL_UART_4IsSet;
+        public bool MTC_Addr_0_SEL_UART_4IsSet {
+            get => _MTC_Addr_0_SEL_UART_4IsSet;
+            set => _ = Set(ref _MTC_Addr_0_SEL_UART_4IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_SEL_UART_4;
+        public Enabled MTC_Addr_0_SEL_UART_4 {
+            get => _MTC_Addr_0_SEL_UART_4;
+            set => _ = Set(ref _MTC_Addr_0_SEL_UART_4, value);
+        }
+        
+        private bool _MTC_Addr_0_SEL_UART_5IsSet;
+        public bool MTC_Addr_0_SEL_UART_5IsSet {
+            get => _MTC_Addr_0_SEL_UART_5IsSet;
+            set => _ = Set(ref _MTC_Addr_0_SEL_UART_5IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_SEL_UART_5;
+        public Enabled MTC_Addr_0_SEL_UART_5 {
+            get => _MTC_Addr_0_SEL_UART_5;
+            set => _ = Set(ref _MTC_Addr_0_SEL_UART_5, value);
+        }
+        
+        private bool _MTC_Addr_0_SEL_UART_6IsSet;
+        public bool MTC_Addr_0_SEL_UART_6IsSet {
+            get => _MTC_Addr_0_SEL_UART_6IsSet;
+            set => _ = Set(ref _MTC_Addr_0_SEL_UART_6IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_SEL_UART_6;
+        public Enabled MTC_Addr_0_SEL_UART_6 {
+            get => _MTC_Addr_0_SEL_UART_6;
+            set => _ = Set(ref _MTC_Addr_0_SEL_UART_6, value);
+        }
+        
+        private bool _MTC_Addr_0_SEL_VBATIsSet;
+        public bool MTC_Addr_0_SEL_VBATIsSet {
+            get => _MTC_Addr_0_SEL_VBATIsSet;
+            set => _ = Set(ref _MTC_Addr_0_SEL_VBATIsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_SEL_VBAT;
+        public Enabled MTC_Addr_0_SEL_VBAT {
+            get => _MTC_Addr_0_SEL_VBAT;
+            set => _ = Set(ref _MTC_Addr_0_SEL_VBAT, value);
+        }
+        
+        private bool _MTC_Addr_0_SEL_VBAT_ALTIsSet;
+        public bool MTC_Addr_0_SEL_VBAT_ALTIsSet {
+            get => _MTC_Addr_0_SEL_VBAT_ALTIsSet;
+            set => _ = Set(ref _MTC_Addr_0_SEL_VBAT_ALTIsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_SEL_VBAT_ALT;
+        public Enabled MTC_Addr_0_SEL_VBAT_ALT {
+            get => _MTC_Addr_0_SEL_VBAT_ALT;
+            set => _ = Set(ref _MTC_Addr_0_SEL_VBAT_ALT, value);
+        }
+        
+        private bool _MTC_Addr_0_SEL_VBAT_FPGAIsSet;
+        public bool MTC_Addr_0_SEL_VBAT_FPGAIsSet {
+            get => _MTC_Addr_0_SEL_VBAT_FPGAIsSet;
+            set => _ = Set(ref _MTC_Addr_0_SEL_VBAT_FPGAIsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_SEL_VBAT_FPGA;
+        public Enabled MTC_Addr_0_SEL_VBAT_FPGA {
+            get => _MTC_Addr_0_SEL_VBAT_FPGA;
+            set => _ = Set(ref _MTC_Addr_0_SEL_VBAT_FPGA, value);
+        }
+        
+        private bool _MTC_Addr_0_SEL_nRESET_1IsSet;
+        public bool MTC_Addr_0_SEL_nRESET_1IsSet {
+            get => _MTC_Addr_0_SEL_nRESET_1IsSet;
+            set => _ = Set(ref _MTC_Addr_0_SEL_nRESET_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_SEL_nRESET_1;
+        public Enabled MTC_Addr_0_SEL_nRESET_1 {
+            get => _MTC_Addr_0_SEL_nRESET_1;
+            set => _ = Set(ref _MTC_Addr_0_SEL_nRESET_1, value);
+        }
+        
+        private bool _MTC_Addr_0_SEL_nRESET_2IsSet;
+        public bool MTC_Addr_0_SEL_nRESET_2IsSet {
+            get => _MTC_Addr_0_SEL_nRESET_2IsSet;
+            set => _ = Set(ref _MTC_Addr_0_SEL_nRESET_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_SEL_nRESET_2;
+        public Enabled MTC_Addr_0_SEL_nRESET_2 {
+            get => _MTC_Addr_0_SEL_nRESET_2;
+            set => _ = Set(ref _MTC_Addr_0_SEL_nRESET_2, value);
+        }
+        
+        private bool _MTC_Addr_0_SEL_nRESET_3IsSet;
+        public bool MTC_Addr_0_SEL_nRESET_3IsSet {
+            get => _MTC_Addr_0_SEL_nRESET_3IsSet;
+            set => _ = Set(ref _MTC_Addr_0_SEL_nRESET_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_SEL_nRESET_3;
+        public Enabled MTC_Addr_0_SEL_nRESET_3 {
+            get => _MTC_Addr_0_SEL_nRESET_3;
+            set => _ = Set(ref _MTC_Addr_0_SEL_nRESET_3, value);
+        }
+        
+        private bool _MTC_Addr_0_SEL_CS_1IsSet;
+        public bool MTC_Addr_0_SEL_CS_1IsSet {
+            get => _MTC_Addr_0_SEL_CS_1IsSet;
+            set => _ = Set(ref _MTC_Addr_0_SEL_CS_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_SEL_CS_1;
+        public Enabled MTC_Addr_0_SEL_CS_1 {
+            get => _MTC_Addr_0_SEL_CS_1;
+            set => _ = Set(ref _MTC_Addr_0_SEL_CS_1, value);
+        }
+        
+        private bool _MTC_Addr_0_SEL_CS_2IsSet;
+        public bool MTC_Addr_0_SEL_CS_2IsSet {
+            get => _MTC_Addr_0_SEL_CS_2IsSet;
+            set => _ = Set(ref _MTC_Addr_0_SEL_CS_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_SEL_CS_2;
+        public Enabled MTC_Addr_0_SEL_CS_2 {
+            get => _MTC_Addr_0_SEL_CS_2;
+            set => _ = Set(ref _MTC_Addr_0_SEL_CS_2, value);
+        }
+        
+        private bool _MTC_Addr_0_SEL_CS_3IsSet;
+        public bool MTC_Addr_0_SEL_CS_3IsSet {
+            get => _MTC_Addr_0_SEL_CS_3IsSet;
+            set => _ = Set(ref _MTC_Addr_0_SEL_CS_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_SEL_CS_3;
+        public Enabled MTC_Addr_0_SEL_CS_3 {
+            get => _MTC_Addr_0_SEL_CS_3;
+            set => _ = Set(ref _MTC_Addr_0_SEL_CS_3, value);
+        }
+        
+        private bool _MTC_Addr_0_SEL_CS_4IsSet;
+        public bool MTC_Addr_0_SEL_CS_4IsSet {
+            get => _MTC_Addr_0_SEL_CS_4IsSet;
+            set => _ = Set(ref _MTC_Addr_0_SEL_CS_4IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_SEL_CS_4;
+        public Enabled MTC_Addr_0_SEL_CS_4 {
+            get => _MTC_Addr_0_SEL_CS_4;
+            set => _ = Set(ref _MTC_Addr_0_SEL_CS_4, value);
+        }
+        
+        private bool _MTC_Addr_0_SEL_CS_5IsSet;
+        public bool MTC_Addr_0_SEL_CS_5IsSet {
+            get => _MTC_Addr_0_SEL_CS_5IsSet;
+            set => _ = Set(ref _MTC_Addr_0_SEL_CS_5IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_SEL_CS_5;
+        public Enabled MTC_Addr_0_SEL_CS_5 {
+            get => _MTC_Addr_0_SEL_CS_5;
+            set => _ = Set(ref _MTC_Addr_0_SEL_CS_5, value);
+        }
+        
+        private bool _MTC_Addr_0_SEL_CS_6IsSet;
+        public bool MTC_Addr_0_SEL_CS_6IsSet {
+            get => _MTC_Addr_0_SEL_CS_6IsSet;
+            set => _ = Set(ref _MTC_Addr_0_SEL_CS_6IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_SEL_CS_6;
+        public Enabled MTC_Addr_0_SEL_CS_6 {
+            get => _MTC_Addr_0_SEL_CS_6;
+            set => _ = Set(ref _MTC_Addr_0_SEL_CS_6, value);
+        }
+        
+        private bool _MTC_Addr_0_SEL_SPI_1IsSet;
+        public bool MTC_Addr_0_SEL_SPI_1IsSet {
+            get => _MTC_Addr_0_SEL_SPI_1IsSet;
+            set => _ = Set(ref _MTC_Addr_0_SEL_SPI_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_SEL_SPI_1;
+        public Enabled MTC_Addr_0_SEL_SPI_1 {
+            get => _MTC_Addr_0_SEL_SPI_1;
+            set => _ = Set(ref _MTC_Addr_0_SEL_SPI_1, value);
+        }
+        
+        private bool _MTC_Addr_0_SEL_SPI_2IsSet;
+        public bool MTC_Addr_0_SEL_SPI_2IsSet {
+            get => _MTC_Addr_0_SEL_SPI_2IsSet;
+            set => _ = Set(ref _MTC_Addr_0_SEL_SPI_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_SEL_SPI_2;
+        public Enabled MTC_Addr_0_SEL_SPI_2 {
+            get => _MTC_Addr_0_SEL_SPI_2;
+            set => _ = Set(ref _MTC_Addr_0_SEL_SPI_2, value);
+        }
+        
+        private bool _MTC_Addr_0_SEL_CAN_1IsSet;
+        public bool MTC_Addr_0_SEL_CAN_1IsSet {
+            get => _MTC_Addr_0_SEL_CAN_1IsSet;
+            set => _ = Set(ref _MTC_Addr_0_SEL_CAN_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_SEL_CAN_1;
+        public Enabled MTC_Addr_0_SEL_CAN_1 {
+            get => _MTC_Addr_0_SEL_CAN_1;
+            set => _ = Set(ref _MTC_Addr_0_SEL_CAN_1, value);
+        }
+        
+        private bool _MTC_Addr_0_SEL_CAN_2IsSet;
+        public bool MTC_Addr_0_SEL_CAN_2IsSet {
+            get => _MTC_Addr_0_SEL_CAN_2IsSet;
+            set => _ = Set(ref _MTC_Addr_0_SEL_CAN_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_SEL_CAN_2;
+        public Enabled MTC_Addr_0_SEL_CAN_2 {
+            get => _MTC_Addr_0_SEL_CAN_2;
+            set => _ = Set(ref _MTC_Addr_0_SEL_CAN_2, value);
+        }
+        
+        private bool _MTC_Addr_0_SEL_CAN_3IsSet;
+        public bool MTC_Addr_0_SEL_CAN_3IsSet {
+            get => _MTC_Addr_0_SEL_CAN_3IsSet;
+            set => _ = Set(ref _MTC_Addr_0_SEL_CAN_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_SEL_CAN_3;
+        public Enabled MTC_Addr_0_SEL_CAN_3 {
+            get => _MTC_Addr_0_SEL_CAN_3;
+            set => _ = Set(ref _MTC_Addr_0_SEL_CAN_3, value);
+        }
+        
+        private bool _MTC_Addr_0_SEL_RS422IsSet;
+        public bool MTC_Addr_0_SEL_RS422IsSet {
+            get => _MTC_Addr_0_SEL_RS422IsSet;
+            set => _ = Set(ref _MTC_Addr_0_SEL_RS422IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_SEL_RS422;
+        public Enabled MTC_Addr_0_SEL_RS422 {
+            get => _MTC_Addr_0_SEL_RS422;
+            set => _ = Set(ref _MTC_Addr_0_SEL_RS422, value);
+        }
+        
+        /*************** Properties for MTC_Addr_0_Set register **********************************/
+        private bool _MTC_Addr_0_Set_ScanEnabledIsSet;
+        public bool MTC_Addr_0_Set_ScanEnabledIsSet {
+            get => _MTC_Addr_0_Set_ScanEnabledIsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_ScanEnabledIsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_ScanEnabled;
+        public Enabled MTC_Addr_0_Set_ScanEnabled {
+            get => _MTC_Addr_0_Set_ScanEnabled;
+            set => _ = Set(ref _MTC_Addr_0_Set_ScanEnabled, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_DetectedIsSet;
+        public bool MTC_Addr_0_Set_DetectedIsSet {
+            get => _MTC_Addr_0_Set_DetectedIsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_DetectedIsSet, value); 
+        }
+        private byte _MTC_Addr_0_Set_Detected;
+        public byte MTC_Addr_0_Set_Detected {
+            get => _MTC_Addr_0_Set_Detected;
+            set => _ = Set(ref _MTC_Addr_0_Set_Detected, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_TypeIsSet;
+        public bool MTC_Addr_0_Set_TypeIsSet {
+            get => _MTC_Addr_0_Set_TypeIsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_TypeIsSet, value); 
+        }
+        private UInt32 _MTC_Addr_0_Set_Type;
+        public UInt32 MTC_Addr_0_Set_Type {
+            get => _MTC_Addr_0_Set_Type;
+            set => _ = Set(ref _MTC_Addr_0_Set_Type, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_ENABLE_1IsSet;
+        public bool MTC_Addr_0_Set_ENABLE_1IsSet {
+            get => _MTC_Addr_0_Set_ENABLE_1IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_ENABLE_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_ENABLE_1;
+        public Enabled MTC_Addr_0_Set_ENABLE_1 {
+            get => _MTC_Addr_0_Set_ENABLE_1;
+            set => _ = Set(ref _MTC_Addr_0_Set_ENABLE_1, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_ENABLE_2IsSet;
+        public bool MTC_Addr_0_Set_ENABLE_2IsSet {
+            get => _MTC_Addr_0_Set_ENABLE_2IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_ENABLE_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_ENABLE_2;
+        public Enabled MTC_Addr_0_Set_ENABLE_2 {
+            get => _MTC_Addr_0_Set_ENABLE_2;
+            set => _ = Set(ref _MTC_Addr_0_Set_ENABLE_2, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_SEL_I2C_1IsSet;
+        public bool MTC_Addr_0_Set_SEL_I2C_1IsSet {
+            get => _MTC_Addr_0_Set_SEL_I2C_1IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_I2C_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_SEL_I2C_1;
+        public Enabled MTC_Addr_0_Set_SEL_I2C_1 {
+            get => _MTC_Addr_0_Set_SEL_I2C_1;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_I2C_1, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_SEL_I2C_2IsSet;
+        public bool MTC_Addr_0_Set_SEL_I2C_2IsSet {
+            get => _MTC_Addr_0_Set_SEL_I2C_2IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_I2C_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_SEL_I2C_2;
+        public Enabled MTC_Addr_0_Set_SEL_I2C_2 {
+            get => _MTC_Addr_0_Set_SEL_I2C_2;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_I2C_2, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_SEL_UART_1IsSet;
+        public bool MTC_Addr_0_Set_SEL_UART_1IsSet {
+            get => _MTC_Addr_0_Set_SEL_UART_1IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_UART_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_SEL_UART_1;
+        public Enabled MTC_Addr_0_Set_SEL_UART_1 {
+            get => _MTC_Addr_0_Set_SEL_UART_1;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_UART_1, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_SEL_UART_2IsSet;
+        public bool MTC_Addr_0_Set_SEL_UART_2IsSet {
+            get => _MTC_Addr_0_Set_SEL_UART_2IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_UART_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_SEL_UART_2;
+        public Enabled MTC_Addr_0_Set_SEL_UART_2 {
+            get => _MTC_Addr_0_Set_SEL_UART_2;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_UART_2, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_SEL_UART_3IsSet;
+        public bool MTC_Addr_0_Set_SEL_UART_3IsSet {
+            get => _MTC_Addr_0_Set_SEL_UART_3IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_UART_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_SEL_UART_3;
+        public Enabled MTC_Addr_0_Set_SEL_UART_3 {
+            get => _MTC_Addr_0_Set_SEL_UART_3;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_UART_3, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_SEL_UART_4IsSet;
+        public bool MTC_Addr_0_Set_SEL_UART_4IsSet {
+            get => _MTC_Addr_0_Set_SEL_UART_4IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_UART_4IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_SEL_UART_4;
+        public Enabled MTC_Addr_0_Set_SEL_UART_4 {
+            get => _MTC_Addr_0_Set_SEL_UART_4;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_UART_4, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_SEL_UART_5IsSet;
+        public bool MTC_Addr_0_Set_SEL_UART_5IsSet {
+            get => _MTC_Addr_0_Set_SEL_UART_5IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_UART_5IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_SEL_UART_5;
+        public Enabled MTC_Addr_0_Set_SEL_UART_5 {
+            get => _MTC_Addr_0_Set_SEL_UART_5;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_UART_5, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_SEL_UART_6IsSet;
+        public bool MTC_Addr_0_Set_SEL_UART_6IsSet {
+            get => _MTC_Addr_0_Set_SEL_UART_6IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_UART_6IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_SEL_UART_6;
+        public Enabled MTC_Addr_0_Set_SEL_UART_6 {
+            get => _MTC_Addr_0_Set_SEL_UART_6;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_UART_6, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_SEL_VBATIsSet;
+        public bool MTC_Addr_0_Set_SEL_VBATIsSet {
+            get => _MTC_Addr_0_Set_SEL_VBATIsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_VBATIsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_SEL_VBAT;
+        public Enabled MTC_Addr_0_Set_SEL_VBAT {
+            get => _MTC_Addr_0_Set_SEL_VBAT;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_VBAT, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_SEL_VBAT_ALTIsSet;
+        public bool MTC_Addr_0_Set_SEL_VBAT_ALTIsSet {
+            get => _MTC_Addr_0_Set_SEL_VBAT_ALTIsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_VBAT_ALTIsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_SEL_VBAT_ALT;
+        public Enabled MTC_Addr_0_Set_SEL_VBAT_ALT {
+            get => _MTC_Addr_0_Set_SEL_VBAT_ALT;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_VBAT_ALT, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_SEL_VBAT_FPGAIsSet;
+        public bool MTC_Addr_0_Set_SEL_VBAT_FPGAIsSet {
+            get => _MTC_Addr_0_Set_SEL_VBAT_FPGAIsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_VBAT_FPGAIsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_SEL_VBAT_FPGA;
+        public Enabled MTC_Addr_0_Set_SEL_VBAT_FPGA {
+            get => _MTC_Addr_0_Set_SEL_VBAT_FPGA;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_VBAT_FPGA, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_SEL_nRESET_1IsSet;
+        public bool MTC_Addr_0_Set_SEL_nRESET_1IsSet {
+            get => _MTC_Addr_0_Set_SEL_nRESET_1IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_nRESET_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_SEL_nRESET_1;
+        public Enabled MTC_Addr_0_Set_SEL_nRESET_1 {
+            get => _MTC_Addr_0_Set_SEL_nRESET_1;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_nRESET_1, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_SEL_nRESET_2IsSet;
+        public bool MTC_Addr_0_Set_SEL_nRESET_2IsSet {
+            get => _MTC_Addr_0_Set_SEL_nRESET_2IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_nRESET_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_SEL_nRESET_2;
+        public Enabled MTC_Addr_0_Set_SEL_nRESET_2 {
+            get => _MTC_Addr_0_Set_SEL_nRESET_2;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_nRESET_2, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_SEL_nRESET_3IsSet;
+        public bool MTC_Addr_0_Set_SEL_nRESET_3IsSet {
+            get => _MTC_Addr_0_Set_SEL_nRESET_3IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_nRESET_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_SEL_nRESET_3;
+        public Enabled MTC_Addr_0_Set_SEL_nRESET_3 {
+            get => _MTC_Addr_0_Set_SEL_nRESET_3;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_nRESET_3, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_SEL_CS_1IsSet;
+        public bool MTC_Addr_0_Set_SEL_CS_1IsSet {
+            get => _MTC_Addr_0_Set_SEL_CS_1IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_CS_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_SEL_CS_1;
+        public Enabled MTC_Addr_0_Set_SEL_CS_1 {
+            get => _MTC_Addr_0_Set_SEL_CS_1;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_CS_1, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_SEL_CS_2IsSet;
+        public bool MTC_Addr_0_Set_SEL_CS_2IsSet {
+            get => _MTC_Addr_0_Set_SEL_CS_2IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_CS_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_SEL_CS_2;
+        public Enabled MTC_Addr_0_Set_SEL_CS_2 {
+            get => _MTC_Addr_0_Set_SEL_CS_2;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_CS_2, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_SEL_CS_3IsSet;
+        public bool MTC_Addr_0_Set_SEL_CS_3IsSet {
+            get => _MTC_Addr_0_Set_SEL_CS_3IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_CS_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_SEL_CS_3;
+        public Enabled MTC_Addr_0_Set_SEL_CS_3 {
+            get => _MTC_Addr_0_Set_SEL_CS_3;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_CS_3, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_SEL_CS_4IsSet;
+        public bool MTC_Addr_0_Set_SEL_CS_4IsSet {
+            get => _MTC_Addr_0_Set_SEL_CS_4IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_CS_4IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_SEL_CS_4;
+        public Enabled MTC_Addr_0_Set_SEL_CS_4 {
+            get => _MTC_Addr_0_Set_SEL_CS_4;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_CS_4, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_SEL_CS_5IsSet;
+        public bool MTC_Addr_0_Set_SEL_CS_5IsSet {
+            get => _MTC_Addr_0_Set_SEL_CS_5IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_CS_5IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_SEL_CS_5;
+        public Enabled MTC_Addr_0_Set_SEL_CS_5 {
+            get => _MTC_Addr_0_Set_SEL_CS_5;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_CS_5, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_SEL_CS_6IsSet;
+        public bool MTC_Addr_0_Set_SEL_CS_6IsSet {
+            get => _MTC_Addr_0_Set_SEL_CS_6IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_CS_6IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_SEL_CS_6;
+        public Enabled MTC_Addr_0_Set_SEL_CS_6 {
+            get => _MTC_Addr_0_Set_SEL_CS_6;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_CS_6, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_SEL_SPI_1IsSet;
+        public bool MTC_Addr_0_Set_SEL_SPI_1IsSet {
+            get => _MTC_Addr_0_Set_SEL_SPI_1IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_SPI_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_SEL_SPI_1;
+        public Enabled MTC_Addr_0_Set_SEL_SPI_1 {
+            get => _MTC_Addr_0_Set_SEL_SPI_1;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_SPI_1, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_SEL_SPI_2IsSet;
+        public bool MTC_Addr_0_Set_SEL_SPI_2IsSet {
+            get => _MTC_Addr_0_Set_SEL_SPI_2IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_SPI_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_SEL_SPI_2;
+        public Enabled MTC_Addr_0_Set_SEL_SPI_2 {
+            get => _MTC_Addr_0_Set_SEL_SPI_2;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_SPI_2, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_SEL_CAN_1IsSet;
+        public bool MTC_Addr_0_Set_SEL_CAN_1IsSet {
+            get => _MTC_Addr_0_Set_SEL_CAN_1IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_CAN_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_SEL_CAN_1;
+        public Enabled MTC_Addr_0_Set_SEL_CAN_1 {
+            get => _MTC_Addr_0_Set_SEL_CAN_1;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_CAN_1, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_SEL_CAN_2IsSet;
+        public bool MTC_Addr_0_Set_SEL_CAN_2IsSet {
+            get => _MTC_Addr_0_Set_SEL_CAN_2IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_CAN_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_SEL_CAN_2;
+        public Enabled MTC_Addr_0_Set_SEL_CAN_2 {
+            get => _MTC_Addr_0_Set_SEL_CAN_2;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_CAN_2, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_SEL_CAN_3IsSet;
+        public bool MTC_Addr_0_Set_SEL_CAN_3IsSet {
+            get => _MTC_Addr_0_Set_SEL_CAN_3IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_CAN_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_SEL_CAN_3;
+        public Enabled MTC_Addr_0_Set_SEL_CAN_3 {
+            get => _MTC_Addr_0_Set_SEL_CAN_3;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_CAN_3, value);
+        }
+        
+        private bool _MTC_Addr_0_Set_SEL_RS422IsSet;
+        public bool MTC_Addr_0_Set_SEL_RS422IsSet {
+            get => _MTC_Addr_0_Set_SEL_RS422IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_RS422IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Set_SEL_RS422;
+        public Enabled MTC_Addr_0_Set_SEL_RS422 {
+            get => _MTC_Addr_0_Set_SEL_RS422;
+            set => _ = Set(ref _MTC_Addr_0_Set_SEL_RS422, value);
+        }
+        
+        /*************** Properties for MTC_Addr_0_Clear register ********************************/
+        private bool _MTC_Addr_0_Clear_ScanEnabledIsSet;
+        public bool MTC_Addr_0_Clear_ScanEnabledIsSet {
+            get => _MTC_Addr_0_Clear_ScanEnabledIsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_ScanEnabledIsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_ScanEnabled;
+        public Enabled MTC_Addr_0_Clear_ScanEnabled {
+            get => _MTC_Addr_0_Clear_ScanEnabled;
+            set => _ = Set(ref _MTC_Addr_0_Clear_ScanEnabled, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_DetectedIsSet;
+        public bool MTC_Addr_0_Clear_DetectedIsSet {
+            get => _MTC_Addr_0_Clear_DetectedIsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_DetectedIsSet, value); 
+        }
+        private byte _MTC_Addr_0_Clear_Detected;
+        public byte MTC_Addr_0_Clear_Detected {
+            get => _MTC_Addr_0_Clear_Detected;
+            set => _ = Set(ref _MTC_Addr_0_Clear_Detected, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_TypeIsSet;
+        public bool MTC_Addr_0_Clear_TypeIsSet {
+            get => _MTC_Addr_0_Clear_TypeIsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_TypeIsSet, value); 
+        }
+        private UInt32 _MTC_Addr_0_Clear_Type;
+        public UInt32 MTC_Addr_0_Clear_Type {
+            get => _MTC_Addr_0_Clear_Type;
+            set => _ = Set(ref _MTC_Addr_0_Clear_Type, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_ENABLE_1IsSet;
+        public bool MTC_Addr_0_Clear_ENABLE_1IsSet {
+            get => _MTC_Addr_0_Clear_ENABLE_1IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_ENABLE_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_ENABLE_1;
+        public Enabled MTC_Addr_0_Clear_ENABLE_1 {
+            get => _MTC_Addr_0_Clear_ENABLE_1;
+            set => _ = Set(ref _MTC_Addr_0_Clear_ENABLE_1, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_ENABLE_2IsSet;
+        public bool MTC_Addr_0_Clear_ENABLE_2IsSet {
+            get => _MTC_Addr_0_Clear_ENABLE_2IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_ENABLE_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_ENABLE_2;
+        public Enabled MTC_Addr_0_Clear_ENABLE_2 {
+            get => _MTC_Addr_0_Clear_ENABLE_2;
+            set => _ = Set(ref _MTC_Addr_0_Clear_ENABLE_2, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_SEL_I2C_1IsSet;
+        public bool MTC_Addr_0_Clear_SEL_I2C_1IsSet {
+            get => _MTC_Addr_0_Clear_SEL_I2C_1IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_I2C_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_SEL_I2C_1;
+        public Enabled MTC_Addr_0_Clear_SEL_I2C_1 {
+            get => _MTC_Addr_0_Clear_SEL_I2C_1;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_I2C_1, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_SEL_I2C_2IsSet;
+        public bool MTC_Addr_0_Clear_SEL_I2C_2IsSet {
+            get => _MTC_Addr_0_Clear_SEL_I2C_2IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_I2C_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_SEL_I2C_2;
+        public Enabled MTC_Addr_0_Clear_SEL_I2C_2 {
+            get => _MTC_Addr_0_Clear_SEL_I2C_2;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_I2C_2, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_SEL_UART_1IsSet;
+        public bool MTC_Addr_0_Clear_SEL_UART_1IsSet {
+            get => _MTC_Addr_0_Clear_SEL_UART_1IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_UART_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_SEL_UART_1;
+        public Enabled MTC_Addr_0_Clear_SEL_UART_1 {
+            get => _MTC_Addr_0_Clear_SEL_UART_1;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_UART_1, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_SEL_UART_2IsSet;
+        public bool MTC_Addr_0_Clear_SEL_UART_2IsSet {
+            get => _MTC_Addr_0_Clear_SEL_UART_2IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_UART_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_SEL_UART_2;
+        public Enabled MTC_Addr_0_Clear_SEL_UART_2 {
+            get => _MTC_Addr_0_Clear_SEL_UART_2;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_UART_2, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_SEL_UART_3IsSet;
+        public bool MTC_Addr_0_Clear_SEL_UART_3IsSet {
+            get => _MTC_Addr_0_Clear_SEL_UART_3IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_UART_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_SEL_UART_3;
+        public Enabled MTC_Addr_0_Clear_SEL_UART_3 {
+            get => _MTC_Addr_0_Clear_SEL_UART_3;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_UART_3, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_SEL_UART_4IsSet;
+        public bool MTC_Addr_0_Clear_SEL_UART_4IsSet {
+            get => _MTC_Addr_0_Clear_SEL_UART_4IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_UART_4IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_SEL_UART_4;
+        public Enabled MTC_Addr_0_Clear_SEL_UART_4 {
+            get => _MTC_Addr_0_Clear_SEL_UART_4;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_UART_4, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_SEL_UART_5IsSet;
+        public bool MTC_Addr_0_Clear_SEL_UART_5IsSet {
+            get => _MTC_Addr_0_Clear_SEL_UART_5IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_UART_5IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_SEL_UART_5;
+        public Enabled MTC_Addr_0_Clear_SEL_UART_5 {
+            get => _MTC_Addr_0_Clear_SEL_UART_5;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_UART_5, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_SEL_UART_6IsSet;
+        public bool MTC_Addr_0_Clear_SEL_UART_6IsSet {
+            get => _MTC_Addr_0_Clear_SEL_UART_6IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_UART_6IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_SEL_UART_6;
+        public Enabled MTC_Addr_0_Clear_SEL_UART_6 {
+            get => _MTC_Addr_0_Clear_SEL_UART_6;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_UART_6, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_SEL_VBATIsSet;
+        public bool MTC_Addr_0_Clear_SEL_VBATIsSet {
+            get => _MTC_Addr_0_Clear_SEL_VBATIsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_VBATIsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_SEL_VBAT;
+        public Enabled MTC_Addr_0_Clear_SEL_VBAT {
+            get => _MTC_Addr_0_Clear_SEL_VBAT;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_VBAT, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_SEL_VBAT_ALTIsSet;
+        public bool MTC_Addr_0_Clear_SEL_VBAT_ALTIsSet {
+            get => _MTC_Addr_0_Clear_SEL_VBAT_ALTIsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_VBAT_ALTIsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_SEL_VBAT_ALT;
+        public Enabled MTC_Addr_0_Clear_SEL_VBAT_ALT {
+            get => _MTC_Addr_0_Clear_SEL_VBAT_ALT;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_VBAT_ALT, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_SEL_VBAT_FPGAIsSet;
+        public bool MTC_Addr_0_Clear_SEL_VBAT_FPGAIsSet {
+            get => _MTC_Addr_0_Clear_SEL_VBAT_FPGAIsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_VBAT_FPGAIsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_SEL_VBAT_FPGA;
+        public Enabled MTC_Addr_0_Clear_SEL_VBAT_FPGA {
+            get => _MTC_Addr_0_Clear_SEL_VBAT_FPGA;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_VBAT_FPGA, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_SEL_nRESET_1IsSet;
+        public bool MTC_Addr_0_Clear_SEL_nRESET_1IsSet {
+            get => _MTC_Addr_0_Clear_SEL_nRESET_1IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_nRESET_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_SEL_nRESET_1;
+        public Enabled MTC_Addr_0_Clear_SEL_nRESET_1 {
+            get => _MTC_Addr_0_Clear_SEL_nRESET_1;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_nRESET_1, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_SEL_nRESET_2IsSet;
+        public bool MTC_Addr_0_Clear_SEL_nRESET_2IsSet {
+            get => _MTC_Addr_0_Clear_SEL_nRESET_2IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_nRESET_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_SEL_nRESET_2;
+        public Enabled MTC_Addr_0_Clear_SEL_nRESET_2 {
+            get => _MTC_Addr_0_Clear_SEL_nRESET_2;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_nRESET_2, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_SEL_nRESET_3IsSet;
+        public bool MTC_Addr_0_Clear_SEL_nRESET_3IsSet {
+            get => _MTC_Addr_0_Clear_SEL_nRESET_3IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_nRESET_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_SEL_nRESET_3;
+        public Enabled MTC_Addr_0_Clear_SEL_nRESET_3 {
+            get => _MTC_Addr_0_Clear_SEL_nRESET_3;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_nRESET_3, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_SEL_CS_1IsSet;
+        public bool MTC_Addr_0_Clear_SEL_CS_1IsSet {
+            get => _MTC_Addr_0_Clear_SEL_CS_1IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_CS_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_SEL_CS_1;
+        public Enabled MTC_Addr_0_Clear_SEL_CS_1 {
+            get => _MTC_Addr_0_Clear_SEL_CS_1;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_CS_1, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_SEL_CS_2IsSet;
+        public bool MTC_Addr_0_Clear_SEL_CS_2IsSet {
+            get => _MTC_Addr_0_Clear_SEL_CS_2IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_CS_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_SEL_CS_2;
+        public Enabled MTC_Addr_0_Clear_SEL_CS_2 {
+            get => _MTC_Addr_0_Clear_SEL_CS_2;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_CS_2, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_SEL_CS_3IsSet;
+        public bool MTC_Addr_0_Clear_SEL_CS_3IsSet {
+            get => _MTC_Addr_0_Clear_SEL_CS_3IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_CS_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_SEL_CS_3;
+        public Enabled MTC_Addr_0_Clear_SEL_CS_3 {
+            get => _MTC_Addr_0_Clear_SEL_CS_3;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_CS_3, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_SEL_CS_4IsSet;
+        public bool MTC_Addr_0_Clear_SEL_CS_4IsSet {
+            get => _MTC_Addr_0_Clear_SEL_CS_4IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_CS_4IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_SEL_CS_4;
+        public Enabled MTC_Addr_0_Clear_SEL_CS_4 {
+            get => _MTC_Addr_0_Clear_SEL_CS_4;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_CS_4, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_SEL_CS_5IsSet;
+        public bool MTC_Addr_0_Clear_SEL_CS_5IsSet {
+            get => _MTC_Addr_0_Clear_SEL_CS_5IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_CS_5IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_SEL_CS_5;
+        public Enabled MTC_Addr_0_Clear_SEL_CS_5 {
+            get => _MTC_Addr_0_Clear_SEL_CS_5;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_CS_5, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_SEL_CS_6IsSet;
+        public bool MTC_Addr_0_Clear_SEL_CS_6IsSet {
+            get => _MTC_Addr_0_Clear_SEL_CS_6IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_CS_6IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_SEL_CS_6;
+        public Enabled MTC_Addr_0_Clear_SEL_CS_6 {
+            get => _MTC_Addr_0_Clear_SEL_CS_6;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_CS_6, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_SEL_SPI_1IsSet;
+        public bool MTC_Addr_0_Clear_SEL_SPI_1IsSet {
+            get => _MTC_Addr_0_Clear_SEL_SPI_1IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_SPI_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_SEL_SPI_1;
+        public Enabled MTC_Addr_0_Clear_SEL_SPI_1 {
+            get => _MTC_Addr_0_Clear_SEL_SPI_1;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_SPI_1, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_SEL_SPI_2IsSet;
+        public bool MTC_Addr_0_Clear_SEL_SPI_2IsSet {
+            get => _MTC_Addr_0_Clear_SEL_SPI_2IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_SPI_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_SEL_SPI_2;
+        public Enabled MTC_Addr_0_Clear_SEL_SPI_2 {
+            get => _MTC_Addr_0_Clear_SEL_SPI_2;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_SPI_2, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_SEL_CAN_1IsSet;
+        public bool MTC_Addr_0_Clear_SEL_CAN_1IsSet {
+            get => _MTC_Addr_0_Clear_SEL_CAN_1IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_CAN_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_SEL_CAN_1;
+        public Enabled MTC_Addr_0_Clear_SEL_CAN_1 {
+            get => _MTC_Addr_0_Clear_SEL_CAN_1;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_CAN_1, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_SEL_CAN_2IsSet;
+        public bool MTC_Addr_0_Clear_SEL_CAN_2IsSet {
+            get => _MTC_Addr_0_Clear_SEL_CAN_2IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_CAN_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_SEL_CAN_2;
+        public Enabled MTC_Addr_0_Clear_SEL_CAN_2 {
+            get => _MTC_Addr_0_Clear_SEL_CAN_2;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_CAN_2, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_SEL_CAN_3IsSet;
+        public bool MTC_Addr_0_Clear_SEL_CAN_3IsSet {
+            get => _MTC_Addr_0_Clear_SEL_CAN_3IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_CAN_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_SEL_CAN_3;
+        public Enabled MTC_Addr_0_Clear_SEL_CAN_3 {
+            get => _MTC_Addr_0_Clear_SEL_CAN_3;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_CAN_3, value);
+        }
+        
+        private bool _MTC_Addr_0_Clear_SEL_RS422IsSet;
+        public bool MTC_Addr_0_Clear_SEL_RS422IsSet {
+            get => _MTC_Addr_0_Clear_SEL_RS422IsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_RS422IsSet, value); 
+        }
+        private Enabled _MTC_Addr_0_Clear_SEL_RS422;
+        public Enabled MTC_Addr_0_Clear_SEL_RS422 {
+            get => _MTC_Addr_0_Clear_SEL_RS422;
+            set => _ = Set(ref _MTC_Addr_0_Clear_SEL_RS422, value);
+        }
+        
+        /*************** Properties for MTC_Addr_1 register **************************************/
+        private bool _MTC_Addr_1_ScanEnabledIsSet;
+        public bool MTC_Addr_1_ScanEnabledIsSet {
+            get => _MTC_Addr_1_ScanEnabledIsSet;
+            set => _ = Set(ref _MTC_Addr_1_ScanEnabledIsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_ScanEnabled;
+        public Enabled MTC_Addr_1_ScanEnabled {
+            get => _MTC_Addr_1_ScanEnabled;
+            set => _ = Set(ref _MTC_Addr_1_ScanEnabled, value);
+        }
+        
+        private bool _MTC_Addr_1_DetectedIsSet;
+        public bool MTC_Addr_1_DetectedIsSet {
+            get => _MTC_Addr_1_DetectedIsSet;
+            set => _ = Set(ref _MTC_Addr_1_DetectedIsSet, value); 
+        }
+        private byte _MTC_Addr_1_Detected;
+        public byte MTC_Addr_1_Detected {
+            get => _MTC_Addr_1_Detected;
+            set => _ = Set(ref _MTC_Addr_1_Detected, value);
+        }
+        
+        private bool _MTC_Addr_1_TypeIsSet;
+        public bool MTC_Addr_1_TypeIsSet {
+            get => _MTC_Addr_1_TypeIsSet;
+            set => _ = Set(ref _MTC_Addr_1_TypeIsSet, value); 
+        }
+        private UInt32 _MTC_Addr_1_Type;
+        public UInt32 MTC_Addr_1_Type {
+            get => _MTC_Addr_1_Type;
+            set => _ = Set(ref _MTC_Addr_1_Type, value);
+        }
+        
+        private bool _MTC_Addr_1_ENABLE_1IsSet;
+        public bool MTC_Addr_1_ENABLE_1IsSet {
+            get => _MTC_Addr_1_ENABLE_1IsSet;
+            set => _ = Set(ref _MTC_Addr_1_ENABLE_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_ENABLE_1;
+        public Enabled MTC_Addr_1_ENABLE_1 {
+            get => _MTC_Addr_1_ENABLE_1;
+            set => _ = Set(ref _MTC_Addr_1_ENABLE_1, value);
+        }
+        
+        private bool _MTC_Addr_1_ENABLE_2IsSet;
+        public bool MTC_Addr_1_ENABLE_2IsSet {
+            get => _MTC_Addr_1_ENABLE_2IsSet;
+            set => _ = Set(ref _MTC_Addr_1_ENABLE_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_ENABLE_2;
+        public Enabled MTC_Addr_1_ENABLE_2 {
+            get => _MTC_Addr_1_ENABLE_2;
+            set => _ = Set(ref _MTC_Addr_1_ENABLE_2, value);
+        }
+        
+        private bool _MTC_Addr_1_SEL_I2C_1IsSet;
+        public bool MTC_Addr_1_SEL_I2C_1IsSet {
+            get => _MTC_Addr_1_SEL_I2C_1IsSet;
+            set => _ = Set(ref _MTC_Addr_1_SEL_I2C_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_SEL_I2C_1;
+        public Enabled MTC_Addr_1_SEL_I2C_1 {
+            get => _MTC_Addr_1_SEL_I2C_1;
+            set => _ = Set(ref _MTC_Addr_1_SEL_I2C_1, value);
+        }
+        
+        private bool _MTC_Addr_1_SEL_I2C_2IsSet;
+        public bool MTC_Addr_1_SEL_I2C_2IsSet {
+            get => _MTC_Addr_1_SEL_I2C_2IsSet;
+            set => _ = Set(ref _MTC_Addr_1_SEL_I2C_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_SEL_I2C_2;
+        public Enabled MTC_Addr_1_SEL_I2C_2 {
+            get => _MTC_Addr_1_SEL_I2C_2;
+            set => _ = Set(ref _MTC_Addr_1_SEL_I2C_2, value);
+        }
+        
+        private bool _MTC_Addr_1_SEL_UART_1IsSet;
+        public bool MTC_Addr_1_SEL_UART_1IsSet {
+            get => _MTC_Addr_1_SEL_UART_1IsSet;
+            set => _ = Set(ref _MTC_Addr_1_SEL_UART_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_SEL_UART_1;
+        public Enabled MTC_Addr_1_SEL_UART_1 {
+            get => _MTC_Addr_1_SEL_UART_1;
+            set => _ = Set(ref _MTC_Addr_1_SEL_UART_1, value);
+        }
+        
+        private bool _MTC_Addr_1_SEL_UART_2IsSet;
+        public bool MTC_Addr_1_SEL_UART_2IsSet {
+            get => _MTC_Addr_1_SEL_UART_2IsSet;
+            set => _ = Set(ref _MTC_Addr_1_SEL_UART_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_SEL_UART_2;
+        public Enabled MTC_Addr_1_SEL_UART_2 {
+            get => _MTC_Addr_1_SEL_UART_2;
+            set => _ = Set(ref _MTC_Addr_1_SEL_UART_2, value);
+        }
+        
+        private bool _MTC_Addr_1_SEL_UART_3IsSet;
+        public bool MTC_Addr_1_SEL_UART_3IsSet {
+            get => _MTC_Addr_1_SEL_UART_3IsSet;
+            set => _ = Set(ref _MTC_Addr_1_SEL_UART_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_SEL_UART_3;
+        public Enabled MTC_Addr_1_SEL_UART_3 {
+            get => _MTC_Addr_1_SEL_UART_3;
+            set => _ = Set(ref _MTC_Addr_1_SEL_UART_3, value);
+        }
+        
+        private bool _MTC_Addr_1_SEL_UART_4IsSet;
+        public bool MTC_Addr_1_SEL_UART_4IsSet {
+            get => _MTC_Addr_1_SEL_UART_4IsSet;
+            set => _ = Set(ref _MTC_Addr_1_SEL_UART_4IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_SEL_UART_4;
+        public Enabled MTC_Addr_1_SEL_UART_4 {
+            get => _MTC_Addr_1_SEL_UART_4;
+            set => _ = Set(ref _MTC_Addr_1_SEL_UART_4, value);
+        }
+        
+        private bool _MTC_Addr_1_SEL_UART_5IsSet;
+        public bool MTC_Addr_1_SEL_UART_5IsSet {
+            get => _MTC_Addr_1_SEL_UART_5IsSet;
+            set => _ = Set(ref _MTC_Addr_1_SEL_UART_5IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_SEL_UART_5;
+        public Enabled MTC_Addr_1_SEL_UART_5 {
+            get => _MTC_Addr_1_SEL_UART_5;
+            set => _ = Set(ref _MTC_Addr_1_SEL_UART_5, value);
+        }
+        
+        private bool _MTC_Addr_1_SEL_UART_6IsSet;
+        public bool MTC_Addr_1_SEL_UART_6IsSet {
+            get => _MTC_Addr_1_SEL_UART_6IsSet;
+            set => _ = Set(ref _MTC_Addr_1_SEL_UART_6IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_SEL_UART_6;
+        public Enabled MTC_Addr_1_SEL_UART_6 {
+            get => _MTC_Addr_1_SEL_UART_6;
+            set => _ = Set(ref _MTC_Addr_1_SEL_UART_6, value);
+        }
+        
+        private bool _MTC_Addr_1_SEL_VBATIsSet;
+        public bool MTC_Addr_1_SEL_VBATIsSet {
+            get => _MTC_Addr_1_SEL_VBATIsSet;
+            set => _ = Set(ref _MTC_Addr_1_SEL_VBATIsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_SEL_VBAT;
+        public Enabled MTC_Addr_1_SEL_VBAT {
+            get => _MTC_Addr_1_SEL_VBAT;
+            set => _ = Set(ref _MTC_Addr_1_SEL_VBAT, value);
+        }
+        
+        private bool _MTC_Addr_1_SEL_VBAT_ALTIsSet;
+        public bool MTC_Addr_1_SEL_VBAT_ALTIsSet {
+            get => _MTC_Addr_1_SEL_VBAT_ALTIsSet;
+            set => _ = Set(ref _MTC_Addr_1_SEL_VBAT_ALTIsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_SEL_VBAT_ALT;
+        public Enabled MTC_Addr_1_SEL_VBAT_ALT {
+            get => _MTC_Addr_1_SEL_VBAT_ALT;
+            set => _ = Set(ref _MTC_Addr_1_SEL_VBAT_ALT, value);
+        }
+        
+        private bool _MTC_Addr_1_SEL_VBAT_FPGAIsSet;
+        public bool MTC_Addr_1_SEL_VBAT_FPGAIsSet {
+            get => _MTC_Addr_1_SEL_VBAT_FPGAIsSet;
+            set => _ = Set(ref _MTC_Addr_1_SEL_VBAT_FPGAIsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_SEL_VBAT_FPGA;
+        public Enabled MTC_Addr_1_SEL_VBAT_FPGA {
+            get => _MTC_Addr_1_SEL_VBAT_FPGA;
+            set => _ = Set(ref _MTC_Addr_1_SEL_VBAT_FPGA, value);
+        }
+        
+        private bool _MTC_Addr_1_SEL_nRESET_1IsSet;
+        public bool MTC_Addr_1_SEL_nRESET_1IsSet {
+            get => _MTC_Addr_1_SEL_nRESET_1IsSet;
+            set => _ = Set(ref _MTC_Addr_1_SEL_nRESET_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_SEL_nRESET_1;
+        public Enabled MTC_Addr_1_SEL_nRESET_1 {
+            get => _MTC_Addr_1_SEL_nRESET_1;
+            set => _ = Set(ref _MTC_Addr_1_SEL_nRESET_1, value);
+        }
+        
+        private bool _MTC_Addr_1_SEL_nRESET_2IsSet;
+        public bool MTC_Addr_1_SEL_nRESET_2IsSet {
+            get => _MTC_Addr_1_SEL_nRESET_2IsSet;
+            set => _ = Set(ref _MTC_Addr_1_SEL_nRESET_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_SEL_nRESET_2;
+        public Enabled MTC_Addr_1_SEL_nRESET_2 {
+            get => _MTC_Addr_1_SEL_nRESET_2;
+            set => _ = Set(ref _MTC_Addr_1_SEL_nRESET_2, value);
+        }
+        
+        private bool _MTC_Addr_1_SEL_nRESET_3IsSet;
+        public bool MTC_Addr_1_SEL_nRESET_3IsSet {
+            get => _MTC_Addr_1_SEL_nRESET_3IsSet;
+            set => _ = Set(ref _MTC_Addr_1_SEL_nRESET_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_SEL_nRESET_3;
+        public Enabled MTC_Addr_1_SEL_nRESET_3 {
+            get => _MTC_Addr_1_SEL_nRESET_3;
+            set => _ = Set(ref _MTC_Addr_1_SEL_nRESET_3, value);
+        }
+        
+        private bool _MTC_Addr_1_SEL_CS_1IsSet;
+        public bool MTC_Addr_1_SEL_CS_1IsSet {
+            get => _MTC_Addr_1_SEL_CS_1IsSet;
+            set => _ = Set(ref _MTC_Addr_1_SEL_CS_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_SEL_CS_1;
+        public Enabled MTC_Addr_1_SEL_CS_1 {
+            get => _MTC_Addr_1_SEL_CS_1;
+            set => _ = Set(ref _MTC_Addr_1_SEL_CS_1, value);
+        }
+        
+        private bool _MTC_Addr_1_SEL_CS_2IsSet;
+        public bool MTC_Addr_1_SEL_CS_2IsSet {
+            get => _MTC_Addr_1_SEL_CS_2IsSet;
+            set => _ = Set(ref _MTC_Addr_1_SEL_CS_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_SEL_CS_2;
+        public Enabled MTC_Addr_1_SEL_CS_2 {
+            get => _MTC_Addr_1_SEL_CS_2;
+            set => _ = Set(ref _MTC_Addr_1_SEL_CS_2, value);
+        }
+        
+        private bool _MTC_Addr_1_SEL_CS_3IsSet;
+        public bool MTC_Addr_1_SEL_CS_3IsSet {
+            get => _MTC_Addr_1_SEL_CS_3IsSet;
+            set => _ = Set(ref _MTC_Addr_1_SEL_CS_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_SEL_CS_3;
+        public Enabled MTC_Addr_1_SEL_CS_3 {
+            get => _MTC_Addr_1_SEL_CS_3;
+            set => _ = Set(ref _MTC_Addr_1_SEL_CS_3, value);
+        }
+        
+        private bool _MTC_Addr_1_SEL_CS_4IsSet;
+        public bool MTC_Addr_1_SEL_CS_4IsSet {
+            get => _MTC_Addr_1_SEL_CS_4IsSet;
+            set => _ = Set(ref _MTC_Addr_1_SEL_CS_4IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_SEL_CS_4;
+        public Enabled MTC_Addr_1_SEL_CS_4 {
+            get => _MTC_Addr_1_SEL_CS_4;
+            set => _ = Set(ref _MTC_Addr_1_SEL_CS_4, value);
+        }
+        
+        private bool _MTC_Addr_1_SEL_CS_5IsSet;
+        public bool MTC_Addr_1_SEL_CS_5IsSet {
+            get => _MTC_Addr_1_SEL_CS_5IsSet;
+            set => _ = Set(ref _MTC_Addr_1_SEL_CS_5IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_SEL_CS_5;
+        public Enabled MTC_Addr_1_SEL_CS_5 {
+            get => _MTC_Addr_1_SEL_CS_5;
+            set => _ = Set(ref _MTC_Addr_1_SEL_CS_5, value);
+        }
+        
+        private bool _MTC_Addr_1_SEL_CS_6IsSet;
+        public bool MTC_Addr_1_SEL_CS_6IsSet {
+            get => _MTC_Addr_1_SEL_CS_6IsSet;
+            set => _ = Set(ref _MTC_Addr_1_SEL_CS_6IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_SEL_CS_6;
+        public Enabled MTC_Addr_1_SEL_CS_6 {
+            get => _MTC_Addr_1_SEL_CS_6;
+            set => _ = Set(ref _MTC_Addr_1_SEL_CS_6, value);
+        }
+        
+        private bool _MTC_Addr_1_SEL_SPI_1IsSet;
+        public bool MTC_Addr_1_SEL_SPI_1IsSet {
+            get => _MTC_Addr_1_SEL_SPI_1IsSet;
+            set => _ = Set(ref _MTC_Addr_1_SEL_SPI_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_SEL_SPI_1;
+        public Enabled MTC_Addr_1_SEL_SPI_1 {
+            get => _MTC_Addr_1_SEL_SPI_1;
+            set => _ = Set(ref _MTC_Addr_1_SEL_SPI_1, value);
+        }
+        
+        private bool _MTC_Addr_1_SEL_SPI_2IsSet;
+        public bool MTC_Addr_1_SEL_SPI_2IsSet {
+            get => _MTC_Addr_1_SEL_SPI_2IsSet;
+            set => _ = Set(ref _MTC_Addr_1_SEL_SPI_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_SEL_SPI_2;
+        public Enabled MTC_Addr_1_SEL_SPI_2 {
+            get => _MTC_Addr_1_SEL_SPI_2;
+            set => _ = Set(ref _MTC_Addr_1_SEL_SPI_2, value);
+        }
+        
+        private bool _MTC_Addr_1_SEL_CAN_1IsSet;
+        public bool MTC_Addr_1_SEL_CAN_1IsSet {
+            get => _MTC_Addr_1_SEL_CAN_1IsSet;
+            set => _ = Set(ref _MTC_Addr_1_SEL_CAN_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_SEL_CAN_1;
+        public Enabled MTC_Addr_1_SEL_CAN_1 {
+            get => _MTC_Addr_1_SEL_CAN_1;
+            set => _ = Set(ref _MTC_Addr_1_SEL_CAN_1, value);
+        }
+        
+        private bool _MTC_Addr_1_SEL_CAN_2IsSet;
+        public bool MTC_Addr_1_SEL_CAN_2IsSet {
+            get => _MTC_Addr_1_SEL_CAN_2IsSet;
+            set => _ = Set(ref _MTC_Addr_1_SEL_CAN_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_SEL_CAN_2;
+        public Enabled MTC_Addr_1_SEL_CAN_2 {
+            get => _MTC_Addr_1_SEL_CAN_2;
+            set => _ = Set(ref _MTC_Addr_1_SEL_CAN_2, value);
+        }
+        
+        private bool _MTC_Addr_1_SEL_CAN_3IsSet;
+        public bool MTC_Addr_1_SEL_CAN_3IsSet {
+            get => _MTC_Addr_1_SEL_CAN_3IsSet;
+            set => _ = Set(ref _MTC_Addr_1_SEL_CAN_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_SEL_CAN_3;
+        public Enabled MTC_Addr_1_SEL_CAN_3 {
+            get => _MTC_Addr_1_SEL_CAN_3;
+            set => _ = Set(ref _MTC_Addr_1_SEL_CAN_3, value);
+        }
+        
+        private bool _MTC_Addr_1_SEL_RS422IsSet;
+        public bool MTC_Addr_1_SEL_RS422IsSet {
+            get => _MTC_Addr_1_SEL_RS422IsSet;
+            set => _ = Set(ref _MTC_Addr_1_SEL_RS422IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_SEL_RS422;
+        public Enabled MTC_Addr_1_SEL_RS422 {
+            get => _MTC_Addr_1_SEL_RS422;
+            set => _ = Set(ref _MTC_Addr_1_SEL_RS422, value);
+        }
+        
+        /*************** Properties for MTC_Addr_1_Set register **********************************/
+        private bool _MTC_Addr_1_Set_ScanEnabledIsSet;
+        public bool MTC_Addr_1_Set_ScanEnabledIsSet {
+            get => _MTC_Addr_1_Set_ScanEnabledIsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_ScanEnabledIsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_ScanEnabled;
+        public Enabled MTC_Addr_1_Set_ScanEnabled {
+            get => _MTC_Addr_1_Set_ScanEnabled;
+            set => _ = Set(ref _MTC_Addr_1_Set_ScanEnabled, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_DetectedIsSet;
+        public bool MTC_Addr_1_Set_DetectedIsSet {
+            get => _MTC_Addr_1_Set_DetectedIsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_DetectedIsSet, value); 
+        }
+        private byte _MTC_Addr_1_Set_Detected;
+        public byte MTC_Addr_1_Set_Detected {
+            get => _MTC_Addr_1_Set_Detected;
+            set => _ = Set(ref _MTC_Addr_1_Set_Detected, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_TypeIsSet;
+        public bool MTC_Addr_1_Set_TypeIsSet {
+            get => _MTC_Addr_1_Set_TypeIsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_TypeIsSet, value); 
+        }
+        private UInt32 _MTC_Addr_1_Set_Type;
+        public UInt32 MTC_Addr_1_Set_Type {
+            get => _MTC_Addr_1_Set_Type;
+            set => _ = Set(ref _MTC_Addr_1_Set_Type, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_ENABLE_1IsSet;
+        public bool MTC_Addr_1_Set_ENABLE_1IsSet {
+            get => _MTC_Addr_1_Set_ENABLE_1IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_ENABLE_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_ENABLE_1;
+        public Enabled MTC_Addr_1_Set_ENABLE_1 {
+            get => _MTC_Addr_1_Set_ENABLE_1;
+            set => _ = Set(ref _MTC_Addr_1_Set_ENABLE_1, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_ENABLE_2IsSet;
+        public bool MTC_Addr_1_Set_ENABLE_2IsSet {
+            get => _MTC_Addr_1_Set_ENABLE_2IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_ENABLE_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_ENABLE_2;
+        public Enabled MTC_Addr_1_Set_ENABLE_2 {
+            get => _MTC_Addr_1_Set_ENABLE_2;
+            set => _ = Set(ref _MTC_Addr_1_Set_ENABLE_2, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_SEL_I2C_1IsSet;
+        public bool MTC_Addr_1_Set_SEL_I2C_1IsSet {
+            get => _MTC_Addr_1_Set_SEL_I2C_1IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_I2C_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_SEL_I2C_1;
+        public Enabled MTC_Addr_1_Set_SEL_I2C_1 {
+            get => _MTC_Addr_1_Set_SEL_I2C_1;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_I2C_1, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_SEL_I2C_2IsSet;
+        public bool MTC_Addr_1_Set_SEL_I2C_2IsSet {
+            get => _MTC_Addr_1_Set_SEL_I2C_2IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_I2C_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_SEL_I2C_2;
+        public Enabled MTC_Addr_1_Set_SEL_I2C_2 {
+            get => _MTC_Addr_1_Set_SEL_I2C_2;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_I2C_2, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_SEL_UART_1IsSet;
+        public bool MTC_Addr_1_Set_SEL_UART_1IsSet {
+            get => _MTC_Addr_1_Set_SEL_UART_1IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_UART_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_SEL_UART_1;
+        public Enabled MTC_Addr_1_Set_SEL_UART_1 {
+            get => _MTC_Addr_1_Set_SEL_UART_1;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_UART_1, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_SEL_UART_2IsSet;
+        public bool MTC_Addr_1_Set_SEL_UART_2IsSet {
+            get => _MTC_Addr_1_Set_SEL_UART_2IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_UART_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_SEL_UART_2;
+        public Enabled MTC_Addr_1_Set_SEL_UART_2 {
+            get => _MTC_Addr_1_Set_SEL_UART_2;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_UART_2, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_SEL_UART_3IsSet;
+        public bool MTC_Addr_1_Set_SEL_UART_3IsSet {
+            get => _MTC_Addr_1_Set_SEL_UART_3IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_UART_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_SEL_UART_3;
+        public Enabled MTC_Addr_1_Set_SEL_UART_3 {
+            get => _MTC_Addr_1_Set_SEL_UART_3;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_UART_3, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_SEL_UART_4IsSet;
+        public bool MTC_Addr_1_Set_SEL_UART_4IsSet {
+            get => _MTC_Addr_1_Set_SEL_UART_4IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_UART_4IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_SEL_UART_4;
+        public Enabled MTC_Addr_1_Set_SEL_UART_4 {
+            get => _MTC_Addr_1_Set_SEL_UART_4;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_UART_4, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_SEL_UART_5IsSet;
+        public bool MTC_Addr_1_Set_SEL_UART_5IsSet {
+            get => _MTC_Addr_1_Set_SEL_UART_5IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_UART_5IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_SEL_UART_5;
+        public Enabled MTC_Addr_1_Set_SEL_UART_5 {
+            get => _MTC_Addr_1_Set_SEL_UART_5;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_UART_5, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_SEL_UART_6IsSet;
+        public bool MTC_Addr_1_Set_SEL_UART_6IsSet {
+            get => _MTC_Addr_1_Set_SEL_UART_6IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_UART_6IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_SEL_UART_6;
+        public Enabled MTC_Addr_1_Set_SEL_UART_6 {
+            get => _MTC_Addr_1_Set_SEL_UART_6;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_UART_6, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_SEL_VBATIsSet;
+        public bool MTC_Addr_1_Set_SEL_VBATIsSet {
+            get => _MTC_Addr_1_Set_SEL_VBATIsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_VBATIsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_SEL_VBAT;
+        public Enabled MTC_Addr_1_Set_SEL_VBAT {
+            get => _MTC_Addr_1_Set_SEL_VBAT;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_VBAT, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_SEL_VBAT_ALTIsSet;
+        public bool MTC_Addr_1_Set_SEL_VBAT_ALTIsSet {
+            get => _MTC_Addr_1_Set_SEL_VBAT_ALTIsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_VBAT_ALTIsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_SEL_VBAT_ALT;
+        public Enabled MTC_Addr_1_Set_SEL_VBAT_ALT {
+            get => _MTC_Addr_1_Set_SEL_VBAT_ALT;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_VBAT_ALT, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_SEL_VBAT_FPGAIsSet;
+        public bool MTC_Addr_1_Set_SEL_VBAT_FPGAIsSet {
+            get => _MTC_Addr_1_Set_SEL_VBAT_FPGAIsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_VBAT_FPGAIsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_SEL_VBAT_FPGA;
+        public Enabled MTC_Addr_1_Set_SEL_VBAT_FPGA {
+            get => _MTC_Addr_1_Set_SEL_VBAT_FPGA;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_VBAT_FPGA, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_SEL_nRESET_1IsSet;
+        public bool MTC_Addr_1_Set_SEL_nRESET_1IsSet {
+            get => _MTC_Addr_1_Set_SEL_nRESET_1IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_nRESET_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_SEL_nRESET_1;
+        public Enabled MTC_Addr_1_Set_SEL_nRESET_1 {
+            get => _MTC_Addr_1_Set_SEL_nRESET_1;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_nRESET_1, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_SEL_nRESET_2IsSet;
+        public bool MTC_Addr_1_Set_SEL_nRESET_2IsSet {
+            get => _MTC_Addr_1_Set_SEL_nRESET_2IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_nRESET_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_SEL_nRESET_2;
+        public Enabled MTC_Addr_1_Set_SEL_nRESET_2 {
+            get => _MTC_Addr_1_Set_SEL_nRESET_2;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_nRESET_2, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_SEL_nRESET_3IsSet;
+        public bool MTC_Addr_1_Set_SEL_nRESET_3IsSet {
+            get => _MTC_Addr_1_Set_SEL_nRESET_3IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_nRESET_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_SEL_nRESET_3;
+        public Enabled MTC_Addr_1_Set_SEL_nRESET_3 {
+            get => _MTC_Addr_1_Set_SEL_nRESET_3;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_nRESET_3, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_SEL_CS_1IsSet;
+        public bool MTC_Addr_1_Set_SEL_CS_1IsSet {
+            get => _MTC_Addr_1_Set_SEL_CS_1IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_CS_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_SEL_CS_1;
+        public Enabled MTC_Addr_1_Set_SEL_CS_1 {
+            get => _MTC_Addr_1_Set_SEL_CS_1;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_CS_1, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_SEL_CS_2IsSet;
+        public bool MTC_Addr_1_Set_SEL_CS_2IsSet {
+            get => _MTC_Addr_1_Set_SEL_CS_2IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_CS_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_SEL_CS_2;
+        public Enabled MTC_Addr_1_Set_SEL_CS_2 {
+            get => _MTC_Addr_1_Set_SEL_CS_2;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_CS_2, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_SEL_CS_3IsSet;
+        public bool MTC_Addr_1_Set_SEL_CS_3IsSet {
+            get => _MTC_Addr_1_Set_SEL_CS_3IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_CS_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_SEL_CS_3;
+        public Enabled MTC_Addr_1_Set_SEL_CS_3 {
+            get => _MTC_Addr_1_Set_SEL_CS_3;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_CS_3, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_SEL_CS_4IsSet;
+        public bool MTC_Addr_1_Set_SEL_CS_4IsSet {
+            get => _MTC_Addr_1_Set_SEL_CS_4IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_CS_4IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_SEL_CS_4;
+        public Enabled MTC_Addr_1_Set_SEL_CS_4 {
+            get => _MTC_Addr_1_Set_SEL_CS_4;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_CS_4, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_SEL_CS_5IsSet;
+        public bool MTC_Addr_1_Set_SEL_CS_5IsSet {
+            get => _MTC_Addr_1_Set_SEL_CS_5IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_CS_5IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_SEL_CS_5;
+        public Enabled MTC_Addr_1_Set_SEL_CS_5 {
+            get => _MTC_Addr_1_Set_SEL_CS_5;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_CS_5, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_SEL_CS_6IsSet;
+        public bool MTC_Addr_1_Set_SEL_CS_6IsSet {
+            get => _MTC_Addr_1_Set_SEL_CS_6IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_CS_6IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_SEL_CS_6;
+        public Enabled MTC_Addr_1_Set_SEL_CS_6 {
+            get => _MTC_Addr_1_Set_SEL_CS_6;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_CS_6, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_SEL_SPI_1IsSet;
+        public bool MTC_Addr_1_Set_SEL_SPI_1IsSet {
+            get => _MTC_Addr_1_Set_SEL_SPI_1IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_SPI_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_SEL_SPI_1;
+        public Enabled MTC_Addr_1_Set_SEL_SPI_1 {
+            get => _MTC_Addr_1_Set_SEL_SPI_1;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_SPI_1, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_SEL_SPI_2IsSet;
+        public bool MTC_Addr_1_Set_SEL_SPI_2IsSet {
+            get => _MTC_Addr_1_Set_SEL_SPI_2IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_SPI_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_SEL_SPI_2;
+        public Enabled MTC_Addr_1_Set_SEL_SPI_2 {
+            get => _MTC_Addr_1_Set_SEL_SPI_2;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_SPI_2, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_SEL_CAN_1IsSet;
+        public bool MTC_Addr_1_Set_SEL_CAN_1IsSet {
+            get => _MTC_Addr_1_Set_SEL_CAN_1IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_CAN_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_SEL_CAN_1;
+        public Enabled MTC_Addr_1_Set_SEL_CAN_1 {
+            get => _MTC_Addr_1_Set_SEL_CAN_1;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_CAN_1, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_SEL_CAN_2IsSet;
+        public bool MTC_Addr_1_Set_SEL_CAN_2IsSet {
+            get => _MTC_Addr_1_Set_SEL_CAN_2IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_CAN_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_SEL_CAN_2;
+        public Enabled MTC_Addr_1_Set_SEL_CAN_2 {
+            get => _MTC_Addr_1_Set_SEL_CAN_2;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_CAN_2, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_SEL_CAN_3IsSet;
+        public bool MTC_Addr_1_Set_SEL_CAN_3IsSet {
+            get => _MTC_Addr_1_Set_SEL_CAN_3IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_CAN_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_SEL_CAN_3;
+        public Enabled MTC_Addr_1_Set_SEL_CAN_3 {
+            get => _MTC_Addr_1_Set_SEL_CAN_3;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_CAN_3, value);
+        }
+        
+        private bool _MTC_Addr_1_Set_SEL_RS422IsSet;
+        public bool MTC_Addr_1_Set_SEL_RS422IsSet {
+            get => _MTC_Addr_1_Set_SEL_RS422IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_RS422IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Set_SEL_RS422;
+        public Enabled MTC_Addr_1_Set_SEL_RS422 {
+            get => _MTC_Addr_1_Set_SEL_RS422;
+            set => _ = Set(ref _MTC_Addr_1_Set_SEL_RS422, value);
+        }
+        
+        /*************** Properties for MTC_Addr_1_Clear register ********************************/
+        private bool _MTC_Addr_1_Clear_ScanEnabledIsSet;
+        public bool MTC_Addr_1_Clear_ScanEnabledIsSet {
+            get => _MTC_Addr_1_Clear_ScanEnabledIsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_ScanEnabledIsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_ScanEnabled;
+        public Enabled MTC_Addr_1_Clear_ScanEnabled {
+            get => _MTC_Addr_1_Clear_ScanEnabled;
+            set => _ = Set(ref _MTC_Addr_1_Clear_ScanEnabled, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_DetectedIsSet;
+        public bool MTC_Addr_1_Clear_DetectedIsSet {
+            get => _MTC_Addr_1_Clear_DetectedIsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_DetectedIsSet, value); 
+        }
+        private byte _MTC_Addr_1_Clear_Detected;
+        public byte MTC_Addr_1_Clear_Detected {
+            get => _MTC_Addr_1_Clear_Detected;
+            set => _ = Set(ref _MTC_Addr_1_Clear_Detected, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_TypeIsSet;
+        public bool MTC_Addr_1_Clear_TypeIsSet {
+            get => _MTC_Addr_1_Clear_TypeIsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_TypeIsSet, value); 
+        }
+        private UInt32 _MTC_Addr_1_Clear_Type;
+        public UInt32 MTC_Addr_1_Clear_Type {
+            get => _MTC_Addr_1_Clear_Type;
+            set => _ = Set(ref _MTC_Addr_1_Clear_Type, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_ENABLE_1IsSet;
+        public bool MTC_Addr_1_Clear_ENABLE_1IsSet {
+            get => _MTC_Addr_1_Clear_ENABLE_1IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_ENABLE_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_ENABLE_1;
+        public Enabled MTC_Addr_1_Clear_ENABLE_1 {
+            get => _MTC_Addr_1_Clear_ENABLE_1;
+            set => _ = Set(ref _MTC_Addr_1_Clear_ENABLE_1, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_ENABLE_2IsSet;
+        public bool MTC_Addr_1_Clear_ENABLE_2IsSet {
+            get => _MTC_Addr_1_Clear_ENABLE_2IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_ENABLE_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_ENABLE_2;
+        public Enabled MTC_Addr_1_Clear_ENABLE_2 {
+            get => _MTC_Addr_1_Clear_ENABLE_2;
+            set => _ = Set(ref _MTC_Addr_1_Clear_ENABLE_2, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_SEL_I2C_1IsSet;
+        public bool MTC_Addr_1_Clear_SEL_I2C_1IsSet {
+            get => _MTC_Addr_1_Clear_SEL_I2C_1IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_I2C_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_SEL_I2C_1;
+        public Enabled MTC_Addr_1_Clear_SEL_I2C_1 {
+            get => _MTC_Addr_1_Clear_SEL_I2C_1;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_I2C_1, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_SEL_I2C_2IsSet;
+        public bool MTC_Addr_1_Clear_SEL_I2C_2IsSet {
+            get => _MTC_Addr_1_Clear_SEL_I2C_2IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_I2C_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_SEL_I2C_2;
+        public Enabled MTC_Addr_1_Clear_SEL_I2C_2 {
+            get => _MTC_Addr_1_Clear_SEL_I2C_2;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_I2C_2, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_SEL_UART_1IsSet;
+        public bool MTC_Addr_1_Clear_SEL_UART_1IsSet {
+            get => _MTC_Addr_1_Clear_SEL_UART_1IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_UART_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_SEL_UART_1;
+        public Enabled MTC_Addr_1_Clear_SEL_UART_1 {
+            get => _MTC_Addr_1_Clear_SEL_UART_1;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_UART_1, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_SEL_UART_2IsSet;
+        public bool MTC_Addr_1_Clear_SEL_UART_2IsSet {
+            get => _MTC_Addr_1_Clear_SEL_UART_2IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_UART_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_SEL_UART_2;
+        public Enabled MTC_Addr_1_Clear_SEL_UART_2 {
+            get => _MTC_Addr_1_Clear_SEL_UART_2;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_UART_2, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_SEL_UART_3IsSet;
+        public bool MTC_Addr_1_Clear_SEL_UART_3IsSet {
+            get => _MTC_Addr_1_Clear_SEL_UART_3IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_UART_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_SEL_UART_3;
+        public Enabled MTC_Addr_1_Clear_SEL_UART_3 {
+            get => _MTC_Addr_1_Clear_SEL_UART_3;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_UART_3, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_SEL_UART_4IsSet;
+        public bool MTC_Addr_1_Clear_SEL_UART_4IsSet {
+            get => _MTC_Addr_1_Clear_SEL_UART_4IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_UART_4IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_SEL_UART_4;
+        public Enabled MTC_Addr_1_Clear_SEL_UART_4 {
+            get => _MTC_Addr_1_Clear_SEL_UART_4;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_UART_4, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_SEL_UART_5IsSet;
+        public bool MTC_Addr_1_Clear_SEL_UART_5IsSet {
+            get => _MTC_Addr_1_Clear_SEL_UART_5IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_UART_5IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_SEL_UART_5;
+        public Enabled MTC_Addr_1_Clear_SEL_UART_5 {
+            get => _MTC_Addr_1_Clear_SEL_UART_5;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_UART_5, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_SEL_UART_6IsSet;
+        public bool MTC_Addr_1_Clear_SEL_UART_6IsSet {
+            get => _MTC_Addr_1_Clear_SEL_UART_6IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_UART_6IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_SEL_UART_6;
+        public Enabled MTC_Addr_1_Clear_SEL_UART_6 {
+            get => _MTC_Addr_1_Clear_SEL_UART_6;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_UART_6, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_SEL_VBATIsSet;
+        public bool MTC_Addr_1_Clear_SEL_VBATIsSet {
+            get => _MTC_Addr_1_Clear_SEL_VBATIsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_VBATIsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_SEL_VBAT;
+        public Enabled MTC_Addr_1_Clear_SEL_VBAT {
+            get => _MTC_Addr_1_Clear_SEL_VBAT;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_VBAT, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_SEL_VBAT_ALTIsSet;
+        public bool MTC_Addr_1_Clear_SEL_VBAT_ALTIsSet {
+            get => _MTC_Addr_1_Clear_SEL_VBAT_ALTIsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_VBAT_ALTIsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_SEL_VBAT_ALT;
+        public Enabled MTC_Addr_1_Clear_SEL_VBAT_ALT {
+            get => _MTC_Addr_1_Clear_SEL_VBAT_ALT;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_VBAT_ALT, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_SEL_VBAT_FPGAIsSet;
+        public bool MTC_Addr_1_Clear_SEL_VBAT_FPGAIsSet {
+            get => _MTC_Addr_1_Clear_SEL_VBAT_FPGAIsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_VBAT_FPGAIsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_SEL_VBAT_FPGA;
+        public Enabled MTC_Addr_1_Clear_SEL_VBAT_FPGA {
+            get => _MTC_Addr_1_Clear_SEL_VBAT_FPGA;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_VBAT_FPGA, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_SEL_nRESET_1IsSet;
+        public bool MTC_Addr_1_Clear_SEL_nRESET_1IsSet {
+            get => _MTC_Addr_1_Clear_SEL_nRESET_1IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_nRESET_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_SEL_nRESET_1;
+        public Enabled MTC_Addr_1_Clear_SEL_nRESET_1 {
+            get => _MTC_Addr_1_Clear_SEL_nRESET_1;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_nRESET_1, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_SEL_nRESET_2IsSet;
+        public bool MTC_Addr_1_Clear_SEL_nRESET_2IsSet {
+            get => _MTC_Addr_1_Clear_SEL_nRESET_2IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_nRESET_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_SEL_nRESET_2;
+        public Enabled MTC_Addr_1_Clear_SEL_nRESET_2 {
+            get => _MTC_Addr_1_Clear_SEL_nRESET_2;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_nRESET_2, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_SEL_nRESET_3IsSet;
+        public bool MTC_Addr_1_Clear_SEL_nRESET_3IsSet {
+            get => _MTC_Addr_1_Clear_SEL_nRESET_3IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_nRESET_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_SEL_nRESET_3;
+        public Enabled MTC_Addr_1_Clear_SEL_nRESET_3 {
+            get => _MTC_Addr_1_Clear_SEL_nRESET_3;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_nRESET_3, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_SEL_CS_1IsSet;
+        public bool MTC_Addr_1_Clear_SEL_CS_1IsSet {
+            get => _MTC_Addr_1_Clear_SEL_CS_1IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_CS_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_SEL_CS_1;
+        public Enabled MTC_Addr_1_Clear_SEL_CS_1 {
+            get => _MTC_Addr_1_Clear_SEL_CS_1;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_CS_1, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_SEL_CS_2IsSet;
+        public bool MTC_Addr_1_Clear_SEL_CS_2IsSet {
+            get => _MTC_Addr_1_Clear_SEL_CS_2IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_CS_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_SEL_CS_2;
+        public Enabled MTC_Addr_1_Clear_SEL_CS_2 {
+            get => _MTC_Addr_1_Clear_SEL_CS_2;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_CS_2, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_SEL_CS_3IsSet;
+        public bool MTC_Addr_1_Clear_SEL_CS_3IsSet {
+            get => _MTC_Addr_1_Clear_SEL_CS_3IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_CS_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_SEL_CS_3;
+        public Enabled MTC_Addr_1_Clear_SEL_CS_3 {
+            get => _MTC_Addr_1_Clear_SEL_CS_3;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_CS_3, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_SEL_CS_4IsSet;
+        public bool MTC_Addr_1_Clear_SEL_CS_4IsSet {
+            get => _MTC_Addr_1_Clear_SEL_CS_4IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_CS_4IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_SEL_CS_4;
+        public Enabled MTC_Addr_1_Clear_SEL_CS_4 {
+            get => _MTC_Addr_1_Clear_SEL_CS_4;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_CS_4, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_SEL_CS_5IsSet;
+        public bool MTC_Addr_1_Clear_SEL_CS_5IsSet {
+            get => _MTC_Addr_1_Clear_SEL_CS_5IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_CS_5IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_SEL_CS_5;
+        public Enabled MTC_Addr_1_Clear_SEL_CS_5 {
+            get => _MTC_Addr_1_Clear_SEL_CS_5;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_CS_5, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_SEL_CS_6IsSet;
+        public bool MTC_Addr_1_Clear_SEL_CS_6IsSet {
+            get => _MTC_Addr_1_Clear_SEL_CS_6IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_CS_6IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_SEL_CS_6;
+        public Enabled MTC_Addr_1_Clear_SEL_CS_6 {
+            get => _MTC_Addr_1_Clear_SEL_CS_6;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_CS_6, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_SEL_SPI_1IsSet;
+        public bool MTC_Addr_1_Clear_SEL_SPI_1IsSet {
+            get => _MTC_Addr_1_Clear_SEL_SPI_1IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_SPI_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_SEL_SPI_1;
+        public Enabled MTC_Addr_1_Clear_SEL_SPI_1 {
+            get => _MTC_Addr_1_Clear_SEL_SPI_1;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_SPI_1, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_SEL_SPI_2IsSet;
+        public bool MTC_Addr_1_Clear_SEL_SPI_2IsSet {
+            get => _MTC_Addr_1_Clear_SEL_SPI_2IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_SPI_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_SEL_SPI_2;
+        public Enabled MTC_Addr_1_Clear_SEL_SPI_2 {
+            get => _MTC_Addr_1_Clear_SEL_SPI_2;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_SPI_2, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_SEL_CAN_1IsSet;
+        public bool MTC_Addr_1_Clear_SEL_CAN_1IsSet {
+            get => _MTC_Addr_1_Clear_SEL_CAN_1IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_CAN_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_SEL_CAN_1;
+        public Enabled MTC_Addr_1_Clear_SEL_CAN_1 {
+            get => _MTC_Addr_1_Clear_SEL_CAN_1;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_CAN_1, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_SEL_CAN_2IsSet;
+        public bool MTC_Addr_1_Clear_SEL_CAN_2IsSet {
+            get => _MTC_Addr_1_Clear_SEL_CAN_2IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_CAN_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_SEL_CAN_2;
+        public Enabled MTC_Addr_1_Clear_SEL_CAN_2 {
+            get => _MTC_Addr_1_Clear_SEL_CAN_2;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_CAN_2, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_SEL_CAN_3IsSet;
+        public bool MTC_Addr_1_Clear_SEL_CAN_3IsSet {
+            get => _MTC_Addr_1_Clear_SEL_CAN_3IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_CAN_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_SEL_CAN_3;
+        public Enabled MTC_Addr_1_Clear_SEL_CAN_3 {
+            get => _MTC_Addr_1_Clear_SEL_CAN_3;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_CAN_3, value);
+        }
+        
+        private bool _MTC_Addr_1_Clear_SEL_RS422IsSet;
+        public bool MTC_Addr_1_Clear_SEL_RS422IsSet {
+            get => _MTC_Addr_1_Clear_SEL_RS422IsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_RS422IsSet, value); 
+        }
+        private Enabled _MTC_Addr_1_Clear_SEL_RS422;
+        public Enabled MTC_Addr_1_Clear_SEL_RS422 {
+            get => _MTC_Addr_1_Clear_SEL_RS422;
+            set => _ = Set(ref _MTC_Addr_1_Clear_SEL_RS422, value);
+        }
+        
+        /*************** Properties for MTC_Addr_2 register **************************************/
+        private bool _MTC_Addr_2_ScanEnabledIsSet;
+        public bool MTC_Addr_2_ScanEnabledIsSet {
+            get => _MTC_Addr_2_ScanEnabledIsSet;
+            set => _ = Set(ref _MTC_Addr_2_ScanEnabledIsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_ScanEnabled;
+        public Enabled MTC_Addr_2_ScanEnabled {
+            get => _MTC_Addr_2_ScanEnabled;
+            set => _ = Set(ref _MTC_Addr_2_ScanEnabled, value);
+        }
+        
+        private bool _MTC_Addr_2_DetectedIsSet;
+        public bool MTC_Addr_2_DetectedIsSet {
+            get => _MTC_Addr_2_DetectedIsSet;
+            set => _ = Set(ref _MTC_Addr_2_DetectedIsSet, value); 
+        }
+        private byte _MTC_Addr_2_Detected;
+        public byte MTC_Addr_2_Detected {
+            get => _MTC_Addr_2_Detected;
+            set => _ = Set(ref _MTC_Addr_2_Detected, value);
+        }
+        
+        private bool _MTC_Addr_2_TypeIsSet;
+        public bool MTC_Addr_2_TypeIsSet {
+            get => _MTC_Addr_2_TypeIsSet;
+            set => _ = Set(ref _MTC_Addr_2_TypeIsSet, value); 
+        }
+        private UInt32 _MTC_Addr_2_Type;
+        public UInt32 MTC_Addr_2_Type {
+            get => _MTC_Addr_2_Type;
+            set => _ = Set(ref _MTC_Addr_2_Type, value);
+        }
+        
+        private bool _MTC_Addr_2_ENABLE_1IsSet;
+        public bool MTC_Addr_2_ENABLE_1IsSet {
+            get => _MTC_Addr_2_ENABLE_1IsSet;
+            set => _ = Set(ref _MTC_Addr_2_ENABLE_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_ENABLE_1;
+        public Enabled MTC_Addr_2_ENABLE_1 {
+            get => _MTC_Addr_2_ENABLE_1;
+            set => _ = Set(ref _MTC_Addr_2_ENABLE_1, value);
+        }
+        
+        private bool _MTC_Addr_2_ENABLE_2IsSet;
+        public bool MTC_Addr_2_ENABLE_2IsSet {
+            get => _MTC_Addr_2_ENABLE_2IsSet;
+            set => _ = Set(ref _MTC_Addr_2_ENABLE_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_ENABLE_2;
+        public Enabled MTC_Addr_2_ENABLE_2 {
+            get => _MTC_Addr_2_ENABLE_2;
+            set => _ = Set(ref _MTC_Addr_2_ENABLE_2, value);
+        }
+        
+        private bool _MTC_Addr_2_SEL_I2C_1IsSet;
+        public bool MTC_Addr_2_SEL_I2C_1IsSet {
+            get => _MTC_Addr_2_SEL_I2C_1IsSet;
+            set => _ = Set(ref _MTC_Addr_2_SEL_I2C_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_SEL_I2C_1;
+        public Enabled MTC_Addr_2_SEL_I2C_1 {
+            get => _MTC_Addr_2_SEL_I2C_1;
+            set => _ = Set(ref _MTC_Addr_2_SEL_I2C_1, value);
+        }
+        
+        private bool _MTC_Addr_2_SEL_I2C_2IsSet;
+        public bool MTC_Addr_2_SEL_I2C_2IsSet {
+            get => _MTC_Addr_2_SEL_I2C_2IsSet;
+            set => _ = Set(ref _MTC_Addr_2_SEL_I2C_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_SEL_I2C_2;
+        public Enabled MTC_Addr_2_SEL_I2C_2 {
+            get => _MTC_Addr_2_SEL_I2C_2;
+            set => _ = Set(ref _MTC_Addr_2_SEL_I2C_2, value);
+        }
+        
+        private bool _MTC_Addr_2_SEL_UART_1IsSet;
+        public bool MTC_Addr_2_SEL_UART_1IsSet {
+            get => _MTC_Addr_2_SEL_UART_1IsSet;
+            set => _ = Set(ref _MTC_Addr_2_SEL_UART_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_SEL_UART_1;
+        public Enabled MTC_Addr_2_SEL_UART_1 {
+            get => _MTC_Addr_2_SEL_UART_1;
+            set => _ = Set(ref _MTC_Addr_2_SEL_UART_1, value);
+        }
+        
+        private bool _MTC_Addr_2_SEL_UART_2IsSet;
+        public bool MTC_Addr_2_SEL_UART_2IsSet {
+            get => _MTC_Addr_2_SEL_UART_2IsSet;
+            set => _ = Set(ref _MTC_Addr_2_SEL_UART_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_SEL_UART_2;
+        public Enabled MTC_Addr_2_SEL_UART_2 {
+            get => _MTC_Addr_2_SEL_UART_2;
+            set => _ = Set(ref _MTC_Addr_2_SEL_UART_2, value);
+        }
+        
+        private bool _MTC_Addr_2_SEL_UART_3IsSet;
+        public bool MTC_Addr_2_SEL_UART_3IsSet {
+            get => _MTC_Addr_2_SEL_UART_3IsSet;
+            set => _ = Set(ref _MTC_Addr_2_SEL_UART_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_SEL_UART_3;
+        public Enabled MTC_Addr_2_SEL_UART_3 {
+            get => _MTC_Addr_2_SEL_UART_3;
+            set => _ = Set(ref _MTC_Addr_2_SEL_UART_3, value);
+        }
+        
+        private bool _MTC_Addr_2_SEL_UART_4IsSet;
+        public bool MTC_Addr_2_SEL_UART_4IsSet {
+            get => _MTC_Addr_2_SEL_UART_4IsSet;
+            set => _ = Set(ref _MTC_Addr_2_SEL_UART_4IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_SEL_UART_4;
+        public Enabled MTC_Addr_2_SEL_UART_4 {
+            get => _MTC_Addr_2_SEL_UART_4;
+            set => _ = Set(ref _MTC_Addr_2_SEL_UART_4, value);
+        }
+        
+        private bool _MTC_Addr_2_SEL_UART_5IsSet;
+        public bool MTC_Addr_2_SEL_UART_5IsSet {
+            get => _MTC_Addr_2_SEL_UART_5IsSet;
+            set => _ = Set(ref _MTC_Addr_2_SEL_UART_5IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_SEL_UART_5;
+        public Enabled MTC_Addr_2_SEL_UART_5 {
+            get => _MTC_Addr_2_SEL_UART_5;
+            set => _ = Set(ref _MTC_Addr_2_SEL_UART_5, value);
+        }
+        
+        private bool _MTC_Addr_2_SEL_UART_6IsSet;
+        public bool MTC_Addr_2_SEL_UART_6IsSet {
+            get => _MTC_Addr_2_SEL_UART_6IsSet;
+            set => _ = Set(ref _MTC_Addr_2_SEL_UART_6IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_SEL_UART_6;
+        public Enabled MTC_Addr_2_SEL_UART_6 {
+            get => _MTC_Addr_2_SEL_UART_6;
+            set => _ = Set(ref _MTC_Addr_2_SEL_UART_6, value);
+        }
+        
+        private bool _MTC_Addr_2_SEL_VBATIsSet;
+        public bool MTC_Addr_2_SEL_VBATIsSet {
+            get => _MTC_Addr_2_SEL_VBATIsSet;
+            set => _ = Set(ref _MTC_Addr_2_SEL_VBATIsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_SEL_VBAT;
+        public Enabled MTC_Addr_2_SEL_VBAT {
+            get => _MTC_Addr_2_SEL_VBAT;
+            set => _ = Set(ref _MTC_Addr_2_SEL_VBAT, value);
+        }
+        
+        private bool _MTC_Addr_2_SEL_VBAT_ALTIsSet;
+        public bool MTC_Addr_2_SEL_VBAT_ALTIsSet {
+            get => _MTC_Addr_2_SEL_VBAT_ALTIsSet;
+            set => _ = Set(ref _MTC_Addr_2_SEL_VBAT_ALTIsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_SEL_VBAT_ALT;
+        public Enabled MTC_Addr_2_SEL_VBAT_ALT {
+            get => _MTC_Addr_2_SEL_VBAT_ALT;
+            set => _ = Set(ref _MTC_Addr_2_SEL_VBAT_ALT, value);
+        }
+        
+        private bool _MTC_Addr_2_SEL_VBAT_FPGAIsSet;
+        public bool MTC_Addr_2_SEL_VBAT_FPGAIsSet {
+            get => _MTC_Addr_2_SEL_VBAT_FPGAIsSet;
+            set => _ = Set(ref _MTC_Addr_2_SEL_VBAT_FPGAIsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_SEL_VBAT_FPGA;
+        public Enabled MTC_Addr_2_SEL_VBAT_FPGA {
+            get => _MTC_Addr_2_SEL_VBAT_FPGA;
+            set => _ = Set(ref _MTC_Addr_2_SEL_VBAT_FPGA, value);
+        }
+        
+        private bool _MTC_Addr_2_SEL_nRESET_1IsSet;
+        public bool MTC_Addr_2_SEL_nRESET_1IsSet {
+            get => _MTC_Addr_2_SEL_nRESET_1IsSet;
+            set => _ = Set(ref _MTC_Addr_2_SEL_nRESET_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_SEL_nRESET_1;
+        public Enabled MTC_Addr_2_SEL_nRESET_1 {
+            get => _MTC_Addr_2_SEL_nRESET_1;
+            set => _ = Set(ref _MTC_Addr_2_SEL_nRESET_1, value);
+        }
+        
+        private bool _MTC_Addr_2_SEL_nRESET_2IsSet;
+        public bool MTC_Addr_2_SEL_nRESET_2IsSet {
+            get => _MTC_Addr_2_SEL_nRESET_2IsSet;
+            set => _ = Set(ref _MTC_Addr_2_SEL_nRESET_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_SEL_nRESET_2;
+        public Enabled MTC_Addr_2_SEL_nRESET_2 {
+            get => _MTC_Addr_2_SEL_nRESET_2;
+            set => _ = Set(ref _MTC_Addr_2_SEL_nRESET_2, value);
+        }
+        
+        private bool _MTC_Addr_2_SEL_nRESET_3IsSet;
+        public bool MTC_Addr_2_SEL_nRESET_3IsSet {
+            get => _MTC_Addr_2_SEL_nRESET_3IsSet;
+            set => _ = Set(ref _MTC_Addr_2_SEL_nRESET_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_SEL_nRESET_3;
+        public Enabled MTC_Addr_2_SEL_nRESET_3 {
+            get => _MTC_Addr_2_SEL_nRESET_3;
+            set => _ = Set(ref _MTC_Addr_2_SEL_nRESET_3, value);
+        }
+        
+        private bool _MTC_Addr_2_SEL_CS_1IsSet;
+        public bool MTC_Addr_2_SEL_CS_1IsSet {
+            get => _MTC_Addr_2_SEL_CS_1IsSet;
+            set => _ = Set(ref _MTC_Addr_2_SEL_CS_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_SEL_CS_1;
+        public Enabled MTC_Addr_2_SEL_CS_1 {
+            get => _MTC_Addr_2_SEL_CS_1;
+            set => _ = Set(ref _MTC_Addr_2_SEL_CS_1, value);
+        }
+        
+        private bool _MTC_Addr_2_SEL_CS_2IsSet;
+        public bool MTC_Addr_2_SEL_CS_2IsSet {
+            get => _MTC_Addr_2_SEL_CS_2IsSet;
+            set => _ = Set(ref _MTC_Addr_2_SEL_CS_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_SEL_CS_2;
+        public Enabled MTC_Addr_2_SEL_CS_2 {
+            get => _MTC_Addr_2_SEL_CS_2;
+            set => _ = Set(ref _MTC_Addr_2_SEL_CS_2, value);
+        }
+        
+        private bool _MTC_Addr_2_SEL_CS_3IsSet;
+        public bool MTC_Addr_2_SEL_CS_3IsSet {
+            get => _MTC_Addr_2_SEL_CS_3IsSet;
+            set => _ = Set(ref _MTC_Addr_2_SEL_CS_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_SEL_CS_3;
+        public Enabled MTC_Addr_2_SEL_CS_3 {
+            get => _MTC_Addr_2_SEL_CS_3;
+            set => _ = Set(ref _MTC_Addr_2_SEL_CS_3, value);
+        }
+        
+        private bool _MTC_Addr_2_SEL_CS_4IsSet;
+        public bool MTC_Addr_2_SEL_CS_4IsSet {
+            get => _MTC_Addr_2_SEL_CS_4IsSet;
+            set => _ = Set(ref _MTC_Addr_2_SEL_CS_4IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_SEL_CS_4;
+        public Enabled MTC_Addr_2_SEL_CS_4 {
+            get => _MTC_Addr_2_SEL_CS_4;
+            set => _ = Set(ref _MTC_Addr_2_SEL_CS_4, value);
+        }
+        
+        private bool _MTC_Addr_2_SEL_CS_5IsSet;
+        public bool MTC_Addr_2_SEL_CS_5IsSet {
+            get => _MTC_Addr_2_SEL_CS_5IsSet;
+            set => _ = Set(ref _MTC_Addr_2_SEL_CS_5IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_SEL_CS_5;
+        public Enabled MTC_Addr_2_SEL_CS_5 {
+            get => _MTC_Addr_2_SEL_CS_5;
+            set => _ = Set(ref _MTC_Addr_2_SEL_CS_5, value);
+        }
+        
+        private bool _MTC_Addr_2_SEL_CS_6IsSet;
+        public bool MTC_Addr_2_SEL_CS_6IsSet {
+            get => _MTC_Addr_2_SEL_CS_6IsSet;
+            set => _ = Set(ref _MTC_Addr_2_SEL_CS_6IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_SEL_CS_6;
+        public Enabled MTC_Addr_2_SEL_CS_6 {
+            get => _MTC_Addr_2_SEL_CS_6;
+            set => _ = Set(ref _MTC_Addr_2_SEL_CS_6, value);
+        }
+        
+        private bool _MTC_Addr_2_SEL_SPI_1IsSet;
+        public bool MTC_Addr_2_SEL_SPI_1IsSet {
+            get => _MTC_Addr_2_SEL_SPI_1IsSet;
+            set => _ = Set(ref _MTC_Addr_2_SEL_SPI_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_SEL_SPI_1;
+        public Enabled MTC_Addr_2_SEL_SPI_1 {
+            get => _MTC_Addr_2_SEL_SPI_1;
+            set => _ = Set(ref _MTC_Addr_2_SEL_SPI_1, value);
+        }
+        
+        private bool _MTC_Addr_2_SEL_SPI_2IsSet;
+        public bool MTC_Addr_2_SEL_SPI_2IsSet {
+            get => _MTC_Addr_2_SEL_SPI_2IsSet;
+            set => _ = Set(ref _MTC_Addr_2_SEL_SPI_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_SEL_SPI_2;
+        public Enabled MTC_Addr_2_SEL_SPI_2 {
+            get => _MTC_Addr_2_SEL_SPI_2;
+            set => _ = Set(ref _MTC_Addr_2_SEL_SPI_2, value);
+        }
+        
+        private bool _MTC_Addr_2_SEL_CAN_1IsSet;
+        public bool MTC_Addr_2_SEL_CAN_1IsSet {
+            get => _MTC_Addr_2_SEL_CAN_1IsSet;
+            set => _ = Set(ref _MTC_Addr_2_SEL_CAN_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_SEL_CAN_1;
+        public Enabled MTC_Addr_2_SEL_CAN_1 {
+            get => _MTC_Addr_2_SEL_CAN_1;
+            set => _ = Set(ref _MTC_Addr_2_SEL_CAN_1, value);
+        }
+        
+        private bool _MTC_Addr_2_SEL_CAN_2IsSet;
+        public bool MTC_Addr_2_SEL_CAN_2IsSet {
+            get => _MTC_Addr_2_SEL_CAN_2IsSet;
+            set => _ = Set(ref _MTC_Addr_2_SEL_CAN_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_SEL_CAN_2;
+        public Enabled MTC_Addr_2_SEL_CAN_2 {
+            get => _MTC_Addr_2_SEL_CAN_2;
+            set => _ = Set(ref _MTC_Addr_2_SEL_CAN_2, value);
+        }
+        
+        private bool _MTC_Addr_2_SEL_CAN_3IsSet;
+        public bool MTC_Addr_2_SEL_CAN_3IsSet {
+            get => _MTC_Addr_2_SEL_CAN_3IsSet;
+            set => _ = Set(ref _MTC_Addr_2_SEL_CAN_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_SEL_CAN_3;
+        public Enabled MTC_Addr_2_SEL_CAN_3 {
+            get => _MTC_Addr_2_SEL_CAN_3;
+            set => _ = Set(ref _MTC_Addr_2_SEL_CAN_3, value);
+        }
+        
+        private bool _MTC_Addr_2_SEL_RS422IsSet;
+        public bool MTC_Addr_2_SEL_RS422IsSet {
+            get => _MTC_Addr_2_SEL_RS422IsSet;
+            set => _ = Set(ref _MTC_Addr_2_SEL_RS422IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_SEL_RS422;
+        public Enabled MTC_Addr_2_SEL_RS422 {
+            get => _MTC_Addr_2_SEL_RS422;
+            set => _ = Set(ref _MTC_Addr_2_SEL_RS422, value);
+        }
+        
+        /*************** Properties for MTC_Addr_2_Set register **********************************/
+        private bool _MTC_Addr_2_Set_ScanEnabledIsSet;
+        public bool MTC_Addr_2_Set_ScanEnabledIsSet {
+            get => _MTC_Addr_2_Set_ScanEnabledIsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_ScanEnabledIsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_ScanEnabled;
+        public Enabled MTC_Addr_2_Set_ScanEnabled {
+            get => _MTC_Addr_2_Set_ScanEnabled;
+            set => _ = Set(ref _MTC_Addr_2_Set_ScanEnabled, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_DetectedIsSet;
+        public bool MTC_Addr_2_Set_DetectedIsSet {
+            get => _MTC_Addr_2_Set_DetectedIsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_DetectedIsSet, value); 
+        }
+        private byte _MTC_Addr_2_Set_Detected;
+        public byte MTC_Addr_2_Set_Detected {
+            get => _MTC_Addr_2_Set_Detected;
+            set => _ = Set(ref _MTC_Addr_2_Set_Detected, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_TypeIsSet;
+        public bool MTC_Addr_2_Set_TypeIsSet {
+            get => _MTC_Addr_2_Set_TypeIsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_TypeIsSet, value); 
+        }
+        private UInt32 _MTC_Addr_2_Set_Type;
+        public UInt32 MTC_Addr_2_Set_Type {
+            get => _MTC_Addr_2_Set_Type;
+            set => _ = Set(ref _MTC_Addr_2_Set_Type, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_ENABLE_1IsSet;
+        public bool MTC_Addr_2_Set_ENABLE_1IsSet {
+            get => _MTC_Addr_2_Set_ENABLE_1IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_ENABLE_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_ENABLE_1;
+        public Enabled MTC_Addr_2_Set_ENABLE_1 {
+            get => _MTC_Addr_2_Set_ENABLE_1;
+            set => _ = Set(ref _MTC_Addr_2_Set_ENABLE_1, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_ENABLE_2IsSet;
+        public bool MTC_Addr_2_Set_ENABLE_2IsSet {
+            get => _MTC_Addr_2_Set_ENABLE_2IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_ENABLE_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_ENABLE_2;
+        public Enabled MTC_Addr_2_Set_ENABLE_2 {
+            get => _MTC_Addr_2_Set_ENABLE_2;
+            set => _ = Set(ref _MTC_Addr_2_Set_ENABLE_2, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_SEL_I2C_1IsSet;
+        public bool MTC_Addr_2_Set_SEL_I2C_1IsSet {
+            get => _MTC_Addr_2_Set_SEL_I2C_1IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_I2C_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_SEL_I2C_1;
+        public Enabled MTC_Addr_2_Set_SEL_I2C_1 {
+            get => _MTC_Addr_2_Set_SEL_I2C_1;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_I2C_1, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_SEL_I2C_2IsSet;
+        public bool MTC_Addr_2_Set_SEL_I2C_2IsSet {
+            get => _MTC_Addr_2_Set_SEL_I2C_2IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_I2C_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_SEL_I2C_2;
+        public Enabled MTC_Addr_2_Set_SEL_I2C_2 {
+            get => _MTC_Addr_2_Set_SEL_I2C_2;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_I2C_2, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_SEL_UART_1IsSet;
+        public bool MTC_Addr_2_Set_SEL_UART_1IsSet {
+            get => _MTC_Addr_2_Set_SEL_UART_1IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_UART_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_SEL_UART_1;
+        public Enabled MTC_Addr_2_Set_SEL_UART_1 {
+            get => _MTC_Addr_2_Set_SEL_UART_1;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_UART_1, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_SEL_UART_2IsSet;
+        public bool MTC_Addr_2_Set_SEL_UART_2IsSet {
+            get => _MTC_Addr_2_Set_SEL_UART_2IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_UART_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_SEL_UART_2;
+        public Enabled MTC_Addr_2_Set_SEL_UART_2 {
+            get => _MTC_Addr_2_Set_SEL_UART_2;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_UART_2, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_SEL_UART_3IsSet;
+        public bool MTC_Addr_2_Set_SEL_UART_3IsSet {
+            get => _MTC_Addr_2_Set_SEL_UART_3IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_UART_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_SEL_UART_3;
+        public Enabled MTC_Addr_2_Set_SEL_UART_3 {
+            get => _MTC_Addr_2_Set_SEL_UART_3;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_UART_3, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_SEL_UART_4IsSet;
+        public bool MTC_Addr_2_Set_SEL_UART_4IsSet {
+            get => _MTC_Addr_2_Set_SEL_UART_4IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_UART_4IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_SEL_UART_4;
+        public Enabled MTC_Addr_2_Set_SEL_UART_4 {
+            get => _MTC_Addr_2_Set_SEL_UART_4;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_UART_4, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_SEL_UART_5IsSet;
+        public bool MTC_Addr_2_Set_SEL_UART_5IsSet {
+            get => _MTC_Addr_2_Set_SEL_UART_5IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_UART_5IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_SEL_UART_5;
+        public Enabled MTC_Addr_2_Set_SEL_UART_5 {
+            get => _MTC_Addr_2_Set_SEL_UART_5;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_UART_5, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_SEL_UART_6IsSet;
+        public bool MTC_Addr_2_Set_SEL_UART_6IsSet {
+            get => _MTC_Addr_2_Set_SEL_UART_6IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_UART_6IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_SEL_UART_6;
+        public Enabled MTC_Addr_2_Set_SEL_UART_6 {
+            get => _MTC_Addr_2_Set_SEL_UART_6;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_UART_6, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_SEL_VBATIsSet;
+        public bool MTC_Addr_2_Set_SEL_VBATIsSet {
+            get => _MTC_Addr_2_Set_SEL_VBATIsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_VBATIsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_SEL_VBAT;
+        public Enabled MTC_Addr_2_Set_SEL_VBAT {
+            get => _MTC_Addr_2_Set_SEL_VBAT;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_VBAT, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_SEL_VBAT_ALTIsSet;
+        public bool MTC_Addr_2_Set_SEL_VBAT_ALTIsSet {
+            get => _MTC_Addr_2_Set_SEL_VBAT_ALTIsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_VBAT_ALTIsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_SEL_VBAT_ALT;
+        public Enabled MTC_Addr_2_Set_SEL_VBAT_ALT {
+            get => _MTC_Addr_2_Set_SEL_VBAT_ALT;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_VBAT_ALT, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_SEL_VBAT_FPGAIsSet;
+        public bool MTC_Addr_2_Set_SEL_VBAT_FPGAIsSet {
+            get => _MTC_Addr_2_Set_SEL_VBAT_FPGAIsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_VBAT_FPGAIsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_SEL_VBAT_FPGA;
+        public Enabled MTC_Addr_2_Set_SEL_VBAT_FPGA {
+            get => _MTC_Addr_2_Set_SEL_VBAT_FPGA;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_VBAT_FPGA, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_SEL_nRESET_1IsSet;
+        public bool MTC_Addr_2_Set_SEL_nRESET_1IsSet {
+            get => _MTC_Addr_2_Set_SEL_nRESET_1IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_nRESET_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_SEL_nRESET_1;
+        public Enabled MTC_Addr_2_Set_SEL_nRESET_1 {
+            get => _MTC_Addr_2_Set_SEL_nRESET_1;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_nRESET_1, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_SEL_nRESET_2IsSet;
+        public bool MTC_Addr_2_Set_SEL_nRESET_2IsSet {
+            get => _MTC_Addr_2_Set_SEL_nRESET_2IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_nRESET_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_SEL_nRESET_2;
+        public Enabled MTC_Addr_2_Set_SEL_nRESET_2 {
+            get => _MTC_Addr_2_Set_SEL_nRESET_2;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_nRESET_2, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_SEL_nRESET_3IsSet;
+        public bool MTC_Addr_2_Set_SEL_nRESET_3IsSet {
+            get => _MTC_Addr_2_Set_SEL_nRESET_3IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_nRESET_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_SEL_nRESET_3;
+        public Enabled MTC_Addr_2_Set_SEL_nRESET_3 {
+            get => _MTC_Addr_2_Set_SEL_nRESET_3;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_nRESET_3, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_SEL_CS_1IsSet;
+        public bool MTC_Addr_2_Set_SEL_CS_1IsSet {
+            get => _MTC_Addr_2_Set_SEL_CS_1IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_CS_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_SEL_CS_1;
+        public Enabled MTC_Addr_2_Set_SEL_CS_1 {
+            get => _MTC_Addr_2_Set_SEL_CS_1;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_CS_1, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_SEL_CS_2IsSet;
+        public bool MTC_Addr_2_Set_SEL_CS_2IsSet {
+            get => _MTC_Addr_2_Set_SEL_CS_2IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_CS_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_SEL_CS_2;
+        public Enabled MTC_Addr_2_Set_SEL_CS_2 {
+            get => _MTC_Addr_2_Set_SEL_CS_2;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_CS_2, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_SEL_CS_3IsSet;
+        public bool MTC_Addr_2_Set_SEL_CS_3IsSet {
+            get => _MTC_Addr_2_Set_SEL_CS_3IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_CS_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_SEL_CS_3;
+        public Enabled MTC_Addr_2_Set_SEL_CS_3 {
+            get => _MTC_Addr_2_Set_SEL_CS_3;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_CS_3, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_SEL_CS_4IsSet;
+        public bool MTC_Addr_2_Set_SEL_CS_4IsSet {
+            get => _MTC_Addr_2_Set_SEL_CS_4IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_CS_4IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_SEL_CS_4;
+        public Enabled MTC_Addr_2_Set_SEL_CS_4 {
+            get => _MTC_Addr_2_Set_SEL_CS_4;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_CS_4, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_SEL_CS_5IsSet;
+        public bool MTC_Addr_2_Set_SEL_CS_5IsSet {
+            get => _MTC_Addr_2_Set_SEL_CS_5IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_CS_5IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_SEL_CS_5;
+        public Enabled MTC_Addr_2_Set_SEL_CS_5 {
+            get => _MTC_Addr_2_Set_SEL_CS_5;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_CS_5, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_SEL_CS_6IsSet;
+        public bool MTC_Addr_2_Set_SEL_CS_6IsSet {
+            get => _MTC_Addr_2_Set_SEL_CS_6IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_CS_6IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_SEL_CS_6;
+        public Enabled MTC_Addr_2_Set_SEL_CS_6 {
+            get => _MTC_Addr_2_Set_SEL_CS_6;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_CS_6, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_SEL_SPI_1IsSet;
+        public bool MTC_Addr_2_Set_SEL_SPI_1IsSet {
+            get => _MTC_Addr_2_Set_SEL_SPI_1IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_SPI_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_SEL_SPI_1;
+        public Enabled MTC_Addr_2_Set_SEL_SPI_1 {
+            get => _MTC_Addr_2_Set_SEL_SPI_1;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_SPI_1, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_SEL_SPI_2IsSet;
+        public bool MTC_Addr_2_Set_SEL_SPI_2IsSet {
+            get => _MTC_Addr_2_Set_SEL_SPI_2IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_SPI_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_SEL_SPI_2;
+        public Enabled MTC_Addr_2_Set_SEL_SPI_2 {
+            get => _MTC_Addr_2_Set_SEL_SPI_2;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_SPI_2, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_SEL_CAN_1IsSet;
+        public bool MTC_Addr_2_Set_SEL_CAN_1IsSet {
+            get => _MTC_Addr_2_Set_SEL_CAN_1IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_CAN_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_SEL_CAN_1;
+        public Enabled MTC_Addr_2_Set_SEL_CAN_1 {
+            get => _MTC_Addr_2_Set_SEL_CAN_1;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_CAN_1, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_SEL_CAN_2IsSet;
+        public bool MTC_Addr_2_Set_SEL_CAN_2IsSet {
+            get => _MTC_Addr_2_Set_SEL_CAN_2IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_CAN_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_SEL_CAN_2;
+        public Enabled MTC_Addr_2_Set_SEL_CAN_2 {
+            get => _MTC_Addr_2_Set_SEL_CAN_2;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_CAN_2, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_SEL_CAN_3IsSet;
+        public bool MTC_Addr_2_Set_SEL_CAN_3IsSet {
+            get => _MTC_Addr_2_Set_SEL_CAN_3IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_CAN_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_SEL_CAN_3;
+        public Enabled MTC_Addr_2_Set_SEL_CAN_3 {
+            get => _MTC_Addr_2_Set_SEL_CAN_3;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_CAN_3, value);
+        }
+        
+        private bool _MTC_Addr_2_Set_SEL_RS422IsSet;
+        public bool MTC_Addr_2_Set_SEL_RS422IsSet {
+            get => _MTC_Addr_2_Set_SEL_RS422IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_RS422IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Set_SEL_RS422;
+        public Enabled MTC_Addr_2_Set_SEL_RS422 {
+            get => _MTC_Addr_2_Set_SEL_RS422;
+            set => _ = Set(ref _MTC_Addr_2_Set_SEL_RS422, value);
+        }
+        
+        /*************** Properties for MTC_Addr_2_Clear register ********************************/
+        private bool _MTC_Addr_2_Clear_ScanEnabledIsSet;
+        public bool MTC_Addr_2_Clear_ScanEnabledIsSet {
+            get => _MTC_Addr_2_Clear_ScanEnabledIsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_ScanEnabledIsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_ScanEnabled;
+        public Enabled MTC_Addr_2_Clear_ScanEnabled {
+            get => _MTC_Addr_2_Clear_ScanEnabled;
+            set => _ = Set(ref _MTC_Addr_2_Clear_ScanEnabled, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_DetectedIsSet;
+        public bool MTC_Addr_2_Clear_DetectedIsSet {
+            get => _MTC_Addr_2_Clear_DetectedIsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_DetectedIsSet, value); 
+        }
+        private byte _MTC_Addr_2_Clear_Detected;
+        public byte MTC_Addr_2_Clear_Detected {
+            get => _MTC_Addr_2_Clear_Detected;
+            set => _ = Set(ref _MTC_Addr_2_Clear_Detected, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_TypeIsSet;
+        public bool MTC_Addr_2_Clear_TypeIsSet {
+            get => _MTC_Addr_2_Clear_TypeIsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_TypeIsSet, value); 
+        }
+        private UInt32 _MTC_Addr_2_Clear_Type;
+        public UInt32 MTC_Addr_2_Clear_Type {
+            get => _MTC_Addr_2_Clear_Type;
+            set => _ = Set(ref _MTC_Addr_2_Clear_Type, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_ENABLE_1IsSet;
+        public bool MTC_Addr_2_Clear_ENABLE_1IsSet {
+            get => _MTC_Addr_2_Clear_ENABLE_1IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_ENABLE_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_ENABLE_1;
+        public Enabled MTC_Addr_2_Clear_ENABLE_1 {
+            get => _MTC_Addr_2_Clear_ENABLE_1;
+            set => _ = Set(ref _MTC_Addr_2_Clear_ENABLE_1, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_ENABLE_2IsSet;
+        public bool MTC_Addr_2_Clear_ENABLE_2IsSet {
+            get => _MTC_Addr_2_Clear_ENABLE_2IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_ENABLE_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_ENABLE_2;
+        public Enabled MTC_Addr_2_Clear_ENABLE_2 {
+            get => _MTC_Addr_2_Clear_ENABLE_2;
+            set => _ = Set(ref _MTC_Addr_2_Clear_ENABLE_2, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_SEL_I2C_1IsSet;
+        public bool MTC_Addr_2_Clear_SEL_I2C_1IsSet {
+            get => _MTC_Addr_2_Clear_SEL_I2C_1IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_I2C_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_SEL_I2C_1;
+        public Enabled MTC_Addr_2_Clear_SEL_I2C_1 {
+            get => _MTC_Addr_2_Clear_SEL_I2C_1;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_I2C_1, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_SEL_I2C_2IsSet;
+        public bool MTC_Addr_2_Clear_SEL_I2C_2IsSet {
+            get => _MTC_Addr_2_Clear_SEL_I2C_2IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_I2C_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_SEL_I2C_2;
+        public Enabled MTC_Addr_2_Clear_SEL_I2C_2 {
+            get => _MTC_Addr_2_Clear_SEL_I2C_2;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_I2C_2, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_SEL_UART_1IsSet;
+        public bool MTC_Addr_2_Clear_SEL_UART_1IsSet {
+            get => _MTC_Addr_2_Clear_SEL_UART_1IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_UART_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_SEL_UART_1;
+        public Enabled MTC_Addr_2_Clear_SEL_UART_1 {
+            get => _MTC_Addr_2_Clear_SEL_UART_1;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_UART_1, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_SEL_UART_2IsSet;
+        public bool MTC_Addr_2_Clear_SEL_UART_2IsSet {
+            get => _MTC_Addr_2_Clear_SEL_UART_2IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_UART_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_SEL_UART_2;
+        public Enabled MTC_Addr_2_Clear_SEL_UART_2 {
+            get => _MTC_Addr_2_Clear_SEL_UART_2;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_UART_2, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_SEL_UART_3IsSet;
+        public bool MTC_Addr_2_Clear_SEL_UART_3IsSet {
+            get => _MTC_Addr_2_Clear_SEL_UART_3IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_UART_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_SEL_UART_3;
+        public Enabled MTC_Addr_2_Clear_SEL_UART_3 {
+            get => _MTC_Addr_2_Clear_SEL_UART_3;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_UART_3, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_SEL_UART_4IsSet;
+        public bool MTC_Addr_2_Clear_SEL_UART_4IsSet {
+            get => _MTC_Addr_2_Clear_SEL_UART_4IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_UART_4IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_SEL_UART_4;
+        public Enabled MTC_Addr_2_Clear_SEL_UART_4 {
+            get => _MTC_Addr_2_Clear_SEL_UART_4;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_UART_4, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_SEL_UART_5IsSet;
+        public bool MTC_Addr_2_Clear_SEL_UART_5IsSet {
+            get => _MTC_Addr_2_Clear_SEL_UART_5IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_UART_5IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_SEL_UART_5;
+        public Enabled MTC_Addr_2_Clear_SEL_UART_5 {
+            get => _MTC_Addr_2_Clear_SEL_UART_5;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_UART_5, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_SEL_UART_6IsSet;
+        public bool MTC_Addr_2_Clear_SEL_UART_6IsSet {
+            get => _MTC_Addr_2_Clear_SEL_UART_6IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_UART_6IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_SEL_UART_6;
+        public Enabled MTC_Addr_2_Clear_SEL_UART_6 {
+            get => _MTC_Addr_2_Clear_SEL_UART_6;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_UART_6, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_SEL_VBATIsSet;
+        public bool MTC_Addr_2_Clear_SEL_VBATIsSet {
+            get => _MTC_Addr_2_Clear_SEL_VBATIsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_VBATIsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_SEL_VBAT;
+        public Enabled MTC_Addr_2_Clear_SEL_VBAT {
+            get => _MTC_Addr_2_Clear_SEL_VBAT;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_VBAT, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_SEL_VBAT_ALTIsSet;
+        public bool MTC_Addr_2_Clear_SEL_VBAT_ALTIsSet {
+            get => _MTC_Addr_2_Clear_SEL_VBAT_ALTIsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_VBAT_ALTIsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_SEL_VBAT_ALT;
+        public Enabled MTC_Addr_2_Clear_SEL_VBAT_ALT {
+            get => _MTC_Addr_2_Clear_SEL_VBAT_ALT;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_VBAT_ALT, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_SEL_VBAT_FPGAIsSet;
+        public bool MTC_Addr_2_Clear_SEL_VBAT_FPGAIsSet {
+            get => _MTC_Addr_2_Clear_SEL_VBAT_FPGAIsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_VBAT_FPGAIsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_SEL_VBAT_FPGA;
+        public Enabled MTC_Addr_2_Clear_SEL_VBAT_FPGA {
+            get => _MTC_Addr_2_Clear_SEL_VBAT_FPGA;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_VBAT_FPGA, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_SEL_nRESET_1IsSet;
+        public bool MTC_Addr_2_Clear_SEL_nRESET_1IsSet {
+            get => _MTC_Addr_2_Clear_SEL_nRESET_1IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_nRESET_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_SEL_nRESET_1;
+        public Enabled MTC_Addr_2_Clear_SEL_nRESET_1 {
+            get => _MTC_Addr_2_Clear_SEL_nRESET_1;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_nRESET_1, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_SEL_nRESET_2IsSet;
+        public bool MTC_Addr_2_Clear_SEL_nRESET_2IsSet {
+            get => _MTC_Addr_2_Clear_SEL_nRESET_2IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_nRESET_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_SEL_nRESET_2;
+        public Enabled MTC_Addr_2_Clear_SEL_nRESET_2 {
+            get => _MTC_Addr_2_Clear_SEL_nRESET_2;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_nRESET_2, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_SEL_nRESET_3IsSet;
+        public bool MTC_Addr_2_Clear_SEL_nRESET_3IsSet {
+            get => _MTC_Addr_2_Clear_SEL_nRESET_3IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_nRESET_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_SEL_nRESET_3;
+        public Enabled MTC_Addr_2_Clear_SEL_nRESET_3 {
+            get => _MTC_Addr_2_Clear_SEL_nRESET_3;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_nRESET_3, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_SEL_CS_1IsSet;
+        public bool MTC_Addr_2_Clear_SEL_CS_1IsSet {
+            get => _MTC_Addr_2_Clear_SEL_CS_1IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_CS_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_SEL_CS_1;
+        public Enabled MTC_Addr_2_Clear_SEL_CS_1 {
+            get => _MTC_Addr_2_Clear_SEL_CS_1;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_CS_1, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_SEL_CS_2IsSet;
+        public bool MTC_Addr_2_Clear_SEL_CS_2IsSet {
+            get => _MTC_Addr_2_Clear_SEL_CS_2IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_CS_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_SEL_CS_2;
+        public Enabled MTC_Addr_2_Clear_SEL_CS_2 {
+            get => _MTC_Addr_2_Clear_SEL_CS_2;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_CS_2, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_SEL_CS_3IsSet;
+        public bool MTC_Addr_2_Clear_SEL_CS_3IsSet {
+            get => _MTC_Addr_2_Clear_SEL_CS_3IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_CS_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_SEL_CS_3;
+        public Enabled MTC_Addr_2_Clear_SEL_CS_3 {
+            get => _MTC_Addr_2_Clear_SEL_CS_3;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_CS_3, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_SEL_CS_4IsSet;
+        public bool MTC_Addr_2_Clear_SEL_CS_4IsSet {
+            get => _MTC_Addr_2_Clear_SEL_CS_4IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_CS_4IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_SEL_CS_4;
+        public Enabled MTC_Addr_2_Clear_SEL_CS_4 {
+            get => _MTC_Addr_2_Clear_SEL_CS_4;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_CS_4, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_SEL_CS_5IsSet;
+        public bool MTC_Addr_2_Clear_SEL_CS_5IsSet {
+            get => _MTC_Addr_2_Clear_SEL_CS_5IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_CS_5IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_SEL_CS_5;
+        public Enabled MTC_Addr_2_Clear_SEL_CS_5 {
+            get => _MTC_Addr_2_Clear_SEL_CS_5;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_CS_5, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_SEL_CS_6IsSet;
+        public bool MTC_Addr_2_Clear_SEL_CS_6IsSet {
+            get => _MTC_Addr_2_Clear_SEL_CS_6IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_CS_6IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_SEL_CS_6;
+        public Enabled MTC_Addr_2_Clear_SEL_CS_6 {
+            get => _MTC_Addr_2_Clear_SEL_CS_6;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_CS_6, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_SEL_SPI_1IsSet;
+        public bool MTC_Addr_2_Clear_SEL_SPI_1IsSet {
+            get => _MTC_Addr_2_Clear_SEL_SPI_1IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_SPI_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_SEL_SPI_1;
+        public Enabled MTC_Addr_2_Clear_SEL_SPI_1 {
+            get => _MTC_Addr_2_Clear_SEL_SPI_1;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_SPI_1, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_SEL_SPI_2IsSet;
+        public bool MTC_Addr_2_Clear_SEL_SPI_2IsSet {
+            get => _MTC_Addr_2_Clear_SEL_SPI_2IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_SPI_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_SEL_SPI_2;
+        public Enabled MTC_Addr_2_Clear_SEL_SPI_2 {
+            get => _MTC_Addr_2_Clear_SEL_SPI_2;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_SPI_2, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_SEL_CAN_1IsSet;
+        public bool MTC_Addr_2_Clear_SEL_CAN_1IsSet {
+            get => _MTC_Addr_2_Clear_SEL_CAN_1IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_CAN_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_SEL_CAN_1;
+        public Enabled MTC_Addr_2_Clear_SEL_CAN_1 {
+            get => _MTC_Addr_2_Clear_SEL_CAN_1;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_CAN_1, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_SEL_CAN_2IsSet;
+        public bool MTC_Addr_2_Clear_SEL_CAN_2IsSet {
+            get => _MTC_Addr_2_Clear_SEL_CAN_2IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_CAN_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_SEL_CAN_2;
+        public Enabled MTC_Addr_2_Clear_SEL_CAN_2 {
+            get => _MTC_Addr_2_Clear_SEL_CAN_2;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_CAN_2, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_SEL_CAN_3IsSet;
+        public bool MTC_Addr_2_Clear_SEL_CAN_3IsSet {
+            get => _MTC_Addr_2_Clear_SEL_CAN_3IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_CAN_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_SEL_CAN_3;
+        public Enabled MTC_Addr_2_Clear_SEL_CAN_3 {
+            get => _MTC_Addr_2_Clear_SEL_CAN_3;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_CAN_3, value);
+        }
+        
+        private bool _MTC_Addr_2_Clear_SEL_RS422IsSet;
+        public bool MTC_Addr_2_Clear_SEL_RS422IsSet {
+            get => _MTC_Addr_2_Clear_SEL_RS422IsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_RS422IsSet, value); 
+        }
+        private Enabled _MTC_Addr_2_Clear_SEL_RS422;
+        public Enabled MTC_Addr_2_Clear_SEL_RS422 {
+            get => _MTC_Addr_2_Clear_SEL_RS422;
+            set => _ = Set(ref _MTC_Addr_2_Clear_SEL_RS422, value);
+        }
+        
+        /*************** Properties for MTC_Addr_3 register **************************************/
+        private bool _MTC_Addr_3_ScanEnabledIsSet;
+        public bool MTC_Addr_3_ScanEnabledIsSet {
+            get => _MTC_Addr_3_ScanEnabledIsSet;
+            set => _ = Set(ref _MTC_Addr_3_ScanEnabledIsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_ScanEnabled;
+        public Enabled MTC_Addr_3_ScanEnabled {
+            get => _MTC_Addr_3_ScanEnabled;
+            set => _ = Set(ref _MTC_Addr_3_ScanEnabled, value);
+        }
+        
+        private bool _MTC_Addr_3_DetectedIsSet;
+        public bool MTC_Addr_3_DetectedIsSet {
+            get => _MTC_Addr_3_DetectedIsSet;
+            set => _ = Set(ref _MTC_Addr_3_DetectedIsSet, value); 
+        }
+        private byte _MTC_Addr_3_Detected;
+        public byte MTC_Addr_3_Detected {
+            get => _MTC_Addr_3_Detected;
+            set => _ = Set(ref _MTC_Addr_3_Detected, value);
+        }
+        
+        private bool _MTC_Addr_3_TypeIsSet;
+        public bool MTC_Addr_3_TypeIsSet {
+            get => _MTC_Addr_3_TypeIsSet;
+            set => _ = Set(ref _MTC_Addr_3_TypeIsSet, value); 
+        }
+        private UInt32 _MTC_Addr_3_Type;
+        public UInt32 MTC_Addr_3_Type {
+            get => _MTC_Addr_3_Type;
+            set => _ = Set(ref _MTC_Addr_3_Type, value);
+        }
+        
+        private bool _MTC_Addr_3_ENABLE_1IsSet;
+        public bool MTC_Addr_3_ENABLE_1IsSet {
+            get => _MTC_Addr_3_ENABLE_1IsSet;
+            set => _ = Set(ref _MTC_Addr_3_ENABLE_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_ENABLE_1;
+        public Enabled MTC_Addr_3_ENABLE_1 {
+            get => _MTC_Addr_3_ENABLE_1;
+            set => _ = Set(ref _MTC_Addr_3_ENABLE_1, value);
+        }
+        
+        private bool _MTC_Addr_3_ENABLE_2IsSet;
+        public bool MTC_Addr_3_ENABLE_2IsSet {
+            get => _MTC_Addr_3_ENABLE_2IsSet;
+            set => _ = Set(ref _MTC_Addr_3_ENABLE_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_ENABLE_2;
+        public Enabled MTC_Addr_3_ENABLE_2 {
+            get => _MTC_Addr_3_ENABLE_2;
+            set => _ = Set(ref _MTC_Addr_3_ENABLE_2, value);
+        }
+        
+        private bool _MTC_Addr_3_SEL_I2C_1IsSet;
+        public bool MTC_Addr_3_SEL_I2C_1IsSet {
+            get => _MTC_Addr_3_SEL_I2C_1IsSet;
+            set => _ = Set(ref _MTC_Addr_3_SEL_I2C_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_SEL_I2C_1;
+        public Enabled MTC_Addr_3_SEL_I2C_1 {
+            get => _MTC_Addr_3_SEL_I2C_1;
+            set => _ = Set(ref _MTC_Addr_3_SEL_I2C_1, value);
+        }
+        
+        private bool _MTC_Addr_3_SEL_I2C_2IsSet;
+        public bool MTC_Addr_3_SEL_I2C_2IsSet {
+            get => _MTC_Addr_3_SEL_I2C_2IsSet;
+            set => _ = Set(ref _MTC_Addr_3_SEL_I2C_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_SEL_I2C_2;
+        public Enabled MTC_Addr_3_SEL_I2C_2 {
+            get => _MTC_Addr_3_SEL_I2C_2;
+            set => _ = Set(ref _MTC_Addr_3_SEL_I2C_2, value);
+        }
+        
+        private bool _MTC_Addr_3_SEL_UART_1IsSet;
+        public bool MTC_Addr_3_SEL_UART_1IsSet {
+            get => _MTC_Addr_3_SEL_UART_1IsSet;
+            set => _ = Set(ref _MTC_Addr_3_SEL_UART_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_SEL_UART_1;
+        public Enabled MTC_Addr_3_SEL_UART_1 {
+            get => _MTC_Addr_3_SEL_UART_1;
+            set => _ = Set(ref _MTC_Addr_3_SEL_UART_1, value);
+        }
+        
+        private bool _MTC_Addr_3_SEL_UART_2IsSet;
+        public bool MTC_Addr_3_SEL_UART_2IsSet {
+            get => _MTC_Addr_3_SEL_UART_2IsSet;
+            set => _ = Set(ref _MTC_Addr_3_SEL_UART_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_SEL_UART_2;
+        public Enabled MTC_Addr_3_SEL_UART_2 {
+            get => _MTC_Addr_3_SEL_UART_2;
+            set => _ = Set(ref _MTC_Addr_3_SEL_UART_2, value);
+        }
+        
+        private bool _MTC_Addr_3_SEL_UART_3IsSet;
+        public bool MTC_Addr_3_SEL_UART_3IsSet {
+            get => _MTC_Addr_3_SEL_UART_3IsSet;
+            set => _ = Set(ref _MTC_Addr_3_SEL_UART_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_SEL_UART_3;
+        public Enabled MTC_Addr_3_SEL_UART_3 {
+            get => _MTC_Addr_3_SEL_UART_3;
+            set => _ = Set(ref _MTC_Addr_3_SEL_UART_3, value);
+        }
+        
+        private bool _MTC_Addr_3_SEL_UART_4IsSet;
+        public bool MTC_Addr_3_SEL_UART_4IsSet {
+            get => _MTC_Addr_3_SEL_UART_4IsSet;
+            set => _ = Set(ref _MTC_Addr_3_SEL_UART_4IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_SEL_UART_4;
+        public Enabled MTC_Addr_3_SEL_UART_4 {
+            get => _MTC_Addr_3_SEL_UART_4;
+            set => _ = Set(ref _MTC_Addr_3_SEL_UART_4, value);
+        }
+        
+        private bool _MTC_Addr_3_SEL_UART_5IsSet;
+        public bool MTC_Addr_3_SEL_UART_5IsSet {
+            get => _MTC_Addr_3_SEL_UART_5IsSet;
+            set => _ = Set(ref _MTC_Addr_3_SEL_UART_5IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_SEL_UART_5;
+        public Enabled MTC_Addr_3_SEL_UART_5 {
+            get => _MTC_Addr_3_SEL_UART_5;
+            set => _ = Set(ref _MTC_Addr_3_SEL_UART_5, value);
+        }
+        
+        private bool _MTC_Addr_3_SEL_UART_6IsSet;
+        public bool MTC_Addr_3_SEL_UART_6IsSet {
+            get => _MTC_Addr_3_SEL_UART_6IsSet;
+            set => _ = Set(ref _MTC_Addr_3_SEL_UART_6IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_SEL_UART_6;
+        public Enabled MTC_Addr_3_SEL_UART_6 {
+            get => _MTC_Addr_3_SEL_UART_6;
+            set => _ = Set(ref _MTC_Addr_3_SEL_UART_6, value);
+        }
+        
+        private bool _MTC_Addr_3_SEL_VBATIsSet;
+        public bool MTC_Addr_3_SEL_VBATIsSet {
+            get => _MTC_Addr_3_SEL_VBATIsSet;
+            set => _ = Set(ref _MTC_Addr_3_SEL_VBATIsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_SEL_VBAT;
+        public Enabled MTC_Addr_3_SEL_VBAT {
+            get => _MTC_Addr_3_SEL_VBAT;
+            set => _ = Set(ref _MTC_Addr_3_SEL_VBAT, value);
+        }
+        
+        private bool _MTC_Addr_3_SEL_VBAT_ALTIsSet;
+        public bool MTC_Addr_3_SEL_VBAT_ALTIsSet {
+            get => _MTC_Addr_3_SEL_VBAT_ALTIsSet;
+            set => _ = Set(ref _MTC_Addr_3_SEL_VBAT_ALTIsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_SEL_VBAT_ALT;
+        public Enabled MTC_Addr_3_SEL_VBAT_ALT {
+            get => _MTC_Addr_3_SEL_VBAT_ALT;
+            set => _ = Set(ref _MTC_Addr_3_SEL_VBAT_ALT, value);
+        }
+        
+        private bool _MTC_Addr_3_SEL_VBAT_FPGAIsSet;
+        public bool MTC_Addr_3_SEL_VBAT_FPGAIsSet {
+            get => _MTC_Addr_3_SEL_VBAT_FPGAIsSet;
+            set => _ = Set(ref _MTC_Addr_3_SEL_VBAT_FPGAIsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_SEL_VBAT_FPGA;
+        public Enabled MTC_Addr_3_SEL_VBAT_FPGA {
+            get => _MTC_Addr_3_SEL_VBAT_FPGA;
+            set => _ = Set(ref _MTC_Addr_3_SEL_VBAT_FPGA, value);
+        }
+        
+        private bool _MTC_Addr_3_SEL_nRESET_1IsSet;
+        public bool MTC_Addr_3_SEL_nRESET_1IsSet {
+            get => _MTC_Addr_3_SEL_nRESET_1IsSet;
+            set => _ = Set(ref _MTC_Addr_3_SEL_nRESET_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_SEL_nRESET_1;
+        public Enabled MTC_Addr_3_SEL_nRESET_1 {
+            get => _MTC_Addr_3_SEL_nRESET_1;
+            set => _ = Set(ref _MTC_Addr_3_SEL_nRESET_1, value);
+        }
+        
+        private bool _MTC_Addr_3_SEL_nRESET_2IsSet;
+        public bool MTC_Addr_3_SEL_nRESET_2IsSet {
+            get => _MTC_Addr_3_SEL_nRESET_2IsSet;
+            set => _ = Set(ref _MTC_Addr_3_SEL_nRESET_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_SEL_nRESET_2;
+        public Enabled MTC_Addr_3_SEL_nRESET_2 {
+            get => _MTC_Addr_3_SEL_nRESET_2;
+            set => _ = Set(ref _MTC_Addr_3_SEL_nRESET_2, value);
+        }
+        
+        private bool _MTC_Addr_3_SEL_nRESET_3IsSet;
+        public bool MTC_Addr_3_SEL_nRESET_3IsSet {
+            get => _MTC_Addr_3_SEL_nRESET_3IsSet;
+            set => _ = Set(ref _MTC_Addr_3_SEL_nRESET_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_SEL_nRESET_3;
+        public Enabled MTC_Addr_3_SEL_nRESET_3 {
+            get => _MTC_Addr_3_SEL_nRESET_3;
+            set => _ = Set(ref _MTC_Addr_3_SEL_nRESET_3, value);
+        }
+        
+        private bool _MTC_Addr_3_SEL_CS_1IsSet;
+        public bool MTC_Addr_3_SEL_CS_1IsSet {
+            get => _MTC_Addr_3_SEL_CS_1IsSet;
+            set => _ = Set(ref _MTC_Addr_3_SEL_CS_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_SEL_CS_1;
+        public Enabled MTC_Addr_3_SEL_CS_1 {
+            get => _MTC_Addr_3_SEL_CS_1;
+            set => _ = Set(ref _MTC_Addr_3_SEL_CS_1, value);
+        }
+        
+        private bool _MTC_Addr_3_SEL_CS_2IsSet;
+        public bool MTC_Addr_3_SEL_CS_2IsSet {
+            get => _MTC_Addr_3_SEL_CS_2IsSet;
+            set => _ = Set(ref _MTC_Addr_3_SEL_CS_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_SEL_CS_2;
+        public Enabled MTC_Addr_3_SEL_CS_2 {
+            get => _MTC_Addr_3_SEL_CS_2;
+            set => _ = Set(ref _MTC_Addr_3_SEL_CS_2, value);
+        }
+        
+        private bool _MTC_Addr_3_SEL_CS_3IsSet;
+        public bool MTC_Addr_3_SEL_CS_3IsSet {
+            get => _MTC_Addr_3_SEL_CS_3IsSet;
+            set => _ = Set(ref _MTC_Addr_3_SEL_CS_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_SEL_CS_3;
+        public Enabled MTC_Addr_3_SEL_CS_3 {
+            get => _MTC_Addr_3_SEL_CS_3;
+            set => _ = Set(ref _MTC_Addr_3_SEL_CS_3, value);
+        }
+        
+        private bool _MTC_Addr_3_SEL_CS_4IsSet;
+        public bool MTC_Addr_3_SEL_CS_4IsSet {
+            get => _MTC_Addr_3_SEL_CS_4IsSet;
+            set => _ = Set(ref _MTC_Addr_3_SEL_CS_4IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_SEL_CS_4;
+        public Enabled MTC_Addr_3_SEL_CS_4 {
+            get => _MTC_Addr_3_SEL_CS_4;
+            set => _ = Set(ref _MTC_Addr_3_SEL_CS_4, value);
+        }
+        
+        private bool _MTC_Addr_3_SEL_CS_5IsSet;
+        public bool MTC_Addr_3_SEL_CS_5IsSet {
+            get => _MTC_Addr_3_SEL_CS_5IsSet;
+            set => _ = Set(ref _MTC_Addr_3_SEL_CS_5IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_SEL_CS_5;
+        public Enabled MTC_Addr_3_SEL_CS_5 {
+            get => _MTC_Addr_3_SEL_CS_5;
+            set => _ = Set(ref _MTC_Addr_3_SEL_CS_5, value);
+        }
+        
+        private bool _MTC_Addr_3_SEL_CS_6IsSet;
+        public bool MTC_Addr_3_SEL_CS_6IsSet {
+            get => _MTC_Addr_3_SEL_CS_6IsSet;
+            set => _ = Set(ref _MTC_Addr_3_SEL_CS_6IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_SEL_CS_6;
+        public Enabled MTC_Addr_3_SEL_CS_6 {
+            get => _MTC_Addr_3_SEL_CS_6;
+            set => _ = Set(ref _MTC_Addr_3_SEL_CS_6, value);
+        }
+        
+        private bool _MTC_Addr_3_SEL_SPI_1IsSet;
+        public bool MTC_Addr_3_SEL_SPI_1IsSet {
+            get => _MTC_Addr_3_SEL_SPI_1IsSet;
+            set => _ = Set(ref _MTC_Addr_3_SEL_SPI_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_SEL_SPI_1;
+        public Enabled MTC_Addr_3_SEL_SPI_1 {
+            get => _MTC_Addr_3_SEL_SPI_1;
+            set => _ = Set(ref _MTC_Addr_3_SEL_SPI_1, value);
+        }
+        
+        private bool _MTC_Addr_3_SEL_SPI_2IsSet;
+        public bool MTC_Addr_3_SEL_SPI_2IsSet {
+            get => _MTC_Addr_3_SEL_SPI_2IsSet;
+            set => _ = Set(ref _MTC_Addr_3_SEL_SPI_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_SEL_SPI_2;
+        public Enabled MTC_Addr_3_SEL_SPI_2 {
+            get => _MTC_Addr_3_SEL_SPI_2;
+            set => _ = Set(ref _MTC_Addr_3_SEL_SPI_2, value);
+        }
+        
+        private bool _MTC_Addr_3_SEL_CAN_1IsSet;
+        public bool MTC_Addr_3_SEL_CAN_1IsSet {
+            get => _MTC_Addr_3_SEL_CAN_1IsSet;
+            set => _ = Set(ref _MTC_Addr_3_SEL_CAN_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_SEL_CAN_1;
+        public Enabled MTC_Addr_3_SEL_CAN_1 {
+            get => _MTC_Addr_3_SEL_CAN_1;
+            set => _ = Set(ref _MTC_Addr_3_SEL_CAN_1, value);
+        }
+        
+        private bool _MTC_Addr_3_SEL_CAN_2IsSet;
+        public bool MTC_Addr_3_SEL_CAN_2IsSet {
+            get => _MTC_Addr_3_SEL_CAN_2IsSet;
+            set => _ = Set(ref _MTC_Addr_3_SEL_CAN_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_SEL_CAN_2;
+        public Enabled MTC_Addr_3_SEL_CAN_2 {
+            get => _MTC_Addr_3_SEL_CAN_2;
+            set => _ = Set(ref _MTC_Addr_3_SEL_CAN_2, value);
+        }
+        
+        private bool _MTC_Addr_3_SEL_CAN_3IsSet;
+        public bool MTC_Addr_3_SEL_CAN_3IsSet {
+            get => _MTC_Addr_3_SEL_CAN_3IsSet;
+            set => _ = Set(ref _MTC_Addr_3_SEL_CAN_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_SEL_CAN_3;
+        public Enabled MTC_Addr_3_SEL_CAN_3 {
+            get => _MTC_Addr_3_SEL_CAN_3;
+            set => _ = Set(ref _MTC_Addr_3_SEL_CAN_3, value);
+        }
+        
+        private bool _MTC_Addr_3_SEL_RS422IsSet;
+        public bool MTC_Addr_3_SEL_RS422IsSet {
+            get => _MTC_Addr_3_SEL_RS422IsSet;
+            set => _ = Set(ref _MTC_Addr_3_SEL_RS422IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_SEL_RS422;
+        public Enabled MTC_Addr_3_SEL_RS422 {
+            get => _MTC_Addr_3_SEL_RS422;
+            set => _ = Set(ref _MTC_Addr_3_SEL_RS422, value);
+        }
+        
+        /*************** Properties for MTC_Addr_3_Set register **********************************/
+        private bool _MTC_Addr_3_Set_ScanEnabledIsSet;
+        public bool MTC_Addr_3_Set_ScanEnabledIsSet {
+            get => _MTC_Addr_3_Set_ScanEnabledIsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_ScanEnabledIsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_ScanEnabled;
+        public Enabled MTC_Addr_3_Set_ScanEnabled {
+            get => _MTC_Addr_3_Set_ScanEnabled;
+            set => _ = Set(ref _MTC_Addr_3_Set_ScanEnabled, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_DetectedIsSet;
+        public bool MTC_Addr_3_Set_DetectedIsSet {
+            get => _MTC_Addr_3_Set_DetectedIsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_DetectedIsSet, value); 
+        }
+        private byte _MTC_Addr_3_Set_Detected;
+        public byte MTC_Addr_3_Set_Detected {
+            get => _MTC_Addr_3_Set_Detected;
+            set => _ = Set(ref _MTC_Addr_3_Set_Detected, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_TypeIsSet;
+        public bool MTC_Addr_3_Set_TypeIsSet {
+            get => _MTC_Addr_3_Set_TypeIsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_TypeIsSet, value); 
+        }
+        private UInt32 _MTC_Addr_3_Set_Type;
+        public UInt32 MTC_Addr_3_Set_Type {
+            get => _MTC_Addr_3_Set_Type;
+            set => _ = Set(ref _MTC_Addr_3_Set_Type, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_ENABLE_1IsSet;
+        public bool MTC_Addr_3_Set_ENABLE_1IsSet {
+            get => _MTC_Addr_3_Set_ENABLE_1IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_ENABLE_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_ENABLE_1;
+        public Enabled MTC_Addr_3_Set_ENABLE_1 {
+            get => _MTC_Addr_3_Set_ENABLE_1;
+            set => _ = Set(ref _MTC_Addr_3_Set_ENABLE_1, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_ENABLE_2IsSet;
+        public bool MTC_Addr_3_Set_ENABLE_2IsSet {
+            get => _MTC_Addr_3_Set_ENABLE_2IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_ENABLE_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_ENABLE_2;
+        public Enabled MTC_Addr_3_Set_ENABLE_2 {
+            get => _MTC_Addr_3_Set_ENABLE_2;
+            set => _ = Set(ref _MTC_Addr_3_Set_ENABLE_2, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_SEL_I2C_1IsSet;
+        public bool MTC_Addr_3_Set_SEL_I2C_1IsSet {
+            get => _MTC_Addr_3_Set_SEL_I2C_1IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_I2C_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_SEL_I2C_1;
+        public Enabled MTC_Addr_3_Set_SEL_I2C_1 {
+            get => _MTC_Addr_3_Set_SEL_I2C_1;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_I2C_1, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_SEL_I2C_2IsSet;
+        public bool MTC_Addr_3_Set_SEL_I2C_2IsSet {
+            get => _MTC_Addr_3_Set_SEL_I2C_2IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_I2C_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_SEL_I2C_2;
+        public Enabled MTC_Addr_3_Set_SEL_I2C_2 {
+            get => _MTC_Addr_3_Set_SEL_I2C_2;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_I2C_2, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_SEL_UART_1IsSet;
+        public bool MTC_Addr_3_Set_SEL_UART_1IsSet {
+            get => _MTC_Addr_3_Set_SEL_UART_1IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_UART_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_SEL_UART_1;
+        public Enabled MTC_Addr_3_Set_SEL_UART_1 {
+            get => _MTC_Addr_3_Set_SEL_UART_1;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_UART_1, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_SEL_UART_2IsSet;
+        public bool MTC_Addr_3_Set_SEL_UART_2IsSet {
+            get => _MTC_Addr_3_Set_SEL_UART_2IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_UART_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_SEL_UART_2;
+        public Enabled MTC_Addr_3_Set_SEL_UART_2 {
+            get => _MTC_Addr_3_Set_SEL_UART_2;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_UART_2, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_SEL_UART_3IsSet;
+        public bool MTC_Addr_3_Set_SEL_UART_3IsSet {
+            get => _MTC_Addr_3_Set_SEL_UART_3IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_UART_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_SEL_UART_3;
+        public Enabled MTC_Addr_3_Set_SEL_UART_3 {
+            get => _MTC_Addr_3_Set_SEL_UART_3;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_UART_3, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_SEL_UART_4IsSet;
+        public bool MTC_Addr_3_Set_SEL_UART_4IsSet {
+            get => _MTC_Addr_3_Set_SEL_UART_4IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_UART_4IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_SEL_UART_4;
+        public Enabled MTC_Addr_3_Set_SEL_UART_4 {
+            get => _MTC_Addr_3_Set_SEL_UART_4;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_UART_4, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_SEL_UART_5IsSet;
+        public bool MTC_Addr_3_Set_SEL_UART_5IsSet {
+            get => _MTC_Addr_3_Set_SEL_UART_5IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_UART_5IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_SEL_UART_5;
+        public Enabled MTC_Addr_3_Set_SEL_UART_5 {
+            get => _MTC_Addr_3_Set_SEL_UART_5;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_UART_5, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_SEL_UART_6IsSet;
+        public bool MTC_Addr_3_Set_SEL_UART_6IsSet {
+            get => _MTC_Addr_3_Set_SEL_UART_6IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_UART_6IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_SEL_UART_6;
+        public Enabled MTC_Addr_3_Set_SEL_UART_6 {
+            get => _MTC_Addr_3_Set_SEL_UART_6;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_UART_6, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_SEL_VBATIsSet;
+        public bool MTC_Addr_3_Set_SEL_VBATIsSet {
+            get => _MTC_Addr_3_Set_SEL_VBATIsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_VBATIsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_SEL_VBAT;
+        public Enabled MTC_Addr_3_Set_SEL_VBAT {
+            get => _MTC_Addr_3_Set_SEL_VBAT;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_VBAT, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_SEL_VBAT_ALTIsSet;
+        public bool MTC_Addr_3_Set_SEL_VBAT_ALTIsSet {
+            get => _MTC_Addr_3_Set_SEL_VBAT_ALTIsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_VBAT_ALTIsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_SEL_VBAT_ALT;
+        public Enabled MTC_Addr_3_Set_SEL_VBAT_ALT {
+            get => _MTC_Addr_3_Set_SEL_VBAT_ALT;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_VBAT_ALT, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_SEL_VBAT_FPGAIsSet;
+        public bool MTC_Addr_3_Set_SEL_VBAT_FPGAIsSet {
+            get => _MTC_Addr_3_Set_SEL_VBAT_FPGAIsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_VBAT_FPGAIsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_SEL_VBAT_FPGA;
+        public Enabled MTC_Addr_3_Set_SEL_VBAT_FPGA {
+            get => _MTC_Addr_3_Set_SEL_VBAT_FPGA;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_VBAT_FPGA, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_SEL_nRESET_1IsSet;
+        public bool MTC_Addr_3_Set_SEL_nRESET_1IsSet {
+            get => _MTC_Addr_3_Set_SEL_nRESET_1IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_nRESET_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_SEL_nRESET_1;
+        public Enabled MTC_Addr_3_Set_SEL_nRESET_1 {
+            get => _MTC_Addr_3_Set_SEL_nRESET_1;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_nRESET_1, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_SEL_nRESET_2IsSet;
+        public bool MTC_Addr_3_Set_SEL_nRESET_2IsSet {
+            get => _MTC_Addr_3_Set_SEL_nRESET_2IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_nRESET_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_SEL_nRESET_2;
+        public Enabled MTC_Addr_3_Set_SEL_nRESET_2 {
+            get => _MTC_Addr_3_Set_SEL_nRESET_2;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_nRESET_2, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_SEL_nRESET_3IsSet;
+        public bool MTC_Addr_3_Set_SEL_nRESET_3IsSet {
+            get => _MTC_Addr_3_Set_SEL_nRESET_3IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_nRESET_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_SEL_nRESET_3;
+        public Enabled MTC_Addr_3_Set_SEL_nRESET_3 {
+            get => _MTC_Addr_3_Set_SEL_nRESET_3;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_nRESET_3, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_SEL_CS_1IsSet;
+        public bool MTC_Addr_3_Set_SEL_CS_1IsSet {
+            get => _MTC_Addr_3_Set_SEL_CS_1IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_CS_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_SEL_CS_1;
+        public Enabled MTC_Addr_3_Set_SEL_CS_1 {
+            get => _MTC_Addr_3_Set_SEL_CS_1;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_CS_1, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_SEL_CS_2IsSet;
+        public bool MTC_Addr_3_Set_SEL_CS_2IsSet {
+            get => _MTC_Addr_3_Set_SEL_CS_2IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_CS_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_SEL_CS_2;
+        public Enabled MTC_Addr_3_Set_SEL_CS_2 {
+            get => _MTC_Addr_3_Set_SEL_CS_2;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_CS_2, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_SEL_CS_3IsSet;
+        public bool MTC_Addr_3_Set_SEL_CS_3IsSet {
+            get => _MTC_Addr_3_Set_SEL_CS_3IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_CS_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_SEL_CS_3;
+        public Enabled MTC_Addr_3_Set_SEL_CS_3 {
+            get => _MTC_Addr_3_Set_SEL_CS_3;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_CS_3, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_SEL_CS_4IsSet;
+        public bool MTC_Addr_3_Set_SEL_CS_4IsSet {
+            get => _MTC_Addr_3_Set_SEL_CS_4IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_CS_4IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_SEL_CS_4;
+        public Enabled MTC_Addr_3_Set_SEL_CS_4 {
+            get => _MTC_Addr_3_Set_SEL_CS_4;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_CS_4, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_SEL_CS_5IsSet;
+        public bool MTC_Addr_3_Set_SEL_CS_5IsSet {
+            get => _MTC_Addr_3_Set_SEL_CS_5IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_CS_5IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_SEL_CS_5;
+        public Enabled MTC_Addr_3_Set_SEL_CS_5 {
+            get => _MTC_Addr_3_Set_SEL_CS_5;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_CS_5, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_SEL_CS_6IsSet;
+        public bool MTC_Addr_3_Set_SEL_CS_6IsSet {
+            get => _MTC_Addr_3_Set_SEL_CS_6IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_CS_6IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_SEL_CS_6;
+        public Enabled MTC_Addr_3_Set_SEL_CS_6 {
+            get => _MTC_Addr_3_Set_SEL_CS_6;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_CS_6, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_SEL_SPI_1IsSet;
+        public bool MTC_Addr_3_Set_SEL_SPI_1IsSet {
+            get => _MTC_Addr_3_Set_SEL_SPI_1IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_SPI_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_SEL_SPI_1;
+        public Enabled MTC_Addr_3_Set_SEL_SPI_1 {
+            get => _MTC_Addr_3_Set_SEL_SPI_1;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_SPI_1, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_SEL_SPI_2IsSet;
+        public bool MTC_Addr_3_Set_SEL_SPI_2IsSet {
+            get => _MTC_Addr_3_Set_SEL_SPI_2IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_SPI_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_SEL_SPI_2;
+        public Enabled MTC_Addr_3_Set_SEL_SPI_2 {
+            get => _MTC_Addr_3_Set_SEL_SPI_2;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_SPI_2, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_SEL_CAN_1IsSet;
+        public bool MTC_Addr_3_Set_SEL_CAN_1IsSet {
+            get => _MTC_Addr_3_Set_SEL_CAN_1IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_CAN_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_SEL_CAN_1;
+        public Enabled MTC_Addr_3_Set_SEL_CAN_1 {
+            get => _MTC_Addr_3_Set_SEL_CAN_1;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_CAN_1, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_SEL_CAN_2IsSet;
+        public bool MTC_Addr_3_Set_SEL_CAN_2IsSet {
+            get => _MTC_Addr_3_Set_SEL_CAN_2IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_CAN_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_SEL_CAN_2;
+        public Enabled MTC_Addr_3_Set_SEL_CAN_2 {
+            get => _MTC_Addr_3_Set_SEL_CAN_2;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_CAN_2, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_SEL_CAN_3IsSet;
+        public bool MTC_Addr_3_Set_SEL_CAN_3IsSet {
+            get => _MTC_Addr_3_Set_SEL_CAN_3IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_CAN_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_SEL_CAN_3;
+        public Enabled MTC_Addr_3_Set_SEL_CAN_3 {
+            get => _MTC_Addr_3_Set_SEL_CAN_3;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_CAN_3, value);
+        }
+        
+        private bool _MTC_Addr_3_Set_SEL_RS422IsSet;
+        public bool MTC_Addr_3_Set_SEL_RS422IsSet {
+            get => _MTC_Addr_3_Set_SEL_RS422IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_RS422IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Set_SEL_RS422;
+        public Enabled MTC_Addr_3_Set_SEL_RS422 {
+            get => _MTC_Addr_3_Set_SEL_RS422;
+            set => _ = Set(ref _MTC_Addr_3_Set_SEL_RS422, value);
+        }
+        
+        /*************** Properties for MTC_Addr_3_Clear register ********************************/
+        private bool _MTC_Addr_3_Clear_ScanEnabledIsSet;
+        public bool MTC_Addr_3_Clear_ScanEnabledIsSet {
+            get => _MTC_Addr_3_Clear_ScanEnabledIsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_ScanEnabledIsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_ScanEnabled;
+        public Enabled MTC_Addr_3_Clear_ScanEnabled {
+            get => _MTC_Addr_3_Clear_ScanEnabled;
+            set => _ = Set(ref _MTC_Addr_3_Clear_ScanEnabled, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_DetectedIsSet;
+        public bool MTC_Addr_3_Clear_DetectedIsSet {
+            get => _MTC_Addr_3_Clear_DetectedIsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_DetectedIsSet, value); 
+        }
+        private byte _MTC_Addr_3_Clear_Detected;
+        public byte MTC_Addr_3_Clear_Detected {
+            get => _MTC_Addr_3_Clear_Detected;
+            set => _ = Set(ref _MTC_Addr_3_Clear_Detected, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_TypeIsSet;
+        public bool MTC_Addr_3_Clear_TypeIsSet {
+            get => _MTC_Addr_3_Clear_TypeIsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_TypeIsSet, value); 
+        }
+        private UInt32 _MTC_Addr_3_Clear_Type;
+        public UInt32 MTC_Addr_3_Clear_Type {
+            get => _MTC_Addr_3_Clear_Type;
+            set => _ = Set(ref _MTC_Addr_3_Clear_Type, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_ENABLE_1IsSet;
+        public bool MTC_Addr_3_Clear_ENABLE_1IsSet {
+            get => _MTC_Addr_3_Clear_ENABLE_1IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_ENABLE_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_ENABLE_1;
+        public Enabled MTC_Addr_3_Clear_ENABLE_1 {
+            get => _MTC_Addr_3_Clear_ENABLE_1;
+            set => _ = Set(ref _MTC_Addr_3_Clear_ENABLE_1, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_ENABLE_2IsSet;
+        public bool MTC_Addr_3_Clear_ENABLE_2IsSet {
+            get => _MTC_Addr_3_Clear_ENABLE_2IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_ENABLE_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_ENABLE_2;
+        public Enabled MTC_Addr_3_Clear_ENABLE_2 {
+            get => _MTC_Addr_3_Clear_ENABLE_2;
+            set => _ = Set(ref _MTC_Addr_3_Clear_ENABLE_2, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_SEL_I2C_1IsSet;
+        public bool MTC_Addr_3_Clear_SEL_I2C_1IsSet {
+            get => _MTC_Addr_3_Clear_SEL_I2C_1IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_I2C_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_SEL_I2C_1;
+        public Enabled MTC_Addr_3_Clear_SEL_I2C_1 {
+            get => _MTC_Addr_3_Clear_SEL_I2C_1;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_I2C_1, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_SEL_I2C_2IsSet;
+        public bool MTC_Addr_3_Clear_SEL_I2C_2IsSet {
+            get => _MTC_Addr_3_Clear_SEL_I2C_2IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_I2C_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_SEL_I2C_2;
+        public Enabled MTC_Addr_3_Clear_SEL_I2C_2 {
+            get => _MTC_Addr_3_Clear_SEL_I2C_2;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_I2C_2, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_SEL_UART_1IsSet;
+        public bool MTC_Addr_3_Clear_SEL_UART_1IsSet {
+            get => _MTC_Addr_3_Clear_SEL_UART_1IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_UART_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_SEL_UART_1;
+        public Enabled MTC_Addr_3_Clear_SEL_UART_1 {
+            get => _MTC_Addr_3_Clear_SEL_UART_1;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_UART_1, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_SEL_UART_2IsSet;
+        public bool MTC_Addr_3_Clear_SEL_UART_2IsSet {
+            get => _MTC_Addr_3_Clear_SEL_UART_2IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_UART_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_SEL_UART_2;
+        public Enabled MTC_Addr_3_Clear_SEL_UART_2 {
+            get => _MTC_Addr_3_Clear_SEL_UART_2;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_UART_2, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_SEL_UART_3IsSet;
+        public bool MTC_Addr_3_Clear_SEL_UART_3IsSet {
+            get => _MTC_Addr_3_Clear_SEL_UART_3IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_UART_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_SEL_UART_3;
+        public Enabled MTC_Addr_3_Clear_SEL_UART_3 {
+            get => _MTC_Addr_3_Clear_SEL_UART_3;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_UART_3, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_SEL_UART_4IsSet;
+        public bool MTC_Addr_3_Clear_SEL_UART_4IsSet {
+            get => _MTC_Addr_3_Clear_SEL_UART_4IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_UART_4IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_SEL_UART_4;
+        public Enabled MTC_Addr_3_Clear_SEL_UART_4 {
+            get => _MTC_Addr_3_Clear_SEL_UART_4;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_UART_4, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_SEL_UART_5IsSet;
+        public bool MTC_Addr_3_Clear_SEL_UART_5IsSet {
+            get => _MTC_Addr_3_Clear_SEL_UART_5IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_UART_5IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_SEL_UART_5;
+        public Enabled MTC_Addr_3_Clear_SEL_UART_5 {
+            get => _MTC_Addr_3_Clear_SEL_UART_5;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_UART_5, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_SEL_UART_6IsSet;
+        public bool MTC_Addr_3_Clear_SEL_UART_6IsSet {
+            get => _MTC_Addr_3_Clear_SEL_UART_6IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_UART_6IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_SEL_UART_6;
+        public Enabled MTC_Addr_3_Clear_SEL_UART_6 {
+            get => _MTC_Addr_3_Clear_SEL_UART_6;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_UART_6, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_SEL_VBATIsSet;
+        public bool MTC_Addr_3_Clear_SEL_VBATIsSet {
+            get => _MTC_Addr_3_Clear_SEL_VBATIsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_VBATIsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_SEL_VBAT;
+        public Enabled MTC_Addr_3_Clear_SEL_VBAT {
+            get => _MTC_Addr_3_Clear_SEL_VBAT;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_VBAT, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_SEL_VBAT_ALTIsSet;
+        public bool MTC_Addr_3_Clear_SEL_VBAT_ALTIsSet {
+            get => _MTC_Addr_3_Clear_SEL_VBAT_ALTIsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_VBAT_ALTIsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_SEL_VBAT_ALT;
+        public Enabled MTC_Addr_3_Clear_SEL_VBAT_ALT {
+            get => _MTC_Addr_3_Clear_SEL_VBAT_ALT;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_VBAT_ALT, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_SEL_VBAT_FPGAIsSet;
+        public bool MTC_Addr_3_Clear_SEL_VBAT_FPGAIsSet {
+            get => _MTC_Addr_3_Clear_SEL_VBAT_FPGAIsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_VBAT_FPGAIsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_SEL_VBAT_FPGA;
+        public Enabled MTC_Addr_3_Clear_SEL_VBAT_FPGA {
+            get => _MTC_Addr_3_Clear_SEL_VBAT_FPGA;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_VBAT_FPGA, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_SEL_nRESET_1IsSet;
+        public bool MTC_Addr_3_Clear_SEL_nRESET_1IsSet {
+            get => _MTC_Addr_3_Clear_SEL_nRESET_1IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_nRESET_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_SEL_nRESET_1;
+        public Enabled MTC_Addr_3_Clear_SEL_nRESET_1 {
+            get => _MTC_Addr_3_Clear_SEL_nRESET_1;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_nRESET_1, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_SEL_nRESET_2IsSet;
+        public bool MTC_Addr_3_Clear_SEL_nRESET_2IsSet {
+            get => _MTC_Addr_3_Clear_SEL_nRESET_2IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_nRESET_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_SEL_nRESET_2;
+        public Enabled MTC_Addr_3_Clear_SEL_nRESET_2 {
+            get => _MTC_Addr_3_Clear_SEL_nRESET_2;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_nRESET_2, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_SEL_nRESET_3IsSet;
+        public bool MTC_Addr_3_Clear_SEL_nRESET_3IsSet {
+            get => _MTC_Addr_3_Clear_SEL_nRESET_3IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_nRESET_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_SEL_nRESET_3;
+        public Enabled MTC_Addr_3_Clear_SEL_nRESET_3 {
+            get => _MTC_Addr_3_Clear_SEL_nRESET_3;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_nRESET_3, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_SEL_CS_1IsSet;
+        public bool MTC_Addr_3_Clear_SEL_CS_1IsSet {
+            get => _MTC_Addr_3_Clear_SEL_CS_1IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_CS_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_SEL_CS_1;
+        public Enabled MTC_Addr_3_Clear_SEL_CS_1 {
+            get => _MTC_Addr_3_Clear_SEL_CS_1;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_CS_1, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_SEL_CS_2IsSet;
+        public bool MTC_Addr_3_Clear_SEL_CS_2IsSet {
+            get => _MTC_Addr_3_Clear_SEL_CS_2IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_CS_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_SEL_CS_2;
+        public Enabled MTC_Addr_3_Clear_SEL_CS_2 {
+            get => _MTC_Addr_3_Clear_SEL_CS_2;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_CS_2, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_SEL_CS_3IsSet;
+        public bool MTC_Addr_3_Clear_SEL_CS_3IsSet {
+            get => _MTC_Addr_3_Clear_SEL_CS_3IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_CS_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_SEL_CS_3;
+        public Enabled MTC_Addr_3_Clear_SEL_CS_3 {
+            get => _MTC_Addr_3_Clear_SEL_CS_3;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_CS_3, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_SEL_CS_4IsSet;
+        public bool MTC_Addr_3_Clear_SEL_CS_4IsSet {
+            get => _MTC_Addr_3_Clear_SEL_CS_4IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_CS_4IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_SEL_CS_4;
+        public Enabled MTC_Addr_3_Clear_SEL_CS_4 {
+            get => _MTC_Addr_3_Clear_SEL_CS_4;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_CS_4, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_SEL_CS_5IsSet;
+        public bool MTC_Addr_3_Clear_SEL_CS_5IsSet {
+            get => _MTC_Addr_3_Clear_SEL_CS_5IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_CS_5IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_SEL_CS_5;
+        public Enabled MTC_Addr_3_Clear_SEL_CS_5 {
+            get => _MTC_Addr_3_Clear_SEL_CS_5;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_CS_5, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_SEL_CS_6IsSet;
+        public bool MTC_Addr_3_Clear_SEL_CS_6IsSet {
+            get => _MTC_Addr_3_Clear_SEL_CS_6IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_CS_6IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_SEL_CS_6;
+        public Enabled MTC_Addr_3_Clear_SEL_CS_6 {
+            get => _MTC_Addr_3_Clear_SEL_CS_6;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_CS_6, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_SEL_SPI_1IsSet;
+        public bool MTC_Addr_3_Clear_SEL_SPI_1IsSet {
+            get => _MTC_Addr_3_Clear_SEL_SPI_1IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_SPI_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_SEL_SPI_1;
+        public Enabled MTC_Addr_3_Clear_SEL_SPI_1 {
+            get => _MTC_Addr_3_Clear_SEL_SPI_1;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_SPI_1, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_SEL_SPI_2IsSet;
+        public bool MTC_Addr_3_Clear_SEL_SPI_2IsSet {
+            get => _MTC_Addr_3_Clear_SEL_SPI_2IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_SPI_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_SEL_SPI_2;
+        public Enabled MTC_Addr_3_Clear_SEL_SPI_2 {
+            get => _MTC_Addr_3_Clear_SEL_SPI_2;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_SPI_2, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_SEL_CAN_1IsSet;
+        public bool MTC_Addr_3_Clear_SEL_CAN_1IsSet {
+            get => _MTC_Addr_3_Clear_SEL_CAN_1IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_CAN_1IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_SEL_CAN_1;
+        public Enabled MTC_Addr_3_Clear_SEL_CAN_1 {
+            get => _MTC_Addr_3_Clear_SEL_CAN_1;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_CAN_1, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_SEL_CAN_2IsSet;
+        public bool MTC_Addr_3_Clear_SEL_CAN_2IsSet {
+            get => _MTC_Addr_3_Clear_SEL_CAN_2IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_CAN_2IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_SEL_CAN_2;
+        public Enabled MTC_Addr_3_Clear_SEL_CAN_2 {
+            get => _MTC_Addr_3_Clear_SEL_CAN_2;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_CAN_2, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_SEL_CAN_3IsSet;
+        public bool MTC_Addr_3_Clear_SEL_CAN_3IsSet {
+            get => _MTC_Addr_3_Clear_SEL_CAN_3IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_CAN_3IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_SEL_CAN_3;
+        public Enabled MTC_Addr_3_Clear_SEL_CAN_3 {
+            get => _MTC_Addr_3_Clear_SEL_CAN_3;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_CAN_3, value);
+        }
+        
+        private bool _MTC_Addr_3_Clear_SEL_RS422IsSet;
+        public bool MTC_Addr_3_Clear_SEL_RS422IsSet {
+            get => _MTC_Addr_3_Clear_SEL_RS422IsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_RS422IsSet, value); 
+        }
+        private Enabled _MTC_Addr_3_Clear_SEL_RS422;
+        public Enabled MTC_Addr_3_Clear_SEL_RS422 {
+            get => _MTC_Addr_3_Clear_SEL_RS422;
+            set => _ = Set(ref _MTC_Addr_3_Clear_SEL_RS422, value);
+        }
+        
         /*************** Properties for RTOS_Status0 register ************************************/
         private bool _RTOS_Status0_uartRxHBOverflowIsSet;
         public bool RTOS_Status0_uartRxHBOverflowIsSet {
@@ -5722,83 +10313,6 @@ namespace Devices.Models
         public bool RTOS_Status0_CANTargetOutgoingOverflow {
             get => _RTOS_Status0_CANTargetOutgoingOverflow;
             set => _ = Set(ref _RTOS_Status0_CANTargetOutgoingOverflow, value);
-        }
-        
-        private bool _RTOS_Status0_UARTTargetIncomingOverflowIsSet;
-        public bool RTOS_Status0_UARTTargetIncomingOverflowIsSet {
-            get => _RTOS_Status0_UARTTargetIncomingOverflowIsSet;
-            set => _ = Set(ref _RTOS_Status0_UARTTargetIncomingOverflowIsSet, value); 
-        }
-        private bool _RTOS_Status0_UARTTargetIncomingOverflow;
-        public bool RTOS_Status0_UARTTargetIncomingOverflow {
-            get => _RTOS_Status0_UARTTargetIncomingOverflow;
-            set => _ = Set(ref _RTOS_Status0_UARTTargetIncomingOverflow, value);
-        }
-        
-        private bool _RTOS_Status0_UARTTargetTxHBOverflowIsSet;
-        public bool RTOS_Status0_UARTTargetTxHBOverflowIsSet {
-            get => _RTOS_Status0_UARTTargetTxHBOverflowIsSet;
-            set => _ = Set(ref _RTOS_Status0_UARTTargetTxHBOverflowIsSet, value); 
-        }
-        private bool _RTOS_Status0_UARTTargetTxHBOverflow;
-        public bool RTOS_Status0_UARTTargetTxHBOverflow {
-            get => _RTOS_Status0_UARTTargetTxHBOverflow;
-            set => _ = Set(ref _RTOS_Status0_UARTTargetTxHBOverflow, value);
-        }
-        
-        private bool _RTOS_Status0_UARTTargetRxHBOverflowIsSet;
-        public bool RTOS_Status0_UARTTargetRxHBOverflowIsSet {
-            get => _RTOS_Status0_UARTTargetRxHBOverflowIsSet;
-            set => _ = Set(ref _RTOS_Status0_UARTTargetRxHBOverflowIsSet, value); 
-        }
-        private bool _RTOS_Status0_UARTTargetRxHBOverflow;
-        public bool RTOS_Status0_UARTTargetRxHBOverflow {
-            get => _RTOS_Status0_UARTTargetRxHBOverflow;
-            set => _ = Set(ref _RTOS_Status0_UARTTargetRxHBOverflow, value);
-        }
-        
-        private bool _RTOS_Status0_UARTTargetOutgoingOverflowIsSet;
-        public bool RTOS_Status0_UARTTargetOutgoingOverflowIsSet {
-            get => _RTOS_Status0_UARTTargetOutgoingOverflowIsSet;
-            set => _ = Set(ref _RTOS_Status0_UARTTargetOutgoingOverflowIsSet, value); 
-        }
-        private bool _RTOS_Status0_UARTTargetOutgoingOverflow;
-        public bool RTOS_Status0_UARTTargetOutgoingOverflow {
-            get => _RTOS_Status0_UARTTargetOutgoingOverflow;
-            set => _ = Set(ref _RTOS_Status0_UARTTargetOutgoingOverflow, value);
-        }
-        
-        private bool _RTOS_Status0_GSETargetIncomingOverflowIsSet;
-        public bool RTOS_Status0_GSETargetIncomingOverflowIsSet {
-            get => _RTOS_Status0_GSETargetIncomingOverflowIsSet;
-            set => _ = Set(ref _RTOS_Status0_GSETargetIncomingOverflowIsSet, value); 
-        }
-        private bool _RTOS_Status0_GSETargetIncomingOverflow;
-        public bool RTOS_Status0_GSETargetIncomingOverflow {
-            get => _RTOS_Status0_GSETargetIncomingOverflow;
-            set => _ = Set(ref _RTOS_Status0_GSETargetIncomingOverflow, value);
-        }
-        
-        private bool _RTOS_Status0_GSETargetOutgoingOverflowIsSet;
-        public bool RTOS_Status0_GSETargetOutgoingOverflowIsSet {
-            get => _RTOS_Status0_GSETargetOutgoingOverflowIsSet;
-            set => _ = Set(ref _RTOS_Status0_GSETargetOutgoingOverflowIsSet, value); 
-        }
-        private bool _RTOS_Status0_GSETargetOutgoingOverflow;
-        public bool RTOS_Status0_GSETargetOutgoingOverflow {
-            get => _RTOS_Status0_GSETargetOutgoingOverflow;
-            set => _ = Set(ref _RTOS_Status0_GSETargetOutgoingOverflow, value);
-        }
-        
-        private bool _RTOS_Status0_SERMUX_CRC_ErrorIsSet;
-        public bool RTOS_Status0_SERMUX_CRC_ErrorIsSet {
-            get => _RTOS_Status0_SERMUX_CRC_ErrorIsSet;
-            set => _ = Set(ref _RTOS_Status0_SERMUX_CRC_ErrorIsSet, value); 
-        }
-        private bool _RTOS_Status0_SERMUX_CRC_Error;
-        public bool RTOS_Status0_SERMUX_CRC_Error {
-            get => _RTOS_Status0_SERMUX_CRC_Error;
-            set => _ = Set(ref _RTOS_Status0_SERMUX_CRC_Error, value);
         }
         
         /*************** Properties for PreviousEndpoint register ********************************/
@@ -6445,6 +10959,426 @@ namespace Devices.Models
                     TE_Addr_3_Clear_COMM_TR = (Enabled) register.RegTE_Config.COMM_TR;
                     break;
 
+                case OBCRegisterAddress.OBC_REG_MTC_ADDR_0:
+                    FullRegister_MTC_Addr_0  = register.RawValue; 
+                    MTC_Addr_0_ScanEnabled = (Enabled) register.RegMTC_Config.ScanEnabled;
+                    MTC_Addr_0_Detected =  register.RegMTC_Config.Detected;
+                    MTC_Addr_0_Type =  register.RegMTC_Config.Type;
+                    MTC_Addr_0_ENABLE_1 = (Enabled) register.RegMTC_Config.ENABLE_1;
+                    MTC_Addr_0_ENABLE_2 = (Enabled) register.RegMTC_Config.ENABLE_2;
+                    MTC_Addr_0_SEL_I2C_1 = (Enabled) register.RegMTC_Config.SEL_I2C_1;
+                    MTC_Addr_0_SEL_I2C_2 = (Enabled) register.RegMTC_Config.SEL_I2C_2;
+                    MTC_Addr_0_SEL_UART_1 = (Enabled) register.RegMTC_Config.SEL_UART_1;
+                    MTC_Addr_0_SEL_UART_2 = (Enabled) register.RegMTC_Config.SEL_UART_2;
+                    MTC_Addr_0_SEL_UART_3 = (Enabled) register.RegMTC_Config.SEL_UART_3;
+                    MTC_Addr_0_SEL_UART_4 = (Enabled) register.RegMTC_Config.SEL_UART_4;
+                    MTC_Addr_0_SEL_UART_5 = (Enabled) register.RegMTC_Config.SEL_UART_5;
+                    MTC_Addr_0_SEL_UART_6 = (Enabled) register.RegMTC_Config.SEL_UART_6;
+                    MTC_Addr_0_SEL_VBAT = (Enabled) register.RegMTC_Config.SEL_VBAT;
+                    MTC_Addr_0_SEL_VBAT_ALT = (Enabled) register.RegMTC_Config.SEL_VBAT_ALT;
+                    MTC_Addr_0_SEL_VBAT_FPGA = (Enabled) register.RegMTC_Config.SEL_VBAT_FPGA;
+                    MTC_Addr_0_SEL_nRESET_1 = (Enabled) register.RegMTC_Config.SEL_nRESET_1;
+                    MTC_Addr_0_SEL_nRESET_2 = (Enabled) register.RegMTC_Config.SEL_nRESET_2;
+                    MTC_Addr_0_SEL_nRESET_3 = (Enabled) register.RegMTC_Config.SEL_nRESET_3;
+                    MTC_Addr_0_SEL_CS_1 = (Enabled) register.RegMTC_Config.SEL_CS_1;
+                    MTC_Addr_0_SEL_CS_2 = (Enabled) register.RegMTC_Config.SEL_CS_2;
+                    MTC_Addr_0_SEL_CS_3 = (Enabled) register.RegMTC_Config.SEL_CS_3;
+                    MTC_Addr_0_SEL_CS_4 = (Enabled) register.RegMTC_Config.SEL_CS_4;
+                    MTC_Addr_0_SEL_CS_5 = (Enabled) register.RegMTC_Config.SEL_CS_5;
+                    MTC_Addr_0_SEL_CS_6 = (Enabled) register.RegMTC_Config.SEL_CS_6;
+                    MTC_Addr_0_SEL_SPI_1 = (Enabled) register.RegMTC_Config.SEL_SPI_1;
+                    MTC_Addr_0_SEL_SPI_2 = (Enabled) register.RegMTC_Config.SEL_SPI_2;
+                    MTC_Addr_0_SEL_CAN_1 = (Enabled) register.RegMTC_Config.SEL_CAN_1;
+                    MTC_Addr_0_SEL_CAN_2 = (Enabled) register.RegMTC_Config.SEL_CAN_2;
+                    MTC_Addr_0_SEL_CAN_3 = (Enabled) register.RegMTC_Config.SEL_CAN_3;
+                    MTC_Addr_0_SEL_RS422 = (Enabled) register.RegMTC_Config.SEL_RS422;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_MTC_ADDR_0_SET:
+                    FullRegister_MTC_Addr_0_Set  = register.RawValue; 
+                    MTC_Addr_0_Set_ScanEnabled = (Enabled) register.RegMTC_Config.ScanEnabled;
+                    MTC_Addr_0_Set_Detected =  register.RegMTC_Config.Detected;
+                    MTC_Addr_0_Set_Type =  register.RegMTC_Config.Type;
+                    MTC_Addr_0_Set_ENABLE_1 = (Enabled) register.RegMTC_Config.ENABLE_1;
+                    MTC_Addr_0_Set_ENABLE_2 = (Enabled) register.RegMTC_Config.ENABLE_2;
+                    MTC_Addr_0_Set_SEL_I2C_1 = (Enabled) register.RegMTC_Config.SEL_I2C_1;
+                    MTC_Addr_0_Set_SEL_I2C_2 = (Enabled) register.RegMTC_Config.SEL_I2C_2;
+                    MTC_Addr_0_Set_SEL_UART_1 = (Enabled) register.RegMTC_Config.SEL_UART_1;
+                    MTC_Addr_0_Set_SEL_UART_2 = (Enabled) register.RegMTC_Config.SEL_UART_2;
+                    MTC_Addr_0_Set_SEL_UART_3 = (Enabled) register.RegMTC_Config.SEL_UART_3;
+                    MTC_Addr_0_Set_SEL_UART_4 = (Enabled) register.RegMTC_Config.SEL_UART_4;
+                    MTC_Addr_0_Set_SEL_UART_5 = (Enabled) register.RegMTC_Config.SEL_UART_5;
+                    MTC_Addr_0_Set_SEL_UART_6 = (Enabled) register.RegMTC_Config.SEL_UART_6;
+                    MTC_Addr_0_Set_SEL_VBAT = (Enabled) register.RegMTC_Config.SEL_VBAT;
+                    MTC_Addr_0_Set_SEL_VBAT_ALT = (Enabled) register.RegMTC_Config.SEL_VBAT_ALT;
+                    MTC_Addr_0_Set_SEL_VBAT_FPGA = (Enabled) register.RegMTC_Config.SEL_VBAT_FPGA;
+                    MTC_Addr_0_Set_SEL_nRESET_1 = (Enabled) register.RegMTC_Config.SEL_nRESET_1;
+                    MTC_Addr_0_Set_SEL_nRESET_2 = (Enabled) register.RegMTC_Config.SEL_nRESET_2;
+                    MTC_Addr_0_Set_SEL_nRESET_3 = (Enabled) register.RegMTC_Config.SEL_nRESET_3;
+                    MTC_Addr_0_Set_SEL_CS_1 = (Enabled) register.RegMTC_Config.SEL_CS_1;
+                    MTC_Addr_0_Set_SEL_CS_2 = (Enabled) register.RegMTC_Config.SEL_CS_2;
+                    MTC_Addr_0_Set_SEL_CS_3 = (Enabled) register.RegMTC_Config.SEL_CS_3;
+                    MTC_Addr_0_Set_SEL_CS_4 = (Enabled) register.RegMTC_Config.SEL_CS_4;
+                    MTC_Addr_0_Set_SEL_CS_5 = (Enabled) register.RegMTC_Config.SEL_CS_5;
+                    MTC_Addr_0_Set_SEL_CS_6 = (Enabled) register.RegMTC_Config.SEL_CS_6;
+                    MTC_Addr_0_Set_SEL_SPI_1 = (Enabled) register.RegMTC_Config.SEL_SPI_1;
+                    MTC_Addr_0_Set_SEL_SPI_2 = (Enabled) register.RegMTC_Config.SEL_SPI_2;
+                    MTC_Addr_0_Set_SEL_CAN_1 = (Enabled) register.RegMTC_Config.SEL_CAN_1;
+                    MTC_Addr_0_Set_SEL_CAN_2 = (Enabled) register.RegMTC_Config.SEL_CAN_2;
+                    MTC_Addr_0_Set_SEL_CAN_3 = (Enabled) register.RegMTC_Config.SEL_CAN_3;
+                    MTC_Addr_0_Set_SEL_RS422 = (Enabled) register.RegMTC_Config.SEL_RS422;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_MTC_ADDR_0_CLEAR:
+                    FullRegister_MTC_Addr_0_Clear  = register.RawValue; 
+                    MTC_Addr_0_Clear_ScanEnabled = (Enabled) register.RegMTC_Config.ScanEnabled;
+                    MTC_Addr_0_Clear_Detected =  register.RegMTC_Config.Detected;
+                    MTC_Addr_0_Clear_Type =  register.RegMTC_Config.Type;
+                    MTC_Addr_0_Clear_ENABLE_1 = (Enabled) register.RegMTC_Config.ENABLE_1;
+                    MTC_Addr_0_Clear_ENABLE_2 = (Enabled) register.RegMTC_Config.ENABLE_2;
+                    MTC_Addr_0_Clear_SEL_I2C_1 = (Enabled) register.RegMTC_Config.SEL_I2C_1;
+                    MTC_Addr_0_Clear_SEL_I2C_2 = (Enabled) register.RegMTC_Config.SEL_I2C_2;
+                    MTC_Addr_0_Clear_SEL_UART_1 = (Enabled) register.RegMTC_Config.SEL_UART_1;
+                    MTC_Addr_0_Clear_SEL_UART_2 = (Enabled) register.RegMTC_Config.SEL_UART_2;
+                    MTC_Addr_0_Clear_SEL_UART_3 = (Enabled) register.RegMTC_Config.SEL_UART_3;
+                    MTC_Addr_0_Clear_SEL_UART_4 = (Enabled) register.RegMTC_Config.SEL_UART_4;
+                    MTC_Addr_0_Clear_SEL_UART_5 = (Enabled) register.RegMTC_Config.SEL_UART_5;
+                    MTC_Addr_0_Clear_SEL_UART_6 = (Enabled) register.RegMTC_Config.SEL_UART_6;
+                    MTC_Addr_0_Clear_SEL_VBAT = (Enabled) register.RegMTC_Config.SEL_VBAT;
+                    MTC_Addr_0_Clear_SEL_VBAT_ALT = (Enabled) register.RegMTC_Config.SEL_VBAT_ALT;
+                    MTC_Addr_0_Clear_SEL_VBAT_FPGA = (Enabled) register.RegMTC_Config.SEL_VBAT_FPGA;
+                    MTC_Addr_0_Clear_SEL_nRESET_1 = (Enabled) register.RegMTC_Config.SEL_nRESET_1;
+                    MTC_Addr_0_Clear_SEL_nRESET_2 = (Enabled) register.RegMTC_Config.SEL_nRESET_2;
+                    MTC_Addr_0_Clear_SEL_nRESET_3 = (Enabled) register.RegMTC_Config.SEL_nRESET_3;
+                    MTC_Addr_0_Clear_SEL_CS_1 = (Enabled) register.RegMTC_Config.SEL_CS_1;
+                    MTC_Addr_0_Clear_SEL_CS_2 = (Enabled) register.RegMTC_Config.SEL_CS_2;
+                    MTC_Addr_0_Clear_SEL_CS_3 = (Enabled) register.RegMTC_Config.SEL_CS_3;
+                    MTC_Addr_0_Clear_SEL_CS_4 = (Enabled) register.RegMTC_Config.SEL_CS_4;
+                    MTC_Addr_0_Clear_SEL_CS_5 = (Enabled) register.RegMTC_Config.SEL_CS_5;
+                    MTC_Addr_0_Clear_SEL_CS_6 = (Enabled) register.RegMTC_Config.SEL_CS_6;
+                    MTC_Addr_0_Clear_SEL_SPI_1 = (Enabled) register.RegMTC_Config.SEL_SPI_1;
+                    MTC_Addr_0_Clear_SEL_SPI_2 = (Enabled) register.RegMTC_Config.SEL_SPI_2;
+                    MTC_Addr_0_Clear_SEL_CAN_1 = (Enabled) register.RegMTC_Config.SEL_CAN_1;
+                    MTC_Addr_0_Clear_SEL_CAN_2 = (Enabled) register.RegMTC_Config.SEL_CAN_2;
+                    MTC_Addr_0_Clear_SEL_CAN_3 = (Enabled) register.RegMTC_Config.SEL_CAN_3;
+                    MTC_Addr_0_Clear_SEL_RS422 = (Enabled) register.RegMTC_Config.SEL_RS422;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_MTC_ADDR_1:
+                    FullRegister_MTC_Addr_1  = register.RawValue; 
+                    MTC_Addr_1_ScanEnabled = (Enabled) register.RegMTC_Config.ScanEnabled;
+                    MTC_Addr_1_Detected =  register.RegMTC_Config.Detected;
+                    MTC_Addr_1_Type =  register.RegMTC_Config.Type;
+                    MTC_Addr_1_ENABLE_1 = (Enabled) register.RegMTC_Config.ENABLE_1;
+                    MTC_Addr_1_ENABLE_2 = (Enabled) register.RegMTC_Config.ENABLE_2;
+                    MTC_Addr_1_SEL_I2C_1 = (Enabled) register.RegMTC_Config.SEL_I2C_1;
+                    MTC_Addr_1_SEL_I2C_2 = (Enabled) register.RegMTC_Config.SEL_I2C_2;
+                    MTC_Addr_1_SEL_UART_1 = (Enabled) register.RegMTC_Config.SEL_UART_1;
+                    MTC_Addr_1_SEL_UART_2 = (Enabled) register.RegMTC_Config.SEL_UART_2;
+                    MTC_Addr_1_SEL_UART_3 = (Enabled) register.RegMTC_Config.SEL_UART_3;
+                    MTC_Addr_1_SEL_UART_4 = (Enabled) register.RegMTC_Config.SEL_UART_4;
+                    MTC_Addr_1_SEL_UART_5 = (Enabled) register.RegMTC_Config.SEL_UART_5;
+                    MTC_Addr_1_SEL_UART_6 = (Enabled) register.RegMTC_Config.SEL_UART_6;
+                    MTC_Addr_1_SEL_VBAT = (Enabled) register.RegMTC_Config.SEL_VBAT;
+                    MTC_Addr_1_SEL_VBAT_ALT = (Enabled) register.RegMTC_Config.SEL_VBAT_ALT;
+                    MTC_Addr_1_SEL_VBAT_FPGA = (Enabled) register.RegMTC_Config.SEL_VBAT_FPGA;
+                    MTC_Addr_1_SEL_nRESET_1 = (Enabled) register.RegMTC_Config.SEL_nRESET_1;
+                    MTC_Addr_1_SEL_nRESET_2 = (Enabled) register.RegMTC_Config.SEL_nRESET_2;
+                    MTC_Addr_1_SEL_nRESET_3 = (Enabled) register.RegMTC_Config.SEL_nRESET_3;
+                    MTC_Addr_1_SEL_CS_1 = (Enabled) register.RegMTC_Config.SEL_CS_1;
+                    MTC_Addr_1_SEL_CS_2 = (Enabled) register.RegMTC_Config.SEL_CS_2;
+                    MTC_Addr_1_SEL_CS_3 = (Enabled) register.RegMTC_Config.SEL_CS_3;
+                    MTC_Addr_1_SEL_CS_4 = (Enabled) register.RegMTC_Config.SEL_CS_4;
+                    MTC_Addr_1_SEL_CS_5 = (Enabled) register.RegMTC_Config.SEL_CS_5;
+                    MTC_Addr_1_SEL_CS_6 = (Enabled) register.RegMTC_Config.SEL_CS_6;
+                    MTC_Addr_1_SEL_SPI_1 = (Enabled) register.RegMTC_Config.SEL_SPI_1;
+                    MTC_Addr_1_SEL_SPI_2 = (Enabled) register.RegMTC_Config.SEL_SPI_2;
+                    MTC_Addr_1_SEL_CAN_1 = (Enabled) register.RegMTC_Config.SEL_CAN_1;
+                    MTC_Addr_1_SEL_CAN_2 = (Enabled) register.RegMTC_Config.SEL_CAN_2;
+                    MTC_Addr_1_SEL_CAN_3 = (Enabled) register.RegMTC_Config.SEL_CAN_3;
+                    MTC_Addr_1_SEL_RS422 = (Enabled) register.RegMTC_Config.SEL_RS422;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_MTC_ADDR_1_SET:
+                    FullRegister_MTC_Addr_1_Set  = register.RawValue; 
+                    MTC_Addr_1_Set_ScanEnabled = (Enabled) register.RegMTC_Config.ScanEnabled;
+                    MTC_Addr_1_Set_Detected =  register.RegMTC_Config.Detected;
+                    MTC_Addr_1_Set_Type =  register.RegMTC_Config.Type;
+                    MTC_Addr_1_Set_ENABLE_1 = (Enabled) register.RegMTC_Config.ENABLE_1;
+                    MTC_Addr_1_Set_ENABLE_2 = (Enabled) register.RegMTC_Config.ENABLE_2;
+                    MTC_Addr_1_Set_SEL_I2C_1 = (Enabled) register.RegMTC_Config.SEL_I2C_1;
+                    MTC_Addr_1_Set_SEL_I2C_2 = (Enabled) register.RegMTC_Config.SEL_I2C_2;
+                    MTC_Addr_1_Set_SEL_UART_1 = (Enabled) register.RegMTC_Config.SEL_UART_1;
+                    MTC_Addr_1_Set_SEL_UART_2 = (Enabled) register.RegMTC_Config.SEL_UART_2;
+                    MTC_Addr_1_Set_SEL_UART_3 = (Enabled) register.RegMTC_Config.SEL_UART_3;
+                    MTC_Addr_1_Set_SEL_UART_4 = (Enabled) register.RegMTC_Config.SEL_UART_4;
+                    MTC_Addr_1_Set_SEL_UART_5 = (Enabled) register.RegMTC_Config.SEL_UART_5;
+                    MTC_Addr_1_Set_SEL_UART_6 = (Enabled) register.RegMTC_Config.SEL_UART_6;
+                    MTC_Addr_1_Set_SEL_VBAT = (Enabled) register.RegMTC_Config.SEL_VBAT;
+                    MTC_Addr_1_Set_SEL_VBAT_ALT = (Enabled) register.RegMTC_Config.SEL_VBAT_ALT;
+                    MTC_Addr_1_Set_SEL_VBAT_FPGA = (Enabled) register.RegMTC_Config.SEL_VBAT_FPGA;
+                    MTC_Addr_1_Set_SEL_nRESET_1 = (Enabled) register.RegMTC_Config.SEL_nRESET_1;
+                    MTC_Addr_1_Set_SEL_nRESET_2 = (Enabled) register.RegMTC_Config.SEL_nRESET_2;
+                    MTC_Addr_1_Set_SEL_nRESET_3 = (Enabled) register.RegMTC_Config.SEL_nRESET_3;
+                    MTC_Addr_1_Set_SEL_CS_1 = (Enabled) register.RegMTC_Config.SEL_CS_1;
+                    MTC_Addr_1_Set_SEL_CS_2 = (Enabled) register.RegMTC_Config.SEL_CS_2;
+                    MTC_Addr_1_Set_SEL_CS_3 = (Enabled) register.RegMTC_Config.SEL_CS_3;
+                    MTC_Addr_1_Set_SEL_CS_4 = (Enabled) register.RegMTC_Config.SEL_CS_4;
+                    MTC_Addr_1_Set_SEL_CS_5 = (Enabled) register.RegMTC_Config.SEL_CS_5;
+                    MTC_Addr_1_Set_SEL_CS_6 = (Enabled) register.RegMTC_Config.SEL_CS_6;
+                    MTC_Addr_1_Set_SEL_SPI_1 = (Enabled) register.RegMTC_Config.SEL_SPI_1;
+                    MTC_Addr_1_Set_SEL_SPI_2 = (Enabled) register.RegMTC_Config.SEL_SPI_2;
+                    MTC_Addr_1_Set_SEL_CAN_1 = (Enabled) register.RegMTC_Config.SEL_CAN_1;
+                    MTC_Addr_1_Set_SEL_CAN_2 = (Enabled) register.RegMTC_Config.SEL_CAN_2;
+                    MTC_Addr_1_Set_SEL_CAN_3 = (Enabled) register.RegMTC_Config.SEL_CAN_3;
+                    MTC_Addr_1_Set_SEL_RS422 = (Enabled) register.RegMTC_Config.SEL_RS422;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_MTC_ADDR_1_CLEAR:
+                    FullRegister_MTC_Addr_1_Clear  = register.RawValue; 
+                    MTC_Addr_1_Clear_ScanEnabled = (Enabled) register.RegMTC_Config.ScanEnabled;
+                    MTC_Addr_1_Clear_Detected =  register.RegMTC_Config.Detected;
+                    MTC_Addr_1_Clear_Type =  register.RegMTC_Config.Type;
+                    MTC_Addr_1_Clear_ENABLE_1 = (Enabled) register.RegMTC_Config.ENABLE_1;
+                    MTC_Addr_1_Clear_ENABLE_2 = (Enabled) register.RegMTC_Config.ENABLE_2;
+                    MTC_Addr_1_Clear_SEL_I2C_1 = (Enabled) register.RegMTC_Config.SEL_I2C_1;
+                    MTC_Addr_1_Clear_SEL_I2C_2 = (Enabled) register.RegMTC_Config.SEL_I2C_2;
+                    MTC_Addr_1_Clear_SEL_UART_1 = (Enabled) register.RegMTC_Config.SEL_UART_1;
+                    MTC_Addr_1_Clear_SEL_UART_2 = (Enabled) register.RegMTC_Config.SEL_UART_2;
+                    MTC_Addr_1_Clear_SEL_UART_3 = (Enabled) register.RegMTC_Config.SEL_UART_3;
+                    MTC_Addr_1_Clear_SEL_UART_4 = (Enabled) register.RegMTC_Config.SEL_UART_4;
+                    MTC_Addr_1_Clear_SEL_UART_5 = (Enabled) register.RegMTC_Config.SEL_UART_5;
+                    MTC_Addr_1_Clear_SEL_UART_6 = (Enabled) register.RegMTC_Config.SEL_UART_6;
+                    MTC_Addr_1_Clear_SEL_VBAT = (Enabled) register.RegMTC_Config.SEL_VBAT;
+                    MTC_Addr_1_Clear_SEL_VBAT_ALT = (Enabled) register.RegMTC_Config.SEL_VBAT_ALT;
+                    MTC_Addr_1_Clear_SEL_VBAT_FPGA = (Enabled) register.RegMTC_Config.SEL_VBAT_FPGA;
+                    MTC_Addr_1_Clear_SEL_nRESET_1 = (Enabled) register.RegMTC_Config.SEL_nRESET_1;
+                    MTC_Addr_1_Clear_SEL_nRESET_2 = (Enabled) register.RegMTC_Config.SEL_nRESET_2;
+                    MTC_Addr_1_Clear_SEL_nRESET_3 = (Enabled) register.RegMTC_Config.SEL_nRESET_3;
+                    MTC_Addr_1_Clear_SEL_CS_1 = (Enabled) register.RegMTC_Config.SEL_CS_1;
+                    MTC_Addr_1_Clear_SEL_CS_2 = (Enabled) register.RegMTC_Config.SEL_CS_2;
+                    MTC_Addr_1_Clear_SEL_CS_3 = (Enabled) register.RegMTC_Config.SEL_CS_3;
+                    MTC_Addr_1_Clear_SEL_CS_4 = (Enabled) register.RegMTC_Config.SEL_CS_4;
+                    MTC_Addr_1_Clear_SEL_CS_5 = (Enabled) register.RegMTC_Config.SEL_CS_5;
+                    MTC_Addr_1_Clear_SEL_CS_6 = (Enabled) register.RegMTC_Config.SEL_CS_6;
+                    MTC_Addr_1_Clear_SEL_SPI_1 = (Enabled) register.RegMTC_Config.SEL_SPI_1;
+                    MTC_Addr_1_Clear_SEL_SPI_2 = (Enabled) register.RegMTC_Config.SEL_SPI_2;
+                    MTC_Addr_1_Clear_SEL_CAN_1 = (Enabled) register.RegMTC_Config.SEL_CAN_1;
+                    MTC_Addr_1_Clear_SEL_CAN_2 = (Enabled) register.RegMTC_Config.SEL_CAN_2;
+                    MTC_Addr_1_Clear_SEL_CAN_3 = (Enabled) register.RegMTC_Config.SEL_CAN_3;
+                    MTC_Addr_1_Clear_SEL_RS422 = (Enabled) register.RegMTC_Config.SEL_RS422;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_MTC_ADDR_2:
+                    FullRegister_MTC_Addr_2  = register.RawValue; 
+                    MTC_Addr_2_ScanEnabled = (Enabled) register.RegMTC_Config.ScanEnabled;
+                    MTC_Addr_2_Detected =  register.RegMTC_Config.Detected;
+                    MTC_Addr_2_Type =  register.RegMTC_Config.Type;
+                    MTC_Addr_2_ENABLE_1 = (Enabled) register.RegMTC_Config.ENABLE_1;
+                    MTC_Addr_2_ENABLE_2 = (Enabled) register.RegMTC_Config.ENABLE_2;
+                    MTC_Addr_2_SEL_I2C_1 = (Enabled) register.RegMTC_Config.SEL_I2C_1;
+                    MTC_Addr_2_SEL_I2C_2 = (Enabled) register.RegMTC_Config.SEL_I2C_2;
+                    MTC_Addr_2_SEL_UART_1 = (Enabled) register.RegMTC_Config.SEL_UART_1;
+                    MTC_Addr_2_SEL_UART_2 = (Enabled) register.RegMTC_Config.SEL_UART_2;
+                    MTC_Addr_2_SEL_UART_3 = (Enabled) register.RegMTC_Config.SEL_UART_3;
+                    MTC_Addr_2_SEL_UART_4 = (Enabled) register.RegMTC_Config.SEL_UART_4;
+                    MTC_Addr_2_SEL_UART_5 = (Enabled) register.RegMTC_Config.SEL_UART_5;
+                    MTC_Addr_2_SEL_UART_6 = (Enabled) register.RegMTC_Config.SEL_UART_6;
+                    MTC_Addr_2_SEL_VBAT = (Enabled) register.RegMTC_Config.SEL_VBAT;
+                    MTC_Addr_2_SEL_VBAT_ALT = (Enabled) register.RegMTC_Config.SEL_VBAT_ALT;
+                    MTC_Addr_2_SEL_VBAT_FPGA = (Enabled) register.RegMTC_Config.SEL_VBAT_FPGA;
+                    MTC_Addr_2_SEL_nRESET_1 = (Enabled) register.RegMTC_Config.SEL_nRESET_1;
+                    MTC_Addr_2_SEL_nRESET_2 = (Enabled) register.RegMTC_Config.SEL_nRESET_2;
+                    MTC_Addr_2_SEL_nRESET_3 = (Enabled) register.RegMTC_Config.SEL_nRESET_3;
+                    MTC_Addr_2_SEL_CS_1 = (Enabled) register.RegMTC_Config.SEL_CS_1;
+                    MTC_Addr_2_SEL_CS_2 = (Enabled) register.RegMTC_Config.SEL_CS_2;
+                    MTC_Addr_2_SEL_CS_3 = (Enabled) register.RegMTC_Config.SEL_CS_3;
+                    MTC_Addr_2_SEL_CS_4 = (Enabled) register.RegMTC_Config.SEL_CS_4;
+                    MTC_Addr_2_SEL_CS_5 = (Enabled) register.RegMTC_Config.SEL_CS_5;
+                    MTC_Addr_2_SEL_CS_6 = (Enabled) register.RegMTC_Config.SEL_CS_6;
+                    MTC_Addr_2_SEL_SPI_1 = (Enabled) register.RegMTC_Config.SEL_SPI_1;
+                    MTC_Addr_2_SEL_SPI_2 = (Enabled) register.RegMTC_Config.SEL_SPI_2;
+                    MTC_Addr_2_SEL_CAN_1 = (Enabled) register.RegMTC_Config.SEL_CAN_1;
+                    MTC_Addr_2_SEL_CAN_2 = (Enabled) register.RegMTC_Config.SEL_CAN_2;
+                    MTC_Addr_2_SEL_CAN_3 = (Enabled) register.RegMTC_Config.SEL_CAN_3;
+                    MTC_Addr_2_SEL_RS422 = (Enabled) register.RegMTC_Config.SEL_RS422;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_MTC_ADDR_2_SET:
+                    FullRegister_MTC_Addr_2_Set  = register.RawValue; 
+                    MTC_Addr_2_Set_ScanEnabled = (Enabled) register.RegMTC_Config.ScanEnabled;
+                    MTC_Addr_2_Set_Detected =  register.RegMTC_Config.Detected;
+                    MTC_Addr_2_Set_Type =  register.RegMTC_Config.Type;
+                    MTC_Addr_2_Set_ENABLE_1 = (Enabled) register.RegMTC_Config.ENABLE_1;
+                    MTC_Addr_2_Set_ENABLE_2 = (Enabled) register.RegMTC_Config.ENABLE_2;
+                    MTC_Addr_2_Set_SEL_I2C_1 = (Enabled) register.RegMTC_Config.SEL_I2C_1;
+                    MTC_Addr_2_Set_SEL_I2C_2 = (Enabled) register.RegMTC_Config.SEL_I2C_2;
+                    MTC_Addr_2_Set_SEL_UART_1 = (Enabled) register.RegMTC_Config.SEL_UART_1;
+                    MTC_Addr_2_Set_SEL_UART_2 = (Enabled) register.RegMTC_Config.SEL_UART_2;
+                    MTC_Addr_2_Set_SEL_UART_3 = (Enabled) register.RegMTC_Config.SEL_UART_3;
+                    MTC_Addr_2_Set_SEL_UART_4 = (Enabled) register.RegMTC_Config.SEL_UART_4;
+                    MTC_Addr_2_Set_SEL_UART_5 = (Enabled) register.RegMTC_Config.SEL_UART_5;
+                    MTC_Addr_2_Set_SEL_UART_6 = (Enabled) register.RegMTC_Config.SEL_UART_6;
+                    MTC_Addr_2_Set_SEL_VBAT = (Enabled) register.RegMTC_Config.SEL_VBAT;
+                    MTC_Addr_2_Set_SEL_VBAT_ALT = (Enabled) register.RegMTC_Config.SEL_VBAT_ALT;
+                    MTC_Addr_2_Set_SEL_VBAT_FPGA = (Enabled) register.RegMTC_Config.SEL_VBAT_FPGA;
+                    MTC_Addr_2_Set_SEL_nRESET_1 = (Enabled) register.RegMTC_Config.SEL_nRESET_1;
+                    MTC_Addr_2_Set_SEL_nRESET_2 = (Enabled) register.RegMTC_Config.SEL_nRESET_2;
+                    MTC_Addr_2_Set_SEL_nRESET_3 = (Enabled) register.RegMTC_Config.SEL_nRESET_3;
+                    MTC_Addr_2_Set_SEL_CS_1 = (Enabled) register.RegMTC_Config.SEL_CS_1;
+                    MTC_Addr_2_Set_SEL_CS_2 = (Enabled) register.RegMTC_Config.SEL_CS_2;
+                    MTC_Addr_2_Set_SEL_CS_3 = (Enabled) register.RegMTC_Config.SEL_CS_3;
+                    MTC_Addr_2_Set_SEL_CS_4 = (Enabled) register.RegMTC_Config.SEL_CS_4;
+                    MTC_Addr_2_Set_SEL_CS_5 = (Enabled) register.RegMTC_Config.SEL_CS_5;
+                    MTC_Addr_2_Set_SEL_CS_6 = (Enabled) register.RegMTC_Config.SEL_CS_6;
+                    MTC_Addr_2_Set_SEL_SPI_1 = (Enabled) register.RegMTC_Config.SEL_SPI_1;
+                    MTC_Addr_2_Set_SEL_SPI_2 = (Enabled) register.RegMTC_Config.SEL_SPI_2;
+                    MTC_Addr_2_Set_SEL_CAN_1 = (Enabled) register.RegMTC_Config.SEL_CAN_1;
+                    MTC_Addr_2_Set_SEL_CAN_2 = (Enabled) register.RegMTC_Config.SEL_CAN_2;
+                    MTC_Addr_2_Set_SEL_CAN_3 = (Enabled) register.RegMTC_Config.SEL_CAN_3;
+                    MTC_Addr_2_Set_SEL_RS422 = (Enabled) register.RegMTC_Config.SEL_RS422;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_MTC_ADDR_2_CLEAR:
+                    FullRegister_MTC_Addr_2_Clear  = register.RawValue; 
+                    MTC_Addr_2_Clear_ScanEnabled = (Enabled) register.RegMTC_Config.ScanEnabled;
+                    MTC_Addr_2_Clear_Detected =  register.RegMTC_Config.Detected;
+                    MTC_Addr_2_Clear_Type =  register.RegMTC_Config.Type;
+                    MTC_Addr_2_Clear_ENABLE_1 = (Enabled) register.RegMTC_Config.ENABLE_1;
+                    MTC_Addr_2_Clear_ENABLE_2 = (Enabled) register.RegMTC_Config.ENABLE_2;
+                    MTC_Addr_2_Clear_SEL_I2C_1 = (Enabled) register.RegMTC_Config.SEL_I2C_1;
+                    MTC_Addr_2_Clear_SEL_I2C_2 = (Enabled) register.RegMTC_Config.SEL_I2C_2;
+                    MTC_Addr_2_Clear_SEL_UART_1 = (Enabled) register.RegMTC_Config.SEL_UART_1;
+                    MTC_Addr_2_Clear_SEL_UART_2 = (Enabled) register.RegMTC_Config.SEL_UART_2;
+                    MTC_Addr_2_Clear_SEL_UART_3 = (Enabled) register.RegMTC_Config.SEL_UART_3;
+                    MTC_Addr_2_Clear_SEL_UART_4 = (Enabled) register.RegMTC_Config.SEL_UART_4;
+                    MTC_Addr_2_Clear_SEL_UART_5 = (Enabled) register.RegMTC_Config.SEL_UART_5;
+                    MTC_Addr_2_Clear_SEL_UART_6 = (Enabled) register.RegMTC_Config.SEL_UART_6;
+                    MTC_Addr_2_Clear_SEL_VBAT = (Enabled) register.RegMTC_Config.SEL_VBAT;
+                    MTC_Addr_2_Clear_SEL_VBAT_ALT = (Enabled) register.RegMTC_Config.SEL_VBAT_ALT;
+                    MTC_Addr_2_Clear_SEL_VBAT_FPGA = (Enabled) register.RegMTC_Config.SEL_VBAT_FPGA;
+                    MTC_Addr_2_Clear_SEL_nRESET_1 = (Enabled) register.RegMTC_Config.SEL_nRESET_1;
+                    MTC_Addr_2_Clear_SEL_nRESET_2 = (Enabled) register.RegMTC_Config.SEL_nRESET_2;
+                    MTC_Addr_2_Clear_SEL_nRESET_3 = (Enabled) register.RegMTC_Config.SEL_nRESET_3;
+                    MTC_Addr_2_Clear_SEL_CS_1 = (Enabled) register.RegMTC_Config.SEL_CS_1;
+                    MTC_Addr_2_Clear_SEL_CS_2 = (Enabled) register.RegMTC_Config.SEL_CS_2;
+                    MTC_Addr_2_Clear_SEL_CS_3 = (Enabled) register.RegMTC_Config.SEL_CS_3;
+                    MTC_Addr_2_Clear_SEL_CS_4 = (Enabled) register.RegMTC_Config.SEL_CS_4;
+                    MTC_Addr_2_Clear_SEL_CS_5 = (Enabled) register.RegMTC_Config.SEL_CS_5;
+                    MTC_Addr_2_Clear_SEL_CS_6 = (Enabled) register.RegMTC_Config.SEL_CS_6;
+                    MTC_Addr_2_Clear_SEL_SPI_1 = (Enabled) register.RegMTC_Config.SEL_SPI_1;
+                    MTC_Addr_2_Clear_SEL_SPI_2 = (Enabled) register.RegMTC_Config.SEL_SPI_2;
+                    MTC_Addr_2_Clear_SEL_CAN_1 = (Enabled) register.RegMTC_Config.SEL_CAN_1;
+                    MTC_Addr_2_Clear_SEL_CAN_2 = (Enabled) register.RegMTC_Config.SEL_CAN_2;
+                    MTC_Addr_2_Clear_SEL_CAN_3 = (Enabled) register.RegMTC_Config.SEL_CAN_3;
+                    MTC_Addr_2_Clear_SEL_RS422 = (Enabled) register.RegMTC_Config.SEL_RS422;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_MTC_ADDR_3:
+                    FullRegister_MTC_Addr_3  = register.RawValue; 
+                    MTC_Addr_3_ScanEnabled = (Enabled) register.RegMTC_Config.ScanEnabled;
+                    MTC_Addr_3_Detected =  register.RegMTC_Config.Detected;
+                    MTC_Addr_3_Type =  register.RegMTC_Config.Type;
+                    MTC_Addr_3_ENABLE_1 = (Enabled) register.RegMTC_Config.ENABLE_1;
+                    MTC_Addr_3_ENABLE_2 = (Enabled) register.RegMTC_Config.ENABLE_2;
+                    MTC_Addr_3_SEL_I2C_1 = (Enabled) register.RegMTC_Config.SEL_I2C_1;
+                    MTC_Addr_3_SEL_I2C_2 = (Enabled) register.RegMTC_Config.SEL_I2C_2;
+                    MTC_Addr_3_SEL_UART_1 = (Enabled) register.RegMTC_Config.SEL_UART_1;
+                    MTC_Addr_3_SEL_UART_2 = (Enabled) register.RegMTC_Config.SEL_UART_2;
+                    MTC_Addr_3_SEL_UART_3 = (Enabled) register.RegMTC_Config.SEL_UART_3;
+                    MTC_Addr_3_SEL_UART_4 = (Enabled) register.RegMTC_Config.SEL_UART_4;
+                    MTC_Addr_3_SEL_UART_5 = (Enabled) register.RegMTC_Config.SEL_UART_5;
+                    MTC_Addr_3_SEL_UART_6 = (Enabled) register.RegMTC_Config.SEL_UART_6;
+                    MTC_Addr_3_SEL_VBAT = (Enabled) register.RegMTC_Config.SEL_VBAT;
+                    MTC_Addr_3_SEL_VBAT_ALT = (Enabled) register.RegMTC_Config.SEL_VBAT_ALT;
+                    MTC_Addr_3_SEL_VBAT_FPGA = (Enabled) register.RegMTC_Config.SEL_VBAT_FPGA;
+                    MTC_Addr_3_SEL_nRESET_1 = (Enabled) register.RegMTC_Config.SEL_nRESET_1;
+                    MTC_Addr_3_SEL_nRESET_2 = (Enabled) register.RegMTC_Config.SEL_nRESET_2;
+                    MTC_Addr_3_SEL_nRESET_3 = (Enabled) register.RegMTC_Config.SEL_nRESET_3;
+                    MTC_Addr_3_SEL_CS_1 = (Enabled) register.RegMTC_Config.SEL_CS_1;
+                    MTC_Addr_3_SEL_CS_2 = (Enabled) register.RegMTC_Config.SEL_CS_2;
+                    MTC_Addr_3_SEL_CS_3 = (Enabled) register.RegMTC_Config.SEL_CS_3;
+                    MTC_Addr_3_SEL_CS_4 = (Enabled) register.RegMTC_Config.SEL_CS_4;
+                    MTC_Addr_3_SEL_CS_5 = (Enabled) register.RegMTC_Config.SEL_CS_5;
+                    MTC_Addr_3_SEL_CS_6 = (Enabled) register.RegMTC_Config.SEL_CS_6;
+                    MTC_Addr_3_SEL_SPI_1 = (Enabled) register.RegMTC_Config.SEL_SPI_1;
+                    MTC_Addr_3_SEL_SPI_2 = (Enabled) register.RegMTC_Config.SEL_SPI_2;
+                    MTC_Addr_3_SEL_CAN_1 = (Enabled) register.RegMTC_Config.SEL_CAN_1;
+                    MTC_Addr_3_SEL_CAN_2 = (Enabled) register.RegMTC_Config.SEL_CAN_2;
+                    MTC_Addr_3_SEL_CAN_3 = (Enabled) register.RegMTC_Config.SEL_CAN_3;
+                    MTC_Addr_3_SEL_RS422 = (Enabled) register.RegMTC_Config.SEL_RS422;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_MTC_ADDR_3_SET:
+                    FullRegister_MTC_Addr_3_Set  = register.RawValue; 
+                    MTC_Addr_3_Set_ScanEnabled = (Enabled) register.RegMTC_Config.ScanEnabled;
+                    MTC_Addr_3_Set_Detected =  register.RegMTC_Config.Detected;
+                    MTC_Addr_3_Set_Type =  register.RegMTC_Config.Type;
+                    MTC_Addr_3_Set_ENABLE_1 = (Enabled) register.RegMTC_Config.ENABLE_1;
+                    MTC_Addr_3_Set_ENABLE_2 = (Enabled) register.RegMTC_Config.ENABLE_2;
+                    MTC_Addr_3_Set_SEL_I2C_1 = (Enabled) register.RegMTC_Config.SEL_I2C_1;
+                    MTC_Addr_3_Set_SEL_I2C_2 = (Enabled) register.RegMTC_Config.SEL_I2C_2;
+                    MTC_Addr_3_Set_SEL_UART_1 = (Enabled) register.RegMTC_Config.SEL_UART_1;
+                    MTC_Addr_3_Set_SEL_UART_2 = (Enabled) register.RegMTC_Config.SEL_UART_2;
+                    MTC_Addr_3_Set_SEL_UART_3 = (Enabled) register.RegMTC_Config.SEL_UART_3;
+                    MTC_Addr_3_Set_SEL_UART_4 = (Enabled) register.RegMTC_Config.SEL_UART_4;
+                    MTC_Addr_3_Set_SEL_UART_5 = (Enabled) register.RegMTC_Config.SEL_UART_5;
+                    MTC_Addr_3_Set_SEL_UART_6 = (Enabled) register.RegMTC_Config.SEL_UART_6;
+                    MTC_Addr_3_Set_SEL_VBAT = (Enabled) register.RegMTC_Config.SEL_VBAT;
+                    MTC_Addr_3_Set_SEL_VBAT_ALT = (Enabled) register.RegMTC_Config.SEL_VBAT_ALT;
+                    MTC_Addr_3_Set_SEL_VBAT_FPGA = (Enabled) register.RegMTC_Config.SEL_VBAT_FPGA;
+                    MTC_Addr_3_Set_SEL_nRESET_1 = (Enabled) register.RegMTC_Config.SEL_nRESET_1;
+                    MTC_Addr_3_Set_SEL_nRESET_2 = (Enabled) register.RegMTC_Config.SEL_nRESET_2;
+                    MTC_Addr_3_Set_SEL_nRESET_3 = (Enabled) register.RegMTC_Config.SEL_nRESET_3;
+                    MTC_Addr_3_Set_SEL_CS_1 = (Enabled) register.RegMTC_Config.SEL_CS_1;
+                    MTC_Addr_3_Set_SEL_CS_2 = (Enabled) register.RegMTC_Config.SEL_CS_2;
+                    MTC_Addr_3_Set_SEL_CS_3 = (Enabled) register.RegMTC_Config.SEL_CS_3;
+                    MTC_Addr_3_Set_SEL_CS_4 = (Enabled) register.RegMTC_Config.SEL_CS_4;
+                    MTC_Addr_3_Set_SEL_CS_5 = (Enabled) register.RegMTC_Config.SEL_CS_5;
+                    MTC_Addr_3_Set_SEL_CS_6 = (Enabled) register.RegMTC_Config.SEL_CS_6;
+                    MTC_Addr_3_Set_SEL_SPI_1 = (Enabled) register.RegMTC_Config.SEL_SPI_1;
+                    MTC_Addr_3_Set_SEL_SPI_2 = (Enabled) register.RegMTC_Config.SEL_SPI_2;
+                    MTC_Addr_3_Set_SEL_CAN_1 = (Enabled) register.RegMTC_Config.SEL_CAN_1;
+                    MTC_Addr_3_Set_SEL_CAN_2 = (Enabled) register.RegMTC_Config.SEL_CAN_2;
+                    MTC_Addr_3_Set_SEL_CAN_3 = (Enabled) register.RegMTC_Config.SEL_CAN_3;
+                    MTC_Addr_3_Set_SEL_RS422 = (Enabled) register.RegMTC_Config.SEL_RS422;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_MTC_ADDR_3_CLEAR:
+                    FullRegister_MTC_Addr_3_Clear  = register.RawValue; 
+                    MTC_Addr_3_Clear_ScanEnabled = (Enabled) register.RegMTC_Config.ScanEnabled;
+                    MTC_Addr_3_Clear_Detected =  register.RegMTC_Config.Detected;
+                    MTC_Addr_3_Clear_Type =  register.RegMTC_Config.Type;
+                    MTC_Addr_3_Clear_ENABLE_1 = (Enabled) register.RegMTC_Config.ENABLE_1;
+                    MTC_Addr_3_Clear_ENABLE_2 = (Enabled) register.RegMTC_Config.ENABLE_2;
+                    MTC_Addr_3_Clear_SEL_I2C_1 = (Enabled) register.RegMTC_Config.SEL_I2C_1;
+                    MTC_Addr_3_Clear_SEL_I2C_2 = (Enabled) register.RegMTC_Config.SEL_I2C_2;
+                    MTC_Addr_3_Clear_SEL_UART_1 = (Enabled) register.RegMTC_Config.SEL_UART_1;
+                    MTC_Addr_3_Clear_SEL_UART_2 = (Enabled) register.RegMTC_Config.SEL_UART_2;
+                    MTC_Addr_3_Clear_SEL_UART_3 = (Enabled) register.RegMTC_Config.SEL_UART_3;
+                    MTC_Addr_3_Clear_SEL_UART_4 = (Enabled) register.RegMTC_Config.SEL_UART_4;
+                    MTC_Addr_3_Clear_SEL_UART_5 = (Enabled) register.RegMTC_Config.SEL_UART_5;
+                    MTC_Addr_3_Clear_SEL_UART_6 = (Enabled) register.RegMTC_Config.SEL_UART_6;
+                    MTC_Addr_3_Clear_SEL_VBAT = (Enabled) register.RegMTC_Config.SEL_VBAT;
+                    MTC_Addr_3_Clear_SEL_VBAT_ALT = (Enabled) register.RegMTC_Config.SEL_VBAT_ALT;
+                    MTC_Addr_3_Clear_SEL_VBAT_FPGA = (Enabled) register.RegMTC_Config.SEL_VBAT_FPGA;
+                    MTC_Addr_3_Clear_SEL_nRESET_1 = (Enabled) register.RegMTC_Config.SEL_nRESET_1;
+                    MTC_Addr_3_Clear_SEL_nRESET_2 = (Enabled) register.RegMTC_Config.SEL_nRESET_2;
+                    MTC_Addr_3_Clear_SEL_nRESET_3 = (Enabled) register.RegMTC_Config.SEL_nRESET_3;
+                    MTC_Addr_3_Clear_SEL_CS_1 = (Enabled) register.RegMTC_Config.SEL_CS_1;
+                    MTC_Addr_3_Clear_SEL_CS_2 = (Enabled) register.RegMTC_Config.SEL_CS_2;
+                    MTC_Addr_3_Clear_SEL_CS_3 = (Enabled) register.RegMTC_Config.SEL_CS_3;
+                    MTC_Addr_3_Clear_SEL_CS_4 = (Enabled) register.RegMTC_Config.SEL_CS_4;
+                    MTC_Addr_3_Clear_SEL_CS_5 = (Enabled) register.RegMTC_Config.SEL_CS_5;
+                    MTC_Addr_3_Clear_SEL_CS_6 = (Enabled) register.RegMTC_Config.SEL_CS_6;
+                    MTC_Addr_3_Clear_SEL_SPI_1 = (Enabled) register.RegMTC_Config.SEL_SPI_1;
+                    MTC_Addr_3_Clear_SEL_SPI_2 = (Enabled) register.RegMTC_Config.SEL_SPI_2;
+                    MTC_Addr_3_Clear_SEL_CAN_1 = (Enabled) register.RegMTC_Config.SEL_CAN_1;
+                    MTC_Addr_3_Clear_SEL_CAN_2 = (Enabled) register.RegMTC_Config.SEL_CAN_2;
+                    MTC_Addr_3_Clear_SEL_CAN_3 = (Enabled) register.RegMTC_Config.SEL_CAN_3;
+                    MTC_Addr_3_Clear_SEL_RS422 = (Enabled) register.RegMTC_Config.SEL_RS422;
+                    break;
+
                 case OBCRegisterAddress.OBC_REG_RTOS_STATUS0:
                     FullRegister_RTOS_Status0  = register.RawValue; 
                     RTOS_Status0_uartRxHBOverflow =  register.RegRTOS_Status0.uartRxHBOverflow;
@@ -6456,13 +11390,6 @@ namespace Devices.Models
                     RTOS_Status0_CANTargetIncomingOverflow =  register.RegRTOS_Status0.CANTargetIncomingOverflow;
                     RTOS_Status0_CANInterruptBufferOverflow =  register.RegRTOS_Status0.CANInterruptBufferOverflow;
                     RTOS_Status0_CANTargetOutgoingOverflow =  register.RegRTOS_Status0.CANTargetOutgoingOverflow;
-                    RTOS_Status0_UARTTargetIncomingOverflow =  register.RegRTOS_Status0.UARTTargetIncomingOverflow;
-                    RTOS_Status0_UARTTargetTxHBOverflow =  register.RegRTOS_Status0.UARTTargetTxHBOverflow;
-                    RTOS_Status0_UARTTargetRxHBOverflow =  register.RegRTOS_Status0.UARTTargetRxHBOverflow;
-                    RTOS_Status0_UARTTargetOutgoingOverflow =  register.RegRTOS_Status0.UARTTargetOutgoingOverflow;
-                    RTOS_Status0_GSETargetIncomingOverflow =  register.RegRTOS_Status0.GSETargetIncomingOverflow;
-                    RTOS_Status0_GSETargetOutgoingOverflow =  register.RegRTOS_Status0.GSETargetOutgoingOverflow;
-                    RTOS_Status0_SERMUX_CRC_Error =  register.RegRTOS_Status0.SERMUX_CRC_Error;
                     break;
 
                 case OBCRegisterAddress.OBC_REG_PREVIOUSENDPOINT:
@@ -7029,6 +11956,414 @@ namespace Devices.Models
                     register.RegTE_Config.COMM_TR = (byte) TE_Addr_3_Clear_COMM_TR;
                     break;
 
+                case OBCRegisterAddress.OBC_REG_MTC_ADDR_0:
+                    register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_0_ScanEnabled;
+                    register.RegMTC_Config.Detected = MTC_Addr_0_Detected;
+                    register.RegMTC_Config.Type = MTC_Addr_0_Type;
+                    register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_0_ENABLE_1;
+                    register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_0_ENABLE_2;
+                    register.RegMTC_Config.SEL_I2C_1 = (byte) MTC_Addr_0_SEL_I2C_1;
+                    register.RegMTC_Config.SEL_I2C_2 = (byte) MTC_Addr_0_SEL_I2C_2;
+                    register.RegMTC_Config.SEL_UART_1 = (byte) MTC_Addr_0_SEL_UART_1;
+                    register.RegMTC_Config.SEL_UART_2 = (byte) MTC_Addr_0_SEL_UART_2;
+                    register.RegMTC_Config.SEL_UART_3 = (byte) MTC_Addr_0_SEL_UART_3;
+                    register.RegMTC_Config.SEL_UART_4 = (byte) MTC_Addr_0_SEL_UART_4;
+                    register.RegMTC_Config.SEL_UART_5 = (byte) MTC_Addr_0_SEL_UART_5;
+                    register.RegMTC_Config.SEL_UART_6 = (byte) MTC_Addr_0_SEL_UART_6;
+                    register.RegMTC_Config.SEL_VBAT = (byte) MTC_Addr_0_SEL_VBAT;
+                    register.RegMTC_Config.SEL_VBAT_ALT = (byte) MTC_Addr_0_SEL_VBAT_ALT;
+                    register.RegMTC_Config.SEL_VBAT_FPGA = (byte) MTC_Addr_0_SEL_VBAT_FPGA;
+                    register.RegMTC_Config.SEL_nRESET_1 = (byte) MTC_Addr_0_SEL_nRESET_1;
+                    register.RegMTC_Config.SEL_nRESET_2 = (byte) MTC_Addr_0_SEL_nRESET_2;
+                    register.RegMTC_Config.SEL_nRESET_3 = (byte) MTC_Addr_0_SEL_nRESET_3;
+                    register.RegMTC_Config.SEL_CS_1 = (byte) MTC_Addr_0_SEL_CS_1;
+                    register.RegMTC_Config.SEL_CS_2 = (byte) MTC_Addr_0_SEL_CS_2;
+                    register.RegMTC_Config.SEL_CS_3 = (byte) MTC_Addr_0_SEL_CS_3;
+                    register.RegMTC_Config.SEL_CS_4 = (byte) MTC_Addr_0_SEL_CS_4;
+                    register.RegMTC_Config.SEL_CS_5 = (byte) MTC_Addr_0_SEL_CS_5;
+                    register.RegMTC_Config.SEL_CS_6 = (byte) MTC_Addr_0_SEL_CS_6;
+                    register.RegMTC_Config.SEL_SPI_1 = (byte) MTC_Addr_0_SEL_SPI_1;
+                    register.RegMTC_Config.SEL_SPI_2 = (byte) MTC_Addr_0_SEL_SPI_2;
+                    register.RegMTC_Config.SEL_CAN_1 = (byte) MTC_Addr_0_SEL_CAN_1;
+                    register.RegMTC_Config.SEL_CAN_2 = (byte) MTC_Addr_0_SEL_CAN_2;
+                    register.RegMTC_Config.SEL_CAN_3 = (byte) MTC_Addr_0_SEL_CAN_3;
+                    register.RegMTC_Config.SEL_RS422 = (byte) MTC_Addr_0_SEL_RS422;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_MTC_ADDR_0_SET:
+                    register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_0_Set_ScanEnabled;
+                    register.RegMTC_Config.Detected = MTC_Addr_0_Set_Detected;
+                    register.RegMTC_Config.Type = MTC_Addr_0_Set_Type;
+                    register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_0_Set_ENABLE_1;
+                    register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_0_Set_ENABLE_2;
+                    register.RegMTC_Config.SEL_I2C_1 = (byte) MTC_Addr_0_Set_SEL_I2C_1;
+                    register.RegMTC_Config.SEL_I2C_2 = (byte) MTC_Addr_0_Set_SEL_I2C_2;
+                    register.RegMTC_Config.SEL_UART_1 = (byte) MTC_Addr_0_Set_SEL_UART_1;
+                    register.RegMTC_Config.SEL_UART_2 = (byte) MTC_Addr_0_Set_SEL_UART_2;
+                    register.RegMTC_Config.SEL_UART_3 = (byte) MTC_Addr_0_Set_SEL_UART_3;
+                    register.RegMTC_Config.SEL_UART_4 = (byte) MTC_Addr_0_Set_SEL_UART_4;
+                    register.RegMTC_Config.SEL_UART_5 = (byte) MTC_Addr_0_Set_SEL_UART_5;
+                    register.RegMTC_Config.SEL_UART_6 = (byte) MTC_Addr_0_Set_SEL_UART_6;
+                    register.RegMTC_Config.SEL_VBAT = (byte) MTC_Addr_0_Set_SEL_VBAT;
+                    register.RegMTC_Config.SEL_VBAT_ALT = (byte) MTC_Addr_0_Set_SEL_VBAT_ALT;
+                    register.RegMTC_Config.SEL_VBAT_FPGA = (byte) MTC_Addr_0_Set_SEL_VBAT_FPGA;
+                    register.RegMTC_Config.SEL_nRESET_1 = (byte) MTC_Addr_0_Set_SEL_nRESET_1;
+                    register.RegMTC_Config.SEL_nRESET_2 = (byte) MTC_Addr_0_Set_SEL_nRESET_2;
+                    register.RegMTC_Config.SEL_nRESET_3 = (byte) MTC_Addr_0_Set_SEL_nRESET_3;
+                    register.RegMTC_Config.SEL_CS_1 = (byte) MTC_Addr_0_Set_SEL_CS_1;
+                    register.RegMTC_Config.SEL_CS_2 = (byte) MTC_Addr_0_Set_SEL_CS_2;
+                    register.RegMTC_Config.SEL_CS_3 = (byte) MTC_Addr_0_Set_SEL_CS_3;
+                    register.RegMTC_Config.SEL_CS_4 = (byte) MTC_Addr_0_Set_SEL_CS_4;
+                    register.RegMTC_Config.SEL_CS_5 = (byte) MTC_Addr_0_Set_SEL_CS_5;
+                    register.RegMTC_Config.SEL_CS_6 = (byte) MTC_Addr_0_Set_SEL_CS_6;
+                    register.RegMTC_Config.SEL_SPI_1 = (byte) MTC_Addr_0_Set_SEL_SPI_1;
+                    register.RegMTC_Config.SEL_SPI_2 = (byte) MTC_Addr_0_Set_SEL_SPI_2;
+                    register.RegMTC_Config.SEL_CAN_1 = (byte) MTC_Addr_0_Set_SEL_CAN_1;
+                    register.RegMTC_Config.SEL_CAN_2 = (byte) MTC_Addr_0_Set_SEL_CAN_2;
+                    register.RegMTC_Config.SEL_CAN_3 = (byte) MTC_Addr_0_Set_SEL_CAN_3;
+                    register.RegMTC_Config.SEL_RS422 = (byte) MTC_Addr_0_Set_SEL_RS422;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_MTC_ADDR_0_CLEAR:
+                    register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_0_Clear_ScanEnabled;
+                    register.RegMTC_Config.Detected = MTC_Addr_0_Clear_Detected;
+                    register.RegMTC_Config.Type = MTC_Addr_0_Clear_Type;
+                    register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_0_Clear_ENABLE_1;
+                    register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_0_Clear_ENABLE_2;
+                    register.RegMTC_Config.SEL_I2C_1 = (byte) MTC_Addr_0_Clear_SEL_I2C_1;
+                    register.RegMTC_Config.SEL_I2C_2 = (byte) MTC_Addr_0_Clear_SEL_I2C_2;
+                    register.RegMTC_Config.SEL_UART_1 = (byte) MTC_Addr_0_Clear_SEL_UART_1;
+                    register.RegMTC_Config.SEL_UART_2 = (byte) MTC_Addr_0_Clear_SEL_UART_2;
+                    register.RegMTC_Config.SEL_UART_3 = (byte) MTC_Addr_0_Clear_SEL_UART_3;
+                    register.RegMTC_Config.SEL_UART_4 = (byte) MTC_Addr_0_Clear_SEL_UART_4;
+                    register.RegMTC_Config.SEL_UART_5 = (byte) MTC_Addr_0_Clear_SEL_UART_5;
+                    register.RegMTC_Config.SEL_UART_6 = (byte) MTC_Addr_0_Clear_SEL_UART_6;
+                    register.RegMTC_Config.SEL_VBAT = (byte) MTC_Addr_0_Clear_SEL_VBAT;
+                    register.RegMTC_Config.SEL_VBAT_ALT = (byte) MTC_Addr_0_Clear_SEL_VBAT_ALT;
+                    register.RegMTC_Config.SEL_VBAT_FPGA = (byte) MTC_Addr_0_Clear_SEL_VBAT_FPGA;
+                    register.RegMTC_Config.SEL_nRESET_1 = (byte) MTC_Addr_0_Clear_SEL_nRESET_1;
+                    register.RegMTC_Config.SEL_nRESET_2 = (byte) MTC_Addr_0_Clear_SEL_nRESET_2;
+                    register.RegMTC_Config.SEL_nRESET_3 = (byte) MTC_Addr_0_Clear_SEL_nRESET_3;
+                    register.RegMTC_Config.SEL_CS_1 = (byte) MTC_Addr_0_Clear_SEL_CS_1;
+                    register.RegMTC_Config.SEL_CS_2 = (byte) MTC_Addr_0_Clear_SEL_CS_2;
+                    register.RegMTC_Config.SEL_CS_3 = (byte) MTC_Addr_0_Clear_SEL_CS_3;
+                    register.RegMTC_Config.SEL_CS_4 = (byte) MTC_Addr_0_Clear_SEL_CS_4;
+                    register.RegMTC_Config.SEL_CS_5 = (byte) MTC_Addr_0_Clear_SEL_CS_5;
+                    register.RegMTC_Config.SEL_CS_6 = (byte) MTC_Addr_0_Clear_SEL_CS_6;
+                    register.RegMTC_Config.SEL_SPI_1 = (byte) MTC_Addr_0_Clear_SEL_SPI_1;
+                    register.RegMTC_Config.SEL_SPI_2 = (byte) MTC_Addr_0_Clear_SEL_SPI_2;
+                    register.RegMTC_Config.SEL_CAN_1 = (byte) MTC_Addr_0_Clear_SEL_CAN_1;
+                    register.RegMTC_Config.SEL_CAN_2 = (byte) MTC_Addr_0_Clear_SEL_CAN_2;
+                    register.RegMTC_Config.SEL_CAN_3 = (byte) MTC_Addr_0_Clear_SEL_CAN_3;
+                    register.RegMTC_Config.SEL_RS422 = (byte) MTC_Addr_0_Clear_SEL_RS422;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_MTC_ADDR_1:
+                    register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_1_ScanEnabled;
+                    register.RegMTC_Config.Detected = MTC_Addr_1_Detected;
+                    register.RegMTC_Config.Type = MTC_Addr_1_Type;
+                    register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_1_ENABLE_1;
+                    register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_1_ENABLE_2;
+                    register.RegMTC_Config.SEL_I2C_1 = (byte) MTC_Addr_1_SEL_I2C_1;
+                    register.RegMTC_Config.SEL_I2C_2 = (byte) MTC_Addr_1_SEL_I2C_2;
+                    register.RegMTC_Config.SEL_UART_1 = (byte) MTC_Addr_1_SEL_UART_1;
+                    register.RegMTC_Config.SEL_UART_2 = (byte) MTC_Addr_1_SEL_UART_2;
+                    register.RegMTC_Config.SEL_UART_3 = (byte) MTC_Addr_1_SEL_UART_3;
+                    register.RegMTC_Config.SEL_UART_4 = (byte) MTC_Addr_1_SEL_UART_4;
+                    register.RegMTC_Config.SEL_UART_5 = (byte) MTC_Addr_1_SEL_UART_5;
+                    register.RegMTC_Config.SEL_UART_6 = (byte) MTC_Addr_1_SEL_UART_6;
+                    register.RegMTC_Config.SEL_VBAT = (byte) MTC_Addr_1_SEL_VBAT;
+                    register.RegMTC_Config.SEL_VBAT_ALT = (byte) MTC_Addr_1_SEL_VBAT_ALT;
+                    register.RegMTC_Config.SEL_VBAT_FPGA = (byte) MTC_Addr_1_SEL_VBAT_FPGA;
+                    register.RegMTC_Config.SEL_nRESET_1 = (byte) MTC_Addr_1_SEL_nRESET_1;
+                    register.RegMTC_Config.SEL_nRESET_2 = (byte) MTC_Addr_1_SEL_nRESET_2;
+                    register.RegMTC_Config.SEL_nRESET_3 = (byte) MTC_Addr_1_SEL_nRESET_3;
+                    register.RegMTC_Config.SEL_CS_1 = (byte) MTC_Addr_1_SEL_CS_1;
+                    register.RegMTC_Config.SEL_CS_2 = (byte) MTC_Addr_1_SEL_CS_2;
+                    register.RegMTC_Config.SEL_CS_3 = (byte) MTC_Addr_1_SEL_CS_3;
+                    register.RegMTC_Config.SEL_CS_4 = (byte) MTC_Addr_1_SEL_CS_4;
+                    register.RegMTC_Config.SEL_CS_5 = (byte) MTC_Addr_1_SEL_CS_5;
+                    register.RegMTC_Config.SEL_CS_6 = (byte) MTC_Addr_1_SEL_CS_6;
+                    register.RegMTC_Config.SEL_SPI_1 = (byte) MTC_Addr_1_SEL_SPI_1;
+                    register.RegMTC_Config.SEL_SPI_2 = (byte) MTC_Addr_1_SEL_SPI_2;
+                    register.RegMTC_Config.SEL_CAN_1 = (byte) MTC_Addr_1_SEL_CAN_1;
+                    register.RegMTC_Config.SEL_CAN_2 = (byte) MTC_Addr_1_SEL_CAN_2;
+                    register.RegMTC_Config.SEL_CAN_3 = (byte) MTC_Addr_1_SEL_CAN_3;
+                    register.RegMTC_Config.SEL_RS422 = (byte) MTC_Addr_1_SEL_RS422;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_MTC_ADDR_1_SET:
+                    register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_1_Set_ScanEnabled;
+                    register.RegMTC_Config.Detected = MTC_Addr_1_Set_Detected;
+                    register.RegMTC_Config.Type = MTC_Addr_1_Set_Type;
+                    register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_1_Set_ENABLE_1;
+                    register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_1_Set_ENABLE_2;
+                    register.RegMTC_Config.SEL_I2C_1 = (byte) MTC_Addr_1_Set_SEL_I2C_1;
+                    register.RegMTC_Config.SEL_I2C_2 = (byte) MTC_Addr_1_Set_SEL_I2C_2;
+                    register.RegMTC_Config.SEL_UART_1 = (byte) MTC_Addr_1_Set_SEL_UART_1;
+                    register.RegMTC_Config.SEL_UART_2 = (byte) MTC_Addr_1_Set_SEL_UART_2;
+                    register.RegMTC_Config.SEL_UART_3 = (byte) MTC_Addr_1_Set_SEL_UART_3;
+                    register.RegMTC_Config.SEL_UART_4 = (byte) MTC_Addr_1_Set_SEL_UART_4;
+                    register.RegMTC_Config.SEL_UART_5 = (byte) MTC_Addr_1_Set_SEL_UART_5;
+                    register.RegMTC_Config.SEL_UART_6 = (byte) MTC_Addr_1_Set_SEL_UART_6;
+                    register.RegMTC_Config.SEL_VBAT = (byte) MTC_Addr_1_Set_SEL_VBAT;
+                    register.RegMTC_Config.SEL_VBAT_ALT = (byte) MTC_Addr_1_Set_SEL_VBAT_ALT;
+                    register.RegMTC_Config.SEL_VBAT_FPGA = (byte) MTC_Addr_1_Set_SEL_VBAT_FPGA;
+                    register.RegMTC_Config.SEL_nRESET_1 = (byte) MTC_Addr_1_Set_SEL_nRESET_1;
+                    register.RegMTC_Config.SEL_nRESET_2 = (byte) MTC_Addr_1_Set_SEL_nRESET_2;
+                    register.RegMTC_Config.SEL_nRESET_3 = (byte) MTC_Addr_1_Set_SEL_nRESET_3;
+                    register.RegMTC_Config.SEL_CS_1 = (byte) MTC_Addr_1_Set_SEL_CS_1;
+                    register.RegMTC_Config.SEL_CS_2 = (byte) MTC_Addr_1_Set_SEL_CS_2;
+                    register.RegMTC_Config.SEL_CS_3 = (byte) MTC_Addr_1_Set_SEL_CS_3;
+                    register.RegMTC_Config.SEL_CS_4 = (byte) MTC_Addr_1_Set_SEL_CS_4;
+                    register.RegMTC_Config.SEL_CS_5 = (byte) MTC_Addr_1_Set_SEL_CS_5;
+                    register.RegMTC_Config.SEL_CS_6 = (byte) MTC_Addr_1_Set_SEL_CS_6;
+                    register.RegMTC_Config.SEL_SPI_1 = (byte) MTC_Addr_1_Set_SEL_SPI_1;
+                    register.RegMTC_Config.SEL_SPI_2 = (byte) MTC_Addr_1_Set_SEL_SPI_2;
+                    register.RegMTC_Config.SEL_CAN_1 = (byte) MTC_Addr_1_Set_SEL_CAN_1;
+                    register.RegMTC_Config.SEL_CAN_2 = (byte) MTC_Addr_1_Set_SEL_CAN_2;
+                    register.RegMTC_Config.SEL_CAN_3 = (byte) MTC_Addr_1_Set_SEL_CAN_3;
+                    register.RegMTC_Config.SEL_RS422 = (byte) MTC_Addr_1_Set_SEL_RS422;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_MTC_ADDR_1_CLEAR:
+                    register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_1_Clear_ScanEnabled;
+                    register.RegMTC_Config.Detected = MTC_Addr_1_Clear_Detected;
+                    register.RegMTC_Config.Type = MTC_Addr_1_Clear_Type;
+                    register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_1_Clear_ENABLE_1;
+                    register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_1_Clear_ENABLE_2;
+                    register.RegMTC_Config.SEL_I2C_1 = (byte) MTC_Addr_1_Clear_SEL_I2C_1;
+                    register.RegMTC_Config.SEL_I2C_2 = (byte) MTC_Addr_1_Clear_SEL_I2C_2;
+                    register.RegMTC_Config.SEL_UART_1 = (byte) MTC_Addr_1_Clear_SEL_UART_1;
+                    register.RegMTC_Config.SEL_UART_2 = (byte) MTC_Addr_1_Clear_SEL_UART_2;
+                    register.RegMTC_Config.SEL_UART_3 = (byte) MTC_Addr_1_Clear_SEL_UART_3;
+                    register.RegMTC_Config.SEL_UART_4 = (byte) MTC_Addr_1_Clear_SEL_UART_4;
+                    register.RegMTC_Config.SEL_UART_5 = (byte) MTC_Addr_1_Clear_SEL_UART_5;
+                    register.RegMTC_Config.SEL_UART_6 = (byte) MTC_Addr_1_Clear_SEL_UART_6;
+                    register.RegMTC_Config.SEL_VBAT = (byte) MTC_Addr_1_Clear_SEL_VBAT;
+                    register.RegMTC_Config.SEL_VBAT_ALT = (byte) MTC_Addr_1_Clear_SEL_VBAT_ALT;
+                    register.RegMTC_Config.SEL_VBAT_FPGA = (byte) MTC_Addr_1_Clear_SEL_VBAT_FPGA;
+                    register.RegMTC_Config.SEL_nRESET_1 = (byte) MTC_Addr_1_Clear_SEL_nRESET_1;
+                    register.RegMTC_Config.SEL_nRESET_2 = (byte) MTC_Addr_1_Clear_SEL_nRESET_2;
+                    register.RegMTC_Config.SEL_nRESET_3 = (byte) MTC_Addr_1_Clear_SEL_nRESET_3;
+                    register.RegMTC_Config.SEL_CS_1 = (byte) MTC_Addr_1_Clear_SEL_CS_1;
+                    register.RegMTC_Config.SEL_CS_2 = (byte) MTC_Addr_1_Clear_SEL_CS_2;
+                    register.RegMTC_Config.SEL_CS_3 = (byte) MTC_Addr_1_Clear_SEL_CS_3;
+                    register.RegMTC_Config.SEL_CS_4 = (byte) MTC_Addr_1_Clear_SEL_CS_4;
+                    register.RegMTC_Config.SEL_CS_5 = (byte) MTC_Addr_1_Clear_SEL_CS_5;
+                    register.RegMTC_Config.SEL_CS_6 = (byte) MTC_Addr_1_Clear_SEL_CS_6;
+                    register.RegMTC_Config.SEL_SPI_1 = (byte) MTC_Addr_1_Clear_SEL_SPI_1;
+                    register.RegMTC_Config.SEL_SPI_2 = (byte) MTC_Addr_1_Clear_SEL_SPI_2;
+                    register.RegMTC_Config.SEL_CAN_1 = (byte) MTC_Addr_1_Clear_SEL_CAN_1;
+                    register.RegMTC_Config.SEL_CAN_2 = (byte) MTC_Addr_1_Clear_SEL_CAN_2;
+                    register.RegMTC_Config.SEL_CAN_3 = (byte) MTC_Addr_1_Clear_SEL_CAN_3;
+                    register.RegMTC_Config.SEL_RS422 = (byte) MTC_Addr_1_Clear_SEL_RS422;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_MTC_ADDR_2:
+                    register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_2_ScanEnabled;
+                    register.RegMTC_Config.Detected = MTC_Addr_2_Detected;
+                    register.RegMTC_Config.Type = MTC_Addr_2_Type;
+                    register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_2_ENABLE_1;
+                    register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_2_ENABLE_2;
+                    register.RegMTC_Config.SEL_I2C_1 = (byte) MTC_Addr_2_SEL_I2C_1;
+                    register.RegMTC_Config.SEL_I2C_2 = (byte) MTC_Addr_2_SEL_I2C_2;
+                    register.RegMTC_Config.SEL_UART_1 = (byte) MTC_Addr_2_SEL_UART_1;
+                    register.RegMTC_Config.SEL_UART_2 = (byte) MTC_Addr_2_SEL_UART_2;
+                    register.RegMTC_Config.SEL_UART_3 = (byte) MTC_Addr_2_SEL_UART_3;
+                    register.RegMTC_Config.SEL_UART_4 = (byte) MTC_Addr_2_SEL_UART_4;
+                    register.RegMTC_Config.SEL_UART_5 = (byte) MTC_Addr_2_SEL_UART_5;
+                    register.RegMTC_Config.SEL_UART_6 = (byte) MTC_Addr_2_SEL_UART_6;
+                    register.RegMTC_Config.SEL_VBAT = (byte) MTC_Addr_2_SEL_VBAT;
+                    register.RegMTC_Config.SEL_VBAT_ALT = (byte) MTC_Addr_2_SEL_VBAT_ALT;
+                    register.RegMTC_Config.SEL_VBAT_FPGA = (byte) MTC_Addr_2_SEL_VBAT_FPGA;
+                    register.RegMTC_Config.SEL_nRESET_1 = (byte) MTC_Addr_2_SEL_nRESET_1;
+                    register.RegMTC_Config.SEL_nRESET_2 = (byte) MTC_Addr_2_SEL_nRESET_2;
+                    register.RegMTC_Config.SEL_nRESET_3 = (byte) MTC_Addr_2_SEL_nRESET_3;
+                    register.RegMTC_Config.SEL_CS_1 = (byte) MTC_Addr_2_SEL_CS_1;
+                    register.RegMTC_Config.SEL_CS_2 = (byte) MTC_Addr_2_SEL_CS_2;
+                    register.RegMTC_Config.SEL_CS_3 = (byte) MTC_Addr_2_SEL_CS_3;
+                    register.RegMTC_Config.SEL_CS_4 = (byte) MTC_Addr_2_SEL_CS_4;
+                    register.RegMTC_Config.SEL_CS_5 = (byte) MTC_Addr_2_SEL_CS_5;
+                    register.RegMTC_Config.SEL_CS_6 = (byte) MTC_Addr_2_SEL_CS_6;
+                    register.RegMTC_Config.SEL_SPI_1 = (byte) MTC_Addr_2_SEL_SPI_1;
+                    register.RegMTC_Config.SEL_SPI_2 = (byte) MTC_Addr_2_SEL_SPI_2;
+                    register.RegMTC_Config.SEL_CAN_1 = (byte) MTC_Addr_2_SEL_CAN_1;
+                    register.RegMTC_Config.SEL_CAN_2 = (byte) MTC_Addr_2_SEL_CAN_2;
+                    register.RegMTC_Config.SEL_CAN_3 = (byte) MTC_Addr_2_SEL_CAN_3;
+                    register.RegMTC_Config.SEL_RS422 = (byte) MTC_Addr_2_SEL_RS422;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_MTC_ADDR_2_SET:
+                    register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_2_Set_ScanEnabled;
+                    register.RegMTC_Config.Detected = MTC_Addr_2_Set_Detected;
+                    register.RegMTC_Config.Type = MTC_Addr_2_Set_Type;
+                    register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_2_Set_ENABLE_1;
+                    register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_2_Set_ENABLE_2;
+                    register.RegMTC_Config.SEL_I2C_1 = (byte) MTC_Addr_2_Set_SEL_I2C_1;
+                    register.RegMTC_Config.SEL_I2C_2 = (byte) MTC_Addr_2_Set_SEL_I2C_2;
+                    register.RegMTC_Config.SEL_UART_1 = (byte) MTC_Addr_2_Set_SEL_UART_1;
+                    register.RegMTC_Config.SEL_UART_2 = (byte) MTC_Addr_2_Set_SEL_UART_2;
+                    register.RegMTC_Config.SEL_UART_3 = (byte) MTC_Addr_2_Set_SEL_UART_3;
+                    register.RegMTC_Config.SEL_UART_4 = (byte) MTC_Addr_2_Set_SEL_UART_4;
+                    register.RegMTC_Config.SEL_UART_5 = (byte) MTC_Addr_2_Set_SEL_UART_5;
+                    register.RegMTC_Config.SEL_UART_6 = (byte) MTC_Addr_2_Set_SEL_UART_6;
+                    register.RegMTC_Config.SEL_VBAT = (byte) MTC_Addr_2_Set_SEL_VBAT;
+                    register.RegMTC_Config.SEL_VBAT_ALT = (byte) MTC_Addr_2_Set_SEL_VBAT_ALT;
+                    register.RegMTC_Config.SEL_VBAT_FPGA = (byte) MTC_Addr_2_Set_SEL_VBAT_FPGA;
+                    register.RegMTC_Config.SEL_nRESET_1 = (byte) MTC_Addr_2_Set_SEL_nRESET_1;
+                    register.RegMTC_Config.SEL_nRESET_2 = (byte) MTC_Addr_2_Set_SEL_nRESET_2;
+                    register.RegMTC_Config.SEL_nRESET_3 = (byte) MTC_Addr_2_Set_SEL_nRESET_3;
+                    register.RegMTC_Config.SEL_CS_1 = (byte) MTC_Addr_2_Set_SEL_CS_1;
+                    register.RegMTC_Config.SEL_CS_2 = (byte) MTC_Addr_2_Set_SEL_CS_2;
+                    register.RegMTC_Config.SEL_CS_3 = (byte) MTC_Addr_2_Set_SEL_CS_3;
+                    register.RegMTC_Config.SEL_CS_4 = (byte) MTC_Addr_2_Set_SEL_CS_4;
+                    register.RegMTC_Config.SEL_CS_5 = (byte) MTC_Addr_2_Set_SEL_CS_5;
+                    register.RegMTC_Config.SEL_CS_6 = (byte) MTC_Addr_2_Set_SEL_CS_6;
+                    register.RegMTC_Config.SEL_SPI_1 = (byte) MTC_Addr_2_Set_SEL_SPI_1;
+                    register.RegMTC_Config.SEL_SPI_2 = (byte) MTC_Addr_2_Set_SEL_SPI_2;
+                    register.RegMTC_Config.SEL_CAN_1 = (byte) MTC_Addr_2_Set_SEL_CAN_1;
+                    register.RegMTC_Config.SEL_CAN_2 = (byte) MTC_Addr_2_Set_SEL_CAN_2;
+                    register.RegMTC_Config.SEL_CAN_3 = (byte) MTC_Addr_2_Set_SEL_CAN_3;
+                    register.RegMTC_Config.SEL_RS422 = (byte) MTC_Addr_2_Set_SEL_RS422;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_MTC_ADDR_2_CLEAR:
+                    register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_2_Clear_ScanEnabled;
+                    register.RegMTC_Config.Detected = MTC_Addr_2_Clear_Detected;
+                    register.RegMTC_Config.Type = MTC_Addr_2_Clear_Type;
+                    register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_2_Clear_ENABLE_1;
+                    register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_2_Clear_ENABLE_2;
+                    register.RegMTC_Config.SEL_I2C_1 = (byte) MTC_Addr_2_Clear_SEL_I2C_1;
+                    register.RegMTC_Config.SEL_I2C_2 = (byte) MTC_Addr_2_Clear_SEL_I2C_2;
+                    register.RegMTC_Config.SEL_UART_1 = (byte) MTC_Addr_2_Clear_SEL_UART_1;
+                    register.RegMTC_Config.SEL_UART_2 = (byte) MTC_Addr_2_Clear_SEL_UART_2;
+                    register.RegMTC_Config.SEL_UART_3 = (byte) MTC_Addr_2_Clear_SEL_UART_3;
+                    register.RegMTC_Config.SEL_UART_4 = (byte) MTC_Addr_2_Clear_SEL_UART_4;
+                    register.RegMTC_Config.SEL_UART_5 = (byte) MTC_Addr_2_Clear_SEL_UART_5;
+                    register.RegMTC_Config.SEL_UART_6 = (byte) MTC_Addr_2_Clear_SEL_UART_6;
+                    register.RegMTC_Config.SEL_VBAT = (byte) MTC_Addr_2_Clear_SEL_VBAT;
+                    register.RegMTC_Config.SEL_VBAT_ALT = (byte) MTC_Addr_2_Clear_SEL_VBAT_ALT;
+                    register.RegMTC_Config.SEL_VBAT_FPGA = (byte) MTC_Addr_2_Clear_SEL_VBAT_FPGA;
+                    register.RegMTC_Config.SEL_nRESET_1 = (byte) MTC_Addr_2_Clear_SEL_nRESET_1;
+                    register.RegMTC_Config.SEL_nRESET_2 = (byte) MTC_Addr_2_Clear_SEL_nRESET_2;
+                    register.RegMTC_Config.SEL_nRESET_3 = (byte) MTC_Addr_2_Clear_SEL_nRESET_3;
+                    register.RegMTC_Config.SEL_CS_1 = (byte) MTC_Addr_2_Clear_SEL_CS_1;
+                    register.RegMTC_Config.SEL_CS_2 = (byte) MTC_Addr_2_Clear_SEL_CS_2;
+                    register.RegMTC_Config.SEL_CS_3 = (byte) MTC_Addr_2_Clear_SEL_CS_3;
+                    register.RegMTC_Config.SEL_CS_4 = (byte) MTC_Addr_2_Clear_SEL_CS_4;
+                    register.RegMTC_Config.SEL_CS_5 = (byte) MTC_Addr_2_Clear_SEL_CS_5;
+                    register.RegMTC_Config.SEL_CS_6 = (byte) MTC_Addr_2_Clear_SEL_CS_6;
+                    register.RegMTC_Config.SEL_SPI_1 = (byte) MTC_Addr_2_Clear_SEL_SPI_1;
+                    register.RegMTC_Config.SEL_SPI_2 = (byte) MTC_Addr_2_Clear_SEL_SPI_2;
+                    register.RegMTC_Config.SEL_CAN_1 = (byte) MTC_Addr_2_Clear_SEL_CAN_1;
+                    register.RegMTC_Config.SEL_CAN_2 = (byte) MTC_Addr_2_Clear_SEL_CAN_2;
+                    register.RegMTC_Config.SEL_CAN_3 = (byte) MTC_Addr_2_Clear_SEL_CAN_3;
+                    register.RegMTC_Config.SEL_RS422 = (byte) MTC_Addr_2_Clear_SEL_RS422;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_MTC_ADDR_3:
+                    register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_3_ScanEnabled;
+                    register.RegMTC_Config.Detected = MTC_Addr_3_Detected;
+                    register.RegMTC_Config.Type = MTC_Addr_3_Type;
+                    register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_3_ENABLE_1;
+                    register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_3_ENABLE_2;
+                    register.RegMTC_Config.SEL_I2C_1 = (byte) MTC_Addr_3_SEL_I2C_1;
+                    register.RegMTC_Config.SEL_I2C_2 = (byte) MTC_Addr_3_SEL_I2C_2;
+                    register.RegMTC_Config.SEL_UART_1 = (byte) MTC_Addr_3_SEL_UART_1;
+                    register.RegMTC_Config.SEL_UART_2 = (byte) MTC_Addr_3_SEL_UART_2;
+                    register.RegMTC_Config.SEL_UART_3 = (byte) MTC_Addr_3_SEL_UART_3;
+                    register.RegMTC_Config.SEL_UART_4 = (byte) MTC_Addr_3_SEL_UART_4;
+                    register.RegMTC_Config.SEL_UART_5 = (byte) MTC_Addr_3_SEL_UART_5;
+                    register.RegMTC_Config.SEL_UART_6 = (byte) MTC_Addr_3_SEL_UART_6;
+                    register.RegMTC_Config.SEL_VBAT = (byte) MTC_Addr_3_SEL_VBAT;
+                    register.RegMTC_Config.SEL_VBAT_ALT = (byte) MTC_Addr_3_SEL_VBAT_ALT;
+                    register.RegMTC_Config.SEL_VBAT_FPGA = (byte) MTC_Addr_3_SEL_VBAT_FPGA;
+                    register.RegMTC_Config.SEL_nRESET_1 = (byte) MTC_Addr_3_SEL_nRESET_1;
+                    register.RegMTC_Config.SEL_nRESET_2 = (byte) MTC_Addr_3_SEL_nRESET_2;
+                    register.RegMTC_Config.SEL_nRESET_3 = (byte) MTC_Addr_3_SEL_nRESET_3;
+                    register.RegMTC_Config.SEL_CS_1 = (byte) MTC_Addr_3_SEL_CS_1;
+                    register.RegMTC_Config.SEL_CS_2 = (byte) MTC_Addr_3_SEL_CS_2;
+                    register.RegMTC_Config.SEL_CS_3 = (byte) MTC_Addr_3_SEL_CS_3;
+                    register.RegMTC_Config.SEL_CS_4 = (byte) MTC_Addr_3_SEL_CS_4;
+                    register.RegMTC_Config.SEL_CS_5 = (byte) MTC_Addr_3_SEL_CS_5;
+                    register.RegMTC_Config.SEL_CS_6 = (byte) MTC_Addr_3_SEL_CS_6;
+                    register.RegMTC_Config.SEL_SPI_1 = (byte) MTC_Addr_3_SEL_SPI_1;
+                    register.RegMTC_Config.SEL_SPI_2 = (byte) MTC_Addr_3_SEL_SPI_2;
+                    register.RegMTC_Config.SEL_CAN_1 = (byte) MTC_Addr_3_SEL_CAN_1;
+                    register.RegMTC_Config.SEL_CAN_2 = (byte) MTC_Addr_3_SEL_CAN_2;
+                    register.RegMTC_Config.SEL_CAN_3 = (byte) MTC_Addr_3_SEL_CAN_3;
+                    register.RegMTC_Config.SEL_RS422 = (byte) MTC_Addr_3_SEL_RS422;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_MTC_ADDR_3_SET:
+                    register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_3_Set_ScanEnabled;
+                    register.RegMTC_Config.Detected = MTC_Addr_3_Set_Detected;
+                    register.RegMTC_Config.Type = MTC_Addr_3_Set_Type;
+                    register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_3_Set_ENABLE_1;
+                    register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_3_Set_ENABLE_2;
+                    register.RegMTC_Config.SEL_I2C_1 = (byte) MTC_Addr_3_Set_SEL_I2C_1;
+                    register.RegMTC_Config.SEL_I2C_2 = (byte) MTC_Addr_3_Set_SEL_I2C_2;
+                    register.RegMTC_Config.SEL_UART_1 = (byte) MTC_Addr_3_Set_SEL_UART_1;
+                    register.RegMTC_Config.SEL_UART_2 = (byte) MTC_Addr_3_Set_SEL_UART_2;
+                    register.RegMTC_Config.SEL_UART_3 = (byte) MTC_Addr_3_Set_SEL_UART_3;
+                    register.RegMTC_Config.SEL_UART_4 = (byte) MTC_Addr_3_Set_SEL_UART_4;
+                    register.RegMTC_Config.SEL_UART_5 = (byte) MTC_Addr_3_Set_SEL_UART_5;
+                    register.RegMTC_Config.SEL_UART_6 = (byte) MTC_Addr_3_Set_SEL_UART_6;
+                    register.RegMTC_Config.SEL_VBAT = (byte) MTC_Addr_3_Set_SEL_VBAT;
+                    register.RegMTC_Config.SEL_VBAT_ALT = (byte) MTC_Addr_3_Set_SEL_VBAT_ALT;
+                    register.RegMTC_Config.SEL_VBAT_FPGA = (byte) MTC_Addr_3_Set_SEL_VBAT_FPGA;
+                    register.RegMTC_Config.SEL_nRESET_1 = (byte) MTC_Addr_3_Set_SEL_nRESET_1;
+                    register.RegMTC_Config.SEL_nRESET_2 = (byte) MTC_Addr_3_Set_SEL_nRESET_2;
+                    register.RegMTC_Config.SEL_nRESET_3 = (byte) MTC_Addr_3_Set_SEL_nRESET_3;
+                    register.RegMTC_Config.SEL_CS_1 = (byte) MTC_Addr_3_Set_SEL_CS_1;
+                    register.RegMTC_Config.SEL_CS_2 = (byte) MTC_Addr_3_Set_SEL_CS_2;
+                    register.RegMTC_Config.SEL_CS_3 = (byte) MTC_Addr_3_Set_SEL_CS_3;
+                    register.RegMTC_Config.SEL_CS_4 = (byte) MTC_Addr_3_Set_SEL_CS_4;
+                    register.RegMTC_Config.SEL_CS_5 = (byte) MTC_Addr_3_Set_SEL_CS_5;
+                    register.RegMTC_Config.SEL_CS_6 = (byte) MTC_Addr_3_Set_SEL_CS_6;
+                    register.RegMTC_Config.SEL_SPI_1 = (byte) MTC_Addr_3_Set_SEL_SPI_1;
+                    register.RegMTC_Config.SEL_SPI_2 = (byte) MTC_Addr_3_Set_SEL_SPI_2;
+                    register.RegMTC_Config.SEL_CAN_1 = (byte) MTC_Addr_3_Set_SEL_CAN_1;
+                    register.RegMTC_Config.SEL_CAN_2 = (byte) MTC_Addr_3_Set_SEL_CAN_2;
+                    register.RegMTC_Config.SEL_CAN_3 = (byte) MTC_Addr_3_Set_SEL_CAN_3;
+                    register.RegMTC_Config.SEL_RS422 = (byte) MTC_Addr_3_Set_SEL_RS422;
+                    break;
+
+                case OBCRegisterAddress.OBC_REG_MTC_ADDR_3_CLEAR:
+                    register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_3_Clear_ScanEnabled;
+                    register.RegMTC_Config.Detected = MTC_Addr_3_Clear_Detected;
+                    register.RegMTC_Config.Type = MTC_Addr_3_Clear_Type;
+                    register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_3_Clear_ENABLE_1;
+                    register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_3_Clear_ENABLE_2;
+                    register.RegMTC_Config.SEL_I2C_1 = (byte) MTC_Addr_3_Clear_SEL_I2C_1;
+                    register.RegMTC_Config.SEL_I2C_2 = (byte) MTC_Addr_3_Clear_SEL_I2C_2;
+                    register.RegMTC_Config.SEL_UART_1 = (byte) MTC_Addr_3_Clear_SEL_UART_1;
+                    register.RegMTC_Config.SEL_UART_2 = (byte) MTC_Addr_3_Clear_SEL_UART_2;
+                    register.RegMTC_Config.SEL_UART_3 = (byte) MTC_Addr_3_Clear_SEL_UART_3;
+                    register.RegMTC_Config.SEL_UART_4 = (byte) MTC_Addr_3_Clear_SEL_UART_4;
+                    register.RegMTC_Config.SEL_UART_5 = (byte) MTC_Addr_3_Clear_SEL_UART_5;
+                    register.RegMTC_Config.SEL_UART_6 = (byte) MTC_Addr_3_Clear_SEL_UART_6;
+                    register.RegMTC_Config.SEL_VBAT = (byte) MTC_Addr_3_Clear_SEL_VBAT;
+                    register.RegMTC_Config.SEL_VBAT_ALT = (byte) MTC_Addr_3_Clear_SEL_VBAT_ALT;
+                    register.RegMTC_Config.SEL_VBAT_FPGA = (byte) MTC_Addr_3_Clear_SEL_VBAT_FPGA;
+                    register.RegMTC_Config.SEL_nRESET_1 = (byte) MTC_Addr_3_Clear_SEL_nRESET_1;
+                    register.RegMTC_Config.SEL_nRESET_2 = (byte) MTC_Addr_3_Clear_SEL_nRESET_2;
+                    register.RegMTC_Config.SEL_nRESET_3 = (byte) MTC_Addr_3_Clear_SEL_nRESET_3;
+                    register.RegMTC_Config.SEL_CS_1 = (byte) MTC_Addr_3_Clear_SEL_CS_1;
+                    register.RegMTC_Config.SEL_CS_2 = (byte) MTC_Addr_3_Clear_SEL_CS_2;
+                    register.RegMTC_Config.SEL_CS_3 = (byte) MTC_Addr_3_Clear_SEL_CS_3;
+                    register.RegMTC_Config.SEL_CS_4 = (byte) MTC_Addr_3_Clear_SEL_CS_4;
+                    register.RegMTC_Config.SEL_CS_5 = (byte) MTC_Addr_3_Clear_SEL_CS_5;
+                    register.RegMTC_Config.SEL_CS_6 = (byte) MTC_Addr_3_Clear_SEL_CS_6;
+                    register.RegMTC_Config.SEL_SPI_1 = (byte) MTC_Addr_3_Clear_SEL_SPI_1;
+                    register.RegMTC_Config.SEL_SPI_2 = (byte) MTC_Addr_3_Clear_SEL_SPI_2;
+                    register.RegMTC_Config.SEL_CAN_1 = (byte) MTC_Addr_3_Clear_SEL_CAN_1;
+                    register.RegMTC_Config.SEL_CAN_2 = (byte) MTC_Addr_3_Clear_SEL_CAN_2;
+                    register.RegMTC_Config.SEL_CAN_3 = (byte) MTC_Addr_3_Clear_SEL_CAN_3;
+                    register.RegMTC_Config.SEL_RS422 = (byte) MTC_Addr_3_Clear_SEL_RS422;
+                    break;
+
                 case OBCRegisterAddress.OBC_REG_RTOS_STATUS0:
                     register.RegRTOS_Status0.uartRxHBOverflow = RTOS_Status0_uartRxHBOverflow;
                     register.RegRTOS_Status0.uartRxSBOverflow = RTOS_Status0_uartRxSBOverflow;
@@ -7039,13 +12374,6 @@ namespace Devices.Models
                     register.RegRTOS_Status0.CANTargetIncomingOverflow = RTOS_Status0_CANTargetIncomingOverflow;
                     register.RegRTOS_Status0.CANInterruptBufferOverflow = RTOS_Status0_CANInterruptBufferOverflow;
                     register.RegRTOS_Status0.CANTargetOutgoingOverflow = RTOS_Status0_CANTargetOutgoingOverflow;
-                    register.RegRTOS_Status0.UARTTargetIncomingOverflow = RTOS_Status0_UARTTargetIncomingOverflow;
-                    register.RegRTOS_Status0.UARTTargetTxHBOverflow = RTOS_Status0_UARTTargetTxHBOverflow;
-                    register.RegRTOS_Status0.UARTTargetRxHBOverflow = RTOS_Status0_UARTTargetRxHBOverflow;
-                    register.RegRTOS_Status0.UARTTargetOutgoingOverflow = RTOS_Status0_UARTTargetOutgoingOverflow;
-                    register.RegRTOS_Status0.GSETargetIncomingOverflow = RTOS_Status0_GSETargetIncomingOverflow;
-                    register.RegRTOS_Status0.GSETargetOutgoingOverflow = RTOS_Status0_GSETargetOutgoingOverflow;
-                    register.RegRTOS_Status0.SERMUX_CRC_Error = RTOS_Status0_SERMUX_CRC_Error;
                     break;
 
                 case OBCRegisterAddress.OBC_REG_PREVIOUSENDPOINT:
@@ -7633,6 +12961,998 @@ namespace Devices.Models
 
                 case OBC_SetClearField.OBC_SCF_TE_Addr_3_Clear_COMM_TR:
                     register.RegTE_Config.COMM_TR = (byte) TE_Addr_3_Clear_COMM_TR;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_ScanEnabled:
+                    register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_0_Set_ScanEnabled;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_Detected:
+                    register.RegMTC_Config.Detected = MTC_Addr_0_Set_Detected;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_Type:
+                    register.RegMTC_Config.Type = MTC_Addr_0_Set_Type;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_ENABLE_1:
+                    register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_0_Set_ENABLE_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_ENABLE_2:
+                    register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_0_Set_ENABLE_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_SEL_I2C_1:
+                    register.RegMTC_Config.SEL_I2C_1 = (byte) MTC_Addr_0_Set_SEL_I2C_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_SEL_I2C_2:
+                    register.RegMTC_Config.SEL_I2C_2 = (byte) MTC_Addr_0_Set_SEL_I2C_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_SEL_UART_1:
+                    register.RegMTC_Config.SEL_UART_1 = (byte) MTC_Addr_0_Set_SEL_UART_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_SEL_UART_2:
+                    register.RegMTC_Config.SEL_UART_2 = (byte) MTC_Addr_0_Set_SEL_UART_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_SEL_UART_3:
+                    register.RegMTC_Config.SEL_UART_3 = (byte) MTC_Addr_0_Set_SEL_UART_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_SEL_UART_4:
+                    register.RegMTC_Config.SEL_UART_4 = (byte) MTC_Addr_0_Set_SEL_UART_4;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_SEL_UART_5:
+                    register.RegMTC_Config.SEL_UART_5 = (byte) MTC_Addr_0_Set_SEL_UART_5;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_SEL_UART_6:
+                    register.RegMTC_Config.SEL_UART_6 = (byte) MTC_Addr_0_Set_SEL_UART_6;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_SEL_VBAT:
+                    register.RegMTC_Config.SEL_VBAT = (byte) MTC_Addr_0_Set_SEL_VBAT;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_SEL_VBAT_ALT:
+                    register.RegMTC_Config.SEL_VBAT_ALT = (byte) MTC_Addr_0_Set_SEL_VBAT_ALT;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_SEL_VBAT_FPGA:
+                    register.RegMTC_Config.SEL_VBAT_FPGA = (byte) MTC_Addr_0_Set_SEL_VBAT_FPGA;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_SEL_nRESET_1:
+                    register.RegMTC_Config.SEL_nRESET_1 = (byte) MTC_Addr_0_Set_SEL_nRESET_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_SEL_nRESET_2:
+                    register.RegMTC_Config.SEL_nRESET_2 = (byte) MTC_Addr_0_Set_SEL_nRESET_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_SEL_nRESET_3:
+                    register.RegMTC_Config.SEL_nRESET_3 = (byte) MTC_Addr_0_Set_SEL_nRESET_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_SEL_CS_1:
+                    register.RegMTC_Config.SEL_CS_1 = (byte) MTC_Addr_0_Set_SEL_CS_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_SEL_CS_2:
+                    register.RegMTC_Config.SEL_CS_2 = (byte) MTC_Addr_0_Set_SEL_CS_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_SEL_CS_3:
+                    register.RegMTC_Config.SEL_CS_3 = (byte) MTC_Addr_0_Set_SEL_CS_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_SEL_CS_4:
+                    register.RegMTC_Config.SEL_CS_4 = (byte) MTC_Addr_0_Set_SEL_CS_4;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_SEL_CS_5:
+                    register.RegMTC_Config.SEL_CS_5 = (byte) MTC_Addr_0_Set_SEL_CS_5;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_SEL_CS_6:
+                    register.RegMTC_Config.SEL_CS_6 = (byte) MTC_Addr_0_Set_SEL_CS_6;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_SEL_SPI_1:
+                    register.RegMTC_Config.SEL_SPI_1 = (byte) MTC_Addr_0_Set_SEL_SPI_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_SEL_SPI_2:
+                    register.RegMTC_Config.SEL_SPI_2 = (byte) MTC_Addr_0_Set_SEL_SPI_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_SEL_CAN_1:
+                    register.RegMTC_Config.SEL_CAN_1 = (byte) MTC_Addr_0_Set_SEL_CAN_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_SEL_CAN_2:
+                    register.RegMTC_Config.SEL_CAN_2 = (byte) MTC_Addr_0_Set_SEL_CAN_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_SEL_CAN_3:
+                    register.RegMTC_Config.SEL_CAN_3 = (byte) MTC_Addr_0_Set_SEL_CAN_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_SEL_RS422:
+                    register.RegMTC_Config.SEL_RS422 = (byte) MTC_Addr_0_Set_SEL_RS422;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_ScanEnabled:
+                    register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_0_Clear_ScanEnabled;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_Detected:
+                    register.RegMTC_Config.Detected = MTC_Addr_0_Clear_Detected;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_Type:
+                    register.RegMTC_Config.Type = MTC_Addr_0_Clear_Type;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_ENABLE_1:
+                    register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_0_Clear_ENABLE_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_ENABLE_2:
+                    register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_0_Clear_ENABLE_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_SEL_I2C_1:
+                    register.RegMTC_Config.SEL_I2C_1 = (byte) MTC_Addr_0_Clear_SEL_I2C_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_SEL_I2C_2:
+                    register.RegMTC_Config.SEL_I2C_2 = (byte) MTC_Addr_0_Clear_SEL_I2C_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_SEL_UART_1:
+                    register.RegMTC_Config.SEL_UART_1 = (byte) MTC_Addr_0_Clear_SEL_UART_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_SEL_UART_2:
+                    register.RegMTC_Config.SEL_UART_2 = (byte) MTC_Addr_0_Clear_SEL_UART_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_SEL_UART_3:
+                    register.RegMTC_Config.SEL_UART_3 = (byte) MTC_Addr_0_Clear_SEL_UART_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_SEL_UART_4:
+                    register.RegMTC_Config.SEL_UART_4 = (byte) MTC_Addr_0_Clear_SEL_UART_4;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_SEL_UART_5:
+                    register.RegMTC_Config.SEL_UART_5 = (byte) MTC_Addr_0_Clear_SEL_UART_5;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_SEL_UART_6:
+                    register.RegMTC_Config.SEL_UART_6 = (byte) MTC_Addr_0_Clear_SEL_UART_6;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_SEL_VBAT:
+                    register.RegMTC_Config.SEL_VBAT = (byte) MTC_Addr_0_Clear_SEL_VBAT;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_SEL_VBAT_ALT:
+                    register.RegMTC_Config.SEL_VBAT_ALT = (byte) MTC_Addr_0_Clear_SEL_VBAT_ALT;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_SEL_VBAT_FPGA:
+                    register.RegMTC_Config.SEL_VBAT_FPGA = (byte) MTC_Addr_0_Clear_SEL_VBAT_FPGA;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_SEL_nRESET_1:
+                    register.RegMTC_Config.SEL_nRESET_1 = (byte) MTC_Addr_0_Clear_SEL_nRESET_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_SEL_nRESET_2:
+                    register.RegMTC_Config.SEL_nRESET_2 = (byte) MTC_Addr_0_Clear_SEL_nRESET_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_SEL_nRESET_3:
+                    register.RegMTC_Config.SEL_nRESET_3 = (byte) MTC_Addr_0_Clear_SEL_nRESET_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_SEL_CS_1:
+                    register.RegMTC_Config.SEL_CS_1 = (byte) MTC_Addr_0_Clear_SEL_CS_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_SEL_CS_2:
+                    register.RegMTC_Config.SEL_CS_2 = (byte) MTC_Addr_0_Clear_SEL_CS_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_SEL_CS_3:
+                    register.RegMTC_Config.SEL_CS_3 = (byte) MTC_Addr_0_Clear_SEL_CS_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_SEL_CS_4:
+                    register.RegMTC_Config.SEL_CS_4 = (byte) MTC_Addr_0_Clear_SEL_CS_4;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_SEL_CS_5:
+                    register.RegMTC_Config.SEL_CS_5 = (byte) MTC_Addr_0_Clear_SEL_CS_5;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_SEL_CS_6:
+                    register.RegMTC_Config.SEL_CS_6 = (byte) MTC_Addr_0_Clear_SEL_CS_6;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_SEL_SPI_1:
+                    register.RegMTC_Config.SEL_SPI_1 = (byte) MTC_Addr_0_Clear_SEL_SPI_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_SEL_SPI_2:
+                    register.RegMTC_Config.SEL_SPI_2 = (byte) MTC_Addr_0_Clear_SEL_SPI_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_SEL_CAN_1:
+                    register.RegMTC_Config.SEL_CAN_1 = (byte) MTC_Addr_0_Clear_SEL_CAN_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_SEL_CAN_2:
+                    register.RegMTC_Config.SEL_CAN_2 = (byte) MTC_Addr_0_Clear_SEL_CAN_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_SEL_CAN_3:
+                    register.RegMTC_Config.SEL_CAN_3 = (byte) MTC_Addr_0_Clear_SEL_CAN_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_SEL_RS422:
+                    register.RegMTC_Config.SEL_RS422 = (byte) MTC_Addr_0_Clear_SEL_RS422;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_ScanEnabled:
+                    register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_1_Set_ScanEnabled;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_Detected:
+                    register.RegMTC_Config.Detected = MTC_Addr_1_Set_Detected;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_Type:
+                    register.RegMTC_Config.Type = MTC_Addr_1_Set_Type;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_ENABLE_1:
+                    register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_1_Set_ENABLE_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_ENABLE_2:
+                    register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_1_Set_ENABLE_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_SEL_I2C_1:
+                    register.RegMTC_Config.SEL_I2C_1 = (byte) MTC_Addr_1_Set_SEL_I2C_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_SEL_I2C_2:
+                    register.RegMTC_Config.SEL_I2C_2 = (byte) MTC_Addr_1_Set_SEL_I2C_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_SEL_UART_1:
+                    register.RegMTC_Config.SEL_UART_1 = (byte) MTC_Addr_1_Set_SEL_UART_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_SEL_UART_2:
+                    register.RegMTC_Config.SEL_UART_2 = (byte) MTC_Addr_1_Set_SEL_UART_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_SEL_UART_3:
+                    register.RegMTC_Config.SEL_UART_3 = (byte) MTC_Addr_1_Set_SEL_UART_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_SEL_UART_4:
+                    register.RegMTC_Config.SEL_UART_4 = (byte) MTC_Addr_1_Set_SEL_UART_4;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_SEL_UART_5:
+                    register.RegMTC_Config.SEL_UART_5 = (byte) MTC_Addr_1_Set_SEL_UART_5;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_SEL_UART_6:
+                    register.RegMTC_Config.SEL_UART_6 = (byte) MTC_Addr_1_Set_SEL_UART_6;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_SEL_VBAT:
+                    register.RegMTC_Config.SEL_VBAT = (byte) MTC_Addr_1_Set_SEL_VBAT;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_SEL_VBAT_ALT:
+                    register.RegMTC_Config.SEL_VBAT_ALT = (byte) MTC_Addr_1_Set_SEL_VBAT_ALT;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_SEL_VBAT_FPGA:
+                    register.RegMTC_Config.SEL_VBAT_FPGA = (byte) MTC_Addr_1_Set_SEL_VBAT_FPGA;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_SEL_nRESET_1:
+                    register.RegMTC_Config.SEL_nRESET_1 = (byte) MTC_Addr_1_Set_SEL_nRESET_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_SEL_nRESET_2:
+                    register.RegMTC_Config.SEL_nRESET_2 = (byte) MTC_Addr_1_Set_SEL_nRESET_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_SEL_nRESET_3:
+                    register.RegMTC_Config.SEL_nRESET_3 = (byte) MTC_Addr_1_Set_SEL_nRESET_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_SEL_CS_1:
+                    register.RegMTC_Config.SEL_CS_1 = (byte) MTC_Addr_1_Set_SEL_CS_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_SEL_CS_2:
+                    register.RegMTC_Config.SEL_CS_2 = (byte) MTC_Addr_1_Set_SEL_CS_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_SEL_CS_3:
+                    register.RegMTC_Config.SEL_CS_3 = (byte) MTC_Addr_1_Set_SEL_CS_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_SEL_CS_4:
+                    register.RegMTC_Config.SEL_CS_4 = (byte) MTC_Addr_1_Set_SEL_CS_4;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_SEL_CS_5:
+                    register.RegMTC_Config.SEL_CS_5 = (byte) MTC_Addr_1_Set_SEL_CS_5;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_SEL_CS_6:
+                    register.RegMTC_Config.SEL_CS_6 = (byte) MTC_Addr_1_Set_SEL_CS_6;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_SEL_SPI_1:
+                    register.RegMTC_Config.SEL_SPI_1 = (byte) MTC_Addr_1_Set_SEL_SPI_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_SEL_SPI_2:
+                    register.RegMTC_Config.SEL_SPI_2 = (byte) MTC_Addr_1_Set_SEL_SPI_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_SEL_CAN_1:
+                    register.RegMTC_Config.SEL_CAN_1 = (byte) MTC_Addr_1_Set_SEL_CAN_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_SEL_CAN_2:
+                    register.RegMTC_Config.SEL_CAN_2 = (byte) MTC_Addr_1_Set_SEL_CAN_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_SEL_CAN_3:
+                    register.RegMTC_Config.SEL_CAN_3 = (byte) MTC_Addr_1_Set_SEL_CAN_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_SEL_RS422:
+                    register.RegMTC_Config.SEL_RS422 = (byte) MTC_Addr_1_Set_SEL_RS422;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_ScanEnabled:
+                    register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_1_Clear_ScanEnabled;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_Detected:
+                    register.RegMTC_Config.Detected = MTC_Addr_1_Clear_Detected;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_Type:
+                    register.RegMTC_Config.Type = MTC_Addr_1_Clear_Type;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_ENABLE_1:
+                    register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_1_Clear_ENABLE_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_ENABLE_2:
+                    register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_1_Clear_ENABLE_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_SEL_I2C_1:
+                    register.RegMTC_Config.SEL_I2C_1 = (byte) MTC_Addr_1_Clear_SEL_I2C_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_SEL_I2C_2:
+                    register.RegMTC_Config.SEL_I2C_2 = (byte) MTC_Addr_1_Clear_SEL_I2C_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_SEL_UART_1:
+                    register.RegMTC_Config.SEL_UART_1 = (byte) MTC_Addr_1_Clear_SEL_UART_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_SEL_UART_2:
+                    register.RegMTC_Config.SEL_UART_2 = (byte) MTC_Addr_1_Clear_SEL_UART_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_SEL_UART_3:
+                    register.RegMTC_Config.SEL_UART_3 = (byte) MTC_Addr_1_Clear_SEL_UART_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_SEL_UART_4:
+                    register.RegMTC_Config.SEL_UART_4 = (byte) MTC_Addr_1_Clear_SEL_UART_4;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_SEL_UART_5:
+                    register.RegMTC_Config.SEL_UART_5 = (byte) MTC_Addr_1_Clear_SEL_UART_5;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_SEL_UART_6:
+                    register.RegMTC_Config.SEL_UART_6 = (byte) MTC_Addr_1_Clear_SEL_UART_6;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_SEL_VBAT:
+                    register.RegMTC_Config.SEL_VBAT = (byte) MTC_Addr_1_Clear_SEL_VBAT;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_SEL_VBAT_ALT:
+                    register.RegMTC_Config.SEL_VBAT_ALT = (byte) MTC_Addr_1_Clear_SEL_VBAT_ALT;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_SEL_VBAT_FPGA:
+                    register.RegMTC_Config.SEL_VBAT_FPGA = (byte) MTC_Addr_1_Clear_SEL_VBAT_FPGA;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_SEL_nRESET_1:
+                    register.RegMTC_Config.SEL_nRESET_1 = (byte) MTC_Addr_1_Clear_SEL_nRESET_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_SEL_nRESET_2:
+                    register.RegMTC_Config.SEL_nRESET_2 = (byte) MTC_Addr_1_Clear_SEL_nRESET_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_SEL_nRESET_3:
+                    register.RegMTC_Config.SEL_nRESET_3 = (byte) MTC_Addr_1_Clear_SEL_nRESET_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_SEL_CS_1:
+                    register.RegMTC_Config.SEL_CS_1 = (byte) MTC_Addr_1_Clear_SEL_CS_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_SEL_CS_2:
+                    register.RegMTC_Config.SEL_CS_2 = (byte) MTC_Addr_1_Clear_SEL_CS_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_SEL_CS_3:
+                    register.RegMTC_Config.SEL_CS_3 = (byte) MTC_Addr_1_Clear_SEL_CS_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_SEL_CS_4:
+                    register.RegMTC_Config.SEL_CS_4 = (byte) MTC_Addr_1_Clear_SEL_CS_4;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_SEL_CS_5:
+                    register.RegMTC_Config.SEL_CS_5 = (byte) MTC_Addr_1_Clear_SEL_CS_5;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_SEL_CS_6:
+                    register.RegMTC_Config.SEL_CS_6 = (byte) MTC_Addr_1_Clear_SEL_CS_6;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_SEL_SPI_1:
+                    register.RegMTC_Config.SEL_SPI_1 = (byte) MTC_Addr_1_Clear_SEL_SPI_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_SEL_SPI_2:
+                    register.RegMTC_Config.SEL_SPI_2 = (byte) MTC_Addr_1_Clear_SEL_SPI_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_SEL_CAN_1:
+                    register.RegMTC_Config.SEL_CAN_1 = (byte) MTC_Addr_1_Clear_SEL_CAN_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_SEL_CAN_2:
+                    register.RegMTC_Config.SEL_CAN_2 = (byte) MTC_Addr_1_Clear_SEL_CAN_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_SEL_CAN_3:
+                    register.RegMTC_Config.SEL_CAN_3 = (byte) MTC_Addr_1_Clear_SEL_CAN_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_SEL_RS422:
+                    register.RegMTC_Config.SEL_RS422 = (byte) MTC_Addr_1_Clear_SEL_RS422;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_ScanEnabled:
+                    register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_2_Set_ScanEnabled;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_Detected:
+                    register.RegMTC_Config.Detected = MTC_Addr_2_Set_Detected;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_Type:
+                    register.RegMTC_Config.Type = MTC_Addr_2_Set_Type;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_ENABLE_1:
+                    register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_2_Set_ENABLE_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_ENABLE_2:
+                    register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_2_Set_ENABLE_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_SEL_I2C_1:
+                    register.RegMTC_Config.SEL_I2C_1 = (byte) MTC_Addr_2_Set_SEL_I2C_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_SEL_I2C_2:
+                    register.RegMTC_Config.SEL_I2C_2 = (byte) MTC_Addr_2_Set_SEL_I2C_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_SEL_UART_1:
+                    register.RegMTC_Config.SEL_UART_1 = (byte) MTC_Addr_2_Set_SEL_UART_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_SEL_UART_2:
+                    register.RegMTC_Config.SEL_UART_2 = (byte) MTC_Addr_2_Set_SEL_UART_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_SEL_UART_3:
+                    register.RegMTC_Config.SEL_UART_3 = (byte) MTC_Addr_2_Set_SEL_UART_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_SEL_UART_4:
+                    register.RegMTC_Config.SEL_UART_4 = (byte) MTC_Addr_2_Set_SEL_UART_4;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_SEL_UART_5:
+                    register.RegMTC_Config.SEL_UART_5 = (byte) MTC_Addr_2_Set_SEL_UART_5;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_SEL_UART_6:
+                    register.RegMTC_Config.SEL_UART_6 = (byte) MTC_Addr_2_Set_SEL_UART_6;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_SEL_VBAT:
+                    register.RegMTC_Config.SEL_VBAT = (byte) MTC_Addr_2_Set_SEL_VBAT;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_SEL_VBAT_ALT:
+                    register.RegMTC_Config.SEL_VBAT_ALT = (byte) MTC_Addr_2_Set_SEL_VBAT_ALT;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_SEL_VBAT_FPGA:
+                    register.RegMTC_Config.SEL_VBAT_FPGA = (byte) MTC_Addr_2_Set_SEL_VBAT_FPGA;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_SEL_nRESET_1:
+                    register.RegMTC_Config.SEL_nRESET_1 = (byte) MTC_Addr_2_Set_SEL_nRESET_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_SEL_nRESET_2:
+                    register.RegMTC_Config.SEL_nRESET_2 = (byte) MTC_Addr_2_Set_SEL_nRESET_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_SEL_nRESET_3:
+                    register.RegMTC_Config.SEL_nRESET_3 = (byte) MTC_Addr_2_Set_SEL_nRESET_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_SEL_CS_1:
+                    register.RegMTC_Config.SEL_CS_1 = (byte) MTC_Addr_2_Set_SEL_CS_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_SEL_CS_2:
+                    register.RegMTC_Config.SEL_CS_2 = (byte) MTC_Addr_2_Set_SEL_CS_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_SEL_CS_3:
+                    register.RegMTC_Config.SEL_CS_3 = (byte) MTC_Addr_2_Set_SEL_CS_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_SEL_CS_4:
+                    register.RegMTC_Config.SEL_CS_4 = (byte) MTC_Addr_2_Set_SEL_CS_4;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_SEL_CS_5:
+                    register.RegMTC_Config.SEL_CS_5 = (byte) MTC_Addr_2_Set_SEL_CS_5;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_SEL_CS_6:
+                    register.RegMTC_Config.SEL_CS_6 = (byte) MTC_Addr_2_Set_SEL_CS_6;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_SEL_SPI_1:
+                    register.RegMTC_Config.SEL_SPI_1 = (byte) MTC_Addr_2_Set_SEL_SPI_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_SEL_SPI_2:
+                    register.RegMTC_Config.SEL_SPI_2 = (byte) MTC_Addr_2_Set_SEL_SPI_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_SEL_CAN_1:
+                    register.RegMTC_Config.SEL_CAN_1 = (byte) MTC_Addr_2_Set_SEL_CAN_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_SEL_CAN_2:
+                    register.RegMTC_Config.SEL_CAN_2 = (byte) MTC_Addr_2_Set_SEL_CAN_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_SEL_CAN_3:
+                    register.RegMTC_Config.SEL_CAN_3 = (byte) MTC_Addr_2_Set_SEL_CAN_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_SEL_RS422:
+                    register.RegMTC_Config.SEL_RS422 = (byte) MTC_Addr_2_Set_SEL_RS422;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_ScanEnabled:
+                    register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_2_Clear_ScanEnabled;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_Detected:
+                    register.RegMTC_Config.Detected = MTC_Addr_2_Clear_Detected;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_Type:
+                    register.RegMTC_Config.Type = MTC_Addr_2_Clear_Type;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_ENABLE_1:
+                    register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_2_Clear_ENABLE_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_ENABLE_2:
+                    register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_2_Clear_ENABLE_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_SEL_I2C_1:
+                    register.RegMTC_Config.SEL_I2C_1 = (byte) MTC_Addr_2_Clear_SEL_I2C_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_SEL_I2C_2:
+                    register.RegMTC_Config.SEL_I2C_2 = (byte) MTC_Addr_2_Clear_SEL_I2C_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_SEL_UART_1:
+                    register.RegMTC_Config.SEL_UART_1 = (byte) MTC_Addr_2_Clear_SEL_UART_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_SEL_UART_2:
+                    register.RegMTC_Config.SEL_UART_2 = (byte) MTC_Addr_2_Clear_SEL_UART_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_SEL_UART_3:
+                    register.RegMTC_Config.SEL_UART_3 = (byte) MTC_Addr_2_Clear_SEL_UART_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_SEL_UART_4:
+                    register.RegMTC_Config.SEL_UART_4 = (byte) MTC_Addr_2_Clear_SEL_UART_4;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_SEL_UART_5:
+                    register.RegMTC_Config.SEL_UART_5 = (byte) MTC_Addr_2_Clear_SEL_UART_5;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_SEL_UART_6:
+                    register.RegMTC_Config.SEL_UART_6 = (byte) MTC_Addr_2_Clear_SEL_UART_6;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_SEL_VBAT:
+                    register.RegMTC_Config.SEL_VBAT = (byte) MTC_Addr_2_Clear_SEL_VBAT;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_SEL_VBAT_ALT:
+                    register.RegMTC_Config.SEL_VBAT_ALT = (byte) MTC_Addr_2_Clear_SEL_VBAT_ALT;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_SEL_VBAT_FPGA:
+                    register.RegMTC_Config.SEL_VBAT_FPGA = (byte) MTC_Addr_2_Clear_SEL_VBAT_FPGA;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_SEL_nRESET_1:
+                    register.RegMTC_Config.SEL_nRESET_1 = (byte) MTC_Addr_2_Clear_SEL_nRESET_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_SEL_nRESET_2:
+                    register.RegMTC_Config.SEL_nRESET_2 = (byte) MTC_Addr_2_Clear_SEL_nRESET_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_SEL_nRESET_3:
+                    register.RegMTC_Config.SEL_nRESET_3 = (byte) MTC_Addr_2_Clear_SEL_nRESET_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_SEL_CS_1:
+                    register.RegMTC_Config.SEL_CS_1 = (byte) MTC_Addr_2_Clear_SEL_CS_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_SEL_CS_2:
+                    register.RegMTC_Config.SEL_CS_2 = (byte) MTC_Addr_2_Clear_SEL_CS_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_SEL_CS_3:
+                    register.RegMTC_Config.SEL_CS_3 = (byte) MTC_Addr_2_Clear_SEL_CS_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_SEL_CS_4:
+                    register.RegMTC_Config.SEL_CS_4 = (byte) MTC_Addr_2_Clear_SEL_CS_4;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_SEL_CS_5:
+                    register.RegMTC_Config.SEL_CS_5 = (byte) MTC_Addr_2_Clear_SEL_CS_5;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_SEL_CS_6:
+                    register.RegMTC_Config.SEL_CS_6 = (byte) MTC_Addr_2_Clear_SEL_CS_6;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_SEL_SPI_1:
+                    register.RegMTC_Config.SEL_SPI_1 = (byte) MTC_Addr_2_Clear_SEL_SPI_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_SEL_SPI_2:
+                    register.RegMTC_Config.SEL_SPI_2 = (byte) MTC_Addr_2_Clear_SEL_SPI_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_SEL_CAN_1:
+                    register.RegMTC_Config.SEL_CAN_1 = (byte) MTC_Addr_2_Clear_SEL_CAN_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_SEL_CAN_2:
+                    register.RegMTC_Config.SEL_CAN_2 = (byte) MTC_Addr_2_Clear_SEL_CAN_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_SEL_CAN_3:
+                    register.RegMTC_Config.SEL_CAN_3 = (byte) MTC_Addr_2_Clear_SEL_CAN_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_SEL_RS422:
+                    register.RegMTC_Config.SEL_RS422 = (byte) MTC_Addr_2_Clear_SEL_RS422;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_ScanEnabled:
+                    register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_3_Set_ScanEnabled;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_Detected:
+                    register.RegMTC_Config.Detected = MTC_Addr_3_Set_Detected;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_Type:
+                    register.RegMTC_Config.Type = MTC_Addr_3_Set_Type;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_ENABLE_1:
+                    register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_3_Set_ENABLE_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_ENABLE_2:
+                    register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_3_Set_ENABLE_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_SEL_I2C_1:
+                    register.RegMTC_Config.SEL_I2C_1 = (byte) MTC_Addr_3_Set_SEL_I2C_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_SEL_I2C_2:
+                    register.RegMTC_Config.SEL_I2C_2 = (byte) MTC_Addr_3_Set_SEL_I2C_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_SEL_UART_1:
+                    register.RegMTC_Config.SEL_UART_1 = (byte) MTC_Addr_3_Set_SEL_UART_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_SEL_UART_2:
+                    register.RegMTC_Config.SEL_UART_2 = (byte) MTC_Addr_3_Set_SEL_UART_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_SEL_UART_3:
+                    register.RegMTC_Config.SEL_UART_3 = (byte) MTC_Addr_3_Set_SEL_UART_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_SEL_UART_4:
+                    register.RegMTC_Config.SEL_UART_4 = (byte) MTC_Addr_3_Set_SEL_UART_4;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_SEL_UART_5:
+                    register.RegMTC_Config.SEL_UART_5 = (byte) MTC_Addr_3_Set_SEL_UART_5;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_SEL_UART_6:
+                    register.RegMTC_Config.SEL_UART_6 = (byte) MTC_Addr_3_Set_SEL_UART_6;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_SEL_VBAT:
+                    register.RegMTC_Config.SEL_VBAT = (byte) MTC_Addr_3_Set_SEL_VBAT;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_SEL_VBAT_ALT:
+                    register.RegMTC_Config.SEL_VBAT_ALT = (byte) MTC_Addr_3_Set_SEL_VBAT_ALT;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_SEL_VBAT_FPGA:
+                    register.RegMTC_Config.SEL_VBAT_FPGA = (byte) MTC_Addr_3_Set_SEL_VBAT_FPGA;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_SEL_nRESET_1:
+                    register.RegMTC_Config.SEL_nRESET_1 = (byte) MTC_Addr_3_Set_SEL_nRESET_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_SEL_nRESET_2:
+                    register.RegMTC_Config.SEL_nRESET_2 = (byte) MTC_Addr_3_Set_SEL_nRESET_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_SEL_nRESET_3:
+                    register.RegMTC_Config.SEL_nRESET_3 = (byte) MTC_Addr_3_Set_SEL_nRESET_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_SEL_CS_1:
+                    register.RegMTC_Config.SEL_CS_1 = (byte) MTC_Addr_3_Set_SEL_CS_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_SEL_CS_2:
+                    register.RegMTC_Config.SEL_CS_2 = (byte) MTC_Addr_3_Set_SEL_CS_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_SEL_CS_3:
+                    register.RegMTC_Config.SEL_CS_3 = (byte) MTC_Addr_3_Set_SEL_CS_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_SEL_CS_4:
+                    register.RegMTC_Config.SEL_CS_4 = (byte) MTC_Addr_3_Set_SEL_CS_4;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_SEL_CS_5:
+                    register.RegMTC_Config.SEL_CS_5 = (byte) MTC_Addr_3_Set_SEL_CS_5;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_SEL_CS_6:
+                    register.RegMTC_Config.SEL_CS_6 = (byte) MTC_Addr_3_Set_SEL_CS_6;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_SEL_SPI_1:
+                    register.RegMTC_Config.SEL_SPI_1 = (byte) MTC_Addr_3_Set_SEL_SPI_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_SEL_SPI_2:
+                    register.RegMTC_Config.SEL_SPI_2 = (byte) MTC_Addr_3_Set_SEL_SPI_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_SEL_CAN_1:
+                    register.RegMTC_Config.SEL_CAN_1 = (byte) MTC_Addr_3_Set_SEL_CAN_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_SEL_CAN_2:
+                    register.RegMTC_Config.SEL_CAN_2 = (byte) MTC_Addr_3_Set_SEL_CAN_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_SEL_CAN_3:
+                    register.RegMTC_Config.SEL_CAN_3 = (byte) MTC_Addr_3_Set_SEL_CAN_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_SEL_RS422:
+                    register.RegMTC_Config.SEL_RS422 = (byte) MTC_Addr_3_Set_SEL_RS422;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_ScanEnabled:
+                    register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_3_Clear_ScanEnabled;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_Detected:
+                    register.RegMTC_Config.Detected = MTC_Addr_3_Clear_Detected;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_Type:
+                    register.RegMTC_Config.Type = MTC_Addr_3_Clear_Type;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_ENABLE_1:
+                    register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_3_Clear_ENABLE_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_ENABLE_2:
+                    register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_3_Clear_ENABLE_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_SEL_I2C_1:
+                    register.RegMTC_Config.SEL_I2C_1 = (byte) MTC_Addr_3_Clear_SEL_I2C_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_SEL_I2C_2:
+                    register.RegMTC_Config.SEL_I2C_2 = (byte) MTC_Addr_3_Clear_SEL_I2C_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_SEL_UART_1:
+                    register.RegMTC_Config.SEL_UART_1 = (byte) MTC_Addr_3_Clear_SEL_UART_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_SEL_UART_2:
+                    register.RegMTC_Config.SEL_UART_2 = (byte) MTC_Addr_3_Clear_SEL_UART_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_SEL_UART_3:
+                    register.RegMTC_Config.SEL_UART_3 = (byte) MTC_Addr_3_Clear_SEL_UART_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_SEL_UART_4:
+                    register.RegMTC_Config.SEL_UART_4 = (byte) MTC_Addr_3_Clear_SEL_UART_4;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_SEL_UART_5:
+                    register.RegMTC_Config.SEL_UART_5 = (byte) MTC_Addr_3_Clear_SEL_UART_5;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_SEL_UART_6:
+                    register.RegMTC_Config.SEL_UART_6 = (byte) MTC_Addr_3_Clear_SEL_UART_6;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_SEL_VBAT:
+                    register.RegMTC_Config.SEL_VBAT = (byte) MTC_Addr_3_Clear_SEL_VBAT;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_SEL_VBAT_ALT:
+                    register.RegMTC_Config.SEL_VBAT_ALT = (byte) MTC_Addr_3_Clear_SEL_VBAT_ALT;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_SEL_VBAT_FPGA:
+                    register.RegMTC_Config.SEL_VBAT_FPGA = (byte) MTC_Addr_3_Clear_SEL_VBAT_FPGA;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_SEL_nRESET_1:
+                    register.RegMTC_Config.SEL_nRESET_1 = (byte) MTC_Addr_3_Clear_SEL_nRESET_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_SEL_nRESET_2:
+                    register.RegMTC_Config.SEL_nRESET_2 = (byte) MTC_Addr_3_Clear_SEL_nRESET_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_SEL_nRESET_3:
+                    register.RegMTC_Config.SEL_nRESET_3 = (byte) MTC_Addr_3_Clear_SEL_nRESET_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_SEL_CS_1:
+                    register.RegMTC_Config.SEL_CS_1 = (byte) MTC_Addr_3_Clear_SEL_CS_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_SEL_CS_2:
+                    register.RegMTC_Config.SEL_CS_2 = (byte) MTC_Addr_3_Clear_SEL_CS_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_SEL_CS_3:
+                    register.RegMTC_Config.SEL_CS_3 = (byte) MTC_Addr_3_Clear_SEL_CS_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_SEL_CS_4:
+                    register.RegMTC_Config.SEL_CS_4 = (byte) MTC_Addr_3_Clear_SEL_CS_4;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_SEL_CS_5:
+                    register.RegMTC_Config.SEL_CS_5 = (byte) MTC_Addr_3_Clear_SEL_CS_5;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_SEL_CS_6:
+                    register.RegMTC_Config.SEL_CS_6 = (byte) MTC_Addr_3_Clear_SEL_CS_6;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_SEL_SPI_1:
+                    register.RegMTC_Config.SEL_SPI_1 = (byte) MTC_Addr_3_Clear_SEL_SPI_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_SEL_SPI_2:
+                    register.RegMTC_Config.SEL_SPI_2 = (byte) MTC_Addr_3_Clear_SEL_SPI_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_SEL_CAN_1:
+                    register.RegMTC_Config.SEL_CAN_1 = (byte) MTC_Addr_3_Clear_SEL_CAN_1;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_SEL_CAN_2:
+                    register.RegMTC_Config.SEL_CAN_2 = (byte) MTC_Addr_3_Clear_SEL_CAN_2;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_SEL_CAN_3:
+                    register.RegMTC_Config.SEL_CAN_3 = (byte) MTC_Addr_3_Clear_SEL_CAN_3;
+                    break;
+
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_SEL_RS422:
+                    register.RegMTC_Config.SEL_RS422 = (byte) MTC_Addr_3_Clear_SEL_RS422;
                     break;
 
             }
@@ -8366,6 +14686,762 @@ namespace Devices.Models
             TE_Addr_3_Clear_COMM_TR = 0;
             TE_Addr_3_Clear_COMM_TRIsSet = false;
 
+            MTC_Addr_0_ScanEnabled = 0;
+            MTC_Addr_0_ScanEnabledIsSet = false;
+            MTC_Addr_0_Detected = 0;
+            MTC_Addr_0_DetectedIsSet = false;
+            MTC_Addr_0_Type = 0;
+            MTC_Addr_0_TypeIsSet = false;
+            MTC_Addr_0_ENABLE_1 = 0;
+            MTC_Addr_0_ENABLE_1IsSet = false;
+            MTC_Addr_0_ENABLE_2 = 0;
+            MTC_Addr_0_ENABLE_2IsSet = false;
+            MTC_Addr_0_SEL_I2C_1 = 0;
+            MTC_Addr_0_SEL_I2C_1IsSet = false;
+            MTC_Addr_0_SEL_I2C_2 = 0;
+            MTC_Addr_0_SEL_I2C_2IsSet = false;
+            MTC_Addr_0_SEL_UART_1 = 0;
+            MTC_Addr_0_SEL_UART_1IsSet = false;
+            MTC_Addr_0_SEL_UART_2 = 0;
+            MTC_Addr_0_SEL_UART_2IsSet = false;
+            MTC_Addr_0_SEL_UART_3 = 0;
+            MTC_Addr_0_SEL_UART_3IsSet = false;
+            MTC_Addr_0_SEL_UART_4 = 0;
+            MTC_Addr_0_SEL_UART_4IsSet = false;
+            MTC_Addr_0_SEL_UART_5 = 0;
+            MTC_Addr_0_SEL_UART_5IsSet = false;
+            MTC_Addr_0_SEL_UART_6 = 0;
+            MTC_Addr_0_SEL_UART_6IsSet = false;
+            MTC_Addr_0_SEL_VBAT = 0;
+            MTC_Addr_0_SEL_VBATIsSet = false;
+            MTC_Addr_0_SEL_VBAT_ALT = 0;
+            MTC_Addr_0_SEL_VBAT_ALTIsSet = false;
+            MTC_Addr_0_SEL_VBAT_FPGA = 0;
+            MTC_Addr_0_SEL_VBAT_FPGAIsSet = false;
+            MTC_Addr_0_SEL_nRESET_1 = 0;
+            MTC_Addr_0_SEL_nRESET_1IsSet = false;
+            MTC_Addr_0_SEL_nRESET_2 = 0;
+            MTC_Addr_0_SEL_nRESET_2IsSet = false;
+            MTC_Addr_0_SEL_nRESET_3 = 0;
+            MTC_Addr_0_SEL_nRESET_3IsSet = false;
+            MTC_Addr_0_SEL_CS_1 = 0;
+            MTC_Addr_0_SEL_CS_1IsSet = false;
+            MTC_Addr_0_SEL_CS_2 = 0;
+            MTC_Addr_0_SEL_CS_2IsSet = false;
+            MTC_Addr_0_SEL_CS_3 = 0;
+            MTC_Addr_0_SEL_CS_3IsSet = false;
+            MTC_Addr_0_SEL_CS_4 = 0;
+            MTC_Addr_0_SEL_CS_4IsSet = false;
+            MTC_Addr_0_SEL_CS_5 = 0;
+            MTC_Addr_0_SEL_CS_5IsSet = false;
+            MTC_Addr_0_SEL_CS_6 = 0;
+            MTC_Addr_0_SEL_CS_6IsSet = false;
+            MTC_Addr_0_SEL_SPI_1 = 0;
+            MTC_Addr_0_SEL_SPI_1IsSet = false;
+            MTC_Addr_0_SEL_SPI_2 = 0;
+            MTC_Addr_0_SEL_SPI_2IsSet = false;
+            MTC_Addr_0_SEL_CAN_1 = 0;
+            MTC_Addr_0_SEL_CAN_1IsSet = false;
+            MTC_Addr_0_SEL_CAN_2 = 0;
+            MTC_Addr_0_SEL_CAN_2IsSet = false;
+            MTC_Addr_0_SEL_CAN_3 = 0;
+            MTC_Addr_0_SEL_CAN_3IsSet = false;
+            MTC_Addr_0_SEL_RS422 = 0;
+            MTC_Addr_0_SEL_RS422IsSet = false;
+
+            MTC_Addr_0_Set_ScanEnabled = 0;
+            MTC_Addr_0_Set_ScanEnabledIsSet = false;
+            MTC_Addr_0_Set_Detected = 0;
+            MTC_Addr_0_Set_DetectedIsSet = false;
+            MTC_Addr_0_Set_Type = 0;
+            MTC_Addr_0_Set_TypeIsSet = false;
+            MTC_Addr_0_Set_ENABLE_1 = 0;
+            MTC_Addr_0_Set_ENABLE_1IsSet = false;
+            MTC_Addr_0_Set_ENABLE_2 = 0;
+            MTC_Addr_0_Set_ENABLE_2IsSet = false;
+            MTC_Addr_0_Set_SEL_I2C_1 = 0;
+            MTC_Addr_0_Set_SEL_I2C_1IsSet = false;
+            MTC_Addr_0_Set_SEL_I2C_2 = 0;
+            MTC_Addr_0_Set_SEL_I2C_2IsSet = false;
+            MTC_Addr_0_Set_SEL_UART_1 = 0;
+            MTC_Addr_0_Set_SEL_UART_1IsSet = false;
+            MTC_Addr_0_Set_SEL_UART_2 = 0;
+            MTC_Addr_0_Set_SEL_UART_2IsSet = false;
+            MTC_Addr_0_Set_SEL_UART_3 = 0;
+            MTC_Addr_0_Set_SEL_UART_3IsSet = false;
+            MTC_Addr_0_Set_SEL_UART_4 = 0;
+            MTC_Addr_0_Set_SEL_UART_4IsSet = false;
+            MTC_Addr_0_Set_SEL_UART_5 = 0;
+            MTC_Addr_0_Set_SEL_UART_5IsSet = false;
+            MTC_Addr_0_Set_SEL_UART_6 = 0;
+            MTC_Addr_0_Set_SEL_UART_6IsSet = false;
+            MTC_Addr_0_Set_SEL_VBAT = 0;
+            MTC_Addr_0_Set_SEL_VBATIsSet = false;
+            MTC_Addr_0_Set_SEL_VBAT_ALT = 0;
+            MTC_Addr_0_Set_SEL_VBAT_ALTIsSet = false;
+            MTC_Addr_0_Set_SEL_VBAT_FPGA = 0;
+            MTC_Addr_0_Set_SEL_VBAT_FPGAIsSet = false;
+            MTC_Addr_0_Set_SEL_nRESET_1 = 0;
+            MTC_Addr_0_Set_SEL_nRESET_1IsSet = false;
+            MTC_Addr_0_Set_SEL_nRESET_2 = 0;
+            MTC_Addr_0_Set_SEL_nRESET_2IsSet = false;
+            MTC_Addr_0_Set_SEL_nRESET_3 = 0;
+            MTC_Addr_0_Set_SEL_nRESET_3IsSet = false;
+            MTC_Addr_0_Set_SEL_CS_1 = 0;
+            MTC_Addr_0_Set_SEL_CS_1IsSet = false;
+            MTC_Addr_0_Set_SEL_CS_2 = 0;
+            MTC_Addr_0_Set_SEL_CS_2IsSet = false;
+            MTC_Addr_0_Set_SEL_CS_3 = 0;
+            MTC_Addr_0_Set_SEL_CS_3IsSet = false;
+            MTC_Addr_0_Set_SEL_CS_4 = 0;
+            MTC_Addr_0_Set_SEL_CS_4IsSet = false;
+            MTC_Addr_0_Set_SEL_CS_5 = 0;
+            MTC_Addr_0_Set_SEL_CS_5IsSet = false;
+            MTC_Addr_0_Set_SEL_CS_6 = 0;
+            MTC_Addr_0_Set_SEL_CS_6IsSet = false;
+            MTC_Addr_0_Set_SEL_SPI_1 = 0;
+            MTC_Addr_0_Set_SEL_SPI_1IsSet = false;
+            MTC_Addr_0_Set_SEL_SPI_2 = 0;
+            MTC_Addr_0_Set_SEL_SPI_2IsSet = false;
+            MTC_Addr_0_Set_SEL_CAN_1 = 0;
+            MTC_Addr_0_Set_SEL_CAN_1IsSet = false;
+            MTC_Addr_0_Set_SEL_CAN_2 = 0;
+            MTC_Addr_0_Set_SEL_CAN_2IsSet = false;
+            MTC_Addr_0_Set_SEL_CAN_3 = 0;
+            MTC_Addr_0_Set_SEL_CAN_3IsSet = false;
+            MTC_Addr_0_Set_SEL_RS422 = 0;
+            MTC_Addr_0_Set_SEL_RS422IsSet = false;
+
+            MTC_Addr_0_Clear_ScanEnabled = 0;
+            MTC_Addr_0_Clear_ScanEnabledIsSet = false;
+            MTC_Addr_0_Clear_Detected = 0;
+            MTC_Addr_0_Clear_DetectedIsSet = false;
+            MTC_Addr_0_Clear_Type = 0;
+            MTC_Addr_0_Clear_TypeIsSet = false;
+            MTC_Addr_0_Clear_ENABLE_1 = 0;
+            MTC_Addr_0_Clear_ENABLE_1IsSet = false;
+            MTC_Addr_0_Clear_ENABLE_2 = 0;
+            MTC_Addr_0_Clear_ENABLE_2IsSet = false;
+            MTC_Addr_0_Clear_SEL_I2C_1 = 0;
+            MTC_Addr_0_Clear_SEL_I2C_1IsSet = false;
+            MTC_Addr_0_Clear_SEL_I2C_2 = 0;
+            MTC_Addr_0_Clear_SEL_I2C_2IsSet = false;
+            MTC_Addr_0_Clear_SEL_UART_1 = 0;
+            MTC_Addr_0_Clear_SEL_UART_1IsSet = false;
+            MTC_Addr_0_Clear_SEL_UART_2 = 0;
+            MTC_Addr_0_Clear_SEL_UART_2IsSet = false;
+            MTC_Addr_0_Clear_SEL_UART_3 = 0;
+            MTC_Addr_0_Clear_SEL_UART_3IsSet = false;
+            MTC_Addr_0_Clear_SEL_UART_4 = 0;
+            MTC_Addr_0_Clear_SEL_UART_4IsSet = false;
+            MTC_Addr_0_Clear_SEL_UART_5 = 0;
+            MTC_Addr_0_Clear_SEL_UART_5IsSet = false;
+            MTC_Addr_0_Clear_SEL_UART_6 = 0;
+            MTC_Addr_0_Clear_SEL_UART_6IsSet = false;
+            MTC_Addr_0_Clear_SEL_VBAT = 0;
+            MTC_Addr_0_Clear_SEL_VBATIsSet = false;
+            MTC_Addr_0_Clear_SEL_VBAT_ALT = 0;
+            MTC_Addr_0_Clear_SEL_VBAT_ALTIsSet = false;
+            MTC_Addr_0_Clear_SEL_VBAT_FPGA = 0;
+            MTC_Addr_0_Clear_SEL_VBAT_FPGAIsSet = false;
+            MTC_Addr_0_Clear_SEL_nRESET_1 = 0;
+            MTC_Addr_0_Clear_SEL_nRESET_1IsSet = false;
+            MTC_Addr_0_Clear_SEL_nRESET_2 = 0;
+            MTC_Addr_0_Clear_SEL_nRESET_2IsSet = false;
+            MTC_Addr_0_Clear_SEL_nRESET_3 = 0;
+            MTC_Addr_0_Clear_SEL_nRESET_3IsSet = false;
+            MTC_Addr_0_Clear_SEL_CS_1 = 0;
+            MTC_Addr_0_Clear_SEL_CS_1IsSet = false;
+            MTC_Addr_0_Clear_SEL_CS_2 = 0;
+            MTC_Addr_0_Clear_SEL_CS_2IsSet = false;
+            MTC_Addr_0_Clear_SEL_CS_3 = 0;
+            MTC_Addr_0_Clear_SEL_CS_3IsSet = false;
+            MTC_Addr_0_Clear_SEL_CS_4 = 0;
+            MTC_Addr_0_Clear_SEL_CS_4IsSet = false;
+            MTC_Addr_0_Clear_SEL_CS_5 = 0;
+            MTC_Addr_0_Clear_SEL_CS_5IsSet = false;
+            MTC_Addr_0_Clear_SEL_CS_6 = 0;
+            MTC_Addr_0_Clear_SEL_CS_6IsSet = false;
+            MTC_Addr_0_Clear_SEL_SPI_1 = 0;
+            MTC_Addr_0_Clear_SEL_SPI_1IsSet = false;
+            MTC_Addr_0_Clear_SEL_SPI_2 = 0;
+            MTC_Addr_0_Clear_SEL_SPI_2IsSet = false;
+            MTC_Addr_0_Clear_SEL_CAN_1 = 0;
+            MTC_Addr_0_Clear_SEL_CAN_1IsSet = false;
+            MTC_Addr_0_Clear_SEL_CAN_2 = 0;
+            MTC_Addr_0_Clear_SEL_CAN_2IsSet = false;
+            MTC_Addr_0_Clear_SEL_CAN_3 = 0;
+            MTC_Addr_0_Clear_SEL_CAN_3IsSet = false;
+            MTC_Addr_0_Clear_SEL_RS422 = 0;
+            MTC_Addr_0_Clear_SEL_RS422IsSet = false;
+
+            MTC_Addr_1_ScanEnabled = 0;
+            MTC_Addr_1_ScanEnabledIsSet = false;
+            MTC_Addr_1_Detected = 0;
+            MTC_Addr_1_DetectedIsSet = false;
+            MTC_Addr_1_Type = 0;
+            MTC_Addr_1_TypeIsSet = false;
+            MTC_Addr_1_ENABLE_1 = 0;
+            MTC_Addr_1_ENABLE_1IsSet = false;
+            MTC_Addr_1_ENABLE_2 = 0;
+            MTC_Addr_1_ENABLE_2IsSet = false;
+            MTC_Addr_1_SEL_I2C_1 = 0;
+            MTC_Addr_1_SEL_I2C_1IsSet = false;
+            MTC_Addr_1_SEL_I2C_2 = 0;
+            MTC_Addr_1_SEL_I2C_2IsSet = false;
+            MTC_Addr_1_SEL_UART_1 = 0;
+            MTC_Addr_1_SEL_UART_1IsSet = false;
+            MTC_Addr_1_SEL_UART_2 = 0;
+            MTC_Addr_1_SEL_UART_2IsSet = false;
+            MTC_Addr_1_SEL_UART_3 = 0;
+            MTC_Addr_1_SEL_UART_3IsSet = false;
+            MTC_Addr_1_SEL_UART_4 = 0;
+            MTC_Addr_1_SEL_UART_4IsSet = false;
+            MTC_Addr_1_SEL_UART_5 = 0;
+            MTC_Addr_1_SEL_UART_5IsSet = false;
+            MTC_Addr_1_SEL_UART_6 = 0;
+            MTC_Addr_1_SEL_UART_6IsSet = false;
+            MTC_Addr_1_SEL_VBAT = 0;
+            MTC_Addr_1_SEL_VBATIsSet = false;
+            MTC_Addr_1_SEL_VBAT_ALT = 0;
+            MTC_Addr_1_SEL_VBAT_ALTIsSet = false;
+            MTC_Addr_1_SEL_VBAT_FPGA = 0;
+            MTC_Addr_1_SEL_VBAT_FPGAIsSet = false;
+            MTC_Addr_1_SEL_nRESET_1 = 0;
+            MTC_Addr_1_SEL_nRESET_1IsSet = false;
+            MTC_Addr_1_SEL_nRESET_2 = 0;
+            MTC_Addr_1_SEL_nRESET_2IsSet = false;
+            MTC_Addr_1_SEL_nRESET_3 = 0;
+            MTC_Addr_1_SEL_nRESET_3IsSet = false;
+            MTC_Addr_1_SEL_CS_1 = 0;
+            MTC_Addr_1_SEL_CS_1IsSet = false;
+            MTC_Addr_1_SEL_CS_2 = 0;
+            MTC_Addr_1_SEL_CS_2IsSet = false;
+            MTC_Addr_1_SEL_CS_3 = 0;
+            MTC_Addr_1_SEL_CS_3IsSet = false;
+            MTC_Addr_1_SEL_CS_4 = 0;
+            MTC_Addr_1_SEL_CS_4IsSet = false;
+            MTC_Addr_1_SEL_CS_5 = 0;
+            MTC_Addr_1_SEL_CS_5IsSet = false;
+            MTC_Addr_1_SEL_CS_6 = 0;
+            MTC_Addr_1_SEL_CS_6IsSet = false;
+            MTC_Addr_1_SEL_SPI_1 = 0;
+            MTC_Addr_1_SEL_SPI_1IsSet = false;
+            MTC_Addr_1_SEL_SPI_2 = 0;
+            MTC_Addr_1_SEL_SPI_2IsSet = false;
+            MTC_Addr_1_SEL_CAN_1 = 0;
+            MTC_Addr_1_SEL_CAN_1IsSet = false;
+            MTC_Addr_1_SEL_CAN_2 = 0;
+            MTC_Addr_1_SEL_CAN_2IsSet = false;
+            MTC_Addr_1_SEL_CAN_3 = 0;
+            MTC_Addr_1_SEL_CAN_3IsSet = false;
+            MTC_Addr_1_SEL_RS422 = 0;
+            MTC_Addr_1_SEL_RS422IsSet = false;
+
+            MTC_Addr_1_Set_ScanEnabled = 0;
+            MTC_Addr_1_Set_ScanEnabledIsSet = false;
+            MTC_Addr_1_Set_Detected = 0;
+            MTC_Addr_1_Set_DetectedIsSet = false;
+            MTC_Addr_1_Set_Type = 0;
+            MTC_Addr_1_Set_TypeIsSet = false;
+            MTC_Addr_1_Set_ENABLE_1 = 0;
+            MTC_Addr_1_Set_ENABLE_1IsSet = false;
+            MTC_Addr_1_Set_ENABLE_2 = 0;
+            MTC_Addr_1_Set_ENABLE_2IsSet = false;
+            MTC_Addr_1_Set_SEL_I2C_1 = 0;
+            MTC_Addr_1_Set_SEL_I2C_1IsSet = false;
+            MTC_Addr_1_Set_SEL_I2C_2 = 0;
+            MTC_Addr_1_Set_SEL_I2C_2IsSet = false;
+            MTC_Addr_1_Set_SEL_UART_1 = 0;
+            MTC_Addr_1_Set_SEL_UART_1IsSet = false;
+            MTC_Addr_1_Set_SEL_UART_2 = 0;
+            MTC_Addr_1_Set_SEL_UART_2IsSet = false;
+            MTC_Addr_1_Set_SEL_UART_3 = 0;
+            MTC_Addr_1_Set_SEL_UART_3IsSet = false;
+            MTC_Addr_1_Set_SEL_UART_4 = 0;
+            MTC_Addr_1_Set_SEL_UART_4IsSet = false;
+            MTC_Addr_1_Set_SEL_UART_5 = 0;
+            MTC_Addr_1_Set_SEL_UART_5IsSet = false;
+            MTC_Addr_1_Set_SEL_UART_6 = 0;
+            MTC_Addr_1_Set_SEL_UART_6IsSet = false;
+            MTC_Addr_1_Set_SEL_VBAT = 0;
+            MTC_Addr_1_Set_SEL_VBATIsSet = false;
+            MTC_Addr_1_Set_SEL_VBAT_ALT = 0;
+            MTC_Addr_1_Set_SEL_VBAT_ALTIsSet = false;
+            MTC_Addr_1_Set_SEL_VBAT_FPGA = 0;
+            MTC_Addr_1_Set_SEL_VBAT_FPGAIsSet = false;
+            MTC_Addr_1_Set_SEL_nRESET_1 = 0;
+            MTC_Addr_1_Set_SEL_nRESET_1IsSet = false;
+            MTC_Addr_1_Set_SEL_nRESET_2 = 0;
+            MTC_Addr_1_Set_SEL_nRESET_2IsSet = false;
+            MTC_Addr_1_Set_SEL_nRESET_3 = 0;
+            MTC_Addr_1_Set_SEL_nRESET_3IsSet = false;
+            MTC_Addr_1_Set_SEL_CS_1 = 0;
+            MTC_Addr_1_Set_SEL_CS_1IsSet = false;
+            MTC_Addr_1_Set_SEL_CS_2 = 0;
+            MTC_Addr_1_Set_SEL_CS_2IsSet = false;
+            MTC_Addr_1_Set_SEL_CS_3 = 0;
+            MTC_Addr_1_Set_SEL_CS_3IsSet = false;
+            MTC_Addr_1_Set_SEL_CS_4 = 0;
+            MTC_Addr_1_Set_SEL_CS_4IsSet = false;
+            MTC_Addr_1_Set_SEL_CS_5 = 0;
+            MTC_Addr_1_Set_SEL_CS_5IsSet = false;
+            MTC_Addr_1_Set_SEL_CS_6 = 0;
+            MTC_Addr_1_Set_SEL_CS_6IsSet = false;
+            MTC_Addr_1_Set_SEL_SPI_1 = 0;
+            MTC_Addr_1_Set_SEL_SPI_1IsSet = false;
+            MTC_Addr_1_Set_SEL_SPI_2 = 0;
+            MTC_Addr_1_Set_SEL_SPI_2IsSet = false;
+            MTC_Addr_1_Set_SEL_CAN_1 = 0;
+            MTC_Addr_1_Set_SEL_CAN_1IsSet = false;
+            MTC_Addr_1_Set_SEL_CAN_2 = 0;
+            MTC_Addr_1_Set_SEL_CAN_2IsSet = false;
+            MTC_Addr_1_Set_SEL_CAN_3 = 0;
+            MTC_Addr_1_Set_SEL_CAN_3IsSet = false;
+            MTC_Addr_1_Set_SEL_RS422 = 0;
+            MTC_Addr_1_Set_SEL_RS422IsSet = false;
+
+            MTC_Addr_1_Clear_ScanEnabled = 0;
+            MTC_Addr_1_Clear_ScanEnabledIsSet = false;
+            MTC_Addr_1_Clear_Detected = 0;
+            MTC_Addr_1_Clear_DetectedIsSet = false;
+            MTC_Addr_1_Clear_Type = 0;
+            MTC_Addr_1_Clear_TypeIsSet = false;
+            MTC_Addr_1_Clear_ENABLE_1 = 0;
+            MTC_Addr_1_Clear_ENABLE_1IsSet = false;
+            MTC_Addr_1_Clear_ENABLE_2 = 0;
+            MTC_Addr_1_Clear_ENABLE_2IsSet = false;
+            MTC_Addr_1_Clear_SEL_I2C_1 = 0;
+            MTC_Addr_1_Clear_SEL_I2C_1IsSet = false;
+            MTC_Addr_1_Clear_SEL_I2C_2 = 0;
+            MTC_Addr_1_Clear_SEL_I2C_2IsSet = false;
+            MTC_Addr_1_Clear_SEL_UART_1 = 0;
+            MTC_Addr_1_Clear_SEL_UART_1IsSet = false;
+            MTC_Addr_1_Clear_SEL_UART_2 = 0;
+            MTC_Addr_1_Clear_SEL_UART_2IsSet = false;
+            MTC_Addr_1_Clear_SEL_UART_3 = 0;
+            MTC_Addr_1_Clear_SEL_UART_3IsSet = false;
+            MTC_Addr_1_Clear_SEL_UART_4 = 0;
+            MTC_Addr_1_Clear_SEL_UART_4IsSet = false;
+            MTC_Addr_1_Clear_SEL_UART_5 = 0;
+            MTC_Addr_1_Clear_SEL_UART_5IsSet = false;
+            MTC_Addr_1_Clear_SEL_UART_6 = 0;
+            MTC_Addr_1_Clear_SEL_UART_6IsSet = false;
+            MTC_Addr_1_Clear_SEL_VBAT = 0;
+            MTC_Addr_1_Clear_SEL_VBATIsSet = false;
+            MTC_Addr_1_Clear_SEL_VBAT_ALT = 0;
+            MTC_Addr_1_Clear_SEL_VBAT_ALTIsSet = false;
+            MTC_Addr_1_Clear_SEL_VBAT_FPGA = 0;
+            MTC_Addr_1_Clear_SEL_VBAT_FPGAIsSet = false;
+            MTC_Addr_1_Clear_SEL_nRESET_1 = 0;
+            MTC_Addr_1_Clear_SEL_nRESET_1IsSet = false;
+            MTC_Addr_1_Clear_SEL_nRESET_2 = 0;
+            MTC_Addr_1_Clear_SEL_nRESET_2IsSet = false;
+            MTC_Addr_1_Clear_SEL_nRESET_3 = 0;
+            MTC_Addr_1_Clear_SEL_nRESET_3IsSet = false;
+            MTC_Addr_1_Clear_SEL_CS_1 = 0;
+            MTC_Addr_1_Clear_SEL_CS_1IsSet = false;
+            MTC_Addr_1_Clear_SEL_CS_2 = 0;
+            MTC_Addr_1_Clear_SEL_CS_2IsSet = false;
+            MTC_Addr_1_Clear_SEL_CS_3 = 0;
+            MTC_Addr_1_Clear_SEL_CS_3IsSet = false;
+            MTC_Addr_1_Clear_SEL_CS_4 = 0;
+            MTC_Addr_1_Clear_SEL_CS_4IsSet = false;
+            MTC_Addr_1_Clear_SEL_CS_5 = 0;
+            MTC_Addr_1_Clear_SEL_CS_5IsSet = false;
+            MTC_Addr_1_Clear_SEL_CS_6 = 0;
+            MTC_Addr_1_Clear_SEL_CS_6IsSet = false;
+            MTC_Addr_1_Clear_SEL_SPI_1 = 0;
+            MTC_Addr_1_Clear_SEL_SPI_1IsSet = false;
+            MTC_Addr_1_Clear_SEL_SPI_2 = 0;
+            MTC_Addr_1_Clear_SEL_SPI_2IsSet = false;
+            MTC_Addr_1_Clear_SEL_CAN_1 = 0;
+            MTC_Addr_1_Clear_SEL_CAN_1IsSet = false;
+            MTC_Addr_1_Clear_SEL_CAN_2 = 0;
+            MTC_Addr_1_Clear_SEL_CAN_2IsSet = false;
+            MTC_Addr_1_Clear_SEL_CAN_3 = 0;
+            MTC_Addr_1_Clear_SEL_CAN_3IsSet = false;
+            MTC_Addr_1_Clear_SEL_RS422 = 0;
+            MTC_Addr_1_Clear_SEL_RS422IsSet = false;
+
+            MTC_Addr_2_ScanEnabled = 0;
+            MTC_Addr_2_ScanEnabledIsSet = false;
+            MTC_Addr_2_Detected = 0;
+            MTC_Addr_2_DetectedIsSet = false;
+            MTC_Addr_2_Type = 0;
+            MTC_Addr_2_TypeIsSet = false;
+            MTC_Addr_2_ENABLE_1 = 0;
+            MTC_Addr_2_ENABLE_1IsSet = false;
+            MTC_Addr_2_ENABLE_2 = 0;
+            MTC_Addr_2_ENABLE_2IsSet = false;
+            MTC_Addr_2_SEL_I2C_1 = 0;
+            MTC_Addr_2_SEL_I2C_1IsSet = false;
+            MTC_Addr_2_SEL_I2C_2 = 0;
+            MTC_Addr_2_SEL_I2C_2IsSet = false;
+            MTC_Addr_2_SEL_UART_1 = 0;
+            MTC_Addr_2_SEL_UART_1IsSet = false;
+            MTC_Addr_2_SEL_UART_2 = 0;
+            MTC_Addr_2_SEL_UART_2IsSet = false;
+            MTC_Addr_2_SEL_UART_3 = 0;
+            MTC_Addr_2_SEL_UART_3IsSet = false;
+            MTC_Addr_2_SEL_UART_4 = 0;
+            MTC_Addr_2_SEL_UART_4IsSet = false;
+            MTC_Addr_2_SEL_UART_5 = 0;
+            MTC_Addr_2_SEL_UART_5IsSet = false;
+            MTC_Addr_2_SEL_UART_6 = 0;
+            MTC_Addr_2_SEL_UART_6IsSet = false;
+            MTC_Addr_2_SEL_VBAT = 0;
+            MTC_Addr_2_SEL_VBATIsSet = false;
+            MTC_Addr_2_SEL_VBAT_ALT = 0;
+            MTC_Addr_2_SEL_VBAT_ALTIsSet = false;
+            MTC_Addr_2_SEL_VBAT_FPGA = 0;
+            MTC_Addr_2_SEL_VBAT_FPGAIsSet = false;
+            MTC_Addr_2_SEL_nRESET_1 = 0;
+            MTC_Addr_2_SEL_nRESET_1IsSet = false;
+            MTC_Addr_2_SEL_nRESET_2 = 0;
+            MTC_Addr_2_SEL_nRESET_2IsSet = false;
+            MTC_Addr_2_SEL_nRESET_3 = 0;
+            MTC_Addr_2_SEL_nRESET_3IsSet = false;
+            MTC_Addr_2_SEL_CS_1 = 0;
+            MTC_Addr_2_SEL_CS_1IsSet = false;
+            MTC_Addr_2_SEL_CS_2 = 0;
+            MTC_Addr_2_SEL_CS_2IsSet = false;
+            MTC_Addr_2_SEL_CS_3 = 0;
+            MTC_Addr_2_SEL_CS_3IsSet = false;
+            MTC_Addr_2_SEL_CS_4 = 0;
+            MTC_Addr_2_SEL_CS_4IsSet = false;
+            MTC_Addr_2_SEL_CS_5 = 0;
+            MTC_Addr_2_SEL_CS_5IsSet = false;
+            MTC_Addr_2_SEL_CS_6 = 0;
+            MTC_Addr_2_SEL_CS_6IsSet = false;
+            MTC_Addr_2_SEL_SPI_1 = 0;
+            MTC_Addr_2_SEL_SPI_1IsSet = false;
+            MTC_Addr_2_SEL_SPI_2 = 0;
+            MTC_Addr_2_SEL_SPI_2IsSet = false;
+            MTC_Addr_2_SEL_CAN_1 = 0;
+            MTC_Addr_2_SEL_CAN_1IsSet = false;
+            MTC_Addr_2_SEL_CAN_2 = 0;
+            MTC_Addr_2_SEL_CAN_2IsSet = false;
+            MTC_Addr_2_SEL_CAN_3 = 0;
+            MTC_Addr_2_SEL_CAN_3IsSet = false;
+            MTC_Addr_2_SEL_RS422 = 0;
+            MTC_Addr_2_SEL_RS422IsSet = false;
+
+            MTC_Addr_2_Set_ScanEnabled = 0;
+            MTC_Addr_2_Set_ScanEnabledIsSet = false;
+            MTC_Addr_2_Set_Detected = 0;
+            MTC_Addr_2_Set_DetectedIsSet = false;
+            MTC_Addr_2_Set_Type = 0;
+            MTC_Addr_2_Set_TypeIsSet = false;
+            MTC_Addr_2_Set_ENABLE_1 = 0;
+            MTC_Addr_2_Set_ENABLE_1IsSet = false;
+            MTC_Addr_2_Set_ENABLE_2 = 0;
+            MTC_Addr_2_Set_ENABLE_2IsSet = false;
+            MTC_Addr_2_Set_SEL_I2C_1 = 0;
+            MTC_Addr_2_Set_SEL_I2C_1IsSet = false;
+            MTC_Addr_2_Set_SEL_I2C_2 = 0;
+            MTC_Addr_2_Set_SEL_I2C_2IsSet = false;
+            MTC_Addr_2_Set_SEL_UART_1 = 0;
+            MTC_Addr_2_Set_SEL_UART_1IsSet = false;
+            MTC_Addr_2_Set_SEL_UART_2 = 0;
+            MTC_Addr_2_Set_SEL_UART_2IsSet = false;
+            MTC_Addr_2_Set_SEL_UART_3 = 0;
+            MTC_Addr_2_Set_SEL_UART_3IsSet = false;
+            MTC_Addr_2_Set_SEL_UART_4 = 0;
+            MTC_Addr_2_Set_SEL_UART_4IsSet = false;
+            MTC_Addr_2_Set_SEL_UART_5 = 0;
+            MTC_Addr_2_Set_SEL_UART_5IsSet = false;
+            MTC_Addr_2_Set_SEL_UART_6 = 0;
+            MTC_Addr_2_Set_SEL_UART_6IsSet = false;
+            MTC_Addr_2_Set_SEL_VBAT = 0;
+            MTC_Addr_2_Set_SEL_VBATIsSet = false;
+            MTC_Addr_2_Set_SEL_VBAT_ALT = 0;
+            MTC_Addr_2_Set_SEL_VBAT_ALTIsSet = false;
+            MTC_Addr_2_Set_SEL_VBAT_FPGA = 0;
+            MTC_Addr_2_Set_SEL_VBAT_FPGAIsSet = false;
+            MTC_Addr_2_Set_SEL_nRESET_1 = 0;
+            MTC_Addr_2_Set_SEL_nRESET_1IsSet = false;
+            MTC_Addr_2_Set_SEL_nRESET_2 = 0;
+            MTC_Addr_2_Set_SEL_nRESET_2IsSet = false;
+            MTC_Addr_2_Set_SEL_nRESET_3 = 0;
+            MTC_Addr_2_Set_SEL_nRESET_3IsSet = false;
+            MTC_Addr_2_Set_SEL_CS_1 = 0;
+            MTC_Addr_2_Set_SEL_CS_1IsSet = false;
+            MTC_Addr_2_Set_SEL_CS_2 = 0;
+            MTC_Addr_2_Set_SEL_CS_2IsSet = false;
+            MTC_Addr_2_Set_SEL_CS_3 = 0;
+            MTC_Addr_2_Set_SEL_CS_3IsSet = false;
+            MTC_Addr_2_Set_SEL_CS_4 = 0;
+            MTC_Addr_2_Set_SEL_CS_4IsSet = false;
+            MTC_Addr_2_Set_SEL_CS_5 = 0;
+            MTC_Addr_2_Set_SEL_CS_5IsSet = false;
+            MTC_Addr_2_Set_SEL_CS_6 = 0;
+            MTC_Addr_2_Set_SEL_CS_6IsSet = false;
+            MTC_Addr_2_Set_SEL_SPI_1 = 0;
+            MTC_Addr_2_Set_SEL_SPI_1IsSet = false;
+            MTC_Addr_2_Set_SEL_SPI_2 = 0;
+            MTC_Addr_2_Set_SEL_SPI_2IsSet = false;
+            MTC_Addr_2_Set_SEL_CAN_1 = 0;
+            MTC_Addr_2_Set_SEL_CAN_1IsSet = false;
+            MTC_Addr_2_Set_SEL_CAN_2 = 0;
+            MTC_Addr_2_Set_SEL_CAN_2IsSet = false;
+            MTC_Addr_2_Set_SEL_CAN_3 = 0;
+            MTC_Addr_2_Set_SEL_CAN_3IsSet = false;
+            MTC_Addr_2_Set_SEL_RS422 = 0;
+            MTC_Addr_2_Set_SEL_RS422IsSet = false;
+
+            MTC_Addr_2_Clear_ScanEnabled = 0;
+            MTC_Addr_2_Clear_ScanEnabledIsSet = false;
+            MTC_Addr_2_Clear_Detected = 0;
+            MTC_Addr_2_Clear_DetectedIsSet = false;
+            MTC_Addr_2_Clear_Type = 0;
+            MTC_Addr_2_Clear_TypeIsSet = false;
+            MTC_Addr_2_Clear_ENABLE_1 = 0;
+            MTC_Addr_2_Clear_ENABLE_1IsSet = false;
+            MTC_Addr_2_Clear_ENABLE_2 = 0;
+            MTC_Addr_2_Clear_ENABLE_2IsSet = false;
+            MTC_Addr_2_Clear_SEL_I2C_1 = 0;
+            MTC_Addr_2_Clear_SEL_I2C_1IsSet = false;
+            MTC_Addr_2_Clear_SEL_I2C_2 = 0;
+            MTC_Addr_2_Clear_SEL_I2C_2IsSet = false;
+            MTC_Addr_2_Clear_SEL_UART_1 = 0;
+            MTC_Addr_2_Clear_SEL_UART_1IsSet = false;
+            MTC_Addr_2_Clear_SEL_UART_2 = 0;
+            MTC_Addr_2_Clear_SEL_UART_2IsSet = false;
+            MTC_Addr_2_Clear_SEL_UART_3 = 0;
+            MTC_Addr_2_Clear_SEL_UART_3IsSet = false;
+            MTC_Addr_2_Clear_SEL_UART_4 = 0;
+            MTC_Addr_2_Clear_SEL_UART_4IsSet = false;
+            MTC_Addr_2_Clear_SEL_UART_5 = 0;
+            MTC_Addr_2_Clear_SEL_UART_5IsSet = false;
+            MTC_Addr_2_Clear_SEL_UART_6 = 0;
+            MTC_Addr_2_Clear_SEL_UART_6IsSet = false;
+            MTC_Addr_2_Clear_SEL_VBAT = 0;
+            MTC_Addr_2_Clear_SEL_VBATIsSet = false;
+            MTC_Addr_2_Clear_SEL_VBAT_ALT = 0;
+            MTC_Addr_2_Clear_SEL_VBAT_ALTIsSet = false;
+            MTC_Addr_2_Clear_SEL_VBAT_FPGA = 0;
+            MTC_Addr_2_Clear_SEL_VBAT_FPGAIsSet = false;
+            MTC_Addr_2_Clear_SEL_nRESET_1 = 0;
+            MTC_Addr_2_Clear_SEL_nRESET_1IsSet = false;
+            MTC_Addr_2_Clear_SEL_nRESET_2 = 0;
+            MTC_Addr_2_Clear_SEL_nRESET_2IsSet = false;
+            MTC_Addr_2_Clear_SEL_nRESET_3 = 0;
+            MTC_Addr_2_Clear_SEL_nRESET_3IsSet = false;
+            MTC_Addr_2_Clear_SEL_CS_1 = 0;
+            MTC_Addr_2_Clear_SEL_CS_1IsSet = false;
+            MTC_Addr_2_Clear_SEL_CS_2 = 0;
+            MTC_Addr_2_Clear_SEL_CS_2IsSet = false;
+            MTC_Addr_2_Clear_SEL_CS_3 = 0;
+            MTC_Addr_2_Clear_SEL_CS_3IsSet = false;
+            MTC_Addr_2_Clear_SEL_CS_4 = 0;
+            MTC_Addr_2_Clear_SEL_CS_4IsSet = false;
+            MTC_Addr_2_Clear_SEL_CS_5 = 0;
+            MTC_Addr_2_Clear_SEL_CS_5IsSet = false;
+            MTC_Addr_2_Clear_SEL_CS_6 = 0;
+            MTC_Addr_2_Clear_SEL_CS_6IsSet = false;
+            MTC_Addr_2_Clear_SEL_SPI_1 = 0;
+            MTC_Addr_2_Clear_SEL_SPI_1IsSet = false;
+            MTC_Addr_2_Clear_SEL_SPI_2 = 0;
+            MTC_Addr_2_Clear_SEL_SPI_2IsSet = false;
+            MTC_Addr_2_Clear_SEL_CAN_1 = 0;
+            MTC_Addr_2_Clear_SEL_CAN_1IsSet = false;
+            MTC_Addr_2_Clear_SEL_CAN_2 = 0;
+            MTC_Addr_2_Clear_SEL_CAN_2IsSet = false;
+            MTC_Addr_2_Clear_SEL_CAN_3 = 0;
+            MTC_Addr_2_Clear_SEL_CAN_3IsSet = false;
+            MTC_Addr_2_Clear_SEL_RS422 = 0;
+            MTC_Addr_2_Clear_SEL_RS422IsSet = false;
+
+            MTC_Addr_3_ScanEnabled = 0;
+            MTC_Addr_3_ScanEnabledIsSet = false;
+            MTC_Addr_3_Detected = 0;
+            MTC_Addr_3_DetectedIsSet = false;
+            MTC_Addr_3_Type = 0;
+            MTC_Addr_3_TypeIsSet = false;
+            MTC_Addr_3_ENABLE_1 = 0;
+            MTC_Addr_3_ENABLE_1IsSet = false;
+            MTC_Addr_3_ENABLE_2 = 0;
+            MTC_Addr_3_ENABLE_2IsSet = false;
+            MTC_Addr_3_SEL_I2C_1 = 0;
+            MTC_Addr_3_SEL_I2C_1IsSet = false;
+            MTC_Addr_3_SEL_I2C_2 = 0;
+            MTC_Addr_3_SEL_I2C_2IsSet = false;
+            MTC_Addr_3_SEL_UART_1 = 0;
+            MTC_Addr_3_SEL_UART_1IsSet = false;
+            MTC_Addr_3_SEL_UART_2 = 0;
+            MTC_Addr_3_SEL_UART_2IsSet = false;
+            MTC_Addr_3_SEL_UART_3 = 0;
+            MTC_Addr_3_SEL_UART_3IsSet = false;
+            MTC_Addr_3_SEL_UART_4 = 0;
+            MTC_Addr_3_SEL_UART_4IsSet = false;
+            MTC_Addr_3_SEL_UART_5 = 0;
+            MTC_Addr_3_SEL_UART_5IsSet = false;
+            MTC_Addr_3_SEL_UART_6 = 0;
+            MTC_Addr_3_SEL_UART_6IsSet = false;
+            MTC_Addr_3_SEL_VBAT = 0;
+            MTC_Addr_3_SEL_VBATIsSet = false;
+            MTC_Addr_3_SEL_VBAT_ALT = 0;
+            MTC_Addr_3_SEL_VBAT_ALTIsSet = false;
+            MTC_Addr_3_SEL_VBAT_FPGA = 0;
+            MTC_Addr_3_SEL_VBAT_FPGAIsSet = false;
+            MTC_Addr_3_SEL_nRESET_1 = 0;
+            MTC_Addr_3_SEL_nRESET_1IsSet = false;
+            MTC_Addr_3_SEL_nRESET_2 = 0;
+            MTC_Addr_3_SEL_nRESET_2IsSet = false;
+            MTC_Addr_3_SEL_nRESET_3 = 0;
+            MTC_Addr_3_SEL_nRESET_3IsSet = false;
+            MTC_Addr_3_SEL_CS_1 = 0;
+            MTC_Addr_3_SEL_CS_1IsSet = false;
+            MTC_Addr_3_SEL_CS_2 = 0;
+            MTC_Addr_3_SEL_CS_2IsSet = false;
+            MTC_Addr_3_SEL_CS_3 = 0;
+            MTC_Addr_3_SEL_CS_3IsSet = false;
+            MTC_Addr_3_SEL_CS_4 = 0;
+            MTC_Addr_3_SEL_CS_4IsSet = false;
+            MTC_Addr_3_SEL_CS_5 = 0;
+            MTC_Addr_3_SEL_CS_5IsSet = false;
+            MTC_Addr_3_SEL_CS_6 = 0;
+            MTC_Addr_3_SEL_CS_6IsSet = false;
+            MTC_Addr_3_SEL_SPI_1 = 0;
+            MTC_Addr_3_SEL_SPI_1IsSet = false;
+            MTC_Addr_3_SEL_SPI_2 = 0;
+            MTC_Addr_3_SEL_SPI_2IsSet = false;
+            MTC_Addr_3_SEL_CAN_1 = 0;
+            MTC_Addr_3_SEL_CAN_1IsSet = false;
+            MTC_Addr_3_SEL_CAN_2 = 0;
+            MTC_Addr_3_SEL_CAN_2IsSet = false;
+            MTC_Addr_3_SEL_CAN_3 = 0;
+            MTC_Addr_3_SEL_CAN_3IsSet = false;
+            MTC_Addr_3_SEL_RS422 = 0;
+            MTC_Addr_3_SEL_RS422IsSet = false;
+
+            MTC_Addr_3_Set_ScanEnabled = 0;
+            MTC_Addr_3_Set_ScanEnabledIsSet = false;
+            MTC_Addr_3_Set_Detected = 0;
+            MTC_Addr_3_Set_DetectedIsSet = false;
+            MTC_Addr_3_Set_Type = 0;
+            MTC_Addr_3_Set_TypeIsSet = false;
+            MTC_Addr_3_Set_ENABLE_1 = 0;
+            MTC_Addr_3_Set_ENABLE_1IsSet = false;
+            MTC_Addr_3_Set_ENABLE_2 = 0;
+            MTC_Addr_3_Set_ENABLE_2IsSet = false;
+            MTC_Addr_3_Set_SEL_I2C_1 = 0;
+            MTC_Addr_3_Set_SEL_I2C_1IsSet = false;
+            MTC_Addr_3_Set_SEL_I2C_2 = 0;
+            MTC_Addr_3_Set_SEL_I2C_2IsSet = false;
+            MTC_Addr_3_Set_SEL_UART_1 = 0;
+            MTC_Addr_3_Set_SEL_UART_1IsSet = false;
+            MTC_Addr_3_Set_SEL_UART_2 = 0;
+            MTC_Addr_3_Set_SEL_UART_2IsSet = false;
+            MTC_Addr_3_Set_SEL_UART_3 = 0;
+            MTC_Addr_3_Set_SEL_UART_3IsSet = false;
+            MTC_Addr_3_Set_SEL_UART_4 = 0;
+            MTC_Addr_3_Set_SEL_UART_4IsSet = false;
+            MTC_Addr_3_Set_SEL_UART_5 = 0;
+            MTC_Addr_3_Set_SEL_UART_5IsSet = false;
+            MTC_Addr_3_Set_SEL_UART_6 = 0;
+            MTC_Addr_3_Set_SEL_UART_6IsSet = false;
+            MTC_Addr_3_Set_SEL_VBAT = 0;
+            MTC_Addr_3_Set_SEL_VBATIsSet = false;
+            MTC_Addr_3_Set_SEL_VBAT_ALT = 0;
+            MTC_Addr_3_Set_SEL_VBAT_ALTIsSet = false;
+            MTC_Addr_3_Set_SEL_VBAT_FPGA = 0;
+            MTC_Addr_3_Set_SEL_VBAT_FPGAIsSet = false;
+            MTC_Addr_3_Set_SEL_nRESET_1 = 0;
+            MTC_Addr_3_Set_SEL_nRESET_1IsSet = false;
+            MTC_Addr_3_Set_SEL_nRESET_2 = 0;
+            MTC_Addr_3_Set_SEL_nRESET_2IsSet = false;
+            MTC_Addr_3_Set_SEL_nRESET_3 = 0;
+            MTC_Addr_3_Set_SEL_nRESET_3IsSet = false;
+            MTC_Addr_3_Set_SEL_CS_1 = 0;
+            MTC_Addr_3_Set_SEL_CS_1IsSet = false;
+            MTC_Addr_3_Set_SEL_CS_2 = 0;
+            MTC_Addr_3_Set_SEL_CS_2IsSet = false;
+            MTC_Addr_3_Set_SEL_CS_3 = 0;
+            MTC_Addr_3_Set_SEL_CS_3IsSet = false;
+            MTC_Addr_3_Set_SEL_CS_4 = 0;
+            MTC_Addr_3_Set_SEL_CS_4IsSet = false;
+            MTC_Addr_3_Set_SEL_CS_5 = 0;
+            MTC_Addr_3_Set_SEL_CS_5IsSet = false;
+            MTC_Addr_3_Set_SEL_CS_6 = 0;
+            MTC_Addr_3_Set_SEL_CS_6IsSet = false;
+            MTC_Addr_3_Set_SEL_SPI_1 = 0;
+            MTC_Addr_3_Set_SEL_SPI_1IsSet = false;
+            MTC_Addr_3_Set_SEL_SPI_2 = 0;
+            MTC_Addr_3_Set_SEL_SPI_2IsSet = false;
+            MTC_Addr_3_Set_SEL_CAN_1 = 0;
+            MTC_Addr_3_Set_SEL_CAN_1IsSet = false;
+            MTC_Addr_3_Set_SEL_CAN_2 = 0;
+            MTC_Addr_3_Set_SEL_CAN_2IsSet = false;
+            MTC_Addr_3_Set_SEL_CAN_3 = 0;
+            MTC_Addr_3_Set_SEL_CAN_3IsSet = false;
+            MTC_Addr_3_Set_SEL_RS422 = 0;
+            MTC_Addr_3_Set_SEL_RS422IsSet = false;
+
+            MTC_Addr_3_Clear_ScanEnabled = 0;
+            MTC_Addr_3_Clear_ScanEnabledIsSet = false;
+            MTC_Addr_3_Clear_Detected = 0;
+            MTC_Addr_3_Clear_DetectedIsSet = false;
+            MTC_Addr_3_Clear_Type = 0;
+            MTC_Addr_3_Clear_TypeIsSet = false;
+            MTC_Addr_3_Clear_ENABLE_1 = 0;
+            MTC_Addr_3_Clear_ENABLE_1IsSet = false;
+            MTC_Addr_3_Clear_ENABLE_2 = 0;
+            MTC_Addr_3_Clear_ENABLE_2IsSet = false;
+            MTC_Addr_3_Clear_SEL_I2C_1 = 0;
+            MTC_Addr_3_Clear_SEL_I2C_1IsSet = false;
+            MTC_Addr_3_Clear_SEL_I2C_2 = 0;
+            MTC_Addr_3_Clear_SEL_I2C_2IsSet = false;
+            MTC_Addr_3_Clear_SEL_UART_1 = 0;
+            MTC_Addr_3_Clear_SEL_UART_1IsSet = false;
+            MTC_Addr_3_Clear_SEL_UART_2 = 0;
+            MTC_Addr_3_Clear_SEL_UART_2IsSet = false;
+            MTC_Addr_3_Clear_SEL_UART_3 = 0;
+            MTC_Addr_3_Clear_SEL_UART_3IsSet = false;
+            MTC_Addr_3_Clear_SEL_UART_4 = 0;
+            MTC_Addr_3_Clear_SEL_UART_4IsSet = false;
+            MTC_Addr_3_Clear_SEL_UART_5 = 0;
+            MTC_Addr_3_Clear_SEL_UART_5IsSet = false;
+            MTC_Addr_3_Clear_SEL_UART_6 = 0;
+            MTC_Addr_3_Clear_SEL_UART_6IsSet = false;
+            MTC_Addr_3_Clear_SEL_VBAT = 0;
+            MTC_Addr_3_Clear_SEL_VBATIsSet = false;
+            MTC_Addr_3_Clear_SEL_VBAT_ALT = 0;
+            MTC_Addr_3_Clear_SEL_VBAT_ALTIsSet = false;
+            MTC_Addr_3_Clear_SEL_VBAT_FPGA = 0;
+            MTC_Addr_3_Clear_SEL_VBAT_FPGAIsSet = false;
+            MTC_Addr_3_Clear_SEL_nRESET_1 = 0;
+            MTC_Addr_3_Clear_SEL_nRESET_1IsSet = false;
+            MTC_Addr_3_Clear_SEL_nRESET_2 = 0;
+            MTC_Addr_3_Clear_SEL_nRESET_2IsSet = false;
+            MTC_Addr_3_Clear_SEL_nRESET_3 = 0;
+            MTC_Addr_3_Clear_SEL_nRESET_3IsSet = false;
+            MTC_Addr_3_Clear_SEL_CS_1 = 0;
+            MTC_Addr_3_Clear_SEL_CS_1IsSet = false;
+            MTC_Addr_3_Clear_SEL_CS_2 = 0;
+            MTC_Addr_3_Clear_SEL_CS_2IsSet = false;
+            MTC_Addr_3_Clear_SEL_CS_3 = 0;
+            MTC_Addr_3_Clear_SEL_CS_3IsSet = false;
+            MTC_Addr_3_Clear_SEL_CS_4 = 0;
+            MTC_Addr_3_Clear_SEL_CS_4IsSet = false;
+            MTC_Addr_3_Clear_SEL_CS_5 = 0;
+            MTC_Addr_3_Clear_SEL_CS_5IsSet = false;
+            MTC_Addr_3_Clear_SEL_CS_6 = 0;
+            MTC_Addr_3_Clear_SEL_CS_6IsSet = false;
+            MTC_Addr_3_Clear_SEL_SPI_1 = 0;
+            MTC_Addr_3_Clear_SEL_SPI_1IsSet = false;
+            MTC_Addr_3_Clear_SEL_SPI_2 = 0;
+            MTC_Addr_3_Clear_SEL_SPI_2IsSet = false;
+            MTC_Addr_3_Clear_SEL_CAN_1 = 0;
+            MTC_Addr_3_Clear_SEL_CAN_1IsSet = false;
+            MTC_Addr_3_Clear_SEL_CAN_2 = 0;
+            MTC_Addr_3_Clear_SEL_CAN_2IsSet = false;
+            MTC_Addr_3_Clear_SEL_CAN_3 = 0;
+            MTC_Addr_3_Clear_SEL_CAN_3IsSet = false;
+            MTC_Addr_3_Clear_SEL_RS422 = 0;
+            MTC_Addr_3_Clear_SEL_RS422IsSet = false;
+
             RTOS_Status0_uartRxHBOverflow = false;
             RTOS_Status0_uartRxHBOverflowIsSet = false;
             RTOS_Status0_uartRxSBOverflow = false;
@@ -8384,20 +15460,6 @@ namespace Devices.Models
             RTOS_Status0_CANInterruptBufferOverflowIsSet = false;
             RTOS_Status0_CANTargetOutgoingOverflow = false;
             RTOS_Status0_CANTargetOutgoingOverflowIsSet = false;
-            RTOS_Status0_UARTTargetIncomingOverflow = false;
-            RTOS_Status0_UARTTargetIncomingOverflowIsSet = false;
-            RTOS_Status0_UARTTargetTxHBOverflow = false;
-            RTOS_Status0_UARTTargetTxHBOverflowIsSet = false;
-            RTOS_Status0_UARTTargetRxHBOverflow = false;
-            RTOS_Status0_UARTTargetRxHBOverflowIsSet = false;
-            RTOS_Status0_UARTTargetOutgoingOverflow = false;
-            RTOS_Status0_UARTTargetOutgoingOverflowIsSet = false;
-            RTOS_Status0_GSETargetIncomingOverflow = false;
-            RTOS_Status0_GSETargetIncomingOverflowIsSet = false;
-            RTOS_Status0_GSETargetOutgoingOverflow = false;
-            RTOS_Status0_GSETargetOutgoingOverflowIsSet = false;
-            RTOS_Status0_SERMUX_CRC_Error = false;
-            RTOS_Status0_SERMUX_CRC_ErrorIsSet = false;
 
             PreviousEndpoint_Number = 0;
             PreviousEndpoint_NumberIsSet = false;

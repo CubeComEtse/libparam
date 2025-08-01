@@ -20,6 +20,11 @@
 #include "pca9555.h"
 #include "tmr.h"
 
+// MTC Version 2 Addresses 
+#define MTCV2_Addr0 0x00
+#define MTCV2_Addr1 0x01
+#define MTCV2_Addr2 0x02
+#define MTCV2_Addr3 0x03
 
 
 typedef struct {
@@ -36,8 +41,9 @@ typedef struct {
 	tmr_t update_timer;
 	
 	// These values map 1:1 to the setting for the IO expander IC.
-	uint16_t new_portbits;
-	uint16_t previous_portbits;
+	//uint16_t new_portbits;
+	uint32_t new_portbits;
+	uint32_t previous_portbits;
 	bool auto_clear;
 	bool scan_enabled;
 	
@@ -86,6 +92,13 @@ void MULTI_SetBitsFrom(multitester_t * pHandle, uint16_t set_bits);
 void MULTI_ClearBitsFrom(multitester_t * pHandle, uint16_t clear_bits);
 void MULTI_SetAutoClear(multitester_t * pHandle, bool value);
 void MULTI_SetScanEnabled(multitester_t * pHandle, bool value);
+
+// Multitester Version 2
+void MTCV2_Init(multitester_t * handle);
+void MTCV2_SetBits(multitester_t * pHandle, uint32_t bits);
+void MTCV2_ClearBits(multitester_t * pHandle, uint32_t bits);
+/*void MTCV2_Task(multitester_t * pHandle, const uint32_t address, const uint32_t data, const size_t length);*/
+void MTCV2_Task(void * vHandle);
 
 
 #endif /* MULTITESTER_H_ */
