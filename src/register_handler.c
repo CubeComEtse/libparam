@@ -12,6 +12,8 @@
 
 #include "gse_manager.h"
 #include "register_map.h"
+
+
   
 static uint32_t REG_CopyArrayToU32(const uint8_t* data);
 
@@ -71,6 +73,7 @@ static addres_to_func_map_t address_to_func_map[] = {
 	{ reg_CSBoard_T5_addr, mm_getCSBoard_T5 },
 	{ reg_CSBoard_T6_addr, mm_getCSBoard_T6 },
 	{ reg_CSBoard_T7_addr, mm_getCSBoard_T7 },
+		
 	{ reg_CSBoard_Current0I0_addr, mm_getCSBoard_Current0I0},
 	{ reg_CSBoard_Current0I1_addr, mm_getCSBoard_Current0I1},
 	{ reg_CSBoard_Current0I2_addr, mm_getCSBoard_Current0I2},
@@ -95,10 +98,16 @@ static addres_to_func_map_t address_to_func_map[] = {
 	{ reg_CSBoard_Current7I0_addr, mm_getCSBoard_Current7I0},
 	{ reg_CSBoard_Current7I1_addr, mm_getCSBoard_Current7I1},
 	{ reg_CSBoard_Current7I2_addr, mm_getCSBoard_Current7I2},
+		
     { reg_TE_Addr_0_addr, mm_getTE_Addr_0},
     { reg_TE_Addr_1_addr, mm_getTE_Addr_1},
     { reg_TE_Addr_2_addr, mm_getTE_Addr_2},
     { reg_TE_Addr_3_addr, mm_getTE_Addr_3},
+		
+	{ reg_MTC_Addr_0_addr, mm_getMTC_Addr_0},
+	{ reg_MTC_Addr_1_addr, mm_getMTC_Addr_1},
+	{ reg_MTC_Addr_2_addr, mm_getMTC_Addr_2},
+	{ reg_MTC_Addr_3_addr, mm_getMTC_Addr_3},
 		
 	{ reg_RTOS_Status0_addr, mm_getRTOS_Status0},
 };
@@ -372,19 +381,19 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 		}
 			break;
 				
-		case reg_MultiConf0_addr:
-			{
-				mm_enabled_t autoclear = reg_enabled_disabled;
-				mm_getMultiConf0_AutoCLRFrom(&autoclear, deserialized);
-				MULTI_SetAutoClear(platform->multitester, autoclear==reg_enabled_enabled);
-				mm_setMultiConf0_AutoCLR(autoclear);
-			
-				mm_enabled_t scan_enabled = reg_enabled_disabled;
-				mm_getMultiConf0_ScanEnabledFrom(&scan_enabled, deserialized);
-				MULTI_SetScanEnabled(platform->multitester, scan_enabled==reg_enabled_enabled);
-				mm_setMultiConf0_ScanEnabled(scan_enabled);
-			}
-			break;
+// 		case reg_MultiConf0_addr:
+// 			{
+// 				mm_enabled_t autoclear = reg_enabled_disabled;
+// 				mm_getMultiConf0_AutoCLRFrom(&autoclear, deserialized);
+// 				MULTI_SetAutoClear(platform->multitester, autoclear==reg_enabled_enabled);
+// 				mm_setMultiConf0_AutoCLR(autoclear);
+// 			
+// 				mm_enabled_t scan_enabled = reg_enabled_disabled;
+// 				mm_getMultiConf0_ScanEnabledFrom(&scan_enabled, deserialized);
+// 				MULTI_SetScanEnabled(platform->multitester, scan_enabled==reg_enabled_enabled);
+// 				mm_setMultiConf0_ScanEnabled(scan_enabled);
+// 			}
+// 			break;
 			
 		case reg_CANConfA_addr:
 			{
@@ -567,6 +576,42 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 				TE_Adaptor_ClearTeBits(platform->te_scanner, 3, (deserialized >> 16) & 0x0FFF);
 			}
 			break;
+			
+		// Multitester V2
+		case reg_MTC_Addr_0_Set_addr:
+		case reg_MTC_Addr_1_Set_addr:
+		case reg_MTC_Addr_2_Set_addr:
+		case reg_MTC_Addr_3_Set_addr:
+		{
+			
+			switch (address) {
+				case 0xb1: platform->multitester->i2c_address = 0x51; break;
+				case 0xb4: platform->multitester->i2c_address = 0x52; break;
+				case 0xb7: platform->multitester->i2c_address = 0x53; break;
+				case 0xba: platform->multitester->i2c_address = 0x54; break;
+			}
+			
+			MTCV2_SetBits(platform->multitester, deserialized);
+			break;
+		}
+		case reg_MTC_Addr_0_Clear_addr:
+		case reg_MTC_Addr_1_Clear_addr:
+		case reg_MTC_Addr_2_Clear_addr:
+		case reg_MTC_Addr_3_Clear_addr:
+		{
+			
+			switch (address) {
+				case 0xb1: platform->multitester->i2c_address = 0x51; break;
+				case 0xb4: platform->multitester->i2c_address = 0x52; break;
+				case 0xb7: platform->multitester->i2c_address = 0x53; break;
+				case 0xba: platform->multitester->i2c_address = 0x54; break;
+			}
+			
+			MTCV2_ClearBits(platform->multitester, deserialized);
+			break;
+		}
+		
+		
 					
 	}        
 }

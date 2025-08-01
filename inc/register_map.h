@@ -89,6 +89,16 @@ typedef enum {
 #define REG_CANCONFB_ADDRESS_Pos                     (0UL)
 #define REG_CANCONFB_ADDRESS_Msk                     (0x00ff << REG_CANCONFB_ADDRESS_Pos)
 
+/*************** Bit definition for SerialConf register **********************/
+#define REG_SERIALCONF_SERIALMODE_Pos                (0UL)
+#define REG_SERIALCONF_SERIALMODE_Msk                (0x0003 << REG_SERIALCONF_SERIALMODE_Pos)
+#define REG_SERIALCONF_PARITYENABLED_Pos             (2UL)
+#define REG_SERIALCONF_PARITYENABLED_Msk             (0x0001 << REG_SERIALCONF_PARITYENABLED_Pos)
+#define REG_SERIALCONF_PARITYMODE_Pos                (3UL)
+#define REG_SERIALCONF_PARITYMODE_Msk                (0x0001 << REG_SERIALCONF_PARITYMODE_Pos)
+#define REG_SERIALCONF_BAUDRATES_Pos                 (4UL)
+#define REG_SERIALCONF_BAUDRATES_Msk                 (0x00ff << REG_SERIALCONF_BAUDRATES_Pos)
+
 /*************** Bit definition for PC104Pins register ***********************/
 #define REG_PC104PINS_ENA_Pos                        (0UL)
 #define REG_PC104PINS_ENA_Msk                        (0x0001 << REG_PC104PINS_ENA_Pos)
@@ -159,6 +169,10 @@ typedef enum {
 #define REG_RTOS_STATUS0_CANTARGETOUTGOINGOVERFLOW_Pos (8UL)
 #define REG_RTOS_STATUS0_CANTARGETOUTGOINGOVERFLOW_Msk (0x0001 << REG_RTOS_STATUS0_CANTARGETOUTGOINGOVERFLOW_Pos)
 
+/*************** Bit definition for PreviousEndpoint register ****************/
+#define REG_PREVIOUSENDPOINT_NUMBER_Pos              (8UL)
+#define REG_PREVIOUSENDPOINT_NUMBER_Msk              (0x00ff << REG_PREVIOUSENDPOINT_NUMBER_Pos)
+
 /*************** Bit definition for boardflag register ***********************/
 #define REG_BOARDFLAG_BOARDS_Pos                     (0UL)
 #define REG_BOARDFLAG_BOARDS_Msk                     (0x00ff << REG_BOARDFLAG_BOARDS_Pos)
@@ -187,7 +201,7 @@ typedef enum {
 #define REG_TE_CONFIG_DETECTED_Pos                   (1UL)
 #define REG_TE_CONFIG_DETECTED_Msk                   (0x0001 << REG_TE_CONFIG_DETECTED_Pos)
 #define REG_TE_CONFIG_TYPE_Pos                       (2UL)
-#define REG_TE_CONFIG_TYPE_Msk                       (0x000f << REG_TE_CONFIG_TYPE_Pos)
+#define REG_TE_CONFIG_TYPE_Msk                       (0x0003 << REG_TE_CONFIG_TYPE_Pos)
 #define REG_TE_CONFIG_SEL_CAN0_Pos                   (16UL)
 #define REG_TE_CONFIG_SEL_CAN0_Msk                   (0x0001 << REG_TE_CONFIG_SEL_CAN0_Pos)
 #define REG_TE_CONFIG_SEL_CAN1_Pos                   (17UL)
@@ -210,6 +224,70 @@ typedef enum {
 #define REG_TE_CONFIG_NRESET_Msk                     (0x0001 << REG_TE_CONFIG_NRESET_Pos)
 #define REG_TE_CONFIG_COMM_TR_Pos                    (27UL)
 #define REG_TE_CONFIG_COMM_TR_Msk                    (0x0001 << REG_TE_CONFIG_COMM_TR_Pos)
+
+/*************** Bit definition for MTC_Config register **********************/
+#define REG_MTC_CONFIG_SCANENABLED_Pos               (0UL)
+#define REG_MTC_CONFIG_SCANENABLED_Msk               (0x0001 << REG_MTC_CONFIG_SCANENABLED_Pos)
+#define REG_MTC_CONFIG_DETECTED_Pos                  (1UL)
+#define REG_MTC_CONFIG_DETECTED_Msk                  (0x0001 << REG_MTC_CONFIG_DETECTED_Pos)
+#define REG_MTC_CONFIG_TYPE_Pos                      (2UL)
+#define REG_MTC_CONFIG_TYPE_Msk                      (0x0003 << REG_MTC_CONFIG_TYPE_Pos)
+#define REG_MTC_CONFIG_ENABLE_1_Pos                  (4UL)
+#define REG_MTC_CONFIG_ENABLE_1_Msk                  (0x0001 << REG_MTC_CONFIG_ENABLE_1_Pos)
+#define REG_MTC_CONFIG_ENABLE_2_Pos                  (5UL)
+#define REG_MTC_CONFIG_ENABLE_2_Msk                  (0x0001 << REG_MTC_CONFIG_ENABLE_2_Pos)
+#define REG_MTC_CONFIG_SEL_I2C_1_Pos                 (6UL)
+#define REG_MTC_CONFIG_SEL_I2C_1_Msk                 (0x0001 << REG_MTC_CONFIG_SEL_I2C_1_Pos)
+#define REG_MTC_CONFIG_SEL_I2C_2_Pos                 (7UL)
+#define REG_MTC_CONFIG_SEL_I2C_2_Msk                 (0x0001 << REG_MTC_CONFIG_SEL_I2C_2_Pos)
+#define REG_MTC_CONFIG_SEL_UART_1_Pos                (8UL)
+#define REG_MTC_CONFIG_SEL_UART_1_Msk                (0x0001 << REG_MTC_CONFIG_SEL_UART_1_Pos)
+#define REG_MTC_CONFIG_SEL_UART_2_Pos                (9UL)
+#define REG_MTC_CONFIG_SEL_UART_2_Msk                (0x0001 << REG_MTC_CONFIG_SEL_UART_2_Pos)
+#define REG_MTC_CONFIG_SEL_UART_3_Pos                (10UL)
+#define REG_MTC_CONFIG_SEL_UART_3_Msk                (0x0001 << REG_MTC_CONFIG_SEL_UART_3_Pos)
+#define REG_MTC_CONFIG_SEL_UART_4_Pos                (11UL)
+#define REG_MTC_CONFIG_SEL_UART_4_Msk                (0x0001 << REG_MTC_CONFIG_SEL_UART_4_Pos)
+#define REG_MTC_CONFIG_SEL_UART_5_Pos                (12UL)
+#define REG_MTC_CONFIG_SEL_UART_5_Msk                (0x0001 << REG_MTC_CONFIG_SEL_UART_5_Pos)
+#define REG_MTC_CONFIG_SEL_UART_6_Pos                (13UL)
+#define REG_MTC_CONFIG_SEL_UART_6_Msk                (0x0001 << REG_MTC_CONFIG_SEL_UART_6_Pos)
+#define REG_MTC_CONFIG_SEL_VBAT_Pos                  (14UL)
+#define REG_MTC_CONFIG_SEL_VBAT_Msk                  (0x0001 << REG_MTC_CONFIG_SEL_VBAT_Pos)
+#define REG_MTC_CONFIG_SEL_VBAT_ALT_Pos              (15UL)
+#define REG_MTC_CONFIG_SEL_VBAT_ALT_Msk              (0x0001 << REG_MTC_CONFIG_SEL_VBAT_ALT_Pos)
+#define REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos             (16UL)
+#define REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk             (0x0001 << REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos)
+#define REG_MTC_CONFIG_SEL_NRESET_1_Pos              (17UL)
+#define REG_MTC_CONFIG_SEL_NRESET_1_Msk              (0x0001 << REG_MTC_CONFIG_SEL_NRESET_1_Pos)
+#define REG_MTC_CONFIG_SEL_NRESET_2_Pos              (18UL)
+#define REG_MTC_CONFIG_SEL_NRESET_2_Msk              (0x0001 << REG_MTC_CONFIG_SEL_NRESET_2_Pos)
+#define REG_MTC_CONFIG_SEL_NRESET_3_Pos              (19UL)
+#define REG_MTC_CONFIG_SEL_NRESET_3_Msk              (0x0001 << REG_MTC_CONFIG_SEL_NRESET_3_Pos)
+#define REG_MTC_CONFIG_SEL_CS_1_Pos                  (20UL)
+#define REG_MTC_CONFIG_SEL_CS_1_Msk                  (0x0001 << REG_MTC_CONFIG_SEL_CS_1_Pos)
+#define REG_MTC_CONFIG_SEL_CS_2_Pos                  (21UL)
+#define REG_MTC_CONFIG_SEL_CS_2_Msk                  (0x0001 << REG_MTC_CONFIG_SEL_CS_2_Pos)
+#define REG_MTC_CONFIG_SEL_CS_3_Pos                  (22UL)
+#define REG_MTC_CONFIG_SEL_CS_3_Msk                  (0x0001 << REG_MTC_CONFIG_SEL_CS_3_Pos)
+#define REG_MTC_CONFIG_SEL_CS_4_Pos                  (23UL)
+#define REG_MTC_CONFIG_SEL_CS_4_Msk                  (0x0001 << REG_MTC_CONFIG_SEL_CS_4_Pos)
+#define REG_MTC_CONFIG_SEL_CS_5_Pos                  (24UL)
+#define REG_MTC_CONFIG_SEL_CS_5_Msk                  (0x0001 << REG_MTC_CONFIG_SEL_CS_5_Pos)
+#define REG_MTC_CONFIG_SEL_CS_6_Pos                  (25UL)
+#define REG_MTC_CONFIG_SEL_CS_6_Msk                  (0x0001 << REG_MTC_CONFIG_SEL_CS_6_Pos)
+#define REG_MTC_CONFIG_SEL_SPI_1_Pos                 (26UL)
+#define REG_MTC_CONFIG_SEL_SPI_1_Msk                 (0x0001 << REG_MTC_CONFIG_SEL_SPI_1_Pos)
+#define REG_MTC_CONFIG_SEL_SPI_2_Pos                 (27UL)
+#define REG_MTC_CONFIG_SEL_SPI_2_Msk                 (0x0001 << REG_MTC_CONFIG_SEL_SPI_2_Pos)
+#define REG_MTC_CONFIG_SEL_CAN_1_Pos                 (28UL)
+#define REG_MTC_CONFIG_SEL_CAN_1_Msk                 (0x0001 << REG_MTC_CONFIG_SEL_CAN_1_Pos)
+#define REG_MTC_CONFIG_SEL_CAN_2_Pos                 (29UL)
+#define REG_MTC_CONFIG_SEL_CAN_2_Msk                 (0x0001 << REG_MTC_CONFIG_SEL_CAN_2_Pos)
+#define REG_MTC_CONFIG_SEL_CAN_3_Pos                 (30UL)
+#define REG_MTC_CONFIG_SEL_CAN_3_Msk                 (0x0001 << REG_MTC_CONFIG_SEL_CAN_3_Pos)
+#define REG_MTC_CONFIG_SEL_RS422_Pos                 (31UL)
+#define REG_MTC_CONFIG_SEL_RS422_Msk                 (0x0001 << REG_MTC_CONFIG_SEL_RS422_Pos)
 
 /*************** Bit definition for Multitester register *********************/
 #define REG_MULTITESTER_POS1_ENABLE_Pos              (0UL)
@@ -271,6 +349,7 @@ typedef struct {
     uint32_t ConfTempSense;
     uint32_t CANConfA;
     uint32_t CANConfB;
+    uint32_t SerialConf;
     uint32_t PC104Pins;
     uint32_t XTXMultitester;
     uint32_t RFRelaysConf;
@@ -322,7 +401,20 @@ typedef struct {
     uint32_t TE_Addr_3;
     uint32_t TE_Addr_3_Set;
     uint32_t TE_Addr_3_Clear;
+    uint32_t MTC_Addr_0;
+    uint32_t MTC_Addr_0_Set;
+    uint32_t MTC_Addr_0_Clear;
+    uint32_t MTC_Addr_1;
+    uint32_t MTC_Addr_1_Set;
+    uint32_t MTC_Addr_1_Clear;
+    uint32_t MTC_Addr_2;
+    uint32_t MTC_Addr_2_Set;
+    uint32_t MTC_Addr_2_Clear;
+    uint32_t MTC_Addr_3;
+    uint32_t MTC_Addr_3_Set;
+    uint32_t MTC_Addr_3_Clear;
     uint32_t RTOS_Status0;
+    uint32_t PreviousEndpoint;
 } mm_t;
 
 typedef enum {
@@ -350,6 +442,7 @@ typedef enum {
     reg_ConfTempSense_addr = 0x2C,
     reg_CANConfA_addr = 0x2D,
     reg_CANConfB_addr = 0x2E,
+    reg_SerialConf_addr = 0x2F,
     reg_PC104Pins_addr = 0x30,
     reg_XTXMultitester_addr = 0x31,
     reg_RFRelaysConf_addr = 0x32,
@@ -401,7 +494,20 @@ typedef enum {
     reg_TE_Addr_3_addr = 0x89,
     reg_TE_Addr_3_Set_addr = 0x8A,
     reg_TE_Addr_3_Clear_addr = 0x8B,
+    reg_MTC_Addr_0_addr = 0xB0,
+    reg_MTC_Addr_0_Set_addr = 0xB1,
+    reg_MTC_Addr_0_Clear_addr = 0xB2,
+    reg_MTC_Addr_1_addr = 0xB3,
+    reg_MTC_Addr_1_Set_addr = 0xB4,
+    reg_MTC_Addr_1_Clear_addr = 0xB5,
+    reg_MTC_Addr_2_addr = 0xB6,
+    reg_MTC_Addr_2_Set_addr = 0xB7,
+    reg_MTC_Addr_2_Clear_addr = 0xB8,
+    reg_MTC_Addr_3_addr = 0xB9,
+    reg_MTC_Addr_3_Set_addr = 0xBA,
+    reg_MTC_Addr_3_Clear_addr = 0xBB,
     reg_RTOS_Status0_addr = 0x90,
+    reg_PreviousEndpoint_addr = 0xA0,
 } mm_register_address_t;
 
 typedef enum {
@@ -424,6 +530,24 @@ typedef enum {
     reg_te_types_ud = 1,                            // uD Adaptor
     reg_te_types_gecko = 2,                         // Gecko Adaptor
 } mm_te_types_t;
+
+typedef enum {
+    reg_serialmode_uart = 0,                        // UART
+    reg_serialmode_rs485 = 1,                       // RS485
+    reg_serialmode_rs422 = 2,                       // RS422
+} mm_serialmode_t;
+
+typedef enum {
+    reg_paritymodes_odd = 0,                        // Odd
+    reg_paritymodes_even = 1,                       // Even
+} mm_paritymodes_t;
+
+typedef enum {
+    reg_usart_baudrates_baud_115200 = 0,            // 115200
+    reg_usart_baudrates_baud_230400 = 1,            // 230400
+    reg_usart_baudrates_baud_460800 = 2,            // 460800
+    reg_usart_baudrates_baud_921600 = 3,            // 921600
+} mm_usart_baudrates_t;
 
 void mm_init(void);
 mm_t * get_mm_ptr(void);
@@ -668,6 +792,22 @@ mm_response_t mm_getCANConfB(uint32_t * dest);
 mm_response_t mm_setCANConfB_Address(const uint8_t val);
 mm_response_t mm_getCANConfB_Address(uint8_t * dest);
 mm_response_t mm_getCANConfB_AddressFrom(uint8_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for SerialConf register ********************************************************************/
+mm_response_t mm_setSerialConf(const uint32_t val);
+mm_response_t mm_getSerialConf(uint32_t * dest);
+mm_response_t mm_setSerialConf_SerialMode(const mm_serialmode_t val);
+mm_response_t mm_getSerialConf_SerialMode(mm_serialmode_t * dest);
+mm_response_t mm_getSerialConf_SerialModeFrom(mm_serialmode_t * dest, const uint32_t source);
+mm_response_t mm_setSerialConf_ParityEnabled(const mm_enabled_t val);
+mm_response_t mm_getSerialConf_ParityEnabled(mm_enabled_t * dest);
+mm_response_t mm_getSerialConf_ParityEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setSerialConf_ParityMode(const mm_paritymodes_t val);
+mm_response_t mm_getSerialConf_ParityMode(mm_paritymodes_t * dest);
+mm_response_t mm_getSerialConf_ParityModeFrom(mm_paritymodes_t * dest, const uint32_t source);
+mm_response_t mm_setSerialConf_BaudRates(const mm_usart_baudrates_t val);
+mm_response_t mm_getSerialConf_BaudRates(mm_usart_baudrates_t * dest);
+mm_response_t mm_getSerialConf_BaudRatesFrom(mm_usart_baudrates_t * dest, const uint32_t source);
 
 /*************** Get/Set functions for PC104Pins register *********************************************************************/
 mm_response_t mm_setPC104Pins(const uint32_t val);
@@ -1616,6 +1756,1170 @@ mm_response_t mm_setTE_Addr_3_Clear_COMM_TR(const mm_enabled_t val);
 mm_response_t mm_getTE_Addr_3_Clear_COMM_TR(mm_enabled_t * dest);
 mm_response_t mm_getTE_Addr_3_Clear_COMM_TRFrom(mm_enabled_t * dest, const uint32_t source);
 
+/*************** Get/Set functions for MTC_Addr_0 register ********************************************************************/
+mm_response_t mm_setMTC_Addr_0(const uint32_t val);
+mm_response_t mm_getMTC_Addr_0(uint32_t * dest);
+mm_response_t mm_setMTC_Addr_0_ScanEnabled(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_ScanEnabled(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Detected(const bool val);
+mm_response_t mm_getMTC_Addr_0_Detected(bool * dest);
+mm_response_t mm_getMTC_Addr_0_DetectedFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Type(const uint32_t val);
+mm_response_t mm_getMTC_Addr_0_Type(uint32_t * dest);
+mm_response_t mm_getMTC_Addr_0_TypeFrom(uint32_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_ENABLE_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_ENABLE_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_ENABLE_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_ENABLE_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_ENABLE_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_ENABLE_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_SEL_I2C_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_SEL_I2C_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_SEL_I2C_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_SEL_I2C_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_SEL_UART_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_SEL_UART_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_SEL_UART_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_SEL_UART_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_SEL_UART_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_SEL_UART_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_SEL_UART_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_SEL_UART_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_SEL_UART_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_SEL_UART_4(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_SEL_UART_4(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_SEL_UART_4From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_SEL_UART_5(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_SEL_UART_5(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_SEL_UART_5From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_SEL_UART_6(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_SEL_UART_6(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_SEL_UART_6From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_SEL_VBAT(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_SEL_VBAT(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_SEL_VBAT_ALT(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_SEL_VBAT_ALT(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_SEL_VBAT_FPGA(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_SEL_VBAT_FPGA(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_SEL_nRESET_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_SEL_nRESET_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_SEL_nRESET_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_SEL_nRESET_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_SEL_nRESET_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_SEL_nRESET_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_SEL_nRESET_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_SEL_nRESET_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_SEL_nRESET_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_SEL_CS_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_SEL_CS_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_SEL_CS_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_SEL_CS_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_SEL_CS_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_SEL_CS_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_SEL_CS_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_SEL_CS_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_SEL_CS_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_SEL_CS_4(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_SEL_CS_4(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_SEL_CS_4From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_SEL_CS_5(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_SEL_CS_5(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_SEL_CS_5From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_SEL_CS_6(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_SEL_CS_6(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_SEL_CS_6From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_SEL_SPI_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_SEL_SPI_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_SEL_SPI_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_SEL_SPI_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_SEL_CAN_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_SEL_CAN_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_SEL_CAN_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_SEL_CAN_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_SEL_CAN_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_SEL_CAN_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_SEL_RS422(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_SEL_RS422(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_SEL_RS422From(mm_enabled_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for MTC_Addr_0_Set register ****************************************************************/
+mm_response_t mm_setMTC_Addr_0_Set(const uint32_t val);
+mm_response_t mm_getMTC_Addr_0_Set(uint32_t * dest);
+mm_response_t mm_setMTC_Addr_0_Set_ScanEnabled(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_ScanEnabled(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_Detected(const bool val);
+mm_response_t mm_getMTC_Addr_0_Set_Detected(bool * dest);
+mm_response_t mm_getMTC_Addr_0_Set_DetectedFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_Type(const uint32_t val);
+mm_response_t mm_getMTC_Addr_0_Set_Type(uint32_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_TypeFrom(uint32_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_ENABLE_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_ENABLE_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_ENABLE_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_ENABLE_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_ENABLE_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_ENABLE_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_SEL_I2C_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_I2C_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_SEL_I2C_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_I2C_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_SEL_UART_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_SEL_UART_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_SEL_UART_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_SEL_UART_4(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_4(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_4From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_SEL_UART_5(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_5(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_5From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_SEL_UART_6(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_6(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_6From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_SEL_VBAT(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_VBAT(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_SEL_VBAT_ALT(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_VBAT_ALT(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_SEL_VBAT_FPGA(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_VBAT_FPGA(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_SEL_nRESET_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_nRESET_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_nRESET_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_SEL_nRESET_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_nRESET_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_nRESET_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_SEL_nRESET_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_nRESET_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_nRESET_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_SEL_CS_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_SEL_CS_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_SEL_CS_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_SEL_CS_4(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_4(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_4From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_SEL_CS_5(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_5(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_5From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_SEL_CS_6(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_6(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_6From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_SEL_SPI_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_SPI_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_SEL_SPI_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_SPI_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_SEL_CAN_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CAN_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_SEL_CAN_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CAN_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_SEL_CAN_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CAN_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Set_SEL_RS422(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_RS422(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Set_SEL_RS422From(mm_enabled_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for MTC_Addr_0_Clear register **************************************************************/
+mm_response_t mm_setMTC_Addr_0_Clear(const uint32_t val);
+mm_response_t mm_getMTC_Addr_0_Clear(uint32_t * dest);
+mm_response_t mm_setMTC_Addr_0_Clear_ScanEnabled(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_ScanEnabled(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_Detected(const bool val);
+mm_response_t mm_getMTC_Addr_0_Clear_Detected(bool * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_DetectedFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_Type(const uint32_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_Type(uint32_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_TypeFrom(uint32_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_ENABLE_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_ENABLE_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_ENABLE_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_ENABLE_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_ENABLE_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_ENABLE_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_I2C_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_I2C_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_I2C_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_I2C_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_UART_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_UART_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_UART_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_UART_4(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_4(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_4From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_UART_5(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_5(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_5From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_UART_6(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_6(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_6From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_VBAT(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_VBAT(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_VBAT_ALT(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_VBAT_ALT(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_VBAT_FPGA(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_VBAT_FPGA(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_nRESET_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_nRESET_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_nRESET_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_nRESET_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_nRESET_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_nRESET_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_nRESET_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_nRESET_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_nRESET_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_CS_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_CS_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_CS_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_CS_4(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_4(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_4From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_CS_5(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_5(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_5From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_CS_6(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_6(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_6From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_SPI_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_SPI_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_SPI_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_SPI_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_CAN_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CAN_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_CAN_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CAN_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_CAN_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CAN_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_RS422(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_RS422(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_RS422From(mm_enabled_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for MTC_Addr_1 register ********************************************************************/
+mm_response_t mm_setMTC_Addr_1(const uint32_t val);
+mm_response_t mm_getMTC_Addr_1(uint32_t * dest);
+mm_response_t mm_setMTC_Addr_1_ScanEnabled(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_ScanEnabled(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Detected(const bool val);
+mm_response_t mm_getMTC_Addr_1_Detected(bool * dest);
+mm_response_t mm_getMTC_Addr_1_DetectedFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Type(const uint32_t val);
+mm_response_t mm_getMTC_Addr_1_Type(uint32_t * dest);
+mm_response_t mm_getMTC_Addr_1_TypeFrom(uint32_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_ENABLE_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_ENABLE_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_ENABLE_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_ENABLE_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_ENABLE_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_ENABLE_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_SEL_I2C_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_SEL_I2C_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_SEL_I2C_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_SEL_I2C_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_SEL_UART_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_SEL_UART_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_SEL_UART_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_SEL_UART_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_SEL_UART_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_SEL_UART_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_SEL_UART_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_SEL_UART_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_SEL_UART_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_SEL_UART_4(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_SEL_UART_4(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_SEL_UART_4From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_SEL_UART_5(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_SEL_UART_5(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_SEL_UART_5From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_SEL_UART_6(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_SEL_UART_6(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_SEL_UART_6From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_SEL_VBAT(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_SEL_VBAT(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_SEL_VBAT_ALT(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_SEL_VBAT_ALT(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_SEL_VBAT_FPGA(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_SEL_VBAT_FPGA(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_SEL_nRESET_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_SEL_nRESET_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_SEL_nRESET_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_SEL_nRESET_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_SEL_nRESET_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_SEL_nRESET_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_SEL_nRESET_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_SEL_nRESET_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_SEL_nRESET_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_SEL_CS_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_SEL_CS_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_SEL_CS_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_SEL_CS_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_SEL_CS_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_SEL_CS_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_SEL_CS_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_SEL_CS_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_SEL_CS_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_SEL_CS_4(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_SEL_CS_4(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_SEL_CS_4From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_SEL_CS_5(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_SEL_CS_5(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_SEL_CS_5From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_SEL_CS_6(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_SEL_CS_6(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_SEL_CS_6From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_SEL_SPI_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_SEL_SPI_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_SEL_SPI_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_SEL_SPI_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_SEL_CAN_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_SEL_CAN_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_SEL_CAN_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_SEL_CAN_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_SEL_CAN_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_SEL_CAN_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_SEL_RS422(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_SEL_RS422(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_SEL_RS422From(mm_enabled_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for MTC_Addr_1_Set register ****************************************************************/
+mm_response_t mm_setMTC_Addr_1_Set(const uint32_t val);
+mm_response_t mm_getMTC_Addr_1_Set(uint32_t * dest);
+mm_response_t mm_setMTC_Addr_1_Set_ScanEnabled(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_ScanEnabled(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_Detected(const bool val);
+mm_response_t mm_getMTC_Addr_1_Set_Detected(bool * dest);
+mm_response_t mm_getMTC_Addr_1_Set_DetectedFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_Type(const uint32_t val);
+mm_response_t mm_getMTC_Addr_1_Set_Type(uint32_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_TypeFrom(uint32_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_ENABLE_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_ENABLE_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_ENABLE_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_ENABLE_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_ENABLE_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_ENABLE_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_SEL_I2C_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_I2C_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_SEL_I2C_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_I2C_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_SEL_UART_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_SEL_UART_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_SEL_UART_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_SEL_UART_4(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_4(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_4From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_SEL_UART_5(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_5(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_5From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_SEL_UART_6(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_6(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_6From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_SEL_VBAT(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_VBAT(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_SEL_VBAT_ALT(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_VBAT_ALT(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_SEL_VBAT_FPGA(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_VBAT_FPGA(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_SEL_nRESET_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_nRESET_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_nRESET_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_SEL_nRESET_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_nRESET_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_nRESET_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_SEL_nRESET_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_nRESET_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_nRESET_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_SEL_CS_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_SEL_CS_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_SEL_CS_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_SEL_CS_4(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_4(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_4From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_SEL_CS_5(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_5(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_5From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_SEL_CS_6(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_6(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_6From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_SEL_SPI_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_SPI_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_SEL_SPI_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_SPI_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_SEL_CAN_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CAN_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_SEL_CAN_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CAN_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_SEL_CAN_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CAN_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Set_SEL_RS422(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_RS422(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Set_SEL_RS422From(mm_enabled_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for MTC_Addr_1_Clear register **************************************************************/
+mm_response_t mm_setMTC_Addr_1_Clear(const uint32_t val);
+mm_response_t mm_getMTC_Addr_1_Clear(uint32_t * dest);
+mm_response_t mm_setMTC_Addr_1_Clear_ScanEnabled(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_ScanEnabled(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_Detected(const bool val);
+mm_response_t mm_getMTC_Addr_1_Clear_Detected(bool * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_DetectedFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_Type(const uint32_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_Type(uint32_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_TypeFrom(uint32_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_ENABLE_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_ENABLE_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_ENABLE_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_ENABLE_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_ENABLE_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_ENABLE_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_I2C_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_I2C_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_I2C_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_I2C_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_UART_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_UART_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_UART_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_UART_4(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_4(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_4From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_UART_5(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_5(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_5From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_UART_6(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_6(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_6From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_VBAT(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_VBAT(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_VBAT_ALT(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_VBAT_ALT(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_VBAT_FPGA(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_VBAT_FPGA(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_nRESET_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_nRESET_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_nRESET_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_nRESET_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_nRESET_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_nRESET_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_nRESET_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_nRESET_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_nRESET_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_CS_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_CS_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_CS_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_CS_4(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_4(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_4From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_CS_5(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_5(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_5From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_CS_6(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_6(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_6From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_SPI_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_SPI_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_SPI_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_SPI_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_CAN_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CAN_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_CAN_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CAN_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_CAN_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CAN_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_RS422(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_RS422(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_RS422From(mm_enabled_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for MTC_Addr_2 register ********************************************************************/
+mm_response_t mm_setMTC_Addr_2(const uint32_t val);
+mm_response_t mm_getMTC_Addr_2(uint32_t * dest);
+mm_response_t mm_setMTC_Addr_2_ScanEnabled(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_ScanEnabled(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Detected(const bool val);
+mm_response_t mm_getMTC_Addr_2_Detected(bool * dest);
+mm_response_t mm_getMTC_Addr_2_DetectedFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Type(const uint32_t val);
+mm_response_t mm_getMTC_Addr_2_Type(uint32_t * dest);
+mm_response_t mm_getMTC_Addr_2_TypeFrom(uint32_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_ENABLE_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_ENABLE_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_ENABLE_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_ENABLE_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_ENABLE_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_ENABLE_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_SEL_I2C_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_SEL_I2C_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_SEL_I2C_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_SEL_I2C_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_SEL_UART_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_SEL_UART_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_SEL_UART_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_SEL_UART_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_SEL_UART_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_SEL_UART_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_SEL_UART_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_SEL_UART_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_SEL_UART_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_SEL_UART_4(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_SEL_UART_4(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_SEL_UART_4From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_SEL_UART_5(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_SEL_UART_5(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_SEL_UART_5From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_SEL_UART_6(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_SEL_UART_6(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_SEL_UART_6From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_SEL_VBAT(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_SEL_VBAT(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_SEL_VBAT_ALT(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_SEL_VBAT_ALT(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_SEL_VBAT_FPGA(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_SEL_VBAT_FPGA(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_SEL_nRESET_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_SEL_nRESET_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_SEL_nRESET_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_SEL_nRESET_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_SEL_nRESET_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_SEL_nRESET_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_SEL_nRESET_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_SEL_nRESET_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_SEL_nRESET_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_SEL_CS_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_SEL_CS_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_SEL_CS_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_SEL_CS_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_SEL_CS_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_SEL_CS_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_SEL_CS_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_SEL_CS_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_SEL_CS_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_SEL_CS_4(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_SEL_CS_4(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_SEL_CS_4From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_SEL_CS_5(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_SEL_CS_5(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_SEL_CS_5From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_SEL_CS_6(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_SEL_CS_6(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_SEL_CS_6From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_SEL_SPI_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_SEL_SPI_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_SEL_SPI_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_SEL_SPI_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_SEL_CAN_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_SEL_CAN_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_SEL_CAN_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_SEL_CAN_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_SEL_CAN_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_SEL_CAN_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_SEL_RS422(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_SEL_RS422(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_SEL_RS422From(mm_enabled_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for MTC_Addr_2_Set register ****************************************************************/
+mm_response_t mm_setMTC_Addr_2_Set(const uint32_t val);
+mm_response_t mm_getMTC_Addr_2_Set(uint32_t * dest);
+mm_response_t mm_setMTC_Addr_2_Set_ScanEnabled(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_ScanEnabled(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_Detected(const bool val);
+mm_response_t mm_getMTC_Addr_2_Set_Detected(bool * dest);
+mm_response_t mm_getMTC_Addr_2_Set_DetectedFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_Type(const uint32_t val);
+mm_response_t mm_getMTC_Addr_2_Set_Type(uint32_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_TypeFrom(uint32_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_ENABLE_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_ENABLE_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_ENABLE_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_ENABLE_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_ENABLE_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_ENABLE_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_SEL_I2C_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_I2C_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_SEL_I2C_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_I2C_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_SEL_UART_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_SEL_UART_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_SEL_UART_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_SEL_UART_4(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_4(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_4From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_SEL_UART_5(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_5(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_5From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_SEL_UART_6(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_6(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_6From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_SEL_VBAT(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_VBAT(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_SEL_VBAT_ALT(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_VBAT_ALT(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_SEL_VBAT_FPGA(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_VBAT_FPGA(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_SEL_nRESET_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_nRESET_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_nRESET_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_SEL_nRESET_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_nRESET_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_nRESET_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_SEL_nRESET_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_nRESET_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_nRESET_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_SEL_CS_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_SEL_CS_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_SEL_CS_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_SEL_CS_4(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_4(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_4From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_SEL_CS_5(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_5(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_5From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_SEL_CS_6(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_6(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_6From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_SEL_SPI_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_SPI_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_SEL_SPI_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_SPI_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_SEL_CAN_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CAN_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_SEL_CAN_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CAN_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_SEL_CAN_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CAN_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Set_SEL_RS422(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_RS422(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Set_SEL_RS422From(mm_enabled_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for MTC_Addr_2_Clear register **************************************************************/
+mm_response_t mm_setMTC_Addr_2_Clear(const uint32_t val);
+mm_response_t mm_getMTC_Addr_2_Clear(uint32_t * dest);
+mm_response_t mm_setMTC_Addr_2_Clear_ScanEnabled(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_ScanEnabled(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_Detected(const bool val);
+mm_response_t mm_getMTC_Addr_2_Clear_Detected(bool * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_DetectedFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_Type(const uint32_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_Type(uint32_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_TypeFrom(uint32_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_ENABLE_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_ENABLE_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_ENABLE_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_ENABLE_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_ENABLE_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_ENABLE_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_I2C_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_I2C_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_I2C_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_I2C_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_UART_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_UART_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_UART_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_UART_4(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_4(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_4From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_UART_5(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_5(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_5From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_UART_6(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_6(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_6From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_VBAT(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_VBAT(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_VBAT_ALT(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_VBAT_ALT(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_VBAT_FPGA(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_VBAT_FPGA(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_nRESET_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_nRESET_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_nRESET_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_nRESET_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_nRESET_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_nRESET_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_nRESET_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_nRESET_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_nRESET_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_CS_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_CS_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_CS_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_CS_4(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_4(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_4From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_CS_5(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_5(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_5From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_CS_6(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_6(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_6From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_SPI_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_SPI_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_SPI_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_SPI_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_CAN_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CAN_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_CAN_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CAN_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_CAN_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CAN_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_RS422(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_RS422(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_RS422From(mm_enabled_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for MTC_Addr_3 register ********************************************************************/
+mm_response_t mm_setMTC_Addr_3(const uint32_t val);
+mm_response_t mm_getMTC_Addr_3(uint32_t * dest);
+mm_response_t mm_setMTC_Addr_3_ScanEnabled(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_ScanEnabled(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Detected(const bool val);
+mm_response_t mm_getMTC_Addr_3_Detected(bool * dest);
+mm_response_t mm_getMTC_Addr_3_DetectedFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Type(const uint32_t val);
+mm_response_t mm_getMTC_Addr_3_Type(uint32_t * dest);
+mm_response_t mm_getMTC_Addr_3_TypeFrom(uint32_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_ENABLE_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_ENABLE_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_ENABLE_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_ENABLE_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_ENABLE_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_ENABLE_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_SEL_I2C_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_SEL_I2C_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_SEL_I2C_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_SEL_I2C_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_SEL_UART_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_SEL_UART_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_SEL_UART_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_SEL_UART_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_SEL_UART_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_SEL_UART_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_SEL_UART_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_SEL_UART_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_SEL_UART_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_SEL_UART_4(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_SEL_UART_4(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_SEL_UART_4From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_SEL_UART_5(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_SEL_UART_5(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_SEL_UART_5From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_SEL_UART_6(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_SEL_UART_6(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_SEL_UART_6From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_SEL_VBAT(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_SEL_VBAT(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_SEL_VBAT_ALT(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_SEL_VBAT_ALT(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_SEL_VBAT_FPGA(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_SEL_VBAT_FPGA(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_SEL_nRESET_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_SEL_nRESET_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_SEL_nRESET_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_SEL_nRESET_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_SEL_nRESET_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_SEL_nRESET_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_SEL_nRESET_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_SEL_nRESET_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_SEL_nRESET_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_SEL_CS_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_SEL_CS_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_SEL_CS_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_SEL_CS_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_SEL_CS_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_SEL_CS_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_SEL_CS_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_SEL_CS_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_SEL_CS_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_SEL_CS_4(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_SEL_CS_4(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_SEL_CS_4From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_SEL_CS_5(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_SEL_CS_5(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_SEL_CS_5From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_SEL_CS_6(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_SEL_CS_6(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_SEL_CS_6From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_SEL_SPI_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_SEL_SPI_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_SEL_SPI_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_SEL_SPI_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_SEL_CAN_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_SEL_CAN_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_SEL_CAN_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_SEL_CAN_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_SEL_CAN_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_SEL_CAN_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_SEL_RS422(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_SEL_RS422(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_SEL_RS422From(mm_enabled_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for MTC_Addr_3_Set register ****************************************************************/
+mm_response_t mm_setMTC_Addr_3_Set(const uint32_t val);
+mm_response_t mm_getMTC_Addr_3_Set(uint32_t * dest);
+mm_response_t mm_setMTC_Addr_3_Set_ScanEnabled(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_ScanEnabled(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_Detected(const bool val);
+mm_response_t mm_getMTC_Addr_3_Set_Detected(bool * dest);
+mm_response_t mm_getMTC_Addr_3_Set_DetectedFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_Type(const uint32_t val);
+mm_response_t mm_getMTC_Addr_3_Set_Type(uint32_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_TypeFrom(uint32_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_ENABLE_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_ENABLE_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_ENABLE_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_ENABLE_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_ENABLE_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_ENABLE_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_SEL_I2C_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_I2C_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_SEL_I2C_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_I2C_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_SEL_UART_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_SEL_UART_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_SEL_UART_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_SEL_UART_4(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_4(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_4From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_SEL_UART_5(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_5(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_5From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_SEL_UART_6(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_6(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_6From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_SEL_VBAT(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_VBAT(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_SEL_VBAT_ALT(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_VBAT_ALT(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_SEL_VBAT_FPGA(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_VBAT_FPGA(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_SEL_nRESET_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_nRESET_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_nRESET_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_SEL_nRESET_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_nRESET_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_nRESET_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_SEL_nRESET_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_nRESET_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_nRESET_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_SEL_CS_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_SEL_CS_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_SEL_CS_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_SEL_CS_4(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_4(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_4From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_SEL_CS_5(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_5(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_5From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_SEL_CS_6(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_6(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_6From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_SEL_SPI_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_SPI_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_SEL_SPI_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_SPI_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_SEL_CAN_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CAN_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_SEL_CAN_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CAN_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_SEL_CAN_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CAN_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Set_SEL_RS422(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_RS422(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Set_SEL_RS422From(mm_enabled_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for MTC_Addr_3_Clear register **************************************************************/
+mm_response_t mm_setMTC_Addr_3_Clear(const uint32_t val);
+mm_response_t mm_getMTC_Addr_3_Clear(uint32_t * dest);
+mm_response_t mm_setMTC_Addr_3_Clear_ScanEnabled(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_ScanEnabled(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_Detected(const bool val);
+mm_response_t mm_getMTC_Addr_3_Clear_Detected(bool * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_DetectedFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_Type(const uint32_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_Type(uint32_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_TypeFrom(uint32_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_ENABLE_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_ENABLE_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_ENABLE_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_ENABLE_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_ENABLE_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_ENABLE_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_I2C_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_I2C_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_I2C_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_I2C_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_UART_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_UART_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_UART_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_UART_4(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_4(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_4From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_UART_5(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_5(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_5From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_UART_6(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_6(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_6From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_VBAT(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_VBAT(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_VBAT_ALT(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_VBAT_ALT(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_VBAT_FPGA(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_VBAT_FPGA(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_nRESET_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_nRESET_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_nRESET_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_nRESET_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_nRESET_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_nRESET_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_nRESET_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_nRESET_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_nRESET_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_CS_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_CS_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_CS_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_CS_4(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_4(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_4From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_CS_5(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_5(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_5From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_CS_6(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_6(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_6From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_SPI_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_SPI_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_SPI_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_SPI_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_CAN_1(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CAN_1(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_CAN_2(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CAN_2(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_CAN_3(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CAN_3(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t source);
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_RS422(const mm_enabled_t val);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_RS422(mm_enabled_t * dest);
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_RS422From(mm_enabled_t * dest, const uint32_t source);
+
 /*************** Get/Set functions for RTOS_Status0 register ******************************************************************/
 mm_response_t mm_setRTOS_Status0(const uint32_t val);
 mm_response_t mm_getRTOS_Status0(uint32_t * dest);
@@ -1646,6 +2950,13 @@ mm_response_t mm_getRTOS_Status0_CANInterruptBufferOverflowFrom(bool * dest, con
 mm_response_t mm_setRTOS_Status0_CANTargetOutgoingOverflow(const bool val);
 mm_response_t mm_getRTOS_Status0_CANTargetOutgoingOverflow(bool * dest);
 mm_response_t mm_getRTOS_Status0_CANTargetOutgoingOverflowFrom(bool * dest, const uint32_t source);
+
+/*************** Get/Set functions for PreviousEndpoint register **************************************************************/
+mm_response_t mm_setPreviousEndpoint(const uint32_t val);
+mm_response_t mm_getPreviousEndpoint(uint32_t * dest);
+mm_response_t mm_setPreviousEndpoint_Number(const uint8_t val);
+mm_response_t mm_getPreviousEndpoint_Number(uint8_t * dest);
+mm_response_t mm_getPreviousEndpoint_NumberFrom(uint8_t * dest, const uint32_t source);
 
 
 #endif /* memory_map_h */

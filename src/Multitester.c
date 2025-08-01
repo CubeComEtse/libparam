@@ -10,8 +10,9 @@
 #include <assert.h>
 #include "register_map.h"
 #include "pca9555.h"
-
 #include "event.h"
+#include "FreeRTOS.h"
+#include "task.h"
 
 // The I2C Expander has two ports, with 8 outputs each. Outputs 0-3 are for Position1, 4-7
 // are the same but for port2. The pins are repeated in the same order, so we can use an offset
@@ -315,4 +316,121 @@ void MULTI_SetAutoClear(multitester_t * pHandle, bool value)
 
 void MULTI_SetScanEnabled(multitester_t * pHandle, bool value){
 	pHandle->scan_enabled = value;
+}
+
+
+void MTCV2_Init(multitester_t * handle) {
+	assert(handle->i2c_write_function);
+	assert(handle->i2c_read_function);
+	handle->state = UNINITIALIZED;
+	TMR_vCreate(&handle->update_timer, TMR_SOURCE_SYSTICK);
+	handle->new_portbits = 0x00;
+	handle->previous_portbits = 0x00;
+}
+
+
+/**
+ * @brief Sets specified bits in the new_portbits field of multitester handle.
+ * 
+ * This function performs a bitwise OR operation to add one or more bits to 
+ * the new_portbits value, indicating pins to be set on the port.
+ *
+ * @param pHandle Pointer to multitester handle structure.
+ * @param bits Bitmask specifying which bits to set.
+ */
+void MTCV2_SetBits(multitester_t * pHandle, uint32_t bits) {
+	assert(pHandle);
+	pHandle->new_portbits |= bits;
+}
+
+
+/**
+ * @brief Clears specified bits in the new_portbits field of multitester handle.
+ * 
+ * This function performs a bitwise AND with the inverse of bits to clear 
+ * specific bits in the new_portbits value, indicating pins to be cleared.
+ *
+ * @param pHandle Pointer to multitester handle structure.
+ * @param bits Bitmask specifying which bits to clear.
+ */
+void MTCV2_ClearBits(multitester_t * pHandle, uint32_t bits) {
+	assert(pHandle);
+	pHandle->new_portbits &= ~bits;
+}
+
+
+/**
+ * @brief Main task for managing multitester I2C communication and port state.
+ * 
+ * This function runs continuously, updating port values 
+ * over I2C when changes occur.
+ *
+ * @param vHandle Pointer to multitester handle (void cast).
+ */
+
+void MTCV2_Task(void * vHandle) {
+	
+		assert(vHandle);
+		multitester_t * pHandle = (multitester_t *) vHandle;
+		
+		// Data buffer for I2C transmission
+		uint8_t buffer[] = {0x00, 0x00, 0x00, 0x00, 0x00};
+		
+		while (1) {
+
+			switch (pHandle->state) {
+			case UNINITIALIZED:
+				if (TMR_bIsExpired(&pHandle->update_timer)) {
+					TMR_vStart(&pHandle->update_timer, 100);
+					pHandle->state = INITIALIZING;
+				}
+				break;
+				
+			case INITIALIZING:
+				pHandle->state = IDLE;
+				break;
+				
+			case IDLE:
+				// If port bits have changed, send update over I2C
+				if (pHandle->new_portbits != pHandle->previous_portbits) {
+					
+					buffer[0] = 0x01;
+					buffer[1] = pHandle->new_portbits & 0xFF;
+					buffer[2] = (pHandle->new_portbits >> 8) & 0xFF;
+					buffer[3] = (pHandle->new_portbits >> 16) & 0xFF;
+					buffer[4] = (pHandle->new_portbits >> 24) & 0xFF;
+					pHandle->i2c_write_function(pHandle->i2c_handle, pHandle->i2c_address, buffer, 5);
+					
+					// Update value in memorymap
+					uint32_t existing = 0;
+					switch (pHandle->i2c_address) {
+						case 0x51:  
+							mm_setMTC_Addr_0(pHandle->new_portbits);
+							break;
+						case 0x52:
+							mm_setMTC_Addr_1(pHandle->new_portbits);
+							break;
+						case 0x53:
+							mm_setMTC_Addr_2(pHandle->new_portbits);
+							break;
+						case 0x54:
+							mm_setMTC_Addr_3(pHandle->new_portbits);
+							break;
+					}
+
+					pHandle->previous_portbits = pHandle->new_portbits;
+				}
+				
+				if (TMR_bIsExpired(&pHandle->update_timer)) {
+					TMR_vStart(&pHandle->update_timer, 1000);
+					pHandle->state = UNINITIALIZED;
+				}
+				break;
+				
+			}
+			
+			vTaskDelay(pdMS_TO_TICKS(20));
+			
+		}
+	
 }
