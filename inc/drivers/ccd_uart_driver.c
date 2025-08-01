@@ -389,7 +389,7 @@ size_t ccd_b_uart_Receive_message(void * vHandle, uint8_t * data, size_t data_le
 	
 	ccd_uart_t * pHandle = (ccd_uart_t*) vHandle;
 
-	size_t bytes_received = xStreamBufferReceive(pHandle->uart_rx_buffer, data, data_len, pdMS_TO_TICKS(500));
+	size_t bytes_received = xStreamBufferReceive(pHandle->uart_rx_buffer, data, data_len, portMAX_DELAY);
 	
 	return bytes_received;
 	

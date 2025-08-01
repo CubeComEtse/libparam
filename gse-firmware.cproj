@@ -369,8 +369,6 @@
       <Value>../src/ASF/sam/utils/cmsis/samv71/source/templates</Value>
       <Value>../src/ASF/sam/utils/cmsis/samv71/include</Value>
       <Value>../src/ASF/common/boards/user_board</Value>
-      <Value>../src</Value>
-      <Value>../src/config</Value>
       <Value>../src/ASF/sam/drivers/pmc</Value>
       <Value>../src/ASF/sam/drivers/uart</Value>
       <Value>../src/ASF/common/services/clock</Value>
@@ -379,6 +377,7 @@
       <Value>../src/ASF/sam/drivers/usart</Value>
       <Value>../src/ASF/common/services/ioport</Value>
       <Value>../src/ASF/common/services/delay</Value>
+      <Value>../src/ASF</Value>
       <Value>../src/ASF/sam/drivers/spi</Value>
       <Value>../src/ASF/common/services/spi/sam_spi</Value>
       <Value>../src/ASF/common/services/spi</Value>
@@ -391,6 +390,12 @@
       <Value>../src/ASF/sam/drivers/tc</Value>
       <Value>../src/ASF/sam/drivers/rtc</Value>
       <Value>../src/ASF/sam/drivers/xdmac</Value>
+      <Value>../inc</Value>
+      <Value>../inc/board</Value>
+      <Value>../inc/drivers</Value>
+      <Value>../inc/freertos</Value>
+      <Value>../inc/config</Value>
+      <Value>../src/freertos/portable/GCC/ARM_CM7/r0p1</Value>
     </ListValues>
   </armgcc.compiler.directories.IncludePaths>
   <armgcc.compiler.optimization.level>Optimize for size (-Os)</armgcc.compiler.optimization.level>
@@ -410,7 +415,7 @@
     </ListValues>
   </armgcc.linker.libraries.LibrarySearchPaths>
   <armgcc.linker.optimization.GarbageCollectUnusedSections>True</armgcc.linker.optimization.GarbageCollectUnusedSections>
-  <armgcc.linker.miscellaneous.LinkerFlags>-Wl,--entry=Reset_Handler -Wl,--cref -mthumb -T../src/ASF/sam/utils/linker_scripts/samv71/samv71q21/gcc/flash.ld</armgcc.linker.miscellaneous.LinkerFlags>
+  <armgcc.linker.miscellaneous.LinkerFlags>-Wl,--entry=Reset_Handler -Wl,--cref -mthumb -T../linker/flash.ld</armgcc.linker.miscellaneous.LinkerFlags>
   <armgcc.assembler.general.IncludePaths>
     <ListValues>
       <Value>../src/ASF/common/boards</Value>
@@ -488,6 +493,7 @@
   </armgcc.preprocessingassembler.general.IncludePaths>
 </ArmGcc>
     </ToolchainSettings>
+    <PreBuildEvent>dir</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
@@ -646,6 +652,12 @@
   <armgcc.preprocessingassembler.debugging.DebugLevel>Default (-Wa,-g)</armgcc.preprocessingassembler.debugging.DebugLevel>
 </ArmGcc>
     </ToolchainSettings>
+    <UsesExternalMakeFile>False</UsesExternalMakeFile>
+    <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
+    <BuildTarget>all</BuildTarget>
+    <CleanTarget>clean</CleanTarget>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Debug\" />

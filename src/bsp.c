@@ -203,7 +203,7 @@ static void BSP_vInitUART(bsp_t * bsp){
 	bus_uart.uart_rx_pin = B_USART_RX_PIN;
 	
 	// Priority 4- much lower
-	ccd_uart_Init(&bus_uart, B_USART, 4);
+	ccd_uart_Init(&bus_uart, B_USART, 3);
 	
 	bsp->bus_uart = &bus_uart; 
 }
@@ -278,7 +278,7 @@ void BSP_vInitGPIO(void) {
 	}
 	
 	// GSE version 2 has 4 debug pins
-	if (BSP_u8GetVersion() == 1){
+	if (BSP_u8GetVersion() == 1 || BSP_u8GetVersion() == 2){
 		ioport_enable_pin(PIN_DEBUG_0);
 		ioport_set_pin_level(PIN_DEBUG_0, 0);
 		ioport_set_pin_dir(PIN_DEBUG_0, IOPORT_DIR_OUTPUT);

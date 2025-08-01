@@ -114,6 +114,7 @@ void PLATFORM_vInit(bsp_t * bsp)
 	uart_target.uart_send = ccd_b_uart_Send_message;
 	uart_target.uart_receive = ccd_b_uart_Receive_message;
 	uart_target.uart_handle = bsp->bus_uart;
+	uart_target.uart_mode  = UART;
 	uart_target.radio_uart_address = 0x26;
 	uart_target.gse_uart_address = 0xE9;
 	UARTTARGET_Init(&uart_target);
