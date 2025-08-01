@@ -823,7 +823,7 @@
 
 				{ "name" : "CANTargetIncomingOverflow", "bit": "6", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} },
 				{ "name" : "CANInterruptBufferOverflow", "bit": "7", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} },
-				{ "name" : "CANTargetOutgoingOverflow", "bit": "8", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} }
+				{ "name" : "CANTargetOutgoingOverflow", "bit": "8", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} },
 
 				{ "name" : "UARTTargetIncomingOverflow", "bit": "9", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} },
 				{ "name" : "UARTTargetTxHBOverflow", "bit": "10", "c#": { "hasminmax": "false", "type": "bool" }, "c": {"type": "bool"} },

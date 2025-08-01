@@ -187,10 +187,6 @@ typedef enum {
 #define REG_PREVIOUSENDPOINT_NUMBER_Pos              (8UL)
 #define REG_PREVIOUSENDPOINT_NUMBER_Msk              (0x00ff << REG_PREVIOUSENDPOINT_NUMBER_Pos)
 
-/*************** Bit definition for PreviousEndpoint register ****************/
-#define REG_PREVIOUSENDPOINT_NUMBER_Pos              (8UL)
-#define REG_PREVIOUSENDPOINT_NUMBER_Msk              (0x00ff << REG_PREVIOUSENDPOINT_NUMBER_Pos)
-
 /*************** Bit definition for boardflag register ***********************/
 #define REG_BOARDFLAG_BOARDS_Pos                     (0UL)
 #define REG_BOARDFLAG_BOARDS_Msk                     (0x00ff << REG_BOARDFLAG_BOARDS_Pos)
@@ -2989,13 +2985,6 @@ mm_response_t mm_getRTOS_Status0_GSETargetOutgoingOverflowFrom(bool * dest, cons
 mm_response_t mm_setRTOS_Status0_SERMUX_CRC_Error(const bool val);
 mm_response_t mm_getRTOS_Status0_SERMUX_CRC_Error(bool * dest);
 mm_response_t mm_getRTOS_Status0_SERMUX_CRC_ErrorFrom(bool * dest, const uint32_t source);
-
-/*************** Get/Set functions for PreviousEndpoint register **************************************************************/
-mm_response_t mm_setPreviousEndpoint(const uint32_t val);
-mm_response_t mm_getPreviousEndpoint(uint32_t * dest);
-mm_response_t mm_setPreviousEndpoint_Number(const uint8_t val);
-mm_response_t mm_getPreviousEndpoint_Number(uint8_t * dest);
-mm_response_t mm_getPreviousEndpoint_NumberFrom(uint8_t * dest, const uint32_t source);
 
 /*************** Get/Set functions for PreviousEndpoint register **************************************************************/
 mm_response_t mm_setPreviousEndpoint(const uint32_t val);

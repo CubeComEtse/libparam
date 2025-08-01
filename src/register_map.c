@@ -8957,6 +8957,9546 @@ mm_response_t mm_getTE_Addr_3_Clear_COMM_TRFrom(mm_enabled_t * dest, const uint3
     *dest = (mm_enabled_t) ((source & REG_TE_CONFIG_COMM_TR_Msk) >> REG_TE_CONFIG_COMM_TR_Pos);
     return mm_OK;
 }
+/*************** Get/Set functions for MTC_Addr_0 register ********************************************************************/
+mm_response_t mm_setMTC_Addr_0(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.MTC_Addr_0;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_setMTC_Addr_0_ScanEnabled(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SCANENABLED_Msk) | (val << REG_MTC_CONFIG_SCANENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_ScanEnabled(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Detected(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_DETECTED_Msk) | (val << REG_MTC_CONFIG_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Detected(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_DetectedFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Type(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_TYPE_Msk) | (val << REG_MTC_CONFIG_TYPE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Type(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (uint32_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_TypeFrom(uint32_t * dest, const uint32_t source) {
+    *dest = (uint32_t) ((source & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_ENABLE_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_ENABLE_1_Msk) | (val << REG_MTC_CONFIG_ENABLE_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_ENABLE_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_ENABLE_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_ENABLE_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_ENABLE_2_Msk) | (val << REG_MTC_CONFIG_ENABLE_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_ENABLE_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_ENABLE_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_SEL_I2C_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_I2C_1_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_SEL_I2C_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_SEL_I2C_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_I2C_2_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_SEL_I2C_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_SEL_UART_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_UART_1_Msk) | (val << REG_MTC_CONFIG_SEL_UART_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_SEL_UART_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_SEL_UART_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_SEL_UART_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_UART_2_Msk) | (val << REG_MTC_CONFIG_SEL_UART_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_SEL_UART_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_SEL_UART_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_SEL_UART_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_UART_3_Msk) | (val << REG_MTC_CONFIG_SEL_UART_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_SEL_UART_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_SEL_UART_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_SEL_UART_4(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_UART_4_Msk) | (val << REG_MTC_CONFIG_SEL_UART_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_SEL_UART_4(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_SEL_UART_4From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_SEL_UART_5(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_UART_5_Msk) | (val << REG_MTC_CONFIG_SEL_UART_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_SEL_UART_5(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_SEL_UART_5From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_SEL_UART_6(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_UART_6_Msk) | (val << REG_MTC_CONFIG_SEL_UART_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_SEL_UART_6(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_SEL_UART_6From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_SEL_VBAT(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_VBAT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_SEL_VBAT(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_SEL_VBAT_ALT(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_SEL_VBAT_ALT(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_SEL_VBAT_FPGA(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_SEL_VBAT_FPGA(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_SEL_nRESET_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_NRESET_1_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_SEL_nRESET_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_SEL_nRESET_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_SEL_nRESET_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_NRESET_2_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_SEL_nRESET_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_SEL_nRESET_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_SEL_nRESET_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_NRESET_3_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_SEL_nRESET_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_SEL_nRESET_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_SEL_CS_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_CS_1_Msk) | (val << REG_MTC_CONFIG_SEL_CS_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_SEL_CS_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_SEL_CS_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_SEL_CS_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_CS_2_Msk) | (val << REG_MTC_CONFIG_SEL_CS_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_SEL_CS_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_SEL_CS_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_SEL_CS_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_CS_3_Msk) | (val << REG_MTC_CONFIG_SEL_CS_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_SEL_CS_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_SEL_CS_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_SEL_CS_4(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_CS_4_Msk) | (val << REG_MTC_CONFIG_SEL_CS_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_SEL_CS_4(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_SEL_CS_4From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_SEL_CS_5(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_CS_5_Msk) | (val << REG_MTC_CONFIG_SEL_CS_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_SEL_CS_5(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_SEL_CS_5From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_SEL_CS_6(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_CS_6_Msk) | (val << REG_MTC_CONFIG_SEL_CS_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_SEL_CS_6(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_SEL_CS_6From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_SEL_SPI_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_SPI_1_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_SEL_SPI_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_SEL_SPI_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_SPI_2_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_SEL_SPI_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_SEL_CAN_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_CAN_1_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_SEL_CAN_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_SEL_CAN_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_CAN_2_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_SEL_CAN_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_SEL_CAN_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_CAN_3_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_SEL_CAN_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_SEL_RS422(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_RS422_Msk) | (val << REG_MTC_CONFIG_SEL_RS422_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_SEL_RS422(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_SEL_RS422From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
+    return mm_OK;
+}
+/*************** Get/Set functions for MTC_Addr_0_Set register ****************************************************************/
+mm_response_t mm_setMTC_Addr_0_Set(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.MTC_Addr_0_Set;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_setMTC_Addr_0_Set_ScanEnabled(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SCANENABLED_Msk) | (val << REG_MTC_CONFIG_SCANENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_ScanEnabled(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_Detected(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_DETECTED_Msk) | (val << REG_MTC_CONFIG_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_Detected(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_DetectedFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_Type(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_TYPE_Msk) | (val << REG_MTC_CONFIG_TYPE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_Type(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (uint32_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_TypeFrom(uint32_t * dest, const uint32_t source) {
+    *dest = (uint32_t) ((source & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_ENABLE_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_ENABLE_1_Msk) | (val << REG_MTC_CONFIG_ENABLE_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_ENABLE_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_ENABLE_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_ENABLE_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_ENABLE_2_Msk) | (val << REG_MTC_CONFIG_ENABLE_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_ENABLE_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_ENABLE_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_SEL_I2C_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_I2C_1_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_SEL_I2C_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_SEL_I2C_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_I2C_2_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_SEL_I2C_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_SEL_UART_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_UART_1_Msk) | (val << REG_MTC_CONFIG_SEL_UART_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_SEL_UART_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_UART_2_Msk) | (val << REG_MTC_CONFIG_SEL_UART_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_SEL_UART_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_UART_3_Msk) | (val << REG_MTC_CONFIG_SEL_UART_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_SEL_UART_4(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_UART_4_Msk) | (val << REG_MTC_CONFIG_SEL_UART_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_4(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_4From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_SEL_UART_5(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_UART_5_Msk) | (val << REG_MTC_CONFIG_SEL_UART_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_5(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_5From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_SEL_UART_6(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_UART_6_Msk) | (val << REG_MTC_CONFIG_SEL_UART_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_6(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_6From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_SEL_VBAT(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_VBAT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_SEL_VBAT(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_SEL_VBAT_ALT(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_SEL_VBAT_ALT(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_SEL_VBAT_FPGA(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_SEL_VBAT_FPGA(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_SEL_nRESET_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_NRESET_1_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_SEL_nRESET_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_SEL_nRESET_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_SEL_nRESET_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_NRESET_2_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_SEL_nRESET_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_SEL_nRESET_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_SEL_nRESET_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_NRESET_3_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_SEL_nRESET_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_SEL_nRESET_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_SEL_CS_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_CS_1_Msk) | (val << REG_MTC_CONFIG_SEL_CS_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_SEL_CS_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_CS_2_Msk) | (val << REG_MTC_CONFIG_SEL_CS_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_SEL_CS_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_CS_3_Msk) | (val << REG_MTC_CONFIG_SEL_CS_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_SEL_CS_4(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_CS_4_Msk) | (val << REG_MTC_CONFIG_SEL_CS_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_4(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_4From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_SEL_CS_5(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_CS_5_Msk) | (val << REG_MTC_CONFIG_SEL_CS_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_5(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_5From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_SEL_CS_6(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_CS_6_Msk) | (val << REG_MTC_CONFIG_SEL_CS_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_6(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_6From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_SEL_SPI_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_SPI_1_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_SEL_SPI_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_SEL_SPI_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_SPI_2_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_SEL_SPI_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_SEL_CAN_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_CAN_1_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CAN_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_SEL_CAN_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_CAN_2_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CAN_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_SEL_CAN_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_CAN_3_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CAN_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Set_SEL_RS422(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_RS422_Msk) | (val << REG_MTC_CONFIG_SEL_RS422_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Set_SEL_RS422(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Set_SEL_RS422From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
+    return mm_OK;
+}
+/*************** Get/Set functions for MTC_Addr_0_Clear register **************************************************************/
+mm_response_t mm_setMTC_Addr_0_Clear(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.MTC_Addr_0_Clear;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_ScanEnabled(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SCANENABLED_Msk) | (val << REG_MTC_CONFIG_SCANENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_ScanEnabled(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_Detected(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_DETECTED_Msk) | (val << REG_MTC_CONFIG_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_Detected(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_DetectedFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_Type(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_TYPE_Msk) | (val << REG_MTC_CONFIG_TYPE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_Type(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (uint32_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_TypeFrom(uint32_t * dest, const uint32_t source) {
+    *dest = (uint32_t) ((source & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_ENABLE_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_ENABLE_1_Msk) | (val << REG_MTC_CONFIG_ENABLE_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_ENABLE_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_ENABLE_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_ENABLE_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_ENABLE_2_Msk) | (val << REG_MTC_CONFIG_ENABLE_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_ENABLE_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_ENABLE_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_I2C_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_I2C_1_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_I2C_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_I2C_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_I2C_2_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_I2C_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_UART_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_UART_1_Msk) | (val << REG_MTC_CONFIG_SEL_UART_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_UART_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_UART_2_Msk) | (val << REG_MTC_CONFIG_SEL_UART_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_UART_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_UART_3_Msk) | (val << REG_MTC_CONFIG_SEL_UART_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_UART_4(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_UART_4_Msk) | (val << REG_MTC_CONFIG_SEL_UART_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_4(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_4From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_UART_5(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_UART_5_Msk) | (val << REG_MTC_CONFIG_SEL_UART_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_5(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_5From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_UART_6(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_UART_6_Msk) | (val << REG_MTC_CONFIG_SEL_UART_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_6(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_6From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_VBAT(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_VBAT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_VBAT(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_VBAT_ALT(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_VBAT_ALT(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_VBAT_FPGA(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_VBAT_FPGA(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_nRESET_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_NRESET_1_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_nRESET_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_nRESET_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_nRESET_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_NRESET_2_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_nRESET_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_nRESET_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_nRESET_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_NRESET_3_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_nRESET_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_nRESET_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_CS_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_CS_1_Msk) | (val << REG_MTC_CONFIG_SEL_CS_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_CS_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_CS_2_Msk) | (val << REG_MTC_CONFIG_SEL_CS_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_CS_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_CS_3_Msk) | (val << REG_MTC_CONFIG_SEL_CS_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_CS_4(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_CS_4_Msk) | (val << REG_MTC_CONFIG_SEL_CS_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_4(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_4From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_CS_5(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_CS_5_Msk) | (val << REG_MTC_CONFIG_SEL_CS_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_5(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_5From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_CS_6(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_CS_6_Msk) | (val << REG_MTC_CONFIG_SEL_CS_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_6(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_6From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_SPI_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_SPI_1_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_SPI_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_SPI_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_SPI_2_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_SPI_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_CAN_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_CAN_1_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CAN_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_CAN_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_CAN_2_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CAN_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_CAN_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_CAN_3_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CAN_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_0_Clear_SEL_RS422(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_RS422_Msk) | (val << REG_MTC_CONFIG_SEL_RS422_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_RS422(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_0_Clear_SEL_RS422From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
+    return mm_OK;
+}
+/*************** Get/Set functions for MTC_Addr_1 register ********************************************************************/
+mm_response_t mm_setMTC_Addr_1(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.MTC_Addr_1;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_setMTC_Addr_1_ScanEnabled(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SCANENABLED_Msk) | (val << REG_MTC_CONFIG_SCANENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_ScanEnabled(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Detected(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_DETECTED_Msk) | (val << REG_MTC_CONFIG_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Detected(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_DetectedFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Type(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_TYPE_Msk) | (val << REG_MTC_CONFIG_TYPE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Type(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (uint32_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_TypeFrom(uint32_t * dest, const uint32_t source) {
+    *dest = (uint32_t) ((source & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_ENABLE_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_ENABLE_1_Msk) | (val << REG_MTC_CONFIG_ENABLE_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_ENABLE_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_ENABLE_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_ENABLE_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_ENABLE_2_Msk) | (val << REG_MTC_CONFIG_ENABLE_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_ENABLE_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_ENABLE_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_SEL_I2C_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_I2C_1_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_SEL_I2C_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_SEL_I2C_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_I2C_2_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_SEL_I2C_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_SEL_UART_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_UART_1_Msk) | (val << REG_MTC_CONFIG_SEL_UART_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_SEL_UART_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_SEL_UART_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_SEL_UART_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_UART_2_Msk) | (val << REG_MTC_CONFIG_SEL_UART_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_SEL_UART_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_SEL_UART_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_SEL_UART_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_UART_3_Msk) | (val << REG_MTC_CONFIG_SEL_UART_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_SEL_UART_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_SEL_UART_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_SEL_UART_4(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_UART_4_Msk) | (val << REG_MTC_CONFIG_SEL_UART_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_SEL_UART_4(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_SEL_UART_4From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_SEL_UART_5(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_UART_5_Msk) | (val << REG_MTC_CONFIG_SEL_UART_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_SEL_UART_5(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_SEL_UART_5From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_SEL_UART_6(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_UART_6_Msk) | (val << REG_MTC_CONFIG_SEL_UART_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_SEL_UART_6(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_SEL_UART_6From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_SEL_VBAT(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_VBAT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_SEL_VBAT(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_SEL_VBAT_ALT(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_SEL_VBAT_ALT(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_SEL_VBAT_FPGA(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_SEL_VBAT_FPGA(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_SEL_nRESET_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_NRESET_1_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_SEL_nRESET_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_SEL_nRESET_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_SEL_nRESET_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_NRESET_2_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_SEL_nRESET_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_SEL_nRESET_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_SEL_nRESET_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_NRESET_3_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_SEL_nRESET_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_SEL_nRESET_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_SEL_CS_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_CS_1_Msk) | (val << REG_MTC_CONFIG_SEL_CS_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_SEL_CS_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_SEL_CS_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_SEL_CS_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_CS_2_Msk) | (val << REG_MTC_CONFIG_SEL_CS_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_SEL_CS_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_SEL_CS_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_SEL_CS_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_CS_3_Msk) | (val << REG_MTC_CONFIG_SEL_CS_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_SEL_CS_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_SEL_CS_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_SEL_CS_4(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_CS_4_Msk) | (val << REG_MTC_CONFIG_SEL_CS_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_SEL_CS_4(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_SEL_CS_4From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_SEL_CS_5(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_CS_5_Msk) | (val << REG_MTC_CONFIG_SEL_CS_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_SEL_CS_5(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_SEL_CS_5From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_SEL_CS_6(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_CS_6_Msk) | (val << REG_MTC_CONFIG_SEL_CS_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_SEL_CS_6(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_SEL_CS_6From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_SEL_SPI_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_SPI_1_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_SEL_SPI_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_SEL_SPI_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_SPI_2_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_SEL_SPI_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_SEL_CAN_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_CAN_1_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_SEL_CAN_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_SEL_CAN_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_CAN_2_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_SEL_CAN_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_SEL_CAN_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_CAN_3_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_SEL_CAN_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_SEL_RS422(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_RS422_Msk) | (val << REG_MTC_CONFIG_SEL_RS422_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_SEL_RS422(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_SEL_RS422From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
+    return mm_OK;
+}
+/*************** Get/Set functions for MTC_Addr_1_Set register ****************************************************************/
+mm_response_t mm_setMTC_Addr_1_Set(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.MTC_Addr_1_Set;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_setMTC_Addr_1_Set_ScanEnabled(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SCANENABLED_Msk) | (val << REG_MTC_CONFIG_SCANENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_ScanEnabled(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_Detected(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_DETECTED_Msk) | (val << REG_MTC_CONFIG_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_Detected(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_DetectedFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_Type(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_TYPE_Msk) | (val << REG_MTC_CONFIG_TYPE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_Type(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (uint32_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_TypeFrom(uint32_t * dest, const uint32_t source) {
+    *dest = (uint32_t) ((source & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_ENABLE_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_ENABLE_1_Msk) | (val << REG_MTC_CONFIG_ENABLE_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_ENABLE_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_ENABLE_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_ENABLE_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_ENABLE_2_Msk) | (val << REG_MTC_CONFIG_ENABLE_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_ENABLE_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_ENABLE_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_SEL_I2C_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_I2C_1_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_SEL_I2C_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_SEL_I2C_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_I2C_2_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_SEL_I2C_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_SEL_UART_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_UART_1_Msk) | (val << REG_MTC_CONFIG_SEL_UART_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_SEL_UART_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_UART_2_Msk) | (val << REG_MTC_CONFIG_SEL_UART_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_SEL_UART_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_UART_3_Msk) | (val << REG_MTC_CONFIG_SEL_UART_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_SEL_UART_4(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_UART_4_Msk) | (val << REG_MTC_CONFIG_SEL_UART_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_4(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_4From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_SEL_UART_5(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_UART_5_Msk) | (val << REG_MTC_CONFIG_SEL_UART_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_5(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_5From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_SEL_UART_6(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_UART_6_Msk) | (val << REG_MTC_CONFIG_SEL_UART_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_6(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_6From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_SEL_VBAT(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_VBAT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_SEL_VBAT(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_SEL_VBAT_ALT(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_SEL_VBAT_ALT(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_SEL_VBAT_FPGA(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_SEL_VBAT_FPGA(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_SEL_nRESET_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_NRESET_1_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_SEL_nRESET_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_SEL_nRESET_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_SEL_nRESET_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_NRESET_2_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_SEL_nRESET_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_SEL_nRESET_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_SEL_nRESET_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_NRESET_3_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_SEL_nRESET_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_SEL_nRESET_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_SEL_CS_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_CS_1_Msk) | (val << REG_MTC_CONFIG_SEL_CS_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_SEL_CS_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_CS_2_Msk) | (val << REG_MTC_CONFIG_SEL_CS_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_SEL_CS_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_CS_3_Msk) | (val << REG_MTC_CONFIG_SEL_CS_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_SEL_CS_4(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_CS_4_Msk) | (val << REG_MTC_CONFIG_SEL_CS_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_4(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_4From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_SEL_CS_5(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_CS_5_Msk) | (val << REG_MTC_CONFIG_SEL_CS_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_5(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_5From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_SEL_CS_6(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_CS_6_Msk) | (val << REG_MTC_CONFIG_SEL_CS_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_6(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_6From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_SEL_SPI_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_SPI_1_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_SEL_SPI_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_SEL_SPI_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_SPI_2_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_SEL_SPI_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_SEL_CAN_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_CAN_1_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CAN_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_SEL_CAN_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_CAN_2_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CAN_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_SEL_CAN_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_CAN_3_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CAN_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Set_SEL_RS422(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_RS422_Msk) | (val << REG_MTC_CONFIG_SEL_RS422_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Set_SEL_RS422(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Set_SEL_RS422From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
+    return mm_OK;
+}
+/*************** Get/Set functions for MTC_Addr_1_Clear register **************************************************************/
+mm_response_t mm_setMTC_Addr_1_Clear(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.MTC_Addr_1_Clear;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_ScanEnabled(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SCANENABLED_Msk) | (val << REG_MTC_CONFIG_SCANENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_ScanEnabled(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_Detected(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_DETECTED_Msk) | (val << REG_MTC_CONFIG_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_Detected(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_DetectedFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_Type(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_TYPE_Msk) | (val << REG_MTC_CONFIG_TYPE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_Type(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (uint32_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_TypeFrom(uint32_t * dest, const uint32_t source) {
+    *dest = (uint32_t) ((source & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_ENABLE_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_ENABLE_1_Msk) | (val << REG_MTC_CONFIG_ENABLE_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_ENABLE_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_ENABLE_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_ENABLE_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_ENABLE_2_Msk) | (val << REG_MTC_CONFIG_ENABLE_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_ENABLE_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_ENABLE_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_I2C_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_I2C_1_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_I2C_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_I2C_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_I2C_2_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_I2C_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_UART_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_UART_1_Msk) | (val << REG_MTC_CONFIG_SEL_UART_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_UART_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_UART_2_Msk) | (val << REG_MTC_CONFIG_SEL_UART_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_UART_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_UART_3_Msk) | (val << REG_MTC_CONFIG_SEL_UART_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_UART_4(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_UART_4_Msk) | (val << REG_MTC_CONFIG_SEL_UART_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_4(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_4From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_UART_5(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_UART_5_Msk) | (val << REG_MTC_CONFIG_SEL_UART_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_5(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_5From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_UART_6(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_UART_6_Msk) | (val << REG_MTC_CONFIG_SEL_UART_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_6(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_6From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_VBAT(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_VBAT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_VBAT(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_VBAT_ALT(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_VBAT_ALT(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_VBAT_FPGA(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_VBAT_FPGA(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_nRESET_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_NRESET_1_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_nRESET_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_nRESET_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_nRESET_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_NRESET_2_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_nRESET_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_nRESET_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_nRESET_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_NRESET_3_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_nRESET_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_nRESET_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_CS_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_CS_1_Msk) | (val << REG_MTC_CONFIG_SEL_CS_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_CS_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_CS_2_Msk) | (val << REG_MTC_CONFIG_SEL_CS_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_CS_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_CS_3_Msk) | (val << REG_MTC_CONFIG_SEL_CS_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_CS_4(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_CS_4_Msk) | (val << REG_MTC_CONFIG_SEL_CS_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_4(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_4From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_CS_5(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_CS_5_Msk) | (val << REG_MTC_CONFIG_SEL_CS_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_5(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_5From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_CS_6(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_CS_6_Msk) | (val << REG_MTC_CONFIG_SEL_CS_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_6(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_6From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_SPI_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_SPI_1_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_SPI_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_SPI_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_SPI_2_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_SPI_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_CAN_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_CAN_1_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CAN_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_CAN_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_CAN_2_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CAN_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_CAN_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_CAN_3_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CAN_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_1_Clear_SEL_RS422(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_RS422_Msk) | (val << REG_MTC_CONFIG_SEL_RS422_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_RS422(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_1_Clear_SEL_RS422From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
+    return mm_OK;
+}
+/*************** Get/Set functions for MTC_Addr_2 register ********************************************************************/
+mm_response_t mm_setMTC_Addr_2(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.MTC_Addr_2;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_setMTC_Addr_2_ScanEnabled(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SCANENABLED_Msk) | (val << REG_MTC_CONFIG_SCANENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_ScanEnabled(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Detected(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_DETECTED_Msk) | (val << REG_MTC_CONFIG_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Detected(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_DetectedFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Type(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_TYPE_Msk) | (val << REG_MTC_CONFIG_TYPE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Type(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (uint32_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_TypeFrom(uint32_t * dest, const uint32_t source) {
+    *dest = (uint32_t) ((source & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_ENABLE_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_ENABLE_1_Msk) | (val << REG_MTC_CONFIG_ENABLE_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_ENABLE_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_ENABLE_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_ENABLE_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_ENABLE_2_Msk) | (val << REG_MTC_CONFIG_ENABLE_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_ENABLE_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_ENABLE_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_SEL_I2C_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_I2C_1_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_SEL_I2C_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_SEL_I2C_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_I2C_2_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_SEL_I2C_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_SEL_UART_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_UART_1_Msk) | (val << REG_MTC_CONFIG_SEL_UART_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_SEL_UART_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_SEL_UART_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_SEL_UART_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_UART_2_Msk) | (val << REG_MTC_CONFIG_SEL_UART_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_SEL_UART_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_SEL_UART_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_SEL_UART_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_UART_3_Msk) | (val << REG_MTC_CONFIG_SEL_UART_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_SEL_UART_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_SEL_UART_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_SEL_UART_4(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_UART_4_Msk) | (val << REG_MTC_CONFIG_SEL_UART_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_SEL_UART_4(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_SEL_UART_4From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_SEL_UART_5(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_UART_5_Msk) | (val << REG_MTC_CONFIG_SEL_UART_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_SEL_UART_5(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_SEL_UART_5From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_SEL_UART_6(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_UART_6_Msk) | (val << REG_MTC_CONFIG_SEL_UART_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_SEL_UART_6(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_SEL_UART_6From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_SEL_VBAT(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_VBAT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_SEL_VBAT(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_SEL_VBAT_ALT(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_SEL_VBAT_ALT(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_SEL_VBAT_FPGA(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_SEL_VBAT_FPGA(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_SEL_nRESET_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_NRESET_1_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_SEL_nRESET_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_SEL_nRESET_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_SEL_nRESET_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_NRESET_2_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_SEL_nRESET_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_SEL_nRESET_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_SEL_nRESET_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_NRESET_3_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_SEL_nRESET_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_SEL_nRESET_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_SEL_CS_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_CS_1_Msk) | (val << REG_MTC_CONFIG_SEL_CS_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_SEL_CS_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_SEL_CS_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_SEL_CS_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_CS_2_Msk) | (val << REG_MTC_CONFIG_SEL_CS_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_SEL_CS_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_SEL_CS_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_SEL_CS_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_CS_3_Msk) | (val << REG_MTC_CONFIG_SEL_CS_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_SEL_CS_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_SEL_CS_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_SEL_CS_4(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_CS_4_Msk) | (val << REG_MTC_CONFIG_SEL_CS_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_SEL_CS_4(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_SEL_CS_4From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_SEL_CS_5(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_CS_5_Msk) | (val << REG_MTC_CONFIG_SEL_CS_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_SEL_CS_5(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_SEL_CS_5From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_SEL_CS_6(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_CS_6_Msk) | (val << REG_MTC_CONFIG_SEL_CS_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_SEL_CS_6(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_SEL_CS_6From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_SEL_SPI_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_SPI_1_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_SEL_SPI_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_SEL_SPI_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_SPI_2_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_SEL_SPI_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_SEL_CAN_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_CAN_1_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_SEL_CAN_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_SEL_CAN_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_CAN_2_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_SEL_CAN_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_SEL_CAN_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_CAN_3_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_SEL_CAN_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_SEL_RS422(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_RS422_Msk) | (val << REG_MTC_CONFIG_SEL_RS422_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_SEL_RS422(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_SEL_RS422From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
+    return mm_OK;
+}
+/*************** Get/Set functions for MTC_Addr_2_Set register ****************************************************************/
+mm_response_t mm_setMTC_Addr_2_Set(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.MTC_Addr_2_Set;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_setMTC_Addr_2_Set_ScanEnabled(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SCANENABLED_Msk) | (val << REG_MTC_CONFIG_SCANENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_ScanEnabled(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_Detected(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_DETECTED_Msk) | (val << REG_MTC_CONFIG_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_Detected(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_DetectedFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_Type(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_TYPE_Msk) | (val << REG_MTC_CONFIG_TYPE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_Type(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (uint32_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_TypeFrom(uint32_t * dest, const uint32_t source) {
+    *dest = (uint32_t) ((source & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_ENABLE_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_ENABLE_1_Msk) | (val << REG_MTC_CONFIG_ENABLE_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_ENABLE_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_ENABLE_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_ENABLE_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_ENABLE_2_Msk) | (val << REG_MTC_CONFIG_ENABLE_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_ENABLE_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_ENABLE_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_SEL_I2C_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_I2C_1_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_SEL_I2C_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_SEL_I2C_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_I2C_2_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_SEL_I2C_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_SEL_UART_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_UART_1_Msk) | (val << REG_MTC_CONFIG_SEL_UART_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_SEL_UART_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_UART_2_Msk) | (val << REG_MTC_CONFIG_SEL_UART_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_SEL_UART_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_UART_3_Msk) | (val << REG_MTC_CONFIG_SEL_UART_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_SEL_UART_4(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_UART_4_Msk) | (val << REG_MTC_CONFIG_SEL_UART_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_4(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_4From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_SEL_UART_5(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_UART_5_Msk) | (val << REG_MTC_CONFIG_SEL_UART_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_5(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_5From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_SEL_UART_6(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_UART_6_Msk) | (val << REG_MTC_CONFIG_SEL_UART_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_6(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_6From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_SEL_VBAT(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_VBAT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_SEL_VBAT(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_SEL_VBAT_ALT(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_SEL_VBAT_ALT(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_SEL_VBAT_FPGA(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_SEL_VBAT_FPGA(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_SEL_nRESET_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_NRESET_1_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_SEL_nRESET_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_SEL_nRESET_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_SEL_nRESET_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_NRESET_2_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_SEL_nRESET_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_SEL_nRESET_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_SEL_nRESET_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_NRESET_3_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_SEL_nRESET_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_SEL_nRESET_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_SEL_CS_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_CS_1_Msk) | (val << REG_MTC_CONFIG_SEL_CS_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_SEL_CS_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_CS_2_Msk) | (val << REG_MTC_CONFIG_SEL_CS_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_SEL_CS_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_CS_3_Msk) | (val << REG_MTC_CONFIG_SEL_CS_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_SEL_CS_4(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_CS_4_Msk) | (val << REG_MTC_CONFIG_SEL_CS_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_4(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_4From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_SEL_CS_5(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_CS_5_Msk) | (val << REG_MTC_CONFIG_SEL_CS_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_5(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_5From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_SEL_CS_6(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_CS_6_Msk) | (val << REG_MTC_CONFIG_SEL_CS_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_6(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_6From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_SEL_SPI_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_SPI_1_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_SEL_SPI_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_SEL_SPI_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_SPI_2_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_SEL_SPI_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_SEL_CAN_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_CAN_1_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CAN_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_SEL_CAN_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_CAN_2_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CAN_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_SEL_CAN_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_CAN_3_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CAN_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Set_SEL_RS422(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_RS422_Msk) | (val << REG_MTC_CONFIG_SEL_RS422_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Set_SEL_RS422(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Set_SEL_RS422From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
+    return mm_OK;
+}
+/*************** Get/Set functions for MTC_Addr_2_Clear register **************************************************************/
+mm_response_t mm_setMTC_Addr_2_Clear(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.MTC_Addr_2_Clear;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_ScanEnabled(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SCANENABLED_Msk) | (val << REG_MTC_CONFIG_SCANENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_ScanEnabled(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_Detected(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_DETECTED_Msk) | (val << REG_MTC_CONFIG_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_Detected(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_DetectedFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_Type(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_TYPE_Msk) | (val << REG_MTC_CONFIG_TYPE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_Type(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (uint32_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_TypeFrom(uint32_t * dest, const uint32_t source) {
+    *dest = (uint32_t) ((source & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_ENABLE_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_ENABLE_1_Msk) | (val << REG_MTC_CONFIG_ENABLE_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_ENABLE_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_ENABLE_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_ENABLE_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_ENABLE_2_Msk) | (val << REG_MTC_CONFIG_ENABLE_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_ENABLE_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_ENABLE_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_I2C_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_I2C_1_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_I2C_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_I2C_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_I2C_2_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_I2C_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_UART_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_UART_1_Msk) | (val << REG_MTC_CONFIG_SEL_UART_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_UART_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_UART_2_Msk) | (val << REG_MTC_CONFIG_SEL_UART_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_UART_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_UART_3_Msk) | (val << REG_MTC_CONFIG_SEL_UART_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_UART_4(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_UART_4_Msk) | (val << REG_MTC_CONFIG_SEL_UART_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_4(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_4From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_UART_5(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_UART_5_Msk) | (val << REG_MTC_CONFIG_SEL_UART_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_5(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_5From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_UART_6(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_UART_6_Msk) | (val << REG_MTC_CONFIG_SEL_UART_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_6(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_6From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_VBAT(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_VBAT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_VBAT(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_VBAT_ALT(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_VBAT_ALT(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_VBAT_FPGA(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_VBAT_FPGA(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_nRESET_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_NRESET_1_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_nRESET_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_nRESET_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_nRESET_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_NRESET_2_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_nRESET_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_nRESET_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_nRESET_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_NRESET_3_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_nRESET_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_nRESET_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_CS_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_CS_1_Msk) | (val << REG_MTC_CONFIG_SEL_CS_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_CS_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_CS_2_Msk) | (val << REG_MTC_CONFIG_SEL_CS_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_CS_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_CS_3_Msk) | (val << REG_MTC_CONFIG_SEL_CS_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_CS_4(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_CS_4_Msk) | (val << REG_MTC_CONFIG_SEL_CS_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_4(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_4From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_CS_5(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_CS_5_Msk) | (val << REG_MTC_CONFIG_SEL_CS_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_5(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_5From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_CS_6(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_CS_6_Msk) | (val << REG_MTC_CONFIG_SEL_CS_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_6(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_6From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_SPI_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_SPI_1_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_SPI_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_SPI_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_SPI_2_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_SPI_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_CAN_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_CAN_1_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CAN_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_CAN_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_CAN_2_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CAN_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_CAN_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_CAN_3_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CAN_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_2_Clear_SEL_RS422(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_RS422_Msk) | (val << REG_MTC_CONFIG_SEL_RS422_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_RS422(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_2_Clear_SEL_RS422From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
+    return mm_OK;
+}
+/*************** Get/Set functions for MTC_Addr_3 register ********************************************************************/
+mm_response_t mm_setMTC_Addr_3(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.MTC_Addr_3;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_setMTC_Addr_3_ScanEnabled(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SCANENABLED_Msk) | (val << REG_MTC_CONFIG_SCANENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_ScanEnabled(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Detected(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_DETECTED_Msk) | (val << REG_MTC_CONFIG_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Detected(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_DetectedFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Type(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_TYPE_Msk) | (val << REG_MTC_CONFIG_TYPE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Type(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (uint32_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_TypeFrom(uint32_t * dest, const uint32_t source) {
+    *dest = (uint32_t) ((source & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_ENABLE_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_ENABLE_1_Msk) | (val << REG_MTC_CONFIG_ENABLE_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_ENABLE_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_ENABLE_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_ENABLE_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_ENABLE_2_Msk) | (val << REG_MTC_CONFIG_ENABLE_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_ENABLE_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_ENABLE_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_SEL_I2C_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_I2C_1_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_SEL_I2C_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_SEL_I2C_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_I2C_2_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_SEL_I2C_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_SEL_UART_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_UART_1_Msk) | (val << REG_MTC_CONFIG_SEL_UART_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_SEL_UART_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_SEL_UART_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_SEL_UART_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_UART_2_Msk) | (val << REG_MTC_CONFIG_SEL_UART_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_SEL_UART_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_SEL_UART_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_SEL_UART_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_UART_3_Msk) | (val << REG_MTC_CONFIG_SEL_UART_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_SEL_UART_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_SEL_UART_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_SEL_UART_4(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_UART_4_Msk) | (val << REG_MTC_CONFIG_SEL_UART_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_SEL_UART_4(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_SEL_UART_4From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_SEL_UART_5(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_UART_5_Msk) | (val << REG_MTC_CONFIG_SEL_UART_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_SEL_UART_5(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_SEL_UART_5From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_SEL_UART_6(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_UART_6_Msk) | (val << REG_MTC_CONFIG_SEL_UART_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_SEL_UART_6(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_SEL_UART_6From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_SEL_VBAT(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_VBAT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_SEL_VBAT(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_SEL_VBAT_ALT(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_SEL_VBAT_ALT(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_SEL_VBAT_FPGA(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_SEL_VBAT_FPGA(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_SEL_nRESET_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_NRESET_1_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_SEL_nRESET_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_SEL_nRESET_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_SEL_nRESET_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_NRESET_2_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_SEL_nRESET_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_SEL_nRESET_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_SEL_nRESET_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_NRESET_3_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_SEL_nRESET_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_SEL_nRESET_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_SEL_CS_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_CS_1_Msk) | (val << REG_MTC_CONFIG_SEL_CS_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_SEL_CS_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_SEL_CS_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_SEL_CS_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_CS_2_Msk) | (val << REG_MTC_CONFIG_SEL_CS_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_SEL_CS_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_SEL_CS_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_SEL_CS_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_CS_3_Msk) | (val << REG_MTC_CONFIG_SEL_CS_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_SEL_CS_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_SEL_CS_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_SEL_CS_4(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_CS_4_Msk) | (val << REG_MTC_CONFIG_SEL_CS_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_SEL_CS_4(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_SEL_CS_4From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_SEL_CS_5(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_CS_5_Msk) | (val << REG_MTC_CONFIG_SEL_CS_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_SEL_CS_5(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_SEL_CS_5From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_SEL_CS_6(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_CS_6_Msk) | (val << REG_MTC_CONFIG_SEL_CS_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_SEL_CS_6(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_SEL_CS_6From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_SEL_SPI_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_SPI_1_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_SEL_SPI_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_SEL_SPI_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_SPI_2_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_SEL_SPI_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_SEL_CAN_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_CAN_1_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_SEL_CAN_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_SEL_CAN_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_CAN_2_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_SEL_CAN_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_SEL_CAN_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_CAN_3_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_SEL_CAN_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_SEL_RS422(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_RS422_Msk) | (val << REG_MTC_CONFIG_SEL_RS422_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_SEL_RS422(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_SEL_RS422From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
+    return mm_OK;
+}
+/*************** Get/Set functions for MTC_Addr_3_Set register ****************************************************************/
+mm_response_t mm_setMTC_Addr_3_Set(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.MTC_Addr_3_Set;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_setMTC_Addr_3_Set_ScanEnabled(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SCANENABLED_Msk) | (val << REG_MTC_CONFIG_SCANENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_ScanEnabled(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_Detected(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_DETECTED_Msk) | (val << REG_MTC_CONFIG_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_Detected(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_DetectedFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_Type(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_TYPE_Msk) | (val << REG_MTC_CONFIG_TYPE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_Type(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (uint32_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_TypeFrom(uint32_t * dest, const uint32_t source) {
+    *dest = (uint32_t) ((source & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_ENABLE_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_ENABLE_1_Msk) | (val << REG_MTC_CONFIG_ENABLE_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_ENABLE_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_ENABLE_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_ENABLE_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_ENABLE_2_Msk) | (val << REG_MTC_CONFIG_ENABLE_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_ENABLE_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_ENABLE_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_SEL_I2C_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_I2C_1_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_SEL_I2C_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_SEL_I2C_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_I2C_2_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_SEL_I2C_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_SEL_UART_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_UART_1_Msk) | (val << REG_MTC_CONFIG_SEL_UART_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_SEL_UART_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_UART_2_Msk) | (val << REG_MTC_CONFIG_SEL_UART_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_SEL_UART_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_UART_3_Msk) | (val << REG_MTC_CONFIG_SEL_UART_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_SEL_UART_4(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_UART_4_Msk) | (val << REG_MTC_CONFIG_SEL_UART_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_4(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_4From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_SEL_UART_5(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_UART_5_Msk) | (val << REG_MTC_CONFIG_SEL_UART_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_5(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_5From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_SEL_UART_6(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_UART_6_Msk) | (val << REG_MTC_CONFIG_SEL_UART_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_6(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_6From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_SEL_VBAT(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_VBAT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_SEL_VBAT(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_SEL_VBAT_ALT(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_SEL_VBAT_ALT(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_SEL_VBAT_FPGA(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_SEL_VBAT_FPGA(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_SEL_nRESET_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_NRESET_1_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_SEL_nRESET_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_SEL_nRESET_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_SEL_nRESET_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_NRESET_2_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_SEL_nRESET_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_SEL_nRESET_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_SEL_nRESET_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_NRESET_3_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_SEL_nRESET_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_SEL_nRESET_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_SEL_CS_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_CS_1_Msk) | (val << REG_MTC_CONFIG_SEL_CS_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_SEL_CS_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_CS_2_Msk) | (val << REG_MTC_CONFIG_SEL_CS_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_SEL_CS_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_CS_3_Msk) | (val << REG_MTC_CONFIG_SEL_CS_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_SEL_CS_4(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_CS_4_Msk) | (val << REG_MTC_CONFIG_SEL_CS_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_4(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_4From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_SEL_CS_5(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_CS_5_Msk) | (val << REG_MTC_CONFIG_SEL_CS_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_5(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_5From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_SEL_CS_6(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_CS_6_Msk) | (val << REG_MTC_CONFIG_SEL_CS_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_6(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_6From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_SEL_SPI_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_SPI_1_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_SEL_SPI_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_SEL_SPI_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_SPI_2_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_SEL_SPI_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_SEL_CAN_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_CAN_1_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CAN_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_SEL_CAN_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_CAN_2_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CAN_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_SEL_CAN_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_CAN_3_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CAN_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Set_SEL_RS422(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_RS422_Msk) | (val << REG_MTC_CONFIG_SEL_RS422_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Set_SEL_RS422(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Set_SEL_RS422From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
+    return mm_OK;
+}
+/*************** Get/Set functions for MTC_Addr_3_Clear register **************************************************************/
+mm_response_t mm_setMTC_Addr_3_Clear(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.MTC_Addr_3_Clear;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_ScanEnabled(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SCANENABLED_Msk) | (val << REG_MTC_CONFIG_SCANENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_ScanEnabled(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_ScanEnabledFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_Detected(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_DETECTED_Msk) | (val << REG_MTC_CONFIG_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_Detected(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_DetectedFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_Type(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_TYPE_Msk) | (val << REG_MTC_CONFIG_TYPE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_Type(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (uint32_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_TypeFrom(uint32_t * dest, const uint32_t source) {
+    *dest = (uint32_t) ((source & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_ENABLE_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_ENABLE_1_Msk) | (val << REG_MTC_CONFIG_ENABLE_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_ENABLE_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_ENABLE_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_ENABLE_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_ENABLE_2_Msk) | (val << REG_MTC_CONFIG_ENABLE_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_ENABLE_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_ENABLE_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_I2C_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_I2C_1_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_I2C_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_I2C_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_I2C_2_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_I2C_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_UART_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_UART_1_Msk) | (val << REG_MTC_CONFIG_SEL_UART_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_UART_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_UART_2_Msk) | (val << REG_MTC_CONFIG_SEL_UART_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_UART_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_UART_3_Msk) | (val << REG_MTC_CONFIG_SEL_UART_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_UART_4(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_UART_4_Msk) | (val << REG_MTC_CONFIG_SEL_UART_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_4(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_4From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_UART_5(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_UART_5_Msk) | (val << REG_MTC_CONFIG_SEL_UART_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_5(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_5From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_UART_6(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_UART_6_Msk) | (val << REG_MTC_CONFIG_SEL_UART_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_6(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_6From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_VBAT(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_VBAT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_VBAT(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_VBAT_ALT(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_VBAT_ALT(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_VBAT_FPGA(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_VBAT_FPGA(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_nRESET_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_NRESET_1_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_nRESET_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_nRESET_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_nRESET_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_NRESET_2_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_nRESET_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_nRESET_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_nRESET_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_NRESET_3_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_nRESET_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_nRESET_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_CS_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_CS_1_Msk) | (val << REG_MTC_CONFIG_SEL_CS_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_CS_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_CS_2_Msk) | (val << REG_MTC_CONFIG_SEL_CS_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_CS_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_CS_3_Msk) | (val << REG_MTC_CONFIG_SEL_CS_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_CS_4(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_CS_4_Msk) | (val << REG_MTC_CONFIG_SEL_CS_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_4(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_4From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_CS_5(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_CS_5_Msk) | (val << REG_MTC_CONFIG_SEL_CS_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_5(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_5From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_CS_6(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_CS_6_Msk) | (val << REG_MTC_CONFIG_SEL_CS_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_6(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_6From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_SPI_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_SPI_1_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_SPI_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_SPI_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_SPI_2_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_SPI_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_CAN_1(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_CAN_1_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CAN_1(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_CAN_2(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_CAN_2_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CAN_2(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_CAN_3(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_CAN_3_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CAN_3(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setMTC_Addr_3_Clear_SEL_RS422(const mm_enabled_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_RS422_Msk) | (val << REG_MTC_CONFIG_SEL_RS422_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_RS422(mm_enabled_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getMTC_Addr_3_Clear_SEL_RS422From(mm_enabled_t * dest, const uint32_t source) {
+    *dest = (mm_enabled_t) ((source & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
+    return mm_OK;
+}
 /*************** Get/Set functions for RTOS_Status0 register ******************************************************************/
 mm_response_t mm_setRTOS_Status0(const uint32_t val) {
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
@@ -9200,5 +18740,225 @@ mm_response_t mm_getRTOS_Status0_CANTargetOutgoingOverflow(bool * dest) {
 
 mm_response_t mm_getRTOS_Status0_CANTargetOutgoingOverflowFrom(bool * dest, const uint32_t source) {
     *dest = (bool) ((source & REG_RTOS_STATUS0_CANTARGETOUTGOINGOVERFLOW_Msk) >> REG_RTOS_STATUS0_CANTARGETOUTGOINGOVERFLOW_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setRTOS_Status0_UARTTargetIncomingOverflow(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_UARTTARGETINCOMINGOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_UARTTARGETINCOMINGOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getRTOS_Status0_UARTTargetIncomingOverflow(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_UARTTARGETINCOMINGOVERFLOW_Msk) >> REG_RTOS_STATUS0_UARTTARGETINCOMINGOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getRTOS_Status0_UARTTargetIncomingOverflowFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_RTOS_STATUS0_UARTTARGETINCOMINGOVERFLOW_Msk) >> REG_RTOS_STATUS0_UARTTARGETINCOMINGOVERFLOW_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setRTOS_Status0_UARTTargetTxHBOverflow(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_UARTTARGETTXHBOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_UARTTARGETTXHBOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getRTOS_Status0_UARTTargetTxHBOverflow(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_UARTTARGETTXHBOVERFLOW_Msk) >> REG_RTOS_STATUS0_UARTTARGETTXHBOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getRTOS_Status0_UARTTargetTxHBOverflowFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_RTOS_STATUS0_UARTTARGETTXHBOVERFLOW_Msk) >> REG_RTOS_STATUS0_UARTTARGETTXHBOVERFLOW_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setRTOS_Status0_UARTTargetRxHBOverflow(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_UARTTARGETRXHBOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_UARTTARGETRXHBOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getRTOS_Status0_UARTTargetRxHBOverflow(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_UARTTARGETRXHBOVERFLOW_Msk) >> REG_RTOS_STATUS0_UARTTARGETRXHBOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getRTOS_Status0_UARTTargetRxHBOverflowFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_RTOS_STATUS0_UARTTARGETRXHBOVERFLOW_Msk) >> REG_RTOS_STATUS0_UARTTARGETRXHBOVERFLOW_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setRTOS_Status0_UARTTargetOutgoingOverflow(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_UARTTARGETOUTGOINGOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_UARTTARGETOUTGOINGOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getRTOS_Status0_UARTTargetOutgoingOverflow(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_UARTTARGETOUTGOINGOVERFLOW_Msk) >> REG_RTOS_STATUS0_UARTTARGETOUTGOINGOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getRTOS_Status0_UARTTargetOutgoingOverflowFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_RTOS_STATUS0_UARTTARGETOUTGOINGOVERFLOW_Msk) >> REG_RTOS_STATUS0_UARTTARGETOUTGOINGOVERFLOW_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setRTOS_Status0_GSETargetIncomingOverflow(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_GSETARGETINCOMINGOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_GSETARGETINCOMINGOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getRTOS_Status0_GSETargetIncomingOverflow(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_GSETARGETINCOMINGOVERFLOW_Msk) >> REG_RTOS_STATUS0_GSETARGETINCOMINGOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getRTOS_Status0_GSETargetIncomingOverflowFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_RTOS_STATUS0_GSETARGETINCOMINGOVERFLOW_Msk) >> REG_RTOS_STATUS0_GSETARGETINCOMINGOVERFLOW_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setRTOS_Status0_GSETargetOutgoingOverflow(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_GSETARGETOUTGOINGOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_GSETARGETOUTGOINGOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getRTOS_Status0_GSETargetOutgoingOverflow(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_GSETARGETOUTGOINGOVERFLOW_Msk) >> REG_RTOS_STATUS0_GSETARGETOUTGOINGOVERFLOW_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getRTOS_Status0_GSETargetOutgoingOverflowFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_RTOS_STATUS0_GSETARGETOUTGOINGOVERFLOW_Msk) >> REG_RTOS_STATUS0_GSETARGETOUTGOINGOVERFLOW_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setRTOS_Status0_SERMUX_CRC_Error(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_SERMUX_CRC_ERROR_Msk) | (val << REG_RTOS_STATUS0_SERMUX_CRC_ERROR_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getRTOS_Status0_SERMUX_CRC_Error(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_SERMUX_CRC_ERROR_Msk) >> REG_RTOS_STATUS0_SERMUX_CRC_ERROR_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getRTOS_Status0_SERMUX_CRC_ErrorFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_RTOS_STATUS0_SERMUX_CRC_ERROR_Msk) >> REG_RTOS_STATUS0_SERMUX_CRC_ERROR_Pos);
+    return mm_OK;
+}
+/*************** Get/Set functions for PreviousEndpoint register **************************************************************/
+mm_response_t mm_setPreviousEndpoint(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.PreviousEndpoint = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getPreviousEndpoint(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.PreviousEndpoint;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_setPreviousEndpoint_Number(const uint8_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.PreviousEndpoint = (mm.PreviousEndpoint & ~REG_PREVIOUSENDPOINT_NUMBER_Msk) | (val << REG_PREVIOUSENDPOINT_NUMBER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getPreviousEndpoint_Number(uint8_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (uint8_t) ((mm.PreviousEndpoint & REG_PREVIOUSENDPOINT_NUMBER_Msk) >> REG_PREVIOUSENDPOINT_NUMBER_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getPreviousEndpoint_NumberFrom(uint8_t * dest, const uint32_t source) {
+    *dest = (uint8_t) ((source & REG_PREVIOUSENDPOINT_NUMBER_Msk) >> REG_PREVIOUSENDPOINT_NUMBER_Pos);
     return mm_OK;
 }
