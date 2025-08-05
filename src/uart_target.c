@@ -164,7 +164,6 @@ void UARTTARGET_RxTask(void * handle)
 	uint8_t rx_buffer[32];
 	size_t rx_max_length = 32;
 	uint8_t uart_msg_kiss_packet[32];
-	uint8_t out_message_data[32];
 	size_t packet_index = 0;
 	bool receiving = false;
 	bool escaped = false;
@@ -231,8 +230,6 @@ void UARTTARGET_RxTask(void * handle)
 					// Packet_index stores the entire kiss packet length. Subtract 4 for the kiss header (type, id, src,dest),
 					// Then add 2 for the EGSE UART header (Type + Length)
 					out_message.data_len = kiss_message_size + 2; 
-					
-					out_message.data = out_message_data;
 					
 					out_message.data[0] = uart_msg_kiss_packet[0]; // msg type
 					out_message.data[1] = kiss_message_size; // msg length

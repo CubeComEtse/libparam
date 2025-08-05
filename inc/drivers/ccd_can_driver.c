@@ -156,7 +156,7 @@ void ccd_can_Send_message(void * vHandle, uint32_t header, uint8_t * data, size_
 	 while (mcan_tx_transfer_request(&pHandle->can_module, 1 << buffer_index) == ERR_BUSY);
 }
 
-bool ccd_can_Receive_message(void * vHandle, uint32_t * header, uint8_t ** data, size_t * data_len)
+bool ccd_can_Receive_message(void * vHandle, uint32_t * header, uint8_t * data, size_t * data_len)
 {
 	ccd_can_t * pHandle = (ccd_can_t*) vHandle;
 	struct mcan_rx_element_fifo_0 rx_element;
@@ -165,7 +165,7 @@ bool ccd_can_Receive_message(void * vHandle, uint32_t * header, uint8_t ** data,
 	{
 		*header = rx_element.R0.reg;
 		*data_len = rx_element.R1.bit.DLC;
-		memcpy(*data, rx_element.data, *data_len);
+		memcpy(data, rx_element.data, *data_len);
 		return true;
 	}	
 	return false;

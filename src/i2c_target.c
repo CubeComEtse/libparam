@@ -84,8 +84,8 @@ void I2CTARGET_Task(void * handle)
 				uint8_t reg_address = in_message.data[0];
 				uint8_t read_length = in_message.data[1];
 				
-				read_buffer[0] = reg_address;
-				read_buffer[1] = read_length;
+				out_message.data[0] = reg_address;
+				out_message.data[1] = read_length;
 
 				uint8_t address_with_checksum[3];
 				address_with_checksum[0] = in_message.data[0];
@@ -94,13 +94,12 @@ void I2CTARGET_Task(void * handle)
 				
 				if (pHandle->write_read_delay ==0)
 				{
-					if (pHandle->i2c_read(pHandle->i2c_handle, pHandle->legacy_address, address_with_checksum, 3, &read_buffer[2], read_length + 2)){
+					if (pHandle->i2c_read(pHandle->i2c_handle, pHandle->legacy_address, address_with_checksum, 3, &out_message.data[2], read_length + 2)){
 					
 						// Create the received message
 						out_message.target = in_message.target;
 						out_message.is_read = true;
 						out_message.msg_id = in_message.msg_id;
-						out_message.data = read_buffer;
 						out_message.data_len = read_length + 2;
 					
 						size_t encoded_len = encode_v2_message(encoded, &out_message);
@@ -119,13 +118,12 @@ void I2CTARGET_Task(void * handle)
 					
 					delay_us(pHandle->write_read_delay);
 					
-					if (pHandle->i2c_read(pHandle->i2c_handle, pHandle->legacy_address, address_with_checksum, 0, &read_buffer[2], read_length + 2)){
+					if (pHandle->i2c_read(pHandle->i2c_handle, pHandle->legacy_address, address_with_checksum, 0, &out_message.data[2], read_length + 2)){
 											
 						// Create the received message
 						out_message.target = in_message.target;
 						out_message.is_read = true;
 						out_message.msg_id = in_message.msg_id;
-						out_message.data = read_buffer;
 						out_message.data_len = read_length + 2;
 											
 						size_t encoded_len = encode_v2_message(encoded, &out_message);
@@ -176,12 +174,11 @@ void I2CTARGET_Task(void * handle)
 				// Copy the register address and length to the buffer
 				memcpy(read_buffer, in_message.data, 2);
 
-				if (pHandle->i2c_read(pHandle->i2c_handle, device_address, address, 1, &read_buffer[2], read_length)){
+				if (pHandle->i2c_read(pHandle->i2c_handle, device_address, address, 1, &out_message.data[2], read_length)){
 					// Create the received message
 					out_message.target = in_message.target;
 					out_message.is_read = true;
 					out_message.msg_id = in_message.msg_id;
-					out_message.data = read_buffer;
 					// Final length is the 3 bytes already in the header plus the (length) bytes we just read.
 					out_message.data_len = 2 + read_length;
 								
@@ -216,12 +213,11 @@ void I2CTARGET_Task(void * handle)
 				// Copy the register address and length to the buffer
 				memcpy(read_buffer, in_message.data, 2);
 
-				if (pHandle->i2c_read(pHandle->i2c_handle, device_address, address, 2, &read_buffer[2], read_length)){
+				if (pHandle->i2c_read(pHandle->i2c_handle, device_address, address, 2, &out_message.data[2], read_length)){
 					// Create the received message
 					out_message.target = in_message.target;
 					out_message.is_read = true;
 					out_message.msg_id = in_message.msg_id;
-					out_message.data = read_buffer;
 					// Final length is the 2 bytes already in the header plus the (length) bytes we just read.
 					out_message.data_len = 2 + read_length;
 					
@@ -261,13 +257,12 @@ void I2CTARGET_Task(void * handle)
 				// Copy the i2c header to the out message data
 				memcpy(read_buffer, in_message.data, 3);
 				
-				if (pHandle->i2c_read(pHandle->i2c_handle, bus_address, &in_message.data[1], addres_length, &read_buffer[3], in_message.data[3]))
+				if (pHandle->i2c_read(pHandle->i2c_handle, bus_address, &in_message.data[1], addres_length, &out_message.data[3], in_message.data[3]))
 				{
 					// Create the received message
 					out_message.target = in_message.target;
 					out_message.is_read = true;
 					out_message.msg_id = in_message.msg_id;
-					out_message.data = read_buffer;
 					out_message.data_len = in_message.data[3] + 3;
 						
 					// encode the out message to a buffer, and transmit
