@@ -97,6 +97,8 @@ void SETUP_Task(void* handle)
 	mm_setI2CConfB_ADDR(platform->i2c_target->legacy_address);
 	
 	mm_setCANConfB_Address(platform->can_target->radio_can_address);
+	mm_setUtilI2CConfA_SPD(bsp.util_i2c->baud / 10000);
+	
 	
 	mm_setRFRelaysConf_ScanEnabled(true);
 	mm_setMultiConf0_ScanEnabled(true);

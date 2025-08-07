@@ -288,11 +288,11 @@ void I2CTARGET_Task(void * handle)
 /*
  * Set the new baud of the I2C Device
 */
-void I2CTARGET_SetBaud(i2c_target_t * handle, uint32_t baud){
+bool I2CTARGET_SetBaud(i2c_target_t * handle, uint32_t baud){
 	if (handle->i2c_set_baud == 0){
-		return;
+		return false;
 	}
-	handle->i2c_set_baud(handle->i2c_handle, baud);
+	return handle->i2c_set_baud(handle->i2c_handle, baud);
 }
 
 /*

@@ -838,6 +838,46 @@
 			] },
 
 			{
+				"name": "UtilI2CConfA",
+				"address": "0x98",
+				"dir": "rw",
+				"width": "32",
+				"fields": [
+					{
+						"name": "Reset", "bit": "31", "c#": { "hasminmax": "false", "type": "byte" }, "c": { "type": "bool"}
+					},
+					{
+						"name": "SPD",
+						"pretty-name": "I2C Speed",
+						"description": "Sets the I2C speed in 10kb/s intervals. (1 = 10 kb/s, 40 = 400 kb/s)",
+						"bit": "7-0",
+						"c#": {
+							"hasminmax": "true",
+							"min": 1,
+							"max": 40,
+							"type": "byte"
+						},
+						"c": {"type": "uint8_t"}
+					}
+				],
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+
+			{
+				"name": "UtilI2CStatus",
+				"address": "0x99",
+				"dir": "rw",
+				"width": "32",
+				"fields": [
+				],
+				"c#": {
+					"type": "UInt32"
+				}
+			},
+
+			{
 				"name":"PreviousEndpoint",
 				"address": "0xA0",
 				"dir": "r",

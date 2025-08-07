@@ -235,6 +235,7 @@ static void BSP_vInitUtilI2C(bsp_t * bsp){
 	ioport_set_pin_mode(I2C_UTIL_SCL_PIN, I2C_UTIL_SCL_MUX);
 	ioport_disable_pin(I2C_UTIL_SCL_PIN);
 	
+	util_i2c.baud = 100000;
 	ccd_i2c_driver_Init(&util_i2c, I2C_UTIL_DEVICE);
 	bsp->util_i2c = &util_i2c;
 }

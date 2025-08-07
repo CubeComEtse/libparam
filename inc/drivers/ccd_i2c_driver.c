@@ -12,6 +12,7 @@
 #include "FreeRTOS.h"
 #include "semphr.h"
 
+#include "register_map.h"
 #include "ccd_i2c_driver.h"
 
 #include <asf.h>
@@ -35,18 +36,36 @@ void ccd_i2c_driver_Init(ccd_i2c_t * driver, Twihs * instance)
 		sysclk_enable_peripheral_clock(ID_TWIHS2);
  
 	// Setup
+	cc_i2c_driver_ReInit(driver);
+}
+
+void cc_i2c_driver_ReInit(ccd_i2c_t * driver)
+{	
+	twihs_disable_interrupt(driver->base_twihs, 0xFFFFFFFF);
+	
+	// Setup
 	twihs_options_t i2cOptions;
-	i2cOptions.chip = 0x26;
+	// Changed from 0x26 to other value - did this perhaps cause issues?
+	i2cOptions.chip = 0x76;
 	i2cOptions.smbus = 0;
 	i2cOptions.master_clk = sysclk_get_peripheral_hz();
-	i2cOptions.speed = 400000;
+	i2cOptions.speed = driver->baud;
+	
 	twihs_master_init(driver->base_twihs, &i2cOptions);
 }
 
-void ccd_i2c_driver_SetBaud(void * handle, uint32_t new_baud){
+bool ccd_i2c_driver_SetBaud(void * handle, uint32_t new_baud){
 	ccd_i2c_t * driver = (ccd_i2c_t *) handle;
 	
-	twihs_set_speed(driver->base_twihs, new_baud, sysclk_get_peripheral_hz());
+	if (xSemaphoreTake(driver->threadMutex, pdMS_TO_TICKS(500)) == pdTRUE)
+	{
+		driver->baud = new_baud;
+		
+		twihs_set_speed(driver->base_twihs, new_baud, sysclk_get_peripheral_hz());
+		xSemaphoreGive(driver->threadMutex);
+		return true;
+	}
+	return false;
 }
 
 
@@ -67,7 +86,13 @@ bool ccd_i2c_driver_Write(void * handle, const uint8_t dev_addr, const uint8_t *
 	{
 		result = twihs_master_write(driver->base_twihs, &write_packet);
 		twihs_read_byte(driver->base_twihs);
+		
+		if (driver->store_status_in_mm){
+			mm_setUtilI2CStatus(driver->base_twihs->TWIHS_SR);
+		}
+		
 		xSemaphoreGive(driver->threadMutex);
+		
 	}
 	return (result == TWIHS_SUCCESS);
 }
@@ -88,9 +113,13 @@ bool ccd_i2c_driver_Read(void * handle, const uint8_t dev_addr, const uint8_t * 
 	if (xSemaphoreTake(driver->threadMutex, pdMS_TO_TICKS(500)) == pdTRUE)
 	{
 		result = twihs_master_read(driver->base_twihs, &read_packet);
+		
+		if (driver->store_status_in_mm){
+			mm_setUtilI2CStatus(driver->base_twihs->TWIHS_SR);
+		}
+		
 		xSemaphoreGive(driver->threadMutex);	
 	}
-	
 
 	// Clear buffer
 	// twihs_read_byte(drv->p_twihs);

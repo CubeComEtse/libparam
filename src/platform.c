@@ -150,7 +150,7 @@ void PLATFORM_vInit(bsp_t * bsp)
 	// Add UART Targets
 	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_UART_CC_2, uart_target.incoming_messages, uart_target.outgoing_messages, mm_setRTOS_Status0_UARTTargetIncomingOverflow);
 	
-	REG_vSetPlatformPointer(&platform);
+	REG_vSetPlatformPointer(&platform, bsp);
 		
 		
 	platform.rf_relay_1 = &rf_relay_1;		
