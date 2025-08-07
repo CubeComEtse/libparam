@@ -130,7 +130,7 @@ void SETUP_Task(void* handle)
 	xTaskCreate(ccd_usart_RXProcessingTask, "UART RX", 512, (void*) bsp.bus_uart, tskIDLE_PRIORITY + 2, NULL);
 	
 	// Process RF Relay, multitester and TE Adapters
-	//xTaskCreate(DEVTOOLS_Task, "RF Tools", 512, (void *) platform, tskIDLE_PRIORITY+2, NULL);
+	xTaskCreate(DEVTOOLS_Task, "RF Tools", 512, (void *) platform, tskIDLE_PRIORITY+2, NULL);
 	xTaskCreate(TE_Adaptors_Task, "TE Adapters", 512, (void *) platform->te_scanner, tskIDLE_PRIORITY + 2, NULL);
 	
 	// Multitester task
