@@ -12,6 +12,8 @@
 
 #include "gse_manager.h"
 #include "register_map.h"
+
+
   
 static uint32_t REG_CopyArrayToU32(const uint8_t* data);
 
@@ -72,6 +74,7 @@ static addres_to_func_map_t address_to_func_map[] = {
 	{ reg_CSBoard_T5_addr, mm_getCSBoard_T5 },
 	{ reg_CSBoard_T6_addr, mm_getCSBoard_T6 },
 	{ reg_CSBoard_T7_addr, mm_getCSBoard_T7 },
+		
 	{ reg_CSBoard_Current0I0_addr, mm_getCSBoard_Current0I0},
 	{ reg_CSBoard_Current0I1_addr, mm_getCSBoard_Current0I1},
 	{ reg_CSBoard_Current0I2_addr, mm_getCSBoard_Current0I2},
@@ -96,6 +99,7 @@ static addres_to_func_map_t address_to_func_map[] = {
 	{ reg_CSBoard_Current7I0_addr, mm_getCSBoard_Current7I0},
 	{ reg_CSBoard_Current7I1_addr, mm_getCSBoard_Current7I1},
 	{ reg_CSBoard_Current7I2_addr, mm_getCSBoard_Current7I2},
+		
     { reg_TE_Addr_0_addr, mm_getTE_Addr_0},
     { reg_TE_Addr_1_addr, mm_getTE_Addr_1},
     { reg_TE_Addr_2_addr, mm_getTE_Addr_2},
@@ -107,6 +111,7 @@ static addres_to_func_map_t address_to_func_map[] = {
 	{ reg_MTC_Addr_3_addr, mm_getMTC_Addr_3},
 		
 	{ reg_RTOS_Status0_addr, mm_getRTOS_Status0},
+		
 	{ reg_PreviousEndpoint_addr, mm_getPreviousEndpoint}, 
 };
 
@@ -492,14 +497,14 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 				RFRelay_SetDesiredChannel(platform->rf_relay_2, rf2_channel);
 			}
 			break;
-// 		case reg_MultiConf1_Set_addr:
-// 			// Register definition precisely matches the bits.
-// 			// Don't set the register, it reads 0 when read.
-// 			MULTI_SetBitsFrom(platform->multitester, deserialized);
-// 			break;
-// 		case reg_MultiConf1_Clear_addr:
-// 			MULTI_ClearBitsFrom(platform->multitester, deserialized);
-// 			break;
+		case reg_MultiConf1_Set_addr:
+			// Register definition precisely matches the bits.
+			// Don't set the register, it reads 0 when read.
+			MULTI_SetBitsFrom(platform->multitester, deserialized);
+			break;
+		case reg_MultiConf1_Clear_addr:
+			MULTI_ClearBitsFrom(platform->multitester, deserialized);
+			break;
 			
 		case reg_TE_Addr_0_Set_addr:
 			{
@@ -601,33 +606,45 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 				TE_Adaptor_ClearTeBits(platform->te_scanner, 3, (deserialized >> 16) & 0x0FFF);
 			}
 			break;
+<<<<<<< HEAD
 			
 		// Multitester V2
 		case reg_MTC_Addr_0_Set_addr:
-			MTCV2_SetBits(platform->multitester, 0, deserialized);
-			break;
 		case reg_MTC_Addr_1_Set_addr:
-			MTCV2_SetBits(platform->multitester, 1, deserialized);
-			break;
 		case reg_MTC_Addr_2_Set_addr:
-			MTCV2_SetBits(platform->multitester, 2, deserialized);
-			break;
 		case reg_MTC_Addr_3_Set_addr:
-			MTCV2_SetBits(platform->multitester, 3, deserialized);
+		{
+			
+			switch (address) {
+				case 0xb1: platform->multitester->i2c_address = 0x51; break;
+				case 0xb4: platform->multitester->i2c_address = 0x52; break;
+				case 0xb7: platform->multitester->i2c_address = 0x53; break;
+				case 0xba: platform->multitester->i2c_address = 0x54; break;
+			}
+			
+			MTCV2_SetBits(platform->multitester, deserialized);
 			break;
+		}
 		case reg_MTC_Addr_0_Clear_addr:
-			MTCV2_ClearBits(platform->multitester, 0, deserialized);
-			break;
 		case reg_MTC_Addr_1_Clear_addr:
-			MTCV2_ClearBits(platform->multitester, 1, deserialized);
-			break;
 		case reg_MTC_Addr_2_Clear_addr:
-			MTCV2_ClearBits(platform->multitester, 2, deserialized);
-			break;
 		case reg_MTC_Addr_3_Clear_addr:
-			MTCV2_ClearBits(platform->multitester, 3, deserialized);
+		{
+			
+			switch (address) {
+				case 0xb1: platform->multitester->i2c_address = 0x51; break;
+				case 0xb4: platform->multitester->i2c_address = 0x52; break;
+				case 0xb7: platform->multitester->i2c_address = 0x53; break;
+				case 0xba: platform->multitester->i2c_address = 0x54; break;
+			}
+			
+			MTCV2_ClearBits(platform->multitester, deserialized);
 			break;
-
+		}
+		
+		
+					
+=======
 		case reg_PreviousEndpoint_addr:
 		{
 			// Just store the full value
@@ -635,7 +652,6 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 		}
 		break;
 		
-		
-					
+>>>>>>> da51b20b79ccc0eceda7d3087f1adc55708de803
 	}        
 }

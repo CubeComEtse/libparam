@@ -373,6 +373,7 @@ uint32_t twihs_master_read(Twihs *p_twihs, twihs_packet_t *p_packet)
 		timeout = TWIHS_TIMEOUT;
 	}
 
+	// Tene: code hangs here during i2c read from mtc. scl not pulled high and no stop condition occurs.
 	while (!(p_twihs->TWIHS_SR & TWIHS_SR_TXCOMP)) {
 	}
 

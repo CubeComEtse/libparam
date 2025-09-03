@@ -20,11 +20,23 @@
 #include "pca9555.h"
 #include "tmr.h"
 
-// MTC Version 2 Addresses 
-#define MTCV2_Addr0 0x00
-#define MTCV2_Addr1 0x01
-#define MTCV2_Addr2 0x02
-#define MTCV2_Addr3 0x03
+#define I2C_CMD_WRITE 0x01
+#define I2C_CMD_READ 0x02
+
+#define POSITION_1 0x51
+#define POSITION_2 0x52
+#define POSITION_3 0x53
+#define POSITION_4 0x54
+
+typedef struct {
+
+	uint8_t i2c_address;
+	enum pca_device_state state;
+	tmr_t update_timer;
+	uint32_t new_portbits;
+	uint32_t previous_portbits;
+	
+} multitester_positions_t;
 
 
 typedef struct {
@@ -32,22 +44,26 @@ typedef struct {
 	bool (*i2c_read_function)(void * handle, const uint8_t dev_addr, const uint8_t * addr, const size_t addr_len, uint8_t * read_buffer, size_t read_len);
 	void * i2c_handle;
 	
-	uint8_t i2c_address;
+	//uint8_t i2c_address;
 	
 	// The multi-tester has similar state to the RF relays. 
-	enum pca_device_state state;
+	//enum pca_device_state state;
+	//enum mtcv2_states mtcv2_state;
 	
 	// Timer tells us when to check for updates
-	tmr_t update_timer;
+	//tmr_t update_timer;
 	
 	// These values map 1:1 to the setting for the IO expander IC.
 	//uint16_t new_portbits;
-	uint32_t new_portbits;
-	uint32_t previous_portbits;
-	bool auto_clear;
-	bool scan_enabled;
+	//uint32_t new_portbits;
+	//uint32_t previous_portbits;
+	//bool auto_clear;
+	//bool scan_enabled;
+	
+	multitester_positions_t multi_positions[4];
 	
 } multitester_t;
+
 
 
 typedef enum channel{
@@ -95,9 +111,8 @@ void MULTI_SetScanEnabled(multitester_t * pHandle, bool value);
 
 // Multitester Version 2
 void MTCV2_Init(multitester_t * handle);
-void MTCV2_SetBits(multitester_t * pHandle, uint32_t bits);
-void MTCV2_ClearBits(multitester_t * pHandle, uint32_t bits);
-/*void MTCV2_Task(multitester_t * pHandle, const uint32_t address, const uint32_t data, const size_t length);*/
+void MTCV2_SetBits(multitester_t * pHandle, uint8_t index, uint32_t bits);
+void MTCV2_ClearBits(multitester_t * pHandle, uint8_t index, uint32_t bits);
 void MTCV2_Task(void * vHandle);
 
 

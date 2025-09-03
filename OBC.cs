@@ -262,7 +262,7 @@ namespace Devices.Models
             OBC_SCF_TE_Addr_3_Clear_nReset,
             OBC_SCF_TE_Addr_3_Clear_COMM_TR,
             OBC_SCF_MTC_Addr_0_Set_ScanEnabled,
-            OBC_SCF_MTC_Addr_0_Set_Detected,
+            OBC_SCF_MTC_Addr_0_Set_ClearAll,
             OBC_SCF_MTC_Addr_0_Set_Type,
             OBC_SCF_MTC_Addr_0_Set_ENABLE_1,
             OBC_SCF_MTC_Addr_0_Set_ENABLE_2,
@@ -293,7 +293,7 @@ namespace Devices.Models
             OBC_SCF_MTC_Addr_0_Set_SEL_CAN_3,
             OBC_SCF_MTC_Addr_0_Set_SEL_RS422,
             OBC_SCF_MTC_Addr_0_Clear_ScanEnabled,
-            OBC_SCF_MTC_Addr_0_Clear_Detected,
+            OBC_SCF_MTC_Addr_0_Clear_ClearAll,
             OBC_SCF_MTC_Addr_0_Clear_Type,
             OBC_SCF_MTC_Addr_0_Clear_ENABLE_1,
             OBC_SCF_MTC_Addr_0_Clear_ENABLE_2,
@@ -324,7 +324,7 @@ namespace Devices.Models
             OBC_SCF_MTC_Addr_0_Clear_SEL_CAN_3,
             OBC_SCF_MTC_Addr_0_Clear_SEL_RS422,
             OBC_SCF_MTC_Addr_1_Set_ScanEnabled,
-            OBC_SCF_MTC_Addr_1_Set_Detected,
+            OBC_SCF_MTC_Addr_1_Set_ClearAll,
             OBC_SCF_MTC_Addr_1_Set_Type,
             OBC_SCF_MTC_Addr_1_Set_ENABLE_1,
             OBC_SCF_MTC_Addr_1_Set_ENABLE_2,
@@ -355,7 +355,7 @@ namespace Devices.Models
             OBC_SCF_MTC_Addr_1_Set_SEL_CAN_3,
             OBC_SCF_MTC_Addr_1_Set_SEL_RS422,
             OBC_SCF_MTC_Addr_1_Clear_ScanEnabled,
-            OBC_SCF_MTC_Addr_1_Clear_Detected,
+            OBC_SCF_MTC_Addr_1_Clear_ClearAll,
             OBC_SCF_MTC_Addr_1_Clear_Type,
             OBC_SCF_MTC_Addr_1_Clear_ENABLE_1,
             OBC_SCF_MTC_Addr_1_Clear_ENABLE_2,
@@ -386,7 +386,7 @@ namespace Devices.Models
             OBC_SCF_MTC_Addr_1_Clear_SEL_CAN_3,
             OBC_SCF_MTC_Addr_1_Clear_SEL_RS422,
             OBC_SCF_MTC_Addr_2_Set_ScanEnabled,
-            OBC_SCF_MTC_Addr_2_Set_Detected,
+            OBC_SCF_MTC_Addr_2_Set_ClearAll,
             OBC_SCF_MTC_Addr_2_Set_Type,
             OBC_SCF_MTC_Addr_2_Set_ENABLE_1,
             OBC_SCF_MTC_Addr_2_Set_ENABLE_2,
@@ -417,7 +417,7 @@ namespace Devices.Models
             OBC_SCF_MTC_Addr_2_Set_SEL_CAN_3,
             OBC_SCF_MTC_Addr_2_Set_SEL_RS422,
             OBC_SCF_MTC_Addr_2_Clear_ScanEnabled,
-            OBC_SCF_MTC_Addr_2_Clear_Detected,
+            OBC_SCF_MTC_Addr_2_Clear_ClearAll,
             OBC_SCF_MTC_Addr_2_Clear_Type,
             OBC_SCF_MTC_Addr_2_Clear_ENABLE_1,
             OBC_SCF_MTC_Addr_2_Clear_ENABLE_2,
@@ -448,7 +448,7 @@ namespace Devices.Models
             OBC_SCF_MTC_Addr_2_Clear_SEL_CAN_3,
             OBC_SCF_MTC_Addr_2_Clear_SEL_RS422,
             OBC_SCF_MTC_Addr_3_Set_ScanEnabled,
-            OBC_SCF_MTC_Addr_3_Set_Detected,
+            OBC_SCF_MTC_Addr_3_Set_ClearAll,
             OBC_SCF_MTC_Addr_3_Set_Type,
             OBC_SCF_MTC_Addr_3_Set_ENABLE_1,
             OBC_SCF_MTC_Addr_3_Set_ENABLE_2,
@@ -479,7 +479,7 @@ namespace Devices.Models
             OBC_SCF_MTC_Addr_3_Set_SEL_CAN_3,
             OBC_SCF_MTC_Addr_3_Set_SEL_RS422,
             OBC_SCF_MTC_Addr_3_Clear_ScanEnabled,
-            OBC_SCF_MTC_Addr_3_Clear_Detected,
+            OBC_SCF_MTC_Addr_3_Clear_ClearAll,
             OBC_SCF_MTC_Addr_3_Clear_Type,
             OBC_SCF_MTC_Addr_3_Clear_ENABLE_1,
             OBC_SCF_MTC_Addr_3_Clear_ENABLE_2,
@@ -1599,7 +1599,7 @@ namespace Devices.Models
                 set { data0 = (UInt32)((data0 & ~(UInt32)0x00000001) | (( (UInt32)(value) & 0x00000001) << 0)); }
             }
 
-            public byte Detected
+            public byte ClearAll
             {
                 get { return (byte)((data0 & (UInt32)0x00000002) >> 1); } 
                 set { data0 = (UInt32)((data0 & ~(UInt32)0x00000002) | (( (UInt32)(value) & 0x00000001) << 1)); }
@@ -6165,15 +6165,15 @@ namespace Devices.Models
             set => _ = Set(ref _MTC_Addr_0_ScanEnabled, value);
         }
         
-        private bool _MTC_Addr_0_DetectedIsSet;
-        public bool MTC_Addr_0_DetectedIsSet {
-            get => _MTC_Addr_0_DetectedIsSet;
-            set => _ = Set(ref _MTC_Addr_0_DetectedIsSet, value); 
+        private bool _MTC_Addr_0_ClearAllIsSet;
+        public bool MTC_Addr_0_ClearAllIsSet {
+            get => _MTC_Addr_0_ClearAllIsSet;
+            set => _ = Set(ref _MTC_Addr_0_ClearAllIsSet, value); 
         }
-        private byte _MTC_Addr_0_Detected;
-        public byte MTC_Addr_0_Detected {
-            get => _MTC_Addr_0_Detected;
-            set => _ = Set(ref _MTC_Addr_0_Detected, value);
+        private byte _MTC_Addr_0_ClearAll;
+        public byte MTC_Addr_0_ClearAll {
+            get => _MTC_Addr_0_ClearAll;
+            set => _ = Set(ref _MTC_Addr_0_ClearAll, value);
         }
         
         private bool _MTC_Addr_0_TypeIsSet;
@@ -6507,15 +6507,15 @@ namespace Devices.Models
             set => _ = Set(ref _MTC_Addr_0_Set_ScanEnabled, value);
         }
         
-        private bool _MTC_Addr_0_Set_DetectedIsSet;
-        public bool MTC_Addr_0_Set_DetectedIsSet {
-            get => _MTC_Addr_0_Set_DetectedIsSet;
-            set => _ = Set(ref _MTC_Addr_0_Set_DetectedIsSet, value); 
+        private bool _MTC_Addr_0_Set_ClearAllIsSet;
+        public bool MTC_Addr_0_Set_ClearAllIsSet {
+            get => _MTC_Addr_0_Set_ClearAllIsSet;
+            set => _ = Set(ref _MTC_Addr_0_Set_ClearAllIsSet, value); 
         }
-        private byte _MTC_Addr_0_Set_Detected;
-        public byte MTC_Addr_0_Set_Detected {
-            get => _MTC_Addr_0_Set_Detected;
-            set => _ = Set(ref _MTC_Addr_0_Set_Detected, value);
+        private byte _MTC_Addr_0_Set_ClearAll;
+        public byte MTC_Addr_0_Set_ClearAll {
+            get => _MTC_Addr_0_Set_ClearAll;
+            set => _ = Set(ref _MTC_Addr_0_Set_ClearAll, value);
         }
         
         private bool _MTC_Addr_0_Set_TypeIsSet;
@@ -6849,15 +6849,15 @@ namespace Devices.Models
             set => _ = Set(ref _MTC_Addr_0_Clear_ScanEnabled, value);
         }
         
-        private bool _MTC_Addr_0_Clear_DetectedIsSet;
-        public bool MTC_Addr_0_Clear_DetectedIsSet {
-            get => _MTC_Addr_0_Clear_DetectedIsSet;
-            set => _ = Set(ref _MTC_Addr_0_Clear_DetectedIsSet, value); 
+        private bool _MTC_Addr_0_Clear_ClearAllIsSet;
+        public bool MTC_Addr_0_Clear_ClearAllIsSet {
+            get => _MTC_Addr_0_Clear_ClearAllIsSet;
+            set => _ = Set(ref _MTC_Addr_0_Clear_ClearAllIsSet, value); 
         }
-        private byte _MTC_Addr_0_Clear_Detected;
-        public byte MTC_Addr_0_Clear_Detected {
-            get => _MTC_Addr_0_Clear_Detected;
-            set => _ = Set(ref _MTC_Addr_0_Clear_Detected, value);
+        private byte _MTC_Addr_0_Clear_ClearAll;
+        public byte MTC_Addr_0_Clear_ClearAll {
+            get => _MTC_Addr_0_Clear_ClearAll;
+            set => _ = Set(ref _MTC_Addr_0_Clear_ClearAll, value);
         }
         
         private bool _MTC_Addr_0_Clear_TypeIsSet;
@@ -7191,15 +7191,15 @@ namespace Devices.Models
             set => _ = Set(ref _MTC_Addr_1_ScanEnabled, value);
         }
         
-        private bool _MTC_Addr_1_DetectedIsSet;
-        public bool MTC_Addr_1_DetectedIsSet {
-            get => _MTC_Addr_1_DetectedIsSet;
-            set => _ = Set(ref _MTC_Addr_1_DetectedIsSet, value); 
+        private bool _MTC_Addr_1_ClearAllIsSet;
+        public bool MTC_Addr_1_ClearAllIsSet {
+            get => _MTC_Addr_1_ClearAllIsSet;
+            set => _ = Set(ref _MTC_Addr_1_ClearAllIsSet, value); 
         }
-        private byte _MTC_Addr_1_Detected;
-        public byte MTC_Addr_1_Detected {
-            get => _MTC_Addr_1_Detected;
-            set => _ = Set(ref _MTC_Addr_1_Detected, value);
+        private byte _MTC_Addr_1_ClearAll;
+        public byte MTC_Addr_1_ClearAll {
+            get => _MTC_Addr_1_ClearAll;
+            set => _ = Set(ref _MTC_Addr_1_ClearAll, value);
         }
         
         private bool _MTC_Addr_1_TypeIsSet;
@@ -7533,15 +7533,15 @@ namespace Devices.Models
             set => _ = Set(ref _MTC_Addr_1_Set_ScanEnabled, value);
         }
         
-        private bool _MTC_Addr_1_Set_DetectedIsSet;
-        public bool MTC_Addr_1_Set_DetectedIsSet {
-            get => _MTC_Addr_1_Set_DetectedIsSet;
-            set => _ = Set(ref _MTC_Addr_1_Set_DetectedIsSet, value); 
+        private bool _MTC_Addr_1_Set_ClearAllIsSet;
+        public bool MTC_Addr_1_Set_ClearAllIsSet {
+            get => _MTC_Addr_1_Set_ClearAllIsSet;
+            set => _ = Set(ref _MTC_Addr_1_Set_ClearAllIsSet, value); 
         }
-        private byte _MTC_Addr_1_Set_Detected;
-        public byte MTC_Addr_1_Set_Detected {
-            get => _MTC_Addr_1_Set_Detected;
-            set => _ = Set(ref _MTC_Addr_1_Set_Detected, value);
+        private byte _MTC_Addr_1_Set_ClearAll;
+        public byte MTC_Addr_1_Set_ClearAll {
+            get => _MTC_Addr_1_Set_ClearAll;
+            set => _ = Set(ref _MTC_Addr_1_Set_ClearAll, value);
         }
         
         private bool _MTC_Addr_1_Set_TypeIsSet;
@@ -7875,15 +7875,15 @@ namespace Devices.Models
             set => _ = Set(ref _MTC_Addr_1_Clear_ScanEnabled, value);
         }
         
-        private bool _MTC_Addr_1_Clear_DetectedIsSet;
-        public bool MTC_Addr_1_Clear_DetectedIsSet {
-            get => _MTC_Addr_1_Clear_DetectedIsSet;
-            set => _ = Set(ref _MTC_Addr_1_Clear_DetectedIsSet, value); 
+        private bool _MTC_Addr_1_Clear_ClearAllIsSet;
+        public bool MTC_Addr_1_Clear_ClearAllIsSet {
+            get => _MTC_Addr_1_Clear_ClearAllIsSet;
+            set => _ = Set(ref _MTC_Addr_1_Clear_ClearAllIsSet, value); 
         }
-        private byte _MTC_Addr_1_Clear_Detected;
-        public byte MTC_Addr_1_Clear_Detected {
-            get => _MTC_Addr_1_Clear_Detected;
-            set => _ = Set(ref _MTC_Addr_1_Clear_Detected, value);
+        private byte _MTC_Addr_1_Clear_ClearAll;
+        public byte MTC_Addr_1_Clear_ClearAll {
+            get => _MTC_Addr_1_Clear_ClearAll;
+            set => _ = Set(ref _MTC_Addr_1_Clear_ClearAll, value);
         }
         
         private bool _MTC_Addr_1_Clear_TypeIsSet;
@@ -8217,15 +8217,15 @@ namespace Devices.Models
             set => _ = Set(ref _MTC_Addr_2_ScanEnabled, value);
         }
         
-        private bool _MTC_Addr_2_DetectedIsSet;
-        public bool MTC_Addr_2_DetectedIsSet {
-            get => _MTC_Addr_2_DetectedIsSet;
-            set => _ = Set(ref _MTC_Addr_2_DetectedIsSet, value); 
+        private bool _MTC_Addr_2_ClearAllIsSet;
+        public bool MTC_Addr_2_ClearAllIsSet {
+            get => _MTC_Addr_2_ClearAllIsSet;
+            set => _ = Set(ref _MTC_Addr_2_ClearAllIsSet, value); 
         }
-        private byte _MTC_Addr_2_Detected;
-        public byte MTC_Addr_2_Detected {
-            get => _MTC_Addr_2_Detected;
-            set => _ = Set(ref _MTC_Addr_2_Detected, value);
+        private byte _MTC_Addr_2_ClearAll;
+        public byte MTC_Addr_2_ClearAll {
+            get => _MTC_Addr_2_ClearAll;
+            set => _ = Set(ref _MTC_Addr_2_ClearAll, value);
         }
         
         private bool _MTC_Addr_2_TypeIsSet;
@@ -8559,15 +8559,15 @@ namespace Devices.Models
             set => _ = Set(ref _MTC_Addr_2_Set_ScanEnabled, value);
         }
         
-        private bool _MTC_Addr_2_Set_DetectedIsSet;
-        public bool MTC_Addr_2_Set_DetectedIsSet {
-            get => _MTC_Addr_2_Set_DetectedIsSet;
-            set => _ = Set(ref _MTC_Addr_2_Set_DetectedIsSet, value); 
+        private bool _MTC_Addr_2_Set_ClearAllIsSet;
+        public bool MTC_Addr_2_Set_ClearAllIsSet {
+            get => _MTC_Addr_2_Set_ClearAllIsSet;
+            set => _ = Set(ref _MTC_Addr_2_Set_ClearAllIsSet, value); 
         }
-        private byte _MTC_Addr_2_Set_Detected;
-        public byte MTC_Addr_2_Set_Detected {
-            get => _MTC_Addr_2_Set_Detected;
-            set => _ = Set(ref _MTC_Addr_2_Set_Detected, value);
+        private byte _MTC_Addr_2_Set_ClearAll;
+        public byte MTC_Addr_2_Set_ClearAll {
+            get => _MTC_Addr_2_Set_ClearAll;
+            set => _ = Set(ref _MTC_Addr_2_Set_ClearAll, value);
         }
         
         private bool _MTC_Addr_2_Set_TypeIsSet;
@@ -8901,15 +8901,15 @@ namespace Devices.Models
             set => _ = Set(ref _MTC_Addr_2_Clear_ScanEnabled, value);
         }
         
-        private bool _MTC_Addr_2_Clear_DetectedIsSet;
-        public bool MTC_Addr_2_Clear_DetectedIsSet {
-            get => _MTC_Addr_2_Clear_DetectedIsSet;
-            set => _ = Set(ref _MTC_Addr_2_Clear_DetectedIsSet, value); 
+        private bool _MTC_Addr_2_Clear_ClearAllIsSet;
+        public bool MTC_Addr_2_Clear_ClearAllIsSet {
+            get => _MTC_Addr_2_Clear_ClearAllIsSet;
+            set => _ = Set(ref _MTC_Addr_2_Clear_ClearAllIsSet, value); 
         }
-        private byte _MTC_Addr_2_Clear_Detected;
-        public byte MTC_Addr_2_Clear_Detected {
-            get => _MTC_Addr_2_Clear_Detected;
-            set => _ = Set(ref _MTC_Addr_2_Clear_Detected, value);
+        private byte _MTC_Addr_2_Clear_ClearAll;
+        public byte MTC_Addr_2_Clear_ClearAll {
+            get => _MTC_Addr_2_Clear_ClearAll;
+            set => _ = Set(ref _MTC_Addr_2_Clear_ClearAll, value);
         }
         
         private bool _MTC_Addr_2_Clear_TypeIsSet;
@@ -9243,15 +9243,15 @@ namespace Devices.Models
             set => _ = Set(ref _MTC_Addr_3_ScanEnabled, value);
         }
         
-        private bool _MTC_Addr_3_DetectedIsSet;
-        public bool MTC_Addr_3_DetectedIsSet {
-            get => _MTC_Addr_3_DetectedIsSet;
-            set => _ = Set(ref _MTC_Addr_3_DetectedIsSet, value); 
+        private bool _MTC_Addr_3_ClearAllIsSet;
+        public bool MTC_Addr_3_ClearAllIsSet {
+            get => _MTC_Addr_3_ClearAllIsSet;
+            set => _ = Set(ref _MTC_Addr_3_ClearAllIsSet, value); 
         }
-        private byte _MTC_Addr_3_Detected;
-        public byte MTC_Addr_3_Detected {
-            get => _MTC_Addr_3_Detected;
-            set => _ = Set(ref _MTC_Addr_3_Detected, value);
+        private byte _MTC_Addr_3_ClearAll;
+        public byte MTC_Addr_3_ClearAll {
+            get => _MTC_Addr_3_ClearAll;
+            set => _ = Set(ref _MTC_Addr_3_ClearAll, value);
         }
         
         private bool _MTC_Addr_3_TypeIsSet;
@@ -9585,15 +9585,15 @@ namespace Devices.Models
             set => _ = Set(ref _MTC_Addr_3_Set_ScanEnabled, value);
         }
         
-        private bool _MTC_Addr_3_Set_DetectedIsSet;
-        public bool MTC_Addr_3_Set_DetectedIsSet {
-            get => _MTC_Addr_3_Set_DetectedIsSet;
-            set => _ = Set(ref _MTC_Addr_3_Set_DetectedIsSet, value); 
+        private bool _MTC_Addr_3_Set_ClearAllIsSet;
+        public bool MTC_Addr_3_Set_ClearAllIsSet {
+            get => _MTC_Addr_3_Set_ClearAllIsSet;
+            set => _ = Set(ref _MTC_Addr_3_Set_ClearAllIsSet, value); 
         }
-        private byte _MTC_Addr_3_Set_Detected;
-        public byte MTC_Addr_3_Set_Detected {
-            get => _MTC_Addr_3_Set_Detected;
-            set => _ = Set(ref _MTC_Addr_3_Set_Detected, value);
+        private byte _MTC_Addr_3_Set_ClearAll;
+        public byte MTC_Addr_3_Set_ClearAll {
+            get => _MTC_Addr_3_Set_ClearAll;
+            set => _ = Set(ref _MTC_Addr_3_Set_ClearAll, value);
         }
         
         private bool _MTC_Addr_3_Set_TypeIsSet;
@@ -9927,15 +9927,15 @@ namespace Devices.Models
             set => _ = Set(ref _MTC_Addr_3_Clear_ScanEnabled, value);
         }
         
-        private bool _MTC_Addr_3_Clear_DetectedIsSet;
-        public bool MTC_Addr_3_Clear_DetectedIsSet {
-            get => _MTC_Addr_3_Clear_DetectedIsSet;
-            set => _ = Set(ref _MTC_Addr_3_Clear_DetectedIsSet, value); 
+        private bool _MTC_Addr_3_Clear_ClearAllIsSet;
+        public bool MTC_Addr_3_Clear_ClearAllIsSet {
+            get => _MTC_Addr_3_Clear_ClearAllIsSet;
+            set => _ = Set(ref _MTC_Addr_3_Clear_ClearAllIsSet, value); 
         }
-        private byte _MTC_Addr_3_Clear_Detected;
-        public byte MTC_Addr_3_Clear_Detected {
-            get => _MTC_Addr_3_Clear_Detected;
-            set => _ = Set(ref _MTC_Addr_3_Clear_Detected, value);
+        private byte _MTC_Addr_3_Clear_ClearAll;
+        public byte MTC_Addr_3_Clear_ClearAll {
+            get => _MTC_Addr_3_Clear_ClearAll;
+            set => _ = Set(ref _MTC_Addr_3_Clear_ClearAll, value);
         }
         
         private bool _MTC_Addr_3_Clear_TypeIsSet;
@@ -11081,7 +11081,7 @@ namespace Devices.Models
                 case OBCRegisterAddress.OBC_REG_MTC_ADDR_0:
                     FullRegister_MTC_Addr_0  = register.RawValue; 
                     MTC_Addr_0_ScanEnabled = (Enabled) register.RegMTC_Config.ScanEnabled;
-                    MTC_Addr_0_Detected =  register.RegMTC_Config.Detected;
+                    MTC_Addr_0_ClearAll =  register.RegMTC_Config.ClearAll;
                     MTC_Addr_0_Type =  register.RegMTC_Config.Type;
                     MTC_Addr_0_ENABLE_1 = (Enabled) register.RegMTC_Config.ENABLE_1;
                     MTC_Addr_0_ENABLE_2 = (Enabled) register.RegMTC_Config.ENABLE_2;
@@ -11116,7 +11116,7 @@ namespace Devices.Models
                 case OBCRegisterAddress.OBC_REG_MTC_ADDR_0_SET:
                     FullRegister_MTC_Addr_0_Set  = register.RawValue; 
                     MTC_Addr_0_Set_ScanEnabled = (Enabled) register.RegMTC_Config.ScanEnabled;
-                    MTC_Addr_0_Set_Detected =  register.RegMTC_Config.Detected;
+                    MTC_Addr_0_Set_ClearAll =  register.RegMTC_Config.ClearAll;
                     MTC_Addr_0_Set_Type =  register.RegMTC_Config.Type;
                     MTC_Addr_0_Set_ENABLE_1 = (Enabled) register.RegMTC_Config.ENABLE_1;
                     MTC_Addr_0_Set_ENABLE_2 = (Enabled) register.RegMTC_Config.ENABLE_2;
@@ -11151,7 +11151,7 @@ namespace Devices.Models
                 case OBCRegisterAddress.OBC_REG_MTC_ADDR_0_CLEAR:
                     FullRegister_MTC_Addr_0_Clear  = register.RawValue; 
                     MTC_Addr_0_Clear_ScanEnabled = (Enabled) register.RegMTC_Config.ScanEnabled;
-                    MTC_Addr_0_Clear_Detected =  register.RegMTC_Config.Detected;
+                    MTC_Addr_0_Clear_ClearAll =  register.RegMTC_Config.ClearAll;
                     MTC_Addr_0_Clear_Type =  register.RegMTC_Config.Type;
                     MTC_Addr_0_Clear_ENABLE_1 = (Enabled) register.RegMTC_Config.ENABLE_1;
                     MTC_Addr_0_Clear_ENABLE_2 = (Enabled) register.RegMTC_Config.ENABLE_2;
@@ -11186,7 +11186,7 @@ namespace Devices.Models
                 case OBCRegisterAddress.OBC_REG_MTC_ADDR_1:
                     FullRegister_MTC_Addr_1  = register.RawValue; 
                     MTC_Addr_1_ScanEnabled = (Enabled) register.RegMTC_Config.ScanEnabled;
-                    MTC_Addr_1_Detected =  register.RegMTC_Config.Detected;
+                    MTC_Addr_1_ClearAll =  register.RegMTC_Config.ClearAll;
                     MTC_Addr_1_Type =  register.RegMTC_Config.Type;
                     MTC_Addr_1_ENABLE_1 = (Enabled) register.RegMTC_Config.ENABLE_1;
                     MTC_Addr_1_ENABLE_2 = (Enabled) register.RegMTC_Config.ENABLE_2;
@@ -11221,7 +11221,7 @@ namespace Devices.Models
                 case OBCRegisterAddress.OBC_REG_MTC_ADDR_1_SET:
                     FullRegister_MTC_Addr_1_Set  = register.RawValue; 
                     MTC_Addr_1_Set_ScanEnabled = (Enabled) register.RegMTC_Config.ScanEnabled;
-                    MTC_Addr_1_Set_Detected =  register.RegMTC_Config.Detected;
+                    MTC_Addr_1_Set_ClearAll =  register.RegMTC_Config.ClearAll;
                     MTC_Addr_1_Set_Type =  register.RegMTC_Config.Type;
                     MTC_Addr_1_Set_ENABLE_1 = (Enabled) register.RegMTC_Config.ENABLE_1;
                     MTC_Addr_1_Set_ENABLE_2 = (Enabled) register.RegMTC_Config.ENABLE_2;
@@ -11256,7 +11256,7 @@ namespace Devices.Models
                 case OBCRegisterAddress.OBC_REG_MTC_ADDR_1_CLEAR:
                     FullRegister_MTC_Addr_1_Clear  = register.RawValue; 
                     MTC_Addr_1_Clear_ScanEnabled = (Enabled) register.RegMTC_Config.ScanEnabled;
-                    MTC_Addr_1_Clear_Detected =  register.RegMTC_Config.Detected;
+                    MTC_Addr_1_Clear_ClearAll =  register.RegMTC_Config.ClearAll;
                     MTC_Addr_1_Clear_Type =  register.RegMTC_Config.Type;
                     MTC_Addr_1_Clear_ENABLE_1 = (Enabled) register.RegMTC_Config.ENABLE_1;
                     MTC_Addr_1_Clear_ENABLE_2 = (Enabled) register.RegMTC_Config.ENABLE_2;
@@ -11291,7 +11291,7 @@ namespace Devices.Models
                 case OBCRegisterAddress.OBC_REG_MTC_ADDR_2:
                     FullRegister_MTC_Addr_2  = register.RawValue; 
                     MTC_Addr_2_ScanEnabled = (Enabled) register.RegMTC_Config.ScanEnabled;
-                    MTC_Addr_2_Detected =  register.RegMTC_Config.Detected;
+                    MTC_Addr_2_ClearAll =  register.RegMTC_Config.ClearAll;
                     MTC_Addr_2_Type =  register.RegMTC_Config.Type;
                     MTC_Addr_2_ENABLE_1 = (Enabled) register.RegMTC_Config.ENABLE_1;
                     MTC_Addr_2_ENABLE_2 = (Enabled) register.RegMTC_Config.ENABLE_2;
@@ -11326,7 +11326,7 @@ namespace Devices.Models
                 case OBCRegisterAddress.OBC_REG_MTC_ADDR_2_SET:
                     FullRegister_MTC_Addr_2_Set  = register.RawValue; 
                     MTC_Addr_2_Set_ScanEnabled = (Enabled) register.RegMTC_Config.ScanEnabled;
-                    MTC_Addr_2_Set_Detected =  register.RegMTC_Config.Detected;
+                    MTC_Addr_2_Set_ClearAll =  register.RegMTC_Config.ClearAll;
                     MTC_Addr_2_Set_Type =  register.RegMTC_Config.Type;
                     MTC_Addr_2_Set_ENABLE_1 = (Enabled) register.RegMTC_Config.ENABLE_1;
                     MTC_Addr_2_Set_ENABLE_2 = (Enabled) register.RegMTC_Config.ENABLE_2;
@@ -11361,7 +11361,7 @@ namespace Devices.Models
                 case OBCRegisterAddress.OBC_REG_MTC_ADDR_2_CLEAR:
                     FullRegister_MTC_Addr_2_Clear  = register.RawValue; 
                     MTC_Addr_2_Clear_ScanEnabled = (Enabled) register.RegMTC_Config.ScanEnabled;
-                    MTC_Addr_2_Clear_Detected =  register.RegMTC_Config.Detected;
+                    MTC_Addr_2_Clear_ClearAll =  register.RegMTC_Config.ClearAll;
                     MTC_Addr_2_Clear_Type =  register.RegMTC_Config.Type;
                     MTC_Addr_2_Clear_ENABLE_1 = (Enabled) register.RegMTC_Config.ENABLE_1;
                     MTC_Addr_2_Clear_ENABLE_2 = (Enabled) register.RegMTC_Config.ENABLE_2;
@@ -11396,7 +11396,7 @@ namespace Devices.Models
                 case OBCRegisterAddress.OBC_REG_MTC_ADDR_3:
                     FullRegister_MTC_Addr_3  = register.RawValue; 
                     MTC_Addr_3_ScanEnabled = (Enabled) register.RegMTC_Config.ScanEnabled;
-                    MTC_Addr_3_Detected =  register.RegMTC_Config.Detected;
+                    MTC_Addr_3_ClearAll =  register.RegMTC_Config.ClearAll;
                     MTC_Addr_3_Type =  register.RegMTC_Config.Type;
                     MTC_Addr_3_ENABLE_1 = (Enabled) register.RegMTC_Config.ENABLE_1;
                     MTC_Addr_3_ENABLE_2 = (Enabled) register.RegMTC_Config.ENABLE_2;
@@ -11431,7 +11431,7 @@ namespace Devices.Models
                 case OBCRegisterAddress.OBC_REG_MTC_ADDR_3_SET:
                     FullRegister_MTC_Addr_3_Set  = register.RawValue; 
                     MTC_Addr_3_Set_ScanEnabled = (Enabled) register.RegMTC_Config.ScanEnabled;
-                    MTC_Addr_3_Set_Detected =  register.RegMTC_Config.Detected;
+                    MTC_Addr_3_Set_ClearAll =  register.RegMTC_Config.ClearAll;
                     MTC_Addr_3_Set_Type =  register.RegMTC_Config.Type;
                     MTC_Addr_3_Set_ENABLE_1 = (Enabled) register.RegMTC_Config.ENABLE_1;
                     MTC_Addr_3_Set_ENABLE_2 = (Enabled) register.RegMTC_Config.ENABLE_2;
@@ -11466,7 +11466,7 @@ namespace Devices.Models
                 case OBCRegisterAddress.OBC_REG_MTC_ADDR_3_CLEAR:
                     FullRegister_MTC_Addr_3_Clear  = register.RawValue; 
                     MTC_Addr_3_Clear_ScanEnabled = (Enabled) register.RegMTC_Config.ScanEnabled;
-                    MTC_Addr_3_Clear_Detected =  register.RegMTC_Config.Detected;
+                    MTC_Addr_3_Clear_ClearAll =  register.RegMTC_Config.ClearAll;
                     MTC_Addr_3_Clear_Type =  register.RegMTC_Config.Type;
                     MTC_Addr_3_Clear_ENABLE_1 = (Enabled) register.RegMTC_Config.ENABLE_1;
                     MTC_Addr_3_Clear_ENABLE_2 = (Enabled) register.RegMTC_Config.ENABLE_2;
@@ -12084,7 +12084,7 @@ namespace Devices.Models
 
                 case OBCRegisterAddress.OBC_REG_MTC_ADDR_0:
                     register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_0_ScanEnabled;
-                    register.RegMTC_Config.Detected = MTC_Addr_0_Detected;
+                    register.RegMTC_Config.ClearAll = MTC_Addr_0_ClearAll;
                     register.RegMTC_Config.Type = MTC_Addr_0_Type;
                     register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_0_ENABLE_1;
                     register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_0_ENABLE_2;
@@ -12118,7 +12118,7 @@ namespace Devices.Models
 
                 case OBCRegisterAddress.OBC_REG_MTC_ADDR_0_SET:
                     register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_0_Set_ScanEnabled;
-                    register.RegMTC_Config.Detected = MTC_Addr_0_Set_Detected;
+                    register.RegMTC_Config.ClearAll = MTC_Addr_0_Set_ClearAll;
                     register.RegMTC_Config.Type = MTC_Addr_0_Set_Type;
                     register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_0_Set_ENABLE_1;
                     register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_0_Set_ENABLE_2;
@@ -12152,7 +12152,7 @@ namespace Devices.Models
 
                 case OBCRegisterAddress.OBC_REG_MTC_ADDR_0_CLEAR:
                     register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_0_Clear_ScanEnabled;
-                    register.RegMTC_Config.Detected = MTC_Addr_0_Clear_Detected;
+                    register.RegMTC_Config.ClearAll = MTC_Addr_0_Clear_ClearAll;
                     register.RegMTC_Config.Type = MTC_Addr_0_Clear_Type;
                     register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_0_Clear_ENABLE_1;
                     register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_0_Clear_ENABLE_2;
@@ -12186,7 +12186,7 @@ namespace Devices.Models
 
                 case OBCRegisterAddress.OBC_REG_MTC_ADDR_1:
                     register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_1_ScanEnabled;
-                    register.RegMTC_Config.Detected = MTC_Addr_1_Detected;
+                    register.RegMTC_Config.ClearAll = MTC_Addr_1_ClearAll;
                     register.RegMTC_Config.Type = MTC_Addr_1_Type;
                     register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_1_ENABLE_1;
                     register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_1_ENABLE_2;
@@ -12220,7 +12220,7 @@ namespace Devices.Models
 
                 case OBCRegisterAddress.OBC_REG_MTC_ADDR_1_SET:
                     register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_1_Set_ScanEnabled;
-                    register.RegMTC_Config.Detected = MTC_Addr_1_Set_Detected;
+                    register.RegMTC_Config.ClearAll = MTC_Addr_1_Set_ClearAll;
                     register.RegMTC_Config.Type = MTC_Addr_1_Set_Type;
                     register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_1_Set_ENABLE_1;
                     register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_1_Set_ENABLE_2;
@@ -12254,7 +12254,7 @@ namespace Devices.Models
 
                 case OBCRegisterAddress.OBC_REG_MTC_ADDR_1_CLEAR:
                     register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_1_Clear_ScanEnabled;
-                    register.RegMTC_Config.Detected = MTC_Addr_1_Clear_Detected;
+                    register.RegMTC_Config.ClearAll = MTC_Addr_1_Clear_ClearAll;
                     register.RegMTC_Config.Type = MTC_Addr_1_Clear_Type;
                     register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_1_Clear_ENABLE_1;
                     register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_1_Clear_ENABLE_2;
@@ -12288,7 +12288,7 @@ namespace Devices.Models
 
                 case OBCRegisterAddress.OBC_REG_MTC_ADDR_2:
                     register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_2_ScanEnabled;
-                    register.RegMTC_Config.Detected = MTC_Addr_2_Detected;
+                    register.RegMTC_Config.ClearAll = MTC_Addr_2_ClearAll;
                     register.RegMTC_Config.Type = MTC_Addr_2_Type;
                     register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_2_ENABLE_1;
                     register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_2_ENABLE_2;
@@ -12322,7 +12322,7 @@ namespace Devices.Models
 
                 case OBCRegisterAddress.OBC_REG_MTC_ADDR_2_SET:
                     register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_2_Set_ScanEnabled;
-                    register.RegMTC_Config.Detected = MTC_Addr_2_Set_Detected;
+                    register.RegMTC_Config.ClearAll = MTC_Addr_2_Set_ClearAll;
                     register.RegMTC_Config.Type = MTC_Addr_2_Set_Type;
                     register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_2_Set_ENABLE_1;
                     register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_2_Set_ENABLE_2;
@@ -12356,7 +12356,7 @@ namespace Devices.Models
 
                 case OBCRegisterAddress.OBC_REG_MTC_ADDR_2_CLEAR:
                     register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_2_Clear_ScanEnabled;
-                    register.RegMTC_Config.Detected = MTC_Addr_2_Clear_Detected;
+                    register.RegMTC_Config.ClearAll = MTC_Addr_2_Clear_ClearAll;
                     register.RegMTC_Config.Type = MTC_Addr_2_Clear_Type;
                     register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_2_Clear_ENABLE_1;
                     register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_2_Clear_ENABLE_2;
@@ -12390,7 +12390,7 @@ namespace Devices.Models
 
                 case OBCRegisterAddress.OBC_REG_MTC_ADDR_3:
                     register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_3_ScanEnabled;
-                    register.RegMTC_Config.Detected = MTC_Addr_3_Detected;
+                    register.RegMTC_Config.ClearAll = MTC_Addr_3_ClearAll;
                     register.RegMTC_Config.Type = MTC_Addr_3_Type;
                     register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_3_ENABLE_1;
                     register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_3_ENABLE_2;
@@ -12424,7 +12424,7 @@ namespace Devices.Models
 
                 case OBCRegisterAddress.OBC_REG_MTC_ADDR_3_SET:
                     register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_3_Set_ScanEnabled;
-                    register.RegMTC_Config.Detected = MTC_Addr_3_Set_Detected;
+                    register.RegMTC_Config.ClearAll = MTC_Addr_3_Set_ClearAll;
                     register.RegMTC_Config.Type = MTC_Addr_3_Set_Type;
                     register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_3_Set_ENABLE_1;
                     register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_3_Set_ENABLE_2;
@@ -12458,7 +12458,7 @@ namespace Devices.Models
 
                 case OBCRegisterAddress.OBC_REG_MTC_ADDR_3_CLEAR:
                     register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_3_Clear_ScanEnabled;
-                    register.RegMTC_Config.Detected = MTC_Addr_3_Clear_Detected;
+                    register.RegMTC_Config.ClearAll = MTC_Addr_3_Clear_ClearAll;
                     register.RegMTC_Config.Type = MTC_Addr_3_Clear_Type;
                     register.RegMTC_Config.ENABLE_1 = (byte) MTC_Addr_3_Clear_ENABLE_1;
                     register.RegMTC_Config.ENABLE_2 = (byte) MTC_Addr_3_Clear_ENABLE_2;
@@ -13100,8 +13100,8 @@ namespace Devices.Models
                     register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_0_Set_ScanEnabled;
                     break;
 
-                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_Detected:
-                    register.RegMTC_Config.Detected = MTC_Addr_0_Set_Detected;
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_ClearAll:
+                    register.RegMTC_Config.ClearAll = MTC_Addr_0_Set_ClearAll;
                     break;
 
                 case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Set_Type:
@@ -13224,8 +13224,8 @@ namespace Devices.Models
                     register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_0_Clear_ScanEnabled;
                     break;
 
-                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_Detected:
-                    register.RegMTC_Config.Detected = MTC_Addr_0_Clear_Detected;
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_ClearAll:
+                    register.RegMTC_Config.ClearAll = MTC_Addr_0_Clear_ClearAll;
                     break;
 
                 case OBC_SetClearField.OBC_SCF_MTC_Addr_0_Clear_Type:
@@ -13348,8 +13348,8 @@ namespace Devices.Models
                     register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_1_Set_ScanEnabled;
                     break;
 
-                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_Detected:
-                    register.RegMTC_Config.Detected = MTC_Addr_1_Set_Detected;
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_ClearAll:
+                    register.RegMTC_Config.ClearAll = MTC_Addr_1_Set_ClearAll;
                     break;
 
                 case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Set_Type:
@@ -13472,8 +13472,8 @@ namespace Devices.Models
                     register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_1_Clear_ScanEnabled;
                     break;
 
-                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_Detected:
-                    register.RegMTC_Config.Detected = MTC_Addr_1_Clear_Detected;
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_ClearAll:
+                    register.RegMTC_Config.ClearAll = MTC_Addr_1_Clear_ClearAll;
                     break;
 
                 case OBC_SetClearField.OBC_SCF_MTC_Addr_1_Clear_Type:
@@ -13596,8 +13596,8 @@ namespace Devices.Models
                     register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_2_Set_ScanEnabled;
                     break;
 
-                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_Detected:
-                    register.RegMTC_Config.Detected = MTC_Addr_2_Set_Detected;
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_ClearAll:
+                    register.RegMTC_Config.ClearAll = MTC_Addr_2_Set_ClearAll;
                     break;
 
                 case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Set_Type:
@@ -13720,8 +13720,8 @@ namespace Devices.Models
                     register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_2_Clear_ScanEnabled;
                     break;
 
-                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_Detected:
-                    register.RegMTC_Config.Detected = MTC_Addr_2_Clear_Detected;
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_ClearAll:
+                    register.RegMTC_Config.ClearAll = MTC_Addr_2_Clear_ClearAll;
                     break;
 
                 case OBC_SetClearField.OBC_SCF_MTC_Addr_2_Clear_Type:
@@ -13844,8 +13844,8 @@ namespace Devices.Models
                     register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_3_Set_ScanEnabled;
                     break;
 
-                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_Detected:
-                    register.RegMTC_Config.Detected = MTC_Addr_3_Set_Detected;
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_ClearAll:
+                    register.RegMTC_Config.ClearAll = MTC_Addr_3_Set_ClearAll;
                     break;
 
                 case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Set_Type:
@@ -13968,8 +13968,8 @@ namespace Devices.Models
                     register.RegMTC_Config.ScanEnabled = (byte) MTC_Addr_3_Clear_ScanEnabled;
                     break;
 
-                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_Detected:
-                    register.RegMTC_Config.Detected = MTC_Addr_3_Clear_Detected;
+                case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_ClearAll:
+                    register.RegMTC_Config.ClearAll = MTC_Addr_3_Clear_ClearAll;
                     break;
 
                 case OBC_SetClearField.OBC_SCF_MTC_Addr_3_Clear_Type:
@@ -14821,8 +14821,8 @@ namespace Devices.Models
 
             MTC_Addr_0_ScanEnabled = 0;
             MTC_Addr_0_ScanEnabledIsSet = false;
-            MTC_Addr_0_Detected = 0;
-            MTC_Addr_0_DetectedIsSet = false;
+            MTC_Addr_0_ClearAll = 0;
+            MTC_Addr_0_ClearAllIsSet = false;
             MTC_Addr_0_Type = 0;
             MTC_Addr_0_TypeIsSet = false;
             MTC_Addr_0_ENABLE_1 = 0;
@@ -14884,8 +14884,8 @@ namespace Devices.Models
 
             MTC_Addr_0_Set_ScanEnabled = 0;
             MTC_Addr_0_Set_ScanEnabledIsSet = false;
-            MTC_Addr_0_Set_Detected = 0;
-            MTC_Addr_0_Set_DetectedIsSet = false;
+            MTC_Addr_0_Set_ClearAll = 0;
+            MTC_Addr_0_Set_ClearAllIsSet = false;
             MTC_Addr_0_Set_Type = 0;
             MTC_Addr_0_Set_TypeIsSet = false;
             MTC_Addr_0_Set_ENABLE_1 = 0;
@@ -14947,8 +14947,8 @@ namespace Devices.Models
 
             MTC_Addr_0_Clear_ScanEnabled = 0;
             MTC_Addr_0_Clear_ScanEnabledIsSet = false;
-            MTC_Addr_0_Clear_Detected = 0;
-            MTC_Addr_0_Clear_DetectedIsSet = false;
+            MTC_Addr_0_Clear_ClearAll = 0;
+            MTC_Addr_0_Clear_ClearAllIsSet = false;
             MTC_Addr_0_Clear_Type = 0;
             MTC_Addr_0_Clear_TypeIsSet = false;
             MTC_Addr_0_Clear_ENABLE_1 = 0;
@@ -15010,8 +15010,8 @@ namespace Devices.Models
 
             MTC_Addr_1_ScanEnabled = 0;
             MTC_Addr_1_ScanEnabledIsSet = false;
-            MTC_Addr_1_Detected = 0;
-            MTC_Addr_1_DetectedIsSet = false;
+            MTC_Addr_1_ClearAll = 0;
+            MTC_Addr_1_ClearAllIsSet = false;
             MTC_Addr_1_Type = 0;
             MTC_Addr_1_TypeIsSet = false;
             MTC_Addr_1_ENABLE_1 = 0;
@@ -15073,8 +15073,8 @@ namespace Devices.Models
 
             MTC_Addr_1_Set_ScanEnabled = 0;
             MTC_Addr_1_Set_ScanEnabledIsSet = false;
-            MTC_Addr_1_Set_Detected = 0;
-            MTC_Addr_1_Set_DetectedIsSet = false;
+            MTC_Addr_1_Set_ClearAll = 0;
+            MTC_Addr_1_Set_ClearAllIsSet = false;
             MTC_Addr_1_Set_Type = 0;
             MTC_Addr_1_Set_TypeIsSet = false;
             MTC_Addr_1_Set_ENABLE_1 = 0;
@@ -15136,8 +15136,8 @@ namespace Devices.Models
 
             MTC_Addr_1_Clear_ScanEnabled = 0;
             MTC_Addr_1_Clear_ScanEnabledIsSet = false;
-            MTC_Addr_1_Clear_Detected = 0;
-            MTC_Addr_1_Clear_DetectedIsSet = false;
+            MTC_Addr_1_Clear_ClearAll = 0;
+            MTC_Addr_1_Clear_ClearAllIsSet = false;
             MTC_Addr_1_Clear_Type = 0;
             MTC_Addr_1_Clear_TypeIsSet = false;
             MTC_Addr_1_Clear_ENABLE_1 = 0;
@@ -15199,8 +15199,8 @@ namespace Devices.Models
 
             MTC_Addr_2_ScanEnabled = 0;
             MTC_Addr_2_ScanEnabledIsSet = false;
-            MTC_Addr_2_Detected = 0;
-            MTC_Addr_2_DetectedIsSet = false;
+            MTC_Addr_2_ClearAll = 0;
+            MTC_Addr_2_ClearAllIsSet = false;
             MTC_Addr_2_Type = 0;
             MTC_Addr_2_TypeIsSet = false;
             MTC_Addr_2_ENABLE_1 = 0;
@@ -15262,8 +15262,8 @@ namespace Devices.Models
 
             MTC_Addr_2_Set_ScanEnabled = 0;
             MTC_Addr_2_Set_ScanEnabledIsSet = false;
-            MTC_Addr_2_Set_Detected = 0;
-            MTC_Addr_2_Set_DetectedIsSet = false;
+            MTC_Addr_2_Set_ClearAll = 0;
+            MTC_Addr_2_Set_ClearAllIsSet = false;
             MTC_Addr_2_Set_Type = 0;
             MTC_Addr_2_Set_TypeIsSet = false;
             MTC_Addr_2_Set_ENABLE_1 = 0;
@@ -15325,8 +15325,8 @@ namespace Devices.Models
 
             MTC_Addr_2_Clear_ScanEnabled = 0;
             MTC_Addr_2_Clear_ScanEnabledIsSet = false;
-            MTC_Addr_2_Clear_Detected = 0;
-            MTC_Addr_2_Clear_DetectedIsSet = false;
+            MTC_Addr_2_Clear_ClearAll = 0;
+            MTC_Addr_2_Clear_ClearAllIsSet = false;
             MTC_Addr_2_Clear_Type = 0;
             MTC_Addr_2_Clear_TypeIsSet = false;
             MTC_Addr_2_Clear_ENABLE_1 = 0;
@@ -15388,8 +15388,8 @@ namespace Devices.Models
 
             MTC_Addr_3_ScanEnabled = 0;
             MTC_Addr_3_ScanEnabledIsSet = false;
-            MTC_Addr_3_Detected = 0;
-            MTC_Addr_3_DetectedIsSet = false;
+            MTC_Addr_3_ClearAll = 0;
+            MTC_Addr_3_ClearAllIsSet = false;
             MTC_Addr_3_Type = 0;
             MTC_Addr_3_TypeIsSet = false;
             MTC_Addr_3_ENABLE_1 = 0;
@@ -15451,8 +15451,8 @@ namespace Devices.Models
 
             MTC_Addr_3_Set_ScanEnabled = 0;
             MTC_Addr_3_Set_ScanEnabledIsSet = false;
-            MTC_Addr_3_Set_Detected = 0;
-            MTC_Addr_3_Set_DetectedIsSet = false;
+            MTC_Addr_3_Set_ClearAll = 0;
+            MTC_Addr_3_Set_ClearAllIsSet = false;
             MTC_Addr_3_Set_Type = 0;
             MTC_Addr_3_Set_TypeIsSet = false;
             MTC_Addr_3_Set_ENABLE_1 = 0;
@@ -15514,8 +15514,8 @@ namespace Devices.Models
 
             MTC_Addr_3_Clear_ScanEnabled = 0;
             MTC_Addr_3_Clear_ScanEnabledIsSet = false;
-            MTC_Addr_3_Clear_Detected = 0;
-            MTC_Addr_3_Clear_DetectedIsSet = false;
+            MTC_Addr_3_Clear_ClearAll = 0;
+            MTC_Addr_3_Clear_ClearAllIsSet = false;
             MTC_Addr_3_Clear_Type = 0;
             MTC_Addr_3_Clear_TypeIsSet = false;
             MTC_Addr_3_Clear_ENABLE_1 = 0;
