@@ -18917,6 +18917,102 @@ mm_response_t mm_getRTOS_Status0_SERMUX_CRC_ErrorFrom(bool * dest, const uint32_
     *dest = (bool) ((source & REG_RTOS_STATUS0_SERMUX_CRC_ERROR_Msk) >> REG_RTOS_STATUS0_SERMUX_CRC_ERROR_Pos);
     return mm_OK;
 }
+/*************** Get/Set functions for UtilI2CConfA register ******************************************************************/
+mm_response_t mm_setUtilI2CConfA(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.UtilI2CConfA = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getUtilI2CConfA(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.UtilI2CConfA;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_setUtilI2CConfA_Reset(const bool val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.UtilI2CConfA = (mm.UtilI2CConfA & ~REG_UTILI2CCONFA_RESET_Msk) | (val << REG_UTILI2CCONFA_RESET_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getUtilI2CConfA_Reset(bool * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (bool) ((mm.UtilI2CConfA & REG_UTILI2CCONFA_RESET_Msk) >> REG_UTILI2CCONFA_RESET_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getUtilI2CConfA_ResetFrom(bool * dest, const uint32_t source) {
+    *dest = (bool) ((source & REG_UTILI2CCONFA_RESET_Msk) >> REG_UTILI2CCONFA_RESET_Pos);
+    return mm_OK;
+}
+mm_response_t mm_setUtilI2CConfA_SPD(const uint8_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.UtilI2CConfA = (mm.UtilI2CConfA & ~REG_UTILI2CCONFA_SPD_Msk) | (val << REG_UTILI2CCONFA_SPD_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return  mm_OK;
+    }
+        else{
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getUtilI2CConfA_SPD(uint8_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) 
+    {
+        *dest = (uint8_t) ((mm.UtilI2CConfA & REG_UTILI2CCONFA_SPD_Msk) >> REG_UTILI2CCONFA_SPD_Pos);
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    return response;
+}
+
+mm_response_t mm_getUtilI2CConfA_SPDFrom(uint8_t * dest, const uint32_t source) {
+    *dest = (uint8_t) ((source & REG_UTILI2CCONFA_SPD_Msk) >> REG_UTILI2CCONFA_SPD_Pos);
+    return mm_OK;
+}
+/*************** Get/Set functions for UtilI2CStatus register *****************************************************************/
+mm_response_t mm_setUtilI2CStatus(const uint32_t val) {
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        mm.UtilI2CStatus = val;
+        xSemaphoreGive(_mm_mutex);
+        return mm_OK;
+    }
+    else {
+        return mm_NotReady;
+    }
+}
+mm_response_t mm_getUtilI2CStatus(uint32_t * dest) {
+    mm_response_t response = mm_NotReady;
+    if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
+        *dest = mm.UtilI2CStatus;
+        response = mm_OK;
+        xSemaphoreGive(_mm_mutex);
+    }
+    return response;
+}
+mm_response_t mm_getUtilI2CStatusFrom(uint32_t * dest, const uint32_t source) {
+    *dest = source;
+    return mm_OK;
+}
+
+
 /*************** Get/Set functions for PreviousEndpoint register **************************************************************/
 mm_response_t mm_setPreviousEndpoint(const uint32_t val) {
     if(xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {

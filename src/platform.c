@@ -114,6 +114,7 @@ void PLATFORM_vInit(bsp_t * bsp)
 	uart_target.uart_send = ccd_b_uart_Send_message;
 	uart_target.uart_receive = ccd_b_uart_Receive_message;
 	uart_target.uart_handle = bsp->bus_uart;
+	uart_target.uart_mode  = UART;
 	uart_target.radio_uart_address = 0x26;
 	uart_target.gse_uart_address = 0xE9;
 	UARTTARGET_Init(&uart_target);
@@ -149,7 +150,7 @@ void PLATFORM_vInit(bsp_t * bsp)
 	// Add UART Targets
 	SERMUX_V3_AddTarget(&sermux_v3, EP_V2_UART_CC_2, uart_target.incoming_messages, uart_target.outgoing_messages, mm_setRTOS_Status0_UARTTargetIncomingOverflow);
 	
-	REG_vSetPlatformPointer(&platform);
+	REG_vSetPlatformPointer(&platform, bsp);
 		
 		
 	platform.rf_relay_1 = &rf_relay_1;		

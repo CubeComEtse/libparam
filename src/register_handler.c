@@ -16,6 +16,7 @@
 static uint32_t REG_CopyArrayToU32(const uint8_t* data);
 
 static platform_t * platform;
+static bsp_t * bsp;
 
 
 /*
@@ -107,12 +108,15 @@ static addres_to_func_map_t address_to_func_map[] = {
 	{ reg_MTC_Addr_3_addr, mm_getMTC_Addr_3},
 		
 	{ reg_RTOS_Status0_addr, mm_getRTOS_Status0},
+	{ reg_UtilI2CConfA_addr, mm_getUtilI2CConfA},
+	{ reg_UtilI2CStatus_addr, mm_getUtilI2CStatus },
 	{ reg_PreviousEndpoint_addr, mm_getPreviousEndpoint}, 
 };
 
 
-void REG_vSetPlatformPointer(platform_t * handle){
+void REG_vSetPlatformPointer(platform_t * handle, bsp_t * bsp_handle){
 	platform = handle;
+	bsp = bsp_handle;
 }
 
 
@@ -351,9 +355,10 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 			uint8_t spd = 0;
 			mm_getI2CConfA_SPDFrom(&spd, deserialized);
 			if ((spd >= 1) && (spd <= 40)){
-				I2CTARGET_SetBaud(platform->i2c_target, spd * 10000);
+				if (I2CTARGET_SetBaud(platform->i2c_target, spd * 10000)){
 				
-				mm_setI2CConfA_SPD(spd);
+					mm_setI2CConfA_SPD(spd);
+				}
 			}
 			
 			uint8_t wrdel = 0 ;
@@ -615,6 +620,7 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 		case reg_MTC_Addr_3_Set_addr:
 			MTCV2_SetBits(platform->multitester, 3, deserialized);
 			break;
+		}
 		case reg_MTC_Addr_0_Clear_addr:
 			MTCV2_ClearBits(platform->multitester, 0, deserialized);
 			break;
@@ -627,7 +633,7 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 		case reg_MTC_Addr_3_Clear_addr:
 			MTCV2_ClearBits(platform->multitester, 3, deserialized);
 			break;
-
+		}
 		case reg_PreviousEndpoint_addr:
 		{
 			// Just store the full value

@@ -32,9 +32,10 @@ void UARTTARGET_Init(uart_target_t * handle)
 	//assert(handle->uart_send);
 	// Do not assert the handle, it might be void. 
 	
-	// This buffer size is an initial guess. Feel free to update it later.
-	handle->incoming_messages = xMessageBufferCreate(256);
-	handle->outgoing_messages = xMessageBufferCreate(256);
+	// Buffer was increase from 256 to 1024 - WE are dropping many messages
+	// due to a slow transmit speed.
+	handle->incoming_messages = xMessageBufferCreate(4096);
+	handle->outgoing_messages = xMessageBufferCreate(1024);
 	
 	handle->uart_semaphore = xSemaphoreCreateMutex();
 	
@@ -51,13 +52,30 @@ void UARTTARGET_TxTask(void * handle)
 	
 	bool decode_successfull;
 	
-	while(1) {
-		// Wait indefinitely to receive a message
-		size_t rx_length = xMessageBufferReceive(hnd->incoming_messages, rx_buffer, 16, portMAX_DELAY);
+	while(1) {		
+		// So...
+		//
+		// RS485 uses the same lines to transmit and receive. After we transmit a message, the radio
+		// will respond. But there is no requirement on WHEN they respond. Additionally, there is no
+		// support in the UART modules for "line busy" to detect when something else is communicating.
+		// This means there can be collision at any time, undetectable.
+		//
+		// There might be complicated methods of solving this, changing when the interrupt routine
+		// fires, wait a while after sending a message. Our solution:
+		// Only send a message every 2ms. A message is roughly 0.8ms long (at 115200), so this gives
+		// the radio ample time to respond. It does limit throughput quite a lot. I don't know why this
+		// IC is so slow with UART.
+		
+		size_t rx_length = 0;
+
+		vTaskDelay(pdMS_TO_TICKS(3));
+		
+		rx_length = xMessageBufferReceive(hnd->incoming_messages, rx_buffer, 16, 0);
 		
 		if (rx_length == 0){
 			continue;
 		}
+		
 		
 		
 		decode_successfull = decode_v2_message(&in_message, rx_buffer, rx_length);
@@ -132,12 +150,12 @@ void UARTTARGET_TxTask(void * handle)
 				uart_msg_kiss_packet[7] = FEND;
 				hnd->uart_send(hnd->uart_handle, uart_msg_kiss_packet, 8);
 			}
-				
 		}
-		
 	}
 }
 
+
+#include "bsp.h"
 
 void UARTTARGET_RxTask(void * handle) 
 {
@@ -146,22 +164,18 @@ void UARTTARGET_RxTask(void * handle)
 	uint8_t rx_buffer[32];
 	size_t rx_max_length = 32;
 	uint8_t uart_msg_kiss_packet[32];
-	uint8_t out_message_data[32];
 	size_t packet_index = 0;
 	bool receiving = false;
 	bool escaped = false;
 
 	
 	while(1){
-		vTaskDelay(pdMS_TO_TICKS(200));
-		
-		//1. call uart_receive to get bytes
-		
 		size_t received_bytes_length = hnd->uart_receive(hnd->uart_handle, rx_buffer, rx_max_length);
 		
 		if (received_bytes_length == 0){
 			continue;
 		}
+		ioport_set_pin_level(PIN_DEBUG_0, 1);
 		
 		//3. disassemble kiss packet -> out_message
 		for (size_t i = 0; i < received_bytes_length; i++)
@@ -171,14 +185,26 @@ void UARTTARGET_RxTask(void * handle)
 			//start receiving only when start byte (FEND) is received
 			if (!receiving){
 				if (rx_byte == FEND){
+					
 					receiving = true;
 					packet_index = 0;
+					ioport_set_pin_level(PIN_DEBUG_1, 1);
 					continue;
 				}
 			} else {
 				
 				if (rx_byte == FEND){
 					// End of packet received
+					ioport_set_pin_level(PIN_DEBUG_1, 0);
+					
+					if (packet_index == 0){
+						//We received an empty packet! Probably means we dropped a byte somewhere,
+						// and should actually start receiving now.
+						receiving = true;
+						packet_index = 0;
+						ioport_set_pin_level(PIN_DEBUG_1, 1);
+						continue;
+					}
 					
 					if (packet_index < 6){
 						// Invalid length, expecting (excluding the start&end FEND):
@@ -204,8 +230,6 @@ void UARTTARGET_RxTask(void * handle)
 					// Packet_index stores the entire kiss packet length. Subtract 4 for the kiss header (type, id, src,dest),
 					// Then add 2 for the EGSE UART header (Type + Length)
 					out_message.data_len = kiss_message_size + 2; 
-					
-					out_message.data = out_message_data;
 					
 					out_message.data[0] = uart_msg_kiss_packet[0]; // msg type
 					out_message.data[1] = kiss_message_size; // msg length
@@ -243,9 +267,8 @@ void UARTTARGET_RxTask(void * handle)
 				}		
 				
 			}
-			
 		}
-
+		ioport_set_pin_level(PIN_DEBUG_0, 0);
 	}
 
 }
@@ -255,6 +278,7 @@ bool UARTTARGET_SetCommMode(uart_target_t * pHandle, uart_comm_mode_t CommMode)
 	// Should we wait for the buffer to be empty?
 	if(xSemaphoreTake(pHandle->uart_semaphore, pdMS_TO_TICKS(200))) {
 		ccd_uart_setCommMode(pHandle->uart_handle, CommMode);
+		pHandle->uart_mode = CommMode;
 		xSemaphoreGive(pHandle->uart_semaphore);
 		return true;	
 	}

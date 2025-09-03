@@ -144,8 +144,23 @@ void ccd_can_Send_message(void * vHandle, uint32_t header, uint8_t * data, size_
     memcpy(tx_element.data, data, data_len);
 	
 	// Wait for the TX Buffer to be open
-	// Todo: THis might need a timeout?
-	while (((pHandle->can_module.hw->MCAN_TXFQS) & MCAN_TXFQS_TFQF)  > 1);
+	// This doesn't need a big timeout - if the buffer isn't ope nvery quickly, drop the message.
+	
+	/*
+	There is some sort of bug here with CAN at different speeds. If there is something else on the 
+	bus at the same speed the CAN module will keep sending messages. If the CAN module and the 
+	radio speeds mismatch the CAN FIFO will get full, and it will refuse to send. I have no idea 
+	why, since it sends a few messages. There is no indicator in the status registers, and the 
+	bus lines are fine.
+	*/
+	uint32_t timeout = 1000;
+	
+	while (((pHandle->can_module.hw->MCAN_TXFQS) & MCAN_TXFQS_TFQF)  > 1 && (--timeout > 0));
+	
+	if (timeout == 0)
+	{
+		return;	
+	}
 	
 	// tfqpi should indicate where to write to next, and what bit to set to send?
 	// Datasheet 49.5.5.3 Tx FIFO, page 1416
@@ -156,7 +171,7 @@ void ccd_can_Send_message(void * vHandle, uint32_t header, uint8_t * data, size_
 	 while (mcan_tx_transfer_request(&pHandle->can_module, 1 << buffer_index) == ERR_BUSY);
 }
 
-bool ccd_can_Receive_message(void * vHandle, uint32_t * header, uint8_t ** data, size_t * data_len)
+bool ccd_can_Receive_message(void * vHandle, uint32_t * header, uint8_t * data, size_t * data_len)
 {
 	ccd_can_t * pHandle = (ccd_can_t*) vHandle;
 	struct mcan_rx_element_fifo_0 rx_element;
@@ -165,7 +180,7 @@ bool ccd_can_Receive_message(void * vHandle, uint32_t * header, uint8_t ** data,
 	{
 		*header = rx_element.R0.reg;
 		*data_len = rx_element.R1.bit.DLC;
-		memcpy(*data, rx_element.data, *data_len);
+		memcpy(data, rx_element.data, *data_len);
 		return true;
 	}	
 	return false;

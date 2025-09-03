@@ -36,7 +36,7 @@ void ccd_can_SetAddress(void * vHandle, uint32_t filter, uint32_t mask);
 void ccd_can_SetRetries(void * vHandle, bool enabled);
 bool ccd_can_SetBaudRate(void * vHandle, uint32_t baud);
 void ccd_can_Send_message(void * vHandle, uint32_t header, uint8_t * data, size_t data_len);
-bool ccd_can_Receive_message(void * vHandle, uint32_t * header, uint8_t ** data, size_t * data_len);
+bool ccd_can_Receive_message(void * vHandle, uint32_t * header, uint8_t * data, size_t * data_len);
 void ccd_can_ReceiveCallback(ccd_can_t* pHandle);
 
 #endif /* CAN_DRIVER_H_ */

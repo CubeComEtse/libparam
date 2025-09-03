@@ -87,7 +87,7 @@ static void DEVTOOLS_Task(void * handle){
 void SETUP_Task(void* handle)
 {	
 	mm_setBoard_ID(0x634F4243);
-	mm_setFW_Version(0x00020205);
+	mm_setFW_Version(0x00020206);
 	mm_setHW_Version_major_version(BSP_u8GetVersion());
 	
 	mm_setI2CConfA_SPD(40);
@@ -97,6 +97,8 @@ void SETUP_Task(void* handle)
 	mm_setI2CConfB_ADDR(platform->i2c_target->legacy_address);
 	
 	mm_setCANConfB_Address(platform->can_target->radio_can_address);
+	mm_setUtilI2CConfA_SPD(bsp.util_i2c->baud / 10000);
+	
 	
 	mm_setRFRelaysConf_ScanEnabled(true);
 	mm_setMultiConf0_ScanEnabled(true);
@@ -130,7 +132,7 @@ void SETUP_Task(void* handle)
 	xTaskCreate(ccd_usart_RXProcessingTask, "UART RX", 512, (void*) bsp.bus_uart, tskIDLE_PRIORITY + 2, NULL);
 	
 	// Process RF Relay, multitester and TE Adapters
-	//xTaskCreate(DEVTOOLS_Task, "RF Tools", 512, (void *) platform, tskIDLE_PRIORITY+2, NULL);
+	xTaskCreate(DEVTOOLS_Task, "RF Tools", 512, (void *) platform, tskIDLE_PRIORITY+2, NULL);
 	xTaskCreate(TE_Adaptors_Task, "TE Adapters", 512, (void *) platform->te_scanner, tskIDLE_PRIORITY + 2, NULL);
 	
 	// Multitester task

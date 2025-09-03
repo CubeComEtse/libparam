@@ -134,22 +134,19 @@ void CANTARGET_RxTask(void * vHandle)
 		
 		// Wait for a message to be received over CAN
 		uint32_t header;
-		uint8_t data[16];
 		size_t receive_size;
-		uint8_t * ptr = &data[2];
-		if (pHandle->can_receive(pHandle->can_handle, &header, &ptr, &receive_size))
+		v2_msg_t out_message;
+		
+		if (pHandle->can_receive(pHandle->can_handle, &header, &out_message.data[2], &receive_size))
 		{
-			
-			v2_msg_t out_message;
 			out_message.is_read = false;
-			out_message.data = data;
 			out_message.data_len = 2 + receive_size;
 			out_message.target = EP_V2_CAN_CC_2;
 			
 			// CAN MsgType
-			data[0] = (uint8_t) ((header >> 24) & 0x1F);
+			out_message.data[0] = (uint8_t) ((header >> 24) & 0x1F);
 			// Message Length
-			data[1] = (uint8_t) receive_size;
+			out_message.data[1] = (uint8_t) receive_size;
 			
 			if (pHandle->mode == CUBECOM_MODE)
 			{

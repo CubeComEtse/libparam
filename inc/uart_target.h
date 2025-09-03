@@ -28,6 +28,7 @@ typedef struct {
 	SemaphoreHandle_t uart_semaphore;
 	
 	void * uart_handle;
+	uart_comm_mode_t uart_mode;
 	
 	uint8_t radio_uart_address;
 	uint8_t gse_uart_address;

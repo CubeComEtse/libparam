@@ -19,7 +19,7 @@
 /*
 This is required for the register handler setup.
 */
-void REG_vSetPlatformPointer(platform_t * handle);
+void REG_vSetPlatformPointer(platform_t * handle, bsp_t * bsp_handle);
 
 /*
  * Checks if the provided register address is a valid one. Returns true if it 

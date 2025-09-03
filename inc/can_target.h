@@ -19,7 +19,7 @@
 #include "semphr.h"
 
 typedef void (*can_send_message_t)(void * handle, uint32_t header, uint8_t * data, size_t data_len);
-typedef bool (*can_receive_message_t)(void * handle, uint32_t * header, uint8_t ** data, size_t * data_len);
+typedef bool (*can_receive_message_t)(void * handle, uint32_t * header, uint8_t * data, size_t * data_len);
 
 typedef enum {
 	CUBECOM_MODE = 0,

@@ -38,7 +38,6 @@ void LOCALTARGET_Task(void *handle)
 	
 	uint8_t rx_buffer[32];
 	v2_msg_t in_message;
-	uint8_t out_message_data[8];
 	uint8_t tx_buffer[32];
 	v2_msg_t out_message;
 	
@@ -71,13 +70,12 @@ void LOCALTARGET_Task(void *handle)
 			uint32_t address = in_message.data[0] | (in_message.data[1] << 8);
 			
 			uint8_t size = 0;
-			if (REG_vReadFromAddress(address, &out_message_data[2], &size)){
+			if (REG_vReadFromAddress(address, &out_message.data[2], &size)){
 				//Copy address
-				out_message_data[0] = in_message.data[0];
-				out_message_data[1] = in_message.data[1];
+				out_message.data[0] = in_message.data[0];
+				out_message.data[1] = in_message.data[1];
 				
 				// Set data
-				out_message.data = out_message_data;
 				out_message.data_len = size + 2;
 				
 				// Copy header

@@ -183,6 +183,12 @@ typedef enum {
 #define REG_RTOS_STATUS0_SERMUX_CRC_ERROR_Pos        (15UL)
 #define REG_RTOS_STATUS0_SERMUX_CRC_ERROR_Msk        (0x0001 << REG_RTOS_STATUS0_SERMUX_CRC_ERROR_Pos)
 
+/*************** Bit definition for UtilI2CConfA register ********************/
+#define REG_UTILI2CCONFA_RESET_Pos                   (31UL)
+#define REG_UTILI2CCONFA_RESET_Msk                   (0x0001 << REG_UTILI2CCONFA_RESET_Pos)
+#define REG_UTILI2CCONFA_SPD_Pos                     (0UL)
+#define REG_UTILI2CCONFA_SPD_Msk                     (0x00ff << REG_UTILI2CCONFA_SPD_Pos)
+
 /*************** Bit definition for PreviousEndpoint register ****************/
 #define REG_PREVIOUSENDPOINT_NUMBER_Pos              (8UL)
 #define REG_PREVIOUSENDPOINT_NUMBER_Msk              (0x00ff << REG_PREVIOUSENDPOINT_NUMBER_Pos)
@@ -428,6 +434,8 @@ typedef struct {
     uint32_t MTC_Addr_3_Set;
     uint32_t MTC_Addr_3_Clear;
     uint32_t RTOS_Status0;
+    uint32_t UtilI2CConfA;
+    uint32_t UtilI2CStatus;
     uint32_t PreviousEndpoint;
 } mm_t;
 
@@ -521,6 +529,8 @@ typedef enum {
     reg_MTC_Addr_3_Set_addr = 0xBA,
     reg_MTC_Addr_3_Clear_addr = 0xBB,
     reg_RTOS_Status0_addr = 0x90,
+    reg_UtilI2CConfA_addr = 0x98,
+    reg_UtilI2CStatus_addr = 0x99,
     reg_PreviousEndpoint_addr = 0xA0,
 } mm_register_address_t;
 
@@ -2985,6 +2995,21 @@ mm_response_t mm_getRTOS_Status0_GSETargetOutgoingOverflowFrom(bool * dest, cons
 mm_response_t mm_setRTOS_Status0_SERMUX_CRC_Error(const bool val);
 mm_response_t mm_getRTOS_Status0_SERMUX_CRC_Error(bool * dest);
 mm_response_t mm_getRTOS_Status0_SERMUX_CRC_ErrorFrom(bool * dest, const uint32_t source);
+
+/*************** Get/Set functions for UtilI2CConfA register ******************************************************************/
+mm_response_t mm_setUtilI2CConfA(const uint32_t val);
+mm_response_t mm_getUtilI2CConfA(uint32_t * dest);
+mm_response_t mm_setUtilI2CConfA_Reset(const bool val);
+mm_response_t mm_getUtilI2CConfA_Reset(bool * dest);
+mm_response_t mm_getUtilI2CConfA_ResetFrom(bool * dest, const uint32_t source);
+mm_response_t mm_setUtilI2CConfA_SPD(const uint8_t val);
+mm_response_t mm_getUtilI2CConfA_SPD(uint8_t * dest);
+mm_response_t mm_getUtilI2CConfA_SPDFrom(uint8_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for UtilI2CStatus register *****************************************************************/
+mm_response_t mm_setUtilI2CStatus(const uint32_t val);
+mm_response_t mm_getUtilI2CStatus(uint32_t * dest);
+mm_response_t mm_getUtilI2CStatusFrom(uint32_t * dest, const uint32_t source);
 
 /*************** Get/Set functions for PreviousEndpoint register **************************************************************/
 mm_response_t mm_setPreviousEndpoint(const uint32_t val);
