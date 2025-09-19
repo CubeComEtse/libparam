@@ -669,6 +669,39 @@
     <Folder Include="inc\config\" />
     <Folder Include="inc\drivers\" />
     <Folder Include="inc\freertos\" />
+    <Folder Include="lib\" />
+    <Folder Include="lib\libcsp\" />
+    <Folder Include="lib\libcsp\contrib\" />
+    <Folder Include="lib\libcsp\contrib\atomics\" />
+    <Folder Include="lib\libcsp\contrib\drivers\" />
+    <Folder Include="lib\libcsp\contrib\drivers\can\" />
+    <Folder Include="lib\libcsp\contrib\hooks\" />
+    <Folder Include="lib\libcsp\contrib\macosx\" />
+    <Folder Include="lib\libcsp\contrib\windows\" />
+    <Folder Include="lib\libcsp\contrib\zephyr\" />
+    <Folder Include="lib\libcsp\contrib\zephyr\samples\" />
+    <Folder Include="lib\libcsp\contrib\zephyr\samples\arch\" />
+    <Folder Include="lib\libcsp\contrib\zephyr\samples\server-client\" />
+    <Folder Include="lib\libcsp\examples\" />
+    <Folder Include="lib\libcsp\include\" />
+    <Folder Include="lib\libcsp\include\csp\" />
+    <Folder Include="lib\libcsp\include\csp\arch\" />
+    <Folder Include="lib\libcsp\include\csp\crypto\" />
+    <Folder Include="lib\libcsp\include\csp\drivers\" />
+    <Folder Include="lib\libcsp\include\csp\interfaces\" />
+    <Folder Include="lib\libcsp\src\" />
+    <Folder Include="lib\libcsp\src\arch\" />
+    <Folder Include="lib\libcsp\src\arch\freertos\" />
+    <Folder Include="lib\libcsp\src\arch\posix\" />
+    <Folder Include="lib\libcsp\src\arch\zephyr\" />
+    <Folder Include="lib\libcsp\src\bindings\" />
+    <Folder Include="lib\libcsp\src\bindings\python\" />
+    <Folder Include="lib\libcsp\src\crypto\" />
+    <Folder Include="lib\libcsp\src\drivers\" />
+    <Folder Include="lib\libcsp\src\drivers\can\" />
+    <Folder Include="lib\libcsp\src\drivers\usart\" />
+    <Folder Include="lib\libcsp\src\interfaces\" />
+    <Folder Include="lib\libcsp\utils\" />
     <Folder Include="linker\" />
     <Folder Include="src\" />
     <Folder Include="src\ASF\" />
@@ -931,6 +964,357 @@
     <Compile Include="inc\version.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="lib\libcsp\contrib\atomics\atomics_freertos_gcc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\contrib\drivers\can\csp_driver_can.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\contrib\hooks\csp_hook_asf4.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\contrib\macosx\csp_clock.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\contrib\macosx\csp_queue.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\contrib\macosx\csp_semaphore.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\contrib\macosx\csp_system.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\contrib\macosx\csp_time.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\contrib\macosx\pthread_queue.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\contrib\windows\csp_clock.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\contrib\windows\csp_queue.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\contrib\windows\csp_semaphore.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\contrib\windows\csp_system.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\contrib\windows\csp_time.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\contrib\windows\windows_queue.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\contrib\windows\windows_queue.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\contrib\zephyr\samples\server-client\csp_server_client_zephyr.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\contrib\zephyr\samples\server-client\main.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\examples\csp_arch.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\examples\csp_server_client.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\examples\csp_server_client_posix.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\examples\csp_server_client_windows.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\examples\zmqproxy.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\arch\csp_queue.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\arch\csp_time.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\crypto\csp_hmac.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\crypto\csp_sha1.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\csp.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\csp_buffer.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\csp_cmp.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\csp_crc32.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\csp_debug.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\csp_error.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\csp_hooks.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\csp_id.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\csp_iflist.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\csp_interface.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\csp_promisc.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\csp_rtable.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\csp_sfp.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\csp_types.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\csp_yaml.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\drivers\can_socketcan.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\drivers\usart.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\interfaces\csp_if_can.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\interfaces\csp_if_i2c.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\interfaces\csp_if_kiss.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\interfaces\csp_if_lo.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\interfaces\csp_if_tun.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\interfaces\csp_if_udp.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\include\csp\interfaces\csp_if_zmqhub.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\arch\freertos\csp_clock.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\arch\freertos\csp_queue.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\arch\freertos\csp_semaphore.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\arch\freertos\csp_system.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\arch\freertos\csp_time.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\arch\posix\csp_clock.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\arch\posix\csp_queue.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\arch\posix\csp_semaphore.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\arch\posix\csp_system.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\arch\posix\csp_time.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\arch\posix\pthread_queue.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\arch\posix\pthread_queue.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\arch\zephyr\csp_clock.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\arch\zephyr\csp_hooks.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\arch\zephyr\csp_queue.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\arch\zephyr\csp_semaphore.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\arch\zephyr\csp_time.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\arch\zephyr\csp_zephyr_init.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\bindings\python\pycsp.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\crypto\csp_hmac.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\crypto\csp_sha1.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_bridge.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_buffer.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_conn.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_conn.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_crc32.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_debug.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_dedup.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_dedup.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_hex_dump.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_id.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_iflist.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_init.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_io.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_io.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_port.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_port.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_promisc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_promisc.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_qfifo.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_qfifo.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_rdp.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_rdp.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_rdp_queue.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_rdp_queue.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_route.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_rtable_cidr.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_rtable_stdio.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_semaphore.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_services.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_service_handler.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_sfp.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\csp_yaml.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\drivers\can\can_socketcan.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\drivers\usart\usart_kiss.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\drivers\usart\usart_linux.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\drivers\usart\usart_windows.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\interfaces\csp_if_can.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\interfaces\csp_if_can_pbuf.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\interfaces\csp_if_can_pbuf.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\interfaces\csp_if_i2c.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\interfaces\csp_if_kiss.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\interfaces\csp_if_lo.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\interfaces\csp_if_tun.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\interfaces\csp_if_udp.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\src\interfaces\csp_if_zmqhub.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\crc8.c">
       <SubType>compile</SubType>
     </Compile>
@@ -949,6 +1333,117 @@
     <Compile Include="src\uart_target.c">
       <SubType>compile</SubType>
     </Compile>
+    <None Include="lib\libcsp\.tags">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\AUTHORS">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\CHANGELOG">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\contrib\macosx\meson.build">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\contrib\windows\README">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\contrib\zephyr\CMakeLists.txt">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\contrib\zephyr\Kconfig">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\contrib\zephyr\module.yml">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\contrib\zephyr\samples\arch\CMakeLists.txt">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\contrib\zephyr\samples\arch\prj.conf">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\contrib\zephyr\samples\server-client\CMakeLists.txt">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\contrib\zephyr\samples\server-client\prj.conf">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\csp_autoconfig.h.in">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\examples\buildall.py">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\examples\CMakeLists.txt">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\examples\iflist.yaml">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\examples\meson.build">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\examples\python_bindings_example_client.py">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\examples\python_bindings_example_server.py">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\LICENSE">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\README.md">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\src\arch\CMakeLists.txt">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\src\arch\freertos\meson.build">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\src\arch\meson.build">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\src\arch\posix\CMakeLists.txt">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\src\arch\posix\meson.build">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\src\arch\zephyr\CMakeLists.txt">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\src\CMakeLists.txt">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\src\crypto\CMakeLists.txt">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\src\crypto\meson.build">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\src\drivers\CMakeLists.txt">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\src\drivers\meson.build">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\src\interfaces\CMakeLists.txt">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\src\interfaces\meson.build">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\src\meson.build">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\utils\cfpsplit.py">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\libcsp\utils\cspsplit.py">
+      <SubType>compile</SubType>
+    </None>
     <None Include="linker\flash.ld">
       <SubType>compile</SubType>
     </None>

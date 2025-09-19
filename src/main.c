@@ -53,6 +53,8 @@ int main (void)
 	
 	// Configure all external ICs
 	PLATFORM_vConfigureAll(platform);
+    
+    
 	
 	xTaskCreate(SETUP_Task, "Startup", 1024, NULL, tskIDLE_PRIORITY + 1, NULL );
 	
