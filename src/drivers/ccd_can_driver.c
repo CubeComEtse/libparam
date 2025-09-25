@@ -9,8 +9,8 @@
 
 #include <assert.h>
 #include <string.h>
-#include "asf.h"
 
+#include "asf.h"
 
 void ccd_can_Init(ccd_can_t * pHandle, Mcan * can_device)
 {
@@ -47,8 +47,6 @@ void ccd_can_Init(ccd_can_t * pHandle, Mcan * can_device)
 	pHandle->receiveMessageBuffer = xMessageBufferCreate(sizeof(struct mcan_rx_element_fifo_0) * 64);
 }
 
-
-
 void ccd_can_SetAddress(void * vHandle, uint32_t filter, uint32_t mask)
 {
 	ccd_can_t * pHandle = (ccd_can_t*) vHandle;
@@ -63,7 +61,6 @@ void ccd_can_SetAddress(void * vHandle, uint32_t filter, uint32_t mask)
 
 	mcan_set_rx_extended_filter(&pHandle->can_module, &et_filter, 0);
 }
-
 
 /*
 	Enables or disable retries in the CAN module.
@@ -126,7 +123,6 @@ bool ccd_can_SetBaudRate(void * vHandle, uint32_t baud)
 	return true;
 }
 
-
 void ccd_can_Send_message(void * vHandle, uint32_t header, uint8_t * data, size_t data_len)
 {
 	// Todo: Apply some sanity checks to the incoming data?
@@ -162,8 +158,8 @@ void ccd_can_Send_message(void * vHandle, uint32_t header, uint8_t * data, size_
 		return;	
 	}
 	
-	// tfqpi should indicate where to write to next, and what bit to set to send?
-	// Datasheet 49.5.5.3 Tx FIFO, page 1416
+	// TXFQi should indicate where to write to next, and what bit to set to send?
+	// Datasheet 49.5.5.3 TX FIFO, page 1416
 	uint32_t buffer_index = ((pHandle->can_module.hw->MCAN_TXFQS & MCAN_TXFQS_TFQPI_Msk) >> MCAN_TXFQS_TFQPI_Pos);
 	// Code copied from the mcan_set_tx_buffer_element function
      mcan_set_tx_buffer_element(&pHandle->can_module, &tx_element, buffer_index);
@@ -185,9 +181,6 @@ bool ccd_can_Receive_message(void * vHandle, uint32_t * header, uint8_t * data, 
 	}	
 	return false;
 }
-
-
-
 
 // Called from interrupt
 void ccd_can_ReceiveCallback(ccd_can_t* pHandle)

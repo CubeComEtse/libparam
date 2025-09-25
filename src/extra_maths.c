@@ -1,10 +1,9 @@
 #include "extra_maths.h"
 
-
 /*
  * Calculate a point along a spline definition give a t point.
  * 
- * The spline definition cointains multiple spline coordinates with their 
+ * The spline definition contains multiple spline coordinates with their 
  * control toggles. 
 */
 void E_MATH_CalculateSplinePoint(const control_point_t * from, const control_point_t * to, const double t, vec3_t * out){
@@ -25,7 +24,6 @@ void E_MATH_CalculateSplinePoint(const control_point_t * from, const control_poi
 
     E_MATH_Lerp3D(&d, &e, t_lim, out);
 }
-
 
 void E_MATH_Lerp3D(const vec3_t * A, const vec3_t * B, const double t, vec3_t * out){
     out->x = A->x + t * (B->x - A->x);

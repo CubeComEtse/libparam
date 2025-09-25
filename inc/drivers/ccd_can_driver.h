@@ -12,10 +12,10 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "FreeRTOS.h"
-#include "message_buffer.h"
 #include "mcan.h"
 
+#include "FreeRTOS.h"
+#include "message_buffer.h"
 
 typedef struct {
 	// There are many CAN functions that take the module, not the MCAN instance itself.

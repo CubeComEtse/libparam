@@ -9,15 +9,15 @@
 #ifndef CCD_UART_DRIVER_H_
 #define CCD_UART_DRIVER_H_
 
+#include "asf.h"
+#include "ioport.h"
+
 #include "FreeRTOS.h"
 #include "task.h"
 #include "stream_buffer.h"
 #include "message_buffer.h"
-#include "ioport.h"
-#include <asf.h>
 
 #define UART_HOLDING_BUFFER_SIZE 32
-
 
 #define UART_RX_HB_OVERFLOW  (0x01<<0)
 #define UART_RX_SB_OVERFLOW  (0x01<<1)
@@ -47,7 +47,7 @@ typedef enum{
 	baud_921600,
 }uart_baud_rates_t;
 
-typedef struct {
+typedef struct ccd_uart_s {
 	// Buffers containing the incoming and outgoing data.
 	StreamBufferHandle_t uart_rx_buffer;
 	StreamBufferHandle_t uart_tx_buffer;
@@ -65,7 +65,8 @@ typedef struct {
 	bool doFlowControl;
 	uint32_t cts_pin; // (clear to send)
 	
-	TaskHandle_t task_reference;
+	TaskHandle_t rx_task_handle;
+	TaskHandle_t tx_task_handle;
 	
 	MessageBufferHandle_t receiveMessageBuffer;
 	
@@ -88,7 +89,7 @@ typedef struct {
 	uint32_t uart_tx_pin;
 	uint32_t uart_rx_pin;
 	
-}ccd_uart_t;
+} ccd_uart_t;
 
 void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart, uint8_t priority);
 void ccd_uart_ReInit(ccd_uart_t * driver);

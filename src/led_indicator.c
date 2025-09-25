@@ -174,12 +174,13 @@ void LEDIndicator_SetNextState(led_board_state_t new_state)
 	}
 }
 
-
 void LEDIndicator_UpdateTask(void * parameters)
 {
 	led_indicator_t * handle = (led_indicator_t*) parameters;
 	vec3_t new_led = {0};
 	double t = 0;
+    
+    LEDIndicator_SetNextState(LED_POWER_ON);
 
     while(1)
     {		

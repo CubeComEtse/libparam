@@ -1,8 +1,8 @@
 /*
  * The drivers are an attempt to present a common hardware interface for the 
  * application code.
- * This driver interacts with ASF's UART driver. It implements 2 Freertos 
- * streams to send uart bytes to and from the application 
+ * This driver interacts with ASF's UART driver. It implements 2 FreeRTOS 
+ * streams to send UART bytes to and from the application 
  *
  * Created: 2024/10/04 08:52:01
  *  Author: Kolijn
@@ -10,11 +10,10 @@
 
 #include "ccd_uart_driver.h"
 
+#include <assert.h>
+
 #include "FreeRTOS.h"
 #include "task.h"
-
-#include "assert.h"
-
 
 void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart, uint8_t priority)
 {
@@ -186,7 +185,6 @@ inline void ccd_uart_StopFlowControl(void * handle)
 	ioport_set_pin_level(driver->cts_pin, true);
 }
 
-//
 inline void ccd_uart_StartFlowControl(void * handle)
 {
 	ccd_uart_t * driver =  (ccd_uart_t *) handle;
@@ -283,14 +281,13 @@ void ccd_usart_TXProcessingTask(void * parameters)
 	}
 }
 
-
 /*
  * This function should be installed into the interrupt handler for the corresponding UART
 */
 inline void ccd_uart_InterruptHandler(ccd_uart_t * driver)
 {
 	uint32_t dw_status = usart_get_status(driver->base_usart);
-
+    
 	// A Value is received
 	if (dw_status & US_CSR_RXRDY) {
 
@@ -373,7 +370,6 @@ void ccd_uart_clear_error_status(void * vHandle)
 
 void ccd_b_uart_Send_message(void * vHandle, uint8_t * data, size_t data_len)
 {
-	
 	ccd_uart_t * pHandle = (ccd_uart_t*) vHandle;
 	
 	size_t bytes_sent = xStreamBufferSend(pHandle->uart_tx_buffer, data, data_len, 0);
@@ -381,18 +377,13 @@ void ccd_b_uart_Send_message(void * vHandle, uint8_t * data, size_t data_len)
 	if (bytes_sent > 0){
 		ccd_uart_EnableTXInterrupt(pHandle);
 	}
-
 }
 
 size_t ccd_b_uart_Receive_message(void * vHandle, uint8_t * data, size_t data_len) 
 {
-	
 	ccd_uart_t * pHandle = (ccd_uart_t*) vHandle;
 
 	size_t bytes_received = xStreamBufferReceive(pHandle->uart_rx_buffer, data, data_len, portMAX_DELAY);
 	
-	return bytes_received;
-	
-	// returns size of actual streambuffer received
-	
+	return bytes_received; // returns size of actual streambuffer received
 }

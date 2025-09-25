@@ -153,6 +153,12 @@ SECTIONS
         _ezero = .;
     } > ram
 
+    .noinit (NOLOAD) :
+    {
+        . = ALIGN(4);
+        *(.noinit .noinit.*)
+    } > ram
+
     /* stack section */
     .stack (NOLOAD):
     {

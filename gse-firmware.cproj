@@ -342,156 +342,156 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>
       <ArmGcc>
-        <armgcc.common.outputfiles.hex>True</armgcc.common.outputfiles.hex>
-        <armgcc.common.outputfiles.lss>True</armgcc.common.outputfiles.lss>
-        <armgcc.common.outputfiles.eep>True</armgcc.common.outputfiles.eep>
-        <armgcc.common.outputfiles.bin>True</armgcc.common.outputfiles.bin>
-        <armgcc.common.outputfiles.srec>True</armgcc.common.outputfiles.srec>
-        <armgcc.compiler.symbols.DefSymbols>
-          <ListValues>
-            <Value>NDEBUG</Value>
-            <Value>scanf=iscanf</Value>
-            <Value>BOARD=USER_BOARD</Value>
-            <Value>ARM_MATH_CM7=true</Value>
-            <Value>printf=iprintf</Value>
-          </ListValues>
-        </armgcc.compiler.symbols.DefSymbols>
-        <armgcc.compiler.directories.IncludePaths>
-          <ListValues>
-            <Value>../src/ASF/common/boards</Value>
-            <Value>../src/ASF/sam/utils</Value>
-            <Value>../src/ASF/sam/utils/header_files</Value>
-            <Value>../src/ASF/sam/utils/preprocessor</Value>
-            <Value>../src/ASF/thirdparty/CMSIS/Include</Value>
-            <Value>../src/ASF/thirdparty/CMSIS/Lib/GCC</Value>
-            <Value>../src/ASF/sam/utils/fpu</Value>
-            <Value>../src/ASF/common/utils</Value>
-            <Value>../src/ASF/sam/utils/cmsis/samv71/source/templates</Value>
-            <Value>../src/ASF/sam/utils/cmsis/samv71/include</Value>
-            <Value>../src/ASF/common/boards/user_board</Value>
-            <Value>../src/ASF/sam/drivers/pmc</Value>
-            <Value>../src/ASF/sam/drivers/uart</Value>
-            <Value>../src/ASF/common/services/clock</Value>
-            <Value>../src/ASF/common/services/serial/sam_uart</Value>
-            <Value>../src/ASF/common/services/serial</Value>
-            <Value>../src/ASF/sam/drivers/usart</Value>
-            <Value>../src/ASF/common/services/ioport</Value>
-            <Value>../src/ASF/common/services/delay</Value>
-            <Value>../src/ASF</Value>
-            <Value>../src/ASF/sam/drivers/spi</Value>
-            <Value>../src/ASF/common/services/spi/sam_spi</Value>
-            <Value>../src/ASF/common/services/spi</Value>
-            <Value>../src/ASF/sam/drivers/rstc/example1</Value>
-            <Value>../src/ASF/sam/drivers/rstc</Value>
-            <Value>../src/ASF/sam/drivers/wdt</Value>
-            <Value>../src/ASF/sam/drivers/twihs</Value>
-            <Value>../src/ASF/sam/drivers/mcan</Value>
-            <Value>../src/ASF/common/services/twi</Value>
-            <Value>../src/ASF/sam/drivers/tc</Value>
-            <Value>../src/ASF/sam/drivers/rtc</Value>
-            <Value>../src/ASF/sam/drivers/xdmac</Value>
-            <Value>../inc</Value>
-            <Value>../inc/board</Value>
-            <Value>../inc/drivers</Value>
-            <Value>../inc/freertos</Value>
-            <Value>../inc/config</Value>
-            <Value>../src/freertos/portable/GCC/ARM_CM7/r0p1</Value>
-          </ListValues>
-        </armgcc.compiler.directories.IncludePaths>
-        <armgcc.compiler.optimization.level>Optimize for size (-Os)</armgcc.compiler.optimization.level>
-        <armgcc.compiler.optimization.OtherFlags>-fdata-sections</armgcc.compiler.optimization.OtherFlags>
-        <armgcc.compiler.optimization.PrepareFunctionsForGarbageCollection>True</armgcc.compiler.optimization.PrepareFunctionsForGarbageCollection>
-        <armgcc.compiler.warnings.AllWarnings>True</armgcc.compiler.warnings.AllWarnings>
-        <armgcc.compiler.miscellaneous.OtherFlags>-pipe -fno-strict-aliasing -Wall -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -std=gnu99 -ffunction-sections -fdata-sections -Wchar-subscripts -Wcomment -Wformat=2 -Wimplicit-int -Wmain -Wparentheses -Wsequence-point -Wreturn-type -Wswitch -Wtrigraphs -Wunused -Wuninitialized -Wunknown-pragmas -Wfloat-equal -Wundef -Wshadow -Wbad-function-cast -Wwrite-strings -Wsign-compare -Waggregate-return -Wmissing-declarations -Wformat -Wmissing-format-attribute -Wno-deprecated-declarations -Wpacked -Wredundant-decls -Wnested-externs -Wlong-long -Wunreachable-code -Wcast-align --param max-inline-insns-single=500 -mfloat-abi=softfp -mfpu=fpv5-sp-d16</armgcc.compiler.miscellaneous.OtherFlags>
-        <armgcc.linker.libraries.Libraries>
-          <ListValues>
-            <Value>libarm_cortexM7lfsp_math_softfp</Value>
-            <Value>libm</Value>
-          </ListValues>
-        </armgcc.linker.libraries.Libraries>
-        <armgcc.linker.libraries.LibrarySearchPaths>
-          <ListValues>
-            <Value>../src/ASF/thirdparty/CMSIS/Lib/GCC</Value>
-          </ListValues>
-        </armgcc.linker.libraries.LibrarySearchPaths>
-        <armgcc.linker.optimization.GarbageCollectUnusedSections>True</armgcc.linker.optimization.GarbageCollectUnusedSections>
-        <armgcc.linker.miscellaneous.LinkerFlags>-Wl,--entry=Reset_Handler -Wl,--cref -mthumb -T../linker/flash.ld</armgcc.linker.miscellaneous.LinkerFlags>
-        <armgcc.assembler.general.IncludePaths>
-          <ListValues>
-            <Value>../src/ASF/common/boards</Value>
-            <Value>../src/ASF/sam/utils</Value>
-            <Value>../src/ASF/sam/utils/header_files</Value>
-            <Value>../src/ASF/sam/utils/preprocessor</Value>
-            <Value>../src/ASF/thirdparty/CMSIS/Include</Value>
-            <Value>../src/ASF/thirdparty/CMSIS/Lib/GCC</Value>
-            <Value>../src/ASF/sam/utils/fpu</Value>
-            <Value>../src/ASF/common/utils</Value>
-            <Value>../src/ASF/sam/utils/cmsis/samv71/source/templates</Value>
-            <Value>../src/ASF/sam/utils/cmsis/samv71/include</Value>
-            <Value>../src/ASF/common/boards/user_board</Value>
-            <Value>../src</Value>
-            <Value>../src/config</Value>
-            <Value>../src/ASF/sam/drivers/pmc</Value>
-            <Value>../src/ASF/sam/drivers/uart</Value>
-            <Value>../src/ASF/common/services/clock</Value>
-            <Value>../src/ASF/common/services/serial/sam_uart</Value>
-            <Value>../src/ASF/common/services/serial</Value>
-            <Value>../src/ASF/sam/drivers/usart</Value>
-            <Value>../src/ASF/common/services/ioport</Value>
-            <Value>../src/ASF/common/services/delay</Value>
-            <Value>../src/ASF/sam/drivers/spi</Value>
-            <Value>../src/ASF/common/services/spi/sam_spi</Value>
-            <Value>../src/ASF/common/services/spi</Value>
-            <Value>../src/ASF/sam/drivers/rstc/example1</Value>
-            <Value>../src/ASF/sam/drivers/rstc</Value>
-            <Value>../src/ASF/sam/drivers/wdt</Value>
-            <Value>../src/ASF/sam/drivers/twihs</Value>
-            <Value>../src/ASF/sam/drivers/mcan</Value>
-            <Value>../src/ASF/common/services/twi</Value>
-            <Value>../src/ASF/sam/drivers/tc</Value>
-            <Value>../src/ASF/sam/drivers/rtc</Value>
-            <Value>../src/ASF/sam/drivers/xdmac</Value>
-          </ListValues>
-        </armgcc.assembler.general.IncludePaths>
-        <armgcc.preprocessingassembler.general.AssemblerFlags>-DARM_MATH_CM7=true -DBOARD=USER_BOARD -Dprintf=iprintf -Dscanf=iscanf</armgcc.preprocessingassembler.general.AssemblerFlags>
-        <armgcc.preprocessingassembler.general.IncludePaths>
-          <ListValues>
-            <Value>../src/ASF/common/boards</Value>
-            <Value>../src/ASF/sam/utils</Value>
-            <Value>../src/ASF/sam/utils/header_files</Value>
-            <Value>../src/ASF/sam/utils/preprocessor</Value>
-            <Value>../src/ASF/thirdparty/CMSIS/Include</Value>
-            <Value>../src/ASF/thirdparty/CMSIS/Lib/GCC</Value>
-            <Value>../src/ASF/sam/utils/fpu</Value>
-            <Value>../src/ASF/common/utils</Value>
-            <Value>../src/ASF/sam/utils/cmsis/samv71/source/templates</Value>
-            <Value>../src/ASF/sam/utils/cmsis/samv71/include</Value>
-            <Value>../src/ASF/common/boards/user_board</Value>
-            <Value>../src</Value>
-            <Value>../src/config</Value>
-            <Value>../src/ASF/sam/drivers/pmc</Value>
-            <Value>../src/ASF/sam/drivers/uart</Value>
-            <Value>../src/ASF/common/services/clock</Value>
-            <Value>../src/ASF/common/services/serial/sam_uart</Value>
-            <Value>../src/ASF/common/services/serial</Value>
-            <Value>../src/ASF/sam/drivers/usart</Value>
-            <Value>../src/ASF/common/services/ioport</Value>
-            <Value>../src/ASF/common/services/delay</Value>
-            <Value>../src/ASF/sam/drivers/spi</Value>
-            <Value>../src/ASF/common/services/spi/sam_spi</Value>
-            <Value>../src/ASF/common/services/spi</Value>
-            <Value>../src/ASF/sam/drivers/rstc/example1</Value>
-            <Value>../src/ASF/sam/drivers/rstc</Value>
-            <Value>../src/ASF/sam/drivers/wdt</Value>
-            <Value>../src/ASF/sam/drivers/twihs</Value>
-            <Value>../src/ASF/sam/drivers/mcan</Value>
-            <Value>../src/ASF/common/services/twi</Value>
-            <Value>../src/ASF/sam/drivers/tc</Value>
-            <Value>../src/ASF/sam/drivers/rtc</Value>
-            <Value>../src/ASF/sam/drivers/xdmac</Value>
-          </ListValues>
-        </armgcc.preprocessingassembler.general.IncludePaths>
-      </ArmGcc>
+  <armgcc.common.outputfiles.hex>True</armgcc.common.outputfiles.hex>
+  <armgcc.common.outputfiles.lss>True</armgcc.common.outputfiles.lss>
+  <armgcc.common.outputfiles.eep>True</armgcc.common.outputfiles.eep>
+  <armgcc.common.outputfiles.bin>True</armgcc.common.outputfiles.bin>
+  <armgcc.common.outputfiles.srec>True</armgcc.common.outputfiles.srec>
+  <armgcc.compiler.symbols.DefSymbols>
+    <ListValues>
+      <Value>NDEBUG</Value>
+      <Value>scanf=iscanf</Value>
+      <Value>BOARD=USER_BOARD</Value>
+      <Value>ARM_MATH_CM7=true</Value>
+      <Value>printf=iprintf</Value>
+    </ListValues>
+  </armgcc.compiler.symbols.DefSymbols>
+  <armgcc.compiler.directories.IncludePaths>
+    <ListValues>
+      <Value>../src/ASF/common/boards</Value>
+      <Value>../src/ASF/sam/utils</Value>
+      <Value>../src/ASF/sam/utils/header_files</Value>
+      <Value>../src/ASF/sam/utils/preprocessor</Value>
+      <Value>../src/ASF/thirdparty/CMSIS/Include</Value>
+      <Value>../src/ASF/thirdparty/CMSIS/Lib/GCC</Value>
+      <Value>../src/ASF/sam/utils/fpu</Value>
+      <Value>../src/ASF/common/utils</Value>
+      <Value>../src/ASF/sam/utils/cmsis/samv71/source/templates</Value>
+      <Value>../src/ASF/sam/utils/cmsis/samv71/include</Value>
+      <Value>../src/ASF/common/boards/user_board</Value>
+      <Value>../src/ASF/sam/drivers/pmc</Value>
+      <Value>../src/ASF/sam/drivers/uart</Value>
+      <Value>../src/ASF/common/services/clock</Value>
+      <Value>../src/ASF/common/services/serial/sam_uart</Value>
+      <Value>../src/ASF/common/services/serial</Value>
+      <Value>../src/ASF/sam/drivers/usart</Value>
+      <Value>../src/ASF/common/services/ioport</Value>
+      <Value>../src/ASF/common/services/delay</Value>
+      <Value>../src/ASF</Value>
+      <Value>../src/ASF/sam/drivers/spi</Value>
+      <Value>../src/ASF/common/services/spi/sam_spi</Value>
+      <Value>../src/ASF/common/services/spi</Value>
+      <Value>../src/ASF/sam/drivers/rstc/example1</Value>
+      <Value>../src/ASF/sam/drivers/rstc</Value>
+      <Value>../src/ASF/sam/drivers/wdt</Value>
+      <Value>../src/ASF/sam/drivers/twihs</Value>
+      <Value>../src/ASF/sam/drivers/mcan</Value>
+      <Value>../src/ASF/common/services/twi</Value>
+      <Value>../src/ASF/sam/drivers/tc</Value>
+      <Value>../src/ASF/sam/drivers/rtc</Value>
+      <Value>../src/ASF/sam/drivers/xdmac</Value>
+      <Value>../inc</Value>
+      <Value>../inc/board</Value>
+      <Value>../inc/drivers</Value>
+      <Value>../inc/freertos</Value>
+      <Value>../inc/config</Value>
+      <Value>../src/freertos/portable/GCC/ARM_CM7/r0p1</Value>
+    </ListValues>
+  </armgcc.compiler.directories.IncludePaths>
+  <armgcc.compiler.optimization.level>Optimize for size (-Os)</armgcc.compiler.optimization.level>
+  <armgcc.compiler.optimization.OtherFlags>-fdata-sections</armgcc.compiler.optimization.OtherFlags>
+  <armgcc.compiler.optimization.PrepareFunctionsForGarbageCollection>True</armgcc.compiler.optimization.PrepareFunctionsForGarbageCollection>
+  <armgcc.compiler.warnings.AllWarnings>True</armgcc.compiler.warnings.AllWarnings>
+  <armgcc.compiler.miscellaneous.OtherFlags>-pipe -fno-strict-aliasing -Wall -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -std=gnu99 -ffunction-sections -fdata-sections -Wchar-subscripts -Wcomment -Wformat=2 -Wimplicit-int -Wmain -Wparentheses -Wsequence-point -Wreturn-type -Wswitch -Wtrigraphs -Wunused -Wuninitialized -Wunknown-pragmas -Wfloat-equal -Wundef -Wshadow -Wbad-function-cast -Wwrite-strings -Wsign-compare -Waggregate-return -Wmissing-declarations -Wformat -Wmissing-format-attribute -Wno-deprecated-declarations -Wpacked -Wredundant-decls -Wnested-externs -Wlong-long -Wunreachable-code -Wcast-align --param max-inline-insns-single=500 -mfloat-abi=softfp -mfpu=fpv5-sp-d16</armgcc.compiler.miscellaneous.OtherFlags>
+  <armgcc.linker.libraries.Libraries>
+    <ListValues>
+      <Value>libarm_cortexM7lfsp_math_softfp</Value>
+      <Value>libm</Value>
+    </ListValues>
+  </armgcc.linker.libraries.Libraries>
+  <armgcc.linker.libraries.LibrarySearchPaths>
+    <ListValues>
+      <Value>../src/ASF/thirdparty/CMSIS/Lib/GCC</Value>
+    </ListValues>
+  </armgcc.linker.libraries.LibrarySearchPaths>
+  <armgcc.linker.optimization.GarbageCollectUnusedSections>True</armgcc.linker.optimization.GarbageCollectUnusedSections>
+  <armgcc.linker.miscellaneous.LinkerFlags>-Wl,--entry=Reset_Handler -Wl,--cref -mthumb -T../linker/flash.ld</armgcc.linker.miscellaneous.LinkerFlags>
+  <armgcc.assembler.general.IncludePaths>
+    <ListValues>
+      <Value>../src/ASF/common/boards</Value>
+      <Value>../src/ASF/sam/utils</Value>
+      <Value>../src/ASF/sam/utils/header_files</Value>
+      <Value>../src/ASF/sam/utils/preprocessor</Value>
+      <Value>../src/ASF/thirdparty/CMSIS/Include</Value>
+      <Value>../src/ASF/thirdparty/CMSIS/Lib/GCC</Value>
+      <Value>../src/ASF/sam/utils/fpu</Value>
+      <Value>../src/ASF/common/utils</Value>
+      <Value>../src/ASF/sam/utils/cmsis/samv71/source/templates</Value>
+      <Value>../src/ASF/sam/utils/cmsis/samv71/include</Value>
+      <Value>../src/ASF/common/boards/user_board</Value>
+      <Value>../src</Value>
+      <Value>../src/config</Value>
+      <Value>../src/ASF/sam/drivers/pmc</Value>
+      <Value>../src/ASF/sam/drivers/uart</Value>
+      <Value>../src/ASF/common/services/clock</Value>
+      <Value>../src/ASF/common/services/serial/sam_uart</Value>
+      <Value>../src/ASF/common/services/serial</Value>
+      <Value>../src/ASF/sam/drivers/usart</Value>
+      <Value>../src/ASF/common/services/ioport</Value>
+      <Value>../src/ASF/common/services/delay</Value>
+      <Value>../src/ASF/sam/drivers/spi</Value>
+      <Value>../src/ASF/common/services/spi/sam_spi</Value>
+      <Value>../src/ASF/common/services/spi</Value>
+      <Value>../src/ASF/sam/drivers/rstc/example1</Value>
+      <Value>../src/ASF/sam/drivers/rstc</Value>
+      <Value>../src/ASF/sam/drivers/wdt</Value>
+      <Value>../src/ASF/sam/drivers/twihs</Value>
+      <Value>../src/ASF/sam/drivers/mcan</Value>
+      <Value>../src/ASF/common/services/twi</Value>
+      <Value>../src/ASF/sam/drivers/tc</Value>
+      <Value>../src/ASF/sam/drivers/rtc</Value>
+      <Value>../src/ASF/sam/drivers/xdmac</Value>
+    </ListValues>
+  </armgcc.assembler.general.IncludePaths>
+  <armgcc.preprocessingassembler.general.AssemblerFlags>-DARM_MATH_CM7=true -DBOARD=USER_BOARD -Dprintf=iprintf -Dscanf=iscanf</armgcc.preprocessingassembler.general.AssemblerFlags>
+  <armgcc.preprocessingassembler.general.IncludePaths>
+    <ListValues>
+      <Value>../src/ASF/common/boards</Value>
+      <Value>../src/ASF/sam/utils</Value>
+      <Value>../src/ASF/sam/utils/header_files</Value>
+      <Value>../src/ASF/sam/utils/preprocessor</Value>
+      <Value>../src/ASF/thirdparty/CMSIS/Include</Value>
+      <Value>../src/ASF/thirdparty/CMSIS/Lib/GCC</Value>
+      <Value>../src/ASF/sam/utils/fpu</Value>
+      <Value>../src/ASF/common/utils</Value>
+      <Value>../src/ASF/sam/utils/cmsis/samv71/source/templates</Value>
+      <Value>../src/ASF/sam/utils/cmsis/samv71/include</Value>
+      <Value>../src/ASF/common/boards/user_board</Value>
+      <Value>../src</Value>
+      <Value>../src/config</Value>
+      <Value>../src/ASF/sam/drivers/pmc</Value>
+      <Value>../src/ASF/sam/drivers/uart</Value>
+      <Value>../src/ASF/common/services/clock</Value>
+      <Value>../src/ASF/common/services/serial/sam_uart</Value>
+      <Value>../src/ASF/common/services/serial</Value>
+      <Value>../src/ASF/sam/drivers/usart</Value>
+      <Value>../src/ASF/common/services/ioport</Value>
+      <Value>../src/ASF/common/services/delay</Value>
+      <Value>../src/ASF/sam/drivers/spi</Value>
+      <Value>../src/ASF/common/services/spi/sam_spi</Value>
+      <Value>../src/ASF/common/services/spi</Value>
+      <Value>../src/ASF/sam/drivers/rstc/example1</Value>
+      <Value>../src/ASF/sam/drivers/rstc</Value>
+      <Value>../src/ASF/sam/drivers/wdt</Value>
+      <Value>../src/ASF/sam/drivers/twihs</Value>
+      <Value>../src/ASF/sam/drivers/mcan</Value>
+      <Value>../src/ASF/common/services/twi</Value>
+      <Value>../src/ASF/sam/drivers/tc</Value>
+      <Value>../src/ASF/sam/drivers/rtc</Value>
+      <Value>../src/ASF/sam/drivers/xdmac</Value>
+    </ListValues>
+  </armgcc.preprocessingassembler.general.IncludePaths>
+</ArmGcc>
     </ToolchainSettings>
     <PreBuildEvent>dir</PreBuildEvent>
   </PropertyGroup>
@@ -514,7 +514,6 @@
   </armgcc.compiler.symbols.DefSymbols>
   <armgcc.compiler.directories.IncludePaths>
     <ListValues>
-      <Value>C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-none-eabi\include\machine</Value>
       <Value>../src/ASF/common/boards</Value>
       <Value>../src/ASF/sam/utils</Value>
       <Value>../src/ASF/sam/utils/header_files</Value>
@@ -549,14 +548,18 @@
       <Value>../inc</Value>
       <Value>../inc/board</Value>
       <Value>../inc/drivers</Value>
-      <Value>../inc/freertos</Value>
+      <Value>../lib/freertos/inc</Value>
+      <Value>../lib/freertos/src/portable/GCC/ARM_CM7/r0p1</Value>
       <Value>../inc/config</Value>
-      <Value>../src/freertos/portable/GCC/ARM_CM7/r0p1</Value>
       <Value>../src/ASF/sam/drivers/xdmac</Value>
       <Value>../src/ASF/sam/utils/cmsis/samv71/include/component</Value>
       <Value>../lib/libcsp/include</Value>
       <Value>../lib/libcsp/src</Value>
       <Value>../inc/libcsp</Value>
+      <Value>../lib/libparam/include</Value>
+      <Value>../inc/libparam</Value>
+      <Value>../lib/slash/include</Value>
+      <Value>../inc/slash</Value>
     </ListValues>
   </armgcc.compiler.directories.IncludePaths>
   <armgcc.compiler.optimization.OtherFlags>-fdata-sections</armgcc.compiler.optimization.OtherFlags>
@@ -665,24 +668,27 @@
     </PreBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Debug\" />
-    <Folder Include="Debug\inc\" />
-    <Folder Include="Debug\inc\inc\" />
-    <Folder Include="Debug\inc\inc\board\" />
     <Folder Include="inc\" />
     <Folder Include="inc\board\" />
     <Folder Include="inc\config\" />
-    <Folder Include="inc\drivers\" />
-    <Folder Include="inc\freertos\" />
-    <Folder Include="inc\libcsp" />
+    <Folder Include="inc\libcsp\" />
     <Folder Include="inc\libcsp\csp\" />
+    <Folder Include="inc\drivers" />
+    <Folder Include="inc\libparam" />
     <Folder Include="lib\" />
+    <Folder Include="lib\freertos\inc" />
+    <Folder Include="lib\freertos\src" />
+    <Folder Include="lib\freertos\src\portable" />
+    <Folder Include="lib\freertos\src\portable\GCC" />
+    <Folder Include="lib\freertos\src\portable\GCC\ARM_CM7" />
+    <Folder Include="lib\freertos\src\portable\GCC\ARM_CM7\r0p1" />
+    <Folder Include="lib\freertos\src\portable\MemMang" />
     <Folder Include="lib\libcsp\" />
-    <Folder Include="lib\libcsp\.github\" />
-    <Folder Include="lib\libcsp\.github\ISSUE_TEMPLATE\" />
-    <Folder Include="lib\libcsp\.github\workflows\" />
     <Folder Include="lib\libcsp\contrib\" />
-    <Folder Include="lib\libcsp\contrib\atomics\" />
+    <Folder Include="lib\libcsp\contrib\drivers\" />
+    <Folder Include="lib\libcsp\contrib\drivers\can\" />
+    <Folder Include="lib\libcsp\contrib\drivers\uart" />
+    <Folder Include="lib\libcsp\contrib\hooks\" />
     <Folder Include="lib\libcsp\include\" />
     <Folder Include="lib\libcsp\include\csp\" />
     <Folder Include="lib\libcsp\include\csp\arch\" />
@@ -696,6 +702,19 @@
     <Folder Include="lib\libcsp\src\drivers\" />
     <Folder Include="lib\libcsp\src\drivers\usart\" />
     <Folder Include="lib\libcsp\src\interfaces\" />
+    <Folder Include="lib\freertos" />
+    <Folder Include="lib\libparam\" />
+    <Folder Include="lib\libparam\include\" />
+    <Folder Include="lib\libparam\include\mpack\" />
+    <Folder Include="lib\libparam\include\objstore\" />
+    <Folder Include="lib\libparam\include\param\" />
+    <Folder Include="lib\libparam\include\vmem\" />
+    <Folder Include="lib\libparam\src\" />
+    <Folder Include="lib\libparam\src\mpack\" />
+    <Folder Include="lib\libparam\src\objstore\" />
+    <Folder Include="lib\libparam\src\param\" />
+    <Folder Include="lib\libparam\src\param\list\" />
+    <Folder Include="lib\libparam\src\vmem\" />
     <Folder Include="linker\" />
     <Folder Include="src\" />
     <Folder Include="src\ASF\" />
@@ -756,15 +775,7 @@
     <Folder Include="src\ASF\thirdparty\CMSIS\Include\" />
     <Folder Include="src\ASF\thirdparty\CMSIS\Lib\" />
     <Folder Include="src\ASF\thirdparty\CMSIS\Lib\GCC\" />
-    <Folder Include="src\FreeRTOS-Plus-Trace\" />
-    <Folder Include="src\FreeRTOS-Plus-Trace\Include\" />
-    <Folder Include="src\freertos\" />
-    <Folder Include="src\freertos\portable\" />
-    <Folder Include="src\freertos\portable\GCC\" />
-    <Folder Include="src\freertos\portable\GCC\ARM_CM7\" />
-    <Folder Include="src\freertos\portable\GCC\ARM_CM7\r0p1\" />
-    <Folder Include="src\freertos\portable\MemMang\" />
-    <Folder Include="src\libcsp" />
+    <Folder Include="src\drivers" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="inc\board\obc_controller_rev_A.h">
@@ -803,28 +814,16 @@
     <Compile Include="inc\crc8.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\drivers\ccd_can_driver.c">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="inc\drivers\ccd_can_driver.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\drivers\ccd_i2c_driver.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\drivers\ccd_led_driver.c">
+    <Compile Include="inc\drivers\ccd_i2c_driver.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\drivers\ccd_led_driver.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\drivers\ccd_uart_driver.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\drivers\ccd_i2c_driver.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\drivers\ccd_uart_driver.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\endpoints.h">
@@ -839,69 +838,6 @@
     <Compile Include="inc\FreeRTOSConfig.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\freertos\atomic.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\freertos\croutine.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\freertos\deprecated_definitions.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\freertos\event_groups.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\freertos\FreeRTOS.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\freertos\list.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\freertos\message_buffer.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\freertos\mpu_prototypes.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\freertos\mpu_syscall_numbers.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\freertos\mpu_wrappers.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\freertos\newlib-freertos.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\freertos\picolibc-freertos.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\freertos\portable.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\freertos\projdefs.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\freertos\queue.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\freertos\semphr.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\freertos\StackMacros.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\freertos\stack_macros.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\freertos\stream_buffer.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\freertos\task.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\freertos\timers.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="inc\gse_manager.h">
       <SubType>compile</SubType>
     </Compile>
@@ -912,6 +848,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\libcsp\csp\autoconfig.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\libparam\libparam.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\local_target.h">
@@ -962,7 +901,106 @@
     <Compile Include="inc\version.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="lib\libcsp\contrib\atomics\atomics_freertos_gcc.c">
+    <Compile Include="lib\freertos\inc\atomic.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\inc\croutine.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\inc\deprecated_definitions.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\inc\event_groups.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\inc\FreeRTOS.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\inc\list.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\inc\message_buffer.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\inc\mpu_prototypes.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\inc\mpu_syscall_numbers.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\inc\mpu_wrappers.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\inc\newlib-freertos.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\inc\picolibc-freertos.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\inc\portable.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\inc\projdefs.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\inc\queue.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\inc\semphr.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\inc\StackMacros.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\inc\stack_macros.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\inc\stream_buffer.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\inc\task.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\inc\timers.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\src\croutine.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\src\event_groups.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\src\list.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\src\portable\GCC\ARM_CM7\r0p1\port.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\src\portable\GCC\ARM_CM7\r0p1\portmacro.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\src\portable\MemMang\heap_4.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\src\queue.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\src\stream_buffer.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\src\tasks.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\freertos\src\timers.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\contrib\drivers\can\csp_driver_asf3_can.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\contrib\drivers\uart\csp_driver_asf3_uart.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libcsp\contrib\hooks\csp_hooks_asf3.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="lib\libcsp\include\csp\arch\csp_queue.h">
@@ -1196,16 +1234,130 @@
     <Compile Include="lib\libcsp\src\interfaces\csp_if_zmqhub.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="lib\libparam\include\mpack\mpack-config.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\include\mpack\mpack.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\include\objstore\objstore.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\include\param\param.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\include\param\param_client.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\include\param\param_list.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\include\param\param_queue.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\include\param\param_serializer.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\include\param\param_server.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\include\param\param_string.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\include\param\param_wildcard.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\include\vmem\vmem.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\include\vmem\vmem_block.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\include\vmem\vmem_client.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\include\vmem\vmem_crc32.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\include\vmem\vmem_ram.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\include\vmem\vmem_server.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\src\mpack\mpack.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\src\objstore\objstore.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\src\param\list\param_list.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\src\param\list\param_list.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\src\param\list\param_list_store.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\src\param\list\param_list_store_vmem.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\src\param\param.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\src\param\param_client.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\src\param\param_queue.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\src\param\param_serializer.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\src\param\param_server.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\src\param\param_string.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\src\param\param_wildcard.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\src\vmem\vmem.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\src\vmem\vmem_block.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\src\vmem\vmem_client.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\src\vmem\vmem_crc32.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\src\vmem\vmem_internal.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\libparam\src\vmem\vmem_server.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\crc8.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\drivers\ccd_can_driver.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\drivers\ccd_i2c_driver.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\drivers\ccd_led_driver.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\drivers\ccd_uart_driver.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\File.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\freertos\portable\MemMang\heap_4.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\libcsp\csp_hook_asf3.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\te_adaptors.c">
@@ -1217,37 +1369,13 @@
     <Compile Include="src\uart_target.c">
       <SubType>compile</SubType>
     </Compile>
-    <None Include="lib\libcsp\.github\dependabot.yml">
+    <None Include="lib\freertos\inc\CMakeLists.txt">
       <SubType>compile</SubType>
     </None>
-    <None Include="lib\libcsp\.github\ISSUE_TEMPLATE\01_q_and_a.md">
+    <None Include="lib\freertos\inc\stdint.readme">
       <SubType>compile</SubType>
     </None>
-    <None Include="lib\libcsp\.github\ISSUE_TEMPLATE\02_bug_report.md">
-      <SubType>compile</SubType>
-    </None>
-    <None Include="lib\libcsp\.github\workflows\abi-checker.yml">
-      <SubType>compile</SubType>
-    </None>
-    <None Include="lib\libcsp\.github\workflows\build-test-freertos.yml">
-      <SubType>compile</SubType>
-    </None>
-    <None Include="lib\libcsp\.github\workflows\build-test-python.yml">
-      <SubType>compile</SubType>
-    </None>
-    <None Include="lib\libcsp\.github\workflows\build-test-zephyr.yml">
-      <SubType>compile</SubType>
-    </None>
-    <None Include="lib\libcsp\.github\workflows\build-test.yml">
-      <SubType>compile</SubType>
-    </None>
-    <None Include="lib\libcsp\.github\workflows\develop-build-sphinx-docs.yml">
-      <SubType>compile</SubType>
-    </None>
-    <None Include="lib\libcsp\.github\workflows\gitlint.yml">
-      <SubType>compile</SubType>
-    </None>
-    <None Include="lib\libcsp\.github\workflows\linelint.yaml">
+    <None Include="lib\freertos\src\portable\GCC\ARM_CM7\ReadMe.txt">
       <SubType>compile</SubType>
     </None>
     <None Include="linker\flash.ld">
@@ -1269,33 +1397,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\extra_maths.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\freertos\croutine.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\freertos\event_groups.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\freertos\list.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\freertos\portable\GCC\ARM_CM7\r0p1\port.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\freertos\portable\GCC\ARM_CM7\r0p1\portmacro.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\freertos\queue.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\freertos\stream_buffer.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\freertos\tasks.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\freertos\timers.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\gse_manager.c">
@@ -1340,12 +1441,6 @@
     <Compile Include="src\register_handler.c">
       <SubType>compile</SubType>
     </Compile>
-    <None Include="inc\freertos\CMakeLists.txt">
-      <SubType>compile</SubType>
-    </None>
-    <None Include="inc\freertos\stdint.readme">
-      <SubType>compile</SubType>
-    </None>
     <None Include="src\ASF\common\services\twi\sam_twihs\twihs_master.h">
       <SubType>compile</SubType>
     </None>
@@ -1991,12 +2086,6 @@
     <Compile Include="src\main.c">
       <SubType>compile</SubType>
     </Compile>
-    <None Include="src\freertos\CMakeLists.txt">
-      <SubType>compile</SubType>
-    </None>
-    <None Include="src\freertos\portable\GCC\ARM_CM7\ReadMe.txt">
-      <SubType>compile</SubType>
-    </None>
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>

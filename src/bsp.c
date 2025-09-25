@@ -135,7 +135,7 @@ static void inline BSP_vDisablePin(uint32_t pin){
 }
 
 static void BSP_vInitUART(bsp_t * bsp){
-	//Telemetry UART
+	// --- Telemetry UART ---
 	ioport_set_pin_mode(T_USART_RX_PIN, IOPORT_MODE_MUX_B);
 	ioport_disable_pin(T_USART_RX_PIN);
 
@@ -162,7 +162,7 @@ static void BSP_vInitUART(bsp_t * bsp){
 	
 	bsp->telemetry_uart = &telemetry_uart;
 	
-	//Board UART
+	// --- Board UART ---
 	ioport_set_pin_mode(B_USART_RX_PIN, IOPORT_MODE_MUX_C);
 	ioport_disable_pin(B_USART_RX_PIN);
 	// When the RS422/RS485 driver is disabled this pin slowly floats low. 
@@ -171,7 +171,6 @@ static void BSP_vInitUART(bsp_t * bsp){
 
 	ioport_set_pin_mode(B_USART_TX_PIN, IOPORT_MODE_MUX_C);
 	ioport_disable_pin(B_USART_TX_PIN);
-	
 	
 	// Default is UART/Normal Mode, RS485/RS422 Shutdown
 	ioport_enable_pin(PIN_SOUT_DE);

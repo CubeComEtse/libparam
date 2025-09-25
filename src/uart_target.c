@@ -11,9 +11,14 @@
 #include <stdlib.h>
 
 #include "uart_target.h"
-#include "pc_messages.h"
+
 #include "FreeRTOS.h"
 #include "task.h"
+
+#include "csp/interfaces/csp_if_kiss.h"
+
+#include "bsp.h"
+#include "pc_messages.h"
 
 // Special characters:
 #define FEND	0xC0 // 192
@@ -21,6 +26,7 @@
 #define TFEND   0xDC // 220 
 #define TFESC   0xDD // 221
 
+extern csp_iface_t * csp_usart_iface;
 
 /*
  * Initialize the instance. 
@@ -75,8 +81,6 @@ void UARTTARGET_TxTask(void * handle)
 		if (rx_length == 0){
 			continue;
 		}
-		
-		
 		
 		decode_successfull = decode_v2_message(&in_message, rx_buffer, rx_length);
 		
@@ -154,9 +158,6 @@ void UARTTARGET_TxTask(void * handle)
 	}
 }
 
-
-#include "bsp.h"
-
 void UARTTARGET_RxTask(void * handle) 
 {
 	uart_target_t * hnd = (uart_target_t *) handle;
@@ -167,24 +168,28 @@ void UARTTARGET_RxTask(void * handle)
 	size_t packet_index = 0;
 	bool receiving = false;
 	bool escaped = false;
-
 	
-	while(1){
+	while(1) {
 		size_t received_bytes_length = hnd->uart_receive(hnd->uart_handle, rx_buffer, rx_max_length);
 		
-		if (received_bytes_length == 0){
+		if (received_bytes_length == 0) {
 			continue;
 		}
+        
+        // TODO: Figure out how to switch between old handler and new handler
+        int xTaskWoken = pdFALSE;
+        csp_kiss_rx(csp_usart_iface, rx_buffer, received_bytes_length, (void *)xTaskWoken);
+        continue;
+        
 		ioport_set_pin_level(PIN_DEBUG_0, 1);
 		
 		//3. disassemble kiss packet -> out_message
-		for (size_t i = 0; i < received_bytes_length; i++)
-		{
+		for (size_t i = 0; i < received_bytes_length; i++) {
 			uint8_t rx_byte = rx_buffer[i];
 			
 			//start receiving only when start byte (FEND) is received
-			if (!receiving){
-				if (rx_byte == FEND){
+			if (!receiving) {
+				if (rx_byte == FEND) {
 					
 					receiving = true;
 					packet_index = 0;
@@ -192,12 +197,11 @@ void UARTTARGET_RxTask(void * handle)
 					continue;
 				}
 			} else {
-				
-				if (rx_byte == FEND){
+				if (rx_byte == FEND ){
 					// End of packet received
 					ioport_set_pin_level(PIN_DEBUG_1, 0);
 					
-					if (packet_index == 0){
+					if (packet_index == 0) {
 						//We received an empty packet! Probably means we dropped a byte somewhere,
 						// and should actually start receiving now.
 						receiving = true;
@@ -206,7 +210,7 @@ void UARTTARGET_RxTask(void * handle)
 						continue;
 					}
 					
-					if (packet_index < 6){
+					if (packet_index < 6) {
 						// Invalid length, expecting (excluding the start&end FEND):
 						//[0] msg type
 						//[1] msg id

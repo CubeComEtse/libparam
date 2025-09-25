@@ -9,14 +9,14 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "ccd_i2c_driver.h"
+
+#include "asf.h"
+
 #include "FreeRTOS.h"
 #include "semphr.h"
 
 #include "register_map.h"
-#include "ccd_i2c_driver.h"
-
-#include <asf.h>
-
 
 void ccd_i2c_driver_Init(ccd_i2c_t * driver, Twihs * instance)
 {
@@ -67,7 +67,6 @@ bool ccd_i2c_driver_SetBaud(void * handle, uint32_t new_baud){
 	}
 	return false;
 }
-
 
 bool ccd_i2c_driver_Write(void * handle, const uint8_t dev_addr, const uint8_t * data, const size_t data_len)
 {

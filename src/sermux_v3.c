@@ -28,7 +28,7 @@
  * Initialize the SerMux.
  *
  * Before calling this function set the in and out streams of the struct to 
- * the uart's streams.
+ * the UART's streams.
 */
 void SERMUX_V3_Init(sermux_v3_t * handle)
 {
@@ -63,9 +63,9 @@ void SERMUX_V3_AddTarget(sermux_v3_t * handle, const uint8_t number, MessageBuff
 }
 
 // PC->GSE
-void SERMUX_V3_ReceiveTask(void * vHandle)
+void SERMUX_V3_ReceiveTask(void * params)
 {
-	sermux_v3_t* pHandle = (sermux_v3_t *) vHandle;
+	sermux_v3_t* pHandle = (sermux_v3_t *) params;
 	
 	uint8_t rx_buffer[16];
 	
@@ -207,10 +207,9 @@ void SERMUX_V3_ReceiveTask(void * vHandle)
 	}
 }
 
-		
-void SERMUX_V3_TransmitTask(void * vHandle)
+void SERMUX_V3_TransmitTask(void * params)
 {
-	sermux_v3_t* pHandle = (sermux_v3_t *) vHandle;
+	sermux_v3_t* pHandle = (sermux_v3_t *) params;
 	
 	// This buffer hold messages as we construct them.
 	uint8_t tx_buffer[256];
@@ -224,7 +223,7 @@ void SERMUX_V3_TransmitTask(void * vHandle)
 		tx_buffer[2] = 2; //Version 2
 		tx_buffer_pos = 4;
 		
-		uint32_t j =0;
+		uint32_t j = 0;
 		while ((j < pHandle->num_targets) && (tx_buffer_pos < buffer_size_without_overhead))
 		{
 			size_t rx_size = 0;
@@ -234,7 +233,7 @@ void SERMUX_V3_TransmitTask(void * vHandle)
 			}
 			while(rx_size > 0);
 			
-			j+=1;
+			j += 1;
 		}
 		
 		if (tx_buffer_pos > 4)

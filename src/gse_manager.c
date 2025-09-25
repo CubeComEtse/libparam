@@ -65,8 +65,9 @@ void GSE_MANAGER_SetBusPowerSwitch_V2(gse_manager_t * handle, const power_rail_i
  *
  * This is a FreeRTOS task that needs to be added to the scheduler.
 */
-void GSE_MANAGER_Task(void * taskptr){
-	gse_manager_t * hdl = (gse_manager_t *) taskptr;
+void GSE_MANAGER_Task(void * params)
+{
+	gse_manager_t * hdl = (gse_manager_t *) params;
 	
 	// Make sure all structs are initialized
 	assert(hdl);

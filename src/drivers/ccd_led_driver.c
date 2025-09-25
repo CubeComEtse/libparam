@@ -4,7 +4,9 @@
  * Created: 2025/01/21 08:46:51
  *  Author: Kolijn
  */ 
+
 #include "ccd_led_driver.h"
+
 #include "FreeRTOS.h"
 #include "task.h"
 
@@ -12,7 +14,7 @@ void ccd_led_driver_Init(ccd_led_t * driver, Pwm * pwm_instance)
 {
 	driver->pwm = pwm_instance;
 
-	// Select peripheral clock - 100 Mhz
+	// Select peripheral clock - 100 MHz
 	driver->pwm->PWM_CLK = PWM_CLK_PREA(PWM_CLK_PREA_CLK) | PWM_CLK_DIVA(1);
 
 	// Channel Mode register:
@@ -22,7 +24,7 @@ void ccd_led_driver_Init(ccd_led_t * driver, Pwm * pwm_instance)
 	// DPOL     1   When disabled, output is 1 (inverted output is 0)
 	driver->pwm->PWM_CH_NUM[3].PWM_CMR = PWM_CMR_DPOLI;
 
-	// Set to 100 for now - 1 Mhz. Poor LED
+	// Set to 100 for now - 1 MHz. Poor LED
 	// driver->pwm->PWM_CH_NUM[3].PWM_CPRD = 120;
 	driver->pwm->PWM_CH_NUM[3].PWM_CPRD = 256;
 	driver->pwm->PWM_CH_NUM[3].PWM_CDTYUPD = 0;
@@ -47,7 +49,7 @@ void ccd_led_driver_DisableInterrupts(ccd_led_t * driver, bool value)
 		// More hacks:
 		// After disabling the FC, there are still UART bytes on the line that need to
 		// received and reacted to. This delay allows the UART interrupt to still
-		// fire when these bytes come in. The delay is roughly equal to 2 uart bytes.
+		// fire when these bytes come in. The delay is roughly equal to 2 UART bytes.
 		delay_us(20);
 			    
 		taskENTER_CRITICAL();
@@ -64,14 +66,12 @@ void ccd_led_driver_DisableInterrupts(ccd_led_t * driver, bool value)
 	
 }
 
-
 void ccd_led_driver_SetLed(ccd_led_t * driver, uint8_t r, uint8_t g, uint8_t b){
 	
 	/*
 	driver->pwm->PWM_ENA = PWM_ENA_CHID3;
 	driver->pwm->PWM_CH_NUM[3].PWM_CDTYUPD = r;
 	return;*/
-	
 	
 	Pwm * pwm = driver->pwm;
 	
@@ -89,8 +89,6 @@ void ccd_led_driver_SetLed(ccd_led_t * driver, uint8_t r, uint8_t g, uint8_t b){
 
 	int short_period = 30;
 	int long_period = 90;
-	    
-
 
 	// Start by setting the duty cycle to 0 so that the first cycle
 	// doesn't count as a bit
