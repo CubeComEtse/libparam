@@ -74,13 +74,13 @@ void SERMUX_V3_ReceiveTask(void * params)
 		// Try receiving data from the UART - Wait up to 500ms before updating state
 		size_t rx_length = xStreamBufferReceive(pHandle->in_stream, rx_buffer, 16, pdMS_TO_TICKS(500));
 	
-		if (rx_length == 0){
-			LEDIndicator_SetNextState(LED_POWER_ON);
-			continue;
-		}
-		else{
-			LEDIndicator_SetNextState(LED_UART_COMMS);
-		}
+// 		if (rx_length == 0){
+// 			LEDIndicator_SetNextState(LED_POWER_ON);
+// 			continue;
+// 		}
+// 		else{
+// 			LEDIndicator_SetNextState(LED_UART_COMMS);
+// 		}
 		
 		// Check if bytes were dropped by the UART.
 		// If it was, reset and wait for next message

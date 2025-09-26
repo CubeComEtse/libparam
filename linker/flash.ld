@@ -51,7 +51,8 @@ SEARCH_DIR(.)
 MEMORY
 {
   rom (rx)  : ORIGIN = 0x00400000, LENGTH = 0x00200000
-  ram (rwx) : ORIGIN = 0x20400000, LENGTH = 0x00060000
+  ram (rwx) : ORIGIN = 0x20400000, LENGTH = 0x0005F000
+  liveram (rwx) : ORIGIN = 0x20400000, LENGTH = 0x00001000
 }
 
 /* The stack size used by the application. NOTE: you need to adjust according to your application. */
@@ -108,6 +109,18 @@ SECTIONS
         KEEP (*(EXCLUDE_FILE (*crtend.o) .dtors))
         KEEP (*(SORT(.dtors.*)))
         KEEP (*crtend.o(.dtors))
+        
+		/* libparam paramerters */
+        . = ALIGN(8); /* Since the param_t contains a 64-bit type */
+        __start_param = .;
+        KEEP(*(param));
+        __stop_param = .;
+        
+		/* libparam vmem */
+        . = ALIGN(8); /* Since the vmem_t contains a 64-bit type */
+        __start_vmem = .;
+        KEEP(*(vmem));
+        __stop_vmem = .;
 
         . = ALIGN(4);
         _efixed = .;            /* End of text section */
@@ -152,7 +165,8 @@ SECTIONS
         _ebss = . ;
         _ezero = .;
     } > ram
-
+	
+    /* .noinit section which is used for libcsp and libparam data */
     .noinit (NOLOAD) :
     {
         . = ALIGN(4);
@@ -182,4 +196,10 @@ SECTIONS
     . = ALIGN(4);
     _end = . ;
     _ram_end_ = ORIGIN(ram) + LENGTH(ram) -1 ;
+	
+    /* .liveram section which is used for libparam VMEM data ??? */
+    .liveram (NOLOAD):
+    {
+        KEEP(*(.liveram .liveram.*))
+    } > liveram
 }
