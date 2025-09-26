@@ -16,7 +16,7 @@ extern "C" {
 #define VMEM_MIN(a,b) ((a) < (b) ? a : b)
 
 #include <stddef.h>
-#include <endian.h>
+#include <machine/endian.h>
 #include <param/param.h>
 
 enum vmem_types{
