@@ -109,7 +109,7 @@ void mpack_assert_fail_wrapper(const char* message) {
     #if (defined(__GNUC__) || defined(__clang__)) && !MPACK_NO_BUILTINS
     __builtin_abort();
     #elif MPACK_STDLIB
-    abort();
+    vmem_abort();
     #endif
 
     MPACK_UNREACHABLE;
@@ -143,7 +143,7 @@ void mpack_break_hit(const char* message) {
     #elif defined(WIN32) && !MPACK_NO_BUILTINS
     __debugbreak();
     #elif MPACK_STDLIB
-    abort();
+    vmem_abort();
     #endif
 }
 #endif
