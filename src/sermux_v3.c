@@ -74,13 +74,15 @@ void SERMUX_V3_ReceiveTask(void * params)
 		// Try receiving data from the UART - Wait up to 500ms before updating state
 		size_t rx_length = xStreamBufferReceive(pHandle->in_stream, rx_buffer, 16, pdMS_TO_TICKS(500));
 	
-// 		if (rx_length == 0){
-// 			LEDIndicator_SetNextState(LED_POWER_ON);
-// 			continue;
-// 		}
-// 		else{
-// 			LEDIndicator_SetNextState(LED_UART_COMMS);
-// 		}
+		if (rx_length == 0)
+        {
+			LEDIndicator_SetNextState(LED_POWER_ON);
+			continue;
+		}
+		else
+        {
+			LEDIndicator_SetNextState(LED_UART_COMMS);
+		}
 		
 		// Check if bytes were dropped by the UART.
 		// If it was, reset and wait for next message
@@ -97,6 +99,7 @@ void SERMUX_V3_ReceiveTask(void * params)
 			pHandle->state = V2_WAITING_2;
 			rx_length = 0;
 		}
+        
 		// This flag isn't really relevant here, but check and clear it anyway.
 		if (uart_status & UART_TX_SB_OVERFLOW)
 		{
@@ -147,10 +150,9 @@ void SERMUX_V3_ReceiveTask(void * params)
 					// Store CRC
 					pHandle->rx_block.crc = rx_byte;
 					
-					// Todo: Verify the CRC. We don't enable this immediately, wait until  the OBC Software generates and 
+					// Todo: Verify the CRC. We don't enable this immediately, wait until the OBC Software generates and 
 					// checks it as well.
 					uint8_t calculated_crc = CRC8_Calculate(&pHandle->crc_checker, pHandle->rx_block.buffer, pHandle->rx_block.length);
-					
 					
 					if (pHandle->rx_block.crc != calculated_crc)
 					{
@@ -169,7 +171,6 @@ void SERMUX_V3_ReceiveTask(void * params)
 						//uint8_t msg_id = hnd->rx_block.buffer[curr_msg_index + 2];
 						// bool dirBit = ((msg_target & 0x80) > 0);
 						msg_target = msg_target & 0x7F;
-						
 						
 						// This is a safety check. If this is true, the index will never be
 						// incremented, and we'll be stuck. So just abandon the block.
@@ -228,7 +229,7 @@ void SERMUX_V3_TransmitTask(void * params)
 		{
 			size_t rx_size = 0;
 			do {
-				rx_size = xMessageBufferReceive (pHandle->targets[j].out, &tx_buffer[tx_buffer_pos], buffer_size_without_overhead-tx_buffer_pos,0);
+				rx_size = xMessageBufferReceive (pHandle->targets[j].out, &tx_buffer[tx_buffer_pos], buffer_size_without_overhead-tx_buffer_pos, 0);
 				tx_buffer_pos += rx_size;
 			}
 			while(rx_size > 0);

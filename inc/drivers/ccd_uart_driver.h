@@ -23,7 +23,6 @@
 #define UART_RX_SB_OVERFLOW  (0x01<<1)
 #define UART_TX_SB_OVERFLOW  (0x01<<2)
 
-
 typedef enum {
 	UART = 0,
 	RS485,

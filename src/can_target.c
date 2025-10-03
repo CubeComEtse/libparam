@@ -9,14 +9,16 @@
  */ 
 
 #include "can_target.h"
+
 #include <assert.h>
+
 #include "pc_messages.h"
 
 // This include should not be here, there should be function pointers
 #include "ccd_can_driver.h"
 
-#define CAN_TELECOMMAND_REQUEST 0x01
-#define CAN_TELEMETRY_REQUEST 0x04
+#define CAN_TELECOMMAND_REQUEST     0x01
+#define CAN_TELEMETRY_REQUEST       0x04
 
 /*
  * Initialize the instance. 
@@ -26,7 +28,6 @@
 void CANTARGET_Init(can_target_t * pHandle)
 {
 	assert(pHandle->can_send);
-	// Do not assert the can handle, it might be void. 
 	
 	// These buffers are for SERCOM messages
 	// This buffer size is an initial guess. Feel free to update it later.
@@ -49,20 +50,22 @@ void CANTARGET_TxTask(void * vHandle)
 	
 	bool decode_successfull;
 	
-	while(1){
+	while(1)
+    {
 		// Wait indefinitely to receive a message 
 		size_t rx_length = xMessageBufferReceive(pHandle->incoming_messages, rx_buffer, 32, portMAX_DELAY);
 		
-		if (rx_length == 0){
+		if (rx_length == 0)
+        {
 			continue;
 		}
 		
 		decode_successfull = decode_v2_message(&in_message, rx_buffer, rx_length);
 		
-		if (!decode_successfull){
+		if (!decode_successfull)
+        {
 			continue;
 		}
-		
 		
 		// So: At the moment the different CAN endpoints all use the same position in the header
 		// for the address. This means the CAN driver does not need to be re-configured between
@@ -124,29 +127,26 @@ void CANTARGET_TxTask(void * vHandle)
 	}
 }
 
-
 void CANTARGET_RxTask(void * vHandle)
 {
 	assert(vHandle);
 	can_target_t * pHandle = (can_target_t *) vHandle;
+    
+	uint32_t header;
+	size_t receive_size, sent_size;
+	v2_msg_t out_message;
 		
-	while(1){
-		
+	while(1)
+    {
 		// Wait for a message to be received over CAN
-		uint32_t header;
-		size_t receive_size;
-		v2_msg_t out_message;
-		
 		if (pHandle->can_receive(pHandle->can_handle, &header, &out_message.data[2], &receive_size))
 		{
 			out_message.is_read = false;
 			out_message.data_len = 2 + receive_size;
 			out_message.target = EP_V2_CAN_CC_2;
 			
-			// CAN MsgType
-			out_message.data[0] = (uint8_t) ((header >> 24) & 0x1F);
-			// Message Length
-			out_message.data[1] = (uint8_t) receive_size;
+			out_message.data[0] = (uint8_t) ((header >> 24) & 0x1F);    // CAN MsgType
+			out_message.data[1] = (uint8_t) receive_size;               // Message Length
 			
 			if (pHandle->mode == CUBECOM_MODE)
 			{
@@ -160,41 +160,53 @@ void CANTARGET_RxTask(void * vHandle)
 			uint8_t encoded[20];
 			size_t encoded_size = encode_v2_message(encoded, &out_message);
 			
-			//Todo: What to do if a message is dropped?
-			xMessageBufferSend(pHandle->outgoing_messages, &encoded, encoded_size, pdMS_TO_TICKS(20));			
-			
+			sent_size = xMessageBufferSend(pHandle->outgoing_messages, &encoded, encoded_size, pdMS_TO_TICKS(20)); //TODO: Handle dropped messages
 		}
-	
 	}
 }
 
 bool CANTARGET_SetBaud(can_target_t * pHandle, uint32_t baud)
 {
-	// Should we wait for the buffer to be empty?
+	// TODO: Should we wait for the buffer to be empty?
+	// TODO: Why are we still continuing even if the semaphore is not obtained?
 	
-	xSemaphoreTake(pHandle->can_semaphore, pdMS_TO_TICKS(200));
+	if (xSemaphoreTake(pHandle->can_semaphore, pdMS_TO_TICKS(200)) != pdTRUE)
+	{
+    	return false;
+	}
+	
 	bool retval = ccd_can_SetBaudRate(pHandle->can_handle, baud);
-	xSemaphoreGive(pHandle->can_semaphore);
+    
+	xSemaphoreGive(pHandle->can_semaphore); // TODO: Handle semaphore release failure
 	
 	return retval;
 }
 
 bool CANTARGET_EnableRetries(can_target_t * pHandle, bool retries)
 {
-	// Should we wait for the buffer to be empty?
+	// TODO: Should we wait for the buffer to be empty?
 	
-	xSemaphoreTake(pHandle->can_semaphore, pdMS_TO_TICKS(200));
+	if (xSemaphoreTake(pHandle->can_semaphore, pdMS_TO_TICKS(200)) != pdTRUE)
+	{
+    	return false;
+	}
+	
 	ccd_can_SetRetries(pHandle->can_handle, retries);
-	xSemaphoreGive(pHandle->can_semaphore);
+    
+	xSemaphoreGive(pHandle->can_semaphore); // TODO: Handle semaphore release failure
 	
 	return true;
 }
 
 bool CANTARGET_SetMode(can_target_t * pHandle, can_mode_t mode)
 {
-	// Should we wait for the buffer to be empty?
+	// TODO: Should we wait for the buffer to be empty?
 	
-	xSemaphoreTake(pHandle->can_semaphore, pdMS_TO_TICKS(200));
+	if (xSemaphoreTake(pHandle->can_semaphore, pdMS_TO_TICKS(200)) != pdTRUE)
+	{
+    	return false;
+	}
+	
 	switch (mode)
 	{
 		case CUBECOM_MODE:
@@ -207,19 +219,22 @@ bool CANTARGET_SetMode(can_target_t * pHandle, can_mode_t mode)
 			ccd_can_SetAddress(pHandle->can_handle, pHandle->our_can_address << 16, 0xFF << 16);
 		break;
 	}
-	xSemaphoreGive(pHandle->can_semaphore);
+    
+	xSemaphoreGive(pHandle->can_semaphore); // TODO: Handle semaphore release failure
 	
 	return true;
-	
 }
 
-bool CANTARGET_vSetAddress(can_target_t * pHandle, uint8_t new_address){
-	if (xSemaphoreTake(pHandle->can_semaphore, pdMS_TO_TICKS(500)) == pdTRUE)
+bool CANTARGET_vSetAddress(can_target_t * pHandle, uint8_t new_address)
+{
+	if (xSemaphoreTake(pHandle->can_semaphore, pdMS_TO_TICKS(500)) != pdTRUE)
 	{
-		pHandle->radio_can_address = new_address;
-		xSemaphoreGive(pHandle->can_semaphore);
-		return true;
+    	return false;
 	}
-	return false;
-	
+    
+	pHandle->radio_can_address = new_address;
+    
+	xSemaphoreGive(pHandle->can_semaphore); // TODO: Handle semaphore release failure
+    
+	return true;
 }

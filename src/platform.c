@@ -3,7 +3,8 @@
  *
  * Created: 2024/11/28 09:23:41
  *  Author: Kolijn
- */ 
+ */
+
 #include "platform.h"
 #include "register_handler.h"
 
@@ -51,7 +52,6 @@ void PLATFORM_vInit(bsp_t * bsp)
 	platform.sermux_v3 = &sermux_v3;
 	
 	platform.pc104 = &pc104;
-
 	
 	uint8_t version = BSP_u8GetVersion();
 	if (version == 0)
@@ -64,14 +64,12 @@ void PLATFORM_vInit(bsp_t * bsp)
 		power_measure_2.i2c_write_function = ccd_i2c_driver_Write;
 		power_measure_2.i2c_read_function = ccd_i2c_driver_Read;
 		power_measure_2.i2c_handle = bsp->util_i2c;
-		
 	}
 	if ((version == 1) || (version == 2)){
 		//The LTC2992's are independent of i2c functions, so setup them
 		power_measure_1.i2c_write_function = ccd_i2c_driver_Write;
 		power_measure_1.i2c_read_function = ccd_i2c_driver_Read;
 		power_measure_1.i2c_handle = bsp->util_i2c;
-		
 	}
 
 	cs_board.i2c_read_function = ccd_i2c_driver_Read;
@@ -152,7 +150,6 @@ void PLATFORM_vInit(bsp_t * bsp)
 	
 	REG_vSetPlatformPointer(&platform, bsp);
 		
-		
 	platform.rf_relay_1 = &rf_relay_1;		
 	rf_relay_1.i2c_write_function = ccd_i2c_driver_Write;
 	rf_relay_1.i2c_read_function = ccd_i2c_driver_Read;
@@ -168,7 +165,6 @@ void PLATFORM_vInit(bsp_t * bsp)
 	platform.multitester->i2c_read_function = ccd_i2c_driver_Read;
 	platform.multitester->i2c_write_function = ccd_i2c_driver_Write;
 	//MULTI_Init(platform.multitester);
-	
 	
 	if (version == 0){
 		rf_relay_1.i2c_handle = bsp->bus_i2c;
@@ -194,7 +190,6 @@ void PLATFORM_vInit(bsp_t * bsp)
 	// Use the FreeRTOS tick count as a timer source
 	// This does mean we can only use this timer from non-interrupt functions.
 	TMR_vRegisterSource(TMR_SOURCE_SYSTICK, xTaskGetTickCount);
-	
 }
 
 /*

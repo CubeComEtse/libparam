@@ -5,7 +5,6 @@
  *  Author: Kolijn
  */ 
 
-
 #ifndef PC104_H_
 #define PC104_H_
 
@@ -22,6 +21,5 @@ typedef struct {
 
 void PC104_setEnaPin(pc104_t * handle, bool value);
 void PC104_setnRstPin(pc104_t * handle, bool value);
-
 
 #endif /* PC104_H_ */

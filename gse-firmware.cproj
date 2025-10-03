@@ -332,7 +332,7 @@
           </JtagDaisyChainDevices>
         </InterfaceProperties>
         <InterfaceName>SWD</InterfaceName>
-        <JlinkConfigFile>C:\Users\Kolijn\Work\Repos\gse-firmware\jlink.config</JlinkConfigFile>
+        <JlinkConfigFile>C:\GitHub\Cubecom\obc-sim-firmware\jlink.config</JlinkConfigFile>
       </ToolOptions>
       <ToolType>com.atmel.avrdbg.tool.samice</ToolType>
       <ToolNumber>602011789</ToolNumber>
@@ -560,6 +560,13 @@
       <Value>../inc/libparam</Value>
       <Value>../lib/slash/include</Value>
       <Value>../inc/slash</Value>
+      <Value>../lib/tracerecorder/streamports/Jlink_RTT/include</Value>
+      <Value>../lib/tracerecorder/streamports/Jlink_RTT/config</Value>
+      <Value>../lib/tracerecorder/include</Value>
+      <Value>../lib/tracerecorder/config</Value>
+      <Value>../lib/tracerecorder/kernelports/FreeRTOS/config</Value>
+      <Value>../lib/tracerecorder/kernelports/FreeRTOS/include</Value>
+      <Value>../inc/freertos</Value>
     </ListValues>
   </armgcc.compiler.directories.IncludePaths>
   <armgcc.compiler.optimization.OtherFlags>-fdata-sections</armgcc.compiler.optimization.OtherFlags>
@@ -675,6 +682,7 @@
     <Folder Include="inc\libcsp\csp\" />
     <Folder Include="inc\drivers" />
     <Folder Include="inc\libparam" />
+    <Folder Include="inc\freertos" />
     <Folder Include="lib\" />
     <Folder Include="lib\freertos\inc" />
     <Folder Include="lib\freertos\src" />
@@ -715,6 +723,18 @@
     <Folder Include="lib\libparam\src\param\" />
     <Folder Include="lib\libparam\src\param\list\" />
     <Folder Include="lib\libparam\src\vmem\" />
+    <Folder Include="lib\tracerecorder\" />
+    <Folder Include="lib\tracerecorder\" />
+    <Folder Include="lib\tracerecorder\config\" />
+    <Folder Include="lib\tracerecorder\include\" />
+    <Folder Include="lib\tracerecorder\kernelports\" />
+    <Folder Include="lib\tracerecorder\kernelports\FreeRTOS\" />
+    <Folder Include="lib\tracerecorder\kernelports\FreeRTOS\config\" />
+    <Folder Include="lib\tracerecorder\kernelports\FreeRTOS\include\" />
+    <Folder Include="lib\tracerecorder\streamports\" />
+    <Folder Include="lib\tracerecorder\streamports\Jlink_RTT\" />
+    <Folder Include="lib\tracerecorder\streamports\Jlink_RTT\config\" />
+    <Folder Include="lib\tracerecorder\streamports\Jlink_RTT\include\" />
     <Folder Include="linker\" />
     <Folder Include="src\" />
     <Folder Include="src\ASF\" />
@@ -835,7 +855,7 @@
     <Compile Include="inc\extra_maths.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\FreeRTOSConfig.h">
+    <Compile Include="inc\freertos\FreeRTOSConfig.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\gse_manager.h">
@@ -1342,6 +1362,216 @@
     <Compile Include="lib\libparam\src\vmem\vmem_server.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="lib\tracerecorder\config\trcConfig.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\config\trcSnapshotConfig.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\config\trcStreamingConfig.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcAssert.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcCounter.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcDefines.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcDependency.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcDiagnostics.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcEntryTable.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcError.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcEvent.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcEventBuffer.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcExtension.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcHardwarePort.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcHeap.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcInternalEventBuffer.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcInterval.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcISR.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcMultiCoreEventBuffer.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcObject.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcPrint.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcProcess.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcRecorder.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcRunnable.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcStackMonitor.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcStateMachine.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcStaticBuffer.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcString.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcTask.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcThread.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcTimestamp.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcTypes.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\include\trcUtility.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\kernelports\FreeRTOS\config\trcKernelPortConfig.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\kernelports\FreeRTOS\config\trcKernelPortSnapshotConfig.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\kernelports\FreeRTOS\config\trcKernelPortStreamingConfig.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\kernelports\FreeRTOS\include\trcKernelPort.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\kernelports\FreeRTOS\trcKernelPort.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\streamports\Jlink_RTT\config\trcStreamPortConfig.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\streamports\Jlink_RTT\include\SEGGER_RTT.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\streamports\Jlink_RTT\include\SEGGER_RTT_Conf.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\streamports\Jlink_RTT\include\trcStreamPort.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\streamports\Jlink_RTT\SEGGER_RTT.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\streamports\Jlink_RTT\trcStreamPort.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\trcAssert.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\trcCounter.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\trcDependency.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\trcDiagnostics.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\trcEntryTable.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\trcError.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\trcEvent.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\trcEventBuffer.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\trcExtension.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\trcHardwarePort.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\trcHeap.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\trcInternalEventBuffer.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\trcInterval.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\trcISR.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\trcMultiCoreEventBuffer.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\trcObject.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\trcPrint.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\trcRunnable.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\trcSnapshotRecorder.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\trcStackMonitor.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\trcStateMachine.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\trcStaticBuffer.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\trcStreamingRecorder.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\trcString.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\trcTask.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\tracerecorder\trcTimestamp.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\crc8.c">
       <SubType>compile</SubType>
     </Compile>
@@ -1376,6 +1606,12 @@
       <SubType>compile</SubType>
     </None>
     <None Include="lib\freertos\src\portable\GCC\ARM_CM7\ReadMe.txt">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\tracerecorder\streamports\Jlink_RTT\Kconfig">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\tracerecorder\streamports\Jlink_RTT\Readme-Streamport.txt">
       <SubType>compile</SubType>
     </None>
     <None Include="linker\flash.ld">

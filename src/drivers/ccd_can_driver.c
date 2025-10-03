@@ -33,13 +33,13 @@ void ccd_can_Init(ccd_can_t * pHandle, Mcan * can_device)
 	if (can_device == MCAN0)
 	{
 		irq_register_handler(MCAN0_INT0_IRQn, 1);
-		NVIC_SetPriority(MCAN0_INT0_IRQn, 4);
+		NVIC_SetPriority(MCAN0_INT0_IRQn, configMAX_SYSCALL_INTERRUPT_PRIORITY >> (8 - __NVIC_PRIO_BITS));
 		mcan_enable_interrupt(&pHandle->can_module, MCAN_RX_BUFFER_NEW_MESSAGE | MCAN_RX_FIFO_0_NEW_MESSAGE | MCAN_RX_FIFO_1_NEW_MESSAGE | MCAN_FORMAT_ERROR | MCAN_ACKNOWLEDGE_ERROR | MCAN_BUS_OFF);
 	}
 	if (can_device == MCAN1)
 	{
 		irq_register_handler(MCAN1_INT0_IRQn, 1);
-		NVIC_SetPriority(MCAN1_INT0_IRQn, 4);
+		NVIC_SetPriority(MCAN1_INT0_IRQn, configMAX_SYSCALL_INTERRUPT_PRIORITY >> (8 - __NVIC_PRIO_BITS));
 		mcan_enable_interrupt(&pHandle->can_module, MCAN_RX_BUFFER_NEW_MESSAGE | MCAN_RX_FIFO_0_NEW_MESSAGE | MCAN_RX_FIFO_1_NEW_MESSAGE | MCAN_FORMAT_ERROR | MCAN_ACKNOWLEDGE_ERROR | MCAN_BUS_OFF);
 	}
 	

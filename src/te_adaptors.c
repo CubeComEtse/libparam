@@ -6,8 +6,10 @@
  */ 
 
 #include "te_adaptors.h"
+
 #include "FreeRTOS.h"
 #include "task.h"
+
 #include "register_map.h"
 
 void TE_Adaptors_Setup(te_scanner_t * pHandle)
@@ -29,9 +31,7 @@ void TE_Adaptors_Setup(te_scanner_t * pHandle)
 		pHandle->adaptors[i].previous_portbits = 0x00;
 		
 	}
-
 }
-
 
 void TE_Adaptors_Task(void * vHandle)
 {

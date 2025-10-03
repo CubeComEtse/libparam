@@ -9,15 +9,16 @@
  * Created: 2024/10/03 17:08:40
  * Author: Kolijn
  */ 
+
 #include "i2c_target.h"
 
 #include <string.h>
 #include <assert.h>
 #include <task.h>
+
 #include "delay.h"
 
 #include "pc_messages.h"
-
 
 /*
  * Initialize the instance. 
@@ -28,7 +29,6 @@ void I2CTARGET_Init(i2c_target_t * handle)
 {
 	assert(handle->i2c_read);
 	assert(handle->i2c_write);
-	// Do not assert the handle, it might be void.
 	
 	// These buffer sizes were increased to hold enough messages between UART transmissions
 	handle->incoming_messages = xMessageBufferCreate(1024);
@@ -51,17 +51,20 @@ void I2CTARGET_Task(void * handle)
 	
 	bool decode_successfull;
 	
-	while(1){
+	while(1)
+    {
 		// Wait indefinitely to receive a message 
 		size_t rx_length =  xMessageBufferReceive(pHandle->incoming_messages, rx_buffer, 32, pdMS_TO_TICKS(50));
 		
-		if (rx_length == 0){
+		if (rx_length == 0)
+        {
 			continue;
 		}
 		
 		decode_successfull = decode_v2_message(&in_message, rx_buffer, rx_length);
 		
-		if (!decode_successfull){
+		if (!decode_successfull)
+        {
 			continue;
 		}
 
@@ -76,10 +79,9 @@ void I2CTARGET_Task(void * handle)
 		
 		if (in_message.target == EP_V2_I2C_CC_CHECKSUM)
 		{
-
 			// This is a i2c message with "checksums". Used by the XTX
-			if ((in_message.is_read)) {
-
+			if ((in_message.is_read))
+            {
 				memcpy(read_buffer, in_message.data, in_message.data_len);
 				uint8_t reg_address = in_message.data[0];
 				uint8_t read_length = in_message.data[1];
@@ -94,8 +96,8 @@ void I2CTARGET_Task(void * handle)
 				
 				if (pHandle->write_read_delay ==0)
 				{
-					if (pHandle->i2c_read(pHandle->i2c_handle, pHandle->legacy_address, address_with_checksum, 3, &out_message.data[2], read_length + 2)){
-					
+					if (pHandle->i2c_read(pHandle->i2c_handle, pHandle->legacy_address, address_with_checksum, 3, &out_message.data[2], read_length + 2))
+                    {
 						// Create the received message
 						out_message.target = in_message.target;
 						out_message.is_read = true;
@@ -104,9 +106,9 @@ void I2CTARGET_Task(void * handle)
 					
 						size_t encoded_len = encode_v2_message(encoded, &out_message);
 					
-						if (encoded_len > 0){
-							xMessageBufferSend(pHandle->outgoing_messages, encoded, encoded_len, 0);
-							//Todo: Do something if buffer is full.
+						if (encoded_len > 0)
+                        {
+							xMessageBufferSend(pHandle->outgoing_messages, encoded, encoded_len, 0); //TODO: Handle dropped messages
 						}
 					}
 				}
@@ -118,8 +120,8 @@ void I2CTARGET_Task(void * handle)
 					
 					delay_us(pHandle->write_read_delay);
 					
-					if (pHandle->i2c_read(pHandle->i2c_handle, pHandle->legacy_address, address_with_checksum, 0, &out_message.data[2], read_length + 2)){
-											
+					if (pHandle->i2c_read(pHandle->i2c_handle, pHandle->legacy_address, address_with_checksum, 0, &out_message.data[2], read_length + 2))
+                    {
 						// Create the received message
 						out_message.target = in_message.target;
 						out_message.is_read = true;
@@ -128,9 +130,9 @@ void I2CTARGET_Task(void * handle)
 											
 						size_t encoded_len = encode_v2_message(encoded, &out_message);
 											
-						if (encoded_len > 0){
-							xMessageBufferSend(pHandle->outgoing_messages, encoded, encoded_len, 0);
-							//Todo: Do something if buffer is full.
+						if (encoded_len > 0)
+                        {
+							xMessageBufferSend(pHandle->outgoing_messages, encoded, encoded_len, 0); //TODO: Handle dropped messages
 						}
 					}
 					
@@ -166,7 +168,8 @@ void I2CTARGET_Task(void * handle)
 		if (in_message.target == EP_V2_I2C_CC)
 		{		
 			// This is an i2c message with either 1 or  2 address bytes, used by the HDRTX
-			if (in_message.is_read & (in_message.data_len == 2)) {
+			if (in_message.is_read & (in_message.data_len == 2))
+            {
 				uint8_t device_address = pHandle->legacy_address; // Hard coded, from a register
 				uint8_t * address = &in_message.data[0];
 				uint8_t read_length = in_message.data[1];
@@ -174,7 +177,8 @@ void I2CTARGET_Task(void * handle)
 				// Copy the register address and length to the buffer
 				memcpy(read_buffer, in_message.data, 2);
 
-				if (pHandle->i2c_read(pHandle->i2c_handle, device_address, address, 1, &out_message.data[2], read_length)){
+				if (pHandle->i2c_read(pHandle->i2c_handle, device_address, address, 1, &out_message.data[2], read_length))
+                {
 					// Create the received message
 					out_message.target = in_message.target;
 					out_message.is_read = true;
@@ -185,9 +189,9 @@ void I2CTARGET_Task(void * handle)
 					// encode the out message to a buffer, and transmit
 					size_t encoded_len = encode_v2_message(encoded, &out_message);
 								
-					if (encoded_len > 0){
-						xMessageBufferSend(pHandle->outgoing_messages, encoded, encoded_len, 0);
-						//Todo: Do something if buffer is full.
+					if (encoded_len > 0)
+                    {
+						xMessageBufferSend(pHandle->outgoing_messages, encoded, encoded_len, 0); //TODO: Handle dropped messages
 					}
 				}
 			}
@@ -201,7 +205,8 @@ void I2CTARGET_Task(void * handle)
 		{
 			
 			// This is an i2c message with either 1 or  2 address bytes, used by the HDRTX
-			if (in_message.is_read & (in_message.data_len == 3)) {
+			if (in_message.is_read & (in_message.data_len == 3))
+            {
 				uint8_t device_address = pHandle->legacy_address; // Hard coded, from a register
 				
 				// Byte 0 & Byte 1 - Address
@@ -213,7 +218,8 @@ void I2CTARGET_Task(void * handle)
 				// Copy the register address and length to the buffer
 				memcpy(read_buffer, in_message.data, 2);
 
-				if (pHandle->i2c_read(pHandle->i2c_handle, device_address, address, 2, &out_message.data[2], read_length)){
+				if (pHandle->i2c_read(pHandle->i2c_handle, device_address, address, 2, &out_message.data[2], read_length))
+                {
 					// Create the received message
 					out_message.target = in_message.target;
 					out_message.is_read = true;
@@ -224,7 +230,8 @@ void I2CTARGET_Task(void * handle)
 					// encode the out message to a buffer, and transmit
 					size_t encoded_len = encode_v2_message(encoded, &out_message);
 					
-					if (encoded_len > 0){
+					if (encoded_len > 0)
+                    {
 						xMessageBufferSend(pHandle->outgoing_messages, encoded, encoded_len, 0);
 						//Todo: Do something if buffer is full.
 					}
@@ -268,9 +275,9 @@ void I2CTARGET_Task(void * handle)
 					// encode the out message to a buffer, and transmit
 					size_t encoded_len = encode_v2_message(encoded, &out_message);
 						
-					if (encoded_len > 0){
-						xMessageBufferSend(pHandle->outgoing_messages, encoded, encoded_len, 0);
-						//Todo: Do something if buffer is full.
+					if (encoded_len > 0)
+                    {
+						xMessageBufferSend(pHandle->outgoing_messages, encoded, encoded_len, 0); //TODO: Handle dropped messages
 					}
 				}
 			}
@@ -278,18 +285,18 @@ void I2CTARGET_Task(void * handle)
 			{
 				// Its a write, just do it directly. The PC will place the address and data next to each other
 				pHandle->i2c_write(pHandle->i2c_handle, bus_address, &in_message.data[1], in_message.data_len -1);
-
 			}
 		}
-	
 	}
 }
 
 /*
  * Set the new baud of the I2C Device
 */
-bool I2CTARGET_SetBaud(i2c_target_t * handle, uint32_t baud){
-	if (handle->i2c_set_baud == 0){
+bool I2CTARGET_SetBaud(i2c_target_t * handle, uint32_t baud)
+{
+	if (handle->i2c_set_baud == 0)
+    {
 		return false;
 	}
 	return handle->i2c_set_baud(handle->i2c_handle, baud);
@@ -300,6 +307,7 @@ bool I2CTARGET_SetBaud(i2c_target_t * handle, uint32_t baud){
  * using a register, and not transferred using the UART messages. This 
  * function allows you to still do that.
 */
-void I2CTarget_SetLegacyAddress(i2c_target_t * handle, uint8_t new_address){
+void I2CTarget_SetLegacyAddress(i2c_target_t * handle, uint8_t new_address)
+{
 	handle->legacy_address = new_address;
 }

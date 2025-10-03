@@ -6,9 +6,9 @@
  */ 
 
 #include "ltc2992.h"
+
 #include <stdint.h>
 #include <stdbool.h>
-
 
 void LTC2992_vNormalSetup(ltc2992_device_t* dev, uint8_t bus_address) {
     dev->i2c_bus_addres = bus_address;
@@ -101,7 +101,6 @@ void LTC2992_vReadVoltage(ltc2992_device_t* dev, uint16_t* voltage_1, uint16_t* 
     dev->i2c_read_function(dev->i2c_handle, dev->i2c_bus_addres, &address, 1, rx_buffer, 2);
     *voltage_2 = (uint16_t) (rx_buffer[0] << 8 | rx_buffer[1]) >> 4;
 }
-
 
 void LTC2992_vReadCurrent(ltc2992_device_t* dev, uint16_t* current_1, uint16_t* current_2) {
     // Check that the functions are set

@@ -108,6 +108,11 @@ int main (void)
     
     // Platform Initialization
     PLATFORM_vInit(&bsp);
+    
+    if(xTraceEnable(TRC_START_FROM_HOST) != TRC_SUCCESS)
+    {
+        ErrorHandler();
+    }
 
     platform = PLATFORM_get();
     
@@ -177,25 +182,25 @@ static void SETUP_Task(void* handle)
     // Create all the FreeRTOS Tasks
     xTaskCreate(GSE_MANAGER_Task, "GSE Manager", 1024, (void *) platform->gse_manager, tskIDLE_PRIORITY + 2, NULL);
     
-    xTaskCreate(SERMUX_V3_ReceiveTask, "Serial MUX RX", 512, (void *) platform->sermux_v3, tskIDLE_PRIORITY + 2, NULL);
-    xTaskCreate(SERMUX_V3_TransmitTask, "Serial MUX TX", 512, (void *) platform->sermux_v3, tskIDLE_PRIORITY + 2, NULL);
+    xTaskCreate(SERMUX_V3_ReceiveTask, "SERMUX RX", 512, (void *) platform->sermux_v3, tskIDLE_PRIORITY + 2, NULL);
+    xTaskCreate(SERMUX_V3_TransmitTask, "SERMUX TX", 512, (void *) platform->sermux_v3, tskIDLE_PRIORITY + 2, NULL);
     
-    xTaskCreate(I2CTARGET_Task, "I2C Target", 512, (void *) platform->i2c_target,  tskIDLE_PRIORITY + 3, NULL);
+    xTaskCreate(I2CTARGET_Task, "I2C Target RX", 512, (void *) platform->i2c_target,  tskIDLE_PRIORITY + 3, NULL);
     
-    xTaskCreate(CANTARGET_TxTask, "CAN TX Task", 512, (void *) platform->can_target, tskIDLE_PRIORITY + 3, NULL);
-    xTaskCreate(CANTARGET_RxTask, "CAN RX Task", 512, (void *) platform->can_target, tskIDLE_PRIORITY + 2, NULL);
+    xTaskCreate(CANTARGET_TxTask, "CAN Target TX", 512, (void *) platform->can_target, tskIDLE_PRIORITY + 3, NULL);
+    xTaskCreate(CANTARGET_RxTask, "CAN Target RX", 512, (void *) platform->can_target, tskIDLE_PRIORITY + 2, NULL);
     
-    xTaskCreate(UARTTARGET_TxTask, "UART TX Task", 512, (void *) platform->uart_target, tskIDLE_PRIORITY + 2, NULL);
-    xTaskCreate(UARTTARGET_RxTask, "UART RX Task", 512, (void *) platform->uart_target, tskIDLE_PRIORITY + 2, NULL);
+    xTaskCreate(UARTTARGET_TxTask, "UART Target TX", 512, (void *) platform->uart_target, tskIDLE_PRIORITY + 2, NULL);
+    xTaskCreate(UARTTARGET_RxTask, "UART Target RX", 512, (void *) platform->uart_target, tskIDLE_PRIORITY + 2, NULL);
     
-    xTaskCreate(LOCALTARGET_Task, "Local Target", 512, (void *) platform->local_target,  tskIDLE_PRIORITY + 2, NULL);
+    xTaskCreate(LOCALTARGET_Task, "Local Target RX", 512, (void *) platform->local_target,  tskIDLE_PRIORITY + 2, NULL);
     
     // High priority for this, to always keep the RX buffer empty and not loose data.
-    xTaskCreate(ccd_usart_RXProcessingTask, "UART RX", 512, (void *) bsp.telemetry_uart, tskIDLE_PRIORITY + 4, &bsp.telemetry_uart->rx_task_handle);
-    xTaskCreate(ccd_usart_TXProcessingTask, "UART TX", 512, (void *) bsp.telemetry_uart, tskIDLE_PRIORITY + 4, &bsp.telemetry_uart->tx_task_handle);
+    xTaskCreate(ccd_usart_RXProcessingTask, "TEL UART RX", 512, (void *) bsp.telemetry_uart, tskIDLE_PRIORITY + 4, &bsp.telemetry_uart->rx_task_handle);
+    xTaskCreate(ccd_usart_TXProcessingTask, "TEL UART TX", 512, (void *) bsp.telemetry_uart, tskIDLE_PRIORITY + 4, &bsp.telemetry_uart->tx_task_handle);
     
-    xTaskCreate(ccd_usart_TXProcessingTask, "UART TX", 512, (void *) bsp.bus_uart, tskIDLE_PRIORITY + 2, &bsp.bus_uart->rx_task_handle);
-    xTaskCreate(ccd_usart_RXProcessingTask, "UART RX", 512, (void *) bsp.bus_uart, tskIDLE_PRIORITY + 2, &bsp.bus_uart->tx_task_handle);
+    xTaskCreate(ccd_usart_RXProcessingTask, "BUS UART RX", 512, (void *) bsp.bus_uart, tskIDLE_PRIORITY + 2, &bsp.bus_uart->tx_task_handle);
+    xTaskCreate(ccd_usart_TXProcessingTask, "BUS UART TX", 512, (void *) bsp.bus_uart, tskIDLE_PRIORITY + 2, &bsp.bus_uart->rx_task_handle);
     
     // Process RF Relay, multitester and TE Adapters
     xTaskCreate(DEVTOOLS_Task, "RF Tools", 512, (void *) platform, tskIDLE_PRIORITY + 2, NULL);
@@ -209,7 +214,7 @@ static void SETUP_Task(void* handle)
     
     // CSP tasks
     xTaskCreate(csp_router_task, "CSP Route", 1024, NULL, tskIDLE_PRIORITY + 2, NULL);
-//     xTaskCreate(csp_ping_task, "CSP Ping", 256, NULL, tskIDLE_PRIORITY + 2, NULL);
+    xTaskCreate(csp_ping_task, "CSP Ping", 256, NULL, tskIDLE_PRIORITY + 2, NULL);
     xTaskCreate(vmem_server_loop, "VMEM Server", 1024, NULL, tskIDLE_PRIORITY + 2, NULL);
 
     // Tasks monitoring task
@@ -243,12 +248,16 @@ static void csp_router_task(void * param)
 
 static void csp_ping_task(void * param)
 {
+    TraceStringHandle_t channel = xTraceRegisterString("CSP Ping Task User Events");
     while(1)
     {
 //         csp_ping_noreply(16);
         uint8_t opts = CSP_O_NONE;
-//         int res = csp_ping(TEST_PC_CSP_ADDRESS, 1000, 0, opts);
-        int res = csp_ping(UART_CSP_ADDRESS, 1000, 0, opts);
+        uint16_t address = TEST_PC_CSP_ADDRESS;
+//         uint16_t address = UART_CSP_ADDRESS;
+        xTracePrintF(channel, "Pinging %d...", address);
+        int res = csp_ping(address, 1000, 0, opts);
+//         int res = csp_ping(UART_CSP_ADDRESS, 1000, 0, opts);
         vTaskDelay(pdMS_TO_TICKS(5000));
     }
 }
@@ -335,8 +344,8 @@ void vApplicationTickHook(void)
 
 void led_color_cb(param_t * param, int index)
 {
-    LEDIndicator_SetNextState(param_get_uint8_array(param, index));
     // TODO: handle parameter set event (parameter already assigned with a new value)
+//     LEDIndicator_SetNextState(param_get_uint8_array(param, index));
     return;
 }
 

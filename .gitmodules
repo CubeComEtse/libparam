@@ -4,3 +4,6 @@
 [submodule "lib/libparam"]
 	path = lib/libparam
 	url = https://github.com/spaceinventor/libparam
+[submodule "lib/tracerecorder"]
+	path = lib/tracerecorder
+	url = https://github.com/percepio/TraceRecorderSource

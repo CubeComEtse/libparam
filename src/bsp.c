@@ -9,25 +9,14 @@
 
 #include "bsp.h"
 
+#include "spi.h"
 #include "sysclk.h"
 #include "genclk.h"
 #include "ioport.h"
 #include "obc_controller_rev_A.h"
-#include "spi.h"
 
 // All interrupt mask.
 #define ALL_INTERRUPT_MASK  0xffffffff
-
-// Local functions
-// void BSP_vInitSPI(void);
-
-// Local variables
-// static struct spi_device sSpiDevice;
-
-
-
-
-// Post cleanup
 
 // Local functions
 static void BSP_vInitUART(bsp_t * bsp);
@@ -37,8 +26,6 @@ static void BSP_vInitGPIO(void);
 static void BSP_InitRTC(void);
 static void BSP_vInitCan(bsp_t * bsp);
 static void BSP_vInitLEDPWM(bsp_t * bsp);
-
-
 
 // Post cleanup
 static ccd_uart_t telemetry_uart;
@@ -51,9 +38,11 @@ static ccd_uart_t bus_uart;
 // The version is only read and set once, during startup
 static uint8_t version;
 
-void BSP_Init(bsp_t * bsp) {		
+void BSP_Init(bsp_t * bsp)
+{
 	// System Initialization
 	sysclk_init();
+    
 	// This initializes the USB clock - used by the CAN
 	sysclk_enable_usb();
 	
@@ -78,7 +67,6 @@ void BSP_Init(bsp_t * bsp) {
 	delay_ms(1);
 	version = (ioport_get_pin_level(PIN_VERSION_2) << 2) | (ioport_get_pin_level(PIN_VERSION_1) << 1) | ioport_get_pin_level(PIN_VERSION_0);
 	//version = 1;
-    
 	
 	BSP_vInitUART(bsp);
 	BSP_vInitBusI2C(bsp);
@@ -106,35 +94,41 @@ void BSP_Init(bsp_t * bsp) {
 	
 	// Set the systick to the lowest possible interrupt level
 	SysTick_Config(300000);
-	NVIC_SetPriority(SysTick_IRQn, (1<<__NVIC_PRIO_BITS) -1 );
+	NVIC_SetPriority(SysTick_IRQn, (1 << __NVIC_PRIO_BITS) - 1);
 }
 
-uint8_t BSP_u8GetVersion(){
+uint8_t BSP_u8GetVersion()
+{
 	return version;
 }
 
-
-void inline BSP_vSetPin(uint32_t pin, bool value){
+void inline BSP_vSetPin(uint32_t pin, bool value)
+{
 	ioport_set_pin_level(pin, value);
 }
 
-static void inline BSP_vEnablePin(uint32_t pin){
+static void inline BSP_vEnablePin(uint32_t pin)
+{
 	ioport_enable_pin(pin);
 }
 
-static void inline BSP_vSetPinDir(uint32_t pin, enum ioport_direction dir){
+static void inline BSP_vSetPinDir(uint32_t pin, enum ioport_direction dir)
+{
 	ioport_set_pin_dir(pin, dir);
 }
 
-static void inline BSP_vSetPinMode(uint32_t pin, ioport_mode_t mode){
+static void inline BSP_vSetPinMode(uint32_t pin, ioport_mode_t mode)
+{
 	ioport_set_pin_mode(pin, mode);
 }
 
-static void inline BSP_vDisablePin(uint32_t pin){
+static void inline BSP_vDisablePin(uint32_t pin)
+{
 	ioport_disable_pin(pin);
 }
 
-static void BSP_vInitUART(bsp_t * bsp){
+static void BSP_vInitUART(bsp_t * bsp)
+{
 	// --- Telemetry UART ---
 	ioport_set_pin_mode(T_USART_RX_PIN, IOPORT_MODE_MUX_B);
 	ioport_disable_pin(T_USART_RX_PIN);
@@ -152,13 +146,13 @@ static void BSP_vInitUART(bsp_t * bsp){
 	telemetry_uart.cts_pin = T_USART_CTS_PIN;
 	telemetry_uart.baudrate = T_USART_SPEED;
 	// Should not be used, but setting this guards against HardFault if the UART 
-	// accidentally lands in RS 485 mode.
+	// accidentally lands in RS485 mode.
 	telemetry_uart.set_gpio_pin = &BSP_vSetPin;
 	
 	// This UART's Interrupt is 1 - The 'highest' available, and outside the FreeRTOS
 	// priority ranges. It needs to be this high so that we don't miss bytes from the PC
 	
-	ccd_uart_Init(&telemetry_uart, T_USART, 1);
+	ccd_uart_Init(&telemetry_uart, T_USART, configMAX_SYSCALL_INTERRUPT_PRIORITY >> (8 - __NVIC_PRIO_BITS));
 	
 	bsp->telemetry_uart = &telemetry_uart;
 	
@@ -201,21 +195,23 @@ static void BSP_vInitUART(bsp_t * bsp){
 	bus_uart.uart_tx_pin = B_USART_TX_PIN;
 	bus_uart.uart_rx_pin = B_USART_RX_PIN;
 	
-	// Priority 4- much lower
-	ccd_uart_Init(&bus_uart, B_USART, 3);
+	ccd_uart_Init(&bus_uart, B_USART, configMAX_SYSCALL_INTERRUPT_PRIORITY >> (8 - __NVIC_PRIO_BITS));
 	
 	bsp->bus_uart = &bus_uart; 
 }
 
-void USART2_Handler(void){
+void USART2_Handler(void)
+{
 	ccd_uart_InterruptHandler(&telemetry_uart);
 }
 
-void USART0_Handler(void){
+void USART0_Handler(void)
+{
 	ccd_uart_InterruptHandler(&bus_uart);
 }
 
-static void BSP_vInitBusI2C(bsp_t * bsp){
+static void BSP_vInitBusI2C(bsp_t * bsp)
+{
 	// Board I2C
 	ioport_set_pin_mode(I2C_BUS_SDA_PIN, I2C_BUS_SDA_MUX);
 	ioport_disable_pin(I2C_BUS_SDA_PIN);
@@ -227,7 +223,8 @@ static void BSP_vInitBusI2C(bsp_t * bsp){
 	bsp->bus_i2c = &bus_i2c;
 }
 
-static void BSP_vInitUtilI2C(bsp_t * bsp){
+static void BSP_vInitUtilI2C(bsp_t * bsp)
+{
 	ioport_set_pin_mode(I2C_UTIL_SDA_PIN, I2C_UTIL_SDA_MUX);
 	ioport_disable_pin(I2C_UTIL_SDA_PIN);
 
@@ -242,7 +239,8 @@ static void BSP_vInitUtilI2C(bsp_t * bsp){
 /*
  * Initialize all the general purpose GPIO pins
 */
-void BSP_vInitGPIO(void) {
+void BSP_vInitGPIO(void)
+{
 
 	// The four GPIO pins are not enabled and set.
 
@@ -256,7 +254,8 @@ void BSP_vInitGPIO(void) {
 	ioport_set_pin_level(USB_RESET_PIN, 1);
 	ioport_set_pin_dir(USB_RESET_PIN, IOPORT_DIR_OUTPUT);
 	
-	if (BSP_u8GetVersion() == 0){
+	if (BSP_u8GetVersion() == 0)
+    {
 		// Version 0 had VBatAlt and 5V lines
 		ioport_enable_pin(EN_VBATALT_BUS_PIN);
 		ioport_set_pin_level(EN_VBATALT_BUS_PIN, 0);
@@ -331,16 +330,16 @@ void BSP_vInitGPIO(void) {
 	}
 }
 
-
-
-void BSP_vUsbReset(void) {
+void BSP_vUsbReset(void)
+{
 	ioport_set_pin_level(USB_RESET_PIN, 0);
 	delay_ms(100);
 	ioport_set_pin_level(USB_RESET_PIN, 1);
 }
 
 
-enum rtc_setup_state_t{
+enum rtc_setup_state_t
+{
 	RTC_WAIT_FOR_SEC_STATUS = 0,
 	RTC_REQUEST_UPDATE = 1,
 	RTC_SETUP_DONE = 2,
@@ -348,7 +347,8 @@ enum rtc_setup_state_t{
 
 static enum rtc_setup_state_t rtc_setup_state;
 
-void BSP_InitRTC(void){
+void BSP_InitRTC(void)
+{
 	/*
 	 Since this waits for the RTC's second tick, it can take quite a while to
 	 execute. Instead start this process and use the interrupt to do the rest.
@@ -368,7 +368,7 @@ void BSP_InitRTC(void){
 	rtc_setup_state = RTC_WAIT_FOR_SEC_STATUS;
 	// Enable the interrupts required for the upcoming section
 	RTC->RTC_IER |= RTC_IER_SECEN | RTC_IER_ACKEN;
-	NVIC_SetPriority(RTC_IRQn, 3);
+	NVIC_SetPriority(RTC_IRQn, configMAX_SYSCALL_INTERRUPT_PRIORITY >> (8 - __NVIC_PRIO_BITS));
 	NVIC_EnableIRQ(RTC_IRQn);
 	
 
@@ -382,8 +382,8 @@ void BSP_InitRTC(void){
 	
 }
 
-
-void RTC_Handler(){
+void RTC_Handler()
+{
 	uint32_t status = RTC->RTC_SR;
 	switch (rtc_setup_state)
 	{
@@ -419,7 +419,8 @@ void RTC_Handler(){
 	
 }
 
-uint32_t BSP_GetUptime(void){
+uint32_t BSP_GetUptime(void)
+{
 	uint32_t seconds = ( (RTC->RTC_TIMR & RTC_TIMR_SEC_Msk) >> RTC_TIMR_SEC_Pos);
 	uint32_t minutes = ( (RTC->RTC_TIMR & RTC_TIMR_MIN_Msk) >> RTC_TIMR_MIN_Pos);
 	uint32_t hours = ( (RTC->RTC_TIMR & RTC_TIMR_HOUR_Msk) >> RTC_TIMR_HOUR_Pos);
@@ -436,8 +437,8 @@ uint32_t BSP_GetUptime(void){
 	return seconds + minutes*60 + hours *60 * 60;
 }
 
-void BSP_vInitCan(bsp_t * bsp) {
-
+void BSP_vInitCan(bsp_t * bsp)
+{
 	if (BSP_u8GetVersion() == 0)
 	{
 		// Configure pins, disable GPIO mode
@@ -465,24 +466,26 @@ void BSP_vInitCan(bsp_t * bsp) {
 		bus_can.baudrate = 1000000;
 		ccd_can_Init(&bus_can, CAN_DEVICE_V2);
 		bsp->bus_can = &bus_can;
-		
 	}
 }
 
-
-void MCAN0_INT0_Handler(void) {
+void MCAN0_INT0_Handler(void)
+{
 	ccd_can_ReceiveCallback(&bus_can);
 }
 
-void MCAN0_INT1_Handler(void) {
+void MCAN0_INT1_Handler(void)
+{
 	asm("nop");
 }
 
-void MCAN1_INT0_Handler(void) {
+void MCAN1_INT0_Handler(void)
+{
 	ccd_can_ReceiveCallback(&bus_can);
 }
 
-void MCAN1_INT1_Handler(void) {
+void MCAN1_INT1_Handler(void)
+{
 	asm("nop");
 }
 
@@ -506,65 +509,10 @@ void BSP_vInitLEDPWM(bsp_t * bsp)
 	bsp->led_driver = &led_driver;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-void debug(uint8_t val){
+void debug(uint8_t val)
+{
 	ioport_set_pin_level(PIN_DEBUG_0, val & 0x01);
 	ioport_set_pin_level(PIN_DEBUG_1, val & 0x02);
 	ioport_set_pin_level(PIN_DEBUG_2, val & 0x04);
 	ioport_set_pin_level(PIN_DEBUG_3, val & 0x08);
 }
-
-
-
-/*
-
-void BSP_vInitSPI(void) { 
-    spi_disable_interrupt(SPI_DEVICE, ALL_INTERRUPT_MASK);
-    
-    // Setup pins for SPI select
-    ioport_enable_pin(SPI_SELECT_PIN);
-    ioport_set_pin_dir(SPI_SELECT_PIN, IOPORT_DIR_OUTPUT);
-    ioport_set_pin_level(SPI_SELECT_PIN, 0);
-
-    // Setup SPI
-    ioport_disable_pin(SPI1_SCK);
-    ioport_set_pin_dir(SPI1_SCK, IOPORT_DIR_OUTPUT);
-    ioport_set_pin_level(SPI1_SCK, 1);
-    ioport_set_pin_mode(SPI1_SCK, IOPORT_MODE_MUX_C);
-
-    ioport_disable_pin(SPI1_MOSI);
-    ioport_set_pin_dir(SPI1_MOSI, IOPORT_DIR_OUTPUT);
-    ioport_set_pin_mode(SPI1_MOSI, IOPORT_MODE_MUX_C);
-
-    ioport_disable_pin(SPI1_MISO);
-    ioport_set_pin_dir(SPI1_MISO, IOPORT_DIR_INPUT);
-    ioport_set_pin_mode(SPI1_MISO, IOPORT_MODE_MUX_C);
-
-    ioport_enable_pin(SPI_CS_PIN_7);
-    ioport_set_pin_dir(SPI_CS_PIN_7, IOPORT_DIR_OUTPUT);
-    ioport_set_pin_level(SPI_CS_PIN_7, 1);
-
-    spi_master_init(SPI_DEVICE);
-    spi_master_setup_device(SPI_DEVICE, &sSpiDevice, SPI_MODE_0, 400000, 0);
-    spi_enable(SPI_DEVICE);
-}
-
-struct spi_device* BSP_psGetSpiDriver(void) {
-    return &sSpiDevice; 
-}
-*/

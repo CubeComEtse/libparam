@@ -35,30 +35,26 @@ extern csp_iface_t * csp_usart_iface;
 */
 void UARTTARGET_Init(uart_target_t * handle)
 {
-	//assert(handle->uart_send);
-	// Do not assert the handle, it might be void. 
-	
 	// Buffer was increase from 256 to 1024 - WE are dropping many messages
 	// due to a slow transmit speed.
 	handle->incoming_messages = xMessageBufferCreate(4096);
 	handle->outgoing_messages = xMessageBufferCreate(1024);
 	
 	handle->uart_semaphore = xSemaphoreCreateMutex();
-	
 }
 
 void UARTTARGET_TxTask(void * handle) 
 {
-	//assert(handle);
+	assert(handle);
 	uart_target_t * hnd = (uart_target_t *) handle;
 	
 	uint8_t rx_buffer[32];
 	v2_msg_t in_message;
 	
-	
 	bool decode_successfull;
 	
-	while(1) {		
+	while(1)
+    {		
 		// So...
 		//
 		// RS485 uses the same lines to transmit and receive. After we transmit a message, the radio
@@ -73,18 +69,18 @@ void UARTTARGET_TxTask(void * handle)
 		// IC is so slow with UART.
 		
 		size_t rx_length = 0;
-
-		vTaskDelay(pdMS_TO_TICKS(3));
 		
-		rx_length = xMessageBufferReceive(hnd->incoming_messages, rx_buffer, 16, 0);
+		rx_length = xMessageBufferReceive(hnd->incoming_messages, rx_buffer, 16, portMAX_DELAY); // TODO: Investigate why we are not using the full buffer???
 		
-		if (rx_length == 0){
+		if (rx_length == 0)
+        {
 			continue;
 		}
 		
 		decode_successfull = decode_v2_message(&in_message, rx_buffer, rx_length);
 		
-		if (!decode_successfull){
+		if (!decode_successfull)
+        {
 			continue;
 		}
 		
@@ -96,7 +92,7 @@ void UARTTARGET_TxTask(void * handle)
 		// Byte 4-5 - Register Address (2 bytes, MSB first)
 		// Byte 6-9 - Optional Data (If it is a write)
 		
-		// UART Message Structure (PC & Gse): in_message
+		// UART Message Structure (PC & GSE): in_message
 		// Head 0	- Total Length
 		// Head 1	- Endpoint & Direction bit
 		// Head 2	- Message ID
@@ -128,21 +124,21 @@ void UARTTARGET_TxTask(void * handle)
 				// Loop through data and replace special characters
 				uint8_t processed_data[4];
 				uint8_t processed_index = 0;
-				for (uint8_t i = 0; i < 4; i++) {
+				for (uint8_t i = 0; i < 4; i++)
+                {
 					if (in_message.data[4 + i] == FEND) 
 					{
 						processed_data[processed_index++] = FESC;
 						processed_data[processed_index++] = TFEND;
+                        continue;
 					} 
-					else if (in_message.data[4 + i] == FESC) 
+					if (in_message.data[4 + i] == FESC) 
 					{
 						processed_data[processed_index++] = FESC;
 						processed_data[processed_index++] = TFESC;
+                        continue;
 					}
-					else 
-					{
-						processed_data[processed_index++] = in_message.data[4 + i];
-					}
+					processed_data[processed_index++] = in_message.data[4 + i];
 				}
 			
 				memcpy(&uart_msg_kiss_packet[7], processed_data, processed_index);
@@ -169,10 +165,12 @@ void UARTTARGET_RxTask(void * handle)
 	bool receiving = false;
 	bool escaped = false;
 	
-	while(1) {
+	while(1)
+    {
 		size_t received_bytes_length = hnd->uart_receive(hnd->uart_handle, rx_buffer, rx_max_length);
 		
-		if (received_bytes_length == 0) {
+		if (received_bytes_length == 0)
+        {
 			continue;
 		}
         
@@ -184,24 +182,31 @@ void UARTTARGET_RxTask(void * handle)
 		ioport_set_pin_level(PIN_DEBUG_0, 1);
 		
 		//3. disassemble kiss packet -> out_message
-		for (size_t i = 0; i < received_bytes_length; i++) {
+		for (size_t i = 0; i < received_bytes_length; i++)
+        {
 			uint8_t rx_byte = rx_buffer[i];
 			
 			//start receiving only when start byte (FEND) is received
-			if (!receiving) {
-				if (rx_byte == FEND) {
+			if (!receiving)
+            {
+				if (rx_byte == FEND)
+                {
 					
 					receiving = true;
 					packet_index = 0;
 					ioport_set_pin_level(PIN_DEBUG_1, 1);
 					continue;
 				}
-			} else {
-				if (rx_byte == FEND ){
+			}
+            else
+            {
+				if (rx_byte == FEND )
+                {
 					// End of packet received
 					ioport_set_pin_level(PIN_DEBUG_1, 0);
 					
-					if (packet_index == 0) {
+					if (packet_index == 0)
+                    {
 						//We received an empty packet! Probably means we dropped a byte somewhere,
 						// and should actually start receiving now.
 						receiving = true;
@@ -210,7 +215,8 @@ void UARTTARGET_RxTask(void * handle)
 						continue;
 					}
 					
-					if (packet_index < 6) {
+					if (packet_index < 6)
+                    {
 						// Invalid length, expecting (excluding the start&end FEND):
 						//[0] msg type
 						//[1] msg id
@@ -242,82 +248,108 @@ void UARTTARGET_RxTask(void * handle)
 					uint8_t encoded[32];
 					size_t encoded_len = encode_v2_message(encoded, &out_message);
 					
-					xMessageBufferSend(hnd->outgoing_messages, encoded, encoded_len, 0);
+					xMessageBufferSend(hnd->outgoing_messages, encoded, encoded_len, 0); //TODO: Handle dropped messages
 					
 					receiving = false;
 					continue;
 				}
 				
 				// Handle escaping
-				if (rx_byte == FESC) {
+				if (rx_byte == FESC)
+                {
 					escaped = true;
 					continue;
 				}
 				
 				// fix
-				if (escaped) {
-					if (rx_byte == TFEND) {
+				if (escaped)
+                {
+					if (rx_byte == TFEND)
+                    {
 						rx_byte = FEND;
-						} else if (rx_byte == TFESC) {
+					}
+                    else if (rx_byte == TFESC)
+                    {
 						rx_byte = FESC;
 					}
 					escaped = false;
 				}
 				
 				// Store received bytes
-				if (packet_index < sizeof(uart_msg_kiss_packet)){
+				if (packet_index < sizeof(uart_msg_kiss_packet))
+                {
 					uart_msg_kiss_packet[packet_index] = rx_byte;
 					packet_index += 1;
 				}		
 				
 			}
 		}
+        
 		ioport_set_pin_level(PIN_DEBUG_0, 0);
 	}
-
 }
 
 bool UARTTARGET_SetCommMode(uart_target_t * pHandle, uart_comm_mode_t CommMode)
 {
-	// Should we wait for the buffer to be empty?
-	if(xSemaphoreTake(pHandle->uart_semaphore, pdMS_TO_TICKS(200))) {
-		ccd_uart_setCommMode(pHandle->uart_handle, CommMode);
-		pHandle->uart_mode = CommMode;
-		xSemaphoreGive(pHandle->uart_semaphore);
-		return true;	
-	}
-	return false;
+    // TODO: Should we wait for the buffer to be empty?
+    
+    if(!xSemaphoreTake(pHandle->uart_semaphore, pdMS_TO_TICKS(200)))
+    {
+        return false;
+    }
+    
+	ccd_uart_setCommMode(pHandle->uart_handle, CommMode);
+	pHandle->uart_mode = CommMode;
+    
+	xSemaphoreGive(pHandle->uart_semaphore); // TODO: Handle semaphore release failure
+    
+	return true;	
 }
 
 bool UARTTARGET_SetParityEnabled(uart_target_t * pHandle, uart_parity_enabled_t ParityEnabled)
 {
-	// Should we wait for the buffer to be empty?
-	if(xSemaphoreTake(pHandle->uart_semaphore, pdMS_TO_TICKS(200))) {
-		ccd_uart_setParityEnabled(pHandle->uart_handle, ParityEnabled);
-		xSemaphoreGive(pHandle->uart_semaphore);
-		return true;
-	}
-	return false;
+    // TODO: Should we wait for the buffer to be empty?
+    
+    if(!xSemaphoreTake(pHandle->uart_semaphore, pdMS_TO_TICKS(200)))
+    {
+        return false;
+    }
+    
+	ccd_uart_setParityEnabled(pHandle->uart_handle, ParityEnabled);
+    
+	xSemaphoreGive(pHandle->uart_semaphore); // TODO: Handle semaphore release failure
+    
+	return true;
 }
 
 bool UARTTARGET_SetParityMode(uart_target_t * pHandle, uart_parity_mode_t ParityMode)
 {
-	// Should we wait for the buffer to be empty?
-	if(xSemaphoreTake(pHandle->uart_semaphore, pdMS_TO_TICKS(200))) {
-		ccd_uart_setParityMode(pHandle->uart_handle, ParityMode);
-		xSemaphoreGive(pHandle->uart_semaphore);
-		return true;
+	// TODO: Should we wait for the buffer to be empty?
+    
+	if(!xSemaphoreTake(pHandle->uart_semaphore, pdMS_TO_TICKS(200)))
+    {
+        return false;
 	}
-	return false;
+    
+	ccd_uart_setParityMode(pHandle->uart_handle, ParityMode);
+    
+	xSemaphoreGive(pHandle->uart_semaphore); // TODO: Handle semaphore release failure
+    
+	return true;
 }
 
 bool UARTTARGET_SetBaudRate(uart_target_t * pHandle, uart_baud_rates_t BaudRate)
 {
-	// Should we wait for the buffer to be empty?
-	if(xSemaphoreTake(pHandle->uart_semaphore, pdMS_TO_TICKS(200))) {
-		ccd_uart_setBaudRate(pHandle->uart_handle, BaudRate);
-		xSemaphoreGive(pHandle->uart_semaphore);
-		return true;
-	}
-	return false;
+    // TODO: Should we wait for the buffer to be empty?
+    
+    if(!xSemaphoreTake(pHandle->uart_semaphore, pdMS_TO_TICKS(200)))
+    {
+        return false;
+    }
+    
+	ccd_uart_setBaudRate(pHandle->uart_handle, BaudRate);
+    
+	xSemaphoreGive(pHandle->uart_semaphore); // TODO: Handle semaphore release failure
+    
+	return true;
 }

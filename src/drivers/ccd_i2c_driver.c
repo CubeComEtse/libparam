@@ -5,11 +5,11 @@
  *  Author: Kolijn
  */
 
+#include "ccd_i2c_driver.h"
+
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
-
-#include "ccd_i2c_driver.h"
 
 #include "asf.h"
 

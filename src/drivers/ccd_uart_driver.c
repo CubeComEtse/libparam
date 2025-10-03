@@ -15,9 +15,10 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart, uint8_t priority)
+void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart, uint8_t interrupt_priority)
 {
-	if (driver->doFlowControl){
+	if (driver->doFlowControl)
+    {
 		assert(driver->cts_pin);	
 	}
 	
@@ -56,26 +57,31 @@ void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart, uint8_t priority)
 	ccd_uart_ReInit(driver);
 	
 	// UART needs a priority above FreeRTOS tasks - there is a very small window to copy the received byte out of the register.
-	if (driver->base_usart == USART0){
-		NVIC_SetPriority(USART0_IRQn, priority);
+	if (driver->base_usart == USART0)
+    {
+		NVIC_SetPriority(USART0_IRQn, interrupt_priority);
 		NVIC_EnableIRQ(USART0_IRQn);
 	}
-	if (driver->base_usart == USART1){
-		NVIC_SetPriority(USART1_IRQn, priority);
+	if (driver->base_usart == USART1)
+    {
+		NVIC_SetPriority(USART1_IRQn, interrupt_priority);
 		NVIC_EnableIRQ(USART1_IRQn);
-		}
-	if (driver->base_usart == USART2){
-		NVIC_SetPriority(USART2_IRQn, priority);
+	}
+	if (driver->base_usart == USART2)
+    {
+		NVIC_SetPriority(USART2_IRQn, interrupt_priority);
 		NVIC_EnableIRQ(USART2_IRQn);
-		}
+	}
 	
-	if (driver->doFlowControl){
+	if (driver->doFlowControl)
+    {
 		ccd_uart_StartFlowControl(driver);
 	}
 	
 }
 
-void ccd_uart_ReInit(ccd_uart_t * driver) {
+void ccd_uart_ReInit(ccd_uart_t * driver)
+{
 	usart_disable_interrupt(driver->base_usart, 0xFFFFFFFF);
 	
 	sam_usart_opt_t sUsartOptions;
@@ -106,51 +112,71 @@ void ccd_uart_ReInit(ccd_uart_t * driver) {
 	usart_enable_interrupt(driver->base_usart, US_IER_RXRDY | US_IER_TXEMPTY);
 }
 
-void ccd_uart_setCommMode(void * vHandle, uart_comm_mode_t uart_comm_mode) {
+void ccd_uart_setCommMode(void * vHandle, uart_comm_mode_t uart_comm_mode)
+{
 	ccd_uart_t * driver = (ccd_uart_t*) vHandle;
 	driver->uart_comm_mode = uart_comm_mode;
 	
-	if (uart_comm_mode == UART) {
-		// Both in shutdown mode for RS422/RS485
-		driver->set_gpio_pin(driver->sout_de_pin, 0);
-		driver->set_gpio_pin(driver->sout_nre_pin, 1);
-		driver->set_gpio_pin(driver->sin_de_pin, 0);
-		driver->set_gpio_pin(driver->sin_nre_pin, 1);
-	}
-	if  (uart_comm_mode == RS485){
-		// RS485 mode, start in receiving mode
-		driver->set_gpio_pin(driver->sout_de_pin, 0);
-		driver->set_gpio_pin(driver->sout_nre_pin, 0);
-		
-		// SIN lines are in shutdown 
-		driver->set_gpio_pin(driver->sin_de_pin, 0);
-		driver->set_gpio_pin(driver->sin_nre_pin, 1);
-		
-	}
-	if (uart_comm_mode == RS422){				
-		// RS422 SOUT IC in drive mode
-		driver->set_gpio_pin(driver->sout_de_pin, 1);
-		driver->set_gpio_pin(driver->sout_nre_pin, 1);
-		
-		// SIN Ic in receive mode
-		driver->set_gpio_pin(driver->sin_de_pin, 0);
-		driver->set_gpio_pin(driver->sin_nre_pin, 0);
-	}
+	switch (uart_comm_mode)
+    {
+        case UART:
+        {
+            // Both in shutdown mode for RS422/RS485
+            driver->set_gpio_pin(driver->sout_de_pin, 0);
+            driver->set_gpio_pin(driver->sout_nre_pin, 1);
+            driver->set_gpio_pin(driver->sin_de_pin, 0);
+            driver->set_gpio_pin(driver->sin_nre_pin, 1);
+            
+            break;
+        }
+        case RS485:
+        {
+            // RS485 mode, start in receiving mode
+            driver->set_gpio_pin(driver->sout_de_pin, 0);
+            driver->set_gpio_pin(driver->sout_nre_pin, 0);
+            
+            // SIN lines are in shutdown
+            driver->set_gpio_pin(driver->sin_de_pin, 0);
+            driver->set_gpio_pin(driver->sin_nre_pin, 1);
+            
+            break;
+        }
+        case RS422:
+        {
+            // RS422 SOUT IC in drive mode
+            driver->set_gpio_pin(driver->sout_de_pin, 1);
+            driver->set_gpio_pin(driver->sout_nre_pin, 1);
+            
+            // SIN IC in receive mode
+            driver->set_gpio_pin(driver->sin_de_pin, 0);
+            driver->set_gpio_pin(driver->sin_nre_pin, 0);
+            
+            break;
+        }
+        default:
+        {
+            // TODO: We should probably handle this
+            break;
+        }
+    }
 }
 
-void ccd_uart_setParityEnabled(void * vHandle, uart_parity_enabled_t ParityEnabled) {
+void ccd_uart_setParityEnabled(void * vHandle, uart_parity_enabled_t ParityEnabled)
+{
 	ccd_uart_t * driver = (ccd_uart_t*) vHandle;
 	driver->uart_parity_enabled = ParityEnabled;
 	ccd_uart_ReInit(driver);
 }
 
-void ccd_uart_setParityMode(void * vHandle, uart_parity_mode_t ParityMode) {
+void ccd_uart_setParityMode(void * vHandle, uart_parity_mode_t ParityMode)
+{
 	ccd_uart_t * driver = (ccd_uart_t*) vHandle;
 	driver->uart_parity_mode = ParityMode;
 	ccd_uart_ReInit(driver);
 }
 
-void ccd_uart_setBaudRate(void * vHandle, uart_baud_rates_t BaudRate) {
+void ccd_uart_setBaudRate(void * vHandle, uart_baud_rates_t BaudRate)
+{
 	ccd_uart_t * driver = (ccd_uart_t*) vHandle;
 	
 	if (BaudRate == baud_115200)
@@ -175,18 +201,24 @@ void ccd_uart_setBaudRate(void * vHandle, uart_baud_rates_t BaudRate) {
  * Re-enable the interrupt. Call this after data was loaded into the buffer,
  * to start sending it again.
 */
-void ccd_uart_EnableTXInterrupt(ccd_uart_t * driver) {
+void ccd_uart_EnableTXInterrupt(ccd_uart_t * driver)
+{
 	usart_enable_interrupt(driver->base_usart, US_IER_TXEMPTY);
 }
 
 inline void ccd_uart_StopFlowControl(void * handle)
 {
+    assert(handle != NULL);
+    
 	ccd_uart_t * driver =  (ccd_uart_t *) handle;
+    
 	ioport_set_pin_level(driver->cts_pin, true);
 }
 
 inline void ccd_uart_StartFlowControl(void * handle)
 {
+    assert(handle != NULL);
+    
 	ccd_uart_t * driver =  (ccd_uart_t *) handle;
 	
 	if ((UART_HOLDING_BUFFER_SIZE - driver->rx_buffer_write + driver->rx_buffer_read - 1)% UART_HOLDING_BUFFER_SIZE > 5)
@@ -208,6 +240,9 @@ void ccd_usart_RXProcessingTask(void * parameters)
 	
 	while(1)
 	{
+		// Wait for new data to be received
+		ulTaskNotifyTake(pdTRUE, portMAX_DELAY); 
+		
 		// Check if there are more bytes in the buffer since the previous time -
 		if (driver->rx_buffer_read != driver->rx_buffer_write)
 		{
@@ -243,8 +278,7 @@ void ccd_usart_RXProcessingTask(void * parameters)
 			ccd_uart_StartFlowControl(driver);
 		}	
 		
-		vTaskDelay(pdMS_TO_TICKS(1));
-	
+		//vTaskDelay(pdMS_TO_TICKS(1));
 	}
 }
 
@@ -289,8 +323,8 @@ inline void ccd_uart_InterruptHandler(ccd_uart_t * driver)
 	uint32_t dw_status = usart_get_status(driver->base_usart);
     
 	// A Value is received
-	if (dw_status & US_CSR_RXRDY) {
-
+	if (dw_status & US_CSR_RXRDY)
+    {
 		uint32_t received_byte_u32;
 
 		while (usart_read(driver->base_usart, &received_byte_u32) == 0)
@@ -312,15 +346,24 @@ inline void ccd_uart_InterruptHandler(ccd_uart_t * driver)
 				{
 					ccd_uart_StopFlowControl(driver);
 				}
+
+				// Notify RX data processing task of new data
+                // TODO: Handle interrupts that also triggered before this task was created
+                if (driver->rx_task_handle != NULL)
+                {
+                    vTaskNotifyGiveFromISR(driver->rx_task_handle, NULL);
+                }
 			}
 		}
 	}
 
-	// TX Buffer and shift register empty	
-	if ((dw_status & US_CSR_TXEMPTY)) {
+	// TX Buffer and shift register empty
+	if (dw_status & US_CSR_TXEMPTY)
+    {
 		if (driver->tx_buffer_read != driver->tx_buffer_write)
 		{
-			if (driver->uart_comm_mode == RS485){
+			if (driver->uart_comm_mode == RS485)
+            {
 				// One pin enables drive, the other disables receive.
 				// Otherwise we receive our own signal, a few microseconds later.
 				driver->set_gpio_pin(driver->sout_de_pin, 1);
@@ -329,14 +372,23 @@ inline void ccd_uart_InterruptHandler(ccd_uart_t * driver)
 			usart_write(driver->base_usart, driver->tx_holding_buffer[driver->tx_buffer_read]);
 			driver->tx_buffer_read = (driver->tx_buffer_read + 1) % UART_HOLDING_BUFFER_SIZE;
 		}
-		else {
-			if (driver->uart_comm_mode == RS485){
+		else
+        {
+			if (driver->uart_comm_mode == RS485)
+            {
 				driver->set_gpio_pin(driver->sout_de_pin, 0);
 				driver->set_gpio_pin(driver->sout_nre_pin, 0);
 			}
 			usart_disable_interrupt(driver->base_usart, US_IER_TXEMPTY);
 		}
 	}
+    
+    // Overrun Error    
+    if (dw_status & US_CSR_OVRE)
+    {
+        driver->base_usart->US_CR |= US_CR_RSTSTA;
+        __NOP();
+    }
 }
 
 uint32_t ccd_uart_get_error_status(void * vHandle)
