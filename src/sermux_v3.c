@@ -11,14 +11,19 @@
 
 #include "sermux_v3.h"
 
+#include <string.h>
+#include <assert.h>
+
 #include "FreeRTOS.h"
 #include "task.h"
+
+#include "csp/interfaces/csp_if_kiss.h"
+
 #include "led_indicator.h"
 #include "ccd_uart_driver.h"
 #include "register_map.h"
 
-#include <string.h>
-#include <assert.h>
+extern csp_iface_t * csp_usart_iface;
 
 // Todo:
 // * What happens when a stream somewhere is full?
@@ -60,6 +65,8 @@ void SERMUX_V3_AddTarget(sermux_v3_t * handle, const uint8_t number, MessageBuff
 	handle->targets[handle->num_targets].set_overflow_flag = overflow_flag_function;
 	
 	handle->num_targets += 1;
+    
+    return;
 }
 
 // PC->GSE
@@ -79,10 +86,13 @@ void SERMUX_V3_ReceiveTask(void * params)
 			LEDIndicator_SetNextState(LED_POWER_ON);
 			continue;
 		}
-		else
-        {
-			LEDIndicator_SetNextState(LED_UART_COMMS);
-		}
+        
+		LEDIndicator_SetNextState(LED_UART_COMMS);
+        
+        // TODO: Figure out how to switch between old handler and new handler
+        int xTaskWoken = pdFALSE;
+        csp_kiss_rx(csp_usart_iface, rx_buffer, rx_length, (void *)xTaskWoken);
+        continue;
 		
 		// Check if bytes were dropped by the UART.
 		// If it was, reset and wait for next message
@@ -114,39 +124,54 @@ void SERMUX_V3_ReceiveTask(void * params)
 			switch (pHandle->state)
 			{
 				case V2_WAITING_1:
-					if (rx_byte == 0xC3) {
+                {
+					if (rx_byte == 0xC3)
+                    {
 						pHandle->state = V2_WAITING_2;
 					}
 					break;
+                }                    
 					
 				case V2_WAITING_2:
-					if (rx_byte == 0xA9) {
+				{
+					if (rx_byte == 0xA9)
+                    {
 						pHandle->state = V2_STORE_VERSION;
 					}
 					else {
 						pHandle->state = V2_WAITING_1;
 					}
 					break;
+	            }
 			
 				case V2_STORE_VERSION:
+				{
 					pHandle->rx_block.version = rx_byte;
 					pHandle->state = V2_STORE_LENGTH;
 					break;
+	            }
 			
 				case V2_STORE_LENGTH:
+				{
 					pHandle->rx_block.length = rx_byte;
 					pHandle->rx_block.rx_count = 0;
 					pHandle->state = V2_STORE_DATA;
 					break;
+	            }
 			
 				case V2_STORE_DATA:
+				{
 					pHandle->rx_block.buffer[pHandle->rx_block.rx_count] = rx_byte;
 					pHandle->rx_block.rx_count+= 1;
-					if (pHandle->rx_block.rx_count == pHandle->rx_block.length){
+					if (pHandle->rx_block.rx_count == pHandle->rx_block.length)
+                    {
 						pHandle->state = V2_STORE_CRC;
 					}
 					break;
-				case V2_STORE_CRC:
+	            }
+				
+                case V2_STORE_CRC:
+				{
 					// Store CRC
 					pHandle->rx_block.crc = rx_byte;
 					
@@ -175,17 +200,21 @@ void SERMUX_V3_ReceiveTask(void * params)
 						// This is a safety check. If this is true, the index will never be
 						// incremented, and we'll be stuck. So just abandon the block.
 						// If this is true, it probably means previous messages  were malformed.
-						if (msg_len == 0){
+						if (msg_len == 0)
+                        {
 							curr_msg_index = pHandle->rx_block.length;
 							continue;
 						}
-						if (msg_len > 32){
+						if (msg_len > 32)
+                        {
 							curr_msg_index = pHandle->rx_block.length;
 							continue;
 						}
 					
-						for (uint32_t j = 0; j < pHandle->num_targets; j++){
-							if (pHandle->targets[j].number == msg_target){
+						for (uint32_t j = 0; j < pHandle->num_targets; j++)
+                        {
+							if (pHandle->targets[j].number == msg_target)
+                            {
 								size_t sent_size = xMessageBufferSend(pHandle->targets[j].in, &(pHandle->rx_block.buffer[curr_msg_index]), msg_len, 0);
 								if (sent_size == 0 && pHandle->targets[i].set_overflow_flag != NULL)
 								{
@@ -199,13 +228,18 @@ void SERMUX_V3_ReceiveTask(void * params)
 					}
 					pHandle->state = V2_WAITING_1;
 					break;
+                }                
 					
 				default:
+                {
 					pHandle->state = V2_WAITING_1;
 					break;
+                }                
 			}
 		}
 	}
+    
+    return;
 }
 
 void SERMUX_V3_TransmitTask(void * params)

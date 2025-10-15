@@ -35,7 +35,8 @@ void ccd_led_driver_Init(ccd_led_t * driver, Pwm * pwm_instance)
 
 void ccd_led_driver_DisableInterrupts(ccd_led_t * driver, bool value)
 {
-	if (value){  
+	if (value)
+    {  
 		// Hacks: The UART interrupt is very important to respond to, otherwise we miss
 		// messages from the PC. It is so important it gets priority above the RTOS.
 		// But if it triggers in the middle of an LED update, the LED is borked, and that
@@ -55,7 +56,8 @@ void ccd_led_driver_DisableInterrupts(ccd_led_t * driver, bool value)
 		taskENTER_CRITICAL();
 		__disable_irq();
 	}
-	else{
+	else
+    {
 		__enable_irq();
 		taskEXIT_CRITICAL();
 		
@@ -66,8 +68,8 @@ void ccd_led_driver_DisableInterrupts(ccd_led_t * driver, bool value)
 	
 }
 
-void ccd_led_driver_SetLed(ccd_led_t * driver, uint8_t r, uint8_t g, uint8_t b){
-	
+void ccd_led_driver_SetLed(ccd_led_t * driver, uint8_t r, uint8_t g, uint8_t b)
+{
 	/*
 	driver->pwm->PWM_ENA = PWM_ENA_CHID3;
 	driver->pwm->PWM_CH_NUM[3].PWM_CDTYUPD = r;
@@ -79,7 +81,8 @@ void ccd_led_driver_SetLed(ccd_led_t * driver, uint8_t r, uint8_t g, uint8_t b){
 	    
 	// Reverse the value for quicker computation
 	uint32_t value_reversed = 0;
-	for (int i = 0; i < 24; i++){
+	for (int i = 0; i < 24; i++)
+    {
 		value_reversed = value_reversed << 1;
 		    
 		value_reversed |= (value & 0x01);
@@ -101,6 +104,7 @@ void ccd_led_driver_SetLed(ccd_led_t * driver, uint8_t r, uint8_t g, uint8_t b){
 	    
 	// Enable the channel
 	pwm->PWM_ENA = PWM_ENA_CHID3;
+    
 	// Wait for 24 interrupts
 	for (int i = 0; i < 24; i ++)
 	{
@@ -118,6 +122,7 @@ void ccd_led_driver_SetLed(ccd_led_t * driver, uint8_t r, uint8_t g, uint8_t b){
 		// And wait
 		while ((pwm->PWM_ISR1 & PWM_ISR1_CHID3) == 0);
 	}
+    
 	pwm->PWM_DIS = PWM_ENA_CHID3;
 	pwm->PWM_CH_NUM[3].PWM_CDTY = 0;
 	pwm->PWM_CH_NUM[3].PWM_CDTYUPD = 0;

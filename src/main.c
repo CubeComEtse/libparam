@@ -1,3 +1,5 @@
+#include "main.h"
+
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -64,9 +66,8 @@ static platform_t * platform;
 // Experimental libcsp stuff
 csp_iface_t * csp_usart_iface;
 // Experimental libparam stuff
-uint8_t _state[2];
-char _device_name[16] = DEVICE_NAME;
 uint8_t _led_color = 0;
+char _device_name[16] = DEVICE_NAME;
 
 // ================================================================================
 // Function prototypes
@@ -75,24 +76,20 @@ uint8_t _led_color = 0;
 static void SETUP_Task(void* handle);
 static void DEVTOOLS_Task(void* handle);
 
-static void monitor_tasks_task(void * param);
-
-static void ErrorHandler(void);
-
 // --- Experimental libcsp stuff ---
 static void csp_router_task(void* param);
 static void csp_ping_task(void * param);
 
 // ---Experimental libparam stuff ---
-void led_color_cb(param_t * param, int index);
+static void led_color_cb(param_t * param, int index);
 
 // ================================================================================
 // Macros
 // ================================================================================
 
 // --- Experimental libparam stuff---
-PARAM_DEFINE_STATIC_RAM(PARAMID_LED_COLOR, led_color, PARAM_TYPE_UINT8, 1, 1, PM_CONF, led_color_cb, NULL, &_led_color, "0 = off, 1 = red, 2 = green, 3 = blue");
-PARAM_DEFINE_STATIC_RAM(PARAMID_DEVICE_NAME, device_name, PARAM_TYPE_STRING, sizeof(_device_name) / sizeof(_device_name[0]), sizeof(_device_name[0]), PM_CONF, NULL, NULL, &_device_name, NULL);
+// PARAM_DEFINE_STATIC_RAM(reg_Board_ID_addr, led_color, PARAM_TYPE_UINT8, 1, 1, PM_CONF, led_color_cb, NULL, &_led_color, "0 = off, 1 = red, 2 = green, 3 = blue");
+// PARAM_DEFINE_STATIC_RAM(PARAMID_DEVICE_NAME, device_name, PARAM_TYPE_STRING, sizeof(_device_name) / sizeof(_device_name[0]), sizeof(_device_name[0]), PM_CONF, NULL, NULL, &_device_name, NULL);
 // VMEM_DEFINE_STATIC_RAM(apmtest, "apmtest", 1024);
 // PARAM_DEFINE_STATIC_VMEM(157, vmem_u8, PARAM_TYPE_UINT8, 0, sizeof(uint8_t), PM_CONF, NULL, "", apmtest, 0x0, "Test VMEM U8");
 // PARAM_DEFINE_STATIC_VMEM(158, vmem_u16, PARAM_TYPE_UINT16, 0, sizeof(uint16_t), PM_CONF, NULL, "", apmtest, 0x1, "Test VMEM U16");
@@ -126,13 +123,21 @@ int main (void)
     csp_conf.hostname = "EGSE"; // TODO: replace with parameter value
     csp_conf.model = "V2";
     csp_init();
+//     csp_usart_conf_t csp_usart_conf = {
+//         .device = "BUS UART",
+//         .baudrate = B_USART_SPEED,
+//         .databits = 8,
+//         .stopbits = 1,
+//         .paritysetting = 0,
+//         .ccd_usart_handle = bsp.bus_uart,
+//     };
     csp_usart_conf_t csp_usart_conf = {
-        .device = "BUS UART",
-        .baudrate = 115200,
+        .device = "TELEMETRY UART",
+        .baudrate = T_USART_SPEED,
         .databits = 8,
         .stopbits = 1,
         .paritysetting = 0,
-        .ccd_usart_handle = bsp.bus_uart,
+        .ccd_usart_handle = bsp.telemetry_uart,
     };
     if (csp_usart_open_and_add_kiss_interface(&csp_usart_conf, CSP_IF_KISS_DEFAULT_NAME, UART_CSP_ADDRESS, &csp_usart_iface) != CSP_ERR_NONE)
     {
@@ -187,11 +192,11 @@ static void SETUP_Task(void* handle)
     
     xTaskCreate(I2CTARGET_Task, "I2C Target RX", 512, (void *) platform->i2c_target,  tskIDLE_PRIORITY + 3, NULL);
     
-    xTaskCreate(CANTARGET_TxTask, "CAN Target TX", 512, (void *) platform->can_target, tskIDLE_PRIORITY + 3, NULL);
     xTaskCreate(CANTARGET_RxTask, "CAN Target RX", 512, (void *) platform->can_target, tskIDLE_PRIORITY + 2, NULL);
+    xTaskCreate(CANTARGET_TxTask, "CAN Target TX", 512, (void *) platform->can_target, tskIDLE_PRIORITY + 3, NULL);
     
-    xTaskCreate(UARTTARGET_TxTask, "UART Target TX", 512, (void *) platform->uart_target, tskIDLE_PRIORITY + 2, NULL);
     xTaskCreate(UARTTARGET_RxTask, "UART Target RX", 512, (void *) platform->uart_target, tskIDLE_PRIORITY + 2, NULL);
+    xTaskCreate(UARTTARGET_TxTask, "UART Target TX", 512, (void *) platform->uart_target, tskIDLE_PRIORITY + 2, NULL);
     
     xTaskCreate(LOCALTARGET_Task, "Local Target RX", 512, (void *) platform->local_target,  tskIDLE_PRIORITY + 2, NULL);
     
@@ -217,9 +222,6 @@ static void SETUP_Task(void* handle)
     xTaskCreate(csp_ping_task, "CSP Ping", 256, NULL, tskIDLE_PRIORITY + 2, NULL);
     xTaskCreate(vmem_server_loop, "VMEM Server", 1024, NULL, tskIDLE_PRIORITY + 2, NULL);
 
-    // Tasks monitoring task
-    xTaskCreate(monitor_tasks_task, "Task Monitor", 128, NULL, tskIDLE_PRIORITY + 1, NULL);
-    
     // Delete the setup task
     vTaskDelete(NULL);
 }
@@ -299,19 +301,6 @@ static void csp_server_task(void * param)
 
 		/* Close current connection */
 		csp_close(conn);
-    }
-}
-
-static void monitor_tasks_task(void * param)
-{
-    while (1)
-    {
-        UBaseType_t uxHighWaterMark1 = uxTaskGetStackHighWaterMark(bsp.telemetry_uart->rx_task_handle);
-        UBaseType_t uxHighWaterMark2 = uxTaskGetStackHighWaterMark(bsp.telemetry_uart->tx_task_handle);
-        UBaseType_t uxHighWaterMark3 = uxTaskGetStackHighWaterMark(bsp.bus_uart->rx_task_handle);
-        UBaseType_t uxHighWaterMark4 = uxTaskGetStackHighWaterMark(bsp.bus_uart->tx_task_handle);
-        
-        vTaskDelay(pdMS_TO_TICKS(5000));
     }
 }
 

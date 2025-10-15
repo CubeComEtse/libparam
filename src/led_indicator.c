@@ -186,9 +186,12 @@ void LEDIndicator_UpdateTask(void * parameters)
     {		
 		uint32_t current_tick = xTaskGetTickCount();
 		
-		switch (handle->state){
+		switch (handle->state)
+        {
 			case LED_STATE_IDLE:
+            {
 				break;
+            }                
 
 			case LED_STATE_TRANSITIONING:
 			{
@@ -226,57 +229,60 @@ void LEDIndicator_UpdateTask(void * parameters)
 					(uint8_t)(new_led.z * 255));
 					ccd_led_driver_DisableInterrupts(handle->led_driver, false);
 				}
+			    break;
 			}
-			break;
 			
 			case LED_STATE_WAITING:
-			if (current_tick > handle->state_start_tick + handle->current_point->ticks_to_stay_on)
-			{
-				handle->state = LED_STATE_CALCULATE_NEXT_POINT;
-				handle->state_start_tick = current_tick;
-			}
-			break;
+            {
+			    if (current_tick > handle->state_start_tick + handle->current_point->ticks_to_stay_on)
+			    {
+				    handle->state = LED_STATE_CALCULATE_NEXT_POINT;
+				    handle->state_start_tick = current_tick;
+			    }
+			    break;
+            }                
 			
 			case LED_STATE_CALCULATE_NEXT_POINT:
-			if (handle->board_state == handle->desired_board_state){
-				// Just go on to the next point in the spline
-				handle->current_point = handle->next_point;
-				handle->next_point = &handle->spline_to_use->control_points[handle->spline_index];
-				handle->spline_index += 1;
-				if (handle->spline_index >= handle->spline_to_use->num_control_points){
-					handle->spline_index = 0;
-				}
-				handle->state = LED_STATE_TRANSITIONING;
-				handle->state_start_tick = current_tick;
-			}
-			else{
-				// Select the new spline
-				if (handle->desired_board_state == LED_POWER_ON)
-				{
-					handle->spline_to_use = &power_on_breathing;
-				}
-				if (handle->desired_board_state == LED_UART_COMMS)
-				{
-					handle->spline_to_use = &uart_comms_breathing;
-				}
-				if (handle->desired_board_state == LED_RADIO_ACTIVE)
-				{
-					handle->spline_to_use = &comms_active_bounce;
-				}
+            {
+			    if (handle->board_state == handle->desired_board_state){
+				    // Just go on to the next point in the spline
+				    handle->current_point = handle->next_point;
+				    handle->next_point = &handle->spline_to_use->control_points[handle->spline_index];
+				    handle->spline_index += 1;
+				    if (handle->spline_index >= handle->spline_to_use->num_control_points){
+					    handle->spline_index = 0;
+				    }
+				    handle->state = LED_STATE_TRANSITIONING;
+				    handle->state_start_tick = current_tick;
+			    }
+			    else{
+				    // Select the new spline
+				    if (handle->desired_board_state == LED_POWER_ON)
+				    {
+					    handle->spline_to_use = &power_on_breathing;
+				    }
+				    if (handle->desired_board_state == LED_UART_COMMS)
+				    {
+					    handle->spline_to_use = &uart_comms_breathing;
+				    }
+				    if (handle->desired_board_state == LED_RADIO_ACTIVE)
+				    {
+					    handle->spline_to_use = &comms_active_bounce;
+				    }
 					
-				handle->current_point = handle->next_point;
-				handle->next_point = &handle->spline_to_use->control_points[0];
-				//Already loaded the first point
-				handle->spline_index = 1;
+				    handle->current_point = handle->next_point;
+				    handle->next_point = &handle->spline_to_use->control_points[0];
+				    //Already loaded the first point
+				    handle->spline_index = 1;
 				
-				handle->board_state = handle->desired_board_state;
+				    handle->board_state = handle->desired_board_state;
 				
-				handle->state = LED_STATE_TRANSITIONING;
-				handle->state_start_tick = current_tick;
-			}
-			break;
+				    handle->state = LED_STATE_TRANSITIONING;
+				    handle->state_start_tick = current_tick;
+			    }
+			    break;
+            }                
 		}
-	      
 		vTaskDelay(pdMS_TO_TICKS(20)); 
     }
 }

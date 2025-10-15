@@ -846,6 +846,15 @@
     <Compile Include="inc\drivers\ccd_uart_driver.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="inc\drivers\ltc2499.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\drivers\ltc2992.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\drivers\ltc2992_conf.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="inc\endpoints.h">
       <SubType>compile</SubType>
     </Compile>
@@ -876,13 +885,7 @@
     <Compile Include="inc\local_target.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\ltc2499.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\ltc2992.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\ltc2992_conf.h">
+    <Compile Include="inc\main.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\Multitester.h">
@@ -1587,6 +1590,12 @@
     <Compile Include="src\drivers\ccd_uart_driver.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\drivers\ltc2499.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\drivers\ltc2992.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\File.c">
       <SubType>compile</SubType>
     </Compile>
@@ -1660,12 +1669,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\sermux_v3.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\ltc2499.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\ltc2992.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\pc104.c">

@@ -1,3 +1,11 @@
+/***********************************************************************
+
+             This file has been automatically generated. 
+                      Changes will be overwritten!
+
+ **********************************************************************/
+
+
 #ifndef OBC_H
 #define OBC_H
 
@@ -5,7 +13,8 @@
 #include <stdbool.h>
 
 // Possible memory map responses
-typedef enum {
+typedef enum mm_response_e
+{
 	mm_OK = 0,
 	mm_OutOfRange = 1,
 	mm_NotReady = 2,
@@ -344,7 +353,8 @@ typedef enum {
 #define REG_MULTITESTER_POS4_FAN_Msk                 (0x0001 << REG_MULTITESTER_POS4_FAN_Pos)
 
 
-typedef struct {
+typedef struct mm_s
+{
     uint32_t Board_ID;
     uint32_t FW_Version;
     uint32_t HW_Version;
@@ -439,7 +449,8 @@ typedef struct {
     uint32_t PreviousEndpoint;
 } mm_t;
 
-typedef enum {
+typedef enum mm_register_address_e 
+{
     reg_Board_ID_addr = 0x10,
     reg_FW_Version_addr = 0x11,
     reg_HW_Version_addr = 0x12,
@@ -534,12 +545,14 @@ typedef enum {
     reg_PreviousEndpoint_addr = 0xA0,
 } mm_register_address_t;
 
-typedef enum {
+typedef enum mm_enabled_e
+{
     reg_enabled_enabled = 1,                        // Enabled
     reg_enabled_disabled = 0,                       // Disabled
 } mm_enabled_t;
 
-typedef enum {
+typedef enum mm_boardidentifier_e
+{
     reg_boardidentifier_none = 0,                   // Disabled
     reg_boardidentifier_xtx = 1,                    // XTX
     reg_boardidentifier_xsteer = 2,                 // XSTEER
@@ -549,24 +562,28 @@ typedef enum {
     reg_boardidentifier_gen2 = 32,                  // GEN2
 } mm_boardidentifier_t;
 
-typedef enum {
+typedef enum mm_te_types_e
+{
     reg_te_types_pc104 = 0,                         // PC104 Adaptor
     reg_te_types_ud = 1,                            // uD Adaptor
     reg_te_types_gecko = 2,                         // Gecko Adaptor
 } mm_te_types_t;
 
-typedef enum {
+typedef enum mm_serialmode_e
+{
     reg_serialmode_uart = 0,                        // UART
     reg_serialmode_rs485 = 1,                       // RS485
     reg_serialmode_rs422 = 2,                       // RS422
 } mm_serialmode_t;
 
-typedef enum {
+typedef enum mm_paritymodes_e
+{
     reg_paritymodes_odd = 0,                        // Odd
     reg_paritymodes_even = 1,                       // Even
 } mm_paritymodes_t;
 
-typedef enum {
+typedef enum mm_usart_baudrates_e
+{
     reg_usart_baudrates_baud_115200 = 0,            // 115200
     reg_usart_baudrates_baud_230400 = 1,            // 230400
     reg_usart_baudrates_baud_460800 = 2,            // 460800

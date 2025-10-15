@@ -5,7 +5,6 @@
  *  Author: Kolijn
  */ 
 
-
 #ifndef REGISTER_HANDLER_H_
 #define REGISTER_HANDLER_H_
 
@@ -38,10 +37,6 @@ bool REG_vReadFromAddress(const uint32_t address, uint8_t * buff, uint8_t * size
 */
 void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const size_t length);
 
-
-
-
-
 /*
  * Add a flag to the I2C Status. The status can only be appended to, it is cleared when the user 
  * reads it
@@ -50,9 +45,7 @@ void REG_vSetI2CStatus(uint32_t flag);
 
 void REG_UpdateTemperature(uint16_t temperature);
 
-
 void REG_Copyu32ToArray(const uint32_t value, uint8_t* data);
-
 
 uint8_t REG_GetI2CSpeed(void);
 

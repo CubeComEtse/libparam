@@ -8,6 +8,7 @@
 #include "Multitester.h"
 
 #include <assert.h>
+
 #include "register_map.h"
 #include "pca9555.h"
 #include "event.h"
@@ -26,7 +27,6 @@
 // Static Functions
 static bool MULTI_vSetRfSwitchChannel(rf_relay_config_t * handle);
 
-
 void RFRelay_Init(rf_relay_config_t * handle, const uint32_t relay_number)
 {	
 	assert(handle->i2c_read_function);
@@ -38,15 +38,15 @@ void RFRelay_Init(rf_relay_config_t * handle, const uint32_t relay_number)
 	handle->channel_num = relay_number;
 	handle->scan_enabled = true;
 	TMR_vCreate(&handle->update_timer, TMR_SOURCE_SYSTICK);
-	if (relay_number == 1){
+	if (relay_number == 1)
+    {
 		handle->i2c_address = PCA9555_RFSWITCH1_ADDR;
 	}
-	if (relay_number == 2) {
+	if (relay_number == 2)
+    {
 		handle->i2c_address = PCA9555_RFSWITCH2_ADDR;
 	}
 }
-
-
 
 void RFRelay_Process(rf_relay_config_t * pHandle)
 {
@@ -56,20 +56,25 @@ void RFRelay_Process(rf_relay_config_t * pHandle)
 	switch (pHandle->state)
 	{
 		case UNINITIALIZED:
-			if (TMR_bIsExpired(&pHandle->update_timer)){
+			if (TMR_bIsExpired(&pHandle->update_timer))
+            {
 				TMR_vStart(& pHandle->update_timer, 100);
 				
-				if (pHandle->scan_enabled){
+				if (pHandle->scan_enabled)
+                {
 					uint8_t register_address = PCA9555_CMD_OUT_PORT0;
 					result = pHandle->i2c_read_function(pHandle->i2c_handle, pHandle->i2c_address, &register_address, 1, buffer, 2);
 					
-					if (result){
+					if (result)
+                    {
 						pHandle->state = INITIALIZING;
 					}
-					if (pHandle->channel_num == 1){
+					if (pHandle->channel_num == 1)
+                    {
 						mm_setRFRelaysConf_RFSW1_Detected(result);
 					}
-					if (pHandle->channel_num == 2){
+					if (pHandle->channel_num == 2)
+                    {
 						mm_setRFRelaysConf_RFSW2_Detected(result);
 					}
 				}
@@ -95,10 +100,12 @@ void RFRelay_Process(rf_relay_config_t * pHandle)
 			buffer[2] = 0x00;
 			result = pHandle->i2c_read_function(pHandle->i2c_handle, pHandle->i2c_address, buffer, 1, &buffer[1], 2);
 			
-			if ((result) && (buffer[1] == 0xF0) && (buffer[2] == 0xFF)){
+			if ((result) && (buffer[1] == 0xF0) && (buffer[2] == 0xFF))
+            {
 				pHandle->state = IDLE;
 			}
-			else {
+			else
+            {
 				// TODO: More elegant error here
 				pHandle->state = UNINITIALIZED;
 			}
@@ -107,15 +114,18 @@ void RFRelay_Process(rf_relay_config_t * pHandle)
 		
 		
 		case IDLE:
-			if (pHandle->desired_channel != pHandle->set_channel){
-				
-				if (MULTI_vSetRfSwitchChannel(pHandle)) {
+			if (pHandle->desired_channel != pHandle->set_channel)
+            {
+				if (MULTI_vSetRfSwitchChannel(pHandle))
+                {
 					// If successful, update register map
 					pHandle->set_channel = pHandle->desired_channel;
-					if (pHandle->channel_num == 1){
+					if (pHandle->channel_num == 1)
+                    {
 						mm_setRFRelaysConf_RfSw1Chan(pHandle->desired_channel);
 					}
-					if (pHandle->channel_num == 2){
+					if (pHandle->channel_num == 2)
+                    {
 						mm_setRFRelaysConf_RfSw2Chan(pHandle->desired_channel);
 					}
 				}
@@ -137,7 +147,8 @@ void RFRelay_Process(rf_relay_config_t * pHandle)
 					buffer[2] = 0x00;
 					result = pHandle->i2c_read_function(pHandle->i2c_handle, pHandle->i2c_address, buffer, 1, &buffer[1], 2);
 					
-					if (!result){
+					if (!result)
+                    {
 						pHandle->state = UNINITIALIZED;
 					}
 				}
@@ -153,7 +164,8 @@ void RFRelay_Process(rf_relay_config_t * pHandle)
 static bool MULTI_vSetRfSwitchChannel(rf_relay_config_t * handle)
 {
 	uint8_t tx_buffer[] = {0x00, 0x00, 0x00};
-	if (handle->desired_channel != 0){
+	if (handle->desired_channel != 0)
+    {
 		tx_buffer[1] = 0x1 << (handle->desired_channel-1);
 	}
 	
@@ -165,7 +177,8 @@ static bool MULTI_vSetRfSwitchChannel(rf_relay_config_t * handle)
 	return result;
 }
 
-void RFRelay_SetScanEnabled(rf_relay_config_t * pHandle, bool value){
+void RFRelay_SetScanEnabled(rf_relay_config_t * pHandle, bool value)
+{
 	pHandle->scan_enabled = value;
 }
 
@@ -176,10 +189,6 @@ void RFRelay_SetDesiredChannel(rf_relay_config_t * handle, uint8_t channel)
 {
 	handle->desired_channel = channel;
 }
-
-
-
-
 
 void MULTI_Init(multitester_t * handle)
 {
@@ -195,7 +204,6 @@ void MULTI_Init(multitester_t * handle)
 	handle->previous_portbits = 0x00;
 	handle->auto_clear = true;
 }
-
 
 void MULTI_Process(multitester_t * pHandle)
 {
@@ -318,7 +326,6 @@ void MULTI_SetScanEnabled(multitester_t * pHandle, bool value){
 	pHandle->scan_enabled = value;
 }
 
-
 void MTCV2_Init(multitester_t * handle) {
 	assert(handle->i2c_write_function);
 	assert(handle->i2c_read_function);
@@ -327,7 +334,6 @@ void MTCV2_Init(multitester_t * handle) {
 	handle->new_portbits = 0x00;
 	handle->previous_portbits = 0x00;
 }
-
 
 /**
  * @brief Sets specified bits in the new_portbits field of multitester handle.
@@ -343,7 +349,6 @@ void MTCV2_SetBits(multitester_t * pHandle, uint32_t bits) {
 	pHandle->new_portbits |= bits;
 }
 
-
 /**
  * @brief Clears specified bits in the new_portbits field of multitester handle.
  * 
@@ -358,7 +363,6 @@ void MTCV2_ClearBits(multitester_t * pHandle, uint32_t bits) {
 	pHandle->new_portbits &= ~bits;
 }
 
-
 /**
  * @brief Main task for managing multitester I2C communication and port state.
  * 
@@ -367,7 +371,6 @@ void MTCV2_ClearBits(multitester_t * pHandle, uint32_t bits) {
  *
  * @param vHandle Pointer to multitester handle (void cast).
  */
-
 void MTCV2_Task(void * vHandle) {
 	
 		assert(vHandle);
@@ -376,11 +379,13 @@ void MTCV2_Task(void * vHandle) {
 		// Data buffer for I2C transmission
 		uint8_t buffer[] = {0x00, 0x00, 0x00, 0x00, 0x00};
 		
-		while (1) {
-
-			switch (pHandle->state) {
+		while (1)
+        {
+			switch (pHandle->state)
+            {
 			case UNINITIALIZED:
-				if (TMR_bIsExpired(&pHandle->update_timer)) {
+				if (TMR_bIsExpired(&pHandle->update_timer))
+                {
 					TMR_vStart(&pHandle->update_timer, 100);
 					pHandle->state = INITIALIZING;
 				}
@@ -392,7 +397,8 @@ void MTCV2_Task(void * vHandle) {
 				
 			case IDLE:
 				// If port bits have changed, send update over I2C
-				if (pHandle->new_portbits != pHandle->previous_portbits) {
+				if (pHandle->new_portbits != pHandle->previous_portbits)
+                {
 					
 					buffer[0] = 0x01;
 					buffer[1] = pHandle->new_portbits & 0xFF;
@@ -401,7 +407,7 @@ void MTCV2_Task(void * vHandle) {
 					buffer[4] = (pHandle->new_portbits >> 24) & 0xFF;
 					pHandle->i2c_write_function(pHandle->i2c_handle, pHandle->i2c_address, buffer, 5);
 					
-					// Update value in memorymap
+					// Update value in memory map
 					uint32_t existing = 0;
 					switch (pHandle->i2c_address) {
 						case 0x51:  
@@ -421,7 +427,8 @@ void MTCV2_Task(void * vHandle) {
 					pHandle->previous_portbits = pHandle->new_portbits;
 				}
 				
-				if (TMR_bIsExpired(&pHandle->update_timer)) {
+				if (TMR_bIsExpired(&pHandle->update_timer))
+                {
 					TMR_vStart(&pHandle->update_timer, 1000);
 					pHandle->state = UNINITIALIZED;
 				}

@@ -19,13 +19,17 @@
 
 #include "obc_controller_rev_A.h"
 
-typedef struct {
+typedef struct bsp_s
+{
 	ccd_uart_t * telemetry_uart;
+	ccd_uart_t * bus_uart;
+    
 	ccd_i2c_t * bus_i2c;
 	ccd_i2c_t * util_i2c;
+    
 	ccd_can_t * bus_can;
+    
 	ccd_led_t * led_driver;
-	ccd_uart_t * bus_uart;
 } bsp_t;
 
 //Used in the NEW SHINY codebase

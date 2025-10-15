@@ -9,7 +9,6 @@
 #include "config.h"
 #include "platform.h"
 
-
 #include "gse_manager.h"
 #include "register_map.h"
   
@@ -18,13 +17,14 @@ static uint32_t REG_CopyArrayToU32(const uint8_t* data);
 static platform_t * platform;
 static bsp_t * bsp;
 
-
 /*
  * This module handles the register interface exposed to the outside.
 */
 
 typedef mm_response_t (*readAddressFunction)(uint32_t * dest);
-typedef struct {
+
+typedef struct addres_to_func_map_s
+{
 	mm_register_address_t address;
 	readAddressFunction readFunction;
 } addres_to_func_map_t;
@@ -113,18 +113,18 @@ static addres_to_func_map_t address_to_func_map[] = {
 	{ reg_PreviousEndpoint_addr, mm_getPreviousEndpoint}, 
 };
 
-
-void REG_vSetPlatformPointer(platform_t * handle, bsp_t * bsp_handle){
+void REG_vSetPlatformPointer(platform_t * handle, bsp_t * bsp_handle)
+{
 	platform = handle;
 	bsp = bsp_handle;
 }
-
 
 /*
  * Checks if the provided register address is a valid one. Returns true if it 
  * is, false otherwise
 */
-bool REG_CheckAddress(const uint8_t address){
+bool REG_CheckAddress(const uint8_t address)
+{
     bool found = false;
     for (uint32_t i = 0; i < (sizeof(address_to_func_map) / sizeof(address_to_func_map[0])); i++) {
         if(address == address_to_func_map[i].address){
@@ -232,18 +232,19 @@ bool REG_vReadFromAddress(const uint32_t address, uint8_t * buff, uint8_t * size
 /*
  * Copy a given value into the buffer. Buffer should be big enough to handle the value
 */
-void REG_Copyu32ToArray(const uint32_t value, uint8_t* data){
+void REG_Copyu32ToArray(const uint32_t value, uint8_t* data)
+{
     data[0] = (uint8_t) ((value & 0x000000FF) >> 0);
     data[1] = (uint8_t) ((value & 0x0000FF00) >> 8);
     data[2] = (uint8_t) ((value & 0x00FF0000) >> 16);
     data[3] = (uint8_t) ((value & 0xFF000000) >> 24);
 }
 
-static uint32_t REG_CopyArrayToU32(const uint8_t* data){
+static uint32_t REG_CopyArrayToU32(const uint8_t* data)
+{
     uint32_t res = (((uint32_t) data[0]) << 0) | (((uint32_t) data[1]) << 8) | (((uint32_t) data[2]) << 16) | (((uint32_t) data[3]) << 24);
     return res;
 }
-
 
 /*
  * Process all the stored messages. This function should be called regularly.
@@ -305,13 +306,18 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 		case reg_CSBoard_Current7I1_addr:
 		case reg_CSBoard_Current7I2_addr:
 			break;
+            
 		case reg_Scratchpad_addr:
+        {
 			mm_setScratchpad(deserialized);
-		break;
+		    break;
+        }            
 		
 		case reg_Configured_Boards_addr:
+        {
 			mm_setConfigured_Boards(deserialized);
 			break;
+        }            
 		
 		case reg_ConfPower_addr:
 		{
@@ -345,9 +351,9 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 				GSE_MANAGER_SetBusPowerSwitch(platform->gse_manager, POWER_3V3_UTIL, powerEn == reg_enabled_enabled);
 				mm_setConfPower_voltage3UtilToggle(powerEn);
 			}
-			
+            
+		    break;
 		}
-		break;
 				
 		case reg_I2CConfA_addr:
 		{
@@ -370,8 +376,9 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 			mm_getI2CConfA_TRDELFrom(&trdel, deserialized);
 			platform->i2c_target->tr_delay = trdel;
 			mm_setI2CConfA_TRDEL(trdel);
-		}
+            
 			break;
+		}
 				
 		case reg_I2CConfB_addr:
 		{
@@ -381,231 +388,254 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 			I2CTarget_SetLegacyAddress(platform->i2c_target, i2c_address);
 			
 			mm_setI2CConfB(deserialized);
-		}
+            
 			break;
+		}
 				
 		case reg_MultiConf0_addr:
-			{
-				mm_enabled_t autoclear = reg_enabled_disabled;
-				mm_getMultiConf0_AutoCLRFrom(&autoclear, deserialized);
-				MULTI_SetAutoClear(platform->multitester, autoclear==reg_enabled_enabled);
-				mm_setMultiConf0_AutoCLR(autoclear);
+		{
+    		mm_enabled_t autoclear = reg_enabled_disabled;
+    		mm_getMultiConf0_AutoCLRFrom(&autoclear, deserialized);
+    		MULTI_SetAutoClear(platform->multitester, autoclear==reg_enabled_enabled);
+    		mm_setMultiConf0_AutoCLR(autoclear);
+    		
+    		mm_enabled_t scan_enabled = reg_enabled_disabled;
+    		mm_getMultiConf0_ScanEnabledFrom(&scan_enabled, deserialized);
+    		MULTI_SetScanEnabled(platform->multitester, scan_enabled==reg_enabled_enabled);
+    		mm_setMultiConf0_ScanEnabled(scan_enabled);
+            
+    		break;
+		}
 			
-				mm_enabled_t scan_enabled = reg_enabled_disabled;
-				mm_getMultiConf0_ScanEnabledFrom(&scan_enabled, deserialized);
-				MULTI_SetScanEnabled(platform->multitester, scan_enabled==reg_enabled_enabled);
-				mm_setMultiConf0_ScanEnabled(scan_enabled);
-			}
-			break;
-			
-		case reg_CANConfA_addr:
-			{
-				uint16_t baudrate_kbps = 0;
-				mm_getCANConfA_BaudRateFrom(&baudrate_kbps, deserialized);
-				if (CANTARGET_SetBaud(platform->can_target, ((uint32_t)baudrate_kbps) * 1000))
-				{
-					mm_setCANConfA_BaudRate( baudrate_kbps);
-				}
-				
-				mm_enabled_t FlipCanBytes;
-				mm_getCANConfA_FlipCanBytesFrom(&FlipCanBytes, deserialized);
-				if (FlipCanBytes)
-				{
-					if (CANTARGET_SetMode(platform->can_target, PLAN_S_COMPATIBILITY)){
-						mm_setCANConfA_FlipCanBytes(FlipCanBytes);
-					}
-				}
-				else {
-					if (CANTARGET_SetMode(platform->can_target, CUBECOM_MODE)){
-						mm_setCANConfA_FlipCanBytes(FlipCanBytes);
-					}
-				}
-				
-				mm_enabled_t EnableRetries;
-				mm_getCANConfA_EnableRetriesFrom(&EnableRetries, deserialized);
-				if (CANTARGET_EnableRetries(platform->can_target, EnableRetries == reg_enabled_enabled))
-				{
-					mm_setCANConfA_EnableRetries(EnableRetries);
-				}
-			}
-			break;
+        case reg_CANConfA_addr:
+        {
+            uint16_t baudrate_kbps = 0;
+            mm_getCANConfA_BaudRateFrom(&baudrate_kbps, deserialized);
+            if (CANTARGET_SetBaud(platform->can_target, ((uint32_t)baudrate_kbps) * 1000))
+            {
+                mm_setCANConfA_BaudRate( baudrate_kbps);
+            }
+            
+            mm_enabled_t FlipCanBytes;
+            mm_getCANConfA_FlipCanBytesFrom(&FlipCanBytes, deserialized);
+            if (FlipCanBytes)
+            {
+                if (CANTARGET_SetMode(platform->can_target, PLAN_S_COMPATIBILITY)){
+                    mm_setCANConfA_FlipCanBytes(FlipCanBytes);
+                }
+            }
+            else {
+                if (CANTARGET_SetMode(platform->can_target, CUBECOM_MODE)){
+                    mm_setCANConfA_FlipCanBytes(FlipCanBytes);
+                }
+            }
+            
+            mm_enabled_t EnableRetries;
+            mm_getCANConfA_EnableRetriesFrom(&EnableRetries, deserialized);
+            if (CANTARGET_EnableRetries(platform->can_target, EnableRetries == reg_enabled_enabled))
+            {
+                mm_setCANConfA_EnableRetries(EnableRetries);
+            }
+            break;
+        }
+        
 		case reg_CANConfB_addr:
-			{
-				uint8_t new_address = 0;
-				mm_getCANConfB_AddressFrom(&new_address, deserialized);
-				
-				if (CANTARGET_vSetAddress(platform->can_target, new_address)){
-					mm_setCANConfB_Address(new_address);	
-				}
-				
-			}
-			break;
+		{
+    		uint8_t new_address = 0;
+    		mm_getCANConfB_AddressFrom(&new_address, deserialized);
+    		
+    		if (CANTARGET_vSetAddress(platform->can_target, new_address)){
+        		mm_setCANConfB_Address(new_address);
+    		}
+    		
+    		break;
+		}
+        
 		case reg_SerialConf_addr:
-			{
-				mm_serialmode_t SerialCommMode;
-				mm_getSerialConf_SerialModeFrom(&SerialCommMode, deserialized);
-				if(UARTTARGET_SetCommMode(platform->uart_target, SerialCommMode)){
-					mm_setSerialConf_SerialMode(SerialCommMode);
-				}
-				
-				mm_enabled_t ParityEnabled;
-				mm_getSerialConf_ParityEnabledFrom(&ParityEnabled, deserialized);
-				if(UARTTARGET_SetParityEnabled(platform->uart_target, ParityEnabled)){
-					mm_setSerialConf_ParityEnabled(ParityEnabled);
-				}		
-				
-				mm_paritymodes_t ParityMode;
-				mm_getSerialConf_ParityModeFrom(&ParityMode, deserialized);
-				if(UARTTARGET_SetParityMode(platform->uart_target, ParityMode)){
-					mm_setSerialConf_ParityMode(ParityMode);
-				}
-				
-				mm_usart_baudrates_t BaudRate;
-				mm_getSerialConf_BaudRatesFrom(&BaudRate, deserialized);
-				if(UARTTARGET_SetBaudRate(platform->uart_target, BaudRate)){
-					mm_setSerialConf_BaudRates(BaudRate);
-				}
-			}
-			break;
+        {
+            mm_serialmode_t SerialCommMode;
+            mm_getSerialConf_SerialModeFrom(&SerialCommMode, deserialized);
+            if(UARTTARGET_SetCommMode(platform->uart_target, SerialCommMode)){
+                mm_setSerialConf_SerialMode(SerialCommMode);
+            }
+            
+            mm_enabled_t ParityEnabled;
+            mm_getSerialConf_ParityEnabledFrom(&ParityEnabled, deserialized);
+            if(UARTTARGET_SetParityEnabled(platform->uart_target, ParityEnabled)){
+                mm_setSerialConf_ParityEnabled(ParityEnabled);
+            }
+            
+            mm_paritymodes_t ParityMode;
+            mm_getSerialConf_ParityModeFrom(&ParityMode, deserialized);
+            if(UARTTARGET_SetParityMode(platform->uart_target, ParityMode)){
+                mm_setSerialConf_ParityMode(ParityMode);
+            }
+            
+            mm_usart_baudrates_t BaudRate;
+            mm_getSerialConf_BaudRatesFrom(&BaudRate, deserialized);
+            if(UARTTARGET_SetBaudRate(platform->uart_target, BaudRate)){
+                mm_setSerialConf_BaudRates(BaudRate);
+            }
+            break;
+        }
 		case reg_PC104Pins_addr:
-			{
-				mm_enabled_t ena;
-				mm_getPC104Pins_ENAFrom(&ena, deserialized);
-				PC104_setEnaPin(platform->pc104, ena == reg_enabled_enabled);
-				mm_setPC104Pins_ENA(ena);
-				
-				mm_getPC104Pins_nRSTFrom(&ena, deserialized);
-				PC104_setnRstPin(platform->pc104, ena == reg_enabled_enabled);
-				mm_setPC104Pins_nRST(ena);
-			}
+		{
+    		mm_enabled_t ena;
+    		mm_getPC104Pins_ENAFrom(&ena, deserialized);
+    		PC104_setEnaPin(platform->pc104, ena == reg_enabled_enabled);
+    		mm_setPC104Pins_ENA(ena);
+    		
+    		mm_getPC104Pins_nRSTFrom(&ena, deserialized);
+    		PC104_setnRstPin(platform->pc104, ena == reg_enabled_enabled);
+    		mm_setPC104Pins_nRST(ena);
+            
+    		break;
+		}
 			
-			break;
 		case reg_RFRelaysConf_addr:
-			{
-				mm_enabled_t scan_enabled = reg_enabled_disabled;
-				mm_getRFRelaysConf_ScanEnabledFrom(&scan_enabled, deserialized);
-				RFRelay_SetScanEnabled(platform->rf_relay_1, scan_enabled == reg_enabled_enabled);
-				RFRelay_SetScanEnabled(platform->rf_relay_2, scan_enabled == reg_enabled_enabled);
-				mm_setRFRelaysConf_ScanEnabled(scan_enabled);
-				
-				uint8_t rf1_channel = 0;
-				uint8_t rf2_channel = 0;
-				mm_getRFRelaysConf_RfSw1ChanFrom(&rf1_channel, deserialized);
-				mm_getRFRelaysConf_RfSw2ChanFrom(&rf2_channel, deserialized);
-				
-				RFRelay_SetDesiredChannel(platform->rf_relay_1, rf1_channel);
-				RFRelay_SetDesiredChannel(platform->rf_relay_2, rf2_channel);
-			}
-			break;
+		{
+    		mm_enabled_t scan_enabled = reg_enabled_disabled;
+    		mm_getRFRelaysConf_ScanEnabledFrom(&scan_enabled, deserialized);
+    		RFRelay_SetScanEnabled(platform->rf_relay_1, scan_enabled == reg_enabled_enabled);
+    		RFRelay_SetScanEnabled(platform->rf_relay_2, scan_enabled == reg_enabled_enabled);
+    		mm_setRFRelaysConf_ScanEnabled(scan_enabled);
+    		
+    		uint8_t rf1_channel = 0;
+    		uint8_t rf2_channel = 0;
+    		mm_getRFRelaysConf_RfSw1ChanFrom(&rf1_channel, deserialized);
+    		mm_getRFRelaysConf_RfSw2ChanFrom(&rf2_channel, deserialized);
+    		
+    		RFRelay_SetDesiredChannel(platform->rf_relay_1, rf1_channel);
+    		RFRelay_SetDesiredChannel(platform->rf_relay_2, rf2_channel);
+            
+    		break;
+		}
+        
 		case reg_MultiConf1_Set_addr:
+        {
 			// Register definition precisely matches the bits.
 			// Don't set the register, it reads 0 when read.
 			MULTI_SetBitsFrom(platform->multitester, deserialized);
 			break;
-		case reg_MultiConf1_Clear_addr:
+        }            
+		
+        case reg_MultiConf1_Clear_addr:
+        {
 			MULTI_ClearBitsFrom(platform->multitester, deserialized);
 			break;
-			
+        }		
+        	
 		case reg_TE_Addr_0_Set_addr:
-			{
-				mm_enabled_t scanEnabled;
-				mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
-				if (scanEnabled == reg_enabled_enabled){
-					TE_Adaptor_SetScanEnabled(platform->te_scanner, 0);
-				}
+		{
+			mm_enabled_t scanEnabled;
+			mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
+			if (scanEnabled == reg_enabled_enabled){
+				TE_Adaptor_SetScanEnabled(platform->te_scanner, 0);
+			}
 				
-				// We have deliberately made the bits align perfectly so we could do this.
-				TE_Adaptor_SetTeBits(platform->te_scanner, 0, (deserialized >> 16) & 0x0FFF);
-			}
+			// We have deliberately made the bits align perfectly so we could do this.
+			TE_Adaptor_SetTeBits(platform->te_scanner, 0, (deserialized >> 16) & 0x0FFF);
+            
 			break;
+		}
+        
 		case reg_TE_Addr_0_Clear_addr:
-			{
-				mm_enabled_t scanEnabled;
-				mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
-				if (scanEnabled == reg_enabled_enabled){
-					TE_Adaptor_ClearScanEnabled(platform->te_scanner, 0);
-				}
-			
-				// We have deliberately made the bits align perfectly so we could do this.
-				TE_Adaptor_ClearTeBits(platform->te_scanner, 0, (deserialized >> 16) & 0x0FFF);
+		{
+			mm_enabled_t scanEnabled;
+			mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
+			if (scanEnabled == reg_enabled_enabled){
+				TE_Adaptor_ClearScanEnabled(platform->te_scanner, 0);
 			}
-			break;
+			
+			// We have deliberately made the bits align perfectly so we could do this.
+			TE_Adaptor_ClearTeBits(platform->te_scanner, 0, (deserialized >> 16) & 0x0FFF);
+            
+            break;
+		}
 			
 		case reg_TE_Addr_1_Set_addr:
-			{
-				mm_enabled_t scanEnabled;
-				mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
-				if (scanEnabled == reg_enabled_enabled){
-					TE_Adaptor_SetScanEnabled(platform->te_scanner, 1);
-				}
+		{
+			mm_enabled_t scanEnabled;
+			mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
+			if (scanEnabled == reg_enabled_enabled){
+				TE_Adaptor_SetScanEnabled(platform->te_scanner, 1);
+			}
 				
-				// We have deliberately made the bits align perfectly so we could do this.
-				TE_Adaptor_SetTeBits(platform->te_scanner, 1, (deserialized >> 16) & 0x0FFF);
-			}
+			// We have deliberately made the bits align perfectly so we could do this.
+			TE_Adaptor_SetTeBits(platform->te_scanner, 1, (deserialized >> 16) & 0x0FFF);
+            
 			break;
+		}
+        
 		case reg_TE_Addr_1_Clear_addr:
-			{
-				mm_enabled_t scanEnabled;
-				mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
-				if (scanEnabled == reg_enabled_enabled){
-					TE_Adaptor_ClearScanEnabled(platform->te_scanner, 1);
-				}
-			
-				// We have deliberately made the bits align perfectly so we could do this.
-				TE_Adaptor_ClearTeBits(platform->te_scanner, 1, (deserialized >> 16) & 0x0FFF);
+		{
+			mm_enabled_t scanEnabled;
+			mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
+			if (scanEnabled == reg_enabled_enabled){
+				TE_Adaptor_ClearScanEnabled(platform->te_scanner, 1);
 			}
-			break;
+			
+			// We have deliberately made the bits align perfectly so we could do this.
+			TE_Adaptor_ClearTeBits(platform->te_scanner, 1, (deserialized >> 16) & 0x0FFF);
+            
+            break;
+		}
 			
 		case reg_TE_Addr_2_Set_addr:
-			{
-				mm_enabled_t scanEnabled;
-				mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
-				if (scanEnabled == reg_enabled_enabled){
-					TE_Adaptor_SetScanEnabled(platform->te_scanner, 2);
-				}
+		{
+			mm_enabled_t scanEnabled;
+			mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
+			if (scanEnabled == reg_enabled_enabled){
+				TE_Adaptor_SetScanEnabled(platform->te_scanner, 2);
+			}
 				
-				// We have deliberately made the bits align perfectly so we could do this.
-				TE_Adaptor_SetTeBits(platform->te_scanner, 2, (deserialized >> 16) & 0x0FFF);
-			}
+			// We have deliberately made the bits align perfectly so we could do this.
+			TE_Adaptor_SetTeBits(platform->te_scanner, 2, (deserialized >> 16) & 0x0FFF);
+            
 			break;
+		}
+        
 		case reg_TE_Addr_2_Clear_addr:
-			{
-				mm_enabled_t scanEnabled;
-				mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
-				if (scanEnabled == reg_enabled_enabled){
-					TE_Adaptor_ClearScanEnabled(platform->te_scanner, 2);
-				}
-			
-				// We have deliberately made the bits align perfectly so we could do this.
-				TE_Adaptor_ClearTeBits(platform->te_scanner, 2, (deserialized >> 16) & 0x0FFF);
+		{
+			mm_enabled_t scanEnabled;
+			mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
+			if (scanEnabled == reg_enabled_enabled){
+				TE_Adaptor_ClearScanEnabled(platform->te_scanner, 2);
 			}
-			break;
 			
+			// We have deliberately made the bits align perfectly so we could do this.
+			TE_Adaptor_ClearTeBits(platform->te_scanner, 2, (deserialized >> 16) & 0x0FFF);
+            
+			break;
+		}
 			
 		case reg_TE_Addr_3_Set_addr:
-			{
-				mm_enabled_t scanEnabled;
-				mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
-				if (scanEnabled == reg_enabled_enabled){
-					TE_Adaptor_SetScanEnabled(platform->te_scanner, 2);
-				}
+		{
+			mm_enabled_t scanEnabled;
+			mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
+			if (scanEnabled == reg_enabled_enabled){
+				TE_Adaptor_SetScanEnabled(platform->te_scanner, 2);
+			}
 				
-				// We have deliberately made the bits align perfectly so we could do this.
-				TE_Adaptor_SetTeBits(platform->te_scanner, 3, (deserialized >> 16) & 0x0FFF);
-			}
+			// We have deliberately made the bits align perfectly so we could do this.
+			TE_Adaptor_SetTeBits(platform->te_scanner, 3, (deserialized >> 16) & 0x0FFF);
+                
 			break;
+		}
+            
 		case reg_TE_Addr_3_Clear_addr:
-			{
-				mm_enabled_t scanEnabled;
-				mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
-				if (scanEnabled == reg_enabled_enabled){
-					TE_Adaptor_ClearScanEnabled(platform->te_scanner, 2);
-				}
-			
-				// We have deliberately made the bits align perfectly so we could do this.
-				TE_Adaptor_ClearTeBits(platform->te_scanner, 3, (deserialized >> 16) & 0x0FFF);
+		{
+			mm_enabled_t scanEnabled;
+			mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
+			if (scanEnabled == reg_enabled_enabled){
+				TE_Adaptor_ClearScanEnabled(platform->te_scanner, 2);
 			}
+			
+			// We have deliberately made the bits align perfectly so we could do this.
+			TE_Adaptor_ClearTeBits(platform->te_scanner, 3, (deserialized >> 16) & 0x0FFF);
+            
 			break;
+		}
 			
 		// Multitester V2
 		case reg_MTC_Addr_0_Set_addr:
@@ -613,7 +643,6 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 		case reg_MTC_Addr_2_Set_addr:
 		case reg_MTC_Addr_3_Set_addr:
 		{
-			
 			switch (address) {
 				case 0xb1: platform->multitester->i2c_address = 0x51; break;
 				case 0xb4: platform->multitester->i2c_address = 0x52; break;
@@ -624,12 +653,12 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 			MTCV2_SetBits(platform->multitester, deserialized);
 			break;
 		}
+        
 		case reg_MTC_Addr_0_Clear_addr:
 		case reg_MTC_Addr_1_Clear_addr:
 		case reg_MTC_Addr_2_Clear_addr:
 		case reg_MTC_Addr_3_Clear_addr:
 		{
-			
 			switch (address) {
 				case 0xb1: platform->multitester->i2c_address = 0x51; break;
 				case 0xb4: platform->multitester->i2c_address = 0x52; break;
@@ -640,6 +669,7 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 			MTCV2_ClearBits(platform->multitester, deserialized);
 			break;
 		}
+        
 		case reg_UtilI2CConfA_addr:
 		{
 			uint8_t new_speed;
@@ -658,17 +688,15 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 			mm_getUtilI2CConfA_ResetFrom(&should_reset, deserialized);
 			cc_i2c_driver_ReInit(bsp->util_i2c);
 			
+			break;
 		}
-		break;
 		
 		case reg_PreviousEndpoint_addr:
 		{
 			// Just store the full value
 			mm_setPreviousEndpoint(deserialized);
+            
+            break;
 		}
-		break;
-		
-		
-					
 	}        
 }

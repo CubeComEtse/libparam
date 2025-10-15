@@ -23,30 +23,35 @@
 #define UART_RX_SB_OVERFLOW  (0x01<<1)
 #define UART_TX_SB_OVERFLOW  (0x01<<2)
 
-typedef enum {
+typedef enum uart_comm_mode_e
+{
 	UART = 0,
 	RS485,
 	RS422,
-}uart_comm_mode_t;
+} uart_comm_mode_t;
 
-typedef enum{
+typedef enum uart_parity_enabled_e
+{
 	Disabled = 0,
 	Enabled,
-}uart_parity_enabled_t;
+} uart_parity_enabled_t;
 
-typedef enum{
+typedef enum
+{
 	Odd = 0,
 	Even,
-}uart_parity_mode_t;
+} uart_parity_mode_t;
 
-typedef enum{
+typedef enum uart_baud_rates_e
+{
 	baud_115200 = 0,
 	baud_230400,
 	baud_460800,
 	baud_921600,
-}uart_baud_rates_t;
+} uart_baud_rates_t;
 
-typedef struct ccd_uart_s {
+typedef struct ccd_uart_s
+{
 	// Buffers containing the incoming and outgoing data.
 	StreamBufferHandle_t uart_rx_buffer;
 	StreamBufferHandle_t uart_tx_buffer;

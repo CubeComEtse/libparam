@@ -15,8 +15,6 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-#include "csp/interfaces/csp_if_kiss.h"
-
 #include "bsp.h"
 #include "pc_messages.h"
 
@@ -25,8 +23,6 @@
 #define FESC    0xDB // 219
 #define TFEND   0xDC // 220 
 #define TFESC   0xDD // 221
-
-extern csp_iface_t * csp_usart_iface;
 
 /*
  * Initialize the instance. 
@@ -173,11 +169,6 @@ void UARTTARGET_RxTask(void * handle)
         {
 			continue;
 		}
-        
-        // TODO: Figure out how to switch between old handler and new handler
-        int xTaskWoken = pdFALSE;
-        csp_kiss_rx(csp_usart_iface, rx_buffer, received_bytes_length, (void *)xTaskWoken);
-        continue;
         
 		ioport_set_pin_level(PIN_DEBUG_0, 1);
 		

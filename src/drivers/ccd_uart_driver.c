@@ -15,6 +15,8 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
+#include "main.h"
+
 void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart, uint8_t interrupt_priority)
 {
 	if (driver->doFlowControl)
@@ -256,7 +258,8 @@ void ccd_usart_RXProcessingTask(void * parameters)
 				size_t bytes_sent = xStreamBufferSend(driver->uart_rx_buffer, &driver->rx_holding_buffer[driver->rx_buffer_read], (UART_HOLDING_BUFFER_SIZE - driver->rx_buffer_read), 0);
 				driver->rx_buffer_read = (driver->rx_buffer_read + bytes_sent) % UART_HOLDING_BUFFER_SIZE;
 				
-				if (bytes_sent == 0){
+				if (bytes_sent == 0)
+                {
 					// Stream buffer overflow
 					driver->rx_streaming_buffer_overflow = true;
 				}
@@ -268,7 +271,8 @@ void ccd_usart_RXProcessingTask(void * parameters)
 				size_t bytes_sent = xStreamBufferSend(driver->uart_rx_buffer, &driver->rx_holding_buffer[driver->rx_buffer_read], (copied_write - driver->rx_buffer_read), 0);
 				driver->rx_buffer_read = (driver->rx_buffer_read + bytes_sent) % UART_HOLDING_BUFFER_SIZE;
 				
-				if (bytes_sent == 0){
+				if (bytes_sent == 0)
+                {
 					// Stream buffer overflow
 					driver->rx_streaming_buffer_overflow = true;
 				}
@@ -293,13 +297,15 @@ void ccd_usart_TXProcessingTask(void * parameters)
 		
 		// If write pointer is past read pointer the max data to receive is to the 
 		// end of the buffer
-		if (driver->tx_buffer_read <= driver->tx_buffer_write){
+		if (driver->tx_buffer_read <= driver->tx_buffer_write)
+        {
 			max_bytes_to_read = min(max_bytes_to_read, UART_HOLDING_BUFFER_SIZE - driver->tx_buffer_write);
 		}
 		
 		// If max_bytes_to_read is zero the buffer is full. We don't even need to 
 		// try reading 0 from the StreamBuffer.
-		if (max_bytes_to_read == 0){
+		if (max_bytes_to_read == 0)
+        {
 			driver->tx_holding_buffer_overflow = true;
 		}
 		else
@@ -308,7 +314,8 @@ void ccd_usart_TXProcessingTask(void * parameters)
 			driver->tx_buffer_write = (driver->tx_buffer_write + read_size) % UART_HOLDING_BUFFER_SIZE;
 		
 			// If we copied any data into the buffer, enable the interrupt
-			if (read_size > 0){
+			if (read_size > 0)
+            {
 				usart_enable_interrupt(driver->base_usart, US_IER_TXEMPTY);
 			}
 		}
@@ -346,15 +353,15 @@ inline void ccd_uart_InterruptHandler(ccd_uart_t * driver)
 				{
 					ccd_uart_StopFlowControl(driver);
 				}
-
-				// Notify RX data processing task of new data
-                // TODO: Handle interrupts that also triggered before this task was created
-                if (driver->rx_task_handle != NULL)
-                {
-                    vTaskNotifyGiveFromISR(driver->rx_task_handle, NULL);
-                }
 			}
 		}
+
+		// Notify RX data processing task of new data
+        // TODO: Handle interrupts that also triggered before this task was created
+        if (driver->rx_task_handle != NULL)
+        {
+            vTaskNotifyGiveFromISR(driver->rx_task_handle, NULL);
+        }
 	}
 
 	// TX Buffer and shift register empty
@@ -386,8 +393,8 @@ inline void ccd_uart_InterruptHandler(ccd_uart_t * driver)
     // Overrun Error    
     if (dw_status & US_CSR_OVRE)
     {
+        ErrorHandler();
         driver->base_usart->US_CR |= US_CR_RSTSTA;
-        __NOP();
     }
 }
 

@@ -1,6 +1,9 @@
 {
 	"generator": {
 		"languages": ["c", "c#"],
+		"c_freertos": {
+			"csp_enabled": false
+		},
 		"c#": {
 			"namespace": "Devices.Models"
 		},
