@@ -42,12 +42,6 @@
 #define CSP_HAVE_LIBZMQ                 0
 
 /* 
- * Custom configuration defines for libcsp.
- */
-
-#define CSP_CUBECOM                     1
-
-/* 
  * These appear in the csp_autoconfig.h.in file, but not in the CMakeLists.txt.
  * No clue what they are for since they don't seem to be used .
  */

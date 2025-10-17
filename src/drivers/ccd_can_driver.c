@@ -140,15 +140,17 @@ void ccd_can_Send_message(void * vHandle, uint32_t header, uint8_t * data, size_
     memcpy(tx_element.data, data, data_len);
 	
 	// Wait for the TX Buffer to be open
-	// This doesn't need a big timeout - if the buffer isn't ope nvery quickly, drop the message.
+	// This doesn't need a big timeout - if the buffer isn't open very quickly, drop the message.
 	
 	/*
+    TODO:
 	There is some sort of bug here with CAN at different speeds. If there is something else on the 
 	bus at the same speed the CAN module will keep sending messages. If the CAN module and the 
 	radio speeds mismatch the CAN FIFO will get full, and it will refuse to send. I have no idea 
 	why, since it sends a few messages. There is no indicator in the status registers, and the 
 	bus lines are fine.
 	*/
+    
 	uint32_t timeout = 1000;
 	
 	while (((pHandle->can_module.hw->MCAN_TXFQS) & MCAN_TXFQS_TFQF)  > 1 && (--timeout > 0));
@@ -161,6 +163,7 @@ void ccd_can_Send_message(void * vHandle, uint32_t header, uint8_t * data, size_
 	// TXFQi should indicate where to write to next, and what bit to set to send?
 	// Datasheet 49.5.5.3 TX FIFO, page 1416
 	uint32_t buffer_index = ((pHandle->can_module.hw->MCAN_TXFQS & MCAN_TXFQS_TFQPI_Msk) >> MCAN_TXFQS_TFQPI_Pos);
+    
 	// Code copied from the mcan_set_tx_buffer_element function
      mcan_set_tx_buffer_element(&pHandle->can_module, &tx_element, buffer_index);
 	
@@ -190,55 +193,58 @@ void ccd_can_ReceiveCallback(ccd_can_t* pHandle)
 	volatile uint32_t status, i;
 	status = mcan_read_interrupt_status(&pHandle->can_module);
 
-	if (status & MCAN_RX_BUFFER_NEW_MESSAGE ) {
+	if (status & MCAN_RX_BUFFER_NEW_MESSAGE)
+    {
 		mcan_clear_interrupt_status(&pHandle->can_module, MCAN_RX_BUFFER_NEW_MESSAGE);
 		static struct mcan_rx_element_buffer rx_element_buffer;
 
-		for (i = 0; i < CONF_MCAN0_RX_BUFFER_NUM; i++) {
-			if (mcan_rx_get_buffer_status(&pHandle->can_module, i)) {
+		for (i = 0; i < CONF_MCAN0_RX_BUFFER_NUM; i++)
+        {
+			if (mcan_rx_get_buffer_status(&pHandle->can_module, i))
+            {
 				mcan_rx_clear_buffer_status(&pHandle->can_module, i);
 				mcan_get_rx_buffer_element(&pHandle->can_module, &rx_element_buffer, i);
 			}
 		}
 	}
 	
-	if (status & MCAN_RX_FIFO_0_NEW_MESSAGE) {
+	if (status & MCAN_RX_FIFO_0_NEW_MESSAGE)
+    {
 		struct mcan_rx_element_fifo_0 rx_element_fifo_0;
 		uint32_t fifo_receive_index = (pHandle->can_module.hw->MCAN_RXF0S & MCAN_RXF0S_F0GI_Msk) >> MCAN_RXF0S_F0GI_Pos;
-			
 		mcan_get_rx_fifo_0_element(&pHandle->can_module, &rx_element_fifo_0, fifo_receive_index);
 			
 		// Send message to driver
 		xMessageBufferSendFromISR(pHandle->receiveMessageBuffer, &rx_element_fifo_0, sizeof(struct mcan_rx_element_fifo_0), &xHigherPriorityTaskWoken);
 			
-		// Ack the message, Suspect this allows a new message to be received
 		mcan_rx_fifo_acknowledge(&pHandle->can_module, 0, fifo_receive_index);
-
-		// Finally, clear interupt flag
 		mcan_clear_interrupt_status(&pHandle->can_module, MCAN_RX_FIFO_0_NEW_MESSAGE);
 	}
-	
 
-	if (status & MCAN_RX_FIFO_1_NEW_MESSAGE) {
-		
+	if (status & MCAN_RX_FIFO_1_NEW_MESSAGE)
+    {
 		struct mcan_rx_element_fifo_1 rx_element_fifo_1;
 		uint32_t fifo_receive_index = (pHandle->can_module.hw->MCAN_RXF1S & MCAN_RXF1S_F1GI_Msk) >> MCAN_RXF1S_F1GI_Pos;
-
 		mcan_get_rx_fifo_1_element(&pHandle->can_module, &rx_element_fifo_1, fifo_receive_index);
+        
+        // TODO: Investigate if we are even sending any messages to this FIFO buffer. If so, why are we just discarding them?
+        
 		mcan_rx_fifo_acknowledge(&pHandle->can_module, 1, fifo_receive_index);
-		
 		mcan_clear_interrupt_status(&pHandle->can_module, MCAN_RX_FIFO_1_NEW_MESSAGE);
 	}
 
-	if (status & MCAN_BUS_OFF) {
+	if (status & MCAN_BUS_OFF)
+    {
 		mcan_clear_interrupt_status(&pHandle->can_module, MCAN_BUS_OFF);
 	}
 
-	if (status & MCAN_ACKNOWLEDGE_ERROR) {
+	if (status & MCAN_ACKNOWLEDGE_ERROR)
+    {
 		mcan_clear_interrupt_status(&pHandle->can_module, MCAN_ACKNOWLEDGE_ERROR);
 	}
 
-	if (status & MCAN_FORMAT_ERROR) {
+	if (status & MCAN_FORMAT_ERROR)
+    {
 		mcan_clear_interrupt_status(&pHandle->can_module, MCAN_FORMAT_ERROR);
 	}
 	

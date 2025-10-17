@@ -451,143 +451,143 @@ typedef struct mm_s
 
 typedef enum mm_register_address_e 
 {
-    reg_Board_ID_addr = 0x10,
-    reg_FW_Version_addr = 0x11,
-    reg_HW_Version_addr = 0x12,
-    reg_Scratchpad_addr = 0x13,
-    reg_Supported_Boards_addr = 0x14,
-    reg_Configured_Boards_addr = 0x15,
-    reg_Uptime_addr = 0x16,
-    reg_Event_ConfA_addr = 0x17,
-    reg_Event_addr = 0x18,
-    reg_ConfPower_addr = 0x20,
-    reg_MeasureVI_V3_addr = 0x21,
-    reg_MeasurePower_V3_addr = 0x22,
-    reg_MeasureVI_V5_addr = 0x23,
-    reg_MeasurePower_V5_addr = 0x24,
-    reg_MeasureVI_VBat_addr = 0x25,
-    reg_MeasurePower_VBat_addr = 0x26,
-    reg_MeasureVI_VBatAlt_addr = 0x27,
-    reg_MeasurePower_VBatAlt_addr = 0x28,
-    reg_I2CConfA_addr = 0x29,
-    reg_I2CConfB_addr = 0x2A,
-    reg_MultiConf0_addr = 0x2B,
-    reg_ConfTempSense_addr = 0x2C,
-    reg_CANConfA_addr = 0x2D,
-    reg_CANConfB_addr = 0x2E,
-    reg_SerialConf_addr = 0x2F,
-    reg_PC104Pins_addr = 0x30,
-    reg_XTXMultitester_addr = 0x31,
-    reg_RFRelaysConf_addr = 0x32,
-    reg_MultiConf1_Status_addr = 0x33,
-    reg_MultiConf1_Set_addr = 0x34,
-    reg_MultiConf1_Clear_addr = 0x35,
-    reg_XDCConfig_addr = 0x40,
-    reg_CSBoard_T0_addr = 0x50,
-    reg_CSBoard_T1_addr = 0x51,
-    reg_CSBoard_T2_addr = 0x52,
-    reg_CSBoard_T3_addr = 0x53,
-    reg_CSBoard_T4_addr = 0x54,
-    reg_CSBoard_T5_addr = 0x55,
-    reg_CSBoard_T6_addr = 0x56,
-    reg_CSBoard_T7_addr = 0x57,
-    reg_CSBoard_Current0I0_addr = 0x58,
-    reg_CSBoard_Current0I1_addr = 0x59,
-    reg_CSBoard_Current0I2_addr = 0x5A,
-    reg_CSBoard_Current1I0_addr = 0x5B,
-    reg_CSBoard_Current1I1_addr = 0x5C,
-    reg_CSBoard_Current1I2_addr = 0x5D,
-    reg_CSBoard_Current2I0_addr = 0x5E,
-    reg_CSBoard_Current2I1_addr = 0x5F,
-    reg_CSBoard_Current2I2_addr = 0x60,
-    reg_CSBoard_Current3I0_addr = 0x61,
-    reg_CSBoard_Current3I1_addr = 0x62,
-    reg_CSBoard_Current3I2_addr = 0x63,
-    reg_CSBoard_Current4I0_addr = 0x64,
-    reg_CSBoard_Current4I1_addr = 0x65,
-    reg_CSBoard_Current4I2_addr = 0x66,
-    reg_CSBoard_Current5I0_addr = 0x67,
-    reg_CSBoard_Current5I1_addr = 0x68,
-    reg_CSBoard_Current5I2_addr = 0x69,
-    reg_CSBoard_Current6I0_addr = 0x6A,
-    reg_CSBoard_Current6I1_addr = 0x6B,
-    reg_CSBoard_Current6I2_addr = 0x6C,
-    reg_CSBoard_Current7I0_addr = 0x6D,
-    reg_CSBoard_Current7I1_addr = 0x6E,
-    reg_CSBoard_Current7I2_addr = 0x6F,
-    reg_TE_Addr_0_addr = 0x80,
-    reg_TE_Addr_0_Set_addr = 0x81,
-    reg_TE_Addr_0_Clear_addr = 0x82,
-    reg_TE_Addr_1_addr = 0x83,
-    reg_TE_Addr_1_Set_addr = 0x84,
-    reg_TE_Addr_1_Clear_addr = 0x85,
-    reg_TE_Addr_2_addr = 0x86,
-    reg_TE_Addr_2_Set_addr = 0x87,
-    reg_TE_Addr_2_Clear_addr = 0x88,
-    reg_TE_Addr_3_addr = 0x89,
-    reg_TE_Addr_3_Set_addr = 0x8A,
-    reg_TE_Addr_3_Clear_addr = 0x8B,
-    reg_MTC_Addr_0_addr = 0xB0,
-    reg_MTC_Addr_0_Set_addr = 0xB1,
-    reg_MTC_Addr_0_Clear_addr = 0xB2,
-    reg_MTC_Addr_1_addr = 0xB3,
-    reg_MTC_Addr_1_Set_addr = 0xB4,
-    reg_MTC_Addr_1_Clear_addr = 0xB5,
-    reg_MTC_Addr_2_addr = 0xB6,
-    reg_MTC_Addr_2_Set_addr = 0xB7,
-    reg_MTC_Addr_2_Clear_addr = 0xB8,
-    reg_MTC_Addr_3_addr = 0xB9,
-    reg_MTC_Addr_3_Set_addr = 0xBA,
-    reg_MTC_Addr_3_Clear_addr = 0xBB,
-    reg_RTOS_Status0_addr = 0x90,
-    reg_UtilI2CConfA_addr = 0x98,
-    reg_UtilI2CStatus_addr = 0x99,
-    reg_PreviousEndpoint_addr = 0xA0,
+    reg_Board_ID_addr                        = 0x10,
+    reg_FW_Version_addr                      = 0x11,
+    reg_HW_Version_addr                      = 0x12,
+    reg_Scratchpad_addr                      = 0x13,
+    reg_Supported_Boards_addr                = 0x14,
+    reg_Configured_Boards_addr               = 0x15,
+    reg_Uptime_addr                          = 0x16,
+    reg_Event_ConfA_addr                     = 0x17,
+    reg_Event_addr                           = 0x18,
+    reg_ConfPower_addr                       = 0x20,
+    reg_MeasureVI_V3_addr                    = 0x21,
+    reg_MeasurePower_V3_addr                 = 0x22,
+    reg_MeasureVI_V5_addr                    = 0x23,
+    reg_MeasurePower_V5_addr                 = 0x24,
+    reg_MeasureVI_VBat_addr                  = 0x25,
+    reg_MeasurePower_VBat_addr               = 0x26,
+    reg_MeasureVI_VBatAlt_addr               = 0x27,
+    reg_MeasurePower_VBatAlt_addr            = 0x28,
+    reg_I2CConfA_addr                        = 0x29,
+    reg_I2CConfB_addr                        = 0x2A,
+    reg_MultiConf0_addr                      = 0x2B,
+    reg_ConfTempSense_addr                   = 0x2C,
+    reg_CANConfA_addr                        = 0x2D,
+    reg_CANConfB_addr                        = 0x2E,
+    reg_SerialConf_addr                      = 0x2F,
+    reg_PC104Pins_addr                       = 0x30,
+    reg_XTXMultitester_addr                  = 0x31,
+    reg_RFRelaysConf_addr                    = 0x32,
+    reg_MultiConf1_Status_addr               = 0x33,
+    reg_MultiConf1_Set_addr                  = 0x34,
+    reg_MultiConf1_Clear_addr                = 0x35,
+    reg_XDCConfig_addr                       = 0x40,
+    reg_CSBoard_T0_addr                      = 0x50,
+    reg_CSBoard_T1_addr                      = 0x51,
+    reg_CSBoard_T2_addr                      = 0x52,
+    reg_CSBoard_T3_addr                      = 0x53,
+    reg_CSBoard_T4_addr                      = 0x54,
+    reg_CSBoard_T5_addr                      = 0x55,
+    reg_CSBoard_T6_addr                      = 0x56,
+    reg_CSBoard_T7_addr                      = 0x57,
+    reg_CSBoard_Current0I0_addr              = 0x58,
+    reg_CSBoard_Current0I1_addr              = 0x59,
+    reg_CSBoard_Current0I2_addr              = 0x5A,
+    reg_CSBoard_Current1I0_addr              = 0x5B,
+    reg_CSBoard_Current1I1_addr              = 0x5C,
+    reg_CSBoard_Current1I2_addr              = 0x5D,
+    reg_CSBoard_Current2I0_addr              = 0x5E,
+    reg_CSBoard_Current2I1_addr              = 0x5F,
+    reg_CSBoard_Current2I2_addr              = 0x60,
+    reg_CSBoard_Current3I0_addr              = 0x61,
+    reg_CSBoard_Current3I1_addr              = 0x62,
+    reg_CSBoard_Current3I2_addr              = 0x63,
+    reg_CSBoard_Current4I0_addr              = 0x64,
+    reg_CSBoard_Current4I1_addr              = 0x65,
+    reg_CSBoard_Current4I2_addr              = 0x66,
+    reg_CSBoard_Current5I0_addr              = 0x67,
+    reg_CSBoard_Current5I1_addr              = 0x68,
+    reg_CSBoard_Current5I2_addr              = 0x69,
+    reg_CSBoard_Current6I0_addr              = 0x6A,
+    reg_CSBoard_Current6I1_addr              = 0x6B,
+    reg_CSBoard_Current6I2_addr              = 0x6C,
+    reg_CSBoard_Current7I0_addr              = 0x6D,
+    reg_CSBoard_Current7I1_addr              = 0x6E,
+    reg_CSBoard_Current7I2_addr              = 0x6F,
+    reg_TE_Addr_0_addr                       = 0x80,
+    reg_TE_Addr_0_Set_addr                   = 0x81,
+    reg_TE_Addr_0_Clear_addr                 = 0x82,
+    reg_TE_Addr_1_addr                       = 0x83,
+    reg_TE_Addr_1_Set_addr                   = 0x84,
+    reg_TE_Addr_1_Clear_addr                 = 0x85,
+    reg_TE_Addr_2_addr                       = 0x86,
+    reg_TE_Addr_2_Set_addr                   = 0x87,
+    reg_TE_Addr_2_Clear_addr                 = 0x88,
+    reg_TE_Addr_3_addr                       = 0x89,
+    reg_TE_Addr_3_Set_addr                   = 0x8A,
+    reg_TE_Addr_3_Clear_addr                 = 0x8B,
+    reg_MTC_Addr_0_addr                      = 0xB0,
+    reg_MTC_Addr_0_Set_addr                  = 0xB1,
+    reg_MTC_Addr_0_Clear_addr                = 0xB2,
+    reg_MTC_Addr_1_addr                      = 0xB3,
+    reg_MTC_Addr_1_Set_addr                  = 0xB4,
+    reg_MTC_Addr_1_Clear_addr                = 0xB5,
+    reg_MTC_Addr_2_addr                      = 0xB6,
+    reg_MTC_Addr_2_Set_addr                  = 0xB7,
+    reg_MTC_Addr_2_Clear_addr                = 0xB8,
+    reg_MTC_Addr_3_addr                      = 0xB9,
+    reg_MTC_Addr_3_Set_addr                  = 0xBA,
+    reg_MTC_Addr_3_Clear_addr                = 0xBB,
+    reg_RTOS_Status0_addr                    = 0x90,
+    reg_UtilI2CConfA_addr                    = 0x98,
+    reg_UtilI2CStatus_addr                   = 0x99,
+    reg_PreviousEndpoint_addr                = 0xA0,
 } mm_register_address_t;
 
 typedef enum mm_enabled_e
 {
-    reg_enabled_enabled = 1,                        // Enabled
-    reg_enabled_disabled = 0,                       // Disabled
+    reg_enabled_enabled                      = 1,  // Enabled
+    reg_enabled_disabled                     = 0,  // Disabled
 } mm_enabled_t;
 
 typedef enum mm_boardidentifier_e
 {
-    reg_boardidentifier_none = 0,                   // Disabled
-    reg_boardidentifier_xtx = 1,                    // XTX
-    reg_boardidentifier_xsteer = 2,                 // XSTEER
-    reg_boardidentifier_xdc = 4,                    // XDC
-    reg_boardidentifier_hdrtx_dfa = 8,              // HDRTX(DFA)
-    reg_boardidentifier_hdrtx = 16,                 // HDRTX
-    reg_boardidentifier_gen2 = 32,                  // GEN2
+    reg_boardidentifier_none                 = 0,  // Disabled
+    reg_boardidentifier_xtx                  = 1,  // XTX
+    reg_boardidentifier_xsteer               = 2,  // XSTEER
+    reg_boardidentifier_xdc                  = 4,  // XDC
+    reg_boardidentifier_hdrtx_dfa            = 8,  // HDRTX(DFA)
+    reg_boardidentifier_hdrtx                = 16, // HDRTX
+    reg_boardidentifier_gen2                 = 32, // GEN2
 } mm_boardidentifier_t;
 
 typedef enum mm_te_types_e
 {
-    reg_te_types_pc104 = 0,                         // PC104 Adaptor
-    reg_te_types_ud = 1,                            // uD Adaptor
-    reg_te_types_gecko = 2,                         // Gecko Adaptor
+    reg_te_types_pc104                       = 0,  // PC104 Adaptor
+    reg_te_types_ud                          = 1,  // uD Adaptor
+    reg_te_types_gecko                       = 2,  // Gecko Adaptor
 } mm_te_types_t;
 
 typedef enum mm_serialmode_e
 {
-    reg_serialmode_uart = 0,                        // UART
-    reg_serialmode_rs485 = 1,                       // RS485
-    reg_serialmode_rs422 = 2,                       // RS422
+    reg_serialmode_uart                      = 0,  // UART
+    reg_serialmode_rs485                     = 1,  // RS485
+    reg_serialmode_rs422                     = 2,  // RS422
 } mm_serialmode_t;
 
 typedef enum mm_paritymodes_e
 {
-    reg_paritymodes_odd = 0,                        // Odd
-    reg_paritymodes_even = 1,                       // Even
+    reg_paritymodes_odd                      = 0,  // Odd
+    reg_paritymodes_even                     = 1,  // Even
 } mm_paritymodes_t;
 
 typedef enum mm_usart_baudrates_e
 {
-    reg_usart_baudrates_baud_115200 = 0,            // 115200
-    reg_usart_baudrates_baud_230400 = 1,            // 230400
-    reg_usart_baudrates_baud_460800 = 2,            // 460800
-    reg_usart_baudrates_baud_921600 = 3,            // 921600
+    reg_usart_baudrates_baud_115200          = 0,  // 115200
+    reg_usart_baudrates_baud_230400          = 1,  // 230400
+    reg_usart_baudrates_baud_460800          = 2,  // 460800
+    reg_usart_baudrates_baud_921600          = 3,  // 921600
 } mm_usart_baudrates_t;
 
 void mm_init(void);

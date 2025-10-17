@@ -17,17 +17,15 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-#include "csp/interfaces/csp_if_kiss.h"
-
+#include "csp_usart_cc.h"
 #include "led_indicator.h"
 #include "ccd_uart_driver.h"
 #include "register_map.h"
 
-extern csp_iface_t * csp_usart_iface;
+extern csp_usart_cc_context_t csp_usart_cc_ctx_tel;
 
-// Todo:
-// * What happens when a stream somewhere is full?
-// * What happens with message to target that doesn't exist?
+// TODO: What happens when a stream somewhere is full?
+// TODO: What happens with message to target that doesn't exist?
 
 /*
  * Initialize the SerMux.
@@ -65,8 +63,6 @@ void SERMUX_V3_AddTarget(sermux_v3_t * handle, const uint8_t number, MessageBuff
 	handle->targets[handle->num_targets].set_overflow_flag = overflow_flag_function;
 	
 	handle->num_targets += 1;
-    
-    return;
 }
 
 // PC->GSE
@@ -81,19 +77,21 @@ void SERMUX_V3_ReceiveTask(void * params)
 		// Try receiving data from the UART - Wait up to 500ms before updating state
 		size_t rx_length = xStreamBufferReceive(pHandle->in_stream, rx_buffer, 16, pdMS_TO_TICKS(500));
 	
+        // No need to continue of no data was received
 		if (rx_length == 0)
         {
 			LEDIndicator_SetNextState(LED_POWER_ON);
 			continue;
 		}
         
+        // Update indication LED and continue processing data
 		LEDIndicator_SetNextState(LED_UART_COMMS);
         
-        // TODO: Figure out how to switch between old handler and new handler
+        // TODO: [ADRIAAN] Move this somewhere more appropriate
         int xTaskWoken = pdFALSE;
-        csp_kiss_rx(csp_usart_iface, rx_buffer, rx_length, (void *)xTaskWoken);
+        csp_kiss_rx(&csp_usart_cc_ctx_tel.iface, rx_buffer, rx_length, (void *)xTaskWoken);
         continue;
-		
+        
 		// Check if bytes were dropped by the UART.
 		// If it was, reset and wait for next message
 		uint32_t uart_status = ccd_uart_get_error_status(pHandle->uart_handle);
@@ -103,7 +101,7 @@ void SERMUX_V3_ReceiveTask(void * params)
 			pHandle->state = V2_WAITING_2;
 			rx_length = 0;
 		}
-		if (uart_status & UART_RX_HB_OVERFLOW)
+		if (uart_status & UART_RX_HB_OVERFLOW) // TODO: Why are we checking the same condition here twice???
 		{
 			mm_setRTOS_Status0_uartRxSBOverflow(true);
 			pHandle->state = V2_WAITING_2;
@@ -117,7 +115,7 @@ void SERMUX_V3_ReceiveTask(void * params)
 		}
 		ccd_uart_clear_error_status(pHandle->uart_handle);
 		
-		for (uint32_t i = 0; i< rx_length; i++)
+		for (uint32_t i = 0; i < rx_length; i++)
 		{
 			uint8_t rx_byte = rx_buffer[i];
 		
@@ -175,7 +173,7 @@ void SERMUX_V3_ReceiveTask(void * params)
 					// Store CRC
 					pHandle->rx_block.crc = rx_byte;
 					
-					// Todo: Verify the CRC. We don't enable this immediately, wait until the OBC Software generates and 
+					// TOTO: Verify the CRC. We don't enable this immediately, wait until the OBC Software generates and 
 					// checks it as well.
 					uint8_t calculated_crc = CRC8_Calculate(&pHandle->crc_checker, pHandle->rx_block.buffer, pHandle->rx_block.length);
 					
@@ -192,10 +190,7 @@ void SERMUX_V3_ReceiveTask(void * params)
 					while (curr_msg_index < pHandle->rx_block.length)
 					{
 						uint8_t msg_len = pHandle->rx_block.buffer[curr_msg_index];
-						uint8_t msg_target = pHandle->rx_block.buffer[curr_msg_index +1];
-						//uint8_t msg_id = hnd->rx_block.buffer[curr_msg_index + 2];
-						// bool dirBit = ((msg_target & 0x80) > 0);
-						msg_target = msg_target & 0x7F;
+						uint8_t msg_target = pHandle->rx_block.buffer[curr_msg_index + 1] & 0x7F;
 						
 						// This is a safety check. If this is true, the index will never be
 						// incremented, and we'll be stuck. So just abandon the block.
@@ -238,8 +233,6 @@ void SERMUX_V3_ReceiveTask(void * params)
 			}
 		}
 	}
-    
-    return;
 }
 
 void SERMUX_V3_TransmitTask(void * params)
@@ -261,13 +254,12 @@ void SERMUX_V3_TransmitTask(void * params)
 		uint32_t j = 0;
 		while ((j < pHandle->num_targets) && (tx_buffer_pos < buffer_size_without_overhead))
 		{
-			size_t rx_size = 0;
-			do {
+			size_t rx_size = 0xFF;
+			while(rx_size > 0)
+            {
 				rx_size = xMessageBufferReceive (pHandle->targets[j].out, &tx_buffer[tx_buffer_pos], buffer_size_without_overhead-tx_buffer_pos, 0);
 				tx_buffer_pos += rx_size;
 			}
-			while(rx_size > 0);
-			
 			j += 1;
 		}
 		
@@ -277,14 +269,16 @@ void SERMUX_V3_TransmitTask(void * params)
 			tx_buffer[3] = tx_buffer_pos - 4;
 			tx_buffer_pos += 1;
 			
-			if (xStreamBufferSpacesAvailable(pHandle->out_stream) > tx_buffer_pos){
+			if (xStreamBufferSpacesAvailable(pHandle->out_stream) > tx_buffer_pos)
+            {
 				size_t send_size = xStreamBufferSend(pHandle->out_stream, tx_buffer, tx_buffer_pos, 0);
-				
-				if (send_size == 0){
+				if (send_size == 0)
+                {
 					mm_setRTOS_Status0_uartTxSBOverflow(true);
 				}
 			}
-			else{
+			else
+            {
 				// We could probably do something smarter than build a block, THEN check if it fits the buffer.
 				mm_setRTOS_Status0_uartTxSBOverflow(true);
 			}

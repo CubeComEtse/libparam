@@ -15,6 +15,8 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
+#include "csp/interfaces/csp_if_kiss.h"
+
 #include "bsp.h"
 #include "pc_messages.h"
 
@@ -23,6 +25,8 @@
 #define FESC    0xDB // 219
 #define TFEND   0xDC // 220 
 #define TFESC   0xDD // 221
+
+extern csp_iface_t * csp_usart_iface_bus;
 
 /*
  * Initialize the instance. 

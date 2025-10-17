@@ -11,12 +11,113 @@
 #include "FreeRTOS.h"
 #include "semphr.h"
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wall"
+#include "param/param.h"
+#pragma GCC diagnostic pop
+
 #ifndef MEMORY_MAP_MUTEX_WAIT_ms
 #define MEMORY_MAP_MUTEX_WAIT_ms 100
 #endif
 
 static SemaphoreHandle_t _mm_mutex;
 static mm_t mm;
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdiscarded-qualifiers"
+PARAM_DEFINE_STATIC_RAM(reg_Board_ID_addr, Board_ID, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.Board_ID, "");
+PARAM_DEFINE_STATIC_RAM(reg_FW_Version_addr, FW_Version, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.FW_Version, "");
+PARAM_DEFINE_STATIC_RAM(reg_HW_Version_addr, HW_Version, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.HW_Version, "");
+PARAM_DEFINE_STATIC_RAM(reg_Scratchpad_addr, Scratchpad, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.Scratchpad, "");
+PARAM_DEFINE_STATIC_RAM(reg_Supported_Boards_addr, Supported_Boards, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.Supported_Boards, "");
+PARAM_DEFINE_STATIC_RAM(reg_Configured_Boards_addr, Configured_Boards, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.Configured_Boards, "");
+PARAM_DEFINE_STATIC_RAM(reg_Uptime_addr, Uptime, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.Uptime, "");
+PARAM_DEFINE_STATIC_RAM(reg_Event_ConfA_addr, Event_ConfA, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.Event_ConfA, "");
+PARAM_DEFINE_STATIC_RAM(reg_Event_addr, Event, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.Event, "");
+PARAM_DEFINE_STATIC_RAM(reg_ConfPower_addr, ConfPower, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.ConfPower, "");
+PARAM_DEFINE_STATIC_RAM(reg_MeasureVI_V3_addr, MeasureVI_V3, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.MeasureVI_V3, "");
+PARAM_DEFINE_STATIC_RAM(reg_MeasurePower_V3_addr, MeasurePower_V3, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.MeasurePower_V3, "");
+PARAM_DEFINE_STATIC_RAM(reg_MeasureVI_V5_addr, MeasureVI_V5, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.MeasureVI_V5, "");
+PARAM_DEFINE_STATIC_RAM(reg_MeasurePower_V5_addr, MeasurePower_V5, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.MeasurePower_V5, "");
+PARAM_DEFINE_STATIC_RAM(reg_MeasureVI_VBat_addr, MeasureVI_VBat, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.MeasureVI_VBat, "");
+PARAM_DEFINE_STATIC_RAM(reg_MeasurePower_VBat_addr, MeasurePower_VBat, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.MeasurePower_VBat, "");
+PARAM_DEFINE_STATIC_RAM(reg_MeasureVI_VBatAlt_addr, MeasureVI_VBatAlt, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.MeasureVI_VBatAlt, "");
+PARAM_DEFINE_STATIC_RAM(reg_MeasurePower_VBatAlt_addr, MeasurePower_VBatAlt, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.MeasurePower_VBatAlt, "");
+PARAM_DEFINE_STATIC_RAM(reg_I2CConfA_addr, I2CConfA, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.I2CConfA, "");
+PARAM_DEFINE_STATIC_RAM(reg_I2CConfB_addr, I2CConfB, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.I2CConfB, "");
+PARAM_DEFINE_STATIC_RAM(reg_MultiConf0_addr, MultiConf0, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.MultiConf0, "");
+PARAM_DEFINE_STATIC_RAM(reg_ConfTempSense_addr, ConfTempSense, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.ConfTempSense, "");
+PARAM_DEFINE_STATIC_RAM(reg_CANConfA_addr, CANConfA, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CANConfA, "");
+PARAM_DEFINE_STATIC_RAM(reg_CANConfB_addr, CANConfB, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CANConfB, "");
+PARAM_DEFINE_STATIC_RAM(reg_SerialConf_addr, SerialConf, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.SerialConf, "");
+PARAM_DEFINE_STATIC_RAM(reg_PC104Pins_addr, PC104Pins, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.PC104Pins, "");
+PARAM_DEFINE_STATIC_RAM(reg_XTXMultitester_addr, XTXMultitester, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.XTXMultitester, "");
+PARAM_DEFINE_STATIC_RAM(reg_RFRelaysConf_addr, RFRelaysConf, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.RFRelaysConf, "");
+PARAM_DEFINE_STATIC_RAM(reg_MultiConf1_Status_addr, MultiConf1_Status, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.MultiConf1_Status, "");
+PARAM_DEFINE_STATIC_RAM(reg_MultiConf1_Set_addr, MultiConf1_Set, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.MultiConf1_Set, "");
+PARAM_DEFINE_STATIC_RAM(reg_MultiConf1_Clear_addr, MultiConf1_Clear, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.MultiConf1_Clear, "");
+PARAM_DEFINE_STATIC_RAM(reg_XDCConfig_addr, XDCConfig, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.XDCConfig, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_T0_addr, CSBoard_T0, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_T0, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_T1_addr, CSBoard_T1, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_T1, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_T2_addr, CSBoard_T2, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_T2, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_T3_addr, CSBoard_T3, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_T3, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_T4_addr, CSBoard_T4, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_T4, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_T5_addr, CSBoard_T5, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_T5, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_T6_addr, CSBoard_T6, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_T6, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_T7_addr, CSBoard_T7, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_T7, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current0I0_addr, CSBoard_Current0I0, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_Current0I0, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current0I1_addr, CSBoard_Current0I1, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_Current0I1, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current0I2_addr, CSBoard_Current0I2, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_Current0I2, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current1I0_addr, CSBoard_Current1I0, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_Current1I0, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current1I1_addr, CSBoard_Current1I1, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_Current1I1, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current1I2_addr, CSBoard_Current1I2, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_Current1I2, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current2I0_addr, CSBoard_Current2I0, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_Current2I0, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current2I1_addr, CSBoard_Current2I1, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_Current2I1, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current2I2_addr, CSBoard_Current2I2, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_Current2I2, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current3I0_addr, CSBoard_Current3I0, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_Current3I0, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current3I1_addr, CSBoard_Current3I1, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_Current3I1, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current3I2_addr, CSBoard_Current3I2, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_Current3I2, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current4I0_addr, CSBoard_Current4I0, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_Current4I0, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current4I1_addr, CSBoard_Current4I1, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_Current4I1, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current4I2_addr, CSBoard_Current4I2, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_Current4I2, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current5I0_addr, CSBoard_Current5I0, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_Current5I0, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current5I1_addr, CSBoard_Current5I1, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_Current5I1, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current5I2_addr, CSBoard_Current5I2, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_Current5I2, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current6I0_addr, CSBoard_Current6I0, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_Current6I0, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current6I1_addr, CSBoard_Current6I1, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_Current6I1, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current6I2_addr, CSBoard_Current6I2, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_Current6I2, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current7I0_addr, CSBoard_Current7I0, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_Current7I0, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current7I1_addr, CSBoard_Current7I1, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_Current7I1, "");
+PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current7I2_addr, CSBoard_Current7I2, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.CSBoard_Current7I2, "");
+PARAM_DEFINE_STATIC_RAM(reg_TE_Addr_0_addr, TE_Addr_0, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.TE_Addr_0, "");
+PARAM_DEFINE_STATIC_RAM(reg_TE_Addr_0_Set_addr, TE_Addr_0_Set, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.TE_Addr_0_Set, "");
+PARAM_DEFINE_STATIC_RAM(reg_TE_Addr_0_Clear_addr, TE_Addr_0_Clear, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.TE_Addr_0_Clear, "");
+PARAM_DEFINE_STATIC_RAM(reg_TE_Addr_1_addr, TE_Addr_1, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.TE_Addr_1, "");
+PARAM_DEFINE_STATIC_RAM(reg_TE_Addr_1_Set_addr, TE_Addr_1_Set, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.TE_Addr_1_Set, "");
+PARAM_DEFINE_STATIC_RAM(reg_TE_Addr_1_Clear_addr, TE_Addr_1_Clear, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.TE_Addr_1_Clear, "");
+PARAM_DEFINE_STATIC_RAM(reg_TE_Addr_2_addr, TE_Addr_2, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.TE_Addr_2, "");
+PARAM_DEFINE_STATIC_RAM(reg_TE_Addr_2_Set_addr, TE_Addr_2_Set, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.TE_Addr_2_Set, "");
+PARAM_DEFINE_STATIC_RAM(reg_TE_Addr_2_Clear_addr, TE_Addr_2_Clear, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.TE_Addr_2_Clear, "");
+PARAM_DEFINE_STATIC_RAM(reg_TE_Addr_3_addr, TE_Addr_3, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.TE_Addr_3, "");
+PARAM_DEFINE_STATIC_RAM(reg_TE_Addr_3_Set_addr, TE_Addr_3_Set, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.TE_Addr_3_Set, "");
+PARAM_DEFINE_STATIC_RAM(reg_TE_Addr_3_Clear_addr, TE_Addr_3_Clear, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.TE_Addr_3_Clear, "");
+PARAM_DEFINE_STATIC_RAM(reg_MTC_Addr_0_addr, MTC_Addr_0, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.MTC_Addr_0, "");
+PARAM_DEFINE_STATIC_RAM(reg_MTC_Addr_0_Set_addr, MTC_Addr_0_Set, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.MTC_Addr_0_Set, "");
+PARAM_DEFINE_STATIC_RAM(reg_MTC_Addr_0_Clear_addr, MTC_Addr_0_Clear, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.MTC_Addr_0_Clear, "");
+PARAM_DEFINE_STATIC_RAM(reg_MTC_Addr_1_addr, MTC_Addr_1, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.MTC_Addr_1, "");
+PARAM_DEFINE_STATIC_RAM(reg_MTC_Addr_1_Set_addr, MTC_Addr_1_Set, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.MTC_Addr_1_Set, "");
+PARAM_DEFINE_STATIC_RAM(reg_MTC_Addr_1_Clear_addr, MTC_Addr_1_Clear, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.MTC_Addr_1_Clear, "");
+PARAM_DEFINE_STATIC_RAM(reg_MTC_Addr_2_addr, MTC_Addr_2, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.MTC_Addr_2, "");
+PARAM_DEFINE_STATIC_RAM(reg_MTC_Addr_2_Set_addr, MTC_Addr_2_Set, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.MTC_Addr_2_Set, "");
+PARAM_DEFINE_STATIC_RAM(reg_MTC_Addr_2_Clear_addr, MTC_Addr_2_Clear, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.MTC_Addr_2_Clear, "");
+PARAM_DEFINE_STATIC_RAM(reg_MTC_Addr_3_addr, MTC_Addr_3, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.MTC_Addr_3, "");
+PARAM_DEFINE_STATIC_RAM(reg_MTC_Addr_3_Set_addr, MTC_Addr_3_Set, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.MTC_Addr_3_Set, "");
+PARAM_DEFINE_STATIC_RAM(reg_MTC_Addr_3_Clear_addr, MTC_Addr_3_Clear, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.MTC_Addr_3_Clear, "");
+PARAM_DEFINE_STATIC_RAM(reg_RTOS_Status0_addr, RTOS_Status0, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.RTOS_Status0, "");
+PARAM_DEFINE_STATIC_RAM(reg_UtilI2CConfA_addr, UtilI2CConfA, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.UtilI2CConfA, "");
+PARAM_DEFINE_STATIC_RAM(reg_UtilI2CStatus_addr, UtilI2CStatus, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.UtilI2CStatus, "");
+PARAM_DEFINE_STATIC_RAM(reg_PreviousEndpoint_addr, PreviousEndpoint, PARAM_TYPE_UINT32, 0, 0, PM_READONLY, NULL, "", &mm.PreviousEndpoint, "");
+#pragma GCC diagnostic pop
 
 void mm_init(void)
 {

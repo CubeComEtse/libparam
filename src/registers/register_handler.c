@@ -346,7 +346,8 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 			mm_setConfPower_voltageVBatToggle(powerEn);
 			
 			// Only version 2 has these pins
-			if (BSP_u8GetVersion() == 2) {
+			if (BSP_u8GetVersion() == 2)
+            {
 				mm_getConfPower_voltage3UtilToggleFrom(&powerEn, deserialized);
 				GSE_MANAGER_SetBusPowerSwitch(platform->gse_manager, POWER_3V3_UTIL, powerEn == reg_enabled_enabled);
 				mm_setConfPower_voltage3UtilToggle(powerEn);
@@ -361,7 +362,8 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 			uint8_t spd = 0;
 			mm_getI2CConfA_SPDFrom(&spd, deserialized);
 			if ((spd >= 1) && (spd <= 40)){
-				if (I2CTARGET_SetBaud(platform->i2c_target, spd * 10000)){
+				if (I2CTARGET_SetBaud(platform->i2c_target, spd * 10000))
+                {
 				
 					mm_setI2CConfA_SPD(spd);
 				}
@@ -420,12 +422,14 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
             mm_getCANConfA_FlipCanBytesFrom(&FlipCanBytes, deserialized);
             if (FlipCanBytes)
             {
-                if (CANTARGET_SetMode(platform->can_target, PLAN_S_COMPATIBILITY)){
+                if (CANTARGET_SetMode(platform->can_target, PLAN_S_COMPATIBILITY))
+                {
                     mm_setCANConfA_FlipCanBytes(FlipCanBytes);
                 }
             }
             else {
-                if (CANTARGET_SetMode(platform->can_target, CUBECOM_MODE)){
+                if (CANTARGET_SetMode(platform->can_target, CUBECOM_MODE))
+                {
                     mm_setCANConfA_FlipCanBytes(FlipCanBytes);
                 }
             }
@@ -444,7 +448,8 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
     		uint8_t new_address = 0;
     		mm_getCANConfB_AddressFrom(&new_address, deserialized);
     		
-    		if (CANTARGET_vSetAddress(platform->can_target, new_address)){
+    		if (CANTARGET_vSetAddress(platform->can_target, new_address))
+            {
         		mm_setCANConfB_Address(new_address);
     		}
     		
@@ -455,29 +460,34 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
         {
             mm_serialmode_t SerialCommMode;
             mm_getSerialConf_SerialModeFrom(&SerialCommMode, deserialized);
-            if(UARTTARGET_SetCommMode(platform->uart_target, SerialCommMode)){
+            if(UARTTARGET_SetCommMode(platform->uart_target, SerialCommMode))
+            {
                 mm_setSerialConf_SerialMode(SerialCommMode);
             }
             
             mm_enabled_t ParityEnabled;
             mm_getSerialConf_ParityEnabledFrom(&ParityEnabled, deserialized);
-            if(UARTTARGET_SetParityEnabled(platform->uart_target, ParityEnabled)){
+            if(UARTTARGET_SetParityEnabled(platform->uart_target, ParityEnabled))
+            {
                 mm_setSerialConf_ParityEnabled(ParityEnabled);
             }
             
             mm_paritymodes_t ParityMode;
             mm_getSerialConf_ParityModeFrom(&ParityMode, deserialized);
-            if(UARTTARGET_SetParityMode(platform->uart_target, ParityMode)){
+            if(UARTTARGET_SetParityMode(platform->uart_target, ParityMode))
+            {
                 mm_setSerialConf_ParityMode(ParityMode);
             }
             
             mm_usart_baudrates_t BaudRate;
             mm_getSerialConf_BaudRatesFrom(&BaudRate, deserialized);
-            if(UARTTARGET_SetBaudRate(platform->uart_target, BaudRate)){
+            if(UARTTARGET_SetBaudRate(platform->uart_target, BaudRate))
+            {
                 mm_setSerialConf_BaudRates(BaudRate);
             }
             break;
         }
+        
 		case reg_PC104Pins_addr:
 		{
     		mm_enabled_t ena;
@@ -529,7 +539,8 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 		{
 			mm_enabled_t scanEnabled;
 			mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
-			if (scanEnabled == reg_enabled_enabled){
+			if (scanEnabled == reg_enabled_enabled)
+            {
 				TE_Adaptor_SetScanEnabled(platform->te_scanner, 0);
 			}
 				
@@ -543,7 +554,8 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 		{
 			mm_enabled_t scanEnabled;
 			mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
-			if (scanEnabled == reg_enabled_enabled){
+			if (scanEnabled == reg_enabled_enabled)
+            {
 				TE_Adaptor_ClearScanEnabled(platform->te_scanner, 0);
 			}
 			
@@ -557,7 +569,8 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 		{
 			mm_enabled_t scanEnabled;
 			mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
-			if (scanEnabled == reg_enabled_enabled){
+			if (scanEnabled == reg_enabled_enabled)
+            {
 				TE_Adaptor_SetScanEnabled(platform->te_scanner, 1);
 			}
 				
@@ -571,7 +584,8 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 		{
 			mm_enabled_t scanEnabled;
 			mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
-			if (scanEnabled == reg_enabled_enabled){
+			if (scanEnabled == reg_enabled_enabled)
+            {
 				TE_Adaptor_ClearScanEnabled(platform->te_scanner, 1);
 			}
 			
@@ -585,7 +599,8 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 		{
 			mm_enabled_t scanEnabled;
 			mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
-			if (scanEnabled == reg_enabled_enabled){
+			if (scanEnabled == reg_enabled_enabled)
+            {
 				TE_Adaptor_SetScanEnabled(platform->te_scanner, 2);
 			}
 				
@@ -599,7 +614,8 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 		{
 			mm_enabled_t scanEnabled;
 			mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
-			if (scanEnabled == reg_enabled_enabled){
+			if (scanEnabled == reg_enabled_enabled)
+            {
 				TE_Adaptor_ClearScanEnabled(platform->te_scanner, 2);
 			}
 			
@@ -613,7 +629,8 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 		{
 			mm_enabled_t scanEnabled;
 			mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
-			if (scanEnabled == reg_enabled_enabled){
+			if (scanEnabled == reg_enabled_enabled)
+            {
 				TE_Adaptor_SetScanEnabled(platform->te_scanner, 2);
 			}
 				
@@ -627,7 +644,8 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 		{
 			mm_enabled_t scanEnabled;
 			mm_getTE_Addr_0_ScanEnabledFrom(&scanEnabled, deserialized);
-			if (scanEnabled == reg_enabled_enabled){
+			if (scanEnabled == reg_enabled_enabled)
+            {
 				TE_Adaptor_ClearScanEnabled(platform->te_scanner, 2);
 			}
 			
@@ -639,27 +657,25 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 			
 		// Multitester V2
 		case reg_MTC_Addr_0_Set_addr:
+            platform->multitester->i2c_address = 0x51;
 		case reg_MTC_Addr_1_Set_addr:
+            platform->multitester->i2c_address = 0x52;
 		case reg_MTC_Addr_2_Set_addr:
+            platform->multitester->i2c_address = 0x53;
 		case reg_MTC_Addr_3_Set_addr:
-		{
-			switch (address) {
-				case 0xb1: platform->multitester->i2c_address = 0x51; break;
-				case 0xb4: platform->multitester->i2c_address = 0x52; break;
-				case 0xb7: platform->multitester->i2c_address = 0x53; break;
-				case 0xba: platform->multitester->i2c_address = 0x54; break;
-			}
-			
+            platform->multitester->i2c_address = 0x54;
 			MTCV2_SetBits(platform->multitester, deserialized);
 			break;
-		}
         
 		case reg_MTC_Addr_0_Clear_addr:
 		case reg_MTC_Addr_1_Clear_addr:
 		case reg_MTC_Addr_2_Clear_addr:
 		case reg_MTC_Addr_3_Clear_addr:
 		{
-			switch (address) {
+            /* TODO: This will never set the I2C addresses since it is impossible to match the inner and outer cases.
+             * See above fall-through method instead */
+			switch (address)
+            {
 				case 0xb1: platform->multitester->i2c_address = 0x51; break;
 				case 0xb4: platform->multitester->i2c_address = 0x52; break;
 				case 0xb7: platform->multitester->i2c_address = 0x53; break;
@@ -674,12 +690,14 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 		{
 			uint8_t new_speed;
 			mm_getUtilI2CConfA_SPDFrom(&new_speed, deserialized);
-			// There are many different things using the same I2C device.
-			// So we can't set the baud through one of them, instead just
-			// set the driver directly. This will still lock the mutex
-				
-			if ((new_speed >= 1) && (new_speed <= 40)){
-				if (ccd_i2c_driver_SetBaud(bsp->util_i2c, (uint32_t)new_speed * 10000)){
+            
+			if ((new_speed >= 1) && (new_speed <= 40))
+            {
+    			// There are many different things using the same I2C device.
+    			// So we can't set the baud through one of them, instead just
+    			// set the driver directly. This will still lock the mutex
+				if (ccd_i2c_driver_SetBaud(bsp->util_i2c, (uint32_t)new_speed * 10000))
+                {
 					mm_setUtilI2CConfA_SPD(new_speed);
 				}
 			}

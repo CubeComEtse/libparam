@@ -14,6 +14,11 @@
 #include "timers.h"
 #include "semphr.h"
 
+#include "trcRecorder.h"
+
+// TODO: [ADRIAAN] Figure out how to ignore the 500'ish warnings from this library when compiling
+#pragma GCC diagnostic push
+#pragma GCC diagnostic error "-Wall"
 #include "csp/csp.h"
 #include "csp/csp_hooks.h"
 #include "csp/autoconfig.h"
@@ -23,6 +28,7 @@
 #include "param/param_server.h"
 #include "vmem/vmem_server.h"
 #include "vmem/vmem_fram.h"
+#pragma GCC diagnostic pop
 
 #include "bsp.h"
 #include "platform.h"
@@ -35,26 +41,20 @@
 #include "sermux_v3.h"
 #include "pc_messages.h"
 #include "led_indicator.h"
-
 #include "can_target.h"
 #include "i2c_target.h"
 #include "local_target.h"
 #include "uart_target.h"
 #include "te_adaptors.h"
+#include "csp_usart_cc.h"
+#include "csp_can_cc.h"
 
 // ================================================================================
 // Defines
 // ================================================================================
 
-#define TEST_PC_CSP_ADDRESS    69
-#define UART_CSP_ADDRESS       420
-
-#define PARAMID_STATE          1
-#define PARAMID_LED_COLOR      1
-#define PARAMID_DEVICE_NAME    2
-
-#define DEVICE_NAME            "EGSE"
-#define DEVICE_NAME_MAX_LEN    16
+#define CSP_DEVICE_NAME            "EGSE"
+#define CSP_DEVICE_NAME_MAX_LEN    16
 
 // ================================================================================
 // Variables
@@ -63,96 +63,53 @@
 static bsp_t bsp;
 static platform_t * platform;
 
-// Experimental libcsp stuff
-csp_iface_t * csp_usart_iface;
-// Experimental libparam stuff
-uint8_t _led_color = 0;
-char _device_name[16] = DEVICE_NAME;
+// --- Experimental libcsp stuff ---
 
 // ================================================================================
 // Function prototypes
 // ================================================================================
 
-static void SETUP_Task(void* handle);
-static void DEVTOOLS_Task(void* handle);
+static void setup_task(void* handle);
+static void devtools_task(void* handle);
 
 // --- Experimental libcsp stuff ---
+static void csp_app_init(void);
 static void csp_router_task(void* param);
-static void csp_ping_task(void * param);
-
-// ---Experimental libparam stuff ---
-static void led_color_cb(param_t * param, int index);
-
-// ================================================================================
-// Macros
-// ================================================================================
-
-// --- Experimental libparam stuff---
-// PARAM_DEFINE_STATIC_RAM(reg_Board_ID_addr, led_color, PARAM_TYPE_UINT8, 1, 1, PM_CONF, led_color_cb, NULL, &_led_color, "0 = off, 1 = red, 2 = green, 3 = blue");
-// PARAM_DEFINE_STATIC_RAM(PARAMID_DEVICE_NAME, device_name, PARAM_TYPE_STRING, sizeof(_device_name) / sizeof(_device_name[0]), sizeof(_device_name[0]), PM_CONF, NULL, NULL, &_device_name, NULL);
-// VMEM_DEFINE_STATIC_RAM(apmtest, "apmtest", 1024);
-// PARAM_DEFINE_STATIC_VMEM(157, vmem_u8, PARAM_TYPE_UINT8, 0, sizeof(uint8_t), PM_CONF, NULL, "", apmtest, 0x0, "Test VMEM U8");
-// PARAM_DEFINE_STATIC_VMEM(158, vmem_u16, PARAM_TYPE_UINT16, 0, sizeof(uint16_t), PM_CONF, NULL, "", apmtest, 0x1, "Test VMEM U16");
 
 // ================================================================================
 // Application entry point
 // ================================================================================
 
-int main (void)
+int main(void)
 {
     // Board initialization
     BSP_Init(&bsp);
-    
+
     // Platform Initialization
     PLATFORM_vInit(&bsp);
-    
+
+    // Initialize memory map
+    mm_init();
+
+    // Configure all external ICs
+    platform = PLATFORM_get();
+    PLATFORM_vConfigureAll(platform);
+
+    // Configure Tracealyzer tracing
     if(xTraceEnable(TRC_START_FROM_HOST) != TRC_SUCCESS)
     {
         ErrorHandler();
     }
 
-    platform = PLATFORM_get();
-    
-    //Initialize memory map
-    mm_init();
-    
-    // Configure all external ICs
-    PLATFORM_vConfigureAll(platform);
-    
-    // Initialize CSP (TODO: Move to platform init function and setup task to match project structure)
-    csp_conf.hostname = "EGSE"; // TODO: replace with parameter value
-    csp_conf.model = "V2";
-    csp_init();
-//     csp_usart_conf_t csp_usart_conf = {
-//         .device = "BUS UART",
-//         .baudrate = B_USART_SPEED,
-//         .databits = 8,
-//         .stopbits = 1,
-//         .paritysetting = 0,
-//         .ccd_usart_handle = bsp.bus_uart,
-//     };
-    csp_usart_conf_t csp_usart_conf = {
-        .device = "TELEMETRY UART",
-        .baudrate = T_USART_SPEED,
-        .databits = 8,
-        .stopbits = 1,
-        .paritysetting = 0,
-        .ccd_usart_handle = bsp.telemetry_uart,
-    };
-    if (csp_usart_open_and_add_kiss_interface(&csp_usart_conf, CSP_IF_KISS_DEFAULT_NAME, UART_CSP_ADDRESS, &csp_usart_iface) != CSP_ERR_NONE)
-    {
-        ErrorHandler();
-    }
-    csp_iflist_check_dfl();
-    csp_bind_callback(csp_service_handler, CSP_ANY);
-    csp_bind_callback(param_serve, PARAM_PORT_SERVER);
-    
-    xTaskCreate(SETUP_Task, "Startup", 1024, NULL, tskIDLE_PRIORITY + 1, NULL );
-        
+    // Configure CubeSat Protocol (CSP)
+    csp_app_init();
+
+    xTaskCreate(setup_task, "Startup", 1024, NULL, tskIDLE_PRIORITY + 1, NULL );
+
     // Entire startup until here is very fast. Starting the scheduler and entering
     // the setup task takes almost 300ms. Don't know why.
     vTaskStartScheduler();
-    
+
     // TODO: Reboot if we get here!
     while(1);
 }
@@ -161,146 +118,89 @@ int main (void)
 // Application tasks
 // ================================================================================
 
-static void SETUP_Task(void* handle)
+static void setup_task(void* handle)
 {
     mm_setBoard_ID(0x634F4243);
     mm_setFW_Version(0x00020206);
     mm_setHW_Version_major_version(BSP_u8GetVersion());
-    
+
     mm_setI2CConfA_SPD(40);
     mm_setI2CConfA_WRDEL(platform->i2c_target->write_read_delay);
     mm_setI2CConfA_TRDEL(platform->i2c_target->tr_delay);
-    
+
     mm_setI2CConfB_ADDR(platform->i2c_target->legacy_address);
-    
+
     mm_setCANConfB_Address(platform->can_target->radio_can_address);
     mm_setUtilI2CConfA_SPD(bsp.util_i2c->baud / 10000);
-    
+
     mm_setRFRelaysConf_ScanEnabled(true);
     mm_setMultiConf0_ScanEnabled(true);
-    
+
     mm_setTE_Addr_0_ScanEnabled(true);
     mm_setTE_Addr_1_ScanEnabled(true);
     mm_setTE_Addr_2_ScanEnabled(true);
     mm_setTE_Addr_3_ScanEnabled(true);
-    
+
     // Create all the FreeRTOS Tasks
-    xTaskCreate(GSE_MANAGER_Task, "GSE Manager", 1024, (void *) platform->gse_manager, tskIDLE_PRIORITY + 2, NULL);
-    
-    xTaskCreate(SERMUX_V3_ReceiveTask, "SERMUX RX", 512, (void *) platform->sermux_v3, tskIDLE_PRIORITY + 2, NULL);
-    xTaskCreate(SERMUX_V3_TransmitTask, "SERMUX TX", 512, (void *) platform->sermux_v3, tskIDLE_PRIORITY + 2, NULL);
-    
-    xTaskCreate(I2CTARGET_Task, "I2C Target RX", 512, (void *) platform->i2c_target,  tskIDLE_PRIORITY + 3, NULL);
-    
-    xTaskCreate(CANTARGET_RxTask, "CAN Target RX", 512, (void *) platform->can_target, tskIDLE_PRIORITY + 2, NULL);
-    xTaskCreate(CANTARGET_TxTask, "CAN Target TX", 512, (void *) platform->can_target, tskIDLE_PRIORITY + 3, NULL);
-    
-    xTaskCreate(UARTTARGET_RxTask, "UART Target RX", 512, (void *) platform->uart_target, tskIDLE_PRIORITY + 2, NULL);
-    xTaskCreate(UARTTARGET_TxTask, "UART Target TX", 512, (void *) platform->uart_target, tskIDLE_PRIORITY + 2, NULL);
-    
-    xTaskCreate(LOCALTARGET_Task, "Local Target RX", 512, (void *) platform->local_target,  tskIDLE_PRIORITY + 2, NULL);
-    
+    xTaskCreate(GSE_MANAGER_Task,               "GSE Manager",      1024,   (void *) platform->gse_manager,     tskIDLE_PRIORITY + 2, NULL);
+
+    xTaskCreate(SERMUX_V3_ReceiveTask,          "SERMUX RX",        512,    (void *) platform->sermux_v3,       tskIDLE_PRIORITY + 2, NULL);
+    xTaskCreate(SERMUX_V3_TransmitTask,         "SERMUX TX",        512,    (void *) platform->sermux_v3,       tskIDLE_PRIORITY + 2, NULL);
+
+    xTaskCreate(I2CTARGET_Task,                 "I2C Target RX",    512,    (void *) platform->i2c_target,      tskIDLE_PRIORITY + 3, NULL);
+
+    xTaskCreate(CANTARGET_RxTask,               "CAN Target RX",    512,    (void *) platform->can_target,      tskIDLE_PRIORITY + 2, NULL);
+    xTaskCreate(CANTARGET_TxTask,               "CAN Target TX",    512,    (void *) platform->can_target,      tskIDLE_PRIORITY + 3, NULL);
+
+    xTaskCreate(UARTTARGET_RxTask,              "UART Target RX",   512,    (void *) platform->uart_target,     tskIDLE_PRIORITY + 2, NULL);
+    xTaskCreate(UARTTARGET_TxTask,              "UART Target TX",   512,    (void *) platform->uart_target,     tskIDLE_PRIORITY + 2, NULL);
+
+    xTaskCreate(LOCALTARGET_Task,               "Local Target RX",  512,    (void *) platform->local_target,    tskIDLE_PRIORITY + 2, NULL);
+
     // High priority for this, to always keep the RX buffer empty and not loose data.
-    xTaskCreate(ccd_usart_RXProcessingTask, "TEL UART RX", 512, (void *) bsp.telemetry_uart, tskIDLE_PRIORITY + 4, &bsp.telemetry_uart->rx_task_handle);
-    xTaskCreate(ccd_usart_TXProcessingTask, "TEL UART TX", 512, (void *) bsp.telemetry_uart, tskIDLE_PRIORITY + 4, &bsp.telemetry_uart->tx_task_handle);
-    
-    xTaskCreate(ccd_usart_RXProcessingTask, "BUS UART RX", 512, (void *) bsp.bus_uart, tskIDLE_PRIORITY + 2, &bsp.bus_uart->tx_task_handle);
-    xTaskCreate(ccd_usart_TXProcessingTask, "BUS UART TX", 512, (void *) bsp.bus_uart, tskIDLE_PRIORITY + 2, &bsp.bus_uart->rx_task_handle);
-    
+    xTaskCreate(ccd_usart_RXProcessingTask,     "TEL UART RX",      512,    (void *) bsp.telemetry_uart,        tskIDLE_PRIORITY + 4, &bsp.telemetry_uart->rx_task_handle);
+    xTaskCreate(ccd_usart_TXProcessingTask,     "TEL UART TX",      512,    (void *) bsp.telemetry_uart,        tskIDLE_PRIORITY + 4, &bsp.telemetry_uart->tx_task_handle);
+
+    xTaskCreate(ccd_usart_RXProcessingTask,     "BUS UART RX",      512,    (void *) bsp.bus_uart,              tskIDLE_PRIORITY + 2, &bsp.bus_uart->rx_task_handle);
+    xTaskCreate(ccd_usart_TXProcessingTask,     "BUS UART TX",      512,    (void *) bsp.bus_uart,              tskIDLE_PRIORITY + 2, &bsp.bus_uart->tx_task_handle);
+
     // Process RF Relay, multitester and TE Adapters
-    xTaskCreate(DEVTOOLS_Task, "RF Tools", 512, (void *) platform, tskIDLE_PRIORITY + 2, NULL);
-    xTaskCreate(TE_Adaptors_Task, "TE Adapters", 512, (void *) platform->te_scanner, tskIDLE_PRIORITY + 2, NULL);
-    
+    xTaskCreate(devtools_task,                  "RF Tools",         512,    (void *) platform,                  tskIDLE_PRIORITY + 2, NULL);
+    xTaskCreate(TE_Adaptors_Task,               "TE Adapters",      512,    (void *) platform->te_scanner,      tskIDLE_PRIORITY + 2, NULL);
+
     // Multitester task
-    xTaskCreate(MTCV2_Task, "MTC Task", 512, (void *) platform->multitester, tskIDLE_PRIORITY + 2, NULL);
-    
+    xTaskCreate(MTCV2_Task,                     "MTC Task",         512,    (void *) platform->multitester,     tskIDLE_PRIORITY + 2, NULL);
+
     // LED task has lowest priority
-    xTaskCreate(LEDIndicator_UpdateTask, "LED", 512, (void *) platform->led_indicator, tskIDLE_PRIORITY + 1, NULL);
-    
+    xTaskCreate(LEDIndicator_UpdateTask,        "LED",              512,    (void *) platform->led_indicator,   tskIDLE_PRIORITY + 1, NULL);
+
     // CSP tasks
-    xTaskCreate(csp_router_task, "CSP Route", 1024, NULL, tskIDLE_PRIORITY + 2, NULL);
-    xTaskCreate(csp_ping_task, "CSP Ping", 256, NULL, tskIDLE_PRIORITY + 2, NULL);
-    xTaskCreate(vmem_server_loop, "VMEM Server", 1024, NULL, tskIDLE_PRIORITY + 2, NULL);
+    xTaskCreate(csp_router_task,                "CSP Route",        1024,   NULL,                               tskIDLE_PRIORITY + 2, NULL);
+    xTaskCreate(vmem_server_loop,               "VMEM Server",      1024,   NULL,                               tskIDLE_PRIORITY + 2, NULL);
 
     // Delete the setup task
     vTaskDelete(NULL);
 }
 
-static void DEVTOOLS_Task(void* handle)
+static void devtools_task(void* handle)
 {
     platform_t * pHandle = (platform_t *) handle;
-    
+
     while(1){
-        
+
         RFRelay_Process(pHandle->rf_relay_1);
         RFRelay_Process(pHandle->rf_relay_2);
         MULTI_Process(pHandle->multitester);
-        
+
         vTaskDelay(pdMS_TO_TICKS(20));
     }
 }
 
 static void csp_router_task(void * param)
 {
-    while(1) 
-    {
-        csp_route_work();
-    }
-}
-
-static void csp_ping_task(void * param)
-{
-    TraceStringHandle_t channel = xTraceRegisterString("CSP Ping Task User Events");
     while(1)
     {
-//         csp_ping_noreply(16);
-        uint8_t opts = CSP_O_NONE;
-        uint16_t address = TEST_PC_CSP_ADDRESS;
-//         uint16_t address = UART_CSP_ADDRESS;
-        xTracePrintF(channel, "Pinging %d...", address);
-        int res = csp_ping(address, 1000, 0, opts);
-//         int res = csp_ping(UART_CSP_ADDRESS, 1000, 0, opts);
-        vTaskDelay(pdMS_TO_TICKS(5000));
-    }
-}
-
-static void csp_server_task(void * param)
-{
-    csp_socket_t sock = {0};
-    csp_bind(&sock, CSP_ANY);
-    csp_listen(&sock, 10);
-    
-    while (1)
-    {
-        csp_conn_t* conn;
-        if((conn = csp_accept(&sock, 10000)) == NULL)
-        {
-            // Timeout
-            continue;
-        }
-        
-        /* Read packets on connection, timeout is 50 ms */
-		csp_packet_t *packet;
-		while ((packet = csp_read(conn, 50)) != NULL) {
-			switch (csp_conn_dport(conn)) {
-			    case 10:
-                {
-				    /* Process packet here */
-				    csp_buffer_free(packet);
-				    break;
-                }                    
-
-			    default:
-                {
-				    /* Call the default CSP service handler, handle pings, buffer use, etc. */
-				    csp_service_handler(packet);
-				    break;
-                }                    
-			}
-		}
-
-		/* Close current connection */
-		csp_close(conn);
+        csp_route_work();
     }
 }
 
@@ -328,18 +228,26 @@ void vApplicationTickHook(void)
 }
 
 // ================================================================================
-// libparam callbacks
+// Miscellaneous
 // ================================================================================
 
-void led_color_cb(param_t * param, int index)
+void csp_app_init(void)
 {
-    // TODO: handle parameter set event (parameter already assigned with a new value)
-//     LEDIndicator_SetNextState(param_get_uint8_array(param, index));
-    return;
+    // Initialize CSP (TODO: Move to platform init function and setup task to match project structure)
+    csp_conf.hostname = "EGSE"; // TODO: replace with parameter value
+    csp_conf.model = "V2";
+    csp_init();
+    
+    csp_usart_cc_init(&bsp);
+    csp_can_cc_init(&bsp);
+    
+    csp_iflist_check_dfl();
+    csp_bind_callback(csp_service_handler, CSP_ANY);
+    csp_bind_callback(param_serve, PARAM_PORT_SERVER);
 }
 
 // ================================================================================
-// Miscellaneous
+// Hardfault/Error handlers
 // ================================================================================
 
 void ErrorHandler(void)

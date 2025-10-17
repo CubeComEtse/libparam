@@ -24,7 +24,7 @@ void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart, uint8_t interrupt_pr
 		assert(driver->cts_pin);	
 	}
 	
-	// Todo: These buffer levels are guesses. Monitor and adjust them
+	// TOTO: These buffer levels are guesses. Monitor and adjust them
 	driver->uart_rx_buffer = xStreamBufferCreate(512, 1);
 	driver->uart_tx_buffer = xStreamBufferCreate(512, 1);
 	driver->base_usart = base_usart;
@@ -229,6 +229,7 @@ inline void ccd_uart_StartFlowControl(void * handle)
 	}
 }
 
+// TODO: [ADRIAAN] May need to revert back to polling operation for this...
 /*
  * So: This chip is not fast enough to service the UART interrupt AND
  * add the data to a FreeRTOS message buffer. Instead add the data to a
@@ -239,50 +240,55 @@ inline void ccd_uart_StartFlowControl(void * handle)
 void ccd_usart_RXProcessingTask(void * parameters)
 {
 	ccd_uart_t * driver = (ccd_uart_t*) parameters;
+    uint8_t * p_data;
+    size_t data_len;
+    
 	
 	while(1)
 	{
 		// Wait for new data to be received
 		ulTaskNotifyTake(pdTRUE, portMAX_DELAY); 
 		
-		// Check if there are more bytes in the buffer since the previous time -
-		if (driver->rx_buffer_read != driver->rx_buffer_write)
+		// Nothing to do if no new data in buffer
+        // TODO: Ensure that this can't happen when data with a length equal to the buffer size is received
+		if (driver->rx_buffer_read == driver->rx_buffer_write)
 		{
-			// Make a copy of the write location - interrupt can still increment it 
-			volatile size_t copied_write = driver->rx_buffer_write;
+            continue;
+        }            
+        
+		// Make a copy of the write location - interrupt can still increment it 
+		volatile size_t copied_write = driver->rx_buffer_write;
 			
-			// First copy all data from the read position until the end of the buffer.
-			// If all these bytes are copied the pointer will be reset to the beginning of 
-			// the buffer
-			if (copied_write < driver->rx_buffer_read) {
-				size_t bytes_sent = xStreamBufferSend(driver->uart_rx_buffer, &driver->rx_holding_buffer[driver->rx_buffer_read], (UART_HOLDING_BUFFER_SIZE - driver->rx_buffer_read), 0);
-				driver->rx_buffer_read = (driver->rx_buffer_read + bytes_sent) % UART_HOLDING_BUFFER_SIZE;
-				
-				if (bytes_sent == 0)
-                {
-					// Stream buffer overflow
-					driver->rx_streaming_buffer_overflow = true;
-				}
+		// First copy all data from the read position until the end of the buffer.
+		// If all these bytes are copied the pointer will be reset to the beginning of 
+		// the buffer
+		if (copied_write < driver->rx_buffer_read)
+        {
+            p_data = &driver->rx_holding_buffer[driver->rx_buffer_read];
+            data_len = UART_HOLDING_BUFFER_SIZE - driver->rx_buffer_read;
+            size_t bytes_sent = xStreamBufferSend(driver->uart_rx_buffer, p_data, data_len, 0);
+			if (bytes_sent == 0)
+            {
+				driver->rx_streaming_buffer_overflow = true;
 			}
+			driver->rx_buffer_read = (driver->rx_buffer_read + bytes_sent) % UART_HOLDING_BUFFER_SIZE;
+		}
 			
-			// Then if there are more bytes available until the write pointer, copy them too.
-			if (driver->rx_buffer_read < copied_write )
-			{
-				size_t bytes_sent = xStreamBufferSend(driver->uart_rx_buffer, &driver->rx_holding_buffer[driver->rx_buffer_read], (copied_write - driver->rx_buffer_read), 0);
-				driver->rx_buffer_read = (driver->rx_buffer_read + bytes_sent) % UART_HOLDING_BUFFER_SIZE;
-				
-				if (bytes_sent == 0)
-                {
-					// Stream buffer overflow
-					driver->rx_streaming_buffer_overflow = true;
-				}
+		// Then if there are more bytes available until the write pointer, copy them too.
+		if (copied_write > driver->rx_buffer_read)
+		{
+    		p_data = &driver->rx_holding_buffer[driver->rx_buffer_read];
+    		data_len = copied_write - driver->rx_buffer_read;
+			size_t bytes_sent = xStreamBufferSend(driver->uart_rx_buffer, p_data, data_len, 0);
+			if (bytes_sent == 0)
+            {
+				driver->rx_streaming_buffer_overflow = true;
 			}
+			driver->rx_buffer_read = (driver->rx_buffer_read + bytes_sent) % UART_HOLDING_BUFFER_SIZE;
+        }
 			
-			// Check if there is space, then clear CTS
-			ccd_uart_StartFlowControl(driver);
-		}	
-		
-		//vTaskDelay(pdMS_TO_TICKS(1));
+		// Check if there is space, then clear CTS
+		ccd_uart_StartFlowControl(driver);
 	}
 }
 
@@ -390,11 +396,12 @@ inline void ccd_uart_InterruptHandler(ccd_uart_t * driver)
 		}
 	}
     
-    // Overrun Error    
+    // Overrun Error
+    // TODO: [ADRIAAN] Handle this is a more acceptable manner, currently just clearing the flag or hardfaulting...
     if (dw_status & US_CSR_OVRE)
     {
         ErrorHandler();
-        driver->base_usart->US_CR |= US_CR_RSTSTA;
+        //driver->base_usart->US_CR |= US_CR_RSTSTA;
     }
 }
 
@@ -415,6 +422,7 @@ uint32_t ccd_uart_get_error_status(void * vHandle)
 	{
 		res |= UART_TX_SB_OVERFLOW;
 	}
+    
 	return res;
 }
 
@@ -433,7 +441,8 @@ void ccd_b_uart_Send_message(void * vHandle, uint8_t * data, size_t data_len)
 	
 	size_t bytes_sent = xStreamBufferSend(pHandle->uart_tx_buffer, data, data_len, 0);
 	
-	if (bytes_sent > 0){
+	if (bytes_sent > 0)
+    {
 		ccd_uart_EnableTXInterrupt(pHandle);
 	}
 }
@@ -444,5 +453,5 @@ size_t ccd_b_uart_Receive_message(void * vHandle, uint8_t * data, size_t data_le
 
 	size_t bytes_received = xStreamBufferReceive(pHandle->uart_rx_buffer, data, data_len, portMAX_DELAY);
 	
-	return bytes_received; // returns size of actual streambuffer received
+	return bytes_received; // returns size of actual stream buffer received
 }

@@ -567,6 +567,9 @@
       <Value>../lib/tracerecorder/kernelports/FreeRTOS/config</Value>
       <Value>../lib/tracerecorder/kernelports/FreeRTOS/include</Value>
       <Value>../inc/freertos</Value>
+      <Value>../inc/utils</Value>
+      <Value>../inc/registers</Value>
+      <Value>../inc/libcsp/csp/drivers</Value>
     </ListValues>
   </armgcc.compiler.directories.IncludePaths>
   <armgcc.compiler.optimization.OtherFlags>-fdata-sections</armgcc.compiler.optimization.OtherFlags>
@@ -681,8 +684,11 @@
     <Folder Include="inc\libcsp\" />
     <Folder Include="inc\libcsp\csp\" />
     <Folder Include="inc\drivers" />
+    <Folder Include="inc\libcsp\csp\drivers" />
     <Folder Include="inc\libparam" />
     <Folder Include="inc\freertos" />
+    <Folder Include="inc\utils" />
+    <Folder Include="inc\registers" />
     <Folder Include="lib\" />
     <Folder Include="lib\freertos\inc" />
     <Folder Include="lib\freertos\src" />
@@ -692,11 +698,6 @@
     <Folder Include="lib\freertos\src\portable\GCC\ARM_CM7\r0p1" />
     <Folder Include="lib\freertos\src\portable\MemMang" />
     <Folder Include="lib\libcsp\" />
-    <Folder Include="lib\libcsp\contrib\" />
-    <Folder Include="lib\libcsp\contrib\drivers\" />
-    <Folder Include="lib\libcsp\contrib\drivers\can\" />
-    <Folder Include="lib\libcsp\contrib\drivers\uart" />
-    <Folder Include="lib\libcsp\contrib\hooks\" />
     <Folder Include="lib\libcsp\include\" />
     <Folder Include="lib\libcsp\include\csp\" />
     <Folder Include="lib\libcsp\include\csp\arch\" />
@@ -707,8 +708,6 @@
     <Folder Include="lib\libcsp\src\arch\" />
     <Folder Include="lib\libcsp\src\arch\freertos\" />
     <Folder Include="lib\libcsp\src\crypto\" />
-    <Folder Include="lib\libcsp\src\drivers\" />
-    <Folder Include="lib\libcsp\src\drivers\usart\" />
     <Folder Include="lib\libcsp\src\interfaces\" />
     <Folder Include="lib\freertos" />
     <Folder Include="lib\libparam\" />
@@ -796,6 +795,10 @@
     <Folder Include="src\ASF\thirdparty\CMSIS\Lib\" />
     <Folder Include="src\ASF\thirdparty\CMSIS\Lib\GCC\" />
     <Folder Include="src\drivers" />
+    <Folder Include="src\libcsp" />
+    <Folder Include="src\libcsp\drivers\" />
+    <Folder Include="src\utils" />
+    <Folder Include="src\registers" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="inc\board\obc_controller_rev_A.h">
@@ -831,9 +834,6 @@
     <Compile Include="inc\config\conf_uart_serial.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\crc8.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="inc\drivers\ccd_can_driver.h">
       <SubType>compile</SubType>
     </Compile>
@@ -846,19 +846,7 @@
     <Compile Include="inc\drivers\ccd_uart_driver.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\drivers\ltc2499.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\drivers\ltc2992.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\drivers\ltc2992_conf.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="inc\endpoints.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\event.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\extra_maths.h">
@@ -879,10 +867,25 @@
     <Compile Include="inc\libcsp\csp\autoconfig.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="inc\libcsp\csp\drivers\csp_can_cc.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\libcsp\csp\drivers\csp_usart_cc.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="inc\libparam\libparam.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\local_target.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\ltc2499.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\ltc2992.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\ltc2992_conf.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\main.h">
@@ -903,10 +906,10 @@
     <Compile Include="inc\Platform.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\register_handler.h">
+    <Compile Include="inc\registers\register_handler.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\register_map.h">
+    <Compile Include="inc\registers\register_map.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\sermux_v3.h">
@@ -915,10 +918,16 @@
     <Compile Include="inc\te_adaptors.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\tmr.h">
+    <Compile Include="inc\uart_target.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\uart_target.h">
+    <Compile Include="inc\utils\crc8.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\utils\event.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\utils\tmr.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\version.h">
@@ -1015,15 +1024,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="lib\freertos\src\timers.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="lib\libcsp\contrib\drivers\can\csp_driver_asf3_can.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="lib\libcsp\contrib\drivers\uart\csp_driver_asf3_uart.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="lib\libcsp\contrib\hooks\csp_hooks_asf3.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="lib\libcsp\include\csp\arch\csp_queue.h">
@@ -1222,9 +1222,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="lib\libcsp\src\csp_sfp.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="lib\libcsp\src\drivers\usart\usart_kiss.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="lib\libcsp\src\interfaces\csp_if_can.c">
@@ -1575,9 +1572,6 @@
     <Compile Include="lib\tracerecorder\trcTimestamp.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\crc8.c">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="src\drivers\ccd_can_driver.c">
       <SubType>compile</SubType>
     </Compile>
@@ -1590,22 +1584,43 @@
     <Compile Include="src\drivers\ccd_uart_driver.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\drivers\ltc2499.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\drivers\ltc2992.c">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="src\File.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\libcsp\csp_hooks_cc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\libcsp\drivers\csp_can_cc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\libcsp\drivers\csp_usart_cc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\ltc2499.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\ltc2992.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\registers\register_handler.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\registers\register_map.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\te_adaptors.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\tmr.c">
+    <Compile Include="src\uart_target.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\uart_target.c">
+    <Compile Include="src\utils\crc8.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\utils\event.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\utils\tmr.c">
       <SubType>compile</SubType>
     </Compile>
     <None Include="lib\freertos\inc\CMakeLists.txt">
@@ -1626,9 +1641,6 @@
     <None Include="linker\flash.ld">
       <SubType>compile</SubType>
     </None>
-    <None Include="src\asf.h">
-      <SubType>compile</SubType>
-    </None>
     <Compile Include="src\ASF\sam\drivers\xdmac\xdmac.c">
       <SubType>compile</SubType>
     </Compile>
@@ -1647,9 +1659,6 @@
     <Compile Include="src\gse_manager.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\event.c">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="src\i2c_target.c">
       <SubType>compile</SubType>
     </Compile>
@@ -1665,9 +1674,6 @@
     <Compile Include="src\Platform.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\register_map.c">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="src\sermux_v3.c">
       <SubType>compile</SubType>
     </Compile>
@@ -1675,9 +1681,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\pc_messages.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\register_handler.c">
       <SubType>compile</SubType>
     </Compile>
     <None Include="src\ASF\common\services\twi\sam_twihs\twihs_master.h">

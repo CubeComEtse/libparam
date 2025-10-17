@@ -2,15 +2,15 @@
 	"generator": {
 		"languages": ["c", "c#"],
 		"c_freertos": {
-			"csp_enabled": false
+			"csp_enabled": true
 		},
 		"c#": {
 			"namespace": "Devices.Models"
 		},
 		"filename": "register_map",
 		"filenames":{
-			"c_header": "../inc/register_map.h",
-			"c_source": "../src/register_map.c",
+			"c_header": "../inc/registers/register_map.h",
+			"c_source": "../src/registers/register_map.c",
 			"cs": "OBC.cs"
 		}
 	},

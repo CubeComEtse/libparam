@@ -17,20 +17,17 @@
  * a tick count.
  *
  */
+
 #ifndef _TMR_H
 #define _TMR_H
 
 #include <stdint.h>
 #include <stdbool.h>
 
-
-
-
 /*
  * Timer GetTick Function. Any source that is registered  
  */
 typedef uint32_t ( * pGetSysTmrTick_t)(void);
-
 
 // Timer states.
 typedef enum {
@@ -38,12 +35,12 @@ typedef enum {
     SYSCLK_EXPIRE,        ///< Timer has expired
 } sysclk_state_e;
 
-
 /* 
  * This enum defines different timer types so that each struct doesn't need a callback function.
- * Add more values here so you can refere to them easier.
+ * Add more values here so you can refer to them easier.
 */
-typedef enum {
+typedef enum timer_source_e
+{
 	TMR_SOURCE_SYSTICK = 0,
 } timer_source_t;
 
@@ -52,15 +49,11 @@ typedef enum {
  *
  *  An instance of this structure is used for every event that needs to be timed.
  */
-typedef struct {
-	// Source of the ticks. This sets which function to call
-	timer_source_t	source;		
-	
-	// The counter value when this timer will expire 
-	uint32_t		expire_time; 
-	
-	// Current state of the timer
-	sysclk_state_e  eState;      
+typedef struct tmr_s
+{
+	timer_source_t	source;		    // Source of the ticks. This sets which function to call
+	uint32_t		expire_time;    // The counter value when this timer will expire 
+	sysclk_state_e  eState;         // Current state of the timer     
 } tmr_t;
 
 
