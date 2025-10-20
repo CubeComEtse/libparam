@@ -561,7 +561,6 @@
       <Value>../lib/tracerecorder/streamports/Jlink_RTT/include</Value>
       <Value>../lib/tracerecorder/streamports/Jlink_RTT/config</Value>
       <Value>../lib/tracerecorder/include</Value>
-      <Value>../lib/tracerecorder/config</Value>
       <Value>../lib/tracerecorder/kernelports/FreeRTOS/config</Value>
       <Value>../lib/tracerecorder/kernelports/FreeRTOS/include</Value>
       <Value>../inc/freertos</Value>
@@ -569,6 +568,7 @@
       <Value>../inc/registers</Value>
       <Value>../inc/libcsp/csp/drivers</Value>
       <Value>../inc/targets</Value>
+      <Value>../inc/tracerecorder</Value>
     </ListValues>
   </armgcc.compiler.directories.IncludePaths>
   <armgcc.compiler.optimization.OtherFlags>-fdata-sections</armgcc.compiler.optimization.OtherFlags>
@@ -686,6 +686,7 @@
     <Folder Include="inc\libcsp\csp\drivers" />
     <Folder Include="inc\libparam" />
     <Folder Include="inc\freertos" />
+    <Folder Include="inc\tracerecorder" />
     <Folder Include="inc\targets" />
     <Folder Include="inc\utils" />
     <Folder Include="inc\registers" />
@@ -724,7 +725,6 @@
     <Folder Include="lib\libparam\src\vmem\" />
     <Folder Include="lib\tracerecorder\" />
     <Folder Include="lib\tracerecorder\" />
-    <Folder Include="lib\tracerecorder\config\" />
     <Folder Include="lib\tracerecorder\include\" />
     <Folder Include="lib\tracerecorder\kernelports\" />
     <Folder Include="lib\tracerecorder\kernelports\FreeRTOS\" />
@@ -920,6 +920,24 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\te_adaptors.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\tracerecorder\trcConfig.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\tracerecorder\trcKernelPortConfig.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\tracerecorder\trcKernelPortSnapshotConfig.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\tracerecorder\trcKernelPortStreamingConfig.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\tracerecorder\trcSnapshotConfig.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\tracerecorder\trcStreamingConfig.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\utils\crc8.h">
@@ -1331,15 +1349,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="lib\libparam\src\vmem\vmem_server.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="lib\tracerecorder\config\trcConfig.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="lib\tracerecorder\config\trcSnapshotConfig.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="lib\tracerecorder\config\trcStreamingConfig.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="lib\tracerecorder\include\trcAssert.h">
