@@ -16,7 +16,7 @@
 // ================================================================================
 
 csp_usart_cc_context_t csp_usart_cc_ctx_tel = { 0 };
-// csp_usart_cc_context_t csp_usart_cc_ctx_bus = { 0 };
+csp_usart_cc_context_t csp_usart_cc_ctx_bus = { 0 };
 
 // ================================================================================
 // Function definitions
@@ -24,7 +24,7 @@ csp_usart_cc_context_t csp_usart_cc_ctx_tel = { 0 };
 
 void csp_usart_lock(void * driver_data)
 {
-    csp_usart_cc_context_t * csp_usart_cc_context = driver_data; // TODO: [ADRIAAN] Determine USART context from driver_data
+    csp_usart_cc_context_t * csp_usart_cc_context = driver_data;
     
     configASSERT(csp_usart_cc_context != NULL);
     configASSERT(csp_usart_cc_context->lock != NULL);
@@ -55,26 +55,9 @@ int csp_usart_cc_init(bsp_t * bsp)
 {
     // --- Telemetry UART ---
     
-    csp_usart_cc_ctx_tel.iface.addr = 2,
-    csp_usart_cc_ctx_tel.iface.netmask = 4;
-    csp_usart_cc_ctx_tel.iface.name = "KISS_TEL";
-    csp_usart_cc_ctx_tel.iface.interface_data = &csp_usart_cc_ctx_tel.ifdata;
-    csp_usart_cc_ctx_tel.iface.driver_data = &csp_usart_cc_ctx_tel;
-    
-    csp_usart_cc_ctx_tel.ifdata.tx_func = csp_usart_cc_write;
-    
-    csp_usart_cc_ctx_tel.lock = xSemaphoreCreateMutexStatic(&csp_usart_cc_ctx_tel.lock_buffer);
-    xSemaphoreGive(csp_usart_cc_ctx_tel.lock);
-    
-    csp_usart_cc_ctx_tel.ccd_driver = bsp->telemetry_uart;
-    
-    csp_kiss_add_interface(&csp_usart_cc_ctx_tel.iface);
-    
-    // --- BUS UART ---
-    
-//     csp_usart_cc_ctx_tel.iface.addr = 3,
-//     csp_usart_cc_ctx_tel.iface.netmask = 4;
-//     csp_usart_cc_ctx_tel.iface.name = "KISS_BUS";
+//     csp_usart_cc_ctx_tel.iface.addr = 210;
+//     csp_usart_cc_ctx_tel.iface.netmask = 12;
+//     csp_usart_cc_ctx_tel.iface.name = "KISS_TEL";
 //     csp_usart_cc_ctx_tel.iface.interface_data = &csp_usart_cc_ctx_tel.ifdata;
 //     csp_usart_cc_ctx_tel.iface.driver_data = &csp_usart_cc_ctx_tel;
 //     
@@ -86,4 +69,21 @@ int csp_usart_cc_init(bsp_t * bsp)
 //     csp_usart_cc_ctx_tel.ccd_driver = bsp->telemetry_uart;
 //     
 //     csp_kiss_add_interface(&csp_usart_cc_ctx_tel.iface);
+    
+    // --- BUS UART ---
+    
+    csp_usart_cc_ctx_bus.iface.addr = 198,
+    csp_usart_cc_ctx_bus.iface.netmask = 12;
+    csp_usart_cc_ctx_bus.iface.name = "KISS_BUS";
+    csp_usart_cc_ctx_bus.iface.interface_data = &csp_usart_cc_ctx_bus.ifdata;
+    csp_usart_cc_ctx_bus.iface.driver_data = &csp_usart_cc_ctx_bus;
+    
+    csp_usart_cc_ctx_bus.ifdata.tx_func = csp_usart_cc_write;
+    
+    csp_usart_cc_ctx_bus.lock = xSemaphoreCreateMutexStatic(&csp_usart_cc_ctx_bus.lock_buffer);
+    xSemaphoreGive(csp_usart_cc_ctx_bus.lock);
+    
+    csp_usart_cc_ctx_bus.ccd_driver = bsp->telemetry_uart;
+    
+    csp_kiss_add_interface(&csp_usart_cc_ctx_bus.iface);
 }

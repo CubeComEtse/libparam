@@ -48,7 +48,7 @@ typedef struct csp_can_context_s
     StaticSemaphore_t lock_buffer;
     
     ccd_can_t * ccd_driver;
-} csp_can_context_t;
+} csp_can_cc_context_t;
 
 // ================================================================================
 // Public function prototypes

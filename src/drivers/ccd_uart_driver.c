@@ -397,11 +397,11 @@ inline void ccd_uart_InterruptHandler(ccd_uart_t * driver)
 	}
     
     // Overrun Error
-    // TODO: [ADRIAAN] Handle this is a more acceptable manner, currently just clearing the flag or hardfaulting...
+    // TODO: [ADRIAAN] Handle this is a more acceptable manner, currently just clearing the flag or hard faulting...
     if (dw_status & US_CSR_OVRE)
     {
-        ErrorHandler();
-        //driver->base_usart->US_CR |= US_CR_RSTSTA;
+        //ErrorHandler();
+        driver->base_usart->US_CR |= US_CR_RSTSTA;
     }
 }
 

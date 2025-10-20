@@ -56,10 +56,19 @@ void ccd_can_SetAddress(void * vHandle, uint32_t filter, uint32_t mask)
 	
 	struct mcan_extended_message_filter_element et_filter;
 	mcan_get_extended_message_filter_element_default(&et_filter);
-	et_filter.F0.reg = MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F0_EFID1(filter) | MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F0_EFEC(MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F0_EFEC_STF0M_Val);
-	et_filter.F1.reg = MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F1_EFID2(mask) | MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F1_EFT_CLASSIC;
+    
+    et_filter.F0.bit.EFID1 = 0;
+	et_filter.F0.bit.EFEC = MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F0_EFEC_STF0M_Val;
+    et_filter.F1.bit.EFID2 = 0x1FFFFFFF;
+    et_filter.F1.bit.EFT = MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F1_EFT_RANGE;
+    
+	//et_filter.F0.reg = MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F0_EFID1(filter) | MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F0_EFEC(MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F0_EFEC_STF0M_Val);
+	//et_filter.F1.reg = MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F1_EFID2(mask) | MCAN_EXTENDED_MESSAGE_FILTER_ELEMENT_F1_EFT_CLASSIC;
 
-	mcan_set_rx_extended_filter(&pHandle->can_module, &et_filter, 0);
+    for (uint8_t i = 0; i < 16; i++)
+    {
+	    mcan_set_rx_extended_filter(&pHandle->can_module, &et_filter, i);
+    }
 }
 
 /*

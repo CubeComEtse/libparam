@@ -149,8 +149,8 @@ static void setup_task(void* handle)
 
     xTaskCreate(I2CTARGET_Task,                 "I2C Target RX",    512,    (void *) platform->i2c_target,      tskIDLE_PRIORITY + 3, NULL);
 
-    xTaskCreate(CANTARGET_RxTask,               "CAN Target RX",    512,    (void *) platform->can_target,      tskIDLE_PRIORITY + 2, NULL);
-    xTaskCreate(CANTARGET_TxTask,               "CAN Target TX",    512,    (void *) platform->can_target,      tskIDLE_PRIORITY + 3, NULL);
+    xTaskCreate(CANTARGET_ReceiveTask,               "CAN Target RX",    512,    (void *) platform->can_target,      tskIDLE_PRIORITY + 2, NULL);
+    xTaskCreate(CANTARGET_TransmitTask,               "CAN Target TX",    512,    (void *) platform->can_target,      tskIDLE_PRIORITY + 3, NULL);
 
     xTaskCreate(UARTTARGET_RxTask,              "UART Target RX",   512,    (void *) platform->uart_target,     tskIDLE_PRIORITY + 2, NULL);
     xTaskCreate(UARTTARGET_TxTask,              "UART Target TX",   512,    (void *) platform->uart_target,     tskIDLE_PRIORITY + 2, NULL);

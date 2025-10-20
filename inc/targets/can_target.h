@@ -51,8 +51,8 @@ typedef struct {
 }can_target_t;
 
 void CANTARGET_Init(can_target_t * handle);
-void CANTARGET_TxTask(void * handle);
-void CANTARGET_RxTask(void * handle);
+void CANTARGET_TransmitTask(void * handle);
+void CANTARGET_ReceiveTask(void * handle);
 
 bool CANTARGET_SetBaud(can_target_t * handle, uint32_t baud);
 bool CANTARGET_EnableRetries(can_target_t * handle, bool retries);

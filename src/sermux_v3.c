@@ -17,6 +17,8 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
+#include "csp/interfaces/csp_if_kiss.h"
+
 #include "csp_usart_cc.h"
 #include "led_indicator.h"
 #include "ccd_uart_driver.h"
@@ -88,9 +90,9 @@ void SERMUX_V3_ReceiveTask(void * params)
 		LEDIndicator_SetNextState(LED_UART_COMMS);
         
         // TODO: [ADRIAAN] Move this somewhere more appropriate
-        int xTaskWoken = pdFALSE;
-        csp_kiss_rx(&csp_usart_cc_ctx_tel.iface, rx_buffer, rx_length, (void *)xTaskWoken);
-        continue;
+//         int xTaskWoken = pdFALSE;
+//         csp_kiss_rx(&csp_usart_cc_ctx_tel.iface, rx_buffer, rx_length, (void *)xTaskWoken);
+//         continue;
         
 		// Check if bytes were dropped by the UART.
 		// If it was, reset and wait for next message

@@ -558,8 +558,6 @@
       <Value>../inc/libcsp</Value>
       <Value>../lib/libparam/include</Value>
       <Value>../inc/libparam</Value>
-      <Value>../lib/slash/include</Value>
-      <Value>../inc/slash</Value>
       <Value>../lib/tracerecorder/streamports/Jlink_RTT/include</Value>
       <Value>../lib/tracerecorder/streamports/Jlink_RTT/config</Value>
       <Value>../lib/tracerecorder/include</Value>
@@ -570,6 +568,7 @@
       <Value>../inc/utils</Value>
       <Value>../inc/registers</Value>
       <Value>../inc/libcsp/csp/drivers</Value>
+      <Value>../inc/targets</Value>
     </ListValues>
   </armgcc.compiler.directories.IncludePaths>
   <armgcc.compiler.optimization.OtherFlags>-fdata-sections</armgcc.compiler.optimization.OtherFlags>
@@ -687,6 +686,7 @@
     <Folder Include="inc\libcsp\csp\drivers" />
     <Folder Include="inc\libparam" />
     <Folder Include="inc\freertos" />
+    <Folder Include="inc\targets" />
     <Folder Include="inc\utils" />
     <Folder Include="inc\registers" />
     <Folder Include="lib\" />
@@ -797,6 +797,7 @@
     <Folder Include="src\drivers" />
     <Folder Include="src\libcsp" />
     <Folder Include="src\libcsp\drivers\" />
+    <Folder Include="src\targets" />
     <Folder Include="src\utils" />
     <Folder Include="src\registers" />
   </ItemGroup>
@@ -808,9 +809,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\can_endpoint.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\can_target.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\config.h">
@@ -858,9 +856,6 @@
     <Compile Include="inc\gse_manager.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\i2c_target.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="inc\led_indicator.h">
       <SubType>compile</SubType>
     </Compile>
@@ -874,9 +869,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\libparam\libparam.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\local_target.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\ltc2499.h">
@@ -915,10 +907,19 @@
     <Compile Include="inc\sermux_v3.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\te_adaptors.h">
+    <Compile Include="inc\targets\can_target.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\uart_target.h">
+    <Compile Include="inc\targets\i2c_target.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\targets\local_target.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\targets\uart_target.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\te_adaptors.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\utils\crc8.h">
@@ -1086,25 +1087,10 @@
     <Compile Include="lib\libcsp\include\csp\interfaces\csp_if_can.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="lib\libcsp\include\csp\interfaces\csp_if_eth.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="lib\libcsp\include\csp\interfaces\csp_if_eth_pbuf.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="lib\libcsp\include\csp\interfaces\csp_if_i2c.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="lib\libcsp\include\csp\interfaces\csp_if_kiss.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="lib\libcsp\include\csp\interfaces\csp_if_lo.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="lib\libcsp\include\csp\interfaces\csp_if_tun.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="lib\libcsp\include\csp\interfaces\csp_if_zmqhub.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="lib\libcsp\src\arch\freertos\csp_clock.c">
@@ -1233,25 +1219,10 @@
     <Compile Include="lib\libcsp\src\interfaces\csp_if_can_pbuf.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="lib\libcsp\src\interfaces\csp_if_eth.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="lib\libcsp\src\interfaces\csp_if_eth_pbuf.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="lib\libcsp\src\interfaces\csp_if_i2c.c">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="lib\libcsp\src\interfaces\csp_if_kiss.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="lib\libcsp\src\interfaces\csp_if_lo.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="lib\libcsp\src\interfaces\csp_if_tun.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="lib\libcsp\src\interfaces\csp_if_zmqhub.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="lib\libparam\include\mpack\mpack-config.h">
@@ -1608,10 +1579,19 @@
     <Compile Include="src\registers\register_map.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\te_adaptors.c">
+    <Compile Include="src\targets\can_target.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\uart_target.c">
+    <Compile Include="src\targets\i2c_target.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\targets\local_target.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\targets\uart_target.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\te_adaptors.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\utils\crc8.c">
@@ -1650,22 +1630,13 @@
     <Compile Include="src\bsp.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\can_target.c">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="src\extra_maths.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\gse_manager.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\i2c_target.c">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="src\led_indicator.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\local_target.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\multitester.c">

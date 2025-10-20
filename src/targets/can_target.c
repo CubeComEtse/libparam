@@ -12,13 +12,16 @@
 
 #include <assert.h>
 
-#include "pc_messages.h"
+#include "csp/interfaces/csp_if_can.h"
 
-// This include should not be here, there should be function pointers
+#include "csp_can_cc.h"
+#include "pc_messages.h"
 #include "ccd_can_driver.h"
 
 #define CAN_TELECOMMAND_REQUEST     0x01
 #define CAN_TELEMETRY_REQUEST       0x04
+
+extern csp_can_cc_context_t csp_can_cc_ctx_bus;
 
 /*
  * Initialize the instance. 
@@ -40,7 +43,7 @@ void CANTARGET_Init(can_target_t * pHandle)
 	ccd_can_SetAddress(pHandle->can_handle, pHandle->our_can_address, 0xFF);
 }
 
-void CANTARGET_TxTask(void * vHandle)
+void CANTARGET_TransmitTask(void * vHandle)
 {
 	assert(vHandle);
 	can_target_t * pHandle = (can_target_t *) vHandle;
@@ -127,7 +130,7 @@ void CANTARGET_TxTask(void * vHandle)
 	}
 }
 
-void CANTARGET_RxTask(void * vHandle)
+void CANTARGET_ReceiveTask(void * vHandle)
 {
 	assert(vHandle);
 	can_target_t * pHandle = (can_target_t *) vHandle;
@@ -159,6 +162,11 @@ void CANTARGET_RxTask(void * vHandle)
 			
 			uint8_t encoded[20];
 			size_t encoded_size = encode_v2_message(encoded, &out_message);
+			
+			// TODO: [ADRIAAN] Move this somewhere more appropriate
+// 			int xTaskWoken = pdFALSE;
+// 			csp_can_rx(&csp_can_cc_ctx_bus.iface, header, &out_message.data[2], receive_size, (void *)xTaskWoken);
+// 			continue;
 			
 			sent_size = xMessageBufferSend(pHandle->outgoing_messages, &encoded, encoded_size, pdMS_TO_TICKS(20)); //TODO: Handle dropped messages
 		}
