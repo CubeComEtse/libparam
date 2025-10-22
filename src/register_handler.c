@@ -314,7 +314,7 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 			break;
 		
 		case reg_ConfPower_addr:
-		{
+			{
 			mm_enabled_t powerEn = reg_enabled_disabled;
 			
 			// Only V0 has these pins
@@ -344,13 +344,13 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 				mm_getConfPower_voltage3UtilToggleFrom(&powerEn, deserialized);
 				GSE_MANAGER_SetBusPowerSwitch(platform->gse_manager, POWER_3V3_UTIL, powerEn == reg_enabled_enabled);
 				mm_setConfPower_voltage3UtilToggle(powerEn);
-			}
+				}
 			
-		}
-		break;
+			}
+			break;
 				
 		case reg_I2CConfA_addr:
-		{
+			{
 			// Set the module speed here. The other values in the register are read when they are needed
 			uint8_t spd = 0;
 			mm_getI2CConfA_SPDFrom(&spd, deserialized);
@@ -370,18 +370,18 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 			mm_getI2CConfA_TRDELFrom(&trdel, deserialized);
 			platform->i2c_target->tr_delay = trdel;
 			mm_setI2CConfA_TRDEL(trdel);
-		}
+			}
 			break;
 				
 		case reg_I2CConfB_addr:
-		{
+			{
 			uint8_t i2c_address = 0;
 			mm_getI2CConfB_ADDRFrom(&i2c_address, deserialized);
 			
 			I2CTarget_SetLegacyAddress(platform->i2c_target, i2c_address);
 			
 			mm_setI2CConfB(deserialized);
-		}
+			}
 			break;
 				
 // 		case reg_MultiConf0_addr:
@@ -620,7 +620,6 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 		case reg_MTC_Addr_3_Set_addr:
 			MTCV2_SetBits(platform->multitester, 3, deserialized);
 			break;
-		}
 		case reg_MTC_Addr_0_Clear_addr:
 			MTCV2_ClearBits(platform->multitester, 0, deserialized);
 			break;
@@ -633,7 +632,6 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
 		case reg_MTC_Addr_3_Clear_addr:
 			MTCV2_ClearBits(platform->multitester, 3, deserialized);
 			break;
-		}
 		case reg_PreviousEndpoint_addr:
 		{
 			// Just store the full value
