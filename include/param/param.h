@@ -110,7 +110,8 @@ typedef struct param_s {
 	int array_step;
 
 	/* Local info */
-	void (*callback)(struct param_s * param, int offset);
+	void (*get_callback)(struct param_s * param, int offset);
+	void (*set_callback)(struct param_s * param, int offset);
 	csp_timestamp_t * timestamp;
 
 #ifdef PARAM_HAVE_SYS_QUEUE
@@ -135,7 +136,7 @@ typedef struct param_s {
  * The size field is only important for non-native types such as string, data and vector.
  *
  */
-#define PARAM_DEFINE_STATIC_RAM(_id, _name, _type, _array_count, _array_step, _flags, _callback, _unit, _physaddr, _docstr) \
+#define PARAM_DEFINE_STATIC_RAM(_id, _name, _type, _array_count, _array_step, _flags, _set_callback, _unit, _physaddr, _docstr) \
 	; /* Catch const param defines */ \
 	csp_timestamp_t _timestamp_##_name = { .tv_sec = 0, .tv_nsec = 0 }; \
 	uint16_t _node_##_name = 0; \
@@ -151,14 +152,14 @@ typedef struct param_s {
 		.array_step = _array_step, \
 		.mask = _flags, \
 		.unit = _unit, \
-		.callback = _callback, \
+		.set_callback = _set_callback, \
 		.timestamp = &_timestamp_##_name, \
 		.addr = (void *)(_physaddr), \
 		.vaddr = 0, \
 		.docstr = _docstr, \
 	}
 
-#define PARAM_DEFINE_STATIC_VMEM(_id, _name, _type, _array_count, _array_step, _flags, _callback, _unit, _vmem_name, _vmem_addr, _docstr) \
+#define PARAM_DEFINE_STATIC_VMEM(_id, _name, _type, _array_count, _array_step, _flags, _set_callback, _unit, _vmem_name, _vmem_addr, _docstr) \
 	; /* Catch const param defines */ \
 	csp_timestamp_t _timestamp_##_name = { .tv_sec = 0, .tv_nsec = 0 }; \
 	uint16_t _node_##_name = 0; \
@@ -172,7 +173,7 @@ typedef struct param_s {
 		.array_size = _array_count < 1 ? 1 : _array_count, \
 		.array_step = _array_step, \
 		.mask = _flags, \
-		.callback = _callback, \
+		.set_callback = _set_callback, \
 		.timestamp = &_timestamp_##_name, \
 		.unit = _unit, \
 		.addr = NULL, \

@@ -103,8 +103,8 @@ void param_get_data(param_t * param, void * outbuf, int len)
 			*(_type*)(param->addr + i * param->array_step) = value; \
 		} \
 		/* Callback */ \
-		if ((do_callback == true) && (param->callback)) { \
-			param->callback(param, i); \
+		if ((do_callback == true) && (param->set_callback)) { \
+			param->set_callback(param, i); \
 		} \
 	} \
 	inline void param_set_##name_in(param_t * param, _type value) \
@@ -179,8 +179,8 @@ void param_set_string(param_t * param, const char * inbuf, int len) {
 		memcpy(param->addr + len , "", 1);
 	}
 	/* Callback */
-	if (param->callback) {
-		param->callback(param, 0);
+	if (param->set_callback) {
+		param->set_callback(param, 0);
 	}
 }
 
@@ -195,8 +195,8 @@ void param_set_data_nocallback(param_t * param, const void * inbuf, int len) {
 void param_set_data(param_t * param, const void * inbuf, int len) {
 	param_set_data_nocallback(param, inbuf, len);
 	/* Callback */
-	if (param->callback) {
-		param->callback(param, 0);
+	if (param->set_callback) {
+		param->set_callback(param, 0);
 	}
 }
 
