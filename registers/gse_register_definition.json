@@ -84,7 +84,7 @@
             {
                 "name": "FW_Version",
                 "address": "0x11",
-                "dir": "rw",
+                "dir": "r",
                 "width": "32",
                 "fields": "Version",
                 "c#": {
@@ -95,7 +95,7 @@
             {
                 "name": "HW_Version",
                 "address": "0x12",
-                "dir": "rw",
+                "dir": "r",
                 "width": "32",
                 "fields": "Version",
                 "c#": {
@@ -141,7 +141,7 @@
             {
                 "name": "Uptime",
                 "address": "0x16",
-                "dir": "rw",
+                "dir": "r",
                 "width": "32",
                 "fields": [],
                 "c#": {
@@ -152,7 +152,7 @@
             {
                 "name": "Event_ConfA",
                 "address": "0x17",
-                "dir": "rw",
+                "dir": "r",
                 "width": "32",
                 "fields": [
                     {
@@ -176,7 +176,7 @@
             {
                 "name": "Event",
                 "address": "0x18",
-                "dir": "rw",
+                "dir": "r",
                 "width": "32",
                 "c#": {
                     "type": "UInt32"
@@ -296,7 +296,7 @@
             {
                 "name": "MeasureVI_V3",
                 "address": "0x21",
-                "dir": "rw",
+                "dir": "r",
                 "width": "32",
                 "fields": "MeasureVI",
                 "c#": {
@@ -307,7 +307,7 @@
             {
                 "name": "MeasurePower_V3",
                 "address": "0x22",
-                "dir": "rw",
+                "dir": "r",
                 "width": "32",
                 "fields": "MeasurePower",
                 "c#": {
@@ -318,7 +318,7 @@
             {
                 "name": "MeasureVI_V5",
                 "address": "0x23",
-                "dir": "rw",
+                "dir": "r",
                 "width": "32",
                 "fields": "MeasureVI",
                 "c#": {
@@ -329,7 +329,7 @@
             {
                 "name": "MeasurePower_V5",
                 "address": "0x24",
-                "dir": "rw",
+                "dir": "r",
                 "width": "32",
                 "fields": "MeasurePower",
                 "c#": {
@@ -340,7 +340,7 @@
             {
                 "name": "MeasureVI_VBat",
                 "address": "0x25",
-                "dir": "rw",
+                "dir": "r",
                 "width": "32",
                 "fields": "MeasureVI",
                 "c#": {
@@ -351,7 +351,7 @@
             {
                 "name": "MeasurePower_VBat",
                 "address": "0x26",
-                "dir": "rw",
+                "dir": "r",
                 "width": "32",
                 "fields": "MeasurePower",
                 "c#": {
@@ -362,7 +362,7 @@
             {
                 "name": "MeasureVI_VBatAlt",
                 "address": "0x27",
-                "dir": "rw",
+                "dir": "r",
                 "width": "32",
                 "fields": "MeasureVI",
                 "c#": {
@@ -373,7 +373,7 @@
             {
                 "name": "MeasurePower_VBatAlt",
                 "address": "0x28",
-                "dir": "rw",
+                "dir": "r",
                 "width": "32",
                 "fields": "MeasurePower",
                 "c#": {
@@ -462,7 +462,7 @@
             {
                 "name": "MultiConf0",
                 "address": "0x2B",
-                "dir": "rw",
+                "dir": "r",
                 "width": "32",
                 "c#": {
                     "type": "UInt32"
@@ -1021,7 +1021,7 @@
             {
                 "name": "MultiConf1_Status",
                 "address": "0x33",
-                "dir": "rw",
+                "dir": "r",
                 "width": "32",
                 "fields": "Multitester",
                 "c#": {

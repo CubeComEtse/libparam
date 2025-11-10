@@ -147,10 +147,13 @@ void CANTARGET_ReceiveTask(void * vHandle)
             continue;
         }
         
-        // TODO: [ADRIAAN] Consider doing this differently, currently just running both "parsers" in parallel.
-        int xTaskWoken = pdFALSE;
-        csp_can_rx(&csp_can_cc_ctx_bus.iface, header, &out_message.data[2], receive_size, (void *)xTaskWoken);
-        continue;
+        // TODO: [ADRIAAN] Consider doing this differently, currently just overriding default parser
+        if (csp_can_cc_ctx_bus.ccd_driver != NULL)
+        {
+            int xTaskWoken = pdFALSE;
+            csp_can_rx(&csp_can_cc_ctx_bus.iface, header, &out_message.data[2], receive_size, (void *)xTaskWoken);
+            continue;
+        }
         
         out_message.is_read = false;
         out_message.data_len = 2 + receive_size;
