@@ -34,7 +34,7 @@ extern csp_usart_cc_context_t csp_usart_cc_ctx_tel;
  *
  * Before calling this function set the in and out streams of the struct to 
  * the UART's streams.
-*/
+ */
 void SERMUX_V3_Init(sermux_v3_t * handle)
 {
 	// The streams have to be set before calling init.
@@ -54,7 +54,7 @@ void SERMUX_V3_Init(sermux_v3_t * handle)
  * 
  * After calling this, messages for target *number* will be sent to the 
  * destination stream. 
-*/
+ */
 void SERMUX_V3_AddTarget(sermux_v3_t * handle, const uint8_t number, MessageBufferHandle_t in, MessageBufferHandle_t out, set_overflow_flag_t overflow_flag_function)
 {
 	assert (handle->num_targets < MAX_NUMBER_OF_TARGETS);
@@ -67,7 +67,9 @@ void SERMUX_V3_AddTarget(sermux_v3_t * handle, const uint8_t number, MessageBuff
 	handle->num_targets += 1;
 }
 
-// PC->GSE
+/*
+ * PC->GSE 
+ */
 void SERMUX_V3_ReceiveTask(void * params)
 {
 	sermux_v3_t* pHandle = (sermux_v3_t *) params;
@@ -89,10 +91,10 @@ void SERMUX_V3_ReceiveTask(void * params)
         // Update indication LED and continue processing data
 		LEDIndicator_SetNextState(LED_UART_COMMS);
         
-        // TODO: [ADRIAAN] Move this somewhere more appropriate
-//         int xTaskWoken = pdFALSE;
-//         csp_kiss_rx(&csp_usart_cc_ctx_tel.iface, rx_buffer, rx_length, (void *)xTaskWoken);
-//         continue;
+        // TODO: [ADRIAAN] Consider doing this differently, currently overriding default parser.
+        int xTaskWoken = pdFALSE;
+        csp_kiss_rx(&csp_usart_cc_ctx_tel.iface, rx_buffer, rx_length, (void *)xTaskWoken);
+        continue;
         
 		// Check if bytes were dropped by the UART.
 		// If it was, reset and wait for next message
@@ -237,6 +239,9 @@ void SERMUX_V3_ReceiveTask(void * params)
 	}
 }
 
+/*
+ * GSE->PC 
+ */
 void SERMUX_V3_TransmitTask(void * params)
 {
 	sermux_v3_t* pHandle = (sermux_v3_t *) params;

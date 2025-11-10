@@ -117,8 +117,8 @@ void PLATFORM_vInit(bsp_t * bsp)
 	uart_target.gse_uart_address = 0xE9;
 	UARTTARGET_Init(&uart_target);
 	
-	sermux_v3.in_stream = bsp->telemetry_uart->uart_rx_buffer;
-	sermux_v3.out_stream = bsp->telemetry_uart->uart_tx_buffer;
+	sermux_v3.in_stream = bsp->telemetry_uart->rx_buffer;
+	sermux_v3.out_stream = bsp->telemetry_uart->tx_buffer;
 	sermux_v3.uart_handle = bsp->telemetry_uart;
 	SERMUX_V3_Init(&sermux_v3);
 	

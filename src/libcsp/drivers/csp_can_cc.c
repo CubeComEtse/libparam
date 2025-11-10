@@ -21,15 +21,16 @@ csp_can_cc_context_t csp_can_cc_ctx_bus = { 0 };
 // Function prototypes
 // ================================================================================
 
-static int csp_can_tx_frame(void *driver_data, uint32_t id, const uint8_t * data, uint8_t dlc);
+static int csp_can_tx_frame(void * driver_data, uint32_t id, const uint8_t * data, uint8_t dlc);
 
 // ================================================================================
 // Function definitions
 // ================================================================================
 
-static int csp_can_tx_frame(void *driver_data, uint32_t id, const uint8_t * data, uint8_t dlc)
+static int csp_can_tx_frame(void * driver_data, uint32_t id, const uint8_t * data, uint8_t dlc)
 {
-    csp_can_cc_context_t * csp_can_context = &csp_can_cc_ctx_bus;
+    configASSERT(driver_data != NULL);
+    csp_can_cc_context_t * csp_can_context = (csp_can_cc_context_t *) driver_data;
     
     xSemaphoreTake(csp_can_context->lock, portMAX_DELAY);
 
@@ -42,7 +43,7 @@ static int csp_can_tx_frame(void *driver_data, uint32_t id, const uint8_t * data
 
 int csp_can_cc_init(bsp_t * bsp)
 {
-    csp_can_cc_ctx_bus.iface.addr = 129;
+    csp_can_cc_ctx_bus.iface.addr = 128;
     csp_can_cc_ctx_bus.iface.netmask = 8;
     csp_can_cc_ctx_bus.iface.name = "CAN_BUS";
     csp_can_cc_ctx_bus.iface.interface_data = &csp_can_cc_ctx_bus.ifdata;

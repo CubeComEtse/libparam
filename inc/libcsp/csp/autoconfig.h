@@ -35,7 +35,7 @@
 
 #define CSP_USE_RDP                     1
 #define CSP_USE_HMAC                    1
-#define CSP_USE_PROMISC                 1
+#define CSP_USE_PROMISC                 0
 #define CSP_USE_RTABLE                  0
 
 #define CSP_HAVE_LIBSOCKETCAN           0

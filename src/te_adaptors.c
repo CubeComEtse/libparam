@@ -35,7 +35,6 @@ void TE_Adaptors_Setup(te_scanner_t * pHandle)
 
 void TE_Adaptors_Task(void * vHandle)
 {
-	
 	assert(vHandle);
 	uint8_t buffer[] = {0x00, 0x00, 0x00};
 	bool result = false;
@@ -44,11 +43,14 @@ void TE_Adaptors_Task(void * vHandle)
 	
 	while(1)
 	{
-		for (int a_index = 0; a_index< 4; a_index++){
+		for (int a_index = 0; a_index< 4; a_index++)
+        {
 			te_adaptor_t * curr = & (pHandle->adaptors[a_index]);
 		
-			switch (curr->state){
+			switch (curr->state)
+            {
 				case UNINITIALIZED:
+                {
 					if (curr->scan_enabled)
 					{
 						if (TMR_bIsExpired(&curr->update_timer))
@@ -58,15 +60,18 @@ void TE_Adaptors_Task(void * vHandle)
 							// Try to read the OUT registers as a test.
 							uint8_t register_address = PCA9555_CMD_OUT_PORT0;
 							result = pHandle->i2c_read_function(pHandle->i2c_handle, curr->i2c_address, &register_address, 1, buffer, 2);
-							if (result){
+							if (result)
+                            {
 								curr->state = INITIALIZING;
 								curr->previous_portbits = 0x00;
 								curr->new_portbits = 0x00;
 							}
 						}
 					}
-				break;
+				    break;
+                }                
 				case INITIALIZING:
+                {
 					// There is a possibility we just re-detected a board that was already configured.
 					// In this case, set the output values again, then set the port directions.
 				
@@ -88,10 +93,9 @@ void TE_Adaptors_Task(void * vHandle)
 					buffer[1] = 0x00;
 					buffer[2] = 0x00;
 					result = pHandle->i2c_read_function(pHandle->i2c_handle, curr->i2c_address, buffer, 1, &buffer[1], 2);
-					
-					
 							
-					if ((result) && (buffer[1] == 0x00) && (buffer[2] == 0xF8)){
+					if ((result) && (buffer[1] == 0x00) && (buffer[2] == 0xF8))
+                    {
 						// Seems configured, check what adapter this is.
 						buffer[0] = PCA9555_CMD_IN_PORT0;
 						buffer[1] = 0x00;
@@ -123,7 +127,8 @@ void TE_Adaptors_Task(void * vHandle)
 						
 						curr->state = IDLE;
 					}
-					else {
+					else
+                    {
 						// TODO: More elegant error here
 						if (a_index == 0)
 						{
@@ -143,8 +148,10 @@ void TE_Adaptors_Task(void * vHandle)
 						}
 						curr->state = UNINITIALIZED;
 					}
-				break;
+				    break;
+                }                
 				case IDLE:
+                {
 					if (curr->new_portbits != curr->previous_portbits)
 					{
 						buffer[0] = PCA9555_CMD_OUT_PORT0;
@@ -156,25 +163,29 @@ void TE_Adaptors_Task(void * vHandle)
 						
 						uint32_t existing = 0;
 						//This calculation really shouldn't be here.
-						if (a_index == 0){
+						if (a_index == 0)
+                        {
 							existing = 0;
 							mm_getTE_Addr_0(&existing);
 							existing = (existing & 0x0000000F) | (curr->new_portbits << 16);
 							mm_setTE_Addr_0(existing);
 						}
-						if (a_index == 1){
+						if (a_index == 1)
+                        {
 							existing = 0;
 							mm_getTE_Addr_1(&existing);
 							existing = (existing & 0x0000000F) | (curr->new_portbits << 16);
 							mm_setTE_Addr_1(existing);
 						}
-						if (a_index == 2){
+						if (a_index == 2)
+                        {
 							existing = 0;
 							mm_getTE_Addr_2(&existing);
 							existing = (existing & 0x0000000F) | (curr->new_portbits << 16);
 							mm_setTE_Addr_2(existing);
 						}
-						if (a_index == 3){
+						if (a_index == 3)
+                        {
 							existing = 0;
 							mm_getTE_Addr_3(&existing);
 							existing = (existing & 0x0000000F) | (curr->new_portbits << 16);
@@ -194,60 +205,63 @@ void TE_Adaptors_Task(void * vHandle)
 				
 						if (!result){
 							// Todo: EVENT!
-							if (a_index == 0){
+							if (a_index == 0)
+                            {
 								mm_setTE_Addr_0_Detected(false);
 								curr->state = UNINITIALIZED;
 							}
-							if (a_index == 1){
+							if (a_index == 1)
+                            {
 								mm_setTE_Addr_1_Detected(false);
 								curr->state = UNINITIALIZED;
 							}
-							if (a_index == 2){
+							if (a_index == 2)
+                            {
 								mm_setTE_Addr_2_Detected(false);
 								curr->state = UNINITIALIZED;
 							}
-							if (a_index == 3){
+							if (a_index == 3)
+                            {
 								mm_setTE_Addr_3_Detected(false);
 								curr->state = UNINITIALIZED;
 							}
 						}
 					}
-				break;
-			
+				    break;
+                }
 			}
 		}
-		
 		vTaskDelay(pdMS_TO_TICKS(20));
 	}
 }
 
 void TE_Adaptor_SetScanEnabled(te_scanner_t * pHandle, uint8_t index)
 {
-	assert(pHandle);
-	assert(index < 4);
-	
-	pHandle->adaptors[index].scan_enabled = true;
+    assert(pHandle);
+    assert(index < 4);
+    
+    pHandle->adaptors[index].scan_enabled = true;
 }
 
 void TE_Adaptor_ClearScanEnabled(te_scanner_t * pHandle, uint8_t index)
 {
-	assert(pHandle);
-	assert(index < 4);
-	
-	pHandle->adaptors[index].scan_enabled = false;
+    assert(pHandle);
+    assert(index < 4);
+    
+    pHandle->adaptors[index].scan_enabled = false;
 }
 
 void TE_Adaptor_SetTeBits(te_scanner_t * pHandle, uint8_t index, uint16_t bits)
 {
-	assert(pHandle);
-	assert(index < 4);
-	
-	pHandle->adaptors[index].new_portbits |= bits;
+    assert(pHandle);
+    assert(index < 4);
+    
+    pHandle->adaptors[index].new_portbits |= bits;
 }
 
 void TE_Adaptor_ClearTeBits(te_scanner_t * pHandle, uint8_t index, uint16_t bits){
-	assert(pHandle);
-	assert(index < 4);
+    assert(pHandle);
+    assert(index < 4);
 	
-	pHandle->adaptors[index].new_portbits &= ~bits;
+    pHandle->adaptors[index].new_portbits &= ~bits;
 }

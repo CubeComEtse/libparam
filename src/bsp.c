@@ -150,17 +150,15 @@ static void BSP_vInitUART(bsp_t * bsp)
 	ioport_enable_pin(T_USART_CTS_PIN);
 	ioport_set_pin_dir(T_USART_CTS_PIN, IOPORT_DIR_OUTPUT);
 	
-	telemetry_uart.doFlowControl = 1;
+	telemetry_uart.flow_control_enabled = 1;
 	telemetry_uart.uart_comm_mode = UART;
 	telemetry_uart.cts_pin = T_USART_CTS_PIN;
 	telemetry_uart.baudrate = T_USART_SPEED;
-	// Should not be used, but setting this guards against HardFault if the UART 
-	// accidentally lands in RS485 mode.
-	telemetry_uart.set_gpio_pin = &BSP_vSetPin;
+	telemetry_uart.set_gpio_pin = &BSP_vSetPin; // Should not be used, but setting this guards against HardFault if the UART accidentally lands in RS485 mode.
 	
 	// This UART's Interrupt is 1 - The 'highest' available, and outside the FreeRTOS
 	// priority ranges. It needs to be this high so that we don't miss bytes from the PC
-	
+    // TODO: [ADRIAAN] Update comment above once things are stable with this interrupt using FreeRTOS priority.
 	ccd_uart_Init(&telemetry_uart, T_USART, configMAX_SYSCALL_INTERRUPT_PRIORITY >> (8 - __NVIC_PRIO_BITS));
 	
 	bsp->telemetry_uart = &telemetry_uart;
@@ -192,7 +190,7 @@ static void BSP_vInitUART(bsp_t * bsp)
 	ioport_set_pin_level(PIN_SIN_nRE, 1);
 	ioport_set_pin_dir(PIN_SIN_nRE, IOPORT_DIR_OUTPUT);
 		
-	bus_uart.doFlowControl = 0;
+	bus_uart.flow_control_enabled = 0;
 	bus_uart.uart_comm_mode = UART;
 	bus_uart.baudrate = B_USART_SPEED;
 	

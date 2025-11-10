@@ -52,7 +52,7 @@ typedef struct {
 	uint8_t tr_delay;
 	
 	
-}i2c_target_t;
+} i2c_target_t;
 
 void I2CTARGET_Init(i2c_target_t * handle);
 void I2CTARGET_Task(void * handle);

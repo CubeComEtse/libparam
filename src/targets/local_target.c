@@ -6,7 +6,6 @@
  *  Author: Kolijn
  */ 
 
-
 #include "local_target.h"
 
 #include <assert.h>
@@ -16,7 +15,6 @@
 
 #include "pc_messages.h"
 #include "register_handler.h"
-
 
 /*
  * Initialize the instance. 
@@ -30,7 +28,6 @@ void LOCALTARGET_Init(local_target_t * handle)
 	handle->outgoing_messages= xMessageBufferCreate(256);
 }
 
-
 void LOCALTARGET_Task(void *handle)
 {
 	assert(handle);
@@ -43,22 +40,25 @@ void LOCALTARGET_Task(void *handle)
 	
 	bool decode_successfull;
 	
-	while(1){
+	while(1)
+    {
 		// Wait indefinitely to receive a message
 		size_t rx_length =  xMessageBufferReceive(pHandle->incoming_messages, rx_buffer, 32, portMAX_DELAY);
 		
-		if (rx_length == 0){
+		if (rx_length == 0)
+        {
 			continue;
 		}
 		
 		decode_successfull = decode_v2_message(&in_message, rx_buffer, rx_length);
 		
-		if (!decode_successfull){
+		if (!decode_successfull)
+        {
 			continue;
 		}
 		
-		if (in_message.is_read){
-			
+		if (in_message.is_read)
+        {
 			// Ensure there is enough data in this message to be a read
 			if (in_message.data_len != 2)
 			{
@@ -70,7 +70,8 @@ void LOCALTARGET_Task(void *handle)
 			uint32_t address = in_message.data[0] | (in_message.data[1] << 8);
 			
 			uint8_t size = 0;
-			if (REG_vReadFromAddress(address, &out_message.data[2], &size)){
+			if (REG_vReadFromAddress(address, &out_message.data[2], &size))
+            {
 				//Copy address
 				out_message.data[0] = in_message.data[0];
 				out_message.data[1] = in_message.data[1];
@@ -85,14 +86,15 @@ void LOCALTARGET_Task(void *handle)
 				
 				size_t tx_size = encode_v2_message(tx_buffer, &out_message);
 				size_t bytes_sent = xMessageBufferSend(pHandle->outgoing_messages, tx_buffer, tx_size, pdMS_TO_TICKS(10));
-				if ( bytes_sent == 0 ){
+				if ( bytes_sent == 0 )
+                {
 					mm_setRTOS_Status0_GSETargetOutgoingOverflow(true);
 				}
 			}
 			
 		}
-		else{
-			//Todo: This
+		else
+        {
 			if (in_message.data_len != 6)
 			{
 				// Todo: Create event for malformed messages
@@ -101,8 +103,9 @@ void LOCALTARGET_Task(void *handle)
 			
 			uint32_t address = in_message.data[0] | (in_message.data[1] << 8);
 			REG_vWriteToAddress(address, &in_message.data[2], 4);
+            
 			// Todo: Register handler respond with a read/write result.
 			// Our messages don't support that yet.
-		}		
+		}
 	}
 }

@@ -9,7 +9,6 @@
  * to be regularly called.
 */
 
-
 #ifndef MULTITESTER_H_
 #define MULTITESTER_H_
 
@@ -26,8 +25,8 @@
 #define MTCV2_Addr2 0x02
 #define MTCV2_Addr3 0x03
 
-
-typedef struct {
+typedef struct
+{
 	bool (*i2c_write_function)(void * handle, const uint8_t dev_addr, const uint8_t * data, const size_t data_len);
 	bool (*i2c_read_function)(void * handle, const uint8_t dev_addr, const uint8_t * addr, const size_t addr_len, uint8_t * read_buffer, size_t read_len);
 	void * i2c_handle;
@@ -49,17 +48,16 @@ typedef struct {
 	
 } multitester_t;
 
-
-typedef enum channel{
+typedef enum channel
+{
 	Position1 = 1,
 	Position2 = 2,
 	Position3 = 3,
 	Position4 = 4
 } channel_id_t;
 
-
-
-typedef struct {
+typedef struct
+{
 	bool (*i2c_write_function)(void * handle, const uint8_t dev_addr, const uint8_t * data, const size_t data_len);
 	bool (*i2c_read_function)(void * handle, const uint8_t dev_addr, const uint8_t * addr, const size_t addr_len, uint8_t * read_buffer, size_t read_len);
 	void * i2c_handle;
@@ -77,14 +75,12 @@ typedef struct {
 	
 	tmr_t update_timer;
 	bool scan_enabled;
-}rf_relay_config_t;
-
+} rf_relay_config_t;
 
 void RFRelay_Init(rf_relay_config_t * handle, const uint32_t relay_number);
 void RFRelay_Process(rf_relay_config_t * pHandle);
 void RFRelay_SetScanEnabled(rf_relay_config_t * pHandle, bool value);
 void RFRelay_SetDesiredChannel(rf_relay_config_t * handle, uint8_t channel);
-
 
 void MULTI_Init(multitester_t * handle);
 void MULTI_Process(multitester_t * pHandle);
@@ -100,6 +96,4 @@ void MTCV2_ClearBits(multitester_t * pHandle, uint32_t bits);
 /*void MTCV2_Task(multitester_t * pHandle, const uint32_t address, const uint32_t data, const size_t length);*/
 void MTCV2_Task(void * vHandle);
 
-
 #endif /* MULTITESTER_H_ */
-

@@ -15,6 +15,7 @@
 #include "mcan.h"
 
 #include "FreeRTOS.h"
+#include "semphr.h"
 #include "message_buffer.h"
 
 typedef struct {
@@ -27,7 +28,7 @@ typedef struct {
 	uint32_t gse_address;
 	uint32_t gse_address_mask;
 	
-	MessageBufferHandle_t receiveMessageBuffer;
+	MessageBufferHandle_t rx_buffer;
 } ccd_can_t;
 
 

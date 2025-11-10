@@ -1,4 +1,9 @@
-#include "main.h"
+/*
+ * main.c
+ *
+ * Created:
+ *  Author: Kolijn
+ */
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -14,11 +19,11 @@
 #include "timers.h"
 #include "semphr.h"
 
+#if TRACE_ENABLED
 #include "trcRecorder.h"
+#endif
 
-// TODO: [ADRIAAN] Figure out how to ignore the 500'ish warnings from this library when compiling
-#pragma GCC diagnostic push
-#pragma GCC diagnostic error "-Wall"
+// TODO: [ADRIAAN] Figure out how to ignore the 500'ish warnings from these libraries when compiling
 #include "csp/csp.h"
 #include "csp/csp_hooks.h"
 #include "csp/autoconfig.h"
@@ -28,7 +33,6 @@
 #include "param/param_server.h"
 #include "vmem/vmem_server.h"
 #include "vmem/vmem_fram.h"
-#pragma GCC diagnostic pop
 
 #include "bsp.h"
 #include "platform.h"
@@ -49,6 +53,10 @@
 #include "csp_usart_cc.h"
 #include "csp_can_cc.h"
 
+#ifdef DEBUG
+#include "egse_debug.h"
+#endif
+
 // ================================================================================
 // Defines
 // ================================================================================
@@ -63,18 +71,18 @@
 static bsp_t bsp;
 static platform_t * platform;
 
-// --- Experimental libcsp stuff ---
-
 // ================================================================================
 // Function prototypes
 // ================================================================================
 
-static void setup_task(void* handle);
-static void devtools_task(void* handle);
+static void setup_task(void * handle);
+static void devtools_task(void * handle);
 
-// --- Experimental libcsp stuff ---
+static void tracealyzer_init(void);
+
+// --- Experimental libcsp stuff --- TODO: [ADRIAAN] Remove comment once done implementing
 static void csp_app_init(void);
-static void csp_router_task(void* param);
+static void csp_router_task(void * param);
 
 // ================================================================================
 // Application entry point
@@ -94,17 +102,14 @@ int main(void)
     // Configure all external ICs
     platform = PLATFORM_get();
     PLATFORM_vConfigureAll(platform);
-
+    
     // Configure Tracealyzer tracing
-    if(xTraceEnable(TRC_START_FROM_HOST) != TRC_SUCCESS)
-    {
-        ErrorHandler();
-    }
-
+    tracealyzer_init();
+    
     // Configure CubeSat Protocol (CSP)
     csp_app_init();
 
-    xTaskCreate(setup_task, "Startup", 1024, NULL, tskIDLE_PRIORITY + 1, NULL );
+    xTaskCreate(setup_task, "Startup", 1024, NULL, tskIDLE_PRIORITY + 1, NULL);
 
     // Entire startup until here is very fast. Starting the scheduler and entering
     // the setup task takes almost 300ms. Don't know why.
@@ -149,11 +154,11 @@ static void setup_task(void* handle)
 
     xTaskCreate(I2CTARGET_Task,                 "I2C Target RX",    512,    (void *) platform->i2c_target,      tskIDLE_PRIORITY + 3, NULL);
 
-    xTaskCreate(CANTARGET_ReceiveTask,               "CAN Target RX",    512,    (void *) platform->can_target,      tskIDLE_PRIORITY + 2, NULL);
-    xTaskCreate(CANTARGET_TransmitTask,               "CAN Target TX",    512,    (void *) platform->can_target,      tskIDLE_PRIORITY + 3, NULL);
+    xTaskCreate(CANTARGET_ReceiveTask,          "CAN Target RX",    512,    (void *) platform->can_target,      tskIDLE_PRIORITY + 2, NULL);
+    xTaskCreate(CANTARGET_TransmitTask,         "CAN Target TX",    512,    (void *) platform->can_target,      tskIDLE_PRIORITY + 3, NULL);
 
-    xTaskCreate(UARTTARGET_RxTask,              "UART Target RX",   512,    (void *) platform->uart_target,     tskIDLE_PRIORITY + 2, NULL);
-    xTaskCreate(UARTTARGET_TxTask,              "UART Target TX",   512,    (void *) platform->uart_target,     tskIDLE_PRIORITY + 2, NULL);
+    xTaskCreate(UARTTARGET_ReceiveTask,         "UART Target RX",   512,    (void *) platform->uart_target,     tskIDLE_PRIORITY + 2, NULL);
+    xTaskCreate(UARTTARGET_TransmitTask,        "UART Target TX",   512,    (void *) platform->uart_target,     tskIDLE_PRIORITY + 2, NULL);
 
     xTaskCreate(LOCALTARGET_Task,               "Local Target RX",  512,    (void *) platform->local_target,    tskIDLE_PRIORITY + 2, NULL);
 
@@ -169,7 +174,7 @@ static void setup_task(void* handle)
     xTaskCreate(TE_Adaptors_Task,               "TE Adapters",      512,    (void *) platform->te_scanner,      tskIDLE_PRIORITY + 2, NULL);
 
     // Multitester task
-    xTaskCreate(MTCV2_Task,                     "MTC Task",         512,    (void *) platform->multitester,     tskIDLE_PRIORITY + 2, NULL);
+    xTaskCreate(MTCV2_Task,                     "MTC",              512,    (void *) platform->multitester,     tskIDLE_PRIORITY + 2, NULL);
 
     // LED task has lowest priority
     xTaskCreate(LEDIndicator_UpdateTask,        "LED",              512,    (void *) platform->led_indicator,   tskIDLE_PRIORITY + 1, NULL);
@@ -177,49 +182,63 @@ static void setup_task(void* handle)
     // CSP tasks
     xTaskCreate(csp_router_task,                "CSP Route",        1024,   NULL,                               tskIDLE_PRIORITY + 2, NULL);
     xTaskCreate(vmem_server_loop,               "VMEM Server",      1024,   NULL,                               tskIDLE_PRIORITY + 2, NULL);
-
+    
+    #ifdef DEBUG
+    // Force XTXG2 on (delay required to allow TE discovery first)
+    vTaskDelay(100);
+    xTaskCreate(xtxg2_enable_task,              "XTXG2 Enable",     1024,   &bsp,                               tskIDLE_PRIORITY + 1, NULL);
+    // Send some test CAN messages for validation purposes
+    //xTaskCreate(test_can_task,                  "Test CAN",         1024,   NULL,                               tskIDLE_PRIORITY + 1, NULL);
+    #endif
+    
     // Delete the setup task
     vTaskDelete(NULL);
 }
 
-static void devtools_task(void* handle)
+static void devtools_task(void * params)
 {
-    platform_t * pHandle = (platform_t *) handle;
+    platform_t * pHandle = (platform_t *) params;
 
-    while(1){
-
+    while (1)
+    {
         RFRelay_Process(pHandle->rf_relay_1);
         RFRelay_Process(pHandle->rf_relay_2);
         MULTI_Process(pHandle->multitester);
 
         vTaskDelay(pdMS_TO_TICKS(20));
     }
+    
+    vTaskDelete(NULL);
 }
 
-static void csp_router_task(void * param)
+static void csp_router_task(void * params)
 {
-    while(1)
+    (void) params; // unused
+    
+    while (1)
     {
         csp_route_work();
     }
+    
+    vTaskDelete(NULL);
 }
 
 // ================================================================================
 // FreeRTOS hooks
 // ================================================================================
 
-void vApplicationStackOverflowHook( TaskHandle_t xTask,char * pcTaskName )
+void vApplicationStackOverflowHook(TaskHandle_t xTask, char * pcTaskName)
 {
     // Check pcTaskName for the name of the offending task,
     // or pxCurrentTCB if pcTaskName has itself been corrupted.
-    ( void ) xTask;
-    ( void ) pcTaskName;
-    ErrorHandler();
+    (void) xTask;
+    (void) pcTaskName;
+    configASSERT(false);
 }
 
 void vApplicationMallocFailedHook(void)
 {
-    ErrorHandler();
+    configASSERT(false);
 }
 
 void vApplicationTickHook(void)
@@ -230,6 +249,13 @@ void vApplicationTickHook(void)
 // ================================================================================
 // Miscellaneous
 // ================================================================================
+
+static void tracealyzer_init(void)
+{
+    #if defined(DEBUG) && TRACE_ENABLED
+    configASSERT(xTraceEnable(TRC_START_FROM_HOST) == TRC_SUCCESS);
+    #endif
+}
 
 void csp_app_init(void)
 {
@@ -242,6 +268,7 @@ void csp_app_init(void)
     csp_can_cc_init(&bsp);
     
     csp_iflist_check_dfl();
+    
     csp_bind_callback(csp_service_handler, CSP_ANY);
     csp_bind_callback(param_serve, PARAM_PORT_SERVER);
 }
@@ -250,30 +277,22 @@ void csp_app_init(void)
 // Hardfault/Error handlers
 // ================================================================================
 
-void ErrorHandler(void)
-{
-    while(1)
-    {
-         continue;
-    }
-}
-
 void HardFault_Handler(void)
 {
-    ErrorHandler();
+    configASSERT(false);
 }
 
 void MemManage_Handler(void)
 {
-    ErrorHandler();
+    configASSERT(false);
 }
 
 void BusFault_Handler(void)
 {
-    ErrorHandler();
+    configASSERT(false);
 }
 
 void UsageFault_Handler(void)
 {
-    ErrorHandler();
+    configASSERT(false);
 }

@@ -17,11 +17,11 @@
 #include "stream_buffer.h"
 #include "message_buffer.h"
 
-#define UART_HOLDING_BUFFER_SIZE 32
+#define UART_HOLDING_BUFFER_SIZE 2048
 
-#define UART_RX_HB_OVERFLOW  (0x01<<0)
-#define UART_RX_SB_OVERFLOW  (0x01<<1)
-#define UART_TX_SB_OVERFLOW  (0x01<<2)
+#define UART_RX_HB_OVERFLOW  (0x01 << 0)
+#define UART_RX_SB_OVERFLOW  (0x01 << 1)
+#define UART_TX_SB_OVERFLOW  (0x01 << 2)
 
 typedef enum uart_comm_mode_e
 {
@@ -53,8 +53,8 @@ typedef enum uart_baud_rates_e
 typedef struct ccd_uart_s
 {
 	// Buffers containing the incoming and outgoing data.
-	StreamBufferHandle_t uart_rx_buffer;
-	StreamBufferHandle_t uart_tx_buffer;
+	StreamBufferHandle_t rx_buffer;
+	StreamBufferHandle_t tx_buffer;
 	
 	uint8_t tx_holding_buffer[UART_HOLDING_BUFFER_SIZE];
 	volatile size_t tx_buffer_read;
@@ -66,7 +66,7 @@ typedef struct ccd_uart_s
 	
 	Usart * base_usart;
 	
-	bool doFlowControl;
+	bool flow_control_enabled;
 	uint32_t cts_pin; // (clear to send)
 	
 	TaskHandle_t rx_task_handle;

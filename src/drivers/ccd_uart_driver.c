@@ -19,14 +19,14 @@
 
 void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart, uint8_t interrupt_priority)
 {
-	if (driver->doFlowControl)
+	if (driver->flow_control_enabled)
     {
 		assert(driver->cts_pin);	
 	}
 	
-	// TOTO: These buffer levels are guesses. Monitor and adjust them
-	driver->uart_rx_buffer = xStreamBufferCreate(512, 1);
-	driver->uart_tx_buffer = xStreamBufferCreate(512, 1);
+	// TODO: These buffer levels are guesses. Monitor and adjust them
+	driver->rx_buffer = xStreamBufferCreate(512, 1);
+	driver->tx_buffer = xStreamBufferCreate(512, 1);
 	driver->base_usart = base_usart;
 	
 	driver->rx_buffer_read = 0;
@@ -37,7 +37,7 @@ void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart, uint8_t interrupt_pr
 	
 	ccd_uart_clear_error_status(driver);
 	
-	// Disable the Interrupts while configuring the usart
+	// Disable the Interrupts while configuring the USART
 	usart_disable_interrupt(driver->base_usart, 0xFFFFFFFF);
 
 	// Enable Clock to this module
@@ -75,7 +75,7 @@ void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart, uint8_t interrupt_pr
 		NVIC_EnableIRQ(USART2_IRQn);
 	}
 	
-	if (driver->doFlowControl)
+	if (driver->flow_control_enabled)
     {
 		ccd_uart_StartFlowControl(driver);
 	}
@@ -165,21 +165,21 @@ void ccd_uart_setCommMode(void * vHandle, uart_comm_mode_t uart_comm_mode)
 
 void ccd_uart_setParityEnabled(void * vHandle, uart_parity_enabled_t ParityEnabled)
 {
-	ccd_uart_t * driver = (ccd_uart_t*) vHandle;
+	ccd_uart_t * driver = (ccd_uart_t *) vHandle;
 	driver->uart_parity_enabled = ParityEnabled;
 	ccd_uart_ReInit(driver);
 }
 
 void ccd_uart_setParityMode(void * vHandle, uart_parity_mode_t ParityMode)
 {
-	ccd_uart_t * driver = (ccd_uart_t*) vHandle;
+	ccd_uart_t * driver = (ccd_uart_t *) vHandle;
 	driver->uart_parity_mode = ParityMode;
 	ccd_uart_ReInit(driver);
 }
 
 void ccd_uart_setBaudRate(void * vHandle, uart_baud_rates_t BaudRate)
 {
-	ccd_uart_t * driver = (ccd_uart_t*) vHandle;
+	ccd_uart_t * driver = (ccd_uart_t *) vHandle;
 	
 	if (BaudRate == baud_115200)
 	{
@@ -223,7 +223,7 @@ inline void ccd_uart_StartFlowControl(void * handle)
     
 	ccd_uart_t * driver =  (ccd_uart_t *) handle;
 	
-	if ((UART_HOLDING_BUFFER_SIZE - driver->rx_buffer_write + driver->rx_buffer_read - 1)% UART_HOLDING_BUFFER_SIZE > 5)
+	if ((UART_HOLDING_BUFFER_SIZE - driver->rx_buffer_write + driver->rx_buffer_read - 1) % UART_HOLDING_BUFFER_SIZE > 5)
 	{
 		ioport_set_pin_level(driver->cts_pin, false);
 	}
@@ -239,12 +239,11 @@ inline void ccd_uart_StartFlowControl(void * handle)
 */
 void ccd_usart_RXProcessingTask(void * parameters)
 {
-	ccd_uart_t * driver = (ccd_uart_t*) parameters;
+	ccd_uart_t * driver = (ccd_uart_t* ) parameters;
     uint8_t * p_data;
     size_t data_len;
-    
 	
-	while(1)
+	while (1)
 	{
 		// Wait for new data to be received
 		ulTaskNotifyTake(pdTRUE, portMAX_DELAY); 
@@ -262,11 +261,11 @@ void ccd_usart_RXProcessingTask(void * parameters)
 		// First copy all data from the read position until the end of the buffer.
 		// If all these bytes are copied the pointer will be reset to the beginning of 
 		// the buffer
-		if (copied_write < driver->rx_buffer_read)
+		if (driver->rx_buffer_read > copied_write)
         {
             p_data = &driver->rx_holding_buffer[driver->rx_buffer_read];
             data_len = UART_HOLDING_BUFFER_SIZE - driver->rx_buffer_read;
-            size_t bytes_sent = xStreamBufferSend(driver->uart_rx_buffer, p_data, data_len, 0);
+            size_t bytes_sent = xStreamBufferSend(driver->rx_buffer, p_data, data_len, 0);
 			if (bytes_sent == 0)
             {
 				driver->rx_streaming_buffer_overflow = true;
@@ -274,12 +273,12 @@ void ccd_usart_RXProcessingTask(void * parameters)
 			driver->rx_buffer_read = (driver->rx_buffer_read + bytes_sent) % UART_HOLDING_BUFFER_SIZE;
 		}
 			
-		// Then if there are more bytes available until the write pointer, copy them too.
-		if (copied_write > driver->rx_buffer_read)
+		// Then if there are more bytes available until the write pointer, copy them too
+		if (driver->rx_buffer_read < copied_write)
 		{
     		p_data = &driver->rx_holding_buffer[driver->rx_buffer_read];
     		data_len = copied_write - driver->rx_buffer_read;
-			size_t bytes_sent = xStreamBufferSend(driver->uart_rx_buffer, p_data, data_len, 0);
+			size_t bytes_sent = xStreamBufferSend(driver->rx_buffer, p_data, data_len, 0);
 			if (bytes_sent == 0)
             {
 				driver->rx_streaming_buffer_overflow = true;
@@ -294,36 +293,33 @@ void ccd_usart_RXProcessingTask(void * parameters)
 
 void ccd_usart_TXProcessingTask(void * parameters)
 {
-	ccd_uart_t * driver = (ccd_uart_t*) parameters;
+	ccd_uart_t * driver = (ccd_uart_t *) parameters;
 	
 	while(1)
 	{
 		// Calculate the max space available
-		size_t max_bytes_to_read = (UART_HOLDING_BUFFER_SIZE - driver->tx_buffer_write + driver->tx_buffer_read - 1)% UART_HOLDING_BUFFER_SIZE;
+		size_t max_bytes_to_read = (UART_HOLDING_BUFFER_SIZE - driver->tx_buffer_write + driver->tx_buffer_read - 1) % UART_HOLDING_BUFFER_SIZE;
 		
-		// If write pointer is past read pointer the max data to receive is to the 
-		// end of the buffer
+		// If write pointer is past read pointer the max data to receive is to the end of the buffer
 		if (driver->tx_buffer_read <= driver->tx_buffer_write)
         {
 			max_bytes_to_read = min(max_bytes_to_read, UART_HOLDING_BUFFER_SIZE - driver->tx_buffer_write);
 		}
 		
-		// If max_bytes_to_read is zero the buffer is full. We don't even need to 
-		// try reading 0 from the StreamBuffer.
+		// If max_bytes_to_read is zero, the buffer is full. We don't even need to try reading data from the StreamBuffer
 		if (max_bytes_to_read == 0)
         {
 			driver->tx_holding_buffer_overflow = true;
+            continue;
 		}
-		else
-		{
-			size_t read_size = xStreamBufferReceive(driver->uart_tx_buffer, &driver->tx_holding_buffer[driver->tx_buffer_write], max_bytes_to_read, portMAX_DELAY);
-			driver->tx_buffer_write = (driver->tx_buffer_write + read_size) % UART_HOLDING_BUFFER_SIZE;
+        
+		size_t read_size = xStreamBufferReceive(driver->tx_buffer, &driver->tx_holding_buffer[driver->tx_buffer_write], max_bytes_to_read, portMAX_DELAY);
+		driver->tx_buffer_write = (driver->tx_buffer_write + read_size) % UART_HOLDING_BUFFER_SIZE;
 		
-			// If we copied any data into the buffer, enable the interrupt
-			if (read_size > 0)
-            {
-				usart_enable_interrupt(driver->base_usart, US_IER_TXEMPTY);
-			}
+		// If we copied any data into the buffer, enable the interrupt
+		if (read_size > 0)
+        {
+			usart_enable_interrupt(driver->base_usart, US_IER_TXEMPTY);
 		}
 	}
 }
@@ -363,7 +359,7 @@ inline void ccd_uart_InterruptHandler(ccd_uart_t * driver)
 		}
 
 		// Notify RX data processing task of new data
-        // TODO: Handle interrupts that also triggered before this task was created
+        // TODO: [ADRIAAN] Handle interrupts that also triggered before this task was created
         if (driver->rx_task_handle != NULL)
         {
             vTaskNotifyGiveFromISR(driver->rx_task_handle, NULL);
@@ -382,7 +378,8 @@ inline void ccd_uart_InterruptHandler(ccd_uart_t * driver)
 				driver->set_gpio_pin(driver->sout_de_pin, 1);
 				driver->set_gpio_pin(driver->sout_nre_pin, 1);
 			}
-			usart_write(driver->base_usart, driver->tx_holding_buffer[driver->tx_buffer_read]);
+			uint32_t ret = usart_write(driver->base_usart, driver->tx_holding_buffer[driver->tx_buffer_read]);
+            configASSERT(ret == 0);
 			driver->tx_buffer_read = (driver->tx_buffer_read + 1) % UART_HOLDING_BUFFER_SIZE;
 		}
 		else
@@ -400,6 +397,7 @@ inline void ccd_uart_InterruptHandler(ccd_uart_t * driver)
     // TODO: [ADRIAAN] Handle this is a more acceptable manner, currently just clearing the flag or hard faulting...
     if (dw_status & US_CSR_OVRE)
     {
+        configASSERT(false);
         //ErrorHandler();
         driver->base_usart->US_CR |= US_CR_RSTSTA;
     }
@@ -437,21 +435,20 @@ void ccd_uart_clear_error_status(void * vHandle)
 
 void ccd_b_uart_Send_message(void * vHandle, uint8_t * data, size_t data_len)
 {
-	ccd_uart_t * pHandle = (ccd_uart_t*) vHandle;
+	ccd_uart_t * pHandle = (ccd_uart_t *) vHandle;
 	
-	size_t bytes_sent = xStreamBufferSend(pHandle->uart_tx_buffer, data, data_len, 0);
+	size_t bytes_sent = xStreamBufferSend(pHandle->tx_buffer, data, data_len, 0);
 	
-	if (bytes_sent > 0)
-    {
-		ccd_uart_EnableTXInterrupt(pHandle);
-	}
+    configASSERT(bytes_sent > 0);
+    
+	ccd_uart_EnableTXInterrupt(pHandle);
 }
 
 size_t ccd_b_uart_Receive_message(void * vHandle, uint8_t * data, size_t data_len) 
 {
-	ccd_uart_t * pHandle = (ccd_uart_t*) vHandle;
+	ccd_uart_t * pHandle = (ccd_uart_t *) vHandle;
 
-	size_t bytes_received = xStreamBufferReceive(pHandle->uart_rx_buffer, data, data_len, portMAX_DELAY);
+	size_t bytes_received = xStreamBufferReceive(pHandle->rx_buffer, data, data_len, portMAX_DELAY);
 	
 	return bytes_received; // returns size of actual stream buffer received
 }

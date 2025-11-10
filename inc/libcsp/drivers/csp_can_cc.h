@@ -3,7 +3,7 @@
  *
  * Created: 10/16/2025 10:36:53 AM
  *  Author: Adriaan van der Westhuizen
- */ 
+ */
 
 #ifndef CSP_CAN_CC_H_
 #define CSP_CAN_CC_H_
@@ -18,10 +18,7 @@
 #include "FreeRTOS.h"
 #include "semphr.h"
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wall"
 #include "csp/interfaces/csp_if_can.h"
-#pragma GCC diagnostic pop
 
 #include "bsp.h"
 #include "ccd_can_driver.h"

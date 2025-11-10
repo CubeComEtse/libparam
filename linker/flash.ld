@@ -52,7 +52,6 @@ MEMORY
 {
   rom (rx)  : ORIGIN = 0x00400000, LENGTH = 0x00200000
   ram (rwx) : ORIGIN = 0x20400000, LENGTH = 0x0005F000
-  liveram (rwx) : ORIGIN = 0x20400000, LENGTH = 0x00001000
 }
 
 /* The stack size used by the application. NOTE: you need to adjust according to your application. */
@@ -196,10 +195,4 @@ SECTIONS
     . = ALIGN(4);
     _end = . ;
     _ram_end_ = ORIGIN(ram) + LENGTH(ram) -1 ;
-	
-    /* .liveram section which is used for libparam VMEM data ??? */
-    .liveram (NOLOAD):
-    {
-        KEEP(*(.liveram .liveram.*))
-    } > liveram
 }

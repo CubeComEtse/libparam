@@ -5,11 +5,7 @@
  *  Author: Adriaan van der Westhuizen
  */ 
 
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wall"
 #include "csp/csp_hooks.h"
-#pragma GCC diagnostic pop
 
 #include "core_cm7.h"
 

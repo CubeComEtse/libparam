@@ -40,8 +40,8 @@ typedef struct {
 
 
 void UARTTARGET_Init(uart_target_t * handle);
-void UARTTARGET_TxTask(void * handle);
-void UARTTARGET_RxTask(void * handle);
+void UARTTARGET_TransmitTask(void * handle);
+void UARTTARGET_ReceiveTask(void * handle);
 bool UARTTARGET_SetCommMode(uart_target_t * pHandle, uart_comm_mode_t CommMode);
 bool UARTTARGET_SetParityEnabled(uart_target_t * pHandle, uart_parity_enabled_t ParityEnabled);
 bool UARTTARGET_SetParityMode(uart_target_t * pHandle, uart_parity_mode_t ParityMode);

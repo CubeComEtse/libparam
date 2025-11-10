@@ -13,7 +13,6 @@
 #include <stdint.h>
 #include <stddef.h>
 
-
 #define EP_V2_GSE				0x20
 
 #define EP_V2_I2C_CC			0x30
@@ -28,15 +27,14 @@
 
 #define EP_V2_UART_CC_2			0x40		
 
-typedef struct{
+typedef struct
+{
 	uint8_t target;
 	bool is_read;
 	uint8_t msg_id;
 	uint8_t data[16];
 	uint8_t data_len;
-	//uint8_t msg_type; //i2c doesn't have msg_type
 } v2_msg_t;
-
 
 bool decode_v2_message(v2_msg_t * dest, uint8_t * buffer, size_t buffer_len);
 size_t encode_v2_message(uint8_t * dest, v2_msg_t * message);

@@ -506,6 +506,7 @@
   <armgcc.compiler.symbols.DefSymbols>
     <ListValues>
       <Value>DEBUG</Value>
+      <Value>TRACE_ENABLED=true</Value>
       <Value>scanf=iscanf</Value>
       <Value>BOARD=USER_BOARD</Value>
       <Value>ARM_MATH_CM7=true</Value>
@@ -567,6 +568,7 @@
       <Value>../inc/utils</Value>
       <Value>../inc/registers</Value>
       <Value>../inc/targets</Value>
+      <Value>../inc/debug</Value>
     </ListValues>
   </armgcc.compiler.directories.IncludePaths>
   <armgcc.compiler.optimization.OtherFlags>-fdata-sections</armgcc.compiler.optimization.OtherFlags>
@@ -684,6 +686,7 @@
     <Folder Include="inc\libcsp\drivers\" />
     <Folder Include="inc\libparam" />
     <Folder Include="inc\freertos" />
+    <Folder Include="inc\debug" />
     <Folder Include="inc\tracerecorder" />
     <Folder Include="inc\targets" />
     <Folder Include="inc\utils" />
@@ -793,6 +796,7 @@
     <Folder Include="src\drivers" />
     <Folder Include="src\libcsp" />
     <Folder Include="src\libcsp\drivers\" />
+    <Folder Include="src\debug" />
     <Folder Include="src\targets" />
     <Folder Include="src\utils" />
     <Folder Include="src\registers" />
@@ -826,6 +830,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\config\conf_uart_serial.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\debug\egse_debug.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\drivers\ccd_can_driver.h">
@@ -874,9 +881,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\ltc2992_conf.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\main.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\Multitester.h">
@@ -1537,6 +1541,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="lib\tracerecorder\trcTimestamp.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\debug\egse_debug.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\drivers\ccd_can_driver.c">

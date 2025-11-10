@@ -19,6 +19,7 @@
 
 #include "bsp.h"
 #include "pc_messages.h"
+#include "csp_usart_cc.h"
 
 // Special characters:
 #define FEND	0xC0 // 192
@@ -26,7 +27,7 @@
 #define TFEND   0xDC // 220 
 #define TFESC   0xDD // 221
 
-extern csp_iface_t * csp_usart_iface_bus;
+extern csp_usart_cc_context_t csp_usart_cc_ctx_bus;
 
 /*
  * Initialize the instance. 
@@ -43,7 +44,7 @@ void UARTTARGET_Init(uart_target_t * handle)
 	handle->uart_semaphore = xSemaphoreCreateMutex();
 }
 
-void UARTTARGET_TxTask(void * handle) 
+void UARTTARGET_TransmitTask(void * handle) 
 {
 	assert(handle);
 	uart_target_t * hnd = (uart_target_t *) handle;
@@ -68,9 +69,7 @@ void UARTTARGET_TxTask(void * handle)
 		// the radio ample time to respond. It does limit throughput quite a lot. I don't know why this
 		// IC is so slow with UART.
 		
-		size_t rx_length = 0;
-		
-		rx_length = xMessageBufferReceive(hnd->incoming_messages, rx_buffer, 16, portMAX_DELAY); // TODO: Investigate why we are not using the full buffer???
+		size_t rx_length = xMessageBufferReceive(hnd->incoming_messages, rx_buffer, 16, portMAX_DELAY); // TODO: Investigate why we are not using the full buffer???
 		
 		if (rx_length == 0)
         {
@@ -154,7 +153,7 @@ void UARTTARGET_TxTask(void * handle)
 	}
 }
 
-void UARTTARGET_RxTask(void * handle) 
+void UARTTARGET_ReceiveTask(void * handle) 
 {
 	uart_target_t * hnd = (uart_target_t *) handle;
 	
@@ -167,17 +166,23 @@ void UARTTARGET_RxTask(void * handle)
 	
 	while(1)
     {
-		size_t received_bytes_length = hnd->uart_receive(hnd->uart_handle, rx_buffer, rx_max_length);
+		size_t rx_length = hnd->uart_receive(hnd->uart_handle, rx_buffer, rx_max_length);
 		
-		if (received_bytes_length == 0)
+		if (rx_length == 0)
         {
 			continue;
 		}
         
+        
+        // TODO: [ADRIAAN] Consider doing this differently, currently overriding default parser.
+        int xTaskWoken = pdFALSE;
+        csp_kiss_rx(&csp_usart_cc_ctx_bus.iface, rx_buffer, rx_length, (void *)xTaskWoken);
+        continue;
+        
 		ioport_set_pin_level(PIN_DEBUG_0, 1);
 		
 		//3. disassemble kiss packet -> out_message
-		for (size_t i = 0; i < received_bytes_length; i++)
+		for (size_t i = 0; i < rx_length; i++)
         {
 			uint8_t rx_byte = rx_buffer[i];
 			

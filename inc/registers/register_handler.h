@@ -45,8 +45,6 @@ void REG_vSetI2CStatus(uint32_t flag);
 
 void REG_UpdateTemperature(uint16_t temperature);
 
-void REG_Copyu32ToArray(const uint32_t value, uint8_t* data);
-
 uint8_t REG_GetI2CSpeed(void);
 
 #endif /* REGISTER_HANDLER_H_ */

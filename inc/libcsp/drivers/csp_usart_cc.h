@@ -18,11 +18,8 @@
 #include "FreeRTOS.h"
 #include "semphr.h"
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wall"
 #include "csp/interfaces/csp_if_kiss.h"
 #include "csp/drivers/usart.h"
-#pragma GCC diagnostic pop
 
 #include "bsp.h"
 #include "ccd_uart_driver.h"
