@@ -135,6 +135,7 @@ bool ccd_can_SetBaudRate(void * vHandle, uint32_t baud)
 
 void ccd_can_Send_message(void * vHandle, uint32_t header, uint8_t * data, size_t len)
 {
+    configASSERT(vHandle != NULL);
     configASSERT(len <= 8);
     
     ccd_can_t * pHandle = (ccd_can_t *) vHandle;

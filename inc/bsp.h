@@ -17,7 +17,7 @@
 #include "ccd_can_driver.h"
 #include "ccd_led_driver.h"
 
-#include "obc_controller_rev_A.h"
+#include "obc_controller_rev_AB.h"
 
 typedef struct bsp_s
 {

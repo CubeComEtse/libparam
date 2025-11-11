@@ -1,5 +1,5 @@
 /*
- * Platform.h
+ * platform.h
  *
  * Created: 2024/11/28 09:23:50
  *  Author: Kolijn
@@ -26,7 +26,6 @@
 #include "i2c_target.h"
 #include "local_target.h"
 #include "uart_target.h"
-
 
 #include "Multitester.h"
 #include "te_adaptors.h"

@@ -105,16 +105,16 @@ void PLATFORM_vInit(bsp_t * bsp)
 	can_target.can_send = ccd_can_Send_message;
 	can_target.can_receive = ccd_can_Receive_message;
 	can_target.can_handle = bsp->bus_can;
-	can_target.radio_can_address = 0x26;
-	can_target.our_can_address = 0xE9;
+	can_target.radio_can_address = XTX_CAN_ADRESS;
+	can_target.our_can_address = OBC_CAN_ADRESS;
 	CANTARGET_Init(&can_target);
 	
 	uart_target.uart_send = ccd_b_uart_Send_message;
 	uart_target.uart_receive = ccd_b_uart_Receive_message;
 	uart_target.uart_handle = bsp->bus_uart;
 	uart_target.uart_mode  = UART;
-	uart_target.radio_uart_address = 0x26;
-	uart_target.gse_uart_address = 0xE9;
+	uart_target.radio_uart_address = XTX_CAN_ADRESS;
+	uart_target.gse_uart_address = OBC_CAN_ADRESS;
 	UARTTARGET_Init(&uart_target);
 	
 	sermux_v3.in_stream = bsp->telemetry_uart->rx_buffer;

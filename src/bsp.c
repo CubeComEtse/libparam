@@ -13,7 +13,7 @@
 #include "sysclk.h"
 #include "genclk.h"
 #include "ioport.h"
-#include "obc_controller_rev_A.h"
+#include "obc_controller_rev_AB.h"
 
 // All interrupt mask.
 #define ALL_INTERRUPT_MASK  0xffffffff

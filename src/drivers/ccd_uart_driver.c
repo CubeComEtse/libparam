@@ -15,8 +15,6 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-#include "main.h"
-
 void ccd_uart_Init(ccd_uart_t * driver, Usart * base_usart, uint8_t interrupt_priority)
 {
 	if (driver->flow_control_enabled)
@@ -324,6 +322,56 @@ void ccd_usart_TXProcessingTask(void * parameters)
 	}
 }
 
+uint32_t ccd_uart_get_error_status(void * vHandle)
+{
+	ccd_uart_t * pHandle = (ccd_uart_t*) vHandle;
+	uint32_t res = 0 ;
+	
+	if (pHandle->rx_holding_buffer_overflow)
+	{
+		res |= UART_RX_HB_OVERFLOW;
+	}
+	if (pHandle->rx_streaming_buffer_overflow)
+	{
+		res |= UART_RX_SB_OVERFLOW;
+	}
+	if (pHandle->tx_holding_buffer_overflow)
+	{
+		res |= UART_TX_SB_OVERFLOW;
+	}
+    
+	return res;
+}
+
+void ccd_uart_clear_error_status(void * vHandle)
+{
+	ccd_uart_t * pHandle = (ccd_uart_t*) vHandle;
+	
+	pHandle->rx_holding_buffer_overflow = false;
+	pHandle->rx_streaming_buffer_overflow = false;
+	pHandle->tx_holding_buffer_overflow = false;
+}
+
+void ccd_b_uart_Send_message(void * vHandle, uint8_t * data, size_t data_len)
+{
+	ccd_uart_t * pHandle = (ccd_uart_t *) vHandle;
+	
+	size_t bytes_sent = xStreamBufferSend(pHandle->tx_buffer, data, data_len, 0);
+	
+    configASSERT(bytes_sent > 0);
+    
+	ccd_uart_EnableTXInterrupt(pHandle);
+}
+
+size_t ccd_b_uart_Receive_message(void * vHandle, uint8_t * data, size_t data_len) 
+{
+	ccd_uart_t * pHandle = (ccd_uart_t *) vHandle;
+
+	size_t bytes_received = xStreamBufferReceive(pHandle->rx_buffer, data, data_len, portMAX_DELAY);
+	
+	return bytes_received; // returns size of actual stream buffer received
+}
+
 /*
  * This function should be installed into the interrupt handler for the corresponding UART
 */
@@ -401,54 +449,4 @@ inline void ccd_uart_InterruptHandler(ccd_uart_t * driver)
         //ErrorHandler();
         driver->base_usart->US_CR |= US_CR_RSTSTA;
     }
-}
-
-uint32_t ccd_uart_get_error_status(void * vHandle)
-{
-	ccd_uart_t * pHandle = (ccd_uart_t*) vHandle;
-	uint32_t res = 0 ;
-	
-	if (pHandle->rx_holding_buffer_overflow)
-	{
-		res |= UART_RX_HB_OVERFLOW;
-	}
-	if (pHandle->rx_streaming_buffer_overflow)
-	{
-		res |= UART_RX_SB_OVERFLOW;
-	}
-	if (pHandle->tx_holding_buffer_overflow)
-	{
-		res |= UART_TX_SB_OVERFLOW;
-	}
-    
-	return res;
-}
-
-void ccd_uart_clear_error_status(void * vHandle)
-{
-	ccd_uart_t * pHandle = (ccd_uart_t*) vHandle;
-	
-	pHandle->rx_holding_buffer_overflow = false;
-	pHandle->rx_streaming_buffer_overflow = false;
-	pHandle->tx_holding_buffer_overflow = false;
-}
-
-void ccd_b_uart_Send_message(void * vHandle, uint8_t * data, size_t data_len)
-{
-	ccd_uart_t * pHandle = (ccd_uart_t *) vHandle;
-	
-	size_t bytes_sent = xStreamBufferSend(pHandle->tx_buffer, data, data_len, 0);
-	
-    configASSERT(bytes_sent > 0);
-    
-	ccd_uart_EnableTXInterrupt(pHandle);
-}
-
-size_t ccd_b_uart_Receive_message(void * vHandle, uint8_t * data, size_t data_len) 
-{
-	ccd_uart_t * pHandle = (ccd_uart_t *) vHandle;
-
-	size_t bytes_received = xStreamBufferReceive(pHandle->rx_buffer, data, data_len, portMAX_DELAY);
-	
-	return bytes_received; // returns size of actual stream buffer received
 }

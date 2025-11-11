@@ -61,8 +61,7 @@
 // Defines
 // ================================================================================
 
-#define CSP_DEVICE_NAME            "EGSE"
-#define CSP_DEVICE_NAME_MAX_LEN    16
+
 
 // ================================================================================
 // Variables
@@ -107,7 +106,7 @@ int main(void)
     tracealyzer_init();
     
     // Configure CubeSat Protocol (CSP)
-    csp_app_init();
+//     csp_app_init();
 
     xTaskCreate(setup_task, "Startup", 1024, NULL, tskIDLE_PRIORITY + 1, NULL);
 
@@ -180,8 +179,8 @@ static void setup_task(void* handle)
     xTaskCreate(LEDIndicator_UpdateTask,        "LED",              512,    (void *) platform->led_indicator,   tskIDLE_PRIORITY + 1, NULL);
 
     // CSP tasks
-    xTaskCreate(csp_router_task,                "CSP Route",        1024,   NULL,                               tskIDLE_PRIORITY + 2, NULL);
-    xTaskCreate(vmem_server_loop,               "VMEM Server",      1024,   NULL,                               tskIDLE_PRIORITY + 2, NULL);
+//     xTaskCreate(csp_router_task,                "CSP Route",        1024,   NULL,                               tskIDLE_PRIORITY + 2, NULL);
+//     xTaskCreate(vmem_server_loop,               "VMEM Server",      1024,   NULL,                               tskIDLE_PRIORITY + 2, NULL);
     
     #ifdef DEBUG
     // Force XTXG2 on (delay required to allow TE discovery first)

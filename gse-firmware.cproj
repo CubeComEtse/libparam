@@ -569,6 +569,7 @@
       <Value>../inc/registers</Value>
       <Value>../inc/targets</Value>
       <Value>../inc/debug</Value>
+      <Value>../inc/devices</Value>
     </ListValues>
   </armgcc.compiler.directories.IncludePaths>
   <armgcc.compiler.optimization.OtherFlags>-fdata-sections</armgcc.compiler.optimization.OtherFlags>
@@ -687,6 +688,8 @@
     <Folder Include="inc\libparam" />
     <Folder Include="inc\freertos" />
     <Folder Include="inc\debug" />
+    <Folder Include="inc\cants" />
+    <Folder Include="inc\devices" />
     <Folder Include="inc\tracerecorder" />
     <Folder Include="inc\targets" />
     <Folder Include="inc\utils" />
@@ -797,15 +800,19 @@
     <Folder Include="src\libcsp" />
     <Folder Include="src\libcsp\drivers\" />
     <Folder Include="src\debug" />
+    <Folder Include="src\devices" />
     <Folder Include="src\targets" />
     <Folder Include="src\utils" />
     <Folder Include="src\registers" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="inc\board\obc_controller_rev_A.h">
+    <Compile Include="inc\board\obc_controller_rev_AB.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\bsp.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\cants\cants_config.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\can_endpoint.h">
@@ -833,6 +840,18 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\debug\egse_debug.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\devices\ltc2499.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\devices\ltc2992.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\devices\ltc2992_conf.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\devices\pca9555.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\drivers\ccd_can_driver.h">
@@ -874,28 +893,16 @@
     <Compile Include="inc\libparam\libparam.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\ltc2499.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\ltc2992.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\ltc2992_conf.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\Multitester.h">
+    <Compile Include="inc\multitester.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\pc104.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\pca9555.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="inc\pc_messages.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\Platform.h">
+    <Compile Include="inc\platform.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\registers\register_handler.h">
@@ -1546,6 +1553,12 @@
     <Compile Include="src\debug\egse_debug.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\devices\ltc2499.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\devices\ltc2992.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\drivers\ccd_can_driver.c">
       <SubType>compile</SubType>
     </Compile>
@@ -1568,12 +1581,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\libcsp\drivers\csp_usart_cc.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\ltc2499.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\ltc2992.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\registers\register_handler.c">
@@ -1645,7 +1652,7 @@
     <Compile Include="src\multitester.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\Platform.c">
+    <Compile Include="src\platform.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\sermux_v3.c">
