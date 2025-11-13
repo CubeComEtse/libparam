@@ -32,24 +32,12 @@ typedef struct bsp_s
 	ccd_led_t * led_driver;
 } bsp_t;
 
-//Used in the NEW SHINY codebase
 void BSP_Init(bsp_t * bsp);
 uint8_t BSP_u8GetVersion(void);
 void BSP_vSetPin(uint32_t pin, bool value);
 uint32_t BSP_GetUptime(void);
-
-void debug(uint8_t val);
-
-struct spi_device* BSP_psGetSpiDriver(void);
-void BSP_vCanSetAddressFilter(uint32_t filter, uint32_t mask);
-void BSP_vEnableUartTXInterrupt(void);
-
-uint64_t BSP_u64GetTimestamp(void);
 void BSP_vUsbReset(void);
 
-void BSP_vTelemetrySetCTS(bool dir);
-
-// These should live in their own XTX file
-void XTX_vConfigBoard(void);
+uint64_t BSP_u64GetTimestamp(void); // TODO: This is not even defined???
 
 #endif /* BSP_H_ */

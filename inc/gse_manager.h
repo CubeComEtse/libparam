@@ -12,7 +12,8 @@
 #include "ltc2992.h"
 #include "ltc2499.h"
 
-typedef enum{
+typedef enum
+{
 	POWER_3V3 = 1,
 	POWER_5V,
 	POWER_VBAT,

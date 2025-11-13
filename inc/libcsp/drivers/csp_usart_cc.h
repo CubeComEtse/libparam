@@ -12,28 +12,20 @@
 // Includes
 // ================================================================================
 
-#include <stdlib.h>
-#include <string.h>
+#include <stdint.h>
 
 #include "FreeRTOS.h"
 #include "semphr.h"
 
 #include "csp/interfaces/csp_if_kiss.h"
-#include "csp/drivers/usart.h"
 
-#include "bsp.h"
 #include "ccd_uart_driver.h"
 
 // ================================================================================
 // Definitions
 // ================================================================================
 
-#define CSP_PC_UART_NETWORK_MASK        12
-#define CSP_EGSE_UART_NETWORK_MASK      8
 
-#define CSP_PC_UART_ADDRESS             420
-#define CSP_TEL_UART_ADDRESS            421
-#define CSP_BUS_UART_ADDRESS            5
 
 // ================================================================================
 // Type definitions
@@ -54,6 +46,6 @@ typedef struct csp_usart_cc_context_s
 // Public function prototypes
 // ================================================================================
 
-int csp_usart_cc_init(bsp_t * bsp);
+int csp_usart_cc_write(void  * driver_data, const uint8_t * data, size_t len);
 
 #endif /* CSP_USART_CC_H_ */

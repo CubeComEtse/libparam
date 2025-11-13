@@ -1,93 +1,43 @@
-
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
 #include <stdbool.h>
 #include <stdint.h>
 
-/*
-    Testing point to test if the device is responding.
-*/
+#define SOFTWARE_VERSION_MAJOR      2
+#define SOFTWARE_VERSION_MINOR      3
+#define SOFTWARE_VERSION_PATCH      0
 
-#define CONF_TEST               0x00
+#define BOARD_IDENTIFIER            0x634F4243 // "cOBC"
 
-/*
-    Configure power supply
+#define SPI_DEVICE                  SPI1
+#define SPI_DEVICE_ID               ID_SPI1
 
-    This command enables the power rails to the PC104 header. Each rail can be
-    individually enabled or disabled. To send the command, send the CONF_POWER
-    byte, followed by a read or write byte. It writing, the next byte should
-    contain flags, one for each power rail.
-    CONF_POWER, WRITE, 0x00, CONF_POWER_5V_FLAG | CONF_POWER_VBAT_FLAG
-*/
-#define CONF_POWER              0x01
+#define T_USART                     USART2
+#define T_USART_SPEED               115200//921600
 
-#define CONF_POWER_5V_FLAG      0x01
-#define CONF_POWER_3V3_FLAG     0x02
-#define CONF_POWER_VBAT_FLAG    0x04
-#define CONF_POWER_VBATALT_FLAG 0x08 
+#define B_USART                     USART0
+#define B_USART_SPEED               115200
 
-/*
-    Power Measurements
+#define I2C_BUS_DEFAULT_SPEED       400000
+#define I2C_DEFAULT_ADDRESS         0x26
 
-    Set which measurements to send to the PC. These are measured and sent at a
-    regular interval. Read from this address to see which are set
+#define I2C_UTIL_SPEED              400000
 
-    CONF_MEASURE, WRITE, CONF_MEASURE_VOLTAGE | CONF_MEASURE_CURRENT | CONF_MEASURE_POWER
+#define XTX_CAN_ADRESS              0x26
+#define XSTEER_CAN_ADRESS           0x27
+#define XDC_ADDRESS                 0x28
+#define HDRTX_CAN_ADRESS            0x41
+#define OBC_CAN_ADRESS              0xE9
 
-*/
-#define CONF_MEASURE            0x02
+#ifdef DEBUG
+#define DEBUG_TRACE_ENABLED         0 // Set to 1 to enable tracealyzer tracing
+#define DEBUG_XTXG2_EN_ENABLED      0 // Set to 1 to enable automatic switch on of XTXG2 device (no need for OBC selection & enabling to power on)
 
-#define CONF_MEASURE_VOLTAGE    (1<<0)
-#define CONF_MEASURE_CURRENT    (1<<1)
-#define CONF_MEASURE_POWER      (1<<2)
-
-
-/*
-    Supported Boards
-
-    Read this value to receive a list of supported boards
-*/
-#define CONF_SUPPORTED_BOARDS   0x03
-
-/*
-    Configure board
-
-    Write to this address to configure a board. The first byte is register 
-    address, write_byte, followed by an index, as per the previous register
-    The rest of the data will be passed on to the board
-*/
-#define CONF_BOARD_SET          0x04
-
-#define CONF_BOARD_NONE         0
-#define CONF_BOARD_XTX          1
-#define CONF_BOARD_XSTEER       2
-#define CONF_BOARD_XDC          4
-#define CONF_BOARD_HDRTX_DFA	8
-#define CONF_BOARD_HDRTX     	16
-#define CONF_BOARD_GEN2			32
-
-
-/*
-    Transmit measured values to PC
-
-    These addresses are used to send values to the PC. 8 Bytes are send for 
-    current and voltage, 16 bytes for power.
-
-    CONF_READ_POWER, 8 Bytes 
-*/
-#define CONF_READ_POWER         0x05
-#define CONF_READ_VOLTAGE       0x06
-#define CONF_READ_CURRENT       0x07
-
-#define CONF_READ_VERSION       0x08
-
-void CONFIG_vInit(uint8_t endpoint);
-bool CONFIG_bConfigEndpoint(const uint8_t* rx_buffer, const uint16_t rx_length, uint8_t* tx_buffer, uint16_t* tx_length);
-void CONFIG_vDecodePower(const uint8_t value);
-uint8_t CONFIG_vDecodeBoardSet(const uint8_t rw, const uint8_t value);
-void CONFIG_vProcess(void);
-uint8_t CONFIG_GetCurrentBoardconfig(void);
-void CONFIG_SetCurrentSenseBoardEnabled(bool value);
+// We override the software version to ensure we don't accidentally release a debug build
+#define SOFTWARE_VERSION_MAJOR      99
+#define SOFTWARE_VERSION_MINOR      99
+#define SOFTWARE_VERSION_PATCH      99
+#endif
 
 #endif /* CONFIG_H_ */

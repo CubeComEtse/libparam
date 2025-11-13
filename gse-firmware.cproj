@@ -506,7 +506,6 @@
   <armgcc.compiler.symbols.DefSymbols>
     <ListValues>
       <Value>DEBUG</Value>
-      <Value>TRACE_ENABLED=true</Value>
       <Value>scanf=iscanf</Value>
       <Value>BOARD=USER_BOARD</Value>
       <Value>ARM_MATH_CM7=true</Value>
@@ -568,8 +567,9 @@
       <Value>../inc/utils</Value>
       <Value>../inc/registers</Value>
       <Value>../inc/targets</Value>
-      <Value>../inc/debug</Value>
       <Value>../inc/devices</Value>
+      <Value>../inc/cants</Value>
+      <Value>../lib/cants</Value>
     </ListValues>
   </armgcc.compiler.directories.IncludePaths>
   <armgcc.compiler.optimization.OtherFlags>-fdata-sections</armgcc.compiler.optimization.OtherFlags>
@@ -687,7 +687,6 @@
     <Folder Include="inc\libcsp\drivers\" />
     <Folder Include="inc\libparam" />
     <Folder Include="inc\freertos" />
-    <Folder Include="inc\debug" />
     <Folder Include="inc\cants" />
     <Folder Include="inc\devices" />
     <Folder Include="inc\tracerecorder" />
@@ -695,6 +694,8 @@
     <Folder Include="inc\utils" />
     <Folder Include="inc\registers" />
     <Folder Include="lib\" />
+    <Folder Include="lib\cants\" />
+    <Folder Include="lib\cants\doc\" />
     <Folder Include="lib\freertos\inc" />
     <Folder Include="lib\freertos\src" />
     <Folder Include="lib\freertos\src\portable" />
@@ -799,8 +800,8 @@
     <Folder Include="src\drivers" />
     <Folder Include="src\libcsp" />
     <Folder Include="src\libcsp\drivers\" />
-    <Folder Include="src\debug" />
     <Folder Include="src\devices" />
+    <Folder Include="src\cants" />
     <Folder Include="src\targets" />
     <Folder Include="src\utils" />
     <Folder Include="src\registers" />
@@ -813,9 +814,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\cants\cants_config.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\can_endpoint.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\config.h">
@@ -837,9 +835,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\config\conf_uart_serial.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="inc\debug\egse_debug.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\devices\ltc2499.h">
@@ -866,9 +861,6 @@
     <Compile Include="inc\drivers\ccd_uart_driver.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\endpoints.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="inc\extra_maths.h">
       <SubType>compile</SubType>
     </Compile>
@@ -882,6 +874,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\libcsp\csp\autoconfig.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\libcsp\csp_app.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\libcsp\drivers\csp_can_cc.h">
@@ -959,7 +954,37 @@
     <Compile Include="inc\utils\tmr.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="inc\version.h">
+    <Compile Include="lib\cants\bitmap.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\cants\bitmap.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\cants\block.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\cants\block.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\cants\cants.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\cants\cants.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\cants\client.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\cants\client.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\cants\tctm.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\cants\tctm.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\cants\utils.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="lib\freertos\inc\atomic.h">
@@ -1550,7 +1575,7 @@
     <Compile Include="lib\tracerecorder\trcTimestamp.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\debug\egse_debug.c">
+    <Compile Include="src\cants\cants_handlers.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\devices\ltc2499.c">
@@ -1572,6 +1597,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\File.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\libcsp\csp_app.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\libcsp\csp_hooks_cc.c">
@@ -1613,6 +1641,18 @@
     <Compile Include="src\utils\tmr.c">
       <SubType>compile</SubType>
     </Compile>
+    <None Include="lib\cants\.git">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\cants\doc\CAN-TS_protocol_presentation_v1.0.pdf">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\cants\doc\CAN-TS_protocol_v1.4.pdf">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="lib\cants\LICENSE.txt">
+      <SubType>compile</SubType>
+    </None>
     <None Include="lib\freertos\inc\CMakeLists.txt">
       <SubType>compile</SubType>
     </None>

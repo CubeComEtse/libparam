@@ -6,6 +6,7 @@
  */
 
 #include "platform.h"
+#include "config.h"
 #include "register_handler.h"
 
 static ltc2992_device_t power_measure_1;

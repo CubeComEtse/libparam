@@ -1931,6 +1931,57 @@
                         }
                     }
                 ]
+            },
+            {
+                "name": "ConfCommsProtocol",
+                "address": "0xA1",
+                "dir": "rw",
+                "width": "32",
+                "c#": {
+                    "type": "UInt32"
+                },
+                "param_flags" : [ "PM_CONF" ],
+                "fields":  [
+                    {
+                        "name": "BUS_UART",
+                        "pretty-name": "Bus UART comms protocol",
+                        "bit": "7-0",
+                        "options": "comms_protocol",
+                        "c#": {
+                            "hasminmax": "false",
+                            "type": "byte"
+                        },
+                        "c": {
+                            "type": "byte"
+                        }
+                    },
+                    {
+                        "name": "TEL_UART",
+                        "pretty-name": "Telemetry UART comms protocol",
+                        "bit": "15-8",
+                        "options": "comms_protocol",
+                        "c#": {
+                            "hasminmax": "false",
+                            "type": "byte"
+                        },
+                        "c": {
+                            "type": "byte"
+                        }
+                    },
+                    {
+                        "name": "BUS_CAN",
+                        "pretty-name": "Bus CAN comms protocol",
+                        "bit": "23-16",
+                        "options": "comms_protocol",
+                        "c#": {
+                            "hasminmax": "false",
+                            "type": "byte"
+                        },
+                        "c": {
+                            "type": "byte"
+                        }
+                    }
+                ]
             }
         ],
         "generic_fields": {
@@ -2900,6 +2951,27 @@
                         "name": "baud_921600",
                         "value": "3",
                         "pretty_name": "921600"
+                    }
+                ]
+            },
+            "comms_protocol": {
+                "name": "comms_protocol",
+                "type": "byte",
+                "options": [
+                    {
+                        "name": "cubecom",
+                        "value": "0",
+                        "pretty_name": "Cubecom Protocol"
+                    },
+                    {
+                        "name": "csp",
+                        "value": "1",
+                        "pretty_name": "Cubesat Space Protocol V2"
+                    },
+                    {
+                        "name": "cants",
+                        "value": "2",
+                        "pretty_name": "CAN-TS"
                     }
                 ]
             }

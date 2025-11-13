@@ -132,11 +132,11 @@ void REG_vSetPlatformPointer(platform_t * handle, bsp_t * bsp_handle)
 * Checks if the provided register address is a valid one. Returns true if it
 * is, false otherwise
 */
-bool REG_CheckAddress(const uint8_t address)
+bool REG_CheckAddress(const uint16_t address)
 {
     for (uint32_t i = 0; i < (sizeof(address_to_func_map) / sizeof(address_to_func_map[0])); i++)
     {
-        if(address != address_to_func_map[i].address)
+        if(address == address_to_func_map[i].address)
         {
             return true;
         }
@@ -149,7 +149,7 @@ bool REG_CheckAddress(const uint8_t address)
 Gets the register given by address, copies it's data into the data argument
 Returns true if the address is valid, false otherwise.
 */
-bool REG_vReadFromAddress(const uint32_t address, uint8_t * buff, uint8_t * size)
+bool REG_vReadFromAddress(const uint16_t address, uint8_t * buff, uint8_t * size)
 {
     uint32_t destination;
 
@@ -186,6 +186,7 @@ bool REG_vReadFromAddress(const uint32_t address, uint8_t * buff, uint8_t * size
             
             return true;
         }
+        
         case reg_Event_ConfA_addr:
         {
             // Update the event count
@@ -204,6 +205,7 @@ bool REG_vReadFromAddress(const uint32_t address, uint8_t * buff, uint8_t * size
             
             return true;
         }
+        
         case reg_Event_addr:
         {
             event_t current_event = {0};
@@ -227,6 +229,7 @@ bool REG_vReadFromAddress(const uint32_t address, uint8_t * buff, uint8_t * size
             
             return true;
         }
+        
         case reg_RTOS_Status0_addr:
         {
             // This register gets cleared on read
@@ -243,7 +246,7 @@ bool REG_vReadFromAddress(const uint32_t address, uint8_t * buff, uint8_t * size
 /*
 * Process all the stored messages. This function should be called regularly.
 */
-void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const size_t length)
+void REG_vWriteToAddress(const uint16_t address, const uint8_t * data, const size_t length)
 {
     // First decode the array as a uint32_t
     uint32_t deserialized = REG_CopyArrayToU32(data);
@@ -651,15 +654,15 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
         
         // Multitester V2
         case reg_MTC_Addr_0_Set_addr:
-        platform->multitester->i2c_address = 0x51;
+            platform->multitester->i2c_address = 0x51;
         case reg_MTC_Addr_1_Set_addr:
-        platform->multitester->i2c_address = 0x52;
+            platform->multitester->i2c_address = 0x52;
         case reg_MTC_Addr_2_Set_addr:
-        platform->multitester->i2c_address = 0x53;
+            platform->multitester->i2c_address = 0x53;
         case reg_MTC_Addr_3_Set_addr:
-        platform->multitester->i2c_address = 0x54;
-        MTCV2_SetBits(platform->multitester, deserialized);
-        break;
+            platform->multitester->i2c_address = 0x54;
+            MTCV2_SetBits(platform->multitester, deserialized);
+            break;
         
         case reg_MTC_Addr_0_Clear_addr:
         case reg_MTC_Addr_1_Clear_addr:
@@ -705,8 +708,22 @@ void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const siz
         
         case reg_PreviousEndpoint_addr:
         {
-            // Just store the full value
             mm_setPreviousEndpoint(deserialized);
+            break;
+        }
+        
+        case reg_ConfCommsProtocol_addr:
+        {
+            mm_comms_protocol_t comms_protocol;
+            
+            mm_getConfCommsProtocol_BUS_CANFrom(&comms_protocol, deserialized);
+            mm_setConfCommsProtocol_BUS_CAN(comms_protocol);
+            
+            mm_getConfCommsProtocol_TEL_UARTFrom(&comms_protocol, deserialized);
+            mm_setConfCommsProtocol_TEL_UART(comms_protocol);
+            
+            mm_getConfCommsProtocol_BUS_UARTFrom(&comms_protocol, deserialized);
+            mm_setConfCommsProtocol_BUS_UART(comms_protocol);
             
             break;
         }

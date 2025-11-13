@@ -10,13 +10,15 @@
 
 #include "can_target.h"
 
-#include <assert.h>
+#include <string.h>
 
 #include "csp/interfaces/csp_if_can.h"
+#include "cants.h"
 
 #include "csp_can_cc.h"
 #include "pc_messages.h"
 #include "ccd_can_driver.h"
+#include "register_map.h"
 
 #define CAN_TELECOMMAND_REQUEST     0x01
 #define CAN_TELEMETRY_REQUEST       0x04
@@ -30,7 +32,7 @@ extern csp_can_cc_context_t csp_can_cc_ctx_bus;
 */
 void CANTARGET_Init(can_target_t * pHandle)
 {
-    assert(pHandle->can_send != NULL);
+    configASSERT(pHandle->can_send != NULL);
     
     // These buffers are for SERCOM messages
     // This buffer size is an initial guess. Feel free to update it later.
@@ -45,7 +47,7 @@ void CANTARGET_Init(can_target_t * pHandle)
 
 void CANTARGET_TransmitTask(void * vHandle)
 {
-    assert(vHandle);
+    configASSERT(vHandle != NULL);
     can_target_t * pHandle = (can_target_t *) vHandle;
     
     uint8_t rx_buffer[32];
@@ -132,51 +134,84 @@ void CANTARGET_TransmitTask(void * vHandle)
 
 void CANTARGET_ReceiveTask(void * vHandle)
 {
-    assert(vHandle);
-    can_target_t * pHandle = (can_target_t *) vHandle;
+    configASSERT(vHandle != NULL);
+    can_target_t * p_can_target_handle = (can_target_t *) vHandle;
     
     uint32_t header;
-    size_t receive_size, sent_size;
-    v2_msg_t out_message;
+    uint8_t data[8];
+    size_t receive_size;
+    mm_comms_protocol_t comms_protocol;
     
     while(1)
     {
         // Wait for a message to be received over CAN
-        if (!pHandle->can_receive(pHandle->can_handle, &header, &out_message.data[2], &receive_size))
+        if (!p_can_target_handle->can_receive(p_can_target_handle->can_handle, &header, data, &receive_size))
         {
             continue;
         }
+        configASSERT(receive_size <= 8);
         
-        // TODO: [ADRIAAN] Consider doing this differently, currently just overriding default parser
-        if (csp_can_cc_ctx_bus.ccd_driver != NULL)
+        configASSERT(mm_getConfCommsProtocol_BUS_CAN(&comms_protocol) == mm_OK);
+        switch (comms_protocol)
         {
-            int xTaskWoken = pdFALSE;
-            csp_can_rx(&csp_can_cc_ctx_bus.iface, header, &out_message.data[2], receive_size, (void *)xTaskWoken);
-            continue;
+            case reg_comms_protocol_cubecom:
+            {
+                v2_msg_t out_message;
+                size_t sent_size;
+                uint8_t encoded[20];
+                size_t encoded_size;
+                
+                out_message.is_read = false;
+                out_message.data_len = 2 + receive_size;
+                out_message.target = EP_V2_CAN_CC_2;
+                
+                out_message.data[0] = (uint8_t) ((header >> 24) & 0x1F);    // CAN MsgType
+                out_message.data[1] = (uint8_t) receive_size;               // Message Length
+                memcpy(&out_message.data[2], data, receive_size);
+                
+                if (p_can_target_handle->mode == CUBECOM_MODE)
+                {
+                    out_message.msg_id = (uint8_t) ((header >> 16) & 0xFF);
+                }
+                if (p_can_target_handle->mode == PLAN_S_COMPATIBILITY)
+                {
+                    out_message.msg_id = (uint8_t) ((header) & 0xFF);
+                }
+                
+                encoded_size = encode_v2_message(encoded, &out_message);
+                
+                sent_size = xMessageBufferSend(p_can_target_handle->outgoing_messages, &encoded, encoded_size, pdMS_TO_TICKS(20));
+                configASSERT(sent_size == encoded_size); // TODO: Handle this more gracefully
+                
+                break;
+            }
+            case reg_comms_protocol_csp:
+            {
+                csp_can_rx(&csp_can_cc_ctx_bus.iface, header, data, receive_size, NULL); // TODO: Handle errors
+                break;
+            }
+            case reg_comms_protocol_cants:
+            {
+                struct cants_msg msg;
+                uint8_t cants_ret;
+                
+                cants_parse_id(&msg, header);
+                msg.length = receive_size;
+                memcpy(msg.data, data, receive_size);
+                cants_ret = cants_dispatch(&msg, pdMS_TO_TICKS(10));
+                configASSERT(cants_ret); // TODO: Handle this more gracefully
+                
+                break;
+            }
+            default:
+            {
+                configASSERT(false);
+                break;
+            }
         }
-        
-        out_message.is_read = false;
-        out_message.data_len = 2 + receive_size;
-        out_message.target = EP_V2_CAN_CC_2;
-        
-        out_message.data[0] = (uint8_t) ((header >> 24) & 0x1F);    // CAN MsgType
-        out_message.data[1] = (uint8_t) receive_size;               // Message Length
-        
-        if (pHandle->mode == CUBECOM_MODE)
-        {
-            out_message.msg_id = (uint8_t) ((header >> 16) & 0xFF);
-        }
-        if (pHandle->mode == PLAN_S_COMPATIBILITY)
-        {
-            out_message.msg_id = (uint8_t) ((header) & 0xFF);
-        }
-        
-        uint8_t encoded[20];
-        size_t encoded_size = encode_v2_message(encoded, &out_message);
-        
-        //TODO: Handle dropped messages
-        sent_size = xMessageBufferSend(pHandle->outgoing_messages, &encoded, encoded_size, pdMS_TO_TICKS(20));
     }
+    
+    configASSERT(false);
 }
 
 bool CANTARGET_SetBaud(can_target_t * pHandle, uint32_t baud)

@@ -12,25 +12,20 @@
 // Includes
 // ================================================================================
 
-#include <stdlib.h>
-#include <string.h>
+#include <stdint.h>
 
 #include "FreeRTOS.h"
 #include "semphr.h"
 
 #include "csp/interfaces/csp_if_can.h"
 
-#include "bsp.h"
 #include "ccd_can_driver.h"
 
 // ================================================================================
 // Definitions
 // ================================================================================
 
-#define CSP_EGSE_CAN_NETWORK_MASK       8
 
-#define CSP_BUS1_CAN_ADDRESS            5
-#define CSP_BUS2_CAN_ADDRESS            5
 
 // ================================================================================
 // Type definitions
@@ -51,6 +46,6 @@ typedef struct csp_can_context_s
 // Public function prototypes
 // ================================================================================
 
-int csp_can_cc_init(bsp_t * bsp);
+int csp_can_tx_frame(void * driver_data, uint32_t id, const uint8_t * data, uint8_t dlc);
 
 #endif /* CSP_CAN_CC_H_ */

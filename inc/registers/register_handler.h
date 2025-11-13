@@ -24,18 +24,18 @@ void REG_vSetPlatformPointer(platform_t * handle, bsp_t * bsp_handle);
  * Checks if the provided register address is a valid one. Returns true if it 
  * is, false otherwise
 */
-bool REG_CheckAddress(const uint8_t address);
+bool REG_CheckAddress(const uint16_t address);
 
 /*
 Gets the register given by address, copies it's data into the data argument
 Returns true if the address is valid, false otherwise.
 */
-bool REG_vReadFromAddress(const uint32_t address, uint8_t * buff, uint8_t * size);
+bool REG_vReadFromAddress(const uint16_t address, uint8_t * buff, uint8_t * size);
 
 /*
  * Process all the stored messages. This function should be called regularly.
 */
-void REG_vWriteToAddress(const uint32_t address, const uint8_t * data, const size_t length);
+void REG_vWriteToAddress(const uint16_t address, const uint8_t * data, const size_t length);
 
 /*
  * Add a flag to the I2C Status. The status can only be appended to, it is cleared when the user 

@@ -202,6 +202,14 @@ typedef enum mm_response_e
 #define REG_PREVIOUSENDPOINT_NUMBER_Pos              (8UL)
 #define REG_PREVIOUSENDPOINT_NUMBER_Msk              (0x00ff << REG_PREVIOUSENDPOINT_NUMBER_Pos)
 
+/*************** Bit definition for ConfCommsProtocol register ***************/
+#define REG_CONFCOMMSPROTOCOL_BUS_UART_Pos           (0UL)
+#define REG_CONFCOMMSPROTOCOL_BUS_UART_Msk           (0x00ff << REG_CONFCOMMSPROTOCOL_BUS_UART_Pos)
+#define REG_CONFCOMMSPROTOCOL_TEL_UART_Pos           (8UL)
+#define REG_CONFCOMMSPROTOCOL_TEL_UART_Msk           (0x00ff << REG_CONFCOMMSPROTOCOL_TEL_UART_Pos)
+#define REG_CONFCOMMSPROTOCOL_BUS_CAN_Pos            (16UL)
+#define REG_CONFCOMMSPROTOCOL_BUS_CAN_Msk            (0x00ff << REG_CONFCOMMSPROTOCOL_BUS_CAN_Pos)
+
 /*************** Bit definition for boardflag register ***********************/
 #define REG_BOARDFLAG_BOARDS_Pos                     (0UL)
 #define REG_BOARDFLAG_BOARDS_Msk                     (0x00ff << REG_BOARDFLAG_BOARDS_Pos)
@@ -447,6 +455,7 @@ typedef struct mm_s
     uint32_t UtilI2CConfA;
     uint32_t UtilI2CStatus;
     uint32_t PreviousEndpoint;
+    uint32_t ConfCommsProtocol;
 } mm_t;
 
 typedef enum mm_register_address_e 
@@ -543,6 +552,7 @@ typedef enum mm_register_address_e
     reg_UtilI2CConfA_addr                    = 0x98, // 152
     reg_UtilI2CStatus_addr                   = 0x99, // 153
     reg_PreviousEndpoint_addr                = 0xA0, // 160
+    reg_ConfCommsProtocol_addr               = 0xA1, // 161
 } mm_register_address_t;
 
 typedef enum mm_enabled_e
@@ -589,6 +599,13 @@ typedef enum mm_usart_baudrates_e
     reg_usart_baudrates_baud_460800          = 2,  // 460800
     reg_usart_baudrates_baud_921600          = 3,  // 921600
 } mm_usart_baudrates_t;
+
+typedef enum mm_comms_protocol_e
+{
+    reg_comms_protocol_cubecom               = 0,  // Cubecom Protocol
+    reg_comms_protocol_csp                   = 1,  // Cubesat Space Protocol V2
+    reg_comms_protocol_cants                 = 2,  // CAN-TS
+} mm_comms_protocol_t;
 
 void mm_init(void);
 mm_t * get_mm_ptr(void);
@@ -3034,6 +3051,19 @@ mm_response_t mm_getPreviousEndpoint(uint32_t * dest);
 mm_response_t mm_setPreviousEndpoint_Number(const uint8_t val);
 mm_response_t mm_getPreviousEndpoint_Number(uint8_t * dest);
 mm_response_t mm_getPreviousEndpoint_NumberFrom(uint8_t * dest, const uint32_t source);
+
+/*************** Get/Set functions for ConfCommsProtocol register *************************************************************/
+mm_response_t mm_setConfCommsProtocol(const uint32_t val);
+mm_response_t mm_getConfCommsProtocol(uint32_t * dest);
+mm_response_t mm_setConfCommsProtocol_BUS_UART(const mm_comms_protocol_t val);
+mm_response_t mm_getConfCommsProtocol_BUS_UART(mm_comms_protocol_t * dest);
+mm_response_t mm_getConfCommsProtocol_BUS_UARTFrom(mm_comms_protocol_t * dest, const uint32_t source);
+mm_response_t mm_setConfCommsProtocol_TEL_UART(const mm_comms_protocol_t val);
+mm_response_t mm_getConfCommsProtocol_TEL_UART(mm_comms_protocol_t * dest);
+mm_response_t mm_getConfCommsProtocol_TEL_UARTFrom(mm_comms_protocol_t * dest, const uint32_t source);
+mm_response_t mm_setConfCommsProtocol_BUS_CAN(const mm_comms_protocol_t val);
+mm_response_t mm_getConfCommsProtocol_BUS_CAN(mm_comms_protocol_t * dest);
+mm_response_t mm_getConfCommsProtocol_BUS_CANFrom(mm_comms_protocol_t * dest, const uint32_t source);
 
 
 #endif /* memory_map_h */

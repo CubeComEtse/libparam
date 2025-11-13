@@ -20,6 +20,7 @@
 #include "bsp.h"
 #include "pc_messages.h"
 #include "csp_usart_cc.h"
+#include "register_map.h"
 
 // Special characters:
 #define FEND	0xC0 // 192
@@ -117,8 +118,14 @@ void UARTTARGET_TransmitTask(void * handle)
             uart_msg_kiss_packet[5] = in_message.data[2];
             uart_msg_kiss_packet[6] = in_message.data[3];
             
-            // write
-            if (!in_message.is_read)
+            // Read request
+            if (in_message.is_read)
+            {
+                uart_msg_kiss_packet[7] = FEND;
+                hnd->uart_send(hnd->uart_handle, uart_msg_kiss_packet, 8);
+            }
+            // Write request
+            else
             {
                 // Loop through data and replace special characters
                 uint8_t processed_data[4];
@@ -144,11 +151,6 @@ void UARTTARGET_TransmitTask(void * handle)
                 uart_msg_kiss_packet[7 + processed_index] = FEND;
                 hnd->uart_send(hnd->uart_handle, uart_msg_kiss_packet, 8 + processed_index);
             }
-            else
-            {
-                uart_msg_kiss_packet[7] = FEND;
-                hnd->uart_send(hnd->uart_handle, uart_msg_kiss_packet, 8);
-            }
         }
     }
 }
@@ -163,6 +165,7 @@ void UARTTARGET_ReceiveTask(void * handle)
     size_t packet_index = 0;
     bool receiving = false;
     bool escaped = false;
+    mm_comms_protocol_t comms_protocol;
     
     while(1)
     {
@@ -173,121 +176,133 @@ void UARTTARGET_ReceiveTask(void * handle)
             continue;
         }
         
-        // TODO: [ADRIAAN] Consider doing this differently, currently overriding default parser.
-        if(csp_usart_cc_ctx_bus.ccd_driver != NULL)
+        configASSERT(mm_getConfCommsProtocol_BUS_UART(&comms_protocol) == mm_OK);
+        switch (comms_protocol)
         {
-            int xTaskWoken = pdFALSE;
-            csp_kiss_rx(&csp_usart_cc_ctx_bus.iface, rx_buffer, rx_length, (void *)xTaskWoken);
-            continue;
-        }
-        
-        ioport_set_pin_level(PIN_DEBUG_0, 1);
-        
-        //3. disassemble kiss packet -> out_message
-        for (size_t i = 0; i < rx_length; i++)
-        {
-            uint8_t rx_byte = rx_buffer[i];
-            
-            //start receiving only when start byte (FEND) is received
-            if (!receiving)
+            case reg_comms_protocol_cubecom:
             {
-                if (rx_byte == FEND)
+                ioport_set_pin_level(PIN_DEBUG_0, 1);
+                
+                //3. disassemble kiss packet -> out_message
+                for (size_t i = 0; i < rx_length; i++)
                 {
+                    uint8_t rx_byte = rx_buffer[i];
                     
-                    receiving = true;
-                    packet_index = 0;
-                    ioport_set_pin_level(PIN_DEBUG_1, 1);
-                    continue;
-                }
-            }
-            else
-            {
-                if (rx_byte == FEND )
-                {
-                    // End of packet received
-                    ioport_set_pin_level(PIN_DEBUG_1, 0);
-                    
-                    if (packet_index == 0)
+                    //start receiving only when start byte (FEND) is received
+                    if (!receiving)
                     {
-                        //We received an empty packet! Probably means we dropped a byte somewhere,
-                        // and should actually start receiving now.
-                        receiving = true;
-                        packet_index = 0;
-                        ioport_set_pin_level(PIN_DEBUG_1, 1);
-                        continue;
+                        if (rx_byte == FEND)
+                        {
+                            receiving = true;
+                            packet_index = 0;
+                            ioport_set_pin_level(PIN_DEBUG_1, 1);
+                            continue;
+                        }
                     }
-                    
-                    if (packet_index < 6)
+                    else
                     {
-                        // Invalid length, expecting (excluding the start&end FEND):
-                        //[0] msg type
-                        //[1] msg id
-                        //[2] src address
-                        //[3] dest address
-                        //[4] reg. address msb
-                        //[5] reg. address lsb
-                        //[6-x] data
+                        if (rx_byte == FEND )
+                        {
+                            // End of packet received
+                            ioport_set_pin_level(PIN_DEBUG_1, 0);
+                            
+                            if (packet_index == 0)
+                            {
+                                //We received an empty packet! Probably means we dropped a byte somewhere,
+                                // and should actually start receiving now.
+                                receiving = true;
+                                packet_index = 0;
+                                ioport_set_pin_level(PIN_DEBUG_1, 1);
+                                continue;
+                            }
+                            
+                            if (packet_index < 6)
+                            {
+                                // Invalid length, expecting (excluding the start&end FEND):
+                                //[0] msg type
+                                //[1] msg id
+                                //[2] src address
+                                //[3] dest address
+                                //[4] reg. address msb
+                                //[5] reg. address lsb
+                                //[6-x] data
 
-                        // "throw away" message, restart receiving
-                        receiving = false;
-                        continue;
+                                // "throw away" message, restart receiving
+                                receiving = false;
+                                continue;
+                            }
+                            
+                            size_t kiss_message_size = packet_index - 4;
+                            
+                            // Full packet received
+                            v2_msg_t out_message;
+                            out_message.msg_id = uart_msg_kiss_packet[1];
+                            out_message.target = EP_V2_UART_CC_2;
+                            // Packet_index stores the entire kiss packet length. Subtract 4 for the kiss header (type, id, src, dest),
+                            // Then add 2 for the EGSE UART header (Type + Length)
+                            out_message.data_len = kiss_message_size + 2;
+                            
+                            out_message.data[0] = uart_msg_kiss_packet[0]; // msg type
+                            out_message.data[1] = kiss_message_size; // msg length
+                            memcpy(&out_message.data[2], &uart_msg_kiss_packet[4], kiss_message_size);
+                            
+                            uint8_t encoded[32];
+                            size_t encoded_len = encode_v2_message(encoded, &out_message);
+                            
+                            xMessageBufferSend(hnd->outgoing_messages, encoded, encoded_len, 0); //TODO: Handle dropped messages
+                            
+                            receiving = false;
+                            continue;
+                        }
+                        
+                        // Handle escaping
+                        if (rx_byte == FESC)
+                        {
+                            escaped = true;
+                            continue;
+                        }
+                        
+                        // fix
+                        if (escaped)
+                        {
+                            if (rx_byte == TFEND)
+                            {
+                                rx_byte = FEND;
+                            }
+                            else if (rx_byte == TFESC)
+                            {
+                                rx_byte = FESC;
+                            }
+                            escaped = false;
+                        }
+                        
+                        // Store received bytes
+                        if (packet_index < sizeof(uart_msg_kiss_packet))
+                        {
+                            uart_msg_kiss_packet[packet_index] = rx_byte;
+                            packet_index += 1;
+                        }
                     }
-                    
-                    size_t kiss_message_size = packet_index - 4;
-                    
-                    // Full packet received
-                    v2_msg_t out_message;
-                    out_message.msg_id = uart_msg_kiss_packet[1];
-                    out_message.target = EP_V2_UART_CC_2;
-                    // Packet_index stores the entire kiss packet length. Subtract 4 for the kiss header (type, id, src,dest),
-                    // Then add 2 for the EGSE UART header (Type + Length)
-                    out_message.data_len = kiss_message_size + 2;
-                    
-                    out_message.data[0] = uart_msg_kiss_packet[0]; // msg type
-                    out_message.data[1] = kiss_message_size; // msg length
-                    memcpy(&out_message.data[2], &uart_msg_kiss_packet[4], kiss_message_size);
-                    
-                    uint8_t encoded[32];
-                    size_t encoded_len = encode_v2_message(encoded, &out_message);
-                    
-                    xMessageBufferSend(hnd->outgoing_messages, encoded, encoded_len, 0); //TODO: Handle dropped messages
-                    
-                    receiving = false;
-                    continue;
                 }
                 
-                // Handle escaping
-                if (rx_byte == FESC)
-                {
-                    escaped = true;
-                    continue;
-                }
+                ioport_set_pin_level(PIN_DEBUG_0, 0);
                 
-                // fix
-                if (escaped)
-                {
-                    if (rx_byte == TFEND)
-                    {
-                        rx_byte = FEND;
-                    }
-                    else if (rx_byte == TFESC)
-                    {
-                        rx_byte = FESC;
-                    }
-                    escaped = false;
-                }
-                
-                // Store received bytes
-                if (packet_index < sizeof(uart_msg_kiss_packet))
-                {
-                    uart_msg_kiss_packet[packet_index] = rx_byte;
-                    packet_index += 1;
-                }
-                
+                break;
+            }
+            
+            case reg_comms_protocol_csp:
+            {
+                csp_kiss_rx(&csp_usart_cc_ctx_bus.iface, rx_buffer, rx_length, NULL);
+                break;
+            }
+            
+            case reg_comms_protocol_cants:
+            default:
+            {
+                configASSERT(false);
+                break;
             }
         }
-        
-        ioport_set_pin_level(PIN_DEBUG_0, 0);
     }
 }
 

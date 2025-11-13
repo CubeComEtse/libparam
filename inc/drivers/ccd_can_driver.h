@@ -1,5 +1,5 @@
 /*
- * can_driver.h
+ * ccd_can_driver.h
  *
  * Created: 2020/07/02 14:57:20
  *  Author: Kolijn

@@ -1,18 +1,20 @@
 /*
- * bsp.h
- *
- * Created: 2020/04/01 08:19:54
- *  Author: Kolijn
- */ 
-
-#include <asf.h>
+* bsp.h
+*
+* Created: 2020/04/01 08:19:54
+*  Author: Kolijn
+*/
 
 #include "bsp.h"
+
+#include <asf.h>
 
 #include "spi.h"
 #include "sysclk.h"
 #include "genclk.h"
 #include "ioport.h"
+
+#include "config.h"
 #include "obc_controller_rev_AB.h"
 
 // All interrupt mask.
@@ -34,13 +36,12 @@ static void BSP_InitRTC(void);
 static void BSP_vInitCan(bsp_t * bsp);
 static void BSP_vInitLEDPWM(bsp_t * bsp);
 
-// Post cleanup
-static ccd_uart_t telemetry_uart;
-static ccd_uart_t bus_uart;
-static ccd_i2c_t  util_i2c;
-static ccd_i2c_t  bus_i2c;
-static ccd_can_t  bus_can;
-static ccd_led_t led_driver;
+ccd_uart_t telemetry_uart;
+ccd_uart_t bus_uart;
+ccd_i2c_t util_i2c;
+ccd_i2c_t bus_i2c;
+ccd_can_t bus_can;
+ccd_led_t led_driver;
 
 // The version is only read and set once, during startup
 static uint8_t version;
@@ -49,469 +50,459 @@ static enum rtc_setup_state_t rtc_setup_state;
 
 void BSP_Init(bsp_t * bsp)
 {
-	// System Initialization
-	sysclk_init();
+    // System Initialization
+    sysclk_init();
     
-	// This initializes the USB clock - used by the CAN
-	sysclk_enable_usb();
-	
-	wdt_disable(WDT); 
-	
-	// General GPIO is handled here - not in a driver
-	ioport_init();
-	
-	// Get the version. This is the first thing we do - it might affect the code later.
-	ioport_set_pin_dir(PIN_VERSION_0, IOPORT_DIR_INPUT);
-	ioport_set_pin_dir(PIN_VERSION_1, IOPORT_DIR_INPUT);
-	ioport_set_pin_dir(PIN_VERSION_2, IOPORT_DIR_INPUT);
-	
-	ioport_set_pin_mode(PIN_VERSION_0, IOPORT_MODE_PULLDOWN);
-	ioport_set_pin_mode(PIN_VERSION_1, IOPORT_MODE_PULLDOWN);
-	ioport_set_pin_mode(PIN_VERSION_2, IOPORT_MODE_PULLDOWN);
-	
-	ioport_enable_pin(PIN_VERSION_0);
-	ioport_enable_pin(PIN_VERSION_1);
-	ioport_enable_pin(PIN_VERSION_2);
-	
-	delay_ms(1);
-	version = (ioport_get_pin_level(PIN_VERSION_2) << 2) | (ioport_get_pin_level(PIN_VERSION_1) << 1) | ioport_get_pin_level(PIN_VERSION_0);
-	//version = 1;
-	
-	BSP_vInitUART(bsp);
-	BSP_vInitBusI2C(bsp);
-	BSP_vInitUtilI2C(bsp);	
+    // This initializes the USB clock - used by the CAN
+    sysclk_enable_usb();
+    
+    wdt_disable(WDT);
+    
+    // General GPIO is handled here - not in a driver
+    ioport_init();
+    
+    // Get the version. This is the first thing we do - it might affect the code later.
+    ioport_set_pin_dir(PIN_VERSION_0, IOPORT_DIR_INPUT);
+    ioport_set_pin_dir(PIN_VERSION_1, IOPORT_DIR_INPUT);
+    ioport_set_pin_dir(PIN_VERSION_2, IOPORT_DIR_INPUT);
+    
+    ioport_set_pin_mode(PIN_VERSION_0, IOPORT_MODE_PULLDOWN);
+    ioport_set_pin_mode(PIN_VERSION_1, IOPORT_MODE_PULLDOWN);
+    ioport_set_pin_mode(PIN_VERSION_2, IOPORT_MODE_PULLDOWN);
+    
+    ioport_enable_pin(PIN_VERSION_0);
+    ioport_enable_pin(PIN_VERSION_1);
+    ioport_enable_pin(PIN_VERSION_2);
+    
+    delay_ms(1);
+    version = (ioport_get_pin_level(PIN_VERSION_2) << 2) | (ioport_get_pin_level(PIN_VERSION_1) << 1) | ioport_get_pin_level(PIN_VERSION_0);
+    
+    BSP_vInitUART(bsp);
+    BSP_vInitBusI2C(bsp);
+    BSP_vInitUtilI2C(bsp);
 
-	BSP_vInitGPIO();
-	
-	ioport_set_pin_level(PIN_DEBUG_0, 0);
-	ioport_set_pin_level(PIN_DEBUG_1, 0);
-	ioport_set_pin_level(PIN_DEBUG_2, 0);
-	ioport_set_pin_level(PIN_DEBUG_3, 0);
-	BSP_InitRTC();
+    BSP_vInitGPIO();
+    
+    ioport_set_pin_level(PIN_DEBUG_0, 0);
+    ioport_set_pin_level(PIN_DEBUG_1, 0);
+    ioport_set_pin_level(PIN_DEBUG_2, 0);
+    ioport_set_pin_level(PIN_DEBUG_3, 0);
+    BSP_InitRTC();
 
-	BSP_vInitCan(bsp);
-	
-	BSP_vInitLEDPWM(bsp);
+    BSP_vInitCan(bsp);
+    
+    BSP_vInitLEDPWM(bsp);
 
-	// So - we used to reset the USB connection when we power cycle. I don't think this is needed anymore?
-	BSP_vUsbReset();
-	
-	// Make all interrupt priority bits preempt bits, rather than sub-priority bits.
-	// According to https://www.freertos.org/Documentation/02-Kernel/03-Supported-devices/04-Demos/ARM-Cortex/RTOS-Cortex-M3-M4
-	NVIC_SetPriorityGrouping(4);
-	Enable_global_interrupt();
-	
-	// Set the systick to the lowest possible interrupt level
-	SysTick_Config(300000);
-	NVIC_SetPriority(SysTick_IRQn, (1 << __NVIC_PRIO_BITS) - 1);
+    // So - we used to reset the USB connection when we power cycle. I don't think this is needed anymore?
+    BSP_vUsbReset();
+    
+    // Make all interrupt priority bits preempt bits, rather than sub-priority bits.
+    // According to https://www.freertos.org/Documentation/02-Kernel/03-Supported-devices/04-Demos/ARM-Cortex/RTOS-Cortex-M3-M4
+    NVIC_SetPriorityGrouping(4);
+    Enable_global_interrupt();
+    
+    // Set the systick to the lowest possible interrupt level
+    SysTick_Config(300000);
+    NVIC_SetPriority(SysTick_IRQn, (1 << __NVIC_PRIO_BITS) - 1);
 }
 
 uint8_t BSP_u8GetVersion()
 {
-	return version;
+    return version;
 }
 
 void inline BSP_vSetPin(uint32_t pin, bool value)
 {
-	ioport_set_pin_level(pin, value);
+    ioport_set_pin_level(pin, value);
 }
 
 static void inline BSP_vEnablePin(uint32_t pin)
 {
-	ioport_enable_pin(pin);
+    ioport_enable_pin(pin);
 }
 
 static void inline BSP_vSetPinDir(uint32_t pin, enum ioport_direction dir)
 {
-	ioport_set_pin_dir(pin, dir);
+    ioport_set_pin_dir(pin, dir);
 }
 
 static void inline BSP_vSetPinMode(uint32_t pin, ioport_mode_t mode)
 {
-	ioport_set_pin_mode(pin, mode);
+    ioport_set_pin_mode(pin, mode);
 }
 
 static void inline BSP_vDisablePin(uint32_t pin)
 {
-	ioport_disable_pin(pin);
+    ioport_disable_pin(pin);
 }
 
 static void BSP_vInitUART(bsp_t * bsp)
 {
-	// --- Telemetry UART ---
-	ioport_set_pin_mode(T_USART_RX_PIN, IOPORT_MODE_MUX_B);
-	ioport_disable_pin(T_USART_RX_PIN);
+    // --- Telemetry UART ---
+    ioport_set_pin_mode(T_USART_RX_PIN, IOPORT_MODE_MUX_B);
+    ioport_disable_pin(T_USART_RX_PIN);
 
-	ioport_set_pin_mode(T_USART_TX_PIN, IOPORT_MODE_MUX_B);
-	ioport_disable_pin(T_USART_TX_PIN);
+    ioport_set_pin_mode(T_USART_TX_PIN, IOPORT_MODE_MUX_B);
+    ioport_disable_pin(T_USART_TX_PIN);
 
-	ioport_enable_pin(T_USART_RTS_PIN);
-	ioport_set_pin_dir(T_USART_RTS_PIN, IOPORT_DIR_INPUT);
-	ioport_enable_pin(T_USART_CTS_PIN);
-	ioport_set_pin_dir(T_USART_CTS_PIN, IOPORT_DIR_OUTPUT);
-	
-	telemetry_uart.flow_control_enabled = 1;
-	telemetry_uart.uart_comm_mode = UART;
-	telemetry_uart.cts_pin = T_USART_CTS_PIN;
-	telemetry_uart.baudrate = T_USART_SPEED;
-	telemetry_uart.set_gpio_pin = &BSP_vSetPin; // Should not be used, but setting this guards against HardFault if the UART accidentally lands in RS485 mode.
-	
-	// This UART's Interrupt is 1 - The 'highest' available, and outside the FreeRTOS
-	// priority ranges. It needs to be this high so that we don't miss bytes from the PC
-    // TODO: [ADRIAAN] Update comment above once things are stable with this interrupt using FreeRTOS priority.
-	ccd_uart_Init(&telemetry_uart, T_USART, configMAX_SYSCALL_INTERRUPT_PRIORITY >> (8 - __NVIC_PRIO_BITS));
-	
-	bsp->telemetry_uart = &telemetry_uart;
-	
-	// --- Board UART ---
-	ioport_set_pin_mode(B_USART_RX_PIN, IOPORT_MODE_MUX_C);
-	ioport_disable_pin(B_USART_RX_PIN);
-	// When the RS422/RS485 driver is disabled this pin slowly floats low. 
-	// This pull-up stops that.
-	// ioport_set_pin_mode(B_USART_RX_PIN, IOPORT_MODE_PULLDOWN);
+    ioport_enable_pin(T_USART_RTS_PIN);
+    ioport_set_pin_dir(T_USART_RTS_PIN, IOPORT_DIR_INPUT);
+    ioport_enable_pin(T_USART_CTS_PIN);
+    ioport_set_pin_dir(T_USART_CTS_PIN, IOPORT_DIR_OUTPUT);
+    
+    telemetry_uart.flow_control_enabled = 1;
+    telemetry_uart.uart_comm_mode = UART;
+    telemetry_uart.cts_pin = T_USART_CTS_PIN;
+    telemetry_uart.baudrate = T_USART_SPEED;
+    telemetry_uart.set_gpio_pin = &BSP_vSetPin; // Should not be used, but setting this guards against HardFault if the UART accidentally lands in RS485 mode.
+    
+    // This UART's Interrupt is 1 - The 'highest' available, and outside the FreeRTOS
+    // priority ranges. It needs to be this high so that we don't miss bytes from the PC
+    ccd_uart_Init(&telemetry_uart, T_USART, 1);
+    
+    bsp->telemetry_uart = &telemetry_uart;
+    
+    // --- Board UART ---
+    ioport_set_pin_mode(B_USART_RX_PIN, IOPORT_MODE_MUX_C);
+    ioport_disable_pin(B_USART_RX_PIN);
+    // When the RS422/RS485 driver is disabled this pin slowly floats low.
+    // This pull-up stops that.
+    // ioport_set_pin_mode(B_USART_RX_PIN, IOPORT_MODE_PULLDOWN);
 
-	ioport_set_pin_mode(B_USART_TX_PIN, IOPORT_MODE_MUX_C);
-	ioport_disable_pin(B_USART_TX_PIN);
-	
-	// Default is UART/Normal Mode, RS485/RS422 Shutdown
-	ioport_enable_pin(PIN_SOUT_DE);
-	ioport_set_pin_level(PIN_SOUT_DE, 0);
-	ioport_set_pin_dir(PIN_SOUT_DE, IOPORT_DIR_OUTPUT);
-	
-	ioport_enable_pin(PIN_SOUT_nRE);
-	ioport_set_pin_level(PIN_SOUT_nRE, 1);
-	ioport_set_pin_dir(PIN_SOUT_nRE, IOPORT_DIR_OUTPUT);
+    ioport_set_pin_mode(B_USART_TX_PIN, IOPORT_MODE_MUX_C);
+    ioport_disable_pin(B_USART_TX_PIN);
+    
+    // Default is UART/Normal Mode, RS485/RS422 Shutdown
+    ioport_enable_pin(PIN_SOUT_DE);
+    ioport_set_pin_level(PIN_SOUT_DE, 0);
+    ioport_set_pin_dir(PIN_SOUT_DE, IOPORT_DIR_OUTPUT);
+    
+    ioport_enable_pin(PIN_SOUT_nRE);
+    ioport_set_pin_level(PIN_SOUT_nRE, 1);
+    ioport_set_pin_dir(PIN_SOUT_nRE, IOPORT_DIR_OUTPUT);
 
-	ioport_enable_pin(PIN_SIN_DE);
-	ioport_set_pin_level(PIN_SIN_DE, 0);
-	ioport_set_pin_dir(PIN_SIN_DE, IOPORT_DIR_OUTPUT);
+    ioport_enable_pin(PIN_SIN_DE);
+    ioport_set_pin_level(PIN_SIN_DE, 0);
+    ioport_set_pin_dir(PIN_SIN_DE, IOPORT_DIR_OUTPUT);
 
-	ioport_enable_pin(PIN_SIN_nRE);
-	ioport_set_pin_level(PIN_SIN_nRE, 1);
-	ioport_set_pin_dir(PIN_SIN_nRE, IOPORT_DIR_OUTPUT);
-		
-	bus_uart.flow_control_enabled = 0;
-	bus_uart.uart_comm_mode = UART;
-	bus_uart.baudrate = B_USART_SPEED;
-	
-	bus_uart.set_gpio_pin = &BSP_vSetPin;
-	bus_uart.sout_de_pin = PIN_SOUT_DE;
-	bus_uart.sout_nre_pin = PIN_SOUT_nRE;
-	bus_uart.sin_de_pin = PIN_SIN_DE;
-	bus_uart.sin_nre_pin = PIN_SIN_nRE;
-	bus_uart.uart_tx_pin = B_USART_TX_PIN;
-	bus_uart.uart_rx_pin = B_USART_RX_PIN;
-	
-	ccd_uart_Init(&bus_uart, B_USART, configMAX_SYSCALL_INTERRUPT_PRIORITY >> (8 - __NVIC_PRIO_BITS));
-	
-	bsp->bus_uart = &bus_uart; 
+    ioport_enable_pin(PIN_SIN_nRE);
+    ioport_set_pin_level(PIN_SIN_nRE, 1);
+    ioport_set_pin_dir(PIN_SIN_nRE, IOPORT_DIR_OUTPUT);
+    
+    bus_uart.flow_control_enabled = 0;
+    bus_uart.uart_comm_mode = UART;
+    bus_uart.baudrate = B_USART_SPEED;
+    
+    bus_uart.set_gpio_pin = &BSP_vSetPin;
+    bus_uart.sout_de_pin = PIN_SOUT_DE;
+    bus_uart.sout_nre_pin = PIN_SOUT_nRE;
+    bus_uart.sin_de_pin = PIN_SIN_DE;
+    bus_uart.sin_nre_pin = PIN_SIN_nRE;
+    bus_uart.uart_tx_pin = B_USART_TX_PIN;
+    bus_uart.uart_rx_pin = B_USART_RX_PIN;
+    
+    ccd_uart_Init(&bus_uart, B_USART, 3);
+    
+    bsp->bus_uart = &bus_uart;
 }
 
 void USART2_Handler(void)
 {
-	ccd_uart_InterruptHandler(&telemetry_uart);
+    ccd_uart_InterruptHandler(&telemetry_uart);
 }
 
 void USART0_Handler(void)
 {
-	ccd_uart_InterruptHandler(&bus_uart);
+    ccd_uart_InterruptHandler(&bus_uart);
 }
 
 static void BSP_vInitBusI2C(bsp_t * bsp)
 {
-	// Board I2C
-	ioport_set_pin_mode(I2C_BUS_SDA_PIN, I2C_BUS_SDA_MUX);
-	ioport_disable_pin(I2C_BUS_SDA_PIN);
+    // Board I2C
+    ioport_set_pin_mode(I2C_BUS_SDA_PIN, I2C_BUS_SDA_MUX);
+    ioport_disable_pin(I2C_BUS_SDA_PIN);
 
-	ioport_set_pin_mode(I2C_BUS_SCL_PIN, I2C_BUS_SCL_MUX);
-	ioport_disable_pin(I2C_BUS_SCL_PIN);
-	
-	ccd_i2c_driver_Init(&bus_i2c, I2C_BUS_DEVICE);
-	bsp->bus_i2c = &bus_i2c;
+    ioport_set_pin_mode(I2C_BUS_SCL_PIN, I2C_BUS_SCL_MUX);
+    ioport_disable_pin(I2C_BUS_SCL_PIN);
+    
+    ccd_i2c_driver_Init(&bus_i2c, I2C_BUS_DEVICE);
+    bsp->bus_i2c = &bus_i2c;
 }
 
 static void BSP_vInitUtilI2C(bsp_t * bsp)
 {
-	ioport_set_pin_mode(I2C_UTIL_SDA_PIN, I2C_UTIL_SDA_MUX);
-	ioport_disable_pin(I2C_UTIL_SDA_PIN);
+    ioport_set_pin_mode(I2C_UTIL_SDA_PIN, I2C_UTIL_SDA_MUX);
+    ioport_disable_pin(I2C_UTIL_SDA_PIN);
 
-	ioport_set_pin_mode(I2C_UTIL_SCL_PIN, I2C_UTIL_SCL_MUX);
-	ioport_disable_pin(I2C_UTIL_SCL_PIN);
-	
-	util_i2c.baud = 100000;
-	ccd_i2c_driver_Init(&util_i2c, I2C_UTIL_DEVICE);
-	bsp->util_i2c = &util_i2c;
+    ioport_set_pin_mode(I2C_UTIL_SCL_PIN, I2C_UTIL_SCL_MUX);
+    ioport_disable_pin(I2C_UTIL_SCL_PIN);
+    
+    util_i2c.baud = 100000;
+    ccd_i2c_driver_Init(&util_i2c, I2C_UTIL_DEVICE);
+    bsp->util_i2c = &util_i2c;
 }
 
 /*
- * Initialize all the general purpose GPIO pins
+* Initialize all the general purpose GPIO pins
 */
 void BSP_vInitGPIO(void)
 {
-	// The four GPIO pins are not enabled and set.
+    // The four GPIO pins are not enabled and set.
 
-	// PA19
-	ioport_enable_pin(EN_VBAT_BUS_PIN);
-	ioport_set_pin_level(EN_VBAT_BUS_PIN, 0);
-	ioport_set_pin_dir(EN_VBAT_BUS_PIN, IOPORT_DIR_OUTPUT);
-			
-	// USB Reset pin PD14
-	ioport_enable_pin(USB_RESET_PIN);
-	ioport_set_pin_level(USB_RESET_PIN, 1);
-	ioport_set_pin_dir(USB_RESET_PIN, IOPORT_DIR_OUTPUT);
-	
-	if (BSP_u8GetVersion() == 0)
+    // PA19
+    ioport_enable_pin(EN_VBAT_BUS_PIN);
+    ioport_set_pin_level(EN_VBAT_BUS_PIN, 0);
+    ioport_set_pin_dir(EN_VBAT_BUS_PIN, IOPORT_DIR_OUTPUT);
+    
+    // USB Reset pin PD14
+    ioport_enable_pin(USB_RESET_PIN);
+    ioport_set_pin_level(USB_RESET_PIN, 1);
+    ioport_set_pin_dir(USB_RESET_PIN, IOPORT_DIR_OUTPUT);
+    
+    if (BSP_u8GetVersion() == 0)
     {
-		// Version 0 had VBatAlt and 5V lines
-		ioport_enable_pin(EN_VBATALT_BUS_PIN);
-		ioport_set_pin_level(EN_VBATALT_BUS_PIN, 0);
-		ioport_set_pin_dir(EN_VBATALT_BUS_PIN, IOPORT_DIR_OUTPUT);
-		
-		ioport_enable_pin(EN_5V_BUS_PIN);
-		ioport_set_pin_level(EN_5V_BUS_PIN, 0);
-		ioport_set_pin_dir(EN_5V_BUS_PIN, IOPORT_DIR_OUTPUT);
-		
-		ioport_enable_pin(ETH_nRST);
-		ioport_set_pin_level(ETH_nRST, 0);
-		ioport_set_pin_dir(ETH_nRST, IOPORT_DIR_OUTPUT);
-		
-		// PA20
-		ioport_enable_pin(EN_3V3_BUS_PIN);
-		ioport_set_pin_level(EN_3V3_BUS_PIN, 0);
-		ioport_set_pin_dir(EN_3V3_BUS_PIN, IOPORT_DIR_OUTPUT);	
-		
-	}
-	
-	// GSE version 2 has 4 debug pins
-	if (BSP_u8GetVersion() == 1 || BSP_u8GetVersion() == 2)
+        // Version 0 had VBatAlt and 5V lines
+        ioport_enable_pin(EN_VBATALT_BUS_PIN);
+        ioport_set_pin_level(EN_VBATALT_BUS_PIN, 0);
+        ioport_set_pin_dir(EN_VBATALT_BUS_PIN, IOPORT_DIR_OUTPUT);
+        
+        ioport_enable_pin(EN_5V_BUS_PIN);
+        ioport_set_pin_level(EN_5V_BUS_PIN, 0);
+        ioport_set_pin_dir(EN_5V_BUS_PIN, IOPORT_DIR_OUTPUT);
+        
+        ioport_enable_pin(ETH_nRST);
+        ioport_set_pin_level(ETH_nRST, 0);
+        ioport_set_pin_dir(ETH_nRST, IOPORT_DIR_OUTPUT);
+        
+        // PA20
+        ioport_enable_pin(EN_3V3_BUS_PIN);
+        ioport_set_pin_level(EN_3V3_BUS_PIN, 0);
+        ioport_set_pin_dir(EN_3V3_BUS_PIN, IOPORT_DIR_OUTPUT);
+        
+    }
+    
+    // GSE version 2 has 4 debug pins
+    if (BSP_u8GetVersion() == 1 || BSP_u8GetVersion() == 2)
     {
-		ioport_enable_pin(PIN_DEBUG_0);
-		ioport_set_pin_level(PIN_DEBUG_0, 0);
-		ioport_set_pin_dir(PIN_DEBUG_0, IOPORT_DIR_OUTPUT);
-		
-		ioport_enable_pin(PIN_DEBUG_1);
-		ioport_set_pin_level(PIN_DEBUG_1, 0);
-		ioport_set_pin_dir(PIN_DEBUG_1, IOPORT_DIR_OUTPUT);
-		
-		ioport_enable_pin(PIN_DEBUG_2);
-		ioport_set_pin_level(PIN_DEBUG_2, 0);
-		ioport_set_pin_dir(PIN_DEBUG_2, IOPORT_DIR_OUTPUT);
-		
-		ioport_enable_pin(PIN_DEBUG_3);
-		ioport_set_pin_level(PIN_DEBUG_3, 0);
-		ioport_set_pin_dir(PIN_DEBUG_3, IOPORT_DIR_OUTPUT);
-		
-		// PA20
-		ioport_enable_pin(EN_3V3_BUS_PIN);
-		ioport_set_pin_level(EN_3V3_BUS_PIN, 0);
-		ioport_set_pin_dir(EN_3V3_BUS_PIN, IOPORT_DIR_OUTPUT);
-	}
-	
-	// Todo: This needs to be cleaned up. In the old OBC we referred to PC104 pins,
-	// in the new GSE there are Bus pins, which happen to map to the same pins,
-	// but won't always be the same for all adaptors.
-	//if (BSP_u8GetVersion() == 0)
-	{
-		// GPIO 1: PC01
-		ioport_set_pin_level(PC104_EN_PIN, 0);
-		ioport_enable_pin(PC104_EN_PIN);
-		ioport_set_pin_dir(PC104_EN_PIN, IOPORT_DIR_OUTPUT);
-		
-		// GPIO 0: PC00
-		ioport_set_pin_level(PC104_nRST_PIN, 0);
-		ioport_enable_pin(PC104_nRST_PIN);
-		ioport_set_pin_dir(PC104_nRST_PIN, IOPORT_DIR_OUTPUT);
-	}
-	
-	// Revision B2 of the EGSE
-	if (BSP_u8GetVersion() == 2)
+        ioport_enable_pin(PIN_DEBUG_0);
+        ioport_set_pin_level(PIN_DEBUG_0, 0);
+        ioport_set_pin_dir(PIN_DEBUG_0, IOPORT_DIR_OUTPUT);
+        
+        ioport_enable_pin(PIN_DEBUG_1);
+        ioport_set_pin_level(PIN_DEBUG_1, 0);
+        ioport_set_pin_dir(PIN_DEBUG_1, IOPORT_DIR_OUTPUT);
+        
+        ioport_enable_pin(PIN_DEBUG_2);
+        ioport_set_pin_level(PIN_DEBUG_2, 0);
+        ioport_set_pin_dir(PIN_DEBUG_2, IOPORT_DIR_OUTPUT);
+        
+        ioport_enable_pin(PIN_DEBUG_3);
+        ioport_set_pin_level(PIN_DEBUG_3, 0);
+        ioport_set_pin_dir(PIN_DEBUG_3, IOPORT_DIR_OUTPUT);
+        
+        // PA20
+        ioport_enable_pin(EN_3V3_BUS_PIN);
+        ioport_set_pin_level(EN_3V3_BUS_PIN, 0);
+        ioport_set_pin_dir(EN_3V3_BUS_PIN, IOPORT_DIR_OUTPUT);
+    }
+    
+    // Todo: This needs to be cleaned up. In the old OBC we referred to PC104 pins,
+    // in the new GSE there are Bus pins, which happen to map to the same pins,
+    // but won't always be the same for all adaptors.
+    //if (BSP_u8GetVersion() == 0)
     {
-		ioport_enable_pin(EN_3V3_EXT_PIN);
-		ioport_set_pin_level(EN_3V3_EXT_PIN, 0);
-		ioport_set_pin_dir(EN_3V3_EXT_PIN, IOPORT_DIR_OUTPUT);
-		
-		ioport_enable_pin(EN_3V3_UTIL_PIN);
-		ioport_set_pin_level(EN_3V3_UTIL_PIN, 0);
-		ioport_set_pin_dir(EN_3V3_UTIL_PIN, IOPORT_DIR_OUTPUT);
-	}
+        // GPIO 1: PC01
+        ioport_set_pin_level(PC104_EN_PIN, 0);
+        ioport_enable_pin(PC104_EN_PIN);
+        ioport_set_pin_dir(PC104_EN_PIN, IOPORT_DIR_OUTPUT);
+        
+        // GPIO 0: PC00
+        ioport_set_pin_level(PC104_nRST_PIN, 0);
+        ioport_enable_pin(PC104_nRST_PIN);
+        ioport_set_pin_dir(PC104_nRST_PIN, IOPORT_DIR_OUTPUT);
+    }
+    
+    // Revision B2 of the EGSE
+    if (BSP_u8GetVersion() == 2)
+    {
+        ioport_enable_pin(EN_3V3_EXT_PIN);
+        ioport_set_pin_level(EN_3V3_EXT_PIN, 0);
+        ioport_set_pin_dir(EN_3V3_EXT_PIN, IOPORT_DIR_OUTPUT);
+        
+        ioport_enable_pin(EN_3V3_UTIL_PIN);
+        ioport_set_pin_level(EN_3V3_UTIL_PIN, 0);
+        ioport_set_pin_dir(EN_3V3_UTIL_PIN, IOPORT_DIR_OUTPUT);
+    }
 }
 
 void BSP_vUsbReset(void)
 {
-	ioport_set_pin_level(USB_RESET_PIN, 0);
-	delay_ms(100);
-	ioport_set_pin_level(USB_RESET_PIN, 1);
+    ioport_set_pin_level(USB_RESET_PIN, 0);
+    delay_ms(100);
+    ioport_set_pin_level(USB_RESET_PIN, 1);
 }
 
 void BSP_InitRTC(void)
 {
-	/*
-	 Since this waits for the RTC's second tick, it can take quite a while to
-	 execute. Instead start this process and use the interrupt to do the rest.
-	*/
-	// Configure the PIO lines to use the crystal
-	ioport_disable_pin(PIN_XIN32);
-	ioport_disable_pin(PIN_XOUT32);
-		
-	// Switch to the crystal
-	SUPC->SUPC_CR = SUPC_CR_XTALSEL | SUPC_CR_KEY_PASSWD;
-	
-	// Wait a number of cycles for the clock to be set
-	while (!((SUPC->SUPC_SR & SUPC_SR_OSCSEL) && (PMC->PMC_SR & PMC_SR_OSCSELS)))
+    /*
+    Since this waits for the RTC's second tick, it can take quite a while to
+    execute. Instead start this process and use the interrupt to do the rest.
+    */
+    // Configure the PIO lines to use the crystal
+    ioport_disable_pin(PIN_XIN32);
+    ioport_disable_pin(PIN_XOUT32);
+    
+    // Switch to the crystal
+    SUPC->SUPC_CR = SUPC_CR_XTALSEL | SUPC_CR_KEY_PASSWD;
+    
+    // Wait a number of cycles for the clock to be set
+    while (!((SUPC->SUPC_SR & SUPC_SR_OSCSEL) && (PMC->PMC_SR & PMC_SR_OSCSELS)))
     {
-		//TODO: Timeout here!
-	}	
-	
-	rtc_setup_state = RTC_WAIT_FOR_SEC_STATUS;
-	// Enable the interrupts required for the upcoming section
-	RTC->RTC_IER |= RTC_IER_SECEN | RTC_IER_ACKEN;
-	NVIC_SetPriority(RTC_IRQn, configMAX_SYSCALL_INTERRUPT_PRIORITY >> (8 - __NVIC_PRIO_BITS));
-	NVIC_EnableIRQ(RTC_IRQn);
-	
-	/* 
-		We want to reset the Time and Calendar registers. For this, refer to 
-		Figure 27.2 Time/Calendar Update Timing Diagram in the data sheet.
-	
-		We want to do this update in the interrupt, since it takes almost 500 mS, and
-		we want to get the board operational before that.
-	*/
+        //TODO: Timeout here!
+    }
+    
+    rtc_setup_state = RTC_WAIT_FOR_SEC_STATUS;
+    // Enable the interrupts required for the upcoming section
+    RTC->RTC_IER |= RTC_IER_SECEN | RTC_IER_ACKEN;
+    NVIC_SetPriority(RTC_IRQn, 3);
+    NVIC_EnableIRQ(RTC_IRQn);
+    
+    /*
+    We want to reset the Time and Calendar registers. For this, refer to
+    Figure 27.2 Time/Calendar Update Timing Diagram in the data sheet.
+    
+    We want to do this update in the interrupt, since it takes almost 500 mS, and
+    we want to get the board operational before that.
+    */
 }
 
 void RTC_Handler()
 {
-	uint32_t status = RTC->RTC_SR;
-	switch (rtc_setup_state)
-	{
-		case RTC_WAIT_FOR_SEC_STATUS:
+    uint32_t status = RTC->RTC_SR;
+    switch (rtc_setup_state)
+    {
+        case RTC_WAIT_FOR_SEC_STATUS:
         {
-			if((status & RTC_SR_SEC) > 0)
-			{
-				// Step 1 Stop the RTC, request update
-				RTC->RTC_CR = RTC->RTC_CR | RTC_CR_UPDCAL | RTC_CR_UPDTIM;
-				rtc_setup_state = RTC_REQUEST_UPDATE;
-			}
-		    break;
-        }        
-		case RTC_REQUEST_UPDATE:
+            if((status & RTC_SR_SEC) > 0)
+            {
+                // Step 1 Stop the RTC, request update
+                RTC->RTC_CR = RTC->RTC_CR | RTC_CR_UPDCAL | RTC_CR_UPDTIM;
+                rtc_setup_state = RTC_REQUEST_UPDATE;
+            }
+            break;
+        }
+        case RTC_REQUEST_UPDATE:
         {
-			if((status & RTC_SR_ACKUPD) > 0)
-			{
-				// Step 2 - Clear the ACKUPD bit
-				RTC->RTC_SCCR = RTC_SR_ACKUPD;
-			
-				// Step 3 Clear values
-				RTC->RTC_TIMR = 0;
-				RTC->RTC_CALR = 0;
-			
-				// Step 4 Clear update request bits
-				RTC->RTC_CR = RTC->RTC_CR & ~(RTC_CR_UPDCAL | RTC_CR_UPDTIM);
-				rtc_setup_state = RTC_SETUP_DONE;
-				RTC->RTC_IER = 0;
-				NVIC_DisableIRQ(RTC_IRQn);
-			}
-			break;
-        }            
-		case RTC_SETUP_DONE:
-		break;
-	}
+            if((status & RTC_SR_ACKUPD) > 0)
+            {
+                // Step 2 - Clear the ACKUPD bit
+                RTC->RTC_SCCR = RTC_SR_ACKUPD;
+                
+                // Step 3 Clear values
+                RTC->RTC_TIMR = 0;
+                RTC->RTC_CALR = 0;
+                
+                // Step 4 Clear update request bits
+                RTC->RTC_CR = RTC->RTC_CR & ~(RTC_CR_UPDCAL | RTC_CR_UPDTIM);
+                rtc_setup_state = RTC_SETUP_DONE;
+                RTC->RTC_IER = 0;
+                NVIC_DisableIRQ(RTC_IRQn);
+            }
+            break;
+        }
+        case RTC_SETUP_DONE:
+        break;
+    }
 }
 
 uint32_t BSP_GetUptime(void)
 {
-	uint32_t seconds = ((RTC->RTC_TIMR & RTC_TIMR_SEC_Msk) >> RTC_TIMR_SEC_Pos);
-	uint32_t minutes = ((RTC->RTC_TIMR & RTC_TIMR_MIN_Msk) >> RTC_TIMR_MIN_Pos);
-	uint32_t hours = ((RTC->RTC_TIMR & RTC_TIMR_HOUR_Msk) >> RTC_TIMR_HOUR_Pos);
-	
-	// Welcome to the most screwed-up method of storing numbers.
-	// Stupid Binary Coded Decimal
-	// Bottom four bits count to 9, then the top bit gets incremented.
-	// This means displaying the hex as a string 'looks' correct.
-	
-	seconds = (seconds & 0xF) + ((seconds & 0xF0) >> 4) * 10;
-	minutes = (minutes & 0xF) + ((minutes & 0xF0) >> 4) * 10;
-	hours = (hours & 0xF) + ((hours & 0xF0) >> 4) * 10;
-	
-	return seconds + minutes*60 + hours *60 * 60;
+    uint32_t seconds = ((RTC->RTC_TIMR & RTC_TIMR_SEC_Msk) >> RTC_TIMR_SEC_Pos);
+    uint32_t minutes = ((RTC->RTC_TIMR & RTC_TIMR_MIN_Msk) >> RTC_TIMR_MIN_Pos);
+    uint32_t hours = ((RTC->RTC_TIMR & RTC_TIMR_HOUR_Msk) >> RTC_TIMR_HOUR_Pos);
+    
+    // Welcome to the most screwed-up method of storing numbers.
+    // Stupid Binary Coded Decimal
+    // Bottom four bits count to 9, then the top bit gets incremented.
+    // This means displaying the hex as a string 'looks' correct.
+    
+    seconds = (seconds & 0xF) + ((seconds & 0xF0) >> 4) * 10;
+    minutes = (minutes & 0xF) + ((minutes & 0xF0) >> 4) * 10;
+    hours = (hours & 0xF) + ((hours & 0xF0) >> 4) * 10;
+    
+    return seconds + minutes*60 + hours *60 * 60;
 }
 
 void BSP_vInitCan(bsp_t * bsp)
 {
-	if (BSP_u8GetVersion() == 0)
-	{
-		// Configure pins, disable GPIO mode
-		ioport_disable_pin(CAN_PIN_TX);
-		ioport_set_pin_mode(CAN_PIN_TX, CAN_PIN_TX_MUX);
-		ioport_disable_pin(CAN_PIN_RX);
-		ioport_set_pin_mode(CAN_PIN_RX, CAN_PIN_RX_MUX);
+    if (BSP_u8GetVersion() == 0)
+    {
+        // Configure pins, disable GPIO mode
+        ioport_disable_pin(CAN_PIN_TX);
+        ioport_set_pin_mode(CAN_PIN_TX, CAN_PIN_TX_MUX);
+        ioport_disable_pin(CAN_PIN_RX);
+        ioport_set_pin_mode(CAN_PIN_RX, CAN_PIN_RX_MUX);
 
-		// Enable clock to CAN module
-		sysclk_enable_peripheral_clock(CAN_DEVICE_ID);
-		bus_can.baudrate = 1000000;
-		ccd_can_Init(&bus_can, MCAN0);
-		bsp->bus_can = &bus_can;
-	}
-	if ((BSP_u8GetVersion() == 1) || (BSP_u8GetVersion() == 2))
-	{
-		// Configure pins, disable GPIO mode
-		ioport_disable_pin(CAN_PIN_TX_V2);
-		ioport_set_pin_mode(CAN_PIN_TX_V2, CAN_PIN_TX_MUX_V2);
-		ioport_disable_pin(CAN_PIN_RX_V2);
-		ioport_set_pin_mode(CAN_PIN_RX_V2, CAN_PIN_RX_MUX_V2);
-		
-		// Enable clock to CAN module
-		sysclk_enable_peripheral_clock(CAN_DEVICE_ID_V2);
-		bus_can.baudrate = 1000000;
-		ccd_can_Init(&bus_can, MCAN1);
-		bsp->bus_can = &bus_can;
-	}
+        // Enable clock to CAN module
+        sysclk_enable_peripheral_clock(CAN_DEVICE_ID);
+        bus_can.baudrate = 1000000;
+        ccd_can_Init(&bus_can, MCAN0);
+        bsp->bus_can = &bus_can;
+    }
+    else if ((BSP_u8GetVersion() == 1) || (BSP_u8GetVersion() == 2))
+    {
+        // Configure pins, disable GPIO mode
+        ioport_disable_pin(CAN_PIN_TX_V2);
+        ioport_set_pin_mode(CAN_PIN_TX_V2, CAN_PIN_TX_MUX_V2);
+        ioport_disable_pin(CAN_PIN_RX_V2);
+        ioport_set_pin_mode(CAN_PIN_RX_V2, CAN_PIN_RX_MUX_V2);
+        
+        // Enable clock to CAN module
+        sysclk_enable_peripheral_clock(CAN_DEVICE_ID_V2);
+        bus_can.baudrate = 1000000;
+        ccd_can_Init(&bus_can, MCAN1);
+        bsp->bus_can = &bus_can;
+    }
 }
-
 void MCAN0_INT0_Handler(void)
 {
-	ccd_can_ReceiveCallback(&bus_can);
+    ccd_can_ReceiveCallback(&bus_can);
 }
 
 void MCAN0_INT1_Handler(void)
 {
-	asm("nop");
+    asm("nop");
 }
 
 void MCAN1_INT0_Handler(void)
 {
-	ccd_can_ReceiveCallback(&bus_can);
+    ccd_can_ReceiveCallback(&bus_can);
 }
 
 void MCAN1_INT1_Handler(void)
 {
-	asm("nop");
+    asm("nop");
 }
 
 void BSP_vInitLEDPWM(bsp_t * bsp)
 {
-	// Setup GPIO pin
-	// Pin PA15 - supports PWMC0_ PWML3 on Peripheral C
-	PIOA->PIO_ABCDSR[0] &= ~PIO_ABCDSR_P15;
-	PIOA->PIO_ABCDSR[1] |= PIO_ABCDSR_P15;
+    // Setup GPIO pin
+    // Pin PA15 - supports PWMC0_ PWML3 on Peripheral C
+    PIOA->PIO_ABCDSR[0] &= ~PIO_ABCDSR_P15;
+    PIOA->PIO_ABCDSR[1] |= PIO_ABCDSR_P15;
 
-	// Set Pin to Peripheral mode
-	PIOA->PIO_PDR |= PIO_PDR_P15;
+    // Set Pin to Peripheral mode
+    PIOA->PIO_PDR |= PIO_PDR_P15;
 
-	// Enable clock to PWM module
-	PMC->PMC_PCER0 = PMC_PCER0_PID31;
-	
-	led_driver.uart_disable_fc = ccd_uart_StopFlowControl;
-	led_driver.uart_enable_fc = ccd_uart_StartFlowControl;
-	led_driver.uart_handle = bsp->telemetry_uart;
+    // Enable clock to PWM module
+    PMC->PMC_PCER0 = PMC_PCER0_PID31;
     
-	ccd_led_driver_Init(&led_driver, PWM0);
+    led_driver.uart_disable_fc = ccd_uart_StopFlowControl;
+    led_driver.uart_enable_fc = ccd_uart_StartFlowControl;
+    led_driver.uart_handle = bsp->telemetry_uart;
     
-	bsp->led_driver = &led_driver;
+    ccd_led_driver_Init(&led_driver, PWM0);
+    
+    bsp->led_driver = &led_driver;
 }
 
-void debug(uint8_t val)
-{
-	ioport_set_pin_level(PIN_DEBUG_0, val & 0x01);
-	ioport_set_pin_level(PIN_DEBUG_1, val & 0x02);
-	ioport_set_pin_level(PIN_DEBUG_2, val & 0x04);
-	ioport_set_pin_level(PIN_DEBUG_3, val & 0x08);
-}

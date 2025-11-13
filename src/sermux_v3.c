@@ -12,7 +12,6 @@
 #include "sermux_v3.h"
 
 #include <string.h>
-#include <assert.h>
 
 #include "FreeRTOS.h"
 #include "task.h"
@@ -38,8 +37,8 @@ extern csp_usart_cc_context_t csp_usart_cc_ctx_tel;
 void SERMUX_V3_Init(sermux_v3_t * handle)
 {
     // The streams have to be set before calling init.
-    assert(handle->in_stream);
-    assert(handle->out_stream);
+    configASSERT(handle->in_stream);
+    configASSERT(handle->out_stream);
     
     handle->rx_block.rx_count = 0;
     handle->tx_block.rx_count = 0;
@@ -57,14 +56,14 @@ void SERMUX_V3_Init(sermux_v3_t * handle)
 */
 void SERMUX_V3_AddTarget(sermux_v3_t * handle, const uint8_t number, MessageBufferHandle_t in, MessageBufferHandle_t out, set_overflow_flag_t overflow_flag_function)
 {
-    assert (handle->num_targets < MAX_NUMBER_OF_TARGETS);
+    configASSERT(handle->num_targets < MAX_NUMBER_OF_TARGETS);
     
     handle->targets[handle->num_targets].number = number;
     handle->targets[handle->num_targets].in = in;
     handle->targets[handle->num_targets].out = out;
     handle->targets[handle->num_targets].set_overflow_flag = overflow_flag_function;
     
-    handle->num_targets += 1;
+    handle->num_targets++;
 }
 
 /*
@@ -72,9 +71,11 @@ void SERMUX_V3_AddTarget(sermux_v3_t * handle, const uint8_t number, MessageBuff
 */
 void SERMUX_V3_ReceiveTask(void * params)
 {
+    configASSERT(params != NULL);
     sermux_v3_t* pHandle = (sermux_v3_t *) params;
     
     uint8_t rx_buffer[16];
+    mm_comms_protocol_t comms_protocol;
     
     while(1)
     {
@@ -91,152 +92,164 @@ void SERMUX_V3_ReceiveTask(void * params)
         // Update indication LED and continue processing data
         LEDIndicator_SetNextState(LED_UART_COMMS);
         
-        // TODO: [ADRIAAN] Consider doing this differently, currently overriding default parser.
-        if (csp_usart_cc_ctx_tel.ccd_driver != NULL)
+        configASSERT(mm_getConfCommsProtocol_BUS_UART(&comms_protocol) == mm_OK);
+        switch (comms_protocol)
         {
-            int xTaskWoken = pdFALSE;
-            csp_kiss_rx(&csp_usart_cc_ctx_tel.iface, rx_buffer, rx_length, (void *)xTaskWoken);
-            continue;
-        }
-        
-        // Check if bytes were dropped by the UART.
-        // If it was, reset and wait for next message
-        uint32_t uart_status = ccd_uart_get_error_status(pHandle->uart_handle);
-        if (uart_status & UART_RX_HB_OVERFLOW)
-        {
-            mm_setRTOS_Status0_uartRxHBOverflow(true);
-            pHandle->state = V2_WAITING_2;
-            rx_length = 0;
-        }
-        if (uart_status & UART_RX_HB_OVERFLOW) // TODO: Why are we checking the same condition here twice???
-        {
-            mm_setRTOS_Status0_uartRxSBOverflow(true);
-            pHandle->state = V2_WAITING_2;
-            rx_length = 0;
-        }
-        
-        // This flag isn't really relevant here, but check and clear it anyway.
-        if (uart_status & UART_TX_SB_OVERFLOW)
-        {
-            mm_setRTOS_Status0_uartTxHBOverflow(true);
-        }
-        ccd_uart_clear_error_status(pHandle->uart_handle);
-        
-        for (uint32_t i = 0; i < rx_length; i++)
-        {
-            uint8_t rx_byte = rx_buffer[i];
-            
-            switch (pHandle->state)
+            case reg_comms_protocol_cubecom:
             {
-                case V2_WAITING_1:
+                // Check if bytes were dropped by the UART.
+                // If it was, reset and wait for next message
+                uint32_t uart_status = ccd_uart_get_error_status(pHandle->uart_handle);
+                if (uart_status & UART_RX_HB_OVERFLOW)
                 {
-                    if (rx_byte == 0xC3)
-                    {
-                        pHandle->state = V2_WAITING_2;
-                    }
-                    break;
+                    mm_setRTOS_Status0_uartRxHBOverflow(true);
+                    pHandle->state = V2_WAITING_2;
+                    rx_length = 0;
+                }
+                if (uart_status & UART_RX_HB_OVERFLOW) // TODO: Why are we checking the same condition here twice???
+                {
+                    mm_setRTOS_Status0_uartRxSBOverflow(true);
+                    pHandle->state = V2_WAITING_2;
+                    rx_length = 0;
                 }
                 
-                case V2_WAITING_2:
+                // This flag isn't really relevant here, but check and clear it anyway.
+                if (uart_status & UART_TX_SB_OVERFLOW)
                 {
-                    if (rx_byte == 0xA9)
-                    {
-                        pHandle->state = V2_STORE_VERSION;
-                    }
-                    else {
-                        pHandle->state = V2_WAITING_1;
-                    }
-                    break;
+                    mm_setRTOS_Status0_uartTxHBOverflow(true);
                 }
+                ccd_uart_clear_error_status(pHandle->uart_handle);
                 
-                case V2_STORE_VERSION:
+                for (uint32_t i = 0; i < rx_length; i++)
                 {
-                    pHandle->rx_block.version = rx_byte;
-                    pHandle->state = V2_STORE_LENGTH;
-                    break;
-                }
-                
-                case V2_STORE_LENGTH:
-                {
-                    pHandle->rx_block.length = rx_byte;
-                    pHandle->rx_block.rx_count = 0;
-                    pHandle->state = V2_STORE_DATA;
-                    break;
-                }
-                
-                case V2_STORE_DATA:
-                {
-                    pHandle->rx_block.buffer[pHandle->rx_block.rx_count] = rx_byte;
-                    pHandle->rx_block.rx_count+= 1;
-                    if (pHandle->rx_block.rx_count == pHandle->rx_block.length)
-                    {
-                        pHandle->state = V2_STORE_CRC;
-                    }
-                    break;
-                }
-                
-                case V2_STORE_CRC:
-                {
-                    // Store CRC
-                    pHandle->rx_block.crc = rx_byte;
+                    uint8_t rx_byte = rx_buffer[i];
                     
-                    // TOTO: Verify the CRC. We don't enable this immediately, wait until the OBC Software generates and
-                    // checks it as well.
-                    uint8_t calculated_crc = CRC8_Calculate(&pHandle->crc_checker, pHandle->rx_block.buffer, pHandle->rx_block.length);
-                    
-                    if (pHandle->rx_block.crc != calculated_crc)
+                    switch (pHandle->state)
                     {
-                        mm_setRTOS_Status0_SERMUX_CRC_Error(true);
-                    }
-                    
-                    // Process all the messages in this block
-                    // This can be a uint8_t, but there was a bug where we lost a single byte, and messages
-                    // would be misread in an endless loop. Using a large size stops this error, but still
-                    // misreads messages.
-                    uint32_t curr_msg_index = 0;
-                    while (curr_msg_index < pHandle->rx_block.length)
-                    {
-                        uint8_t msg_len = pHandle->rx_block.buffer[curr_msg_index];
-                        uint8_t msg_target = pHandle->rx_block.buffer[curr_msg_index + 1] & 0x7F;
-                        
-                        // This is a safety check. If this is true, the index will never be
-                        // incremented, and we'll be stuck. So just abandon the block.
-                        // If this is true, it probably means previous messages  were malformed.
-                        if (msg_len == 0)
+                        case V2_WAITING_1:
                         {
-                            curr_msg_index = pHandle->rx_block.length;
-                            continue;
-                        }
-                        if (msg_len > 32)
-                        {
-                            curr_msg_index = pHandle->rx_block.length;
-                            continue;
-                        }
-                        
-                        for (uint32_t j = 0; j < pHandle->num_targets; j++)
-                        {
-                            if (pHandle->targets[j].number == msg_target)
+                            if (rx_byte == 0xC3)
                             {
-                                size_t sent_size = xMessageBufferSend(pHandle->targets[j].in, &(pHandle->rx_block.buffer[curr_msg_index]), msg_len, 0);
-                                if (sent_size == 0 && pHandle->targets[i].set_overflow_flag != NULL)
-                                {
-                                    pHandle->targets[i].set_overflow_flag(true);
-                                }
+                                pHandle->state = V2_WAITING_2;
                             }
+                            break;
                         }
                         
-                        // Increment by the message count
-                        curr_msg_index += msg_len;
+                        case V2_WAITING_2:
+                        {
+                            if (rx_byte == 0xA9)
+                            {
+                                pHandle->state = V2_STORE_VERSION;
+                            }
+                            else {
+                                pHandle->state = V2_WAITING_1;
+                            }
+                            break;
+                        }
+                        
+                        case V2_STORE_VERSION:
+                        {
+                            pHandle->rx_block.version = rx_byte;
+                            pHandle->state = V2_STORE_LENGTH;
+                            break;
+                        }
+                        
+                        case V2_STORE_LENGTH:
+                        {
+                            pHandle->rx_block.length = rx_byte;
+                            pHandle->rx_block.rx_count = 0;
+                            pHandle->state = V2_STORE_DATA;
+                            break;
+                        }
+                        
+                        case V2_STORE_DATA:
+                        {
+                            pHandle->rx_block.buffer[pHandle->rx_block.rx_count] = rx_byte;
+                            pHandle->rx_block.rx_count+= 1;
+                            if (pHandle->rx_block.rx_count == pHandle->rx_block.length)
+                            {
+                                pHandle->state = V2_STORE_CRC;
+                            }
+                            break;
+                        }
+                        
+                        case V2_STORE_CRC:
+                        {
+                            // Store CRC
+                            pHandle->rx_block.crc = rx_byte;
+                            
+                            // TOTO: Verify the CRC. We don't enable this immediately, wait until the OBC Software generates and
+                            // checks it as well.
+                            uint8_t calculated_crc = CRC8_Calculate(&pHandle->crc_checker, pHandle->rx_block.buffer, pHandle->rx_block.length);
+                            
+                            if (pHandle->rx_block.crc != calculated_crc)
+                            {
+                                mm_setRTOS_Status0_SERMUX_CRC_Error(true);
+                            }
+                            
+                            // Process all the messages in this block
+                            // This can be a uint8_t, but there was a bug where we lost a single byte, and messages
+                            // would be misread in an endless loop. Using a large size stops this error, but still
+                            // misreads messages.
+                            uint32_t curr_msg_index = 0;
+                            while (curr_msg_index < pHandle->rx_block.length)
+                            {
+                                uint8_t msg_len = pHandle->rx_block.buffer[curr_msg_index];
+                                uint8_t msg_target = pHandle->rx_block.buffer[curr_msg_index + 1] & 0x7F;
+                                
+                                // This is a safety check. If this is true, the index will never be
+                                // incremented, and we'll be stuck. So just abandon the block.
+                                // If this is true, it probably means previous messages  were malformed.
+                                if (msg_len == 0)
+                                {
+                                    curr_msg_index = pHandle->rx_block.length;
+                                    continue;
+                                }
+                                if (msg_len > 32)
+                                {
+                                    curr_msg_index = pHandle->rx_block.length;
+                                    continue;
+                                }
+                                
+                                for (uint32_t j = 0; j < pHandle->num_targets; j++)
+                                {
+                                    if (pHandle->targets[j].number == msg_target)
+                                    {
+                                        size_t sent_size = xMessageBufferSend(pHandle->targets[j].in, &(pHandle->rx_block.buffer[curr_msg_index]), msg_len, 0);
+                                        if (sent_size == 0 && pHandle->targets[i].set_overflow_flag != NULL)
+                                        {
+                                            pHandle->targets[i].set_overflow_flag(true);
+                                        }
+                                    }
+                                }
+                                
+                                // Increment by the message count
+                                curr_msg_index += msg_len;
+                            }
+                            pHandle->state = V2_WAITING_1;
+                            break;
+                        }
+                        
+                        default:
+                        {
+                            pHandle->state = V2_WAITING_1;
+                            break;
+                        }
                     }
-                    pHandle->state = V2_WAITING_1;
-                    break;
                 }
-                
-                default:
-                {
-                    pHandle->state = V2_WAITING_1;
-                    break;
-                }
+            }
+            
+            case reg_comms_protocol_csp:
+            {
+                csp_kiss_rx(&csp_usart_cc_ctx_tel.iface, rx_buffer, rx_length, NULL);
+                break;
+            }
+            
+            case reg_comms_protocol_cants:
+            default:
+            {
+                configASSERT(false);
+                break;
             }
         }
     }

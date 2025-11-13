@@ -27,18 +27,11 @@
 #define SPI1_MOSI               PIO_PC27_IDX
 #define SPI1_MISO               PIO_PC26_IDX
 
-#define SPI_DEVICE              SPI1
-#define SPI_DEVICE_ID           ID_SPI1
-
-#define T_USART                 USART2
-#define T_USART_SPEED           921600
 #define T_USART_RX_PIN          IOPORT_CREATE_PIN(PIOD, 15)
 #define T_USART_TX_PIN          IOPORT_CREATE_PIN(PIOD, 16)
 #define T_USART_RTS_PIN         IOPORT_CREATE_PIN(PIOD, 18)
 #define T_USART_CTS_PIN         IOPORT_CREATE_PIN(PIOD, 19)
 
-#define B_USART                 USART0
-#define B_USART_SPEED           115200
 #define B_USART_RX_PIN          PIO_PB0_IDX
 #define B_USART_TX_PIN          PIO_PB1_IDX
 
@@ -47,16 +40,12 @@
 #define PIN_SIN_DE              PIO_PC30_IDX
 #define PIN_SIN_nRE             PIO_PD9_IDX
 
-
 #define I2C_BUS_DEVICE          TWIHS0
 #define I2C_BUS_DEVICE_ID		ID_TWIHS0
 #define I2C_BUS_SDA_PIN			PIO_PA3_IDX
 #define I2C_BUS_SDA_MUX			IOPORT_MODE_MUX_A
 #define I2C_BUS_SCL_PIN			PIO_PA4_IDX
 #define I2C_BUS_SCL_MUX			IOPORT_MODE_MUX_A
-#define I2C_BUS_DEFAULT_SPEED   400000
-
-#define I2C_DEFAULT_ADDRESS		(0x26)
 
 #define I2C_UTIL_DEVICE			TWIHS2
 #define I2C_UTIL_DEVICE_ID		ID_TWIHS2
@@ -64,7 +53,6 @@
 #define I2C_UTIL_SDA_MUX		IOPORT_MODE_MUX_C
 #define I2C_UTIL_SCL_PIN		PIO_PD28_IDX
 #define I2C_UTIL_SCL_MUX		IOPORT_MODE_MUX_C
-#define I2C_UTIL_SPEED			400000
 
 #define LTC2992_1_DATARDY_PIN   PIO_PA24_IDX
 #define LTC2992_1_ALERT_PIN     PIO_PA22_IDX
@@ -102,13 +90,6 @@
 #define CAN_HANDLER_V2          MCAN1_INT0_Handler
 #define CAN_HANDLER2_V2         MCAN1_INT1_Handler
 
-// The XTX uses the bottom 8 bits as the address
-#define XTX_CAN_ADRESS          0x0000026
-#define XTX_CAN_MASK            0x00000FF
-#define HDRTX_CAN_ADRESS        0x0000041
-#define OBC_CAN_ADRESS          0x00000E9
-#define OBC_CAN_MASK            0x00000FF
-
 #define RTC_HANDLER             RTC_Handler
 
 // Test Pins
@@ -134,10 +115,6 @@
 #define XTX_RDY_PIN             PIO_PC2_IDX
 // H1.11
 #define XTX_SS_PIN              SPI_CS_PIN_2
-
-#define XSTEER_ADRESS           0x0000027
-
-#define XDC_ADDRESS             0x0000028
 
 #define PIN_BUS_GPIO0           PIO_PC0_IDX
 #define PIN_BUS_GPIO1           PIO_PC1_IDX
