@@ -230,7 +230,7 @@ static void devtools_task(void * params)
     {
         RFRelay_Process(pHandle->rf_relay_1);
         RFRelay_Process(pHandle->rf_relay_2);
-        MULTI_Process(pHandle->multitester);
+        //MULTI_Process(pHandle->multitester);
 
         vTaskDelay(pdMS_TO_TICKS(20));
     }

@@ -634,10 +634,6 @@ namespace Devices.Models
             [FieldOffset(0)]
             public RegRTOS_Status0 RegRTOS_Status0;
             [FieldOffset(0)]
-            public RegUtilI2CConfA RegUtilI2CConfA;
-            [FieldOffset(0)]
-            public RegUtilI2CStatus RegUtilI2CStatus;
-            [FieldOffset(0)]
             public RegPreviousEndpoint RegPreviousEndpoint;
         }
 
@@ -1847,75 +1843,6 @@ namespace Devices.Models
                 set { data0 = (UInt32)((data0 & ~(UInt32)0x00000100) | (( Convert.ToUInt32(value) & 0x00000001) << 8)); }
             }
 
-            public bool UARTTargetIncomingOverflow
-            {
-                get { return Convert.ToBoolean((data0 & (UInt32)0x00000200) >> 9); } 
-                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000200) | (( Convert.ToUInt32(value) & 0x00000001) << 9)); }
-            }
-
-            public bool UARTTargetTxHBOverflow
-            {
-                get { return Convert.ToBoolean((data0 & (UInt32)0x00000400) >> 10); } 
-                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000400) | (( Convert.ToUInt32(value) & 0x00000001) << 10)); }
-            }
-
-            public bool UARTTargetRxHBOverflow
-            {
-                get { return Convert.ToBoolean((data0 & (UInt32)0x00000800) >> 11); } 
-                set { data0 = (UInt32)((data0 & ~(UInt32)0x00000800) | (( Convert.ToUInt32(value) & 0x00000001) << 11)); }
-            }
-
-            public bool UARTTargetOutgoingOverflow
-            {
-                get { return Convert.ToBoolean((data0 & (UInt32)0x00001000) >> 12); } 
-                set { data0 = (UInt32)((data0 & ~(UInt32)0x00001000) | (( Convert.ToUInt32(value) & 0x00000001) << 12)); }
-            }
-
-            public bool GSETargetIncomingOverflow
-            {
-                get { return Convert.ToBoolean((data0 & (UInt32)0x00002000) >> 13); } 
-                set { data0 = (UInt32)((data0 & ~(UInt32)0x00002000) | (( Convert.ToUInt32(value) & 0x00000001) << 13)); }
-            }
-
-            public bool GSETargetOutgoingOverflow
-            {
-                get { return Convert.ToBoolean((data0 & (UInt32)0x00004000) >> 14); } 
-                set { data0 = (UInt32)((data0 & ~(UInt32)0x00004000) | (( Convert.ToUInt32(value) & 0x00000001) << 14)); }
-            }
-
-            public bool SERMUX_CRC_Error
-            {
-                get { return Convert.ToBoolean((data0 & (UInt32)0x00008000) >> 15); } 
-                set { data0 = (UInt32)((data0 & ~(UInt32)0x00008000) | (( Convert.ToUInt32(value) & 0x00000001) << 15)); }
-            }
-
-        }
-
-        [StructLayout(LayoutKind.Explicit, Pack = 0)]
-        public struct RegUtilI2CConfA
-        {
-            [FieldOffset(0)]
-            UInt32 data0;
-
-            public byte Reset
-            {
-                get { return (byte)((data0 & (UInt32)0x80000000) >> 31); } 
-                set { data0 = (UInt32)((data0 & ~(UInt32)0x80000000) | (( (UInt32)(value) & 0x00000001) << 31)); }
-            }
-
-            public byte SPD
-            {
-                get { return (byte)((data0 & (UInt32)0x000000ff) >> 0); } 
-                set { data0 = (UInt32)((data0 & ~(UInt32)0x000000ff) | (( (UInt32)(value) & 0x000000ff) << 0)); }
-            }
-
-        }
-
-        [StructLayout(LayoutKind.Explicit, Pack = 0)]
-        public struct RegUtilI2CStatus
-        {
-            [FieldOffset(0)]
-            public UInt32 value;
         }
 
         [StructLayout(LayoutKind.Explicit, Pack = 0)]
@@ -2530,18 +2457,6 @@ namespace Devices.Models
         public UInt32 FullRegister_RTOS_Status0 {
             get => _fullRegister_RTOS_Status0;
             set => _ = Set(ref _fullRegister_RTOS_Status0, value); 
-        }
-
-        private UInt32 _fullRegister_UtilI2CConfA;
-        public UInt32 FullRegister_UtilI2CConfA {
-            get => _fullRegister_UtilI2CConfA;
-            set => _ = Set(ref _fullRegister_UtilI2CConfA, value); 
-        }
-
-        private UInt32 _fullRegister_UtilI2CStatus;
-        public UInt32 FullRegister_UtilI2CStatus {
-            get => _fullRegister_UtilI2CStatus;
-            set => _ = Set(ref _fullRegister_UtilI2CStatus, value); 
         }
 
         private UInt32 _fullRegister_PreviousEndpoint;

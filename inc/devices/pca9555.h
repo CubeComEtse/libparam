@@ -36,7 +36,8 @@
 enum pca_device_state {
 	UNINITIALIZED = 0,
 	INITIALIZING,
-	IDLE
+	IDLE,
+	STARTUP
 };
 
 
