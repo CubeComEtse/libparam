@@ -9,4 +9,4 @@
 	url = https://github.com/percepio/TraceRecorderSource
 [submodule "lib/cants"]
 	path = lib/cants
-	url = https://git.skylabs.si/dev/cants
+	url = https://github.com/CubeComEtse/cants
