@@ -391,20 +391,21 @@ void REG_vWriteToAddress(const uint16_t address, const uint8_t * data, const siz
             break;
         }
         
-        case reg_MultiConf0_addr:
-        {
-            mm_enabled_t autoclear = reg_enabled_disabled;
-            mm_getMultiConf0_AutoCLRFrom(&autoclear, deserialized);
-            MULTI_SetAutoClear(platform->multitester, autoclear==reg_enabled_enabled);
-            mm_setMultiConf0_AutoCLR(autoclear);
-            
-            mm_enabled_t scan_enabled = reg_enabled_disabled;
-            mm_getMultiConf0_ScanEnabledFrom(&scan_enabled, deserialized);
-            MULTI_SetScanEnabled(platform->multitester, scan_enabled==reg_enabled_enabled);
-            mm_setMultiConf0_ScanEnabled(scan_enabled);
-            
-            break;
-        }
+        // TODO: WHy is this commented out?? Should this parameter be dropped?
+//         case reg_MultiConf0_addr:
+//         {
+//             mm_enabled_t autoclear = reg_enabled_disabled;
+//             mm_getMultiConf0_AutoCLRFrom(&autoclear, deserialized);
+//             MULTI_SetAutoClear(platform->multitester, autoclear==reg_enabled_enabled);
+//             mm_setMultiConf0_AutoCLR(autoclear);
+//             
+//             mm_enabled_t scan_enabled = reg_enabled_disabled;
+//             mm_getMultiConf0_ScanEnabledFrom(&scan_enabled, deserialized);
+//             MULTI_SetScanEnabled(platform->multitester, scan_enabled==reg_enabled_enabled);
+//             mm_setMultiConf0_ScanEnabled(scan_enabled);
+//             
+//             break;
+//         }
         
         case reg_CANConfA_addr:
         {
@@ -517,20 +518,21 @@ void REG_vWriteToAddress(const uint16_t address, const uint8_t * data, const siz
             
             break;
         }
-        
-        case reg_MultiConf1_Set_addr:
-        {
-            // Register definition precisely matches the bits.
-            // Don't set the register, it reads 0 when read.
-            MULTI_SetBitsFrom(platform->multitester, deserialized);
-            break;
-        }
-        
-        case reg_MultiConf1_Clear_addr:
-        {
-            MULTI_ClearBitsFrom(platform->multitester, deserialized);
-            break;
-        }
+
+        // TODO: WHy is this commented out?? Should this parameter be dropped?
+//         case reg_MultiConf1_Set_addr:
+//         {
+//             // Register definition precisely matches the bits.
+//             // Don't set the register, it reads 0 when read.
+//             MULTI_SetBitsFrom(platform->multitester, deserialized);
+//             break;
+//         }
+//         
+//         case reg_MultiConf1_Clear_addr:
+//         {
+//             MULTI_ClearBitsFrom(platform->multitester, deserialized);
+//             break;
+//         }
         
         case reg_TE_Addr_0_Set_addr:
         {
@@ -654,32 +656,50 @@ void REG_vWriteToAddress(const uint16_t address, const uint8_t * data, const siz
         
         // Multitester V2
         case reg_MTC_Addr_0_Set_addr:
-            platform->multitester->i2c_address = 0x51;
-        case reg_MTC_Addr_1_Set_addr:
-            platform->multitester->i2c_address = 0x52;
-        case reg_MTC_Addr_2_Set_addr:
-            platform->multitester->i2c_address = 0x53;
-        case reg_MTC_Addr_3_Set_addr:
-            platform->multitester->i2c_address = 0x54;
-            MTCV2_SetBits(platform->multitester, deserialized);
+        {
+            MTCV2_SetBits(platform->multitester, 0, deserialized);
             break;
+        }
+        
+        case reg_MTC_Addr_1_Set_addr:
+        {
+            MTCV2_SetBits(platform->multitester, 1, deserialized);
+            break;
+        }
+        
+        case reg_MTC_Addr_2_Set_addr:
+        {
+            MTCV2_SetBits(platform->multitester, 2, deserialized);
+            break;
+        }
+        
+        case reg_MTC_Addr_3_Set_addr:
+        {
+            MTCV2_SetBits(platform->multitester, 3, deserialized);
+            break;
+        }        
         
         case reg_MTC_Addr_0_Clear_addr:
+        {
+            MTCV2_ClearBits(platform->multitester, 0, deserialized);
+            break;
+        }
+        
         case reg_MTC_Addr_1_Clear_addr:
+        {
+            MTCV2_ClearBits(platform->multitester, 1, deserialized);
+            break;
+        }
+        
         case reg_MTC_Addr_2_Clear_addr:
+        {
+            MTCV2_ClearBits(platform->multitester, 2, deserialized);
+            break;
+        }
+        
         case reg_MTC_Addr_3_Clear_addr:
         {
-            /* TODO: This will never set the I2C addresses since it is impossible to match the inner and outer cases.
-            * See above fall-through method instead */
-            switch (address)
-            {
-                case 0xb1: platform->multitester->i2c_address = 0x51; break;
-                case 0xb4: platform->multitester->i2c_address = 0x52; break;
-                case 0xb7: platform->multitester->i2c_address = 0x53; break;
-                case 0xba: platform->multitester->i2c_address = 0x54; break;
-            }
-            
-            MTCV2_ClearBits(platform->multitester, deserialized);
+            MTCV2_ClearBits(platform->multitester, 3, deserialized);
             break;
         }
         

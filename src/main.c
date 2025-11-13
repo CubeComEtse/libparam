@@ -141,9 +141,9 @@ static void system_init(void)
     
 #if DEBUG
     // This is just for overriding the communication protocols for debugging purposes
-    mm_setConfCommsProtocol_TEL_UART(reg_comms_protocol_cubecom);
+    mm_setConfCommsProtocol_TEL_UART(reg_comms_protocol_csp);
     mm_setConfCommsProtocol_BUS_UART(reg_comms_protocol_cubecom);
-    mm_setConfCommsProtocol_BUS_CAN(reg_comms_protocol_cants);
+    mm_setConfCommsProtocol_BUS_CAN(reg_comms_protocol_csp);
 #endif
 
     mm_getConfCommsProtocol_BUS_CAN(&can_comms_protocol);

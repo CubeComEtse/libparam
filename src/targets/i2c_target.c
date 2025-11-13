@@ -174,7 +174,7 @@ void I2CTARGET_Task(void * handle)
                 uint8_t read_length = in_message.data[1];
                 
                 // Copy the register address and length to the buffer
-                memcpy(read_buffer, in_message.data, 2);
+                memcpy(out_message.data, in_message.data, 2);
 
                 if (pHandle->i2c_read(pHandle->i2c_handle, device_address, address, 1, &out_message.data[2], read_length))
                 {
@@ -215,7 +215,7 @@ void I2CTARGET_Task(void * handle)
                 uint8_t read_length = in_message.data[2];
                 
                 // Copy the register address and length to the buffer
-                memcpy(read_buffer, in_message.data, 2);
+                memcpy(out_message.data, in_message.data, 2);
 
                 if (pHandle->i2c_read(pHandle->i2c_handle, device_address, address, 2, &out_message.data[2], read_length))
                 {
@@ -260,7 +260,7 @@ void I2CTARGET_Task(void * handle)
             if (in_message.is_read)
             {
                 // Copy the i2c header to the out message data
-                memcpy(read_buffer, in_message.data, 3);
+                memcpy(out_message.data, in_message.data, 3);
                 
                 if (pHandle->i2c_read(pHandle->i2c_handle, bus_address, &in_message.data[1], addres_length, &out_message.data[3], in_message.data[3]))
                 {
