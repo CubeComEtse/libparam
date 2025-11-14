@@ -30,6 +30,13 @@
 #define HDRTX_CAN_ADRESS            0x41
 #define OBC_CAN_ADRESS              0xE9
 
+#define CSP_NETMASK_BUS_CAN         8
+#define CSP_ADDRESS_BUS_CAN         128
+#define CSP_NETMASK_BUS_UART        12
+#define CSP_ADDRESS_BUS_UART        197
+#define CSP_NETMASK_TEL_UART        12
+#define CSP_ADDRESS_TEL_UART        209
+
 #ifdef DEBUG
 #define DEBUG_TRACE_ENABLED         0 // Set to 1 to enable tracealyzer tracing
 #define DEBUG_XTXG2_EN_ENABLED      0 // Set to 1 to enable automatic switch on of XTXG2 device (no need for OBC selection & enabling to power on)

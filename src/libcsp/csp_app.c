@@ -16,6 +16,8 @@
 #include "vmem/vmem_server.h"
 #include "vmem/vmem_fram.h"
 
+#include "config.h"
+
 #include "csp_usart_cc.h"
 #include "csp_can_cc.h"
 #include "register_map.h"
@@ -52,8 +54,8 @@ void csp_app_init(bsp_t * bsp)
     // BUS CAN
     if (can_comms_protocol == reg_comms_protocol_csp)
     {
-        csp_can_cc_ctx_bus.iface.addr = 128;
-        csp_can_cc_ctx_bus.iface.netmask = 8;
+        csp_can_cc_ctx_bus.iface.addr = CSP_ADDRESS_BUS_CAN;
+        csp_can_cc_ctx_bus.iface.netmask = CSP_NETMASK_BUS_CAN;
         csp_can_cc_ctx_bus.iface.name = "CAN_BUS";
         csp_can_cc_ctx_bus.iface.interface_data = &csp_can_cc_ctx_bus.ifdata;
         csp_can_cc_ctx_bus.iface.driver_data = &csp_can_cc_ctx_bus;
@@ -67,8 +69,8 @@ void csp_app_init(bsp_t * bsp)
     // Telemetry UART
     if (tel_uart_comms_protocol == reg_comms_protocol_csp)
     {
-        csp_usart_cc_ctx_tel.iface.addr = 209;
-        csp_usart_cc_ctx_tel.iface.netmask = 12;
+        csp_usart_cc_ctx_tel.iface.addr = CSP_ADDRESS_TEL_UART;
+        csp_usart_cc_ctx_tel.iface.netmask = CSP_NETMASK_TEL_UART;
         csp_usart_cc_ctx_tel.iface.name = "KISS_TEL";
         csp_usart_cc_ctx_tel.iface.interface_data = &csp_usart_cc_ctx_tel.ifdata;
         csp_usart_cc_ctx_tel.iface.driver_data = &csp_usart_cc_ctx_tel;
@@ -82,8 +84,8 @@ void csp_app_init(bsp_t * bsp)
     // BUS UART
     if (bus_uart_comms_protocol == reg_comms_protocol_csp)
     {
-        csp_usart_cc_ctx_bus.iface.addr = 197,
-        csp_usart_cc_ctx_bus.iface.netmask = 12;
+        csp_usart_cc_ctx_bus.iface.addr = CSP_ADDRESS_BUS_UART,
+        csp_usart_cc_ctx_bus.iface.netmask = CSP_NETMASK_BUS_UART;
         csp_usart_cc_ctx_bus.iface.name = "KISS_BUS";
         csp_usart_cc_ctx_bus.iface.interface_data = &csp_usart_cc_ctx_bus.ifdata;
         csp_usart_cc_ctx_bus.iface.driver_data = &csp_usart_cc_ctx_bus;

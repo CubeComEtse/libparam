@@ -28,12 +28,13 @@
 #include "config.h"
 
 // 3rd Party libraries includes
-#if defined(DEBUG) && TRACE_ENABLED
+#if defined(DEBUG) && DEBUG_TRACE_ENABLED
 #include "trcRecorder.h"
 #endif
 // TODO: Figure out how to ignore the 500'ish warnings from these libraries when compiling
 #include "csp_app.h"
 #include "cants.h"
+#include "param/param.h"
 
 // Application includes
 #include "register_handler.h"
@@ -71,10 +72,10 @@ static void system_init(void);
 
 static void devtools_task(void * handle);
 
-#if defined(DEBUG) && TRACE_ENABLED
+#if defined(DEBUG) && DEBUG_TRACE_ENABLED
 static void tracealyzer_init(void);
 #endif
-#if defined(DEBUG) && XTXG2_DEBUG_ENABLE
+#if defined(DEBUG) && DEBUG_XTXG2_EN_ENABLED
 static void initialize_xtxg2_task(void * params);
 #endif
 #ifdef DEBUG
@@ -96,7 +97,7 @@ int main(void)
     platform = PLATFORM_get();
     PLATFORM_vConfigureAll(platform);
     
-#if defined(DEBUG) && TRACE_ENABLED
+#if defined(DEBUG) && DEBUG_TRACE_ENABLED
     // Configure Tracealyzer tracing
     tracealyzer_init();
 #endif
@@ -143,7 +144,7 @@ static void system_init(void)
     // This is just for overriding the communication protocols for debugging purposes
     mm_setConfCommsProtocol_TEL_UART(reg_comms_protocol_csp);
     mm_setConfCommsProtocol_BUS_UART(reg_comms_protocol_cubecom);
-    mm_setConfCommsProtocol_BUS_CAN(reg_comms_protocol_csp);
+    mm_setConfCommsProtocol_BUS_CAN(reg_comms_protocol_cubecom);
 #endif
 
     mm_getConfCommsProtocol_BUS_CAN(&can_comms_protocol);
@@ -215,7 +216,7 @@ static void system_init(void)
     rtos_ret = xTaskCreate(LEDIndicator_UpdateTask, "LED", 512, (void *) platform->led_indicator, tskIDLE_PRIORITY + 1, NULL);
     configASSERT(rtos_ret == pdPASS);
     
-#if defined(DEBUG) && XTXG2_DEBUG_ENABLE
+#if defined(DEBUG) && DEBUG_XTXG2_EN_ENABLED
     rtos_ret = xTaskCreate(initialize_xtxg2_task, "Init XTXG2", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
     configASSERT(rtos_ret == pdPASS);
 #endif
@@ -238,7 +239,7 @@ static void devtools_task(void * params)
     vTaskDelete(NULL);
 }
 
-#if defined(DEBUG) && TRACE_ENABLED
+#if defined(DEBUG) && DEBUG_TRACE_ENABLED
 static void tracealyzer_init(void)
 {
     configASSERT(xTraceEnable(TRC_START_FROM_HOST) == TRC_SUCCESS);
@@ -275,7 +276,7 @@ static void cants_test_task(void * params)
 }
 #endif
 
-#if defined(DEBUG) && XTXG2_DEBUG_ENABLE
+#if defined(DEBUG) && DEBUG_XTXG2_EN_ENABLED
 static void initialize_xtxg2_task(void * params)
 {
     (void) params; // unused

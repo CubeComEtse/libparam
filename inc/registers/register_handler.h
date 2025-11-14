@@ -15,36 +15,14 @@
 #include "register_map.h"
 #include "platform.h"
 
-/*
-This is required for the register handler setup.
-*/
 void REG_vSetPlatformPointer(platform_t * handle, bsp_t * bsp_handle);
-
-/*
- * Checks if the provided register address is a valid one. Returns true if it 
- * is, false otherwise
-*/
 bool REG_CheckAddress(const uint16_t address);
 
-/*
-Gets the register given by address, copies it's data into the data argument
-Returns true if the address is valid, false otherwise.
-*/
-bool REG_vReadFromAddress(const uint16_t address, uint8_t * buff, uint8_t * size);
+bool REG_ReadFromAddress(const uint16_t address, uint8_t * buff);
+bool REG_WriteToAddress(const uint16_t address, const uint8_t * data);
 
-/*
- * Process all the stored messages. This function should be called regularly.
-*/
-void REG_vWriteToAddress(const uint16_t address, const uint8_t * data, const size_t length);
-
-/*
- * Add a flag to the I2C Status. The status can only be appended to, it is cleared when the user 
- * reads it
-*/
-void REG_vSetI2CStatus(uint32_t flag);
-
-void REG_UpdateTemperature(uint16_t temperature);
-
-uint8_t REG_GetI2CSpeed(void);
+// These functions are used by the libparam parameter system
+void REG_vReadFromAddress(const uint16_t address, void * value);
+void REG_vWriteToAddress(const uint16_t address, const void * value);
 
 #endif /* REGISTER_HANDLER_H_ */

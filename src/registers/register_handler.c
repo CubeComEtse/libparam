@@ -1,9 +1,9 @@
 /*
- * register_handler.c
- *
- * Created: 2021/08/03 14:34:22
- *  Author: Kolijn
- */ 
+* register_handler.c
+*
+* Created: 2021/08/03 14:34:22
+*  Author: Kolijn
+*/
 
 #include "register_handler.h"
 
@@ -129,8 +129,8 @@ void REG_vSetPlatformPointer(platform_t * handle, bsp_t * bsp_handle)
 }
 
 /*
-* Checks if the provided register address is a valid one. Returns true if it
-* is, false otherwise
+* Checks if the provided register address is a valid one.
+* Returns true if it is, false otherwise.
 */
 bool REG_CheckAddress(const uint16_t address)
 {
@@ -146,10 +146,13 @@ bool REG_CheckAddress(const uint16_t address)
 }
 
 /*
-Gets the register given by address, copies it's data into the data argument
-Returns true if the address is valid, false otherwise.
+* Gets the register given by address, copies it's data into the data argument
+* Returns true if the address is valid, false otherwise.
+*
+* NOTE: Currently only 32-bit registers are supported by this function.
+*       Hence, the buffer passed must be of length >= 4 for this operation to be safe.
 */
-bool REG_vReadFromAddress(const uint16_t address, uint8_t * buff, uint8_t * size)
+bool REG_ReadFromAddress(const uint16_t address, uint8_t * buff)
 {
     uint32_t destination;
 
@@ -162,16 +165,13 @@ bool REG_vReadFromAddress(const uint16_t address, uint8_t * buff, uint8_t * size
         }
         
         // Call the function
-        mm_response_t mm_ret = address_to_func_map[i].readFunction(&destination);
-        if (mm_ret != mm_OK)
+        if (address_to_func_map[i].readFunction(&destination) != mm_OK)
         {
-            // An error reading this register - just return unknown error
             return false;
         }
-            
+        
         // Copy into the buffer
         REG_Copyu32ToArray(destination, buff);
-        *size = 4;
 
         return true;
     }
@@ -182,7 +182,6 @@ bool REG_vReadFromAddress(const uint16_t address, uint8_t * buff, uint8_t * size
         case reg_Uptime_addr:
         {
             REG_Copyu32ToArray(BSP_GetUptime(), buff);
-            *size = 4;
             
             return true;
         }
@@ -190,18 +189,16 @@ bool REG_vReadFromAddress(const uint16_t address, uint8_t * buff, uint8_t * size
         case reg_Event_ConfA_addr:
         {
             // Update the event count
-            mm_setEvent_ConfA_count(EVENT_EventCount());
+            uint16_t event_count = EVENT_EventCount();
+            mm_setEvent_ConfA_count(event_count);
             
-            uint32_t mm_ret = mm_getEvent_ConfA(&destination);
-            if (mm_ret != mm_OK)
+            if (mm_getEvent_ConfA(&destination) != mm_OK)
             {
-                // An error reading this register - just return unknown error
                 return false;
             }
             
             // Copy into the buffer
             REG_Copyu32ToArray(destination, buff);
-            *size = 4;
             
             return true;
         }
@@ -216,22 +213,28 @@ bool REG_vReadFromAddress(const uint16_t address, uint8_t * buff, uint8_t * size
             mm_setEvent_detail(current_event.detail);
             mm_setEvent_timestamp(current_event.timestamp);
             
-            uint32_t read_successful = mm_getEvent(&destination);
-            if (read_successful == mm_OK)
+            if (mm_getEvent(&destination) != mm_OK)
             {
-                // An error reading this register - just return unknown error
                 return false;
             }
             
             // Copy into the buffer
             REG_Copyu32ToArray(destination, buff);
-            *size = 4;
             
             return true;
         }
         
         case reg_RTOS_Status0_addr:
         {
+            // TODO: This does not seem to be set anywhere in the code? Should we be reading something here???
+            if (mm_getRTOS_Status0(&destination) != mm_OK)
+            {
+                return false;
+            }
+            
+            // Copy into the buffer
+            REG_Copyu32ToArray(destination, buff);
+            
             // This register gets cleared on read
             mm_setRTOS_Status0(0);
             
@@ -243,77 +246,42 @@ bool REG_vReadFromAddress(const uint16_t address, uint8_t * buff, uint8_t * size
     return false;
 }
 
-/*
-* Process all the stored messages. This function should be called regularly.
-*/
-void REG_vWriteToAddress(const uint16_t address, const uint8_t * data, const size_t length)
+void REG_vReadFromAddress(const uint16_t address, void * value)
 {
-    // First decode the array as a uint32_t
-    uint32_t deserialized = REG_CopyArrayToU32(data);
+    uint8_t buff[4] = { 0 };
+    if (!REG_ReadFromAddress(address, buff))
+    {
+        // TODO: We need to handle this better... Currently returning uint32_t max value if this fails. Really shouldn't fail.
+        *((uint32_t *)value) = 0xFFFFFFFF;
+    }
+    *((uint32_t *)value) = REG_CopyArrayToU32(buff);
+}
+
+/*
+* Sets the register given by address.
+* Returns true if executed successfully (register exists and is write-enabled), 
+* false if not (register does not exist, or is read-only).
+*
+* NOTE: Currently only 32-bit registers are supported by this function.
+*       Hence, the buffer passed must be of length >= 4 for this operation to be safe.
+*/
+bool REG_WriteToAddress(const uint16_t address, const uint8_t * buff)
+{
+    uint32_t deserialized = REG_CopyArrayToU32(buff);
     
-    // Do something based on the message
+    // NOTE: All addresses not handled here are assumed to be read-only
     switch (address)
     {
-        // Read-only registers. Can't write to them
-        case reg_Board_ID_addr:
-        case reg_FW_Version_addr:
-        case reg_HW_Version_addr:
-        case reg_Uptime_addr:
-        case reg_Event_ConfA_addr:
-        case reg_Event_addr:
-        case reg_MeasureVI_V3_addr:
-        case reg_MeasurePower_V3_addr:
-        case reg_MeasureVI_V5_addr:
-        case reg_MeasurePower_V5_addr:
-        case reg_MeasureVI_VBat_addr:
-        case reg_MeasurePower_VBat_addr:
-        case reg_MeasureVI_VBatAlt_addr:
-        case reg_MeasurePower_VBatAlt_addr:
-        case reg_MultiConf1_Status_addr:
-        case reg_CSBoard_T0_addr:
-        case reg_CSBoard_T1_addr:
-        case reg_CSBoard_T2_addr:
-        case reg_CSBoard_T3_addr:
-        case reg_CSBoard_T4_addr:
-        case reg_CSBoard_T5_addr:
-        case reg_CSBoard_T6_addr:
-        case reg_CSBoard_T7_addr:
-        case reg_CSBoard_Current0I0_addr:
-        case reg_CSBoard_Current0I1_addr:
-        case reg_CSBoard_Current0I2_addr:
-        case reg_CSBoard_Current1I0_addr:
-        case reg_CSBoard_Current1I1_addr:
-        case reg_CSBoard_Current1I2_addr:
-        case reg_CSBoard_Current2I0_addr:
-        case reg_CSBoard_Current2I1_addr:
-        case reg_CSBoard_Current2I2_addr:
-        case reg_CSBoard_Current3I0_addr:
-        case reg_CSBoard_Current3I1_addr:
-        case reg_CSBoard_Current3I2_addr:
-        case reg_CSBoard_Current4I0_addr:
-        case reg_CSBoard_Current4I1_addr:
-        case reg_CSBoard_Current4I2_addr:
-        case reg_CSBoard_Current5I0_addr:
-        case reg_CSBoard_Current5I1_addr:
-        case reg_CSBoard_Current5I2_addr:
-        case reg_CSBoard_Current6I0_addr:
-        case reg_CSBoard_Current6I1_addr:
-        case reg_CSBoard_Current6I2_addr:
-        case reg_CSBoard_Current7I0_addr:
-        case reg_CSBoard_Current7I1_addr:
-        case reg_CSBoard_Current7I2_addr:
-        break;
-        
         case reg_Scratchpad_addr:
         {
             mm_setScratchpad(deserialized);
-            break;
+            return true;
         }
         
         case reg_Configured_Boards_addr:
         {
             mm_setConfigured_Boards(deserialized);
-            break;
+            return true;
         }
         
         case reg_ConfPower_addr:
@@ -330,7 +298,6 @@ void REG_vWriteToAddress(const uint16_t address, const uint8_t * data, const siz
                 mm_getConfPower_voltageVBatAltToggleFrom(&powerEn, deserialized);
                 GSE_MANAGER_SetBusPowerSwitch(platform->gse_manager, POWER_VBAT_ALT, powerEn == reg_enabled_enabled);
                 mm_setConfPower_voltageVBatAltToggle(powerEn);
-                
             }
             
             mm_getConfPower_voltage3ToggleFrom(&powerEn, deserialized);
@@ -350,7 +317,7 @@ void REG_vWriteToAddress(const uint16_t address, const uint8_t * data, const siz
                 mm_setConfPower_voltage3UtilToggle(powerEn);
             }
             
-            break;
+            return true;
         }
         
         case reg_I2CConfA_addr:
@@ -358,10 +325,10 @@ void REG_vWriteToAddress(const uint16_t address, const uint8_t * data, const siz
             // Set the module speed here. The other values in the register are read when they are needed
             uint8_t spd = 0;
             mm_getI2CConfA_SPDFrom(&spd, deserialized);
-            if ((spd >= 1) && (spd <= 40)){
+            if ((spd >= 1) && (spd <= 40))
+            {
                 if (I2CTARGET_SetBaud(platform->i2c_target, spd * 10000))
                 {
-                    
                     mm_setI2CConfA_SPD(spd);
                 }
             }
@@ -376,7 +343,7 @@ void REG_vWriteToAddress(const uint16_t address, const uint8_t * data, const siz
             platform->i2c_target->tr_delay = trdel;
             mm_setI2CConfA_TRDEL(trdel);
             
-            break;
+            return true;
         }
         
         case reg_I2CConfB_addr:
@@ -388,24 +355,8 @@ void REG_vWriteToAddress(const uint16_t address, const uint8_t * data, const siz
             
             mm_setI2CConfB(deserialized);
             
-            break;
+            return true;
         }
-        
-        // TODO: WHy is this commented out?? Should this parameter be dropped?
-//         case reg_MultiConf0_addr:
-//         {
-//             mm_enabled_t autoclear = reg_enabled_disabled;
-//             mm_getMultiConf0_AutoCLRFrom(&autoclear, deserialized);
-//             MULTI_SetAutoClear(platform->multitester, autoclear==reg_enabled_enabled);
-//             mm_setMultiConf0_AutoCLR(autoclear);
-//             
-//             mm_enabled_t scan_enabled = reg_enabled_disabled;
-//             mm_getMultiConf0_ScanEnabledFrom(&scan_enabled, deserialized);
-//             MULTI_SetScanEnabled(platform->multitester, scan_enabled==reg_enabled_enabled);
-//             mm_setMultiConf0_ScanEnabled(scan_enabled);
-//             
-//             break;
-//         }
         
         case reg_CANConfA_addr:
         {
@@ -416,29 +367,31 @@ void REG_vWriteToAddress(const uint16_t address, const uint8_t * data, const siz
                 mm_setCANConfA_BaudRate( baudrate_kbps);
             }
             
-            mm_enabled_t FlipCanBytes;
-            mm_getCANConfA_FlipCanBytesFrom(&FlipCanBytes, deserialized);
-            if (FlipCanBytes)
+            mm_enabled_t flip_can_bytes;
+            mm_getCANConfA_FlipCanBytesFrom(&flip_can_bytes, deserialized);
+            if (flip_can_bytes)
             {
                 if (CANTARGET_SetMode(platform->can_target, PLAN_S_COMPATIBILITY))
                 {
-                    mm_setCANConfA_FlipCanBytes(FlipCanBytes);
+                    mm_setCANConfA_FlipCanBytes(flip_can_bytes);
                 }
             }
-            else {
+            else
+            {
                 if (CANTARGET_SetMode(platform->can_target, CUBECOM_MODE))
                 {
-                    mm_setCANConfA_FlipCanBytes(FlipCanBytes);
+                    mm_setCANConfA_FlipCanBytes(flip_can_bytes);
                 }
             }
             
-            mm_enabled_t EnableRetries;
-            mm_getCANConfA_EnableRetriesFrom(&EnableRetries, deserialized);
-            if (CANTARGET_EnableRetries(platform->can_target, EnableRetries == reg_enabled_enabled))
+            mm_enabled_t enable_retries;
+            mm_getCANConfA_EnableRetriesFrom(&enable_retries, deserialized);
+            if (CANTARGET_EnableRetries(platform->can_target, enable_retries == reg_enabled_enabled))
             {
-                mm_setCANConfA_EnableRetries(EnableRetries);
+                mm_setCANConfA_EnableRetries(enable_retries);
             }
-            break;
+            
+            return true;
         }
         
         case reg_CANConfB_addr:
@@ -451,39 +404,40 @@ void REG_vWriteToAddress(const uint16_t address, const uint8_t * data, const siz
                 mm_setCANConfB_Address(new_address);
             }
             
-            break;
+            return true;
         }
         
         case reg_SerialConf_addr:
         {
-            mm_serialmode_t SerialCommMode;
-            mm_getSerialConf_SerialModeFrom(&SerialCommMode, deserialized);
-            if(UARTTARGET_SetCommMode(platform->uart_target, SerialCommMode))
+            mm_serialmode_t serial_comm_mode;
+            mm_getSerialConf_SerialModeFrom(&serial_comm_mode, deserialized);
+            if(UARTTARGET_SetCommMode(platform->uart_target, serial_comm_mode))
             {
-                mm_setSerialConf_SerialMode(SerialCommMode);
+                mm_setSerialConf_SerialMode(serial_comm_mode);
             }
             
-            mm_enabled_t ParityEnabled;
-            mm_getSerialConf_ParityEnabledFrom(&ParityEnabled, deserialized);
-            if(UARTTARGET_SetParityEnabled(platform->uart_target, ParityEnabled))
+            mm_enabled_t parity_enabled;
+            mm_getSerialConf_ParityEnabledFrom(&parity_enabled, deserialized);
+            if(UARTTARGET_SetParityEnabled(platform->uart_target, parity_enabled))
             {
-                mm_setSerialConf_ParityEnabled(ParityEnabled);
+                mm_setSerialConf_ParityEnabled(parity_enabled);
             }
             
-            mm_paritymodes_t ParityMode;
-            mm_getSerialConf_ParityModeFrom(&ParityMode, deserialized);
-            if(UARTTARGET_SetParityMode(platform->uart_target, ParityMode))
+            mm_paritymodes_t parity_mode;
+            mm_getSerialConf_ParityModeFrom(&parity_mode, deserialized);
+            if(UARTTARGET_SetParityMode(platform->uart_target, parity_mode))
             {
-                mm_setSerialConf_ParityMode(ParityMode);
+                mm_setSerialConf_ParityMode(parity_mode);
             }
             
-            mm_usart_baudrates_t BaudRate;
-            mm_getSerialConf_BaudRatesFrom(&BaudRate, deserialized);
-            if(UARTTARGET_SetBaudRate(platform->uart_target, BaudRate))
+            mm_usart_baudrates_t baud_rate;
+            mm_getSerialConf_BaudRatesFrom(&baud_rate, deserialized);
+            if(UARTTARGET_SetBaudRate(platform->uart_target, baud_rate))
             {
-                mm_setSerialConf_BaudRates(BaudRate);
+                mm_setSerialConf_BaudRates(baud_rate);
             }
-            break;
+            
+            return true;
         }
         
         case reg_PC104Pins_addr:
@@ -497,7 +451,7 @@ void REG_vWriteToAddress(const uint16_t address, const uint8_t * data, const siz
             PC104_setnRstPin(platform->pc104, ena == reg_enabled_enabled);
             mm_setPC104Pins_nRST(ena);
             
-            break;
+            return true;
         }
         
         case reg_RFRelaysConf_addr:
@@ -516,23 +470,8 @@ void REG_vWriteToAddress(const uint16_t address, const uint8_t * data, const siz
             RFRelay_SetDesiredChannel(platform->rf_relay_1, rf1_channel);
             RFRelay_SetDesiredChannel(platform->rf_relay_2, rf2_channel);
             
-            break;
+            return true;
         }
-
-        // TODO: WHy is this commented out?? Should this parameter be dropped?
-//         case reg_MultiConf1_Set_addr:
-//         {
-//             // Register definition precisely matches the bits.
-//             // Don't set the register, it reads 0 when read.
-//             MULTI_SetBitsFrom(platform->multitester, deserialized);
-//             break;
-//         }
-//         
-//         case reg_MultiConf1_Clear_addr:
-//         {
-//             MULTI_ClearBitsFrom(platform->multitester, deserialized);
-//             break;
-//         }
         
         case reg_TE_Addr_0_Set_addr:
         {
@@ -546,7 +485,7 @@ void REG_vWriteToAddress(const uint16_t address, const uint8_t * data, const siz
             // We have deliberately made the bits align perfectly so we could do this.
             TE_Adaptor_SetTeBits(platform->te_scanner, 0, (deserialized >> 16) & 0x0FFF);
             
-            break;
+            return true;
         }
         
         case reg_TE_Addr_0_Clear_addr:
@@ -561,7 +500,7 @@ void REG_vWriteToAddress(const uint16_t address, const uint8_t * data, const siz
             // We have deliberately made the bits align perfectly so we could do this.
             TE_Adaptor_ClearTeBits(platform->te_scanner, 0, (deserialized >> 16) & 0x0FFF);
             
-            break;
+            return true;
         }
         
         case reg_TE_Addr_1_Set_addr:
@@ -576,7 +515,7 @@ void REG_vWriteToAddress(const uint16_t address, const uint8_t * data, const siz
             // We have deliberately made the bits align perfectly so we could do this.
             TE_Adaptor_SetTeBits(platform->te_scanner, 1, (deserialized >> 16) & 0x0FFF);
             
-            break;
+            return true;
         }
         
         case reg_TE_Addr_1_Clear_addr:
@@ -591,7 +530,7 @@ void REG_vWriteToAddress(const uint16_t address, const uint8_t * data, const siz
             // We have deliberately made the bits align perfectly so we could do this.
             TE_Adaptor_ClearTeBits(platform->te_scanner, 1, (deserialized >> 16) & 0x0FFF);
             
-            break;
+            return true;
         }
         
         case reg_TE_Addr_2_Set_addr:
@@ -606,7 +545,7 @@ void REG_vWriteToAddress(const uint16_t address, const uint8_t * data, const siz
             // We have deliberately made the bits align perfectly so we could do this.
             TE_Adaptor_SetTeBits(platform->te_scanner, 2, (deserialized >> 16) & 0x0FFF);
             
-            break;
+            return true;
         }
         
         case reg_TE_Addr_2_Clear_addr:
@@ -621,7 +560,7 @@ void REG_vWriteToAddress(const uint16_t address, const uint8_t * data, const siz
             // We have deliberately made the bits align perfectly so we could do this.
             TE_Adaptor_ClearTeBits(platform->te_scanner, 2, (deserialized >> 16) & 0x0FFF);
             
-            break;
+            return true;
         }
         
         case reg_TE_Addr_3_Set_addr:
@@ -636,7 +575,7 @@ void REG_vWriteToAddress(const uint16_t address, const uint8_t * data, const siz
             // We have deliberately made the bits align perfectly so we could do this.
             TE_Adaptor_SetTeBits(platform->te_scanner, 3, (deserialized >> 16) & 0x0FFF);
             
-            break;
+            return true;
         }
         
         case reg_TE_Addr_3_Clear_addr:
@@ -651,56 +590,56 @@ void REG_vWriteToAddress(const uint16_t address, const uint8_t * data, const siz
             // We have deliberately made the bits align perfectly so we could do this.
             TE_Adaptor_ClearTeBits(platform->te_scanner, 3, (deserialized >> 16) & 0x0FFF);
             
-            break;
+            return true;
         }
         
         // Multitester V2
         case reg_MTC_Addr_0_Set_addr:
         {
             MTCV2_SetBits(platform->multitester, 0, deserialized);
-            break;
+            return true;
         }
         
         case reg_MTC_Addr_1_Set_addr:
         {
             MTCV2_SetBits(platform->multitester, 1, deserialized);
-            break;
+            return true;
         }
         
         case reg_MTC_Addr_2_Set_addr:
         {
             MTCV2_SetBits(platform->multitester, 2, deserialized);
-            break;
+            return true;
         }
         
         case reg_MTC_Addr_3_Set_addr:
         {
             MTCV2_SetBits(platform->multitester, 3, deserialized);
-            break;
-        }        
+            return true;
+        }
         
         case reg_MTC_Addr_0_Clear_addr:
         {
             MTCV2_ClearBits(platform->multitester, 0, deserialized);
-            break;
+            return true;
         }
         
         case reg_MTC_Addr_1_Clear_addr:
         {
             MTCV2_ClearBits(platform->multitester, 1, deserialized);
-            break;
+            return true;
         }
         
         case reg_MTC_Addr_2_Clear_addr:
         {
             MTCV2_ClearBits(platform->multitester, 2, deserialized);
-            break;
+            return true;
         }
         
         case reg_MTC_Addr_3_Clear_addr:
         {
             MTCV2_ClearBits(platform->multitester, 3, deserialized);
-            break;
+            return true;
         }
         
         case reg_UtilI2CConfA_addr:
@@ -723,13 +662,14 @@ void REG_vWriteToAddress(const uint16_t address, const uint8_t * data, const siz
             mm_getUtilI2CConfA_ResetFrom(&should_reset, deserialized);
             cc_i2c_driver_ReInit(bsp->util_i2c);
             
-            break;
+            return true;
         }
         
         case reg_PreviousEndpoint_addr:
         {
             mm_setPreviousEndpoint(deserialized);
-            break;
+            
+            return true;
         }
         
         case reg_ConfCommsProtocol_addr:
@@ -745,8 +685,23 @@ void REG_vWriteToAddress(const uint16_t address, const uint8_t * data, const siz
             mm_getConfCommsProtocol_BUS_UARTFrom(&comms_protocol, deserialized);
             mm_setConfCommsProtocol_BUS_UART(comms_protocol);
             
-            break;
+            return true;
         }
+        
+        default:
+        {
+            return false;
+        }
+    }
+}
+
+void REG_vWriteToAddress(const uint16_t address, const void * value)
+{
+    uint8_t buff[4];
+    REG_Copyu32ToArray(*((uint32_t *)value), buff);
+    if (!REG_WriteToAddress(address, (const uint8_t *) buff))
+    {
+        // TODO: Handle failed writes. Really shouldn't fail.
     }
 }
 
@@ -755,14 +710,20 @@ void REG_vWriteToAddress(const uint16_t address, const uint8_t * data, const siz
 */
 static void REG_Copyu32ToArray(const uint32_t value, uint8_t* data)
 {
-    data[0] = (uint8_t) ((value & 0x000000FF) >> 0);
-    data[1] = (uint8_t) ((value & 0x0000FF00) >> 8);
-    data[2] = (uint8_t) ((value & 0x00FF0000) >> 16);
-    data[3] = (uint8_t) ((value & 0xFF000000) >> 24);
+    data[0] = (uint8_t) (value >> 0);
+    data[1] = (uint8_t) (value >> 8);
+    data[2] = (uint8_t) (value >> 16);
+    data[3] = (uint8_t) (value >> 24);
 }
 
 static uint32_t REG_CopyArrayToU32(const uint8_t* data)
 {
-    uint32_t res = (((uint32_t) data[0]) << 0) | (((uint32_t) data[1]) << 8) | (((uint32_t) data[2]) << 16) | (((uint32_t) data[3]) << 24);
+    uint32_t res = 0;
+    
+    res |= (uint32_t) data[3] << 24;
+    res |= (uint32_t) data[2] << 16;
+    res |= (uint32_t) data[1] << 8;
+    res |= (uint32_t) data[0] << 0;
+    
     return res;
 }

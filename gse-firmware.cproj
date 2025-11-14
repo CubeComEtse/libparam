@@ -888,6 +888,9 @@
     <Compile Include="inc\libparam\libparam.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="inc\libparam\libparam_custom.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="inc\multitester.h">
       <SubType>compile</SubType>
     </Compile>
@@ -904,6 +907,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\registers\register_map.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="inc\registers\register_map_libparam.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="inc\sermux_v3.h">

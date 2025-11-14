@@ -68,15 +68,14 @@ void LOCALTARGET_Task(void *handle)
                 continue;
             }
             
-            uint8_t size = 0;
-            if (REG_vReadFromAddress(address, &out_message.data[2], &size))
+            if (REG_ReadFromAddress(address, &out_message.data[2]))
             {
                 // Copy address
                 out_message.data[0] = in_message.data[0];
                 out_message.data[1] = in_message.data[1];
                 
                 // Set data
-                out_message.data_len = size + 2;
+                out_message.data_len = 6;
                 
                 // Copy header
                 out_message.target = in_message.target;
@@ -99,7 +98,10 @@ void LOCALTARGET_Task(void *handle)
                 continue;
             }
             
-            REG_vWriteToAddress(address, &in_message.data[2], 4);
+            if (!REG_WriteToAddress(address, &in_message.data[2]))
+            {
+                // TODO: Handle write failure somehow
+            }
             
             // Todo: Register handler respond with a read/write result.
             // Our messages don't support that yet.

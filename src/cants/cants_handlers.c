@@ -105,27 +105,25 @@ int8_t cants_telecommand_handler(uint8_t src, uint8_t dst, uint8_t channel, uint
         {
             if (length < 6)
             {
-                return 0;
+                return 0; // reject
             }
             
             uint16_t addr = ((uint16_t) data[0] << 8) | ((uint16_t) data[1] << 0);
             if (!REG_CheckAddress(addr))
             {
-                return 0;
+                return 0; // reject
             }
             
-            mm_register_address_t reg_addr = (mm_register_address_t) addr;
-            if (!REG_vWriteToAddress(reg_addr, &data[2], 4))
+            if (!REG_WriteToAddress(addr, &data[2]))
             {
-                return 0;
+                return 0; // reject
             }
             
-            return 1;
+            return 1; // success
         }
         default:
         {
-            // TODO: Verify this this
-            return 0; // Will send NACK to indicate invalid channel.
+            return 0; // reject
         }
     }
 }
@@ -173,7 +171,7 @@ int8_t cants_telemetry_handler(uint8_t src, uint8_t dst, uint8_t channel, uint8_
     {
         case CANTS_CHANNEL_PARAMETERS:
         {
-            if (length < 6)
+            if (*length < 6)
             {
                 return 0; // reject
             }
@@ -184,8 +182,7 @@ int8_t cants_telemetry_handler(uint8_t src, uint8_t dst, uint8_t channel, uint8_
                 return 0; // reject
             }
             
-            mm_register_address_t reg_addr = (mm_register_address_t) addr;
-            if (!REG_vReadFromAddress(reg_addr, &data[2], 4))
+            if (!REG_ReadFromAddress(addr, &data[2]))
             {
                 return 0; // reject
             }

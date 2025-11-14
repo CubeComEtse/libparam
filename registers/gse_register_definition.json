@@ -5,7 +5,10 @@
             "c#"
         ],
         "c_freertos": {
-            "csp_enabled": true
+            "csp_enabled": true,
+            "csp_include_docstring": false,
+            "param_default_tag": "PM_READONLY",
+            "use_critical_over_mutex": true
         },
         "c#": {
             "namespace": "Devices.Models"
@@ -14,11 +17,12 @@
         "filenames": {
             "c_header": "../inc/registers/register_map.h",
             "c_source": "../src/registers/register_map.c",
+            "libparam_header": "../inc/registers/register_map_libparam.h",
             "cs": "OBC.cs"
         }
     },
     "module": {
-        "name": "OBC",
+        "name": "EGSE_REGISTER_MAP",
         "registers": [
             {
                 "name": "Board_ID",

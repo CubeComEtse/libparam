@@ -5,123 +5,19 @@
 
  **********************************************************************/
 
-
 #include "register_map.h"
 
 #include "FreeRTOS.h"
 #include "semphr.h"
 
-#include "param/param.h"
+#include "register_map_libparam.h"
 
-#ifndef MEMORY_MAP_MUTEX_WAIT_ms
-#define MEMORY_MAP_MUTEX_WAIT_ms 100
-#endif
-
-static SemaphoreHandle_t _mm_mutex;
-static mm_t mm;
-
-PARAM_DEFINE_STATIC_RAM(reg_Board_ID_addr, Board_ID, PARAM_TYPE_UINT32, 0, 0, PM_SYSINFO, NULL, "", &mm.Board_ID, "");
-PARAM_DEFINE_STATIC_RAM(reg_FW_Version_addr, FW_Version, PARAM_TYPE_UINT32, 0, 0, PM_READONLY | PM_SYSINFO, NULL, "", &mm.FW_Version, "");
-PARAM_DEFINE_STATIC_RAM(reg_HW_Version_addr, HW_Version, PARAM_TYPE_UINT32, 0, 0, PM_READONLY | PM_SYSINFO, NULL, "", &mm.HW_Version, "");
-PARAM_DEFINE_STATIC_RAM(reg_Scratchpad_addr, Scratchpad, PARAM_TYPE_UINT32, 0, 0, PM_CONF | PM_DEBUG, NULL, "", &mm.Scratchpad, "");
-PARAM_DEFINE_STATIC_RAM(reg_Supported_Boards_addr, Supported_Boards, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.Supported_Boards, "This register was available in V0, and is now deprecated.");
-PARAM_DEFINE_STATIC_RAM(reg_Configured_Boards_addr, Configured_Boards, PARAM_TYPE_UINT32, 0, 0, PM_CONF, NULL, "", &mm.Configured_Boards, "");
-PARAM_DEFINE_STATIC_RAM(reg_Uptime_addr, Uptime, PARAM_TYPE_UINT32, 0, 0, PM_READONLY | PM_SYSINFO, NULL, "", &mm.Uptime, "");
-PARAM_DEFINE_STATIC_RAM(reg_Event_ConfA_addr, Event_ConfA, PARAM_TYPE_UINT32, 0, 0, PM_READONLY | PM_TELEM, NULL, "", &mm.Event_ConfA, "");
-PARAM_DEFINE_STATIC_RAM(reg_Event_addr, Event, PARAM_TYPE_UINT32, 0, 0, PM_READONLY | PM_TELEM, NULL, "", &mm.Event, "");
-PARAM_DEFINE_STATIC_RAM(reg_ConfPower_addr, ConfPower, PARAM_TYPE_UINT32, 0, 0, PM_CONF, NULL, "", &mm.ConfPower, "");
-PARAM_DEFINE_STATIC_RAM(reg_MeasureVI_V3_addr, MeasureVI_V3, PARAM_TYPE_UINT32, 0, 0, PM_READONLY | PM_TELEM, NULL, "", &mm.MeasureVI_V3, "");
-PARAM_DEFINE_STATIC_RAM(reg_MeasurePower_V3_addr, MeasurePower_V3, PARAM_TYPE_UINT32, 0, 0, PM_READONLY | PM_TELEM, NULL, "", &mm.MeasurePower_V3, "");
-PARAM_DEFINE_STATIC_RAM(reg_MeasureVI_V5_addr, MeasureVI_V5, PARAM_TYPE_UINT32, 0, 0, PM_READONLY | PM_TELEM, NULL, "", &mm.MeasureVI_V5, "");
-PARAM_DEFINE_STATIC_RAM(reg_MeasurePower_V5_addr, MeasurePower_V5, PARAM_TYPE_UINT32, 0, 0, PM_READONLY | PM_TELEM, NULL, "", &mm.MeasurePower_V5, "");
-PARAM_DEFINE_STATIC_RAM(reg_MeasureVI_VBat_addr, MeasureVI_VBat, PARAM_TYPE_UINT32, 0, 0, PM_READONLY | PM_TELEM, NULL, "", &mm.MeasureVI_VBat, "");
-PARAM_DEFINE_STATIC_RAM(reg_MeasurePower_VBat_addr, MeasurePower_VBat, PARAM_TYPE_UINT32, 0, 0, PM_READONLY | PM_TELEM, NULL, "", &mm.MeasurePower_VBat, "");
-PARAM_DEFINE_STATIC_RAM(reg_MeasureVI_VBatAlt_addr, MeasureVI_VBatAlt, PARAM_TYPE_UINT32, 0, 0, PM_READONLY | PM_TELEM, NULL, "", &mm.MeasureVI_VBatAlt, "");
-PARAM_DEFINE_STATIC_RAM(reg_MeasurePower_VBatAlt_addr, MeasurePower_VBatAlt, PARAM_TYPE_UINT32, 0, 0, PM_READONLY | PM_TELEM, NULL, "", &mm.MeasurePower_VBatAlt, "");
-PARAM_DEFINE_STATIC_RAM(reg_I2CConfA_addr, I2CConfA, PARAM_TYPE_UINT32, 0, 0, PM_CONF, NULL, "", &mm.I2CConfA, "");
-PARAM_DEFINE_STATIC_RAM(reg_I2CConfB_addr, I2CConfB, PARAM_TYPE_UINT32, 0, 0, PM_CONF, NULL, "", &mm.I2CConfB, "");
-PARAM_DEFINE_STATIC_RAM(reg_MultiConf0_addr, MultiConf0, PARAM_TYPE_UINT32, 0, 0, PM_CONF, NULL, "", &mm.MultiConf0, "");
-PARAM_DEFINE_STATIC_RAM(reg_ConfTempSense_addr, ConfTempSense, PARAM_TYPE_UINT32, 0, 0, PM_CONF, NULL, "", &mm.ConfTempSense, "");
-PARAM_DEFINE_STATIC_RAM(reg_CANConfA_addr, CANConfA, PARAM_TYPE_UINT32, 0, 0, PM_CONF, NULL, "", &mm.CANConfA, "");
-PARAM_DEFINE_STATIC_RAM(reg_CANConfB_addr, CANConfB, PARAM_TYPE_UINT32, 0, 0, PM_CONF, NULL, "", &mm.CANConfB, "");
-PARAM_DEFINE_STATIC_RAM(reg_SerialConf_addr, SerialConf, PARAM_TYPE_UINT32, 0, 0, PM_CONF, NULL, "", &mm.SerialConf, "");
-PARAM_DEFINE_STATIC_RAM(reg_PC104Pins_addr, PC104Pins, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.PC104Pins, "Only used by the V0 OBC, to set the PC104 pins");
-PARAM_DEFINE_STATIC_RAM(reg_XTXMultitester_addr, XTXMultitester, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.XTXMultitester, "This register is deprecated, replaced with MultiConf1_Status, MultiConf1_Set and MultiConf1_Clear");
-PARAM_DEFINE_STATIC_RAM(reg_RFRelaysConf_addr, RFRelaysConf, PARAM_TYPE_UINT32, 0, 0, PM_CONF, NULL, "", &mm.RFRelaysConf, "");
-PARAM_DEFINE_STATIC_RAM(reg_MultiConf1_Status_addr, MultiConf1_Status, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.MultiConf1_Status, "");
-PARAM_DEFINE_STATIC_RAM(reg_MultiConf1_Set_addr, MultiConf1_Set, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.MultiConf1_Set, "");
-PARAM_DEFINE_STATIC_RAM(reg_MultiConf1_Clear_addr, MultiConf1_Clear, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.MultiConf1_Clear, "");
-PARAM_DEFINE_STATIC_RAM(reg_XDCConfig_addr, XDCConfig, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.XDCConfig, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_T0_addr, CSBoard_T0, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_T0, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_T1_addr, CSBoard_T1, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_T1, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_T2_addr, CSBoard_T2, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_T2, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_T3_addr, CSBoard_T3, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_T3, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_T4_addr, CSBoard_T4, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_T4, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_T5_addr, CSBoard_T5, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_T5, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_T6_addr, CSBoard_T6, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_T6, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_T7_addr, CSBoard_T7, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_T7, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current0I0_addr, CSBoard_Current0I0, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_Current0I0, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current0I1_addr, CSBoard_Current0I1, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_Current0I1, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current0I2_addr, CSBoard_Current0I2, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_Current0I2, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current1I0_addr, CSBoard_Current1I0, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_Current1I0, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current1I1_addr, CSBoard_Current1I1, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_Current1I1, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current1I2_addr, CSBoard_Current1I2, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_Current1I2, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current2I0_addr, CSBoard_Current2I0, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_Current2I0, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current2I1_addr, CSBoard_Current2I1, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_Current2I1, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current2I2_addr, CSBoard_Current2I2, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_Current2I2, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current3I0_addr, CSBoard_Current3I0, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_Current3I0, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current3I1_addr, CSBoard_Current3I1, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_Current3I1, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current3I2_addr, CSBoard_Current3I2, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_Current3I2, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current4I0_addr, CSBoard_Current4I0, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_Current4I0, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current4I1_addr, CSBoard_Current4I1, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_Current4I1, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current4I2_addr, CSBoard_Current4I2, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_Current4I2, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current5I0_addr, CSBoard_Current5I0, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_Current5I0, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current5I1_addr, CSBoard_Current5I1, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_Current5I1, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current5I2_addr, CSBoard_Current5I2, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_Current5I2, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current6I0_addr, CSBoard_Current6I0, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_Current6I0, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current6I1_addr, CSBoard_Current6I1, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_Current6I1, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current6I2_addr, CSBoard_Current6I2, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_Current6I2, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current7I0_addr, CSBoard_Current7I0, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_Current7I0, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current7I1_addr, CSBoard_Current7I1, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_Current7I1, "");
-PARAM_DEFINE_STATIC_RAM(reg_CSBoard_Current7I2_addr, CSBoard_Current7I2, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.CSBoard_Current7I2, "");
-PARAM_DEFINE_STATIC_RAM(reg_TE_Addr_0_addr, TE_Addr_0, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.TE_Addr_0, "");
-PARAM_DEFINE_STATIC_RAM(reg_TE_Addr_0_Set_addr, TE_Addr_0_Set, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.TE_Addr_0_Set, "");
-PARAM_DEFINE_STATIC_RAM(reg_TE_Addr_0_Clear_addr, TE_Addr_0_Clear, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.TE_Addr_0_Clear, "");
-PARAM_DEFINE_STATIC_RAM(reg_TE_Addr_1_addr, TE_Addr_1, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.TE_Addr_1, "");
-PARAM_DEFINE_STATIC_RAM(reg_TE_Addr_1_Set_addr, TE_Addr_1_Set, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.TE_Addr_1_Set, "");
-PARAM_DEFINE_STATIC_RAM(reg_TE_Addr_1_Clear_addr, TE_Addr_1_Clear, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.TE_Addr_1_Clear, "");
-PARAM_DEFINE_STATIC_RAM(reg_TE_Addr_2_addr, TE_Addr_2, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.TE_Addr_2, "");
-PARAM_DEFINE_STATIC_RAM(reg_TE_Addr_2_Set_addr, TE_Addr_2_Set, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.TE_Addr_2_Set, "");
-PARAM_DEFINE_STATIC_RAM(reg_TE_Addr_2_Clear_addr, TE_Addr_2_Clear, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.TE_Addr_2_Clear, "");
-PARAM_DEFINE_STATIC_RAM(reg_TE_Addr_3_addr, TE_Addr_3, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.TE_Addr_3, "");
-PARAM_DEFINE_STATIC_RAM(reg_TE_Addr_3_Set_addr, TE_Addr_3_Set, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.TE_Addr_3_Set, "");
-PARAM_DEFINE_STATIC_RAM(reg_TE_Addr_3_Clear_addr, TE_Addr_3_Clear, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.TE_Addr_3_Clear, "");
-PARAM_DEFINE_STATIC_RAM(reg_MTC_Addr_0_addr, MTC_Addr_0, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.MTC_Addr_0, "");
-PARAM_DEFINE_STATIC_RAM(reg_MTC_Addr_0_Set_addr, MTC_Addr_0_Set, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.MTC_Addr_0_Set, "");
-PARAM_DEFINE_STATIC_RAM(reg_MTC_Addr_0_Clear_addr, MTC_Addr_0_Clear, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.MTC_Addr_0_Clear, "");
-PARAM_DEFINE_STATIC_RAM(reg_MTC_Addr_1_addr, MTC_Addr_1, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.MTC_Addr_1, "");
-PARAM_DEFINE_STATIC_RAM(reg_MTC_Addr_1_Set_addr, MTC_Addr_1_Set, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.MTC_Addr_1_Set, "");
-PARAM_DEFINE_STATIC_RAM(reg_MTC_Addr_1_Clear_addr, MTC_Addr_1_Clear, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.MTC_Addr_1_Clear, "");
-PARAM_DEFINE_STATIC_RAM(reg_MTC_Addr_2_addr, MTC_Addr_2, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.MTC_Addr_2, "");
-PARAM_DEFINE_STATIC_RAM(reg_MTC_Addr_2_Set_addr, MTC_Addr_2_Set, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.MTC_Addr_2_Set, "");
-PARAM_DEFINE_STATIC_RAM(reg_MTC_Addr_2_Clear_addr, MTC_Addr_2_Clear, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.MTC_Addr_2_Clear, "");
-PARAM_DEFINE_STATIC_RAM(reg_MTC_Addr_3_addr, MTC_Addr_3, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.MTC_Addr_3, "");
-PARAM_DEFINE_STATIC_RAM(reg_MTC_Addr_3_Set_addr, MTC_Addr_3_Set, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.MTC_Addr_3_Set, "");
-PARAM_DEFINE_STATIC_RAM(reg_MTC_Addr_3_Clear_addr, MTC_Addr_3_Clear, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.MTC_Addr_3_Clear, "");
-PARAM_DEFINE_STATIC_RAM(reg_RTOS_Status0_addr, RTOS_Status0, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.RTOS_Status0, "");
-PARAM_DEFINE_STATIC_RAM(reg_UtilI2CConfA_addr, UtilI2CConfA, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.UtilI2CConfA, "");
-PARAM_DEFINE_STATIC_RAM(reg_UtilI2CStatus_addr, UtilI2CStatus, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.UtilI2CStatus, "");
-PARAM_DEFINE_STATIC_RAM(reg_PreviousEndpoint_addr, PreviousEndpoint, PARAM_TYPE_UINT32, 0, 0, PM_HIDDEN, NULL, "", &mm.PreviousEndpoint, "");
-PARAM_DEFINE_STATIC_RAM(reg_ConfCommsProtocol_addr, ConfCommsProtocol, PARAM_TYPE_UINT32, 0, 0, PM_CONF, NULL, "", &mm.ConfCommsProtocol, "");
-
+mm_t mm;
 
 void mm_init(void)
 {
-    // Create the mutex lock
-    _mm_mutex =  xSemaphoreCreateMutex();
-    
-    // Initialize the values in the memory map
 }
+
 mm_t * get_mm_ptr(void)
 {
     return &mm;
@@ -129,46 +25,28 @@ mm_t * get_mm_ptr(void)
 
 /*************** Get/Set functions for Board_ID register **********************************************************************/
 mm_response_t mm_setBoard_ID(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.Board_ID = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getBoard_ID(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.Board_ID;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setBoard_ID_ccIdentifier(const uint8_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.Board_ID = (mm.Board_ID & ~REG_BOARD_ID_CCIDENTIFIER_Msk) | (val << REG_BOARD_ID_CCIDENTIFIER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getBoard_ID_ccIdentifier(uint8_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint8_t) ((mm.Board_ID & REG_BOARD_ID_CCIDENTIFIER_Msk) >> REG_BOARD_ID_CCIDENTIFIER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -178,24 +56,16 @@ mm_response_t mm_getBoard_ID_ccIdentifierFrom(uint8_t * dest, const uint32_t sou
 }
 
 mm_response_t mm_setBoard_ID_id0(const uint8_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.Board_ID = (mm.Board_ID & ~REG_BOARD_ID_ID0_Msk) | (val << REG_BOARD_ID_ID0_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getBoard_ID_id0(uint8_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint8_t) ((mm.Board_ID & REG_BOARD_ID_ID0_Msk) >> REG_BOARD_ID_ID0_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -205,24 +75,16 @@ mm_response_t mm_getBoard_ID_id0From(uint8_t * dest, const uint32_t source) {
 }
 
 mm_response_t mm_setBoard_ID_id1(const uint8_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.Board_ID = (mm.Board_ID & ~REG_BOARD_ID_ID1_Msk) | (val << REG_BOARD_ID_ID1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getBoard_ID_id1(uint8_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint8_t) ((mm.Board_ID & REG_BOARD_ID_ID1_Msk) >> REG_BOARD_ID_ID1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -232,24 +94,16 @@ mm_response_t mm_getBoard_ID_id1From(uint8_t * dest, const uint32_t source) {
 }
 
 mm_response_t mm_setBoard_ID_id2(const uint8_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.Board_ID = (mm.Board_ID & ~REG_BOARD_ID_ID2_Msk) | (val << REG_BOARD_ID_ID2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getBoard_ID_id2(uint8_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint8_t) ((mm.Board_ID & REG_BOARD_ID_ID2_Msk) >> REG_BOARD_ID_ID2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -260,46 +114,28 @@ mm_response_t mm_getBoard_ID_id2From(uint8_t * dest, const uint32_t source) {
 
 /*************** Get/Set functions for FW_Version register ********************************************************************/
 mm_response_t mm_setFW_Version(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.FW_Version = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getFW_Version(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.FW_Version;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setFW_Version_major_version(const uint8_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.FW_Version = (mm.FW_Version & ~REG_VERSION_MAJOR_VERSION_Msk) | (val << REG_VERSION_MAJOR_VERSION_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getFW_Version_major_version(uint8_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint8_t) ((mm.FW_Version & REG_VERSION_MAJOR_VERSION_Msk) >> REG_VERSION_MAJOR_VERSION_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -309,24 +145,16 @@ mm_response_t mm_getFW_Version_major_versionFrom(uint8_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setFW_Version_minor_version(const uint8_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.FW_Version = (mm.FW_Version & ~REG_VERSION_MINOR_VERSION_Msk) | (val << REG_VERSION_MINOR_VERSION_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getFW_Version_minor_version(uint8_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint8_t) ((mm.FW_Version & REG_VERSION_MINOR_VERSION_Msk) >> REG_VERSION_MINOR_VERSION_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -336,24 +164,16 @@ mm_response_t mm_getFW_Version_minor_versionFrom(uint8_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setFW_Version_patch_version(const uint8_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.FW_Version = (mm.FW_Version & ~REG_VERSION_PATCH_VERSION_Msk) | (val << REG_VERSION_PATCH_VERSION_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getFW_Version_patch_version(uint8_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint8_t) ((mm.FW_Version & REG_VERSION_PATCH_VERSION_Msk) >> REG_VERSION_PATCH_VERSION_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -364,46 +184,28 @@ mm_response_t mm_getFW_Version_patch_versionFrom(uint8_t * dest, const uint32_t 
 
 /*************** Get/Set functions for HW_Version register ********************************************************************/
 mm_response_t mm_setHW_Version(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.HW_Version = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getHW_Version(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.HW_Version;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setHW_Version_major_version(const uint8_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.HW_Version = (mm.HW_Version & ~REG_VERSION_MAJOR_VERSION_Msk) | (val << REG_VERSION_MAJOR_VERSION_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getHW_Version_major_version(uint8_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint8_t) ((mm.HW_Version & REG_VERSION_MAJOR_VERSION_Msk) >> REG_VERSION_MAJOR_VERSION_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -413,24 +215,16 @@ mm_response_t mm_getHW_Version_major_versionFrom(uint8_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setHW_Version_minor_version(const uint8_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.HW_Version = (mm.HW_Version & ~REG_VERSION_MINOR_VERSION_Msk) | (val << REG_VERSION_MINOR_VERSION_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getHW_Version_minor_version(uint8_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint8_t) ((mm.HW_Version & REG_VERSION_MINOR_VERSION_Msk) >> REG_VERSION_MINOR_VERSION_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -440,24 +234,16 @@ mm_response_t mm_getHW_Version_minor_versionFrom(uint8_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setHW_Version_patch_version(const uint8_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.HW_Version = (mm.HW_Version & ~REG_VERSION_PATCH_VERSION_Msk) | (val << REG_VERSION_PATCH_VERSION_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getHW_Version_patch_version(uint8_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint8_t) ((mm.HW_Version & REG_VERSION_PATCH_VERSION_Msk) >> REG_VERSION_PATCH_VERSION_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -468,24 +254,14 @@ mm_response_t mm_getHW_Version_patch_versionFrom(uint8_t * dest, const uint32_t 
 
 /*************** Get/Set functions for Scratchpad register ********************************************************************/
 mm_response_t mm_setScratchpad(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.Scratchpad = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getScratchpad(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.Scratchpad;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -497,24 +273,14 @@ mm_response_t mm_getScratchpadFrom(uint32_t * dest, const uint32_t source) {
 
 /*************** Get/Set functions for Supported_Boards register **************************************************************/
 mm_response_t mm_setSupported_Boards(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.Supported_Boards = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getSupported_Boards(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.Supported_Boards;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -526,24 +292,14 @@ mm_response_t mm_getSupported_BoardsFrom(uint32_t * dest, const uint32_t source)
 
 /*************** Get/Set functions for Configured_Boards register *************************************************************/
 mm_response_t mm_setConfigured_Boards(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.Configured_Boards = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getConfigured_Boards(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.Configured_Boards;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -555,24 +311,14 @@ mm_response_t mm_getConfigured_BoardsFrom(uint32_t * dest, const uint32_t source
 
 /*************** Get/Set functions for Uptime register ************************************************************************/
 mm_response_t mm_setUptime(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.Uptime = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getUptime(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.Uptime;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -584,46 +330,28 @@ mm_response_t mm_getUptimeFrom(uint32_t * dest, const uint32_t source) {
 
 /*************** Get/Set functions for Event_ConfA register *******************************************************************/
 mm_response_t mm_setEvent_ConfA(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.Event_ConfA = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getEvent_ConfA(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.Event_ConfA;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setEvent_ConfA_count(const uint16_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.Event_ConfA = (mm.Event_ConfA & ~REG_EVENT_CONFA_COUNT_Msk) | (val << REG_EVENT_CONFA_COUNT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getEvent_ConfA_count(uint16_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint16_t) ((mm.Event_ConfA & REG_EVENT_CONFA_COUNT_Msk) >> REG_EVENT_CONFA_COUNT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -634,46 +362,28 @@ mm_response_t mm_getEvent_ConfA_countFrom(uint16_t * dest, const uint32_t source
 
 /*************** Get/Set functions for Event register *************************************************************************/
 mm_response_t mm_setEvent(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.Event = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getEvent(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.Event;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setEvent_section(const uint16_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.Event = (mm.Event & ~REG_EVENT_SECTION_Msk) | (val << REG_EVENT_SECTION_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getEvent_section(uint16_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint16_t) ((mm.Event & REG_EVENT_SECTION_Msk) >> REG_EVENT_SECTION_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -683,24 +393,16 @@ mm_response_t mm_getEvent_sectionFrom(uint16_t * dest, const uint32_t source) {
 }
 
 mm_response_t mm_setEvent_detail(const uint16_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.Event = (mm.Event & ~REG_EVENT_DETAIL_Msk) | (val << REG_EVENT_DETAIL_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getEvent_detail(uint16_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint16_t) ((mm.Event & REG_EVENT_DETAIL_Msk) >> REG_EVENT_DETAIL_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -710,24 +412,16 @@ mm_response_t mm_getEvent_detailFrom(uint16_t * dest, const uint32_t source) {
 }
 
 mm_response_t mm_setEvent_timestamp(const uint16_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.Event = (mm.Event & ~REG_EVENT_TIMESTAMP_Msk) | (val << REG_EVENT_TIMESTAMP_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getEvent_timestamp(uint16_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint16_t) ((mm.Event & REG_EVENT_TIMESTAMP_Msk) >> REG_EVENT_TIMESTAMP_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -738,46 +432,28 @@ mm_response_t mm_getEvent_timestampFrom(uint16_t * dest, const uint32_t source) 
 
 /*************** Get/Set functions for ConfPower register *********************************************************************/
 mm_response_t mm_setConfPower(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.ConfPower = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getConfPower(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.ConfPower;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setConfPower_voltage5Toggle(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.ConfPower = (mm.ConfPower & ~REG_CONFPOWER_VOLTAGE5TOGGLE_Msk) | (val << REG_CONFPOWER_VOLTAGE5TOGGLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getConfPower_voltage5Toggle(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.ConfPower & REG_CONFPOWER_VOLTAGE5TOGGLE_Msk) >> REG_CONFPOWER_VOLTAGE5TOGGLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -787,24 +463,16 @@ mm_response_t mm_getConfPower_voltage5ToggleFrom(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setConfPower_voltage3Toggle(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.ConfPower = (mm.ConfPower & ~REG_CONFPOWER_VOLTAGE3TOGGLE_Msk) | (val << REG_CONFPOWER_VOLTAGE3TOGGLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getConfPower_voltage3Toggle(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.ConfPower & REG_CONFPOWER_VOLTAGE3TOGGLE_Msk) >> REG_CONFPOWER_VOLTAGE3TOGGLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -814,24 +482,16 @@ mm_response_t mm_getConfPower_voltage3ToggleFrom(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setConfPower_voltageVBatToggle(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.ConfPower = (mm.ConfPower & ~REG_CONFPOWER_VOLTAGEVBATTOGGLE_Msk) | (val << REG_CONFPOWER_VOLTAGEVBATTOGGLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getConfPower_voltageVBatToggle(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.ConfPower & REG_CONFPOWER_VOLTAGEVBATTOGGLE_Msk) >> REG_CONFPOWER_VOLTAGEVBATTOGGLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -841,24 +501,16 @@ mm_response_t mm_getConfPower_voltageVBatToggleFrom(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setConfPower_voltageVBatAltToggle(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.ConfPower = (mm.ConfPower & ~REG_CONFPOWER_VOLTAGEVBATALTTOGGLE_Msk) | (val << REG_CONFPOWER_VOLTAGEVBATALTTOGGLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getConfPower_voltageVBatAltToggle(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.ConfPower & REG_CONFPOWER_VOLTAGEVBATALTTOGGLE_Msk) >> REG_CONFPOWER_VOLTAGEVBATALTTOGGLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -868,24 +520,16 @@ mm_response_t mm_getConfPower_voltageVBatAltToggleFrom(mm_enabled_t * dest, cons
 }
 
 mm_response_t mm_setConfPower_voltage3UtilToggle(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.ConfPower = (mm.ConfPower & ~REG_CONFPOWER_VOLTAGE3UTILTOGGLE_Msk) | (val << REG_CONFPOWER_VOLTAGE3UTILTOGGLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getConfPower_voltage3UtilToggle(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.ConfPower & REG_CONFPOWER_VOLTAGE3UTILTOGGLE_Msk) >> REG_CONFPOWER_VOLTAGE3UTILTOGGLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -896,46 +540,28 @@ mm_response_t mm_getConfPower_voltage3UtilToggleFrom(mm_enabled_t * dest, const 
 
 /*************** Get/Set functions for MeasureVI_V3 register ******************************************************************/
 mm_response_t mm_setMeasureVI_V3(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MeasureVI_V3 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getMeasureVI_V3(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.MeasureVI_V3;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setMeasureVI_V3_voltage(const uint16_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MeasureVI_V3 = (mm.MeasureVI_V3 & ~REG_MEASUREVI_VOLTAGE_Msk) | (val << REG_MEASUREVI_VOLTAGE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMeasureVI_V3_voltage(uint16_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint16_t) ((mm.MeasureVI_V3 & REG_MEASUREVI_VOLTAGE_Msk) >> REG_MEASUREVI_VOLTAGE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -945,24 +571,16 @@ mm_response_t mm_getMeasureVI_V3_voltageFrom(uint16_t * dest, const uint32_t sou
 }
 
 mm_response_t mm_setMeasureVI_V3_current(const uint16_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MeasureVI_V3 = (mm.MeasureVI_V3 & ~REG_MEASUREVI_CURRENT_Msk) | (val << REG_MEASUREVI_CURRENT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMeasureVI_V3_current(uint16_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint16_t) ((mm.MeasureVI_V3 & REG_MEASUREVI_CURRENT_Msk) >> REG_MEASUREVI_CURRENT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -973,46 +591,28 @@ mm_response_t mm_getMeasureVI_V3_currentFrom(uint16_t * dest, const uint32_t sou
 
 /*************** Get/Set functions for MeasurePower_V3 register ***************************************************************/
 mm_response_t mm_setMeasurePower_V3(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MeasurePower_V3 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getMeasurePower_V3(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.MeasurePower_V3;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setMeasurePower_V3_power(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MeasurePower_V3 = (mm.MeasurePower_V3 & ~REG_MEASUREPOWER_POWER_Msk) | (val << REG_MEASUREPOWER_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMeasurePower_V3_power(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint32_t) ((mm.MeasurePower_V3 & REG_MEASUREPOWER_POWER_Msk) >> REG_MEASUREPOWER_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -1023,46 +623,28 @@ mm_response_t mm_getMeasurePower_V3_powerFrom(uint32_t * dest, const uint32_t so
 
 /*************** Get/Set functions for MeasureVI_V5 register ******************************************************************/
 mm_response_t mm_setMeasureVI_V5(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MeasureVI_V5 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getMeasureVI_V5(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.MeasureVI_V5;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setMeasureVI_V5_voltage(const uint16_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MeasureVI_V5 = (mm.MeasureVI_V5 & ~REG_MEASUREVI_VOLTAGE_Msk) | (val << REG_MEASUREVI_VOLTAGE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMeasureVI_V5_voltage(uint16_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint16_t) ((mm.MeasureVI_V5 & REG_MEASUREVI_VOLTAGE_Msk) >> REG_MEASUREVI_VOLTAGE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -1072,24 +654,16 @@ mm_response_t mm_getMeasureVI_V5_voltageFrom(uint16_t * dest, const uint32_t sou
 }
 
 mm_response_t mm_setMeasureVI_V5_current(const uint16_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MeasureVI_V5 = (mm.MeasureVI_V5 & ~REG_MEASUREVI_CURRENT_Msk) | (val << REG_MEASUREVI_CURRENT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMeasureVI_V5_current(uint16_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint16_t) ((mm.MeasureVI_V5 & REG_MEASUREVI_CURRENT_Msk) >> REG_MEASUREVI_CURRENT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -1100,46 +674,28 @@ mm_response_t mm_getMeasureVI_V5_currentFrom(uint16_t * dest, const uint32_t sou
 
 /*************** Get/Set functions for MeasurePower_V5 register ***************************************************************/
 mm_response_t mm_setMeasurePower_V5(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MeasurePower_V5 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getMeasurePower_V5(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.MeasurePower_V5;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setMeasurePower_V5_power(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MeasurePower_V5 = (mm.MeasurePower_V5 & ~REG_MEASUREPOWER_POWER_Msk) | (val << REG_MEASUREPOWER_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMeasurePower_V5_power(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint32_t) ((mm.MeasurePower_V5 & REG_MEASUREPOWER_POWER_Msk) >> REG_MEASUREPOWER_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -1150,46 +706,28 @@ mm_response_t mm_getMeasurePower_V5_powerFrom(uint32_t * dest, const uint32_t so
 
 /*************** Get/Set functions for MeasureVI_VBat register ****************************************************************/
 mm_response_t mm_setMeasureVI_VBat(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MeasureVI_VBat = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getMeasureVI_VBat(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.MeasureVI_VBat;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setMeasureVI_VBat_voltage(const uint16_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MeasureVI_VBat = (mm.MeasureVI_VBat & ~REG_MEASUREVI_VOLTAGE_Msk) | (val << REG_MEASUREVI_VOLTAGE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMeasureVI_VBat_voltage(uint16_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint16_t) ((mm.MeasureVI_VBat & REG_MEASUREVI_VOLTAGE_Msk) >> REG_MEASUREVI_VOLTAGE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -1199,24 +737,16 @@ mm_response_t mm_getMeasureVI_VBat_voltageFrom(uint16_t * dest, const uint32_t s
 }
 
 mm_response_t mm_setMeasureVI_VBat_current(const uint16_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MeasureVI_VBat = (mm.MeasureVI_VBat & ~REG_MEASUREVI_CURRENT_Msk) | (val << REG_MEASUREVI_CURRENT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMeasureVI_VBat_current(uint16_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint16_t) ((mm.MeasureVI_VBat & REG_MEASUREVI_CURRENT_Msk) >> REG_MEASUREVI_CURRENT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -1227,46 +757,28 @@ mm_response_t mm_getMeasureVI_VBat_currentFrom(uint16_t * dest, const uint32_t s
 
 /*************** Get/Set functions for MeasurePower_VBat register *************************************************************/
 mm_response_t mm_setMeasurePower_VBat(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MeasurePower_VBat = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getMeasurePower_VBat(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.MeasurePower_VBat;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setMeasurePower_VBat_power(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MeasurePower_VBat = (mm.MeasurePower_VBat & ~REG_MEASUREPOWER_POWER_Msk) | (val << REG_MEASUREPOWER_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMeasurePower_VBat_power(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint32_t) ((mm.MeasurePower_VBat & REG_MEASUREPOWER_POWER_Msk) >> REG_MEASUREPOWER_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -1277,46 +789,28 @@ mm_response_t mm_getMeasurePower_VBat_powerFrom(uint32_t * dest, const uint32_t 
 
 /*************** Get/Set functions for MeasureVI_VBatAlt register *************************************************************/
 mm_response_t mm_setMeasureVI_VBatAlt(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MeasureVI_VBatAlt = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getMeasureVI_VBatAlt(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.MeasureVI_VBatAlt;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setMeasureVI_VBatAlt_voltage(const uint16_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MeasureVI_VBatAlt = (mm.MeasureVI_VBatAlt & ~REG_MEASUREVI_VOLTAGE_Msk) | (val << REG_MEASUREVI_VOLTAGE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMeasureVI_VBatAlt_voltage(uint16_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint16_t) ((mm.MeasureVI_VBatAlt & REG_MEASUREVI_VOLTAGE_Msk) >> REG_MEASUREVI_VOLTAGE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -1326,24 +820,16 @@ mm_response_t mm_getMeasureVI_VBatAlt_voltageFrom(uint16_t * dest, const uint32_
 }
 
 mm_response_t mm_setMeasureVI_VBatAlt_current(const uint16_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MeasureVI_VBatAlt = (mm.MeasureVI_VBatAlt & ~REG_MEASUREVI_CURRENT_Msk) | (val << REG_MEASUREVI_CURRENT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMeasureVI_VBatAlt_current(uint16_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint16_t) ((mm.MeasureVI_VBatAlt & REG_MEASUREVI_CURRENT_Msk) >> REG_MEASUREVI_CURRENT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -1354,46 +840,28 @@ mm_response_t mm_getMeasureVI_VBatAlt_currentFrom(uint16_t * dest, const uint32_
 
 /*************** Get/Set functions for MeasurePower_VBatAlt register **********************************************************/
 mm_response_t mm_setMeasurePower_VBatAlt(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MeasurePower_VBatAlt = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getMeasurePower_VBatAlt(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.MeasurePower_VBatAlt;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setMeasurePower_VBatAlt_power(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MeasurePower_VBatAlt = (mm.MeasurePower_VBatAlt & ~REG_MEASUREPOWER_POWER_Msk) | (val << REG_MEASUREPOWER_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMeasurePower_VBatAlt_power(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint32_t) ((mm.MeasurePower_VBatAlt & REG_MEASUREPOWER_POWER_Msk) >> REG_MEASUREPOWER_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -1404,46 +872,28 @@ mm_response_t mm_getMeasurePower_VBatAlt_powerFrom(uint32_t * dest, const uint32
 
 /*************** Get/Set functions for I2CConfA register **********************************************************************/
 mm_response_t mm_setI2CConfA(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.I2CConfA = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getI2CConfA(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.I2CConfA;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setI2CConfA_TRDEL(const uint8_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.I2CConfA = (mm.I2CConfA & ~REG_I2CCONFA_TRDEL_Msk) | (val << REG_I2CCONFA_TRDEL_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getI2CConfA_TRDEL(uint8_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint8_t) ((mm.I2CConfA & REG_I2CCONFA_TRDEL_Msk) >> REG_I2CCONFA_TRDEL_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -1453,24 +903,16 @@ mm_response_t mm_getI2CConfA_TRDELFrom(uint8_t * dest, const uint32_t source) {
 }
 
 mm_response_t mm_setI2CConfA_WRDEL(const uint8_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.I2CConfA = (mm.I2CConfA & ~REG_I2CCONFA_WRDEL_Msk) | (val << REG_I2CCONFA_WRDEL_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getI2CConfA_WRDEL(uint8_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint8_t) ((mm.I2CConfA & REG_I2CCONFA_WRDEL_Msk) >> REG_I2CCONFA_WRDEL_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -1480,24 +922,16 @@ mm_response_t mm_getI2CConfA_WRDELFrom(uint8_t * dest, const uint32_t source) {
 }
 
 mm_response_t mm_setI2CConfA_SPD(const uint8_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.I2CConfA = (mm.I2CConfA & ~REG_I2CCONFA_SPD_Msk) | (val << REG_I2CCONFA_SPD_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getI2CConfA_SPD(uint8_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint8_t) ((mm.I2CConfA & REG_I2CCONFA_SPD_Msk) >> REG_I2CCONFA_SPD_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -1508,46 +942,28 @@ mm_response_t mm_getI2CConfA_SPDFrom(uint8_t * dest, const uint32_t source) {
 
 /*************** Get/Set functions for I2CConfB register **********************************************************************/
 mm_response_t mm_setI2CConfB(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.I2CConfB = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getI2CConfB(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.I2CConfB;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setI2CConfB_ADDR(const uint8_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.I2CConfB = (mm.I2CConfB & ~REG_I2CCONFB_ADDR_Msk) | (val << REG_I2CCONFB_ADDR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getI2CConfB_ADDR(uint8_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint8_t) ((mm.I2CConfB & REG_I2CCONFB_ADDR_Msk) >> REG_I2CCONFB_ADDR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -1558,46 +974,28 @@ mm_response_t mm_getI2CConfB_ADDRFrom(uint8_t * dest, const uint32_t source) {
 
 /*************** Get/Set functions for MultiConf0 register ********************************************************************/
 mm_response_t mm_setMultiConf0(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf0 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getMultiConf0(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.MultiConf0;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setMultiConf0_Detected(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf0 = (mm.MultiConf0 & ~REG_MULTICONF0_DETECTED_Msk) | (val << REG_MULTICONF0_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf0_Detected(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf0 & REG_MULTICONF0_DETECTED_Msk) >> REG_MULTICONF0_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -1607,24 +1005,16 @@ mm_response_t mm_getMultiConf0_DetectedFrom(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMultiConf0_AutoCLR(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf0 = (mm.MultiConf0 & ~REG_MULTICONF0_AUTOCLR_Msk) | (val << REG_MULTICONF0_AUTOCLR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf0_AutoCLR(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf0 & REG_MULTICONF0_AUTOCLR_Msk) >> REG_MULTICONF0_AUTOCLR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -1634,24 +1024,16 @@ mm_response_t mm_getMultiConf0_AutoCLRFrom(mm_enabled_t * dest, const uint32_t s
 }
 
 mm_response_t mm_setMultiConf0_ScanEnabled(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf0 = (mm.MultiConf0 & ~REG_MULTICONF0_SCANENABLED_Msk) | (val << REG_MULTICONF0_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf0_ScanEnabled(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf0 & REG_MULTICONF0_SCANENABLED_Msk) >> REG_MULTICONF0_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -1661,24 +1043,16 @@ mm_response_t mm_getMultiConf0_ScanEnabledFrom(mm_enabled_t * dest, const uint32
 }
 
 mm_response_t mm_setMultiConf0_FanPos1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf0 = (mm.MultiConf0 & ~REG_MULTICONF0_FANPOS1_Msk) | (val << REG_MULTICONF0_FANPOS1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf0_FanPos1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf0 & REG_MULTICONF0_FANPOS1_Msk) >> REG_MULTICONF0_FANPOS1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -1688,24 +1062,16 @@ mm_response_t mm_getMultiConf0_FanPos1From(mm_enabled_t * dest, const uint32_t s
 }
 
 mm_response_t mm_setMultiConf0_FanPos2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf0 = (mm.MultiConf0 & ~REG_MULTICONF0_FANPOS2_Msk) | (val << REG_MULTICONF0_FANPOS2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf0_FanPos2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf0 & REG_MULTICONF0_FANPOS2_Msk) >> REG_MULTICONF0_FANPOS2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -1715,24 +1081,16 @@ mm_response_t mm_getMultiConf0_FanPos2From(mm_enabled_t * dest, const uint32_t s
 }
 
 mm_response_t mm_setMultiConf0_FanPos3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf0 = (mm.MultiConf0 & ~REG_MULTICONF0_FANPOS3_Msk) | (val << REG_MULTICONF0_FANPOS3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf0_FanPos3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf0 & REG_MULTICONF0_FANPOS3_Msk) >> REG_MULTICONF0_FANPOS3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -1742,24 +1100,16 @@ mm_response_t mm_getMultiConf0_FanPos3From(mm_enabled_t * dest, const uint32_t s
 }
 
 mm_response_t mm_setMultiConf0_FanPos4(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf0 = (mm.MultiConf0 & ~REG_MULTICONF0_FANPOS4_Msk) | (val << REG_MULTICONF0_FANPOS4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf0_FanPos4(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf0 & REG_MULTICONF0_FANPOS4_Msk) >> REG_MULTICONF0_FANPOS4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -1770,46 +1120,28 @@ mm_response_t mm_getMultiConf0_FanPos4From(mm_enabled_t * dest, const uint32_t s
 
 /*************** Get/Set functions for ConfTempSense register *****************************************************************/
 mm_response_t mm_setConfTempSense(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.ConfTempSense = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getConfTempSense(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.ConfTempSense;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setConfTempSense_EnableMeasurements(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.ConfTempSense = (mm.ConfTempSense & ~REG_CONFTEMPSENSE_ENABLEMEASUREMENTS_Msk) | (val << REG_CONFTEMPSENSE_ENABLEMEASUREMENTS_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getConfTempSense_EnableMeasurements(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.ConfTempSense & REG_CONFTEMPSENSE_ENABLEMEASUREMENTS_Msk) >> REG_CONFTEMPSENSE_ENABLEMEASUREMENTS_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -1820,46 +1152,28 @@ mm_response_t mm_getConfTempSense_EnableMeasurementsFrom(mm_enabled_t * dest, co
 
 /*************** Get/Set functions for CANConfA register **********************************************************************/
 mm_response_t mm_setCANConfA(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CANConfA = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCANConfA(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CANConfA;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setCANConfA_BaudRate(const uint16_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CANConfA = (mm.CANConfA & ~REG_CANCONFA_BAUDRATE_Msk) | (val << REG_CANCONFA_BAUDRATE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getCANConfA_BaudRate(uint16_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint16_t) ((mm.CANConfA & REG_CANCONFA_BAUDRATE_Msk) >> REG_CANCONFA_BAUDRATE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -1869,24 +1183,16 @@ mm_response_t mm_getCANConfA_BaudRateFrom(uint16_t * dest, const uint32_t source
 }
 
 mm_response_t mm_setCANConfA_EnableRetries(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CANConfA = (mm.CANConfA & ~REG_CANCONFA_ENABLERETRIES_Msk) | (val << REG_CANCONFA_ENABLERETRIES_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getCANConfA_EnableRetries(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.CANConfA & REG_CANCONFA_ENABLERETRIES_Msk) >> REG_CANCONFA_ENABLERETRIES_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -1896,24 +1202,16 @@ mm_response_t mm_getCANConfA_EnableRetriesFrom(mm_enabled_t * dest, const uint32
 }
 
 mm_response_t mm_setCANConfA_FlipCanBytes(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CANConfA = (mm.CANConfA & ~REG_CANCONFA_FLIPCANBYTES_Msk) | (val << REG_CANCONFA_FLIPCANBYTES_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getCANConfA_FlipCanBytes(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.CANConfA & REG_CANCONFA_FLIPCANBYTES_Msk) >> REG_CANCONFA_FLIPCANBYTES_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -1924,46 +1222,28 @@ mm_response_t mm_getCANConfA_FlipCanBytesFrom(mm_enabled_t * dest, const uint32_
 
 /*************** Get/Set functions for CANConfB register **********************************************************************/
 mm_response_t mm_setCANConfB(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CANConfB = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCANConfB(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CANConfB;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setCANConfB_Address(const uint8_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CANConfB = (mm.CANConfB & ~REG_CANCONFB_ADDRESS_Msk) | (val << REG_CANCONFB_ADDRESS_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getCANConfB_Address(uint8_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint8_t) ((mm.CANConfB & REG_CANCONFB_ADDRESS_Msk) >> REG_CANCONFB_ADDRESS_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -1974,46 +1254,28 @@ mm_response_t mm_getCANConfB_AddressFrom(uint8_t * dest, const uint32_t source) 
 
 /*************** Get/Set functions for SerialConf register ********************************************************************/
 mm_response_t mm_setSerialConf(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.SerialConf = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getSerialConf(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.SerialConf;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setSerialConf_SerialMode(const mm_serialmode_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.SerialConf = (mm.SerialConf & ~REG_SERIALCONF_SERIALMODE_Msk) | (val << REG_SERIALCONF_SERIALMODE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getSerialConf_SerialMode(mm_serialmode_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_serialmode_t) ((mm.SerialConf & REG_SERIALCONF_SERIALMODE_Msk) >> REG_SERIALCONF_SERIALMODE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2023,24 +1285,16 @@ mm_response_t mm_getSerialConf_SerialModeFrom(mm_serialmode_t * dest, const uint
 }
 
 mm_response_t mm_setSerialConf_ParityEnabled(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.SerialConf = (mm.SerialConf & ~REG_SERIALCONF_PARITYENABLED_Msk) | (val << REG_SERIALCONF_PARITYENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getSerialConf_ParityEnabled(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.SerialConf & REG_SERIALCONF_PARITYENABLED_Msk) >> REG_SERIALCONF_PARITYENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2050,24 +1304,16 @@ mm_response_t mm_getSerialConf_ParityEnabledFrom(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setSerialConf_ParityMode(const mm_paritymodes_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.SerialConf = (mm.SerialConf & ~REG_SERIALCONF_PARITYMODE_Msk) | (val << REG_SERIALCONF_PARITYMODE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getSerialConf_ParityMode(mm_paritymodes_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_paritymodes_t) ((mm.SerialConf & REG_SERIALCONF_PARITYMODE_Msk) >> REG_SERIALCONF_PARITYMODE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2077,24 +1323,16 @@ mm_response_t mm_getSerialConf_ParityModeFrom(mm_paritymodes_t * dest, const uin
 }
 
 mm_response_t mm_setSerialConf_BaudRates(const mm_usart_baudrates_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.SerialConf = (mm.SerialConf & ~REG_SERIALCONF_BAUDRATES_Msk) | (val << REG_SERIALCONF_BAUDRATES_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getSerialConf_BaudRates(mm_usart_baudrates_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_usart_baudrates_t) ((mm.SerialConf & REG_SERIALCONF_BAUDRATES_Msk) >> REG_SERIALCONF_BAUDRATES_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2105,46 +1343,28 @@ mm_response_t mm_getSerialConf_BaudRatesFrom(mm_usart_baudrates_t * dest, const 
 
 /*************** Get/Set functions for PC104Pins register *********************************************************************/
 mm_response_t mm_setPC104Pins(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.PC104Pins = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getPC104Pins(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.PC104Pins;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setPC104Pins_ENA(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.PC104Pins = (mm.PC104Pins & ~REG_PC104PINS_ENA_Msk) | (val << REG_PC104PINS_ENA_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getPC104Pins_ENA(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.PC104Pins & REG_PC104PINS_ENA_Msk) >> REG_PC104PINS_ENA_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2154,24 +1374,16 @@ mm_response_t mm_getPC104Pins_ENAFrom(mm_enabled_t * dest, const uint32_t source
 }
 
 mm_response_t mm_setPC104Pins_nRST(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.PC104Pins = (mm.PC104Pins & ~REG_PC104PINS_NRST_Msk) | (val << REG_PC104PINS_NRST_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getPC104Pins_nRST(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.PC104Pins & REG_PC104PINS_NRST_Msk) >> REG_PC104PINS_NRST_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2181,24 +1393,16 @@ mm_response_t mm_getPC104Pins_nRSTFrom(mm_enabled_t * dest, const uint32_t sourc
 }
 
 mm_response_t mm_setPC104Pins_RDY(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.PC104Pins = (mm.PC104Pins & ~REG_PC104PINS_RDY_Msk) | (val << REG_PC104PINS_RDY_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getPC104Pins_RDY(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.PC104Pins & REG_PC104PINS_RDY_Msk) >> REG_PC104PINS_RDY_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2209,46 +1413,28 @@ mm_response_t mm_getPC104Pins_RDYFrom(mm_enabled_t * dest, const uint32_t source
 
 /*************** Get/Set functions for XTXMultitester register ****************************************************************/
 mm_response_t mm_setXTXMultitester(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.XTXMultitester = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getXTXMultitester(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.XTXMultitester;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setXTXMultitester_POS1_XTX_EN(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.XTXMultitester = (mm.XTXMultitester & ~REG_XTXMULTITESTER_POS1_XTX_EN_Msk) | (val << REG_XTXMULTITESTER_POS1_XTX_EN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getXTXMultitester_POS1_XTX_EN(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.XTXMultitester & REG_XTXMULTITESTER_POS1_XTX_EN_Msk) >> REG_XTXMULTITESTER_POS1_XTX_EN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2258,24 +1444,16 @@ mm_response_t mm_getXTXMultitester_POS1_XTX_ENFrom(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setXTXMultitester_POS1_XTX_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.XTXMultitester = (mm.XTXMultitester & ~REG_XTXMULTITESTER_POS1_XTX_POWER_Msk) | (val << REG_XTXMULTITESTER_POS1_XTX_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getXTXMultitester_POS1_XTX_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.XTXMultitester & REG_XTXMULTITESTER_POS1_XTX_POWER_Msk) >> REG_XTXMULTITESTER_POS1_XTX_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2285,24 +1463,16 @@ mm_response_t mm_getXTXMultitester_POS1_XTX_PowerFrom(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setXTXMultitester_POS1_XTX_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.XTXMultitester = (mm.XTXMultitester & ~REG_XTXMULTITESTER_POS1_XTX_NRESET_Msk) | (val << REG_XTXMULTITESTER_POS1_XTX_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getXTXMultitester_POS1_XTX_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.XTXMultitester & REG_XTXMULTITESTER_POS1_XTX_NRESET_Msk) >> REG_XTXMULTITESTER_POS1_XTX_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2312,24 +1482,16 @@ mm_response_t mm_getXTXMultitester_POS1_XTX_nResetFrom(mm_enabled_t * dest, cons
 }
 
 mm_response_t mm_setXTXMultitester_POS2_XTX_EN(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.XTXMultitester = (mm.XTXMultitester & ~REG_XTXMULTITESTER_POS2_XTX_EN_Msk) | (val << REG_XTXMULTITESTER_POS2_XTX_EN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getXTXMultitester_POS2_XTX_EN(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.XTXMultitester & REG_XTXMULTITESTER_POS2_XTX_EN_Msk) >> REG_XTXMULTITESTER_POS2_XTX_EN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2339,24 +1501,16 @@ mm_response_t mm_getXTXMultitester_POS2_XTX_ENFrom(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setXTXMultitester_POS2_XTX_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.XTXMultitester = (mm.XTXMultitester & ~REG_XTXMULTITESTER_POS2_XTX_POWER_Msk) | (val << REG_XTXMULTITESTER_POS2_XTX_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getXTXMultitester_POS2_XTX_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.XTXMultitester & REG_XTXMULTITESTER_POS2_XTX_POWER_Msk) >> REG_XTXMULTITESTER_POS2_XTX_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2366,24 +1520,16 @@ mm_response_t mm_getXTXMultitester_POS2_XTX_PowerFrom(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setXTXMultitester_POS2_XTX_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.XTXMultitester = (mm.XTXMultitester & ~REG_XTXMULTITESTER_POS2_XTX_NRESET_Msk) | (val << REG_XTXMULTITESTER_POS2_XTX_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getXTXMultitester_POS2_XTX_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.XTXMultitester & REG_XTXMULTITESTER_POS2_XTX_NRESET_Msk) >> REG_XTXMULTITESTER_POS2_XTX_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2393,24 +1539,16 @@ mm_response_t mm_getXTXMultitester_POS2_XTX_nResetFrom(mm_enabled_t * dest, cons
 }
 
 mm_response_t mm_setXTXMultitester_POS3_XTX_EN(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.XTXMultitester = (mm.XTXMultitester & ~REG_XTXMULTITESTER_POS3_XTX_EN_Msk) | (val << REG_XTXMULTITESTER_POS3_XTX_EN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getXTXMultitester_POS3_XTX_EN(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.XTXMultitester & REG_XTXMULTITESTER_POS3_XTX_EN_Msk) >> REG_XTXMULTITESTER_POS3_XTX_EN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2420,24 +1558,16 @@ mm_response_t mm_getXTXMultitester_POS3_XTX_ENFrom(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setXTXMultitester_POS3_XTX_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.XTXMultitester = (mm.XTXMultitester & ~REG_XTXMULTITESTER_POS3_XTX_POWER_Msk) | (val << REG_XTXMULTITESTER_POS3_XTX_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getXTXMultitester_POS3_XTX_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.XTXMultitester & REG_XTXMULTITESTER_POS3_XTX_POWER_Msk) >> REG_XTXMULTITESTER_POS3_XTX_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2447,24 +1577,16 @@ mm_response_t mm_getXTXMultitester_POS3_XTX_PowerFrom(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setXTXMultitester_POS3_XTX_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.XTXMultitester = (mm.XTXMultitester & ~REG_XTXMULTITESTER_POS3_XTX_NRESET_Msk) | (val << REG_XTXMULTITESTER_POS3_XTX_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getXTXMultitester_POS3_XTX_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.XTXMultitester & REG_XTXMULTITESTER_POS3_XTX_NRESET_Msk) >> REG_XTXMULTITESTER_POS3_XTX_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2474,24 +1596,16 @@ mm_response_t mm_getXTXMultitester_POS3_XTX_nResetFrom(mm_enabled_t * dest, cons
 }
 
 mm_response_t mm_setXTXMultitester_POS4_XTX_EN(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.XTXMultitester = (mm.XTXMultitester & ~REG_XTXMULTITESTER_POS4_XTX_EN_Msk) | (val << REG_XTXMULTITESTER_POS4_XTX_EN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getXTXMultitester_POS4_XTX_EN(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.XTXMultitester & REG_XTXMULTITESTER_POS4_XTX_EN_Msk) >> REG_XTXMULTITESTER_POS4_XTX_EN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2501,24 +1615,16 @@ mm_response_t mm_getXTXMultitester_POS4_XTX_ENFrom(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setXTXMultitester_POS4_XTX_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.XTXMultitester = (mm.XTXMultitester & ~REG_XTXMULTITESTER_POS4_XTX_POWER_Msk) | (val << REG_XTXMULTITESTER_POS4_XTX_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getXTXMultitester_POS4_XTX_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.XTXMultitester & REG_XTXMULTITESTER_POS4_XTX_POWER_Msk) >> REG_XTXMULTITESTER_POS4_XTX_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2528,24 +1634,16 @@ mm_response_t mm_getXTXMultitester_POS4_XTX_PowerFrom(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setXTXMultitester_POS4_XTX_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.XTXMultitester = (mm.XTXMultitester & ~REG_XTXMULTITESTER_POS4_XTX_NRESET_Msk) | (val << REG_XTXMULTITESTER_POS4_XTX_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getXTXMultitester_POS4_XTX_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.XTXMultitester & REG_XTXMULTITESTER_POS4_XTX_NRESET_Msk) >> REG_XTXMULTITESTER_POS4_XTX_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2556,46 +1654,28 @@ mm_response_t mm_getXTXMultitester_POS4_XTX_nResetFrom(mm_enabled_t * dest, cons
 
 /*************** Get/Set functions for RFRelaysConf register ******************************************************************/
 mm_response_t mm_setRFRelaysConf(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.RFRelaysConf = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getRFRelaysConf(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.RFRelaysConf;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setRFRelaysConf_RFSW1_Detected(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.RFRelaysConf = (mm.RFRelaysConf & ~REG_RFRELAYSCONF_RFSW1_DETECTED_Msk) | (val << REG_RFRELAYSCONF_RFSW1_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getRFRelaysConf_RFSW1_Detected(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.RFRelaysConf & REG_RFRELAYSCONF_RFSW1_DETECTED_Msk) >> REG_RFRELAYSCONF_RFSW1_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2605,24 +1685,16 @@ mm_response_t mm_getRFRelaysConf_RFSW1_DetectedFrom(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setRFRelaysConf_RFSW2_Detected(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.RFRelaysConf = (mm.RFRelaysConf & ~REG_RFRELAYSCONF_RFSW2_DETECTED_Msk) | (val << REG_RFRELAYSCONF_RFSW2_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getRFRelaysConf_RFSW2_Detected(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.RFRelaysConf & REG_RFRELAYSCONF_RFSW2_DETECTED_Msk) >> REG_RFRELAYSCONF_RFSW2_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2632,24 +1704,16 @@ mm_response_t mm_getRFRelaysConf_RFSW2_DetectedFrom(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setRFRelaysConf_ScanEnabled(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.RFRelaysConf = (mm.RFRelaysConf & ~REG_RFRELAYSCONF_SCANENABLED_Msk) | (val << REG_RFRELAYSCONF_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getRFRelaysConf_ScanEnabled(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.RFRelaysConf & REG_RFRELAYSCONF_SCANENABLED_Msk) >> REG_RFRELAYSCONF_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2659,24 +1723,16 @@ mm_response_t mm_getRFRelaysConf_ScanEnabledFrom(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setRFRelaysConf_RfSw1Chan(const uint8_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.RFRelaysConf = (mm.RFRelaysConf & ~REG_RFRELAYSCONF_RFSW1CHAN_Msk) | (val << REG_RFRELAYSCONF_RFSW1CHAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getRFRelaysConf_RfSw1Chan(uint8_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint8_t) ((mm.RFRelaysConf & REG_RFRELAYSCONF_RFSW1CHAN_Msk) >> REG_RFRELAYSCONF_RFSW1CHAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2686,24 +1742,16 @@ mm_response_t mm_getRFRelaysConf_RfSw1ChanFrom(uint8_t * dest, const uint32_t so
 }
 
 mm_response_t mm_setRFRelaysConf_RfSw2Chan(const uint8_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.RFRelaysConf = (mm.RFRelaysConf & ~REG_RFRELAYSCONF_RFSW2CHAN_Msk) | (val << REG_RFRELAYSCONF_RFSW2CHAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getRFRelaysConf_RfSw2Chan(uint8_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint8_t) ((mm.RFRelaysConf & REG_RFRELAYSCONF_RFSW2CHAN_Msk) >> REG_RFRELAYSCONF_RFSW2CHAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2714,46 +1762,28 @@ mm_response_t mm_getRFRelaysConf_RfSw2ChanFrom(uint8_t * dest, const uint32_t so
 
 /*************** Get/Set functions for MultiConf1_Status register *************************************************************/
 mm_response_t mm_setMultiConf1_Status(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Status = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Status(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.MultiConf1_Status;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setMultiConf1_Status_POS1_Enable(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS1_ENABLE_Msk) | (val << REG_MULTITESTER_POS1_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Status_POS1_Enable(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS1_ENABLE_Msk) >> REG_MULTITESTER_POS1_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2763,24 +1793,16 @@ mm_response_t mm_getMultiConf1_Status_POS1_EnableFrom(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setMultiConf1_Status_POS1_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS1_POWER_Msk) | (val << REG_MULTITESTER_POS1_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Status_POS1_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS1_POWER_Msk) >> REG_MULTITESTER_POS1_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2790,24 +1812,16 @@ mm_response_t mm_getMultiConf1_Status_POS1_PowerFrom(mm_enabled_t * dest, const 
 }
 
 mm_response_t mm_setMultiConf1_Status_POS1_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS1_NRESET_Msk) | (val << REG_MULTITESTER_POS1_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Status_POS1_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS1_NRESET_Msk) >> REG_MULTITESTER_POS1_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2817,24 +1831,16 @@ mm_response_t mm_getMultiConf1_Status_POS1_nResetFrom(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setMultiConf1_Status_POS1_FAN(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS1_FAN_Msk) | (val << REG_MULTITESTER_POS1_FAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Status_POS1_FAN(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS1_FAN_Msk) >> REG_MULTITESTER_POS1_FAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2844,24 +1850,16 @@ mm_response_t mm_getMultiConf1_Status_POS1_FANFrom(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMultiConf1_Status_POS2_Enable(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS2_ENABLE_Msk) | (val << REG_MULTITESTER_POS2_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Status_POS2_Enable(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS2_ENABLE_Msk) >> REG_MULTITESTER_POS2_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2871,24 +1869,16 @@ mm_response_t mm_getMultiConf1_Status_POS2_EnableFrom(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setMultiConf1_Status_POS2_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS2_POWER_Msk) | (val << REG_MULTITESTER_POS2_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Status_POS2_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS2_POWER_Msk) >> REG_MULTITESTER_POS2_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2898,24 +1888,16 @@ mm_response_t mm_getMultiConf1_Status_POS2_PowerFrom(mm_enabled_t * dest, const 
 }
 
 mm_response_t mm_setMultiConf1_Status_POS2_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS2_NRESET_Msk) | (val << REG_MULTITESTER_POS2_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Status_POS2_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS2_NRESET_Msk) >> REG_MULTITESTER_POS2_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2925,24 +1907,16 @@ mm_response_t mm_getMultiConf1_Status_POS2_nResetFrom(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setMultiConf1_Status_POS2_FAN(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS2_FAN_Msk) | (val << REG_MULTITESTER_POS2_FAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Status_POS2_FAN(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS2_FAN_Msk) >> REG_MULTITESTER_POS2_FAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2952,24 +1926,16 @@ mm_response_t mm_getMultiConf1_Status_POS2_FANFrom(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMultiConf1_Status_POS3_Enable(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS3_ENABLE_Msk) | (val << REG_MULTITESTER_POS3_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Status_POS3_Enable(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS3_ENABLE_Msk) >> REG_MULTITESTER_POS3_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -2979,24 +1945,16 @@ mm_response_t mm_getMultiConf1_Status_POS3_EnableFrom(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setMultiConf1_Status_POS3_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS3_POWER_Msk) | (val << REG_MULTITESTER_POS3_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Status_POS3_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS3_POWER_Msk) >> REG_MULTITESTER_POS3_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3006,24 +1964,16 @@ mm_response_t mm_getMultiConf1_Status_POS3_PowerFrom(mm_enabled_t * dest, const 
 }
 
 mm_response_t mm_setMultiConf1_Status_POS3_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS3_NRESET_Msk) | (val << REG_MULTITESTER_POS3_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Status_POS3_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS3_NRESET_Msk) >> REG_MULTITESTER_POS3_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3033,24 +1983,16 @@ mm_response_t mm_getMultiConf1_Status_POS3_nResetFrom(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setMultiConf1_Status_POS3_FAN(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS3_FAN_Msk) | (val << REG_MULTITESTER_POS3_FAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Status_POS3_FAN(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS3_FAN_Msk) >> REG_MULTITESTER_POS3_FAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3060,24 +2002,16 @@ mm_response_t mm_getMultiConf1_Status_POS3_FANFrom(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMultiConf1_Status_POS4_Enable(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS4_ENABLE_Msk) | (val << REG_MULTITESTER_POS4_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Status_POS4_Enable(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS4_ENABLE_Msk) >> REG_MULTITESTER_POS4_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3087,24 +2021,16 @@ mm_response_t mm_getMultiConf1_Status_POS4_EnableFrom(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setMultiConf1_Status_POS4_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS4_POWER_Msk) | (val << REG_MULTITESTER_POS4_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Status_POS4_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS4_POWER_Msk) >> REG_MULTITESTER_POS4_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3114,24 +2040,16 @@ mm_response_t mm_getMultiConf1_Status_POS4_PowerFrom(mm_enabled_t * dest, const 
 }
 
 mm_response_t mm_setMultiConf1_Status_POS4_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS4_NRESET_Msk) | (val << REG_MULTITESTER_POS4_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Status_POS4_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS4_NRESET_Msk) >> REG_MULTITESTER_POS4_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3141,24 +2059,16 @@ mm_response_t mm_getMultiConf1_Status_POS4_nResetFrom(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setMultiConf1_Status_POS4_FAN(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Status = (mm.MultiConf1_Status & ~REG_MULTITESTER_POS4_FAN_Msk) | (val << REG_MULTITESTER_POS4_FAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Status_POS4_FAN(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Status & REG_MULTITESTER_POS4_FAN_Msk) >> REG_MULTITESTER_POS4_FAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3169,46 +2079,28 @@ mm_response_t mm_getMultiConf1_Status_POS4_FANFrom(mm_enabled_t * dest, const ui
 
 /*************** Get/Set functions for MultiConf1_Set register ****************************************************************/
 mm_response_t mm_setMultiConf1_Set(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Set = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Set(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.MultiConf1_Set;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setMultiConf1_Set_POS1_Enable(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS1_ENABLE_Msk) | (val << REG_MULTITESTER_POS1_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Set_POS1_Enable(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS1_ENABLE_Msk) >> REG_MULTITESTER_POS1_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3218,24 +2110,16 @@ mm_response_t mm_getMultiConf1_Set_POS1_EnableFrom(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMultiConf1_Set_POS1_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS1_POWER_Msk) | (val << REG_MULTITESTER_POS1_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Set_POS1_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS1_POWER_Msk) >> REG_MULTITESTER_POS1_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3245,24 +2129,16 @@ mm_response_t mm_getMultiConf1_Set_POS1_PowerFrom(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMultiConf1_Set_POS1_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS1_NRESET_Msk) | (val << REG_MULTITESTER_POS1_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Set_POS1_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS1_NRESET_Msk) >> REG_MULTITESTER_POS1_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3272,24 +2148,16 @@ mm_response_t mm_getMultiConf1_Set_POS1_nResetFrom(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMultiConf1_Set_POS1_FAN(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS1_FAN_Msk) | (val << REG_MULTITESTER_POS1_FAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Set_POS1_FAN(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS1_FAN_Msk) >> REG_MULTITESTER_POS1_FAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3299,24 +2167,16 @@ mm_response_t mm_getMultiConf1_Set_POS1_FANFrom(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMultiConf1_Set_POS2_Enable(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS2_ENABLE_Msk) | (val << REG_MULTITESTER_POS2_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Set_POS2_Enable(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS2_ENABLE_Msk) >> REG_MULTITESTER_POS2_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3326,24 +2186,16 @@ mm_response_t mm_getMultiConf1_Set_POS2_EnableFrom(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMultiConf1_Set_POS2_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS2_POWER_Msk) | (val << REG_MULTITESTER_POS2_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Set_POS2_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS2_POWER_Msk) >> REG_MULTITESTER_POS2_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3353,24 +2205,16 @@ mm_response_t mm_getMultiConf1_Set_POS2_PowerFrom(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMultiConf1_Set_POS2_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS2_NRESET_Msk) | (val << REG_MULTITESTER_POS2_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Set_POS2_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS2_NRESET_Msk) >> REG_MULTITESTER_POS2_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3380,24 +2224,16 @@ mm_response_t mm_getMultiConf1_Set_POS2_nResetFrom(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMultiConf1_Set_POS2_FAN(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS2_FAN_Msk) | (val << REG_MULTITESTER_POS2_FAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Set_POS2_FAN(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS2_FAN_Msk) >> REG_MULTITESTER_POS2_FAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3407,24 +2243,16 @@ mm_response_t mm_getMultiConf1_Set_POS2_FANFrom(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMultiConf1_Set_POS3_Enable(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS3_ENABLE_Msk) | (val << REG_MULTITESTER_POS3_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Set_POS3_Enable(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS3_ENABLE_Msk) >> REG_MULTITESTER_POS3_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3434,24 +2262,16 @@ mm_response_t mm_getMultiConf1_Set_POS3_EnableFrom(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMultiConf1_Set_POS3_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS3_POWER_Msk) | (val << REG_MULTITESTER_POS3_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Set_POS3_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS3_POWER_Msk) >> REG_MULTITESTER_POS3_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3461,24 +2281,16 @@ mm_response_t mm_getMultiConf1_Set_POS3_PowerFrom(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMultiConf1_Set_POS3_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS3_NRESET_Msk) | (val << REG_MULTITESTER_POS3_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Set_POS3_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS3_NRESET_Msk) >> REG_MULTITESTER_POS3_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3488,24 +2300,16 @@ mm_response_t mm_getMultiConf1_Set_POS3_nResetFrom(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMultiConf1_Set_POS3_FAN(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS3_FAN_Msk) | (val << REG_MULTITESTER_POS3_FAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Set_POS3_FAN(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS3_FAN_Msk) >> REG_MULTITESTER_POS3_FAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3515,24 +2319,16 @@ mm_response_t mm_getMultiConf1_Set_POS3_FANFrom(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMultiConf1_Set_POS4_Enable(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS4_ENABLE_Msk) | (val << REG_MULTITESTER_POS4_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Set_POS4_Enable(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS4_ENABLE_Msk) >> REG_MULTITESTER_POS4_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3542,24 +2338,16 @@ mm_response_t mm_getMultiConf1_Set_POS4_EnableFrom(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMultiConf1_Set_POS4_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS4_POWER_Msk) | (val << REG_MULTITESTER_POS4_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Set_POS4_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS4_POWER_Msk) >> REG_MULTITESTER_POS4_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3569,24 +2357,16 @@ mm_response_t mm_getMultiConf1_Set_POS4_PowerFrom(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMultiConf1_Set_POS4_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS4_NRESET_Msk) | (val << REG_MULTITESTER_POS4_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Set_POS4_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS4_NRESET_Msk) >> REG_MULTITESTER_POS4_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3596,24 +2376,16 @@ mm_response_t mm_getMultiConf1_Set_POS4_nResetFrom(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMultiConf1_Set_POS4_FAN(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Set = (mm.MultiConf1_Set & ~REG_MULTITESTER_POS4_FAN_Msk) | (val << REG_MULTITESTER_POS4_FAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Set_POS4_FAN(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Set & REG_MULTITESTER_POS4_FAN_Msk) >> REG_MULTITESTER_POS4_FAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3624,46 +2396,28 @@ mm_response_t mm_getMultiConf1_Set_POS4_FANFrom(mm_enabled_t * dest, const uint3
 
 /*************** Get/Set functions for MultiConf1_Clear register **************************************************************/
 mm_response_t mm_setMultiConf1_Clear(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Clear = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Clear(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.MultiConf1_Clear;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setMultiConf1_Clear_POS1_Enable(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS1_ENABLE_Msk) | (val << REG_MULTITESTER_POS1_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Clear_POS1_Enable(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS1_ENABLE_Msk) >> REG_MULTITESTER_POS1_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3673,24 +2427,16 @@ mm_response_t mm_getMultiConf1_Clear_POS1_EnableFrom(mm_enabled_t * dest, const 
 }
 
 mm_response_t mm_setMultiConf1_Clear_POS1_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS1_POWER_Msk) | (val << REG_MULTITESTER_POS1_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Clear_POS1_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS1_POWER_Msk) >> REG_MULTITESTER_POS1_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3700,24 +2446,16 @@ mm_response_t mm_getMultiConf1_Clear_POS1_PowerFrom(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMultiConf1_Clear_POS1_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS1_NRESET_Msk) | (val << REG_MULTITESTER_POS1_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Clear_POS1_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS1_NRESET_Msk) >> REG_MULTITESTER_POS1_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3727,24 +2465,16 @@ mm_response_t mm_getMultiConf1_Clear_POS1_nResetFrom(mm_enabled_t * dest, const 
 }
 
 mm_response_t mm_setMultiConf1_Clear_POS1_FAN(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS1_FAN_Msk) | (val << REG_MULTITESTER_POS1_FAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Clear_POS1_FAN(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS1_FAN_Msk) >> REG_MULTITESTER_POS1_FAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3754,24 +2484,16 @@ mm_response_t mm_getMultiConf1_Clear_POS1_FANFrom(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMultiConf1_Clear_POS2_Enable(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS2_ENABLE_Msk) | (val << REG_MULTITESTER_POS2_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Clear_POS2_Enable(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS2_ENABLE_Msk) >> REG_MULTITESTER_POS2_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3781,24 +2503,16 @@ mm_response_t mm_getMultiConf1_Clear_POS2_EnableFrom(mm_enabled_t * dest, const 
 }
 
 mm_response_t mm_setMultiConf1_Clear_POS2_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS2_POWER_Msk) | (val << REG_MULTITESTER_POS2_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Clear_POS2_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS2_POWER_Msk) >> REG_MULTITESTER_POS2_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3808,24 +2522,16 @@ mm_response_t mm_getMultiConf1_Clear_POS2_PowerFrom(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMultiConf1_Clear_POS2_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS2_NRESET_Msk) | (val << REG_MULTITESTER_POS2_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Clear_POS2_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS2_NRESET_Msk) >> REG_MULTITESTER_POS2_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3835,24 +2541,16 @@ mm_response_t mm_getMultiConf1_Clear_POS2_nResetFrom(mm_enabled_t * dest, const 
 }
 
 mm_response_t mm_setMultiConf1_Clear_POS2_FAN(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS2_FAN_Msk) | (val << REG_MULTITESTER_POS2_FAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Clear_POS2_FAN(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS2_FAN_Msk) >> REG_MULTITESTER_POS2_FAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3862,24 +2560,16 @@ mm_response_t mm_getMultiConf1_Clear_POS2_FANFrom(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMultiConf1_Clear_POS3_Enable(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS3_ENABLE_Msk) | (val << REG_MULTITESTER_POS3_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Clear_POS3_Enable(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS3_ENABLE_Msk) >> REG_MULTITESTER_POS3_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3889,24 +2579,16 @@ mm_response_t mm_getMultiConf1_Clear_POS3_EnableFrom(mm_enabled_t * dest, const 
 }
 
 mm_response_t mm_setMultiConf1_Clear_POS3_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS3_POWER_Msk) | (val << REG_MULTITESTER_POS3_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Clear_POS3_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS3_POWER_Msk) >> REG_MULTITESTER_POS3_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3916,24 +2598,16 @@ mm_response_t mm_getMultiConf1_Clear_POS3_PowerFrom(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMultiConf1_Clear_POS3_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS3_NRESET_Msk) | (val << REG_MULTITESTER_POS3_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Clear_POS3_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS3_NRESET_Msk) >> REG_MULTITESTER_POS3_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3943,24 +2617,16 @@ mm_response_t mm_getMultiConf1_Clear_POS3_nResetFrom(mm_enabled_t * dest, const 
 }
 
 mm_response_t mm_setMultiConf1_Clear_POS3_FAN(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS3_FAN_Msk) | (val << REG_MULTITESTER_POS3_FAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Clear_POS3_FAN(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS3_FAN_Msk) >> REG_MULTITESTER_POS3_FAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3970,24 +2636,16 @@ mm_response_t mm_getMultiConf1_Clear_POS3_FANFrom(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMultiConf1_Clear_POS4_Enable(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS4_ENABLE_Msk) | (val << REG_MULTITESTER_POS4_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Clear_POS4_Enable(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS4_ENABLE_Msk) >> REG_MULTITESTER_POS4_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -3997,24 +2655,16 @@ mm_response_t mm_getMultiConf1_Clear_POS4_EnableFrom(mm_enabled_t * dest, const 
 }
 
 mm_response_t mm_setMultiConf1_Clear_POS4_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS4_POWER_Msk) | (val << REG_MULTITESTER_POS4_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Clear_POS4_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS4_POWER_Msk) >> REG_MULTITESTER_POS4_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -4024,24 +2674,16 @@ mm_response_t mm_getMultiConf1_Clear_POS4_PowerFrom(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMultiConf1_Clear_POS4_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS4_NRESET_Msk) | (val << REG_MULTITESTER_POS4_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Clear_POS4_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS4_NRESET_Msk) >> REG_MULTITESTER_POS4_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -4051,24 +2693,16 @@ mm_response_t mm_getMultiConf1_Clear_POS4_nResetFrom(mm_enabled_t * dest, const 
 }
 
 mm_response_t mm_setMultiConf1_Clear_POS4_FAN(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MultiConf1_Clear = (mm.MultiConf1_Clear & ~REG_MULTITESTER_POS4_FAN_Msk) | (val << REG_MULTITESTER_POS4_FAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMultiConf1_Clear_POS4_FAN(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MultiConf1_Clear & REG_MULTITESTER_POS4_FAN_Msk) >> REG_MULTITESTER_POS4_FAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -4079,46 +2713,28 @@ mm_response_t mm_getMultiConf1_Clear_POS4_FANFrom(mm_enabled_t * dest, const uin
 
 /*************** Get/Set functions for XDCConfig register *********************************************************************/
 mm_response_t mm_setXDCConfig(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.XDCConfig = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getXDCConfig(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.XDCConfig;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setXDCConfig_ADDR(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.XDCConfig = (mm.XDCConfig & ~REG_XDCCONFIG_ADDR_Msk) | (val << REG_XDCCONFIG_ADDR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getXDCConfig_ADDR(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.XDCConfig & REG_XDCCONFIG_ADDR_Msk) >> REG_XDCCONFIG_ADDR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -4129,24 +2745,14 @@ mm_response_t mm_getXDCConfig_ADDRFrom(mm_enabled_t * dest, const uint32_t sourc
 
 /*************** Get/Set functions for CSBoard_T0 register ********************************************************************/
 mm_response_t mm_setCSBoard_T0(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_T0 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_T0(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_T0;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4158,24 +2764,14 @@ mm_response_t mm_getCSBoard_T0From(uint32_t * dest, const uint32_t source) {
 
 /*************** Get/Set functions for CSBoard_T1 register ********************************************************************/
 mm_response_t mm_setCSBoard_T1(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_T1 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_T1(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_T1;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4187,24 +2783,14 @@ mm_response_t mm_getCSBoard_T1From(uint32_t * dest, const uint32_t source) {
 
 /*************** Get/Set functions for CSBoard_T2 register ********************************************************************/
 mm_response_t mm_setCSBoard_T2(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_T2 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_T2(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_T2;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4216,24 +2802,14 @@ mm_response_t mm_getCSBoard_T2From(uint32_t * dest, const uint32_t source) {
 
 /*************** Get/Set functions for CSBoard_T3 register ********************************************************************/
 mm_response_t mm_setCSBoard_T3(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_T3 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_T3(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_T3;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4245,24 +2821,14 @@ mm_response_t mm_getCSBoard_T3From(uint32_t * dest, const uint32_t source) {
 
 /*************** Get/Set functions for CSBoard_T4 register ********************************************************************/
 mm_response_t mm_setCSBoard_T4(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_T4 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_T4(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_T4;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4274,24 +2840,14 @@ mm_response_t mm_getCSBoard_T4From(uint32_t * dest, const uint32_t source) {
 
 /*************** Get/Set functions for CSBoard_T5 register ********************************************************************/
 mm_response_t mm_setCSBoard_T5(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_T5 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_T5(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_T5;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4303,24 +2859,14 @@ mm_response_t mm_getCSBoard_T5From(uint32_t * dest, const uint32_t source) {
 
 /*************** Get/Set functions for CSBoard_T6 register ********************************************************************/
 mm_response_t mm_setCSBoard_T6(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_T6 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_T6(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_T6;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4332,24 +2878,14 @@ mm_response_t mm_getCSBoard_T6From(uint32_t * dest, const uint32_t source) {
 
 /*************** Get/Set functions for CSBoard_T7 register ********************************************************************/
 mm_response_t mm_setCSBoard_T7(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_T7 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_T7(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_T7;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4361,24 +2897,14 @@ mm_response_t mm_getCSBoard_T7From(uint32_t * dest, const uint32_t source) {
 
 /*************** Get/Set functions for CSBoard_Current0I0 register ************************************************************/
 mm_response_t mm_setCSBoard_Current0I0(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_Current0I0 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_Current0I0(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_Current0I0;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4390,24 +2916,14 @@ mm_response_t mm_getCSBoard_Current0I0From(uint32_t * dest, const uint32_t sourc
 
 /*************** Get/Set functions for CSBoard_Current0I1 register ************************************************************/
 mm_response_t mm_setCSBoard_Current0I1(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_Current0I1 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_Current0I1(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_Current0I1;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4419,24 +2935,14 @@ mm_response_t mm_getCSBoard_Current0I1From(uint32_t * dest, const uint32_t sourc
 
 /*************** Get/Set functions for CSBoard_Current0I2 register ************************************************************/
 mm_response_t mm_setCSBoard_Current0I2(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_Current0I2 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_Current0I2(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_Current0I2;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4448,24 +2954,14 @@ mm_response_t mm_getCSBoard_Current0I2From(uint32_t * dest, const uint32_t sourc
 
 /*************** Get/Set functions for CSBoard_Current1I0 register ************************************************************/
 mm_response_t mm_setCSBoard_Current1I0(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_Current1I0 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_Current1I0(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_Current1I0;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4477,24 +2973,14 @@ mm_response_t mm_getCSBoard_Current1I0From(uint32_t * dest, const uint32_t sourc
 
 /*************** Get/Set functions for CSBoard_Current1I1 register ************************************************************/
 mm_response_t mm_setCSBoard_Current1I1(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_Current1I1 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_Current1I1(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_Current1I1;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4506,24 +2992,14 @@ mm_response_t mm_getCSBoard_Current1I1From(uint32_t * dest, const uint32_t sourc
 
 /*************** Get/Set functions for CSBoard_Current1I2 register ************************************************************/
 mm_response_t mm_setCSBoard_Current1I2(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_Current1I2 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_Current1I2(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_Current1I2;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4535,24 +3011,14 @@ mm_response_t mm_getCSBoard_Current1I2From(uint32_t * dest, const uint32_t sourc
 
 /*************** Get/Set functions for CSBoard_Current2I0 register ************************************************************/
 mm_response_t mm_setCSBoard_Current2I0(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_Current2I0 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_Current2I0(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_Current2I0;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4564,24 +3030,14 @@ mm_response_t mm_getCSBoard_Current2I0From(uint32_t * dest, const uint32_t sourc
 
 /*************** Get/Set functions for CSBoard_Current2I1 register ************************************************************/
 mm_response_t mm_setCSBoard_Current2I1(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_Current2I1 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_Current2I1(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_Current2I1;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4593,24 +3049,14 @@ mm_response_t mm_getCSBoard_Current2I1From(uint32_t * dest, const uint32_t sourc
 
 /*************** Get/Set functions for CSBoard_Current2I2 register ************************************************************/
 mm_response_t mm_setCSBoard_Current2I2(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_Current2I2 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_Current2I2(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_Current2I2;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4622,24 +3068,14 @@ mm_response_t mm_getCSBoard_Current2I2From(uint32_t * dest, const uint32_t sourc
 
 /*************** Get/Set functions for CSBoard_Current3I0 register ************************************************************/
 mm_response_t mm_setCSBoard_Current3I0(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_Current3I0 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_Current3I0(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_Current3I0;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4651,24 +3087,14 @@ mm_response_t mm_getCSBoard_Current3I0From(uint32_t * dest, const uint32_t sourc
 
 /*************** Get/Set functions for CSBoard_Current3I1 register ************************************************************/
 mm_response_t mm_setCSBoard_Current3I1(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_Current3I1 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_Current3I1(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_Current3I1;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4680,24 +3106,14 @@ mm_response_t mm_getCSBoard_Current3I1From(uint32_t * dest, const uint32_t sourc
 
 /*************** Get/Set functions for CSBoard_Current3I2 register ************************************************************/
 mm_response_t mm_setCSBoard_Current3I2(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_Current3I2 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_Current3I2(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_Current3I2;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4709,24 +3125,14 @@ mm_response_t mm_getCSBoard_Current3I2From(uint32_t * dest, const uint32_t sourc
 
 /*************** Get/Set functions for CSBoard_Current4I0 register ************************************************************/
 mm_response_t mm_setCSBoard_Current4I0(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_Current4I0 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_Current4I0(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_Current4I0;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4738,24 +3144,14 @@ mm_response_t mm_getCSBoard_Current4I0From(uint32_t * dest, const uint32_t sourc
 
 /*************** Get/Set functions for CSBoard_Current4I1 register ************************************************************/
 mm_response_t mm_setCSBoard_Current4I1(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_Current4I1 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_Current4I1(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_Current4I1;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4767,24 +3163,14 @@ mm_response_t mm_getCSBoard_Current4I1From(uint32_t * dest, const uint32_t sourc
 
 /*************** Get/Set functions for CSBoard_Current4I2 register ************************************************************/
 mm_response_t mm_setCSBoard_Current4I2(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_Current4I2 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_Current4I2(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_Current4I2;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4796,24 +3182,14 @@ mm_response_t mm_getCSBoard_Current4I2From(uint32_t * dest, const uint32_t sourc
 
 /*************** Get/Set functions for CSBoard_Current5I0 register ************************************************************/
 mm_response_t mm_setCSBoard_Current5I0(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_Current5I0 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_Current5I0(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_Current5I0;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4825,24 +3201,14 @@ mm_response_t mm_getCSBoard_Current5I0From(uint32_t * dest, const uint32_t sourc
 
 /*************** Get/Set functions for CSBoard_Current5I1 register ************************************************************/
 mm_response_t mm_setCSBoard_Current5I1(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_Current5I1 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_Current5I1(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_Current5I1;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4854,24 +3220,14 @@ mm_response_t mm_getCSBoard_Current5I1From(uint32_t * dest, const uint32_t sourc
 
 /*************** Get/Set functions for CSBoard_Current5I2 register ************************************************************/
 mm_response_t mm_setCSBoard_Current5I2(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_Current5I2 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_Current5I2(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_Current5I2;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4883,24 +3239,14 @@ mm_response_t mm_getCSBoard_Current5I2From(uint32_t * dest, const uint32_t sourc
 
 /*************** Get/Set functions for CSBoard_Current6I0 register ************************************************************/
 mm_response_t mm_setCSBoard_Current6I0(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_Current6I0 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_Current6I0(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_Current6I0;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4912,24 +3258,14 @@ mm_response_t mm_getCSBoard_Current6I0From(uint32_t * dest, const uint32_t sourc
 
 /*************** Get/Set functions for CSBoard_Current6I1 register ************************************************************/
 mm_response_t mm_setCSBoard_Current6I1(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_Current6I1 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_Current6I1(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_Current6I1;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4941,24 +3277,14 @@ mm_response_t mm_getCSBoard_Current6I1From(uint32_t * dest, const uint32_t sourc
 
 /*************** Get/Set functions for CSBoard_Current6I2 register ************************************************************/
 mm_response_t mm_setCSBoard_Current6I2(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_Current6I2 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_Current6I2(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_Current6I2;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4970,24 +3296,14 @@ mm_response_t mm_getCSBoard_Current6I2From(uint32_t * dest, const uint32_t sourc
 
 /*************** Get/Set functions for CSBoard_Current7I0 register ************************************************************/
 mm_response_t mm_setCSBoard_Current7I0(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_Current7I0 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_Current7I0(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_Current7I0;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -4999,24 +3315,14 @@ mm_response_t mm_getCSBoard_Current7I0From(uint32_t * dest, const uint32_t sourc
 
 /*************** Get/Set functions for CSBoard_Current7I1 register ************************************************************/
 mm_response_t mm_setCSBoard_Current7I1(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_Current7I1 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_Current7I1(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_Current7I1;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -5028,24 +3334,14 @@ mm_response_t mm_getCSBoard_Current7I1From(uint32_t * dest, const uint32_t sourc
 
 /*************** Get/Set functions for CSBoard_Current7I2 register ************************************************************/
 mm_response_t mm_setCSBoard_Current7I2(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.CSBoard_Current7I2 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getCSBoard_Current7I2(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.CSBoard_Current7I2;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -5057,46 +3353,28 @@ mm_response_t mm_getCSBoard_Current7I2From(uint32_t * dest, const uint32_t sourc
 
 /*************** Get/Set functions for TE_Addr_0 register *********************************************************************/
 mm_response_t mm_setTE_Addr_0(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.TE_Addr_0;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setTE_Addr_0_ScanEnabled(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0 = (mm.TE_Addr_0 & ~REG_TE_CONFIG_SCANENABLED_Msk) | (val << REG_TE_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_ScanEnabled(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0 & REG_TE_CONFIG_SCANENABLED_Msk) >> REG_TE_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5106,24 +3384,16 @@ mm_response_t mm_getTE_Addr_0_ScanEnabledFrom(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setTE_Addr_0_Detected(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0 = (mm.TE_Addr_0 & ~REG_TE_CONFIG_DETECTED_Msk) | (val << REG_TE_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Detected(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.TE_Addr_0 & REG_TE_CONFIG_DETECTED_Msk) >> REG_TE_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5133,24 +3403,16 @@ mm_response_t mm_getTE_Addr_0_DetectedFrom(bool * dest, const uint32_t source) {
 }
 
 mm_response_t mm_setTE_Addr_0_Type(const mm_te_types_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0 = (mm.TE_Addr_0 & ~REG_TE_CONFIG_TYPE_Msk) | (val << REG_TE_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Type(mm_te_types_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_te_types_t) ((mm.TE_Addr_0 & REG_TE_CONFIG_TYPE_Msk) >> REG_TE_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5160,24 +3422,16 @@ mm_response_t mm_getTE_Addr_0_TypeFrom(mm_te_types_t * dest, const uint32_t sour
 }
 
 mm_response_t mm_setTE_Addr_0_SEL_CAN0(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0 = (mm.TE_Addr_0 & ~REG_TE_CONFIG_SEL_CAN0_Msk) | (val << REG_TE_CONFIG_SEL_CAN0_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_SEL_CAN0(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0 & REG_TE_CONFIG_SEL_CAN0_Msk) >> REG_TE_CONFIG_SEL_CAN0_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5187,24 +3441,16 @@ mm_response_t mm_getTE_Addr_0_SEL_CAN0From(mm_enabled_t * dest, const uint32_t s
 }
 
 mm_response_t mm_setTE_Addr_0_SEL_CAN1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0 = (mm.TE_Addr_0 & ~REG_TE_CONFIG_SEL_CAN1_Msk) | (val << REG_TE_CONFIG_SEL_CAN1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_SEL_CAN1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0 & REG_TE_CONFIG_SEL_CAN1_Msk) >> REG_TE_CONFIG_SEL_CAN1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5214,24 +3460,16 @@ mm_response_t mm_getTE_Addr_0_SEL_CAN1From(mm_enabled_t * dest, const uint32_t s
 }
 
 mm_response_t mm_setTE_Addr_0_SEL_RS485(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0 = (mm.TE_Addr_0 & ~REG_TE_CONFIG_SEL_RS485_Msk) | (val << REG_TE_CONFIG_SEL_RS485_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_SEL_RS485(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0 & REG_TE_CONFIG_SEL_RS485_Msk) >> REG_TE_CONFIG_SEL_RS485_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5241,24 +3479,16 @@ mm_response_t mm_getTE_Addr_0_SEL_RS485From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setTE_Addr_0_SEL_I2C(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0 = (mm.TE_Addr_0 & ~REG_TE_CONFIG_SEL_I2C_Msk) | (val << REG_TE_CONFIG_SEL_I2C_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_SEL_I2C(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0 & REG_TE_CONFIG_SEL_I2C_Msk) >> REG_TE_CONFIG_SEL_I2C_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5268,24 +3498,16 @@ mm_response_t mm_getTE_Addr_0_SEL_I2CFrom(mm_enabled_t * dest, const uint32_t so
 }
 
 mm_response_t mm_setTE_Addr_0_SEL_RS422(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0 = (mm.TE_Addr_0 & ~REG_TE_CONFIG_SEL_RS422_Msk) | (val << REG_TE_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_SEL_RS422(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0 & REG_TE_CONFIG_SEL_RS422_Msk) >> REG_TE_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5295,24 +3517,16 @@ mm_response_t mm_getTE_Addr_0_SEL_RS422From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setTE_Addr_0_SEL_SPI(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0 = (mm.TE_Addr_0 & ~REG_TE_CONFIG_SEL_SPI_Msk) | (val << REG_TE_CONFIG_SEL_SPI_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_SEL_SPI(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0 & REG_TE_CONFIG_SEL_SPI_Msk) >> REG_TE_CONFIG_SEL_SPI_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5322,24 +3536,16 @@ mm_response_t mm_getTE_Addr_0_SEL_SPIFrom(mm_enabled_t * dest, const uint32_t so
 }
 
 mm_response_t mm_setTE_Addr_0_SEL_UART(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0 = (mm.TE_Addr_0 & ~REG_TE_CONFIG_SEL_UART_Msk) | (val << REG_TE_CONFIG_SEL_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_SEL_UART(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0 & REG_TE_CONFIG_SEL_UART_Msk) >> REG_TE_CONFIG_SEL_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5349,24 +3555,16 @@ mm_response_t mm_getTE_Addr_0_SEL_UARTFrom(mm_enabled_t * dest, const uint32_t s
 }
 
 mm_response_t mm_setTE_Addr_0_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0 = (mm.TE_Addr_0 & ~REG_TE_CONFIG_POWER_Msk) | (val << REG_TE_CONFIG_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0 & REG_TE_CONFIG_POWER_Msk) >> REG_TE_CONFIG_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5376,24 +3574,16 @@ mm_response_t mm_getTE_Addr_0_PowerFrom(mm_enabled_t * dest, const uint32_t sour
 }
 
 mm_response_t mm_setTE_Addr_0_Enable(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0 = (mm.TE_Addr_0 & ~REG_TE_CONFIG_ENABLE_Msk) | (val << REG_TE_CONFIG_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Enable(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0 & REG_TE_CONFIG_ENABLE_Msk) >> REG_TE_CONFIG_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5403,24 +3593,16 @@ mm_response_t mm_getTE_Addr_0_EnableFrom(mm_enabled_t * dest, const uint32_t sou
 }
 
 mm_response_t mm_setTE_Addr_0_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0 = (mm.TE_Addr_0 & ~REG_TE_CONFIG_NRESET_Msk) | (val << REG_TE_CONFIG_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0 & REG_TE_CONFIG_NRESET_Msk) >> REG_TE_CONFIG_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5430,24 +3612,16 @@ mm_response_t mm_getTE_Addr_0_nResetFrom(mm_enabled_t * dest, const uint32_t sou
 }
 
 mm_response_t mm_setTE_Addr_0_COMM_TR(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0 = (mm.TE_Addr_0 & ~REG_TE_CONFIG_COMM_TR_Msk) | (val << REG_TE_CONFIG_COMM_TR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_COMM_TR(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0 & REG_TE_CONFIG_COMM_TR_Msk) >> REG_TE_CONFIG_COMM_TR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5458,46 +3632,28 @@ mm_response_t mm_getTE_Addr_0_COMM_TRFrom(mm_enabled_t * dest, const uint32_t so
 
 /*************** Get/Set functions for TE_Addr_0_Set register *****************************************************************/
 mm_response_t mm_setTE_Addr_0_Set(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Set = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Set(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.TE_Addr_0_Set;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setTE_Addr_0_Set_ScanEnabled(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Set = (mm.TE_Addr_0_Set & ~REG_TE_CONFIG_SCANENABLED_Msk) | (val << REG_TE_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Set_ScanEnabled(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0_Set & REG_TE_CONFIG_SCANENABLED_Msk) >> REG_TE_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5507,24 +3663,16 @@ mm_response_t mm_getTE_Addr_0_Set_ScanEnabledFrom(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setTE_Addr_0_Set_Detected(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Set = (mm.TE_Addr_0_Set & ~REG_TE_CONFIG_DETECTED_Msk) | (val << REG_TE_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Set_Detected(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.TE_Addr_0_Set & REG_TE_CONFIG_DETECTED_Msk) >> REG_TE_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5534,24 +3682,16 @@ mm_response_t mm_getTE_Addr_0_Set_DetectedFrom(bool * dest, const uint32_t sourc
 }
 
 mm_response_t mm_setTE_Addr_0_Set_Type(const mm_te_types_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Set = (mm.TE_Addr_0_Set & ~REG_TE_CONFIG_TYPE_Msk) | (val << REG_TE_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Set_Type(mm_te_types_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_te_types_t) ((mm.TE_Addr_0_Set & REG_TE_CONFIG_TYPE_Msk) >> REG_TE_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5561,24 +3701,16 @@ mm_response_t mm_getTE_Addr_0_Set_TypeFrom(mm_te_types_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setTE_Addr_0_Set_SEL_CAN0(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Set = (mm.TE_Addr_0_Set & ~REG_TE_CONFIG_SEL_CAN0_Msk) | (val << REG_TE_CONFIG_SEL_CAN0_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Set_SEL_CAN0(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0_Set & REG_TE_CONFIG_SEL_CAN0_Msk) >> REG_TE_CONFIG_SEL_CAN0_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5588,24 +3720,16 @@ mm_response_t mm_getTE_Addr_0_Set_SEL_CAN0From(mm_enabled_t * dest, const uint32
 }
 
 mm_response_t mm_setTE_Addr_0_Set_SEL_CAN1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Set = (mm.TE_Addr_0_Set & ~REG_TE_CONFIG_SEL_CAN1_Msk) | (val << REG_TE_CONFIG_SEL_CAN1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Set_SEL_CAN1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0_Set & REG_TE_CONFIG_SEL_CAN1_Msk) >> REG_TE_CONFIG_SEL_CAN1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5615,24 +3739,16 @@ mm_response_t mm_getTE_Addr_0_Set_SEL_CAN1From(mm_enabled_t * dest, const uint32
 }
 
 mm_response_t mm_setTE_Addr_0_Set_SEL_RS485(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Set = (mm.TE_Addr_0_Set & ~REG_TE_CONFIG_SEL_RS485_Msk) | (val << REG_TE_CONFIG_SEL_RS485_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Set_SEL_RS485(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0_Set & REG_TE_CONFIG_SEL_RS485_Msk) >> REG_TE_CONFIG_SEL_RS485_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5642,24 +3758,16 @@ mm_response_t mm_getTE_Addr_0_Set_SEL_RS485From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setTE_Addr_0_Set_SEL_I2C(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Set = (mm.TE_Addr_0_Set & ~REG_TE_CONFIG_SEL_I2C_Msk) | (val << REG_TE_CONFIG_SEL_I2C_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Set_SEL_I2C(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0_Set & REG_TE_CONFIG_SEL_I2C_Msk) >> REG_TE_CONFIG_SEL_I2C_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5669,24 +3777,16 @@ mm_response_t mm_getTE_Addr_0_Set_SEL_I2CFrom(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setTE_Addr_0_Set_SEL_RS422(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Set = (mm.TE_Addr_0_Set & ~REG_TE_CONFIG_SEL_RS422_Msk) | (val << REG_TE_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Set_SEL_RS422(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0_Set & REG_TE_CONFIG_SEL_RS422_Msk) >> REG_TE_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5696,24 +3796,16 @@ mm_response_t mm_getTE_Addr_0_Set_SEL_RS422From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setTE_Addr_0_Set_SEL_SPI(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Set = (mm.TE_Addr_0_Set & ~REG_TE_CONFIG_SEL_SPI_Msk) | (val << REG_TE_CONFIG_SEL_SPI_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Set_SEL_SPI(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0_Set & REG_TE_CONFIG_SEL_SPI_Msk) >> REG_TE_CONFIG_SEL_SPI_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5723,24 +3815,16 @@ mm_response_t mm_getTE_Addr_0_Set_SEL_SPIFrom(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setTE_Addr_0_Set_SEL_UART(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Set = (mm.TE_Addr_0_Set & ~REG_TE_CONFIG_SEL_UART_Msk) | (val << REG_TE_CONFIG_SEL_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Set_SEL_UART(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0_Set & REG_TE_CONFIG_SEL_UART_Msk) >> REG_TE_CONFIG_SEL_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5750,24 +3834,16 @@ mm_response_t mm_getTE_Addr_0_Set_SEL_UARTFrom(mm_enabled_t * dest, const uint32
 }
 
 mm_response_t mm_setTE_Addr_0_Set_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Set = (mm.TE_Addr_0_Set & ~REG_TE_CONFIG_POWER_Msk) | (val << REG_TE_CONFIG_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Set_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0_Set & REG_TE_CONFIG_POWER_Msk) >> REG_TE_CONFIG_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5777,24 +3853,16 @@ mm_response_t mm_getTE_Addr_0_Set_PowerFrom(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setTE_Addr_0_Set_Enable(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Set = (mm.TE_Addr_0_Set & ~REG_TE_CONFIG_ENABLE_Msk) | (val << REG_TE_CONFIG_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Set_Enable(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0_Set & REG_TE_CONFIG_ENABLE_Msk) >> REG_TE_CONFIG_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5804,24 +3872,16 @@ mm_response_t mm_getTE_Addr_0_Set_EnableFrom(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setTE_Addr_0_Set_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Set = (mm.TE_Addr_0_Set & ~REG_TE_CONFIG_NRESET_Msk) | (val << REG_TE_CONFIG_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Set_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0_Set & REG_TE_CONFIG_NRESET_Msk) >> REG_TE_CONFIG_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5831,24 +3891,16 @@ mm_response_t mm_getTE_Addr_0_Set_nResetFrom(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setTE_Addr_0_Set_COMM_TR(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Set = (mm.TE_Addr_0_Set & ~REG_TE_CONFIG_COMM_TR_Msk) | (val << REG_TE_CONFIG_COMM_TR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Set_COMM_TR(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0_Set & REG_TE_CONFIG_COMM_TR_Msk) >> REG_TE_CONFIG_COMM_TR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5859,46 +3911,28 @@ mm_response_t mm_getTE_Addr_0_Set_COMM_TRFrom(mm_enabled_t * dest, const uint32_
 
 /*************** Get/Set functions for TE_Addr_0_Clear register ***************************************************************/
 mm_response_t mm_setTE_Addr_0_Clear(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Clear = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Clear(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.TE_Addr_0_Clear;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setTE_Addr_0_Clear_ScanEnabled(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Clear = (mm.TE_Addr_0_Clear & ~REG_TE_CONFIG_SCANENABLED_Msk) | (val << REG_TE_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Clear_ScanEnabled(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0_Clear & REG_TE_CONFIG_SCANENABLED_Msk) >> REG_TE_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5908,24 +3942,16 @@ mm_response_t mm_getTE_Addr_0_Clear_ScanEnabledFrom(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setTE_Addr_0_Clear_Detected(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Clear = (mm.TE_Addr_0_Clear & ~REG_TE_CONFIG_DETECTED_Msk) | (val << REG_TE_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Clear_Detected(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.TE_Addr_0_Clear & REG_TE_CONFIG_DETECTED_Msk) >> REG_TE_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5935,24 +3961,16 @@ mm_response_t mm_getTE_Addr_0_Clear_DetectedFrom(bool * dest, const uint32_t sou
 }
 
 mm_response_t mm_setTE_Addr_0_Clear_Type(const mm_te_types_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Clear = (mm.TE_Addr_0_Clear & ~REG_TE_CONFIG_TYPE_Msk) | (val << REG_TE_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Clear_Type(mm_te_types_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_te_types_t) ((mm.TE_Addr_0_Clear & REG_TE_CONFIG_TYPE_Msk) >> REG_TE_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5962,24 +3980,16 @@ mm_response_t mm_getTE_Addr_0_Clear_TypeFrom(mm_te_types_t * dest, const uint32_
 }
 
 mm_response_t mm_setTE_Addr_0_Clear_SEL_CAN0(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Clear = (mm.TE_Addr_0_Clear & ~REG_TE_CONFIG_SEL_CAN0_Msk) | (val << REG_TE_CONFIG_SEL_CAN0_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Clear_SEL_CAN0(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0_Clear & REG_TE_CONFIG_SEL_CAN0_Msk) >> REG_TE_CONFIG_SEL_CAN0_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -5989,24 +3999,16 @@ mm_response_t mm_getTE_Addr_0_Clear_SEL_CAN0From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setTE_Addr_0_Clear_SEL_CAN1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Clear = (mm.TE_Addr_0_Clear & ~REG_TE_CONFIG_SEL_CAN1_Msk) | (val << REG_TE_CONFIG_SEL_CAN1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Clear_SEL_CAN1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0_Clear & REG_TE_CONFIG_SEL_CAN1_Msk) >> REG_TE_CONFIG_SEL_CAN1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6016,24 +4018,16 @@ mm_response_t mm_getTE_Addr_0_Clear_SEL_CAN1From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setTE_Addr_0_Clear_SEL_RS485(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Clear = (mm.TE_Addr_0_Clear & ~REG_TE_CONFIG_SEL_RS485_Msk) | (val << REG_TE_CONFIG_SEL_RS485_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Clear_SEL_RS485(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0_Clear & REG_TE_CONFIG_SEL_RS485_Msk) >> REG_TE_CONFIG_SEL_RS485_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6043,24 +4037,16 @@ mm_response_t mm_getTE_Addr_0_Clear_SEL_RS485From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setTE_Addr_0_Clear_SEL_I2C(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Clear = (mm.TE_Addr_0_Clear & ~REG_TE_CONFIG_SEL_I2C_Msk) | (val << REG_TE_CONFIG_SEL_I2C_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Clear_SEL_I2C(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0_Clear & REG_TE_CONFIG_SEL_I2C_Msk) >> REG_TE_CONFIG_SEL_I2C_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6070,24 +4056,16 @@ mm_response_t mm_getTE_Addr_0_Clear_SEL_I2CFrom(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setTE_Addr_0_Clear_SEL_RS422(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Clear = (mm.TE_Addr_0_Clear & ~REG_TE_CONFIG_SEL_RS422_Msk) | (val << REG_TE_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Clear_SEL_RS422(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0_Clear & REG_TE_CONFIG_SEL_RS422_Msk) >> REG_TE_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6097,24 +4075,16 @@ mm_response_t mm_getTE_Addr_0_Clear_SEL_RS422From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setTE_Addr_0_Clear_SEL_SPI(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Clear = (mm.TE_Addr_0_Clear & ~REG_TE_CONFIG_SEL_SPI_Msk) | (val << REG_TE_CONFIG_SEL_SPI_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Clear_SEL_SPI(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0_Clear & REG_TE_CONFIG_SEL_SPI_Msk) >> REG_TE_CONFIG_SEL_SPI_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6124,24 +4094,16 @@ mm_response_t mm_getTE_Addr_0_Clear_SEL_SPIFrom(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setTE_Addr_0_Clear_SEL_UART(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Clear = (mm.TE_Addr_0_Clear & ~REG_TE_CONFIG_SEL_UART_Msk) | (val << REG_TE_CONFIG_SEL_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Clear_SEL_UART(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0_Clear & REG_TE_CONFIG_SEL_UART_Msk) >> REG_TE_CONFIG_SEL_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6151,24 +4113,16 @@ mm_response_t mm_getTE_Addr_0_Clear_SEL_UARTFrom(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setTE_Addr_0_Clear_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Clear = (mm.TE_Addr_0_Clear & ~REG_TE_CONFIG_POWER_Msk) | (val << REG_TE_CONFIG_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Clear_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0_Clear & REG_TE_CONFIG_POWER_Msk) >> REG_TE_CONFIG_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6178,24 +4132,16 @@ mm_response_t mm_getTE_Addr_0_Clear_PowerFrom(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setTE_Addr_0_Clear_Enable(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Clear = (mm.TE_Addr_0_Clear & ~REG_TE_CONFIG_ENABLE_Msk) | (val << REG_TE_CONFIG_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Clear_Enable(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0_Clear & REG_TE_CONFIG_ENABLE_Msk) >> REG_TE_CONFIG_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6205,24 +4151,16 @@ mm_response_t mm_getTE_Addr_0_Clear_EnableFrom(mm_enabled_t * dest, const uint32
 }
 
 mm_response_t mm_setTE_Addr_0_Clear_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Clear = (mm.TE_Addr_0_Clear & ~REG_TE_CONFIG_NRESET_Msk) | (val << REG_TE_CONFIG_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Clear_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0_Clear & REG_TE_CONFIG_NRESET_Msk) >> REG_TE_CONFIG_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6232,24 +4170,16 @@ mm_response_t mm_getTE_Addr_0_Clear_nResetFrom(mm_enabled_t * dest, const uint32
 }
 
 mm_response_t mm_setTE_Addr_0_Clear_COMM_TR(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_0_Clear = (mm.TE_Addr_0_Clear & ~REG_TE_CONFIG_COMM_TR_Msk) | (val << REG_TE_CONFIG_COMM_TR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_0_Clear_COMM_TR(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_0_Clear & REG_TE_CONFIG_COMM_TR_Msk) >> REG_TE_CONFIG_COMM_TR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6260,46 +4190,28 @@ mm_response_t mm_getTE_Addr_0_Clear_COMM_TRFrom(mm_enabled_t * dest, const uint3
 
 /*************** Get/Set functions for TE_Addr_1 register *********************************************************************/
 mm_response_t mm_setTE_Addr_1(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.TE_Addr_1;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setTE_Addr_1_ScanEnabled(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1 = (mm.TE_Addr_1 & ~REG_TE_CONFIG_SCANENABLED_Msk) | (val << REG_TE_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_ScanEnabled(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1 & REG_TE_CONFIG_SCANENABLED_Msk) >> REG_TE_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6309,24 +4221,16 @@ mm_response_t mm_getTE_Addr_1_ScanEnabledFrom(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setTE_Addr_1_Detected(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1 = (mm.TE_Addr_1 & ~REG_TE_CONFIG_DETECTED_Msk) | (val << REG_TE_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Detected(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.TE_Addr_1 & REG_TE_CONFIG_DETECTED_Msk) >> REG_TE_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6336,24 +4240,16 @@ mm_response_t mm_getTE_Addr_1_DetectedFrom(bool * dest, const uint32_t source) {
 }
 
 mm_response_t mm_setTE_Addr_1_Type(const mm_te_types_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1 = (mm.TE_Addr_1 & ~REG_TE_CONFIG_TYPE_Msk) | (val << REG_TE_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Type(mm_te_types_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_te_types_t) ((mm.TE_Addr_1 & REG_TE_CONFIG_TYPE_Msk) >> REG_TE_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6363,24 +4259,16 @@ mm_response_t mm_getTE_Addr_1_TypeFrom(mm_te_types_t * dest, const uint32_t sour
 }
 
 mm_response_t mm_setTE_Addr_1_SEL_CAN0(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1 = (mm.TE_Addr_1 & ~REG_TE_CONFIG_SEL_CAN0_Msk) | (val << REG_TE_CONFIG_SEL_CAN0_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_SEL_CAN0(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1 & REG_TE_CONFIG_SEL_CAN0_Msk) >> REG_TE_CONFIG_SEL_CAN0_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6390,24 +4278,16 @@ mm_response_t mm_getTE_Addr_1_SEL_CAN0From(mm_enabled_t * dest, const uint32_t s
 }
 
 mm_response_t mm_setTE_Addr_1_SEL_CAN1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1 = (mm.TE_Addr_1 & ~REG_TE_CONFIG_SEL_CAN1_Msk) | (val << REG_TE_CONFIG_SEL_CAN1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_SEL_CAN1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1 & REG_TE_CONFIG_SEL_CAN1_Msk) >> REG_TE_CONFIG_SEL_CAN1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6417,24 +4297,16 @@ mm_response_t mm_getTE_Addr_1_SEL_CAN1From(mm_enabled_t * dest, const uint32_t s
 }
 
 mm_response_t mm_setTE_Addr_1_SEL_RS485(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1 = (mm.TE_Addr_1 & ~REG_TE_CONFIG_SEL_RS485_Msk) | (val << REG_TE_CONFIG_SEL_RS485_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_SEL_RS485(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1 & REG_TE_CONFIG_SEL_RS485_Msk) >> REG_TE_CONFIG_SEL_RS485_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6444,24 +4316,16 @@ mm_response_t mm_getTE_Addr_1_SEL_RS485From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setTE_Addr_1_SEL_I2C(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1 = (mm.TE_Addr_1 & ~REG_TE_CONFIG_SEL_I2C_Msk) | (val << REG_TE_CONFIG_SEL_I2C_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_SEL_I2C(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1 & REG_TE_CONFIG_SEL_I2C_Msk) >> REG_TE_CONFIG_SEL_I2C_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6471,24 +4335,16 @@ mm_response_t mm_getTE_Addr_1_SEL_I2CFrom(mm_enabled_t * dest, const uint32_t so
 }
 
 mm_response_t mm_setTE_Addr_1_SEL_RS422(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1 = (mm.TE_Addr_1 & ~REG_TE_CONFIG_SEL_RS422_Msk) | (val << REG_TE_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_SEL_RS422(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1 & REG_TE_CONFIG_SEL_RS422_Msk) >> REG_TE_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6498,24 +4354,16 @@ mm_response_t mm_getTE_Addr_1_SEL_RS422From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setTE_Addr_1_SEL_SPI(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1 = (mm.TE_Addr_1 & ~REG_TE_CONFIG_SEL_SPI_Msk) | (val << REG_TE_CONFIG_SEL_SPI_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_SEL_SPI(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1 & REG_TE_CONFIG_SEL_SPI_Msk) >> REG_TE_CONFIG_SEL_SPI_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6525,24 +4373,16 @@ mm_response_t mm_getTE_Addr_1_SEL_SPIFrom(mm_enabled_t * dest, const uint32_t so
 }
 
 mm_response_t mm_setTE_Addr_1_SEL_UART(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1 = (mm.TE_Addr_1 & ~REG_TE_CONFIG_SEL_UART_Msk) | (val << REG_TE_CONFIG_SEL_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_SEL_UART(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1 & REG_TE_CONFIG_SEL_UART_Msk) >> REG_TE_CONFIG_SEL_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6552,24 +4392,16 @@ mm_response_t mm_getTE_Addr_1_SEL_UARTFrom(mm_enabled_t * dest, const uint32_t s
 }
 
 mm_response_t mm_setTE_Addr_1_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1 = (mm.TE_Addr_1 & ~REG_TE_CONFIG_POWER_Msk) | (val << REG_TE_CONFIG_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1 & REG_TE_CONFIG_POWER_Msk) >> REG_TE_CONFIG_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6579,24 +4411,16 @@ mm_response_t mm_getTE_Addr_1_PowerFrom(mm_enabled_t * dest, const uint32_t sour
 }
 
 mm_response_t mm_setTE_Addr_1_Enable(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1 = (mm.TE_Addr_1 & ~REG_TE_CONFIG_ENABLE_Msk) | (val << REG_TE_CONFIG_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Enable(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1 & REG_TE_CONFIG_ENABLE_Msk) >> REG_TE_CONFIG_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6606,24 +4430,16 @@ mm_response_t mm_getTE_Addr_1_EnableFrom(mm_enabled_t * dest, const uint32_t sou
 }
 
 mm_response_t mm_setTE_Addr_1_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1 = (mm.TE_Addr_1 & ~REG_TE_CONFIG_NRESET_Msk) | (val << REG_TE_CONFIG_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1 & REG_TE_CONFIG_NRESET_Msk) >> REG_TE_CONFIG_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6633,24 +4449,16 @@ mm_response_t mm_getTE_Addr_1_nResetFrom(mm_enabled_t * dest, const uint32_t sou
 }
 
 mm_response_t mm_setTE_Addr_1_COMM_TR(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1 = (mm.TE_Addr_1 & ~REG_TE_CONFIG_COMM_TR_Msk) | (val << REG_TE_CONFIG_COMM_TR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_COMM_TR(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1 & REG_TE_CONFIG_COMM_TR_Msk) >> REG_TE_CONFIG_COMM_TR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6661,46 +4469,28 @@ mm_response_t mm_getTE_Addr_1_COMM_TRFrom(mm_enabled_t * dest, const uint32_t so
 
 /*************** Get/Set functions for TE_Addr_1_Set register *****************************************************************/
 mm_response_t mm_setTE_Addr_1_Set(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Set = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Set(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.TE_Addr_1_Set;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setTE_Addr_1_Set_ScanEnabled(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Set = (mm.TE_Addr_1_Set & ~REG_TE_CONFIG_SCANENABLED_Msk) | (val << REG_TE_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Set_ScanEnabled(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1_Set & REG_TE_CONFIG_SCANENABLED_Msk) >> REG_TE_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6710,24 +4500,16 @@ mm_response_t mm_getTE_Addr_1_Set_ScanEnabledFrom(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setTE_Addr_1_Set_Detected(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Set = (mm.TE_Addr_1_Set & ~REG_TE_CONFIG_DETECTED_Msk) | (val << REG_TE_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Set_Detected(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.TE_Addr_1_Set & REG_TE_CONFIG_DETECTED_Msk) >> REG_TE_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6737,24 +4519,16 @@ mm_response_t mm_getTE_Addr_1_Set_DetectedFrom(bool * dest, const uint32_t sourc
 }
 
 mm_response_t mm_setTE_Addr_1_Set_Type(const mm_te_types_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Set = (mm.TE_Addr_1_Set & ~REG_TE_CONFIG_TYPE_Msk) | (val << REG_TE_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Set_Type(mm_te_types_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_te_types_t) ((mm.TE_Addr_1_Set & REG_TE_CONFIG_TYPE_Msk) >> REG_TE_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6764,24 +4538,16 @@ mm_response_t mm_getTE_Addr_1_Set_TypeFrom(mm_te_types_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setTE_Addr_1_Set_SEL_CAN0(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Set = (mm.TE_Addr_1_Set & ~REG_TE_CONFIG_SEL_CAN0_Msk) | (val << REG_TE_CONFIG_SEL_CAN0_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Set_SEL_CAN0(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1_Set & REG_TE_CONFIG_SEL_CAN0_Msk) >> REG_TE_CONFIG_SEL_CAN0_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6791,24 +4557,16 @@ mm_response_t mm_getTE_Addr_1_Set_SEL_CAN0From(mm_enabled_t * dest, const uint32
 }
 
 mm_response_t mm_setTE_Addr_1_Set_SEL_CAN1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Set = (mm.TE_Addr_1_Set & ~REG_TE_CONFIG_SEL_CAN1_Msk) | (val << REG_TE_CONFIG_SEL_CAN1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Set_SEL_CAN1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1_Set & REG_TE_CONFIG_SEL_CAN1_Msk) >> REG_TE_CONFIG_SEL_CAN1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6818,24 +4576,16 @@ mm_response_t mm_getTE_Addr_1_Set_SEL_CAN1From(mm_enabled_t * dest, const uint32
 }
 
 mm_response_t mm_setTE_Addr_1_Set_SEL_RS485(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Set = (mm.TE_Addr_1_Set & ~REG_TE_CONFIG_SEL_RS485_Msk) | (val << REG_TE_CONFIG_SEL_RS485_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Set_SEL_RS485(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1_Set & REG_TE_CONFIG_SEL_RS485_Msk) >> REG_TE_CONFIG_SEL_RS485_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6845,24 +4595,16 @@ mm_response_t mm_getTE_Addr_1_Set_SEL_RS485From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setTE_Addr_1_Set_SEL_I2C(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Set = (mm.TE_Addr_1_Set & ~REG_TE_CONFIG_SEL_I2C_Msk) | (val << REG_TE_CONFIG_SEL_I2C_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Set_SEL_I2C(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1_Set & REG_TE_CONFIG_SEL_I2C_Msk) >> REG_TE_CONFIG_SEL_I2C_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6872,24 +4614,16 @@ mm_response_t mm_getTE_Addr_1_Set_SEL_I2CFrom(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setTE_Addr_1_Set_SEL_RS422(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Set = (mm.TE_Addr_1_Set & ~REG_TE_CONFIG_SEL_RS422_Msk) | (val << REG_TE_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Set_SEL_RS422(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1_Set & REG_TE_CONFIG_SEL_RS422_Msk) >> REG_TE_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6899,24 +4633,16 @@ mm_response_t mm_getTE_Addr_1_Set_SEL_RS422From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setTE_Addr_1_Set_SEL_SPI(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Set = (mm.TE_Addr_1_Set & ~REG_TE_CONFIG_SEL_SPI_Msk) | (val << REG_TE_CONFIG_SEL_SPI_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Set_SEL_SPI(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1_Set & REG_TE_CONFIG_SEL_SPI_Msk) >> REG_TE_CONFIG_SEL_SPI_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6926,24 +4652,16 @@ mm_response_t mm_getTE_Addr_1_Set_SEL_SPIFrom(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setTE_Addr_1_Set_SEL_UART(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Set = (mm.TE_Addr_1_Set & ~REG_TE_CONFIG_SEL_UART_Msk) | (val << REG_TE_CONFIG_SEL_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Set_SEL_UART(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1_Set & REG_TE_CONFIG_SEL_UART_Msk) >> REG_TE_CONFIG_SEL_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6953,24 +4671,16 @@ mm_response_t mm_getTE_Addr_1_Set_SEL_UARTFrom(mm_enabled_t * dest, const uint32
 }
 
 mm_response_t mm_setTE_Addr_1_Set_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Set = (mm.TE_Addr_1_Set & ~REG_TE_CONFIG_POWER_Msk) | (val << REG_TE_CONFIG_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Set_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1_Set & REG_TE_CONFIG_POWER_Msk) >> REG_TE_CONFIG_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -6980,24 +4690,16 @@ mm_response_t mm_getTE_Addr_1_Set_PowerFrom(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setTE_Addr_1_Set_Enable(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Set = (mm.TE_Addr_1_Set & ~REG_TE_CONFIG_ENABLE_Msk) | (val << REG_TE_CONFIG_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Set_Enable(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1_Set & REG_TE_CONFIG_ENABLE_Msk) >> REG_TE_CONFIG_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7007,24 +4709,16 @@ mm_response_t mm_getTE_Addr_1_Set_EnableFrom(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setTE_Addr_1_Set_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Set = (mm.TE_Addr_1_Set & ~REG_TE_CONFIG_NRESET_Msk) | (val << REG_TE_CONFIG_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Set_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1_Set & REG_TE_CONFIG_NRESET_Msk) >> REG_TE_CONFIG_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7034,24 +4728,16 @@ mm_response_t mm_getTE_Addr_1_Set_nResetFrom(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setTE_Addr_1_Set_COMM_TR(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Set = (mm.TE_Addr_1_Set & ~REG_TE_CONFIG_COMM_TR_Msk) | (val << REG_TE_CONFIG_COMM_TR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Set_COMM_TR(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1_Set & REG_TE_CONFIG_COMM_TR_Msk) >> REG_TE_CONFIG_COMM_TR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7062,46 +4748,28 @@ mm_response_t mm_getTE_Addr_1_Set_COMM_TRFrom(mm_enabled_t * dest, const uint32_
 
 /*************** Get/Set functions for TE_Addr_1_Clear register ***************************************************************/
 mm_response_t mm_setTE_Addr_1_Clear(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Clear = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Clear(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.TE_Addr_1_Clear;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setTE_Addr_1_Clear_ScanEnabled(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Clear = (mm.TE_Addr_1_Clear & ~REG_TE_CONFIG_SCANENABLED_Msk) | (val << REG_TE_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Clear_ScanEnabled(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1_Clear & REG_TE_CONFIG_SCANENABLED_Msk) >> REG_TE_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7111,24 +4779,16 @@ mm_response_t mm_getTE_Addr_1_Clear_ScanEnabledFrom(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setTE_Addr_1_Clear_Detected(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Clear = (mm.TE_Addr_1_Clear & ~REG_TE_CONFIG_DETECTED_Msk) | (val << REG_TE_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Clear_Detected(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.TE_Addr_1_Clear & REG_TE_CONFIG_DETECTED_Msk) >> REG_TE_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7138,24 +4798,16 @@ mm_response_t mm_getTE_Addr_1_Clear_DetectedFrom(bool * dest, const uint32_t sou
 }
 
 mm_response_t mm_setTE_Addr_1_Clear_Type(const mm_te_types_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Clear = (mm.TE_Addr_1_Clear & ~REG_TE_CONFIG_TYPE_Msk) | (val << REG_TE_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Clear_Type(mm_te_types_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_te_types_t) ((mm.TE_Addr_1_Clear & REG_TE_CONFIG_TYPE_Msk) >> REG_TE_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7165,24 +4817,16 @@ mm_response_t mm_getTE_Addr_1_Clear_TypeFrom(mm_te_types_t * dest, const uint32_
 }
 
 mm_response_t mm_setTE_Addr_1_Clear_SEL_CAN0(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Clear = (mm.TE_Addr_1_Clear & ~REG_TE_CONFIG_SEL_CAN0_Msk) | (val << REG_TE_CONFIG_SEL_CAN0_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Clear_SEL_CAN0(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1_Clear & REG_TE_CONFIG_SEL_CAN0_Msk) >> REG_TE_CONFIG_SEL_CAN0_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7192,24 +4836,16 @@ mm_response_t mm_getTE_Addr_1_Clear_SEL_CAN0From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setTE_Addr_1_Clear_SEL_CAN1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Clear = (mm.TE_Addr_1_Clear & ~REG_TE_CONFIG_SEL_CAN1_Msk) | (val << REG_TE_CONFIG_SEL_CAN1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Clear_SEL_CAN1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1_Clear & REG_TE_CONFIG_SEL_CAN1_Msk) >> REG_TE_CONFIG_SEL_CAN1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7219,24 +4855,16 @@ mm_response_t mm_getTE_Addr_1_Clear_SEL_CAN1From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setTE_Addr_1_Clear_SEL_RS485(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Clear = (mm.TE_Addr_1_Clear & ~REG_TE_CONFIG_SEL_RS485_Msk) | (val << REG_TE_CONFIG_SEL_RS485_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Clear_SEL_RS485(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1_Clear & REG_TE_CONFIG_SEL_RS485_Msk) >> REG_TE_CONFIG_SEL_RS485_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7246,24 +4874,16 @@ mm_response_t mm_getTE_Addr_1_Clear_SEL_RS485From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setTE_Addr_1_Clear_SEL_I2C(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Clear = (mm.TE_Addr_1_Clear & ~REG_TE_CONFIG_SEL_I2C_Msk) | (val << REG_TE_CONFIG_SEL_I2C_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Clear_SEL_I2C(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1_Clear & REG_TE_CONFIG_SEL_I2C_Msk) >> REG_TE_CONFIG_SEL_I2C_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7273,24 +4893,16 @@ mm_response_t mm_getTE_Addr_1_Clear_SEL_I2CFrom(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setTE_Addr_1_Clear_SEL_RS422(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Clear = (mm.TE_Addr_1_Clear & ~REG_TE_CONFIG_SEL_RS422_Msk) | (val << REG_TE_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Clear_SEL_RS422(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1_Clear & REG_TE_CONFIG_SEL_RS422_Msk) >> REG_TE_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7300,24 +4912,16 @@ mm_response_t mm_getTE_Addr_1_Clear_SEL_RS422From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setTE_Addr_1_Clear_SEL_SPI(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Clear = (mm.TE_Addr_1_Clear & ~REG_TE_CONFIG_SEL_SPI_Msk) | (val << REG_TE_CONFIG_SEL_SPI_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Clear_SEL_SPI(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1_Clear & REG_TE_CONFIG_SEL_SPI_Msk) >> REG_TE_CONFIG_SEL_SPI_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7327,24 +4931,16 @@ mm_response_t mm_getTE_Addr_1_Clear_SEL_SPIFrom(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setTE_Addr_1_Clear_SEL_UART(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Clear = (mm.TE_Addr_1_Clear & ~REG_TE_CONFIG_SEL_UART_Msk) | (val << REG_TE_CONFIG_SEL_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Clear_SEL_UART(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1_Clear & REG_TE_CONFIG_SEL_UART_Msk) >> REG_TE_CONFIG_SEL_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7354,24 +4950,16 @@ mm_response_t mm_getTE_Addr_1_Clear_SEL_UARTFrom(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setTE_Addr_1_Clear_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Clear = (mm.TE_Addr_1_Clear & ~REG_TE_CONFIG_POWER_Msk) | (val << REG_TE_CONFIG_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Clear_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1_Clear & REG_TE_CONFIG_POWER_Msk) >> REG_TE_CONFIG_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7381,24 +4969,16 @@ mm_response_t mm_getTE_Addr_1_Clear_PowerFrom(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setTE_Addr_1_Clear_Enable(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Clear = (mm.TE_Addr_1_Clear & ~REG_TE_CONFIG_ENABLE_Msk) | (val << REG_TE_CONFIG_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Clear_Enable(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1_Clear & REG_TE_CONFIG_ENABLE_Msk) >> REG_TE_CONFIG_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7408,24 +4988,16 @@ mm_response_t mm_getTE_Addr_1_Clear_EnableFrom(mm_enabled_t * dest, const uint32
 }
 
 mm_response_t mm_setTE_Addr_1_Clear_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Clear = (mm.TE_Addr_1_Clear & ~REG_TE_CONFIG_NRESET_Msk) | (val << REG_TE_CONFIG_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Clear_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1_Clear & REG_TE_CONFIG_NRESET_Msk) >> REG_TE_CONFIG_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7435,24 +5007,16 @@ mm_response_t mm_getTE_Addr_1_Clear_nResetFrom(mm_enabled_t * dest, const uint32
 }
 
 mm_response_t mm_setTE_Addr_1_Clear_COMM_TR(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_1_Clear = (mm.TE_Addr_1_Clear & ~REG_TE_CONFIG_COMM_TR_Msk) | (val << REG_TE_CONFIG_COMM_TR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_1_Clear_COMM_TR(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_1_Clear & REG_TE_CONFIG_COMM_TR_Msk) >> REG_TE_CONFIG_COMM_TR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7463,46 +5027,28 @@ mm_response_t mm_getTE_Addr_1_Clear_COMM_TRFrom(mm_enabled_t * dest, const uint3
 
 /*************** Get/Set functions for TE_Addr_2 register *********************************************************************/
 mm_response_t mm_setTE_Addr_2(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.TE_Addr_2;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setTE_Addr_2_ScanEnabled(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2 = (mm.TE_Addr_2 & ~REG_TE_CONFIG_SCANENABLED_Msk) | (val << REG_TE_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_ScanEnabled(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2 & REG_TE_CONFIG_SCANENABLED_Msk) >> REG_TE_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7512,24 +5058,16 @@ mm_response_t mm_getTE_Addr_2_ScanEnabledFrom(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setTE_Addr_2_Detected(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2 = (mm.TE_Addr_2 & ~REG_TE_CONFIG_DETECTED_Msk) | (val << REG_TE_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Detected(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.TE_Addr_2 & REG_TE_CONFIG_DETECTED_Msk) >> REG_TE_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7539,24 +5077,16 @@ mm_response_t mm_getTE_Addr_2_DetectedFrom(bool * dest, const uint32_t source) {
 }
 
 mm_response_t mm_setTE_Addr_2_Type(const mm_te_types_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2 = (mm.TE_Addr_2 & ~REG_TE_CONFIG_TYPE_Msk) | (val << REG_TE_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Type(mm_te_types_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_te_types_t) ((mm.TE_Addr_2 & REG_TE_CONFIG_TYPE_Msk) >> REG_TE_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7566,24 +5096,16 @@ mm_response_t mm_getTE_Addr_2_TypeFrom(mm_te_types_t * dest, const uint32_t sour
 }
 
 mm_response_t mm_setTE_Addr_2_SEL_CAN0(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2 = (mm.TE_Addr_2 & ~REG_TE_CONFIG_SEL_CAN0_Msk) | (val << REG_TE_CONFIG_SEL_CAN0_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_SEL_CAN0(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2 & REG_TE_CONFIG_SEL_CAN0_Msk) >> REG_TE_CONFIG_SEL_CAN0_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7593,24 +5115,16 @@ mm_response_t mm_getTE_Addr_2_SEL_CAN0From(mm_enabled_t * dest, const uint32_t s
 }
 
 mm_response_t mm_setTE_Addr_2_SEL_CAN1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2 = (mm.TE_Addr_2 & ~REG_TE_CONFIG_SEL_CAN1_Msk) | (val << REG_TE_CONFIG_SEL_CAN1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_SEL_CAN1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2 & REG_TE_CONFIG_SEL_CAN1_Msk) >> REG_TE_CONFIG_SEL_CAN1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7620,24 +5134,16 @@ mm_response_t mm_getTE_Addr_2_SEL_CAN1From(mm_enabled_t * dest, const uint32_t s
 }
 
 mm_response_t mm_setTE_Addr_2_SEL_RS485(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2 = (mm.TE_Addr_2 & ~REG_TE_CONFIG_SEL_RS485_Msk) | (val << REG_TE_CONFIG_SEL_RS485_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_SEL_RS485(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2 & REG_TE_CONFIG_SEL_RS485_Msk) >> REG_TE_CONFIG_SEL_RS485_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7647,24 +5153,16 @@ mm_response_t mm_getTE_Addr_2_SEL_RS485From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setTE_Addr_2_SEL_I2C(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2 = (mm.TE_Addr_2 & ~REG_TE_CONFIG_SEL_I2C_Msk) | (val << REG_TE_CONFIG_SEL_I2C_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_SEL_I2C(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2 & REG_TE_CONFIG_SEL_I2C_Msk) >> REG_TE_CONFIG_SEL_I2C_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7674,24 +5172,16 @@ mm_response_t mm_getTE_Addr_2_SEL_I2CFrom(mm_enabled_t * dest, const uint32_t so
 }
 
 mm_response_t mm_setTE_Addr_2_SEL_RS422(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2 = (mm.TE_Addr_2 & ~REG_TE_CONFIG_SEL_RS422_Msk) | (val << REG_TE_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_SEL_RS422(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2 & REG_TE_CONFIG_SEL_RS422_Msk) >> REG_TE_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7701,24 +5191,16 @@ mm_response_t mm_getTE_Addr_2_SEL_RS422From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setTE_Addr_2_SEL_SPI(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2 = (mm.TE_Addr_2 & ~REG_TE_CONFIG_SEL_SPI_Msk) | (val << REG_TE_CONFIG_SEL_SPI_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_SEL_SPI(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2 & REG_TE_CONFIG_SEL_SPI_Msk) >> REG_TE_CONFIG_SEL_SPI_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7728,24 +5210,16 @@ mm_response_t mm_getTE_Addr_2_SEL_SPIFrom(mm_enabled_t * dest, const uint32_t so
 }
 
 mm_response_t mm_setTE_Addr_2_SEL_UART(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2 = (mm.TE_Addr_2 & ~REG_TE_CONFIG_SEL_UART_Msk) | (val << REG_TE_CONFIG_SEL_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_SEL_UART(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2 & REG_TE_CONFIG_SEL_UART_Msk) >> REG_TE_CONFIG_SEL_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7755,24 +5229,16 @@ mm_response_t mm_getTE_Addr_2_SEL_UARTFrom(mm_enabled_t * dest, const uint32_t s
 }
 
 mm_response_t mm_setTE_Addr_2_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2 = (mm.TE_Addr_2 & ~REG_TE_CONFIG_POWER_Msk) | (val << REG_TE_CONFIG_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2 & REG_TE_CONFIG_POWER_Msk) >> REG_TE_CONFIG_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7782,24 +5248,16 @@ mm_response_t mm_getTE_Addr_2_PowerFrom(mm_enabled_t * dest, const uint32_t sour
 }
 
 mm_response_t mm_setTE_Addr_2_Enable(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2 = (mm.TE_Addr_2 & ~REG_TE_CONFIG_ENABLE_Msk) | (val << REG_TE_CONFIG_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Enable(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2 & REG_TE_CONFIG_ENABLE_Msk) >> REG_TE_CONFIG_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7809,24 +5267,16 @@ mm_response_t mm_getTE_Addr_2_EnableFrom(mm_enabled_t * dest, const uint32_t sou
 }
 
 mm_response_t mm_setTE_Addr_2_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2 = (mm.TE_Addr_2 & ~REG_TE_CONFIG_NRESET_Msk) | (val << REG_TE_CONFIG_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2 & REG_TE_CONFIG_NRESET_Msk) >> REG_TE_CONFIG_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7836,24 +5286,16 @@ mm_response_t mm_getTE_Addr_2_nResetFrom(mm_enabled_t * dest, const uint32_t sou
 }
 
 mm_response_t mm_setTE_Addr_2_COMM_TR(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2 = (mm.TE_Addr_2 & ~REG_TE_CONFIG_COMM_TR_Msk) | (val << REG_TE_CONFIG_COMM_TR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_COMM_TR(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2 & REG_TE_CONFIG_COMM_TR_Msk) >> REG_TE_CONFIG_COMM_TR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7864,46 +5306,28 @@ mm_response_t mm_getTE_Addr_2_COMM_TRFrom(mm_enabled_t * dest, const uint32_t so
 
 /*************** Get/Set functions for TE_Addr_2_Set register *****************************************************************/
 mm_response_t mm_setTE_Addr_2_Set(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Set = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Set(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.TE_Addr_2_Set;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setTE_Addr_2_Set_ScanEnabled(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Set = (mm.TE_Addr_2_Set & ~REG_TE_CONFIG_SCANENABLED_Msk) | (val << REG_TE_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Set_ScanEnabled(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2_Set & REG_TE_CONFIG_SCANENABLED_Msk) >> REG_TE_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7913,24 +5337,16 @@ mm_response_t mm_getTE_Addr_2_Set_ScanEnabledFrom(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setTE_Addr_2_Set_Detected(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Set = (mm.TE_Addr_2_Set & ~REG_TE_CONFIG_DETECTED_Msk) | (val << REG_TE_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Set_Detected(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.TE_Addr_2_Set & REG_TE_CONFIG_DETECTED_Msk) >> REG_TE_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7940,24 +5356,16 @@ mm_response_t mm_getTE_Addr_2_Set_DetectedFrom(bool * dest, const uint32_t sourc
 }
 
 mm_response_t mm_setTE_Addr_2_Set_Type(const mm_te_types_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Set = (mm.TE_Addr_2_Set & ~REG_TE_CONFIG_TYPE_Msk) | (val << REG_TE_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Set_Type(mm_te_types_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_te_types_t) ((mm.TE_Addr_2_Set & REG_TE_CONFIG_TYPE_Msk) >> REG_TE_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7967,24 +5375,16 @@ mm_response_t mm_getTE_Addr_2_Set_TypeFrom(mm_te_types_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setTE_Addr_2_Set_SEL_CAN0(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Set = (mm.TE_Addr_2_Set & ~REG_TE_CONFIG_SEL_CAN0_Msk) | (val << REG_TE_CONFIG_SEL_CAN0_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Set_SEL_CAN0(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2_Set & REG_TE_CONFIG_SEL_CAN0_Msk) >> REG_TE_CONFIG_SEL_CAN0_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -7994,24 +5394,16 @@ mm_response_t mm_getTE_Addr_2_Set_SEL_CAN0From(mm_enabled_t * dest, const uint32
 }
 
 mm_response_t mm_setTE_Addr_2_Set_SEL_CAN1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Set = (mm.TE_Addr_2_Set & ~REG_TE_CONFIG_SEL_CAN1_Msk) | (val << REG_TE_CONFIG_SEL_CAN1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Set_SEL_CAN1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2_Set & REG_TE_CONFIG_SEL_CAN1_Msk) >> REG_TE_CONFIG_SEL_CAN1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8021,24 +5413,16 @@ mm_response_t mm_getTE_Addr_2_Set_SEL_CAN1From(mm_enabled_t * dest, const uint32
 }
 
 mm_response_t mm_setTE_Addr_2_Set_SEL_RS485(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Set = (mm.TE_Addr_2_Set & ~REG_TE_CONFIG_SEL_RS485_Msk) | (val << REG_TE_CONFIG_SEL_RS485_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Set_SEL_RS485(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2_Set & REG_TE_CONFIG_SEL_RS485_Msk) >> REG_TE_CONFIG_SEL_RS485_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8048,24 +5432,16 @@ mm_response_t mm_getTE_Addr_2_Set_SEL_RS485From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setTE_Addr_2_Set_SEL_I2C(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Set = (mm.TE_Addr_2_Set & ~REG_TE_CONFIG_SEL_I2C_Msk) | (val << REG_TE_CONFIG_SEL_I2C_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Set_SEL_I2C(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2_Set & REG_TE_CONFIG_SEL_I2C_Msk) >> REG_TE_CONFIG_SEL_I2C_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8075,24 +5451,16 @@ mm_response_t mm_getTE_Addr_2_Set_SEL_I2CFrom(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setTE_Addr_2_Set_SEL_RS422(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Set = (mm.TE_Addr_2_Set & ~REG_TE_CONFIG_SEL_RS422_Msk) | (val << REG_TE_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Set_SEL_RS422(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2_Set & REG_TE_CONFIG_SEL_RS422_Msk) >> REG_TE_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8102,24 +5470,16 @@ mm_response_t mm_getTE_Addr_2_Set_SEL_RS422From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setTE_Addr_2_Set_SEL_SPI(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Set = (mm.TE_Addr_2_Set & ~REG_TE_CONFIG_SEL_SPI_Msk) | (val << REG_TE_CONFIG_SEL_SPI_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Set_SEL_SPI(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2_Set & REG_TE_CONFIG_SEL_SPI_Msk) >> REG_TE_CONFIG_SEL_SPI_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8129,24 +5489,16 @@ mm_response_t mm_getTE_Addr_2_Set_SEL_SPIFrom(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setTE_Addr_2_Set_SEL_UART(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Set = (mm.TE_Addr_2_Set & ~REG_TE_CONFIG_SEL_UART_Msk) | (val << REG_TE_CONFIG_SEL_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Set_SEL_UART(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2_Set & REG_TE_CONFIG_SEL_UART_Msk) >> REG_TE_CONFIG_SEL_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8156,24 +5508,16 @@ mm_response_t mm_getTE_Addr_2_Set_SEL_UARTFrom(mm_enabled_t * dest, const uint32
 }
 
 mm_response_t mm_setTE_Addr_2_Set_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Set = (mm.TE_Addr_2_Set & ~REG_TE_CONFIG_POWER_Msk) | (val << REG_TE_CONFIG_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Set_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2_Set & REG_TE_CONFIG_POWER_Msk) >> REG_TE_CONFIG_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8183,24 +5527,16 @@ mm_response_t mm_getTE_Addr_2_Set_PowerFrom(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setTE_Addr_2_Set_Enable(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Set = (mm.TE_Addr_2_Set & ~REG_TE_CONFIG_ENABLE_Msk) | (val << REG_TE_CONFIG_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Set_Enable(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2_Set & REG_TE_CONFIG_ENABLE_Msk) >> REG_TE_CONFIG_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8210,24 +5546,16 @@ mm_response_t mm_getTE_Addr_2_Set_EnableFrom(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setTE_Addr_2_Set_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Set = (mm.TE_Addr_2_Set & ~REG_TE_CONFIG_NRESET_Msk) | (val << REG_TE_CONFIG_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Set_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2_Set & REG_TE_CONFIG_NRESET_Msk) >> REG_TE_CONFIG_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8237,24 +5565,16 @@ mm_response_t mm_getTE_Addr_2_Set_nResetFrom(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setTE_Addr_2_Set_COMM_TR(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Set = (mm.TE_Addr_2_Set & ~REG_TE_CONFIG_COMM_TR_Msk) | (val << REG_TE_CONFIG_COMM_TR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Set_COMM_TR(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2_Set & REG_TE_CONFIG_COMM_TR_Msk) >> REG_TE_CONFIG_COMM_TR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8265,46 +5585,28 @@ mm_response_t mm_getTE_Addr_2_Set_COMM_TRFrom(mm_enabled_t * dest, const uint32_
 
 /*************** Get/Set functions for TE_Addr_2_Clear register ***************************************************************/
 mm_response_t mm_setTE_Addr_2_Clear(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Clear = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Clear(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.TE_Addr_2_Clear;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setTE_Addr_2_Clear_ScanEnabled(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Clear = (mm.TE_Addr_2_Clear & ~REG_TE_CONFIG_SCANENABLED_Msk) | (val << REG_TE_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Clear_ScanEnabled(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2_Clear & REG_TE_CONFIG_SCANENABLED_Msk) >> REG_TE_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8314,24 +5616,16 @@ mm_response_t mm_getTE_Addr_2_Clear_ScanEnabledFrom(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setTE_Addr_2_Clear_Detected(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Clear = (mm.TE_Addr_2_Clear & ~REG_TE_CONFIG_DETECTED_Msk) | (val << REG_TE_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Clear_Detected(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.TE_Addr_2_Clear & REG_TE_CONFIG_DETECTED_Msk) >> REG_TE_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8341,24 +5635,16 @@ mm_response_t mm_getTE_Addr_2_Clear_DetectedFrom(bool * dest, const uint32_t sou
 }
 
 mm_response_t mm_setTE_Addr_2_Clear_Type(const mm_te_types_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Clear = (mm.TE_Addr_2_Clear & ~REG_TE_CONFIG_TYPE_Msk) | (val << REG_TE_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Clear_Type(mm_te_types_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_te_types_t) ((mm.TE_Addr_2_Clear & REG_TE_CONFIG_TYPE_Msk) >> REG_TE_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8368,24 +5654,16 @@ mm_response_t mm_getTE_Addr_2_Clear_TypeFrom(mm_te_types_t * dest, const uint32_
 }
 
 mm_response_t mm_setTE_Addr_2_Clear_SEL_CAN0(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Clear = (mm.TE_Addr_2_Clear & ~REG_TE_CONFIG_SEL_CAN0_Msk) | (val << REG_TE_CONFIG_SEL_CAN0_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Clear_SEL_CAN0(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2_Clear & REG_TE_CONFIG_SEL_CAN0_Msk) >> REG_TE_CONFIG_SEL_CAN0_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8395,24 +5673,16 @@ mm_response_t mm_getTE_Addr_2_Clear_SEL_CAN0From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setTE_Addr_2_Clear_SEL_CAN1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Clear = (mm.TE_Addr_2_Clear & ~REG_TE_CONFIG_SEL_CAN1_Msk) | (val << REG_TE_CONFIG_SEL_CAN1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Clear_SEL_CAN1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2_Clear & REG_TE_CONFIG_SEL_CAN1_Msk) >> REG_TE_CONFIG_SEL_CAN1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8422,24 +5692,16 @@ mm_response_t mm_getTE_Addr_2_Clear_SEL_CAN1From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setTE_Addr_2_Clear_SEL_RS485(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Clear = (mm.TE_Addr_2_Clear & ~REG_TE_CONFIG_SEL_RS485_Msk) | (val << REG_TE_CONFIG_SEL_RS485_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Clear_SEL_RS485(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2_Clear & REG_TE_CONFIG_SEL_RS485_Msk) >> REG_TE_CONFIG_SEL_RS485_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8449,24 +5711,16 @@ mm_response_t mm_getTE_Addr_2_Clear_SEL_RS485From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setTE_Addr_2_Clear_SEL_I2C(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Clear = (mm.TE_Addr_2_Clear & ~REG_TE_CONFIG_SEL_I2C_Msk) | (val << REG_TE_CONFIG_SEL_I2C_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Clear_SEL_I2C(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2_Clear & REG_TE_CONFIG_SEL_I2C_Msk) >> REG_TE_CONFIG_SEL_I2C_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8476,24 +5730,16 @@ mm_response_t mm_getTE_Addr_2_Clear_SEL_I2CFrom(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setTE_Addr_2_Clear_SEL_RS422(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Clear = (mm.TE_Addr_2_Clear & ~REG_TE_CONFIG_SEL_RS422_Msk) | (val << REG_TE_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Clear_SEL_RS422(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2_Clear & REG_TE_CONFIG_SEL_RS422_Msk) >> REG_TE_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8503,24 +5749,16 @@ mm_response_t mm_getTE_Addr_2_Clear_SEL_RS422From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setTE_Addr_2_Clear_SEL_SPI(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Clear = (mm.TE_Addr_2_Clear & ~REG_TE_CONFIG_SEL_SPI_Msk) | (val << REG_TE_CONFIG_SEL_SPI_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Clear_SEL_SPI(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2_Clear & REG_TE_CONFIG_SEL_SPI_Msk) >> REG_TE_CONFIG_SEL_SPI_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8530,24 +5768,16 @@ mm_response_t mm_getTE_Addr_2_Clear_SEL_SPIFrom(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setTE_Addr_2_Clear_SEL_UART(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Clear = (mm.TE_Addr_2_Clear & ~REG_TE_CONFIG_SEL_UART_Msk) | (val << REG_TE_CONFIG_SEL_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Clear_SEL_UART(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2_Clear & REG_TE_CONFIG_SEL_UART_Msk) >> REG_TE_CONFIG_SEL_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8557,24 +5787,16 @@ mm_response_t mm_getTE_Addr_2_Clear_SEL_UARTFrom(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setTE_Addr_2_Clear_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Clear = (mm.TE_Addr_2_Clear & ~REG_TE_CONFIG_POWER_Msk) | (val << REG_TE_CONFIG_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Clear_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2_Clear & REG_TE_CONFIG_POWER_Msk) >> REG_TE_CONFIG_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8584,24 +5806,16 @@ mm_response_t mm_getTE_Addr_2_Clear_PowerFrom(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setTE_Addr_2_Clear_Enable(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Clear = (mm.TE_Addr_2_Clear & ~REG_TE_CONFIG_ENABLE_Msk) | (val << REG_TE_CONFIG_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Clear_Enable(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2_Clear & REG_TE_CONFIG_ENABLE_Msk) >> REG_TE_CONFIG_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8611,24 +5825,16 @@ mm_response_t mm_getTE_Addr_2_Clear_EnableFrom(mm_enabled_t * dest, const uint32
 }
 
 mm_response_t mm_setTE_Addr_2_Clear_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Clear = (mm.TE_Addr_2_Clear & ~REG_TE_CONFIG_NRESET_Msk) | (val << REG_TE_CONFIG_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Clear_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2_Clear & REG_TE_CONFIG_NRESET_Msk) >> REG_TE_CONFIG_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8638,24 +5844,16 @@ mm_response_t mm_getTE_Addr_2_Clear_nResetFrom(mm_enabled_t * dest, const uint32
 }
 
 mm_response_t mm_setTE_Addr_2_Clear_COMM_TR(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_2_Clear = (mm.TE_Addr_2_Clear & ~REG_TE_CONFIG_COMM_TR_Msk) | (val << REG_TE_CONFIG_COMM_TR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_2_Clear_COMM_TR(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_2_Clear & REG_TE_CONFIG_COMM_TR_Msk) >> REG_TE_CONFIG_COMM_TR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8666,46 +5864,28 @@ mm_response_t mm_getTE_Addr_2_Clear_COMM_TRFrom(mm_enabled_t * dest, const uint3
 
 /*************** Get/Set functions for TE_Addr_3 register *********************************************************************/
 mm_response_t mm_setTE_Addr_3(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.TE_Addr_3;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setTE_Addr_3_ScanEnabled(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3 = (mm.TE_Addr_3 & ~REG_TE_CONFIG_SCANENABLED_Msk) | (val << REG_TE_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_ScanEnabled(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3 & REG_TE_CONFIG_SCANENABLED_Msk) >> REG_TE_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8715,24 +5895,16 @@ mm_response_t mm_getTE_Addr_3_ScanEnabledFrom(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setTE_Addr_3_Detected(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3 = (mm.TE_Addr_3 & ~REG_TE_CONFIG_DETECTED_Msk) | (val << REG_TE_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Detected(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.TE_Addr_3 & REG_TE_CONFIG_DETECTED_Msk) >> REG_TE_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8742,24 +5914,16 @@ mm_response_t mm_getTE_Addr_3_DetectedFrom(bool * dest, const uint32_t source) {
 }
 
 mm_response_t mm_setTE_Addr_3_Type(const mm_te_types_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3 = (mm.TE_Addr_3 & ~REG_TE_CONFIG_TYPE_Msk) | (val << REG_TE_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Type(mm_te_types_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_te_types_t) ((mm.TE_Addr_3 & REG_TE_CONFIG_TYPE_Msk) >> REG_TE_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8769,24 +5933,16 @@ mm_response_t mm_getTE_Addr_3_TypeFrom(mm_te_types_t * dest, const uint32_t sour
 }
 
 mm_response_t mm_setTE_Addr_3_SEL_CAN0(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3 = (mm.TE_Addr_3 & ~REG_TE_CONFIG_SEL_CAN0_Msk) | (val << REG_TE_CONFIG_SEL_CAN0_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_SEL_CAN0(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3 & REG_TE_CONFIG_SEL_CAN0_Msk) >> REG_TE_CONFIG_SEL_CAN0_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8796,24 +5952,16 @@ mm_response_t mm_getTE_Addr_3_SEL_CAN0From(mm_enabled_t * dest, const uint32_t s
 }
 
 mm_response_t mm_setTE_Addr_3_SEL_CAN1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3 = (mm.TE_Addr_3 & ~REG_TE_CONFIG_SEL_CAN1_Msk) | (val << REG_TE_CONFIG_SEL_CAN1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_SEL_CAN1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3 & REG_TE_CONFIG_SEL_CAN1_Msk) >> REG_TE_CONFIG_SEL_CAN1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8823,24 +5971,16 @@ mm_response_t mm_getTE_Addr_3_SEL_CAN1From(mm_enabled_t * dest, const uint32_t s
 }
 
 mm_response_t mm_setTE_Addr_3_SEL_RS485(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3 = (mm.TE_Addr_3 & ~REG_TE_CONFIG_SEL_RS485_Msk) | (val << REG_TE_CONFIG_SEL_RS485_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_SEL_RS485(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3 & REG_TE_CONFIG_SEL_RS485_Msk) >> REG_TE_CONFIG_SEL_RS485_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8850,24 +5990,16 @@ mm_response_t mm_getTE_Addr_3_SEL_RS485From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setTE_Addr_3_SEL_I2C(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3 = (mm.TE_Addr_3 & ~REG_TE_CONFIG_SEL_I2C_Msk) | (val << REG_TE_CONFIG_SEL_I2C_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_SEL_I2C(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3 & REG_TE_CONFIG_SEL_I2C_Msk) >> REG_TE_CONFIG_SEL_I2C_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8877,24 +6009,16 @@ mm_response_t mm_getTE_Addr_3_SEL_I2CFrom(mm_enabled_t * dest, const uint32_t so
 }
 
 mm_response_t mm_setTE_Addr_3_SEL_RS422(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3 = (mm.TE_Addr_3 & ~REG_TE_CONFIG_SEL_RS422_Msk) | (val << REG_TE_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_SEL_RS422(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3 & REG_TE_CONFIG_SEL_RS422_Msk) >> REG_TE_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8904,24 +6028,16 @@ mm_response_t mm_getTE_Addr_3_SEL_RS422From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setTE_Addr_3_SEL_SPI(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3 = (mm.TE_Addr_3 & ~REG_TE_CONFIG_SEL_SPI_Msk) | (val << REG_TE_CONFIG_SEL_SPI_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_SEL_SPI(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3 & REG_TE_CONFIG_SEL_SPI_Msk) >> REG_TE_CONFIG_SEL_SPI_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8931,24 +6047,16 @@ mm_response_t mm_getTE_Addr_3_SEL_SPIFrom(mm_enabled_t * dest, const uint32_t so
 }
 
 mm_response_t mm_setTE_Addr_3_SEL_UART(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3 = (mm.TE_Addr_3 & ~REG_TE_CONFIG_SEL_UART_Msk) | (val << REG_TE_CONFIG_SEL_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_SEL_UART(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3 & REG_TE_CONFIG_SEL_UART_Msk) >> REG_TE_CONFIG_SEL_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8958,24 +6066,16 @@ mm_response_t mm_getTE_Addr_3_SEL_UARTFrom(mm_enabled_t * dest, const uint32_t s
 }
 
 mm_response_t mm_setTE_Addr_3_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3 = (mm.TE_Addr_3 & ~REG_TE_CONFIG_POWER_Msk) | (val << REG_TE_CONFIG_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3 & REG_TE_CONFIG_POWER_Msk) >> REG_TE_CONFIG_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -8985,24 +6085,16 @@ mm_response_t mm_getTE_Addr_3_PowerFrom(mm_enabled_t * dest, const uint32_t sour
 }
 
 mm_response_t mm_setTE_Addr_3_Enable(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3 = (mm.TE_Addr_3 & ~REG_TE_CONFIG_ENABLE_Msk) | (val << REG_TE_CONFIG_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Enable(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3 & REG_TE_CONFIG_ENABLE_Msk) >> REG_TE_CONFIG_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9012,24 +6104,16 @@ mm_response_t mm_getTE_Addr_3_EnableFrom(mm_enabled_t * dest, const uint32_t sou
 }
 
 mm_response_t mm_setTE_Addr_3_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3 = (mm.TE_Addr_3 & ~REG_TE_CONFIG_NRESET_Msk) | (val << REG_TE_CONFIG_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3 & REG_TE_CONFIG_NRESET_Msk) >> REG_TE_CONFIG_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9039,24 +6123,16 @@ mm_response_t mm_getTE_Addr_3_nResetFrom(mm_enabled_t * dest, const uint32_t sou
 }
 
 mm_response_t mm_setTE_Addr_3_COMM_TR(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3 = (mm.TE_Addr_3 & ~REG_TE_CONFIG_COMM_TR_Msk) | (val << REG_TE_CONFIG_COMM_TR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_COMM_TR(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3 & REG_TE_CONFIG_COMM_TR_Msk) >> REG_TE_CONFIG_COMM_TR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9067,46 +6143,28 @@ mm_response_t mm_getTE_Addr_3_COMM_TRFrom(mm_enabled_t * dest, const uint32_t so
 
 /*************** Get/Set functions for TE_Addr_3_Set register *****************************************************************/
 mm_response_t mm_setTE_Addr_3_Set(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Set = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Set(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.TE_Addr_3_Set;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setTE_Addr_3_Set_ScanEnabled(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Set = (mm.TE_Addr_3_Set & ~REG_TE_CONFIG_SCANENABLED_Msk) | (val << REG_TE_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Set_ScanEnabled(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3_Set & REG_TE_CONFIG_SCANENABLED_Msk) >> REG_TE_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9116,24 +6174,16 @@ mm_response_t mm_getTE_Addr_3_Set_ScanEnabledFrom(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setTE_Addr_3_Set_Detected(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Set = (mm.TE_Addr_3_Set & ~REG_TE_CONFIG_DETECTED_Msk) | (val << REG_TE_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Set_Detected(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.TE_Addr_3_Set & REG_TE_CONFIG_DETECTED_Msk) >> REG_TE_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9143,24 +6193,16 @@ mm_response_t mm_getTE_Addr_3_Set_DetectedFrom(bool * dest, const uint32_t sourc
 }
 
 mm_response_t mm_setTE_Addr_3_Set_Type(const mm_te_types_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Set = (mm.TE_Addr_3_Set & ~REG_TE_CONFIG_TYPE_Msk) | (val << REG_TE_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Set_Type(mm_te_types_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_te_types_t) ((mm.TE_Addr_3_Set & REG_TE_CONFIG_TYPE_Msk) >> REG_TE_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9170,24 +6212,16 @@ mm_response_t mm_getTE_Addr_3_Set_TypeFrom(mm_te_types_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setTE_Addr_3_Set_SEL_CAN0(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Set = (mm.TE_Addr_3_Set & ~REG_TE_CONFIG_SEL_CAN0_Msk) | (val << REG_TE_CONFIG_SEL_CAN0_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Set_SEL_CAN0(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3_Set & REG_TE_CONFIG_SEL_CAN0_Msk) >> REG_TE_CONFIG_SEL_CAN0_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9197,24 +6231,16 @@ mm_response_t mm_getTE_Addr_3_Set_SEL_CAN0From(mm_enabled_t * dest, const uint32
 }
 
 mm_response_t mm_setTE_Addr_3_Set_SEL_CAN1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Set = (mm.TE_Addr_3_Set & ~REG_TE_CONFIG_SEL_CAN1_Msk) | (val << REG_TE_CONFIG_SEL_CAN1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Set_SEL_CAN1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3_Set & REG_TE_CONFIG_SEL_CAN1_Msk) >> REG_TE_CONFIG_SEL_CAN1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9224,24 +6250,16 @@ mm_response_t mm_getTE_Addr_3_Set_SEL_CAN1From(mm_enabled_t * dest, const uint32
 }
 
 mm_response_t mm_setTE_Addr_3_Set_SEL_RS485(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Set = (mm.TE_Addr_3_Set & ~REG_TE_CONFIG_SEL_RS485_Msk) | (val << REG_TE_CONFIG_SEL_RS485_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Set_SEL_RS485(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3_Set & REG_TE_CONFIG_SEL_RS485_Msk) >> REG_TE_CONFIG_SEL_RS485_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9251,24 +6269,16 @@ mm_response_t mm_getTE_Addr_3_Set_SEL_RS485From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setTE_Addr_3_Set_SEL_I2C(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Set = (mm.TE_Addr_3_Set & ~REG_TE_CONFIG_SEL_I2C_Msk) | (val << REG_TE_CONFIG_SEL_I2C_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Set_SEL_I2C(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3_Set & REG_TE_CONFIG_SEL_I2C_Msk) >> REG_TE_CONFIG_SEL_I2C_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9278,24 +6288,16 @@ mm_response_t mm_getTE_Addr_3_Set_SEL_I2CFrom(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setTE_Addr_3_Set_SEL_RS422(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Set = (mm.TE_Addr_3_Set & ~REG_TE_CONFIG_SEL_RS422_Msk) | (val << REG_TE_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Set_SEL_RS422(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3_Set & REG_TE_CONFIG_SEL_RS422_Msk) >> REG_TE_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9305,24 +6307,16 @@ mm_response_t mm_getTE_Addr_3_Set_SEL_RS422From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setTE_Addr_3_Set_SEL_SPI(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Set = (mm.TE_Addr_3_Set & ~REG_TE_CONFIG_SEL_SPI_Msk) | (val << REG_TE_CONFIG_SEL_SPI_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Set_SEL_SPI(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3_Set & REG_TE_CONFIG_SEL_SPI_Msk) >> REG_TE_CONFIG_SEL_SPI_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9332,24 +6326,16 @@ mm_response_t mm_getTE_Addr_3_Set_SEL_SPIFrom(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setTE_Addr_3_Set_SEL_UART(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Set = (mm.TE_Addr_3_Set & ~REG_TE_CONFIG_SEL_UART_Msk) | (val << REG_TE_CONFIG_SEL_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Set_SEL_UART(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3_Set & REG_TE_CONFIG_SEL_UART_Msk) >> REG_TE_CONFIG_SEL_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9359,24 +6345,16 @@ mm_response_t mm_getTE_Addr_3_Set_SEL_UARTFrom(mm_enabled_t * dest, const uint32
 }
 
 mm_response_t mm_setTE_Addr_3_Set_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Set = (mm.TE_Addr_3_Set & ~REG_TE_CONFIG_POWER_Msk) | (val << REG_TE_CONFIG_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Set_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3_Set & REG_TE_CONFIG_POWER_Msk) >> REG_TE_CONFIG_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9386,24 +6364,16 @@ mm_response_t mm_getTE_Addr_3_Set_PowerFrom(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setTE_Addr_3_Set_Enable(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Set = (mm.TE_Addr_3_Set & ~REG_TE_CONFIG_ENABLE_Msk) | (val << REG_TE_CONFIG_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Set_Enable(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3_Set & REG_TE_CONFIG_ENABLE_Msk) >> REG_TE_CONFIG_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9413,24 +6383,16 @@ mm_response_t mm_getTE_Addr_3_Set_EnableFrom(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setTE_Addr_3_Set_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Set = (mm.TE_Addr_3_Set & ~REG_TE_CONFIG_NRESET_Msk) | (val << REG_TE_CONFIG_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Set_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3_Set & REG_TE_CONFIG_NRESET_Msk) >> REG_TE_CONFIG_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9440,24 +6402,16 @@ mm_response_t mm_getTE_Addr_3_Set_nResetFrom(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setTE_Addr_3_Set_COMM_TR(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Set = (mm.TE_Addr_3_Set & ~REG_TE_CONFIG_COMM_TR_Msk) | (val << REG_TE_CONFIG_COMM_TR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Set_COMM_TR(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3_Set & REG_TE_CONFIG_COMM_TR_Msk) >> REG_TE_CONFIG_COMM_TR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9468,46 +6422,28 @@ mm_response_t mm_getTE_Addr_3_Set_COMM_TRFrom(mm_enabled_t * dest, const uint32_
 
 /*************** Get/Set functions for TE_Addr_3_Clear register ***************************************************************/
 mm_response_t mm_setTE_Addr_3_Clear(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Clear = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Clear(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.TE_Addr_3_Clear;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setTE_Addr_3_Clear_ScanEnabled(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Clear = (mm.TE_Addr_3_Clear & ~REG_TE_CONFIG_SCANENABLED_Msk) | (val << REG_TE_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Clear_ScanEnabled(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3_Clear & REG_TE_CONFIG_SCANENABLED_Msk) >> REG_TE_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9517,24 +6453,16 @@ mm_response_t mm_getTE_Addr_3_Clear_ScanEnabledFrom(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setTE_Addr_3_Clear_Detected(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Clear = (mm.TE_Addr_3_Clear & ~REG_TE_CONFIG_DETECTED_Msk) | (val << REG_TE_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Clear_Detected(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.TE_Addr_3_Clear & REG_TE_CONFIG_DETECTED_Msk) >> REG_TE_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9544,24 +6472,16 @@ mm_response_t mm_getTE_Addr_3_Clear_DetectedFrom(bool * dest, const uint32_t sou
 }
 
 mm_response_t mm_setTE_Addr_3_Clear_Type(const mm_te_types_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Clear = (mm.TE_Addr_3_Clear & ~REG_TE_CONFIG_TYPE_Msk) | (val << REG_TE_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Clear_Type(mm_te_types_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_te_types_t) ((mm.TE_Addr_3_Clear & REG_TE_CONFIG_TYPE_Msk) >> REG_TE_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9571,24 +6491,16 @@ mm_response_t mm_getTE_Addr_3_Clear_TypeFrom(mm_te_types_t * dest, const uint32_
 }
 
 mm_response_t mm_setTE_Addr_3_Clear_SEL_CAN0(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Clear = (mm.TE_Addr_3_Clear & ~REG_TE_CONFIG_SEL_CAN0_Msk) | (val << REG_TE_CONFIG_SEL_CAN0_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Clear_SEL_CAN0(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3_Clear & REG_TE_CONFIG_SEL_CAN0_Msk) >> REG_TE_CONFIG_SEL_CAN0_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9598,24 +6510,16 @@ mm_response_t mm_getTE_Addr_3_Clear_SEL_CAN0From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setTE_Addr_3_Clear_SEL_CAN1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Clear = (mm.TE_Addr_3_Clear & ~REG_TE_CONFIG_SEL_CAN1_Msk) | (val << REG_TE_CONFIG_SEL_CAN1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Clear_SEL_CAN1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3_Clear & REG_TE_CONFIG_SEL_CAN1_Msk) >> REG_TE_CONFIG_SEL_CAN1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9625,24 +6529,16 @@ mm_response_t mm_getTE_Addr_3_Clear_SEL_CAN1From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setTE_Addr_3_Clear_SEL_RS485(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Clear = (mm.TE_Addr_3_Clear & ~REG_TE_CONFIG_SEL_RS485_Msk) | (val << REG_TE_CONFIG_SEL_RS485_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Clear_SEL_RS485(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3_Clear & REG_TE_CONFIG_SEL_RS485_Msk) >> REG_TE_CONFIG_SEL_RS485_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9652,24 +6548,16 @@ mm_response_t mm_getTE_Addr_3_Clear_SEL_RS485From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setTE_Addr_3_Clear_SEL_I2C(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Clear = (mm.TE_Addr_3_Clear & ~REG_TE_CONFIG_SEL_I2C_Msk) | (val << REG_TE_CONFIG_SEL_I2C_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Clear_SEL_I2C(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3_Clear & REG_TE_CONFIG_SEL_I2C_Msk) >> REG_TE_CONFIG_SEL_I2C_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9679,24 +6567,16 @@ mm_response_t mm_getTE_Addr_3_Clear_SEL_I2CFrom(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setTE_Addr_3_Clear_SEL_RS422(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Clear = (mm.TE_Addr_3_Clear & ~REG_TE_CONFIG_SEL_RS422_Msk) | (val << REG_TE_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Clear_SEL_RS422(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3_Clear & REG_TE_CONFIG_SEL_RS422_Msk) >> REG_TE_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9706,24 +6586,16 @@ mm_response_t mm_getTE_Addr_3_Clear_SEL_RS422From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setTE_Addr_3_Clear_SEL_SPI(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Clear = (mm.TE_Addr_3_Clear & ~REG_TE_CONFIG_SEL_SPI_Msk) | (val << REG_TE_CONFIG_SEL_SPI_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Clear_SEL_SPI(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3_Clear & REG_TE_CONFIG_SEL_SPI_Msk) >> REG_TE_CONFIG_SEL_SPI_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9733,24 +6605,16 @@ mm_response_t mm_getTE_Addr_3_Clear_SEL_SPIFrom(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setTE_Addr_3_Clear_SEL_UART(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Clear = (mm.TE_Addr_3_Clear & ~REG_TE_CONFIG_SEL_UART_Msk) | (val << REG_TE_CONFIG_SEL_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Clear_SEL_UART(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3_Clear & REG_TE_CONFIG_SEL_UART_Msk) >> REG_TE_CONFIG_SEL_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9760,24 +6624,16 @@ mm_response_t mm_getTE_Addr_3_Clear_SEL_UARTFrom(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setTE_Addr_3_Clear_Power(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Clear = (mm.TE_Addr_3_Clear & ~REG_TE_CONFIG_POWER_Msk) | (val << REG_TE_CONFIG_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Clear_Power(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3_Clear & REG_TE_CONFIG_POWER_Msk) >> REG_TE_CONFIG_POWER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9787,24 +6643,16 @@ mm_response_t mm_getTE_Addr_3_Clear_PowerFrom(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setTE_Addr_3_Clear_Enable(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Clear = (mm.TE_Addr_3_Clear & ~REG_TE_CONFIG_ENABLE_Msk) | (val << REG_TE_CONFIG_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Clear_Enable(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3_Clear & REG_TE_CONFIG_ENABLE_Msk) >> REG_TE_CONFIG_ENABLE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9814,24 +6662,16 @@ mm_response_t mm_getTE_Addr_3_Clear_EnableFrom(mm_enabled_t * dest, const uint32
 }
 
 mm_response_t mm_setTE_Addr_3_Clear_nReset(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Clear = (mm.TE_Addr_3_Clear & ~REG_TE_CONFIG_NRESET_Msk) | (val << REG_TE_CONFIG_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Clear_nReset(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3_Clear & REG_TE_CONFIG_NRESET_Msk) >> REG_TE_CONFIG_NRESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9841,24 +6681,16 @@ mm_response_t mm_getTE_Addr_3_Clear_nResetFrom(mm_enabled_t * dest, const uint32
 }
 
 mm_response_t mm_setTE_Addr_3_Clear_COMM_TR(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.TE_Addr_3_Clear = (mm.TE_Addr_3_Clear & ~REG_TE_CONFIG_COMM_TR_Msk) | (val << REG_TE_CONFIG_COMM_TR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getTE_Addr_3_Clear_COMM_TR(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.TE_Addr_3_Clear & REG_TE_CONFIG_COMM_TR_Msk) >> REG_TE_CONFIG_COMM_TR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9869,46 +6701,28 @@ mm_response_t mm_getTE_Addr_3_Clear_COMM_TRFrom(mm_enabled_t * dest, const uint3
 
 /*************** Get/Set functions for MTC_Addr_0 register ********************************************************************/
 mm_response_t mm_setMTC_Addr_0(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.MTC_Addr_0;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setMTC_Addr_0_ScanEnabled(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SCANENABLED_Msk) | (val << REG_MTC_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_ScanEnabled(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9918,24 +6732,16 @@ mm_response_t mm_getMTC_Addr_0_ScanEnabledFrom(mm_enabled_t * dest, const uint32
 }
 
 mm_response_t mm_setMTC_Addr_0_Detected(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_DETECTED_Msk) | (val << REG_MTC_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Detected(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9945,24 +6751,16 @@ mm_response_t mm_getMTC_Addr_0_DetectedFrom(bool * dest, const uint32_t source) 
 }
 
 mm_response_t mm_setMTC_Addr_0_Type(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_TYPE_Msk) | (val << REG_MTC_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Type(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint32_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9972,24 +6770,16 @@ mm_response_t mm_getMTC_Addr_0_TypeFrom(uint32_t * dest, const uint32_t source) 
 }
 
 mm_response_t mm_setMTC_Addr_0_ENABLE_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_ENABLE_1_Msk) | (val << REG_MTC_CONFIG_ENABLE_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_ENABLE_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -9999,24 +6789,16 @@ mm_response_t mm_getMTC_Addr_0_ENABLE_1From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_0_ENABLE_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_ENABLE_2_Msk) | (val << REG_MTC_CONFIG_ENABLE_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_ENABLE_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10026,24 +6808,16 @@ mm_response_t mm_getMTC_Addr_0_ENABLE_2From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_0_SEL_I2C_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_I2C_1_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_SEL_I2C_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10053,24 +6827,16 @@ mm_response_t mm_getMTC_Addr_0_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_0_SEL_I2C_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_I2C_2_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_SEL_I2C_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10080,24 +6846,16 @@ mm_response_t mm_getMTC_Addr_0_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_0_SEL_UART_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_UART_1_Msk) | (val << REG_MTC_CONFIG_SEL_UART_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_SEL_UART_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10107,24 +6865,16 @@ mm_response_t mm_getMTC_Addr_0_SEL_UART_1From(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setMTC_Addr_0_SEL_UART_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_UART_2_Msk) | (val << REG_MTC_CONFIG_SEL_UART_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_SEL_UART_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10134,24 +6884,16 @@ mm_response_t mm_getMTC_Addr_0_SEL_UART_2From(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setMTC_Addr_0_SEL_UART_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_UART_3_Msk) | (val << REG_MTC_CONFIG_SEL_UART_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_SEL_UART_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10161,24 +6903,16 @@ mm_response_t mm_getMTC_Addr_0_SEL_UART_3From(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setMTC_Addr_0_SEL_UART_4(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_UART_4_Msk) | (val << REG_MTC_CONFIG_SEL_UART_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_SEL_UART_4(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10188,24 +6922,16 @@ mm_response_t mm_getMTC_Addr_0_SEL_UART_4From(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setMTC_Addr_0_SEL_UART_5(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_UART_5_Msk) | (val << REG_MTC_CONFIG_SEL_UART_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_SEL_UART_5(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10215,24 +6941,16 @@ mm_response_t mm_getMTC_Addr_0_SEL_UART_5From(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setMTC_Addr_0_SEL_UART_6(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_UART_6_Msk) | (val << REG_MTC_CONFIG_SEL_UART_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_SEL_UART_6(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10242,24 +6960,16 @@ mm_response_t mm_getMTC_Addr_0_SEL_UART_6From(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setMTC_Addr_0_SEL_VBAT(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_VBAT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_SEL_VBAT(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10269,24 +6979,16 @@ mm_response_t mm_getMTC_Addr_0_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_0_SEL_VBAT_ALT(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_SEL_VBAT_ALT(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10296,24 +6998,16 @@ mm_response_t mm_getMTC_Addr_0_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_0_SEL_VBAT_FPGA(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_SEL_VBAT_FPGA(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10323,24 +7017,16 @@ mm_response_t mm_getMTC_Addr_0_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_0_SEL_nRESET_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_NRESET_1_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_SEL_nRESET_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10350,24 +7036,16 @@ mm_response_t mm_getMTC_Addr_0_SEL_nRESET_1From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_0_SEL_nRESET_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_NRESET_2_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_SEL_nRESET_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10377,24 +7055,16 @@ mm_response_t mm_getMTC_Addr_0_SEL_nRESET_2From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_0_SEL_nRESET_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_NRESET_3_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_SEL_nRESET_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10404,24 +7074,16 @@ mm_response_t mm_getMTC_Addr_0_SEL_nRESET_3From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_0_SEL_CS_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_CS_1_Msk) | (val << REG_MTC_CONFIG_SEL_CS_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_SEL_CS_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10431,24 +7093,16 @@ mm_response_t mm_getMTC_Addr_0_SEL_CS_1From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_0_SEL_CS_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_CS_2_Msk) | (val << REG_MTC_CONFIG_SEL_CS_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_SEL_CS_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10458,24 +7112,16 @@ mm_response_t mm_getMTC_Addr_0_SEL_CS_2From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_0_SEL_CS_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_CS_3_Msk) | (val << REG_MTC_CONFIG_SEL_CS_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_SEL_CS_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10485,24 +7131,16 @@ mm_response_t mm_getMTC_Addr_0_SEL_CS_3From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_0_SEL_CS_4(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_CS_4_Msk) | (val << REG_MTC_CONFIG_SEL_CS_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_SEL_CS_4(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10512,24 +7150,16 @@ mm_response_t mm_getMTC_Addr_0_SEL_CS_4From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_0_SEL_CS_5(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_CS_5_Msk) | (val << REG_MTC_CONFIG_SEL_CS_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_SEL_CS_5(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10539,24 +7169,16 @@ mm_response_t mm_getMTC_Addr_0_SEL_CS_5From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_0_SEL_CS_6(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_CS_6_Msk) | (val << REG_MTC_CONFIG_SEL_CS_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_SEL_CS_6(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10566,24 +7188,16 @@ mm_response_t mm_getMTC_Addr_0_SEL_CS_6From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_0_SEL_SPI_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_SPI_1_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_SEL_SPI_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10593,24 +7207,16 @@ mm_response_t mm_getMTC_Addr_0_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_0_SEL_SPI_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_SPI_2_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_SEL_SPI_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10620,24 +7226,16 @@ mm_response_t mm_getMTC_Addr_0_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_0_SEL_CAN_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_CAN_1_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_SEL_CAN_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10647,24 +7245,16 @@ mm_response_t mm_getMTC_Addr_0_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_0_SEL_CAN_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_CAN_2_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_SEL_CAN_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10674,24 +7264,16 @@ mm_response_t mm_getMTC_Addr_0_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_0_SEL_CAN_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_CAN_3_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_SEL_CAN_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10701,24 +7283,16 @@ mm_response_t mm_getMTC_Addr_0_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_0_SEL_RS422(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0 = (mm.MTC_Addr_0 & ~REG_MTC_CONFIG_SEL_RS422_Msk) | (val << REG_MTC_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_SEL_RS422(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0 & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10729,46 +7303,28 @@ mm_response_t mm_getMTC_Addr_0_SEL_RS422From(mm_enabled_t * dest, const uint32_t
 
 /*************** Get/Set functions for MTC_Addr_0_Set register ****************************************************************/
 mm_response_t mm_setMTC_Addr_0_Set(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.MTC_Addr_0_Set;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_ScanEnabled(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SCANENABLED_Msk) | (val << REG_MTC_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_ScanEnabled(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10778,24 +7334,16 @@ mm_response_t mm_getMTC_Addr_0_Set_ScanEnabledFrom(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_Detected(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_DETECTED_Msk) | (val << REG_MTC_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_Detected(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10805,24 +7353,16 @@ mm_response_t mm_getMTC_Addr_0_Set_DetectedFrom(bool * dest, const uint32_t sour
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_Type(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_TYPE_Msk) | (val << REG_MTC_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_Type(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint32_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10832,24 +7372,16 @@ mm_response_t mm_getMTC_Addr_0_Set_TypeFrom(uint32_t * dest, const uint32_t sour
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_ENABLE_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_ENABLE_1_Msk) | (val << REG_MTC_CONFIG_ENABLE_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_ENABLE_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10859,24 +7391,16 @@ mm_response_t mm_getMTC_Addr_0_Set_ENABLE_1From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_ENABLE_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_ENABLE_2_Msk) | (val << REG_MTC_CONFIG_ENABLE_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_ENABLE_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10886,24 +7410,16 @@ mm_response_t mm_getMTC_Addr_0_Set_ENABLE_2From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_SEL_I2C_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_I2C_1_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_SEL_I2C_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10913,24 +7429,16 @@ mm_response_t mm_getMTC_Addr_0_Set_SEL_I2C_1From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_SEL_I2C_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_I2C_2_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_SEL_I2C_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10940,24 +7448,16 @@ mm_response_t mm_getMTC_Addr_0_Set_SEL_I2C_2From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_SEL_UART_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_UART_1_Msk) | (val << REG_MTC_CONFIG_SEL_UART_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10967,24 +7467,16 @@ mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_1From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_SEL_UART_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_UART_2_Msk) | (val << REG_MTC_CONFIG_SEL_UART_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -10994,24 +7486,16 @@ mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_2From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_SEL_UART_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_UART_3_Msk) | (val << REG_MTC_CONFIG_SEL_UART_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11021,24 +7505,16 @@ mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_3From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_SEL_UART_4(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_UART_4_Msk) | (val << REG_MTC_CONFIG_SEL_UART_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_4(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11048,24 +7524,16 @@ mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_4From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_SEL_UART_5(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_UART_5_Msk) | (val << REG_MTC_CONFIG_SEL_UART_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_5(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11075,24 +7543,16 @@ mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_5From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_SEL_UART_6(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_UART_6_Msk) | (val << REG_MTC_CONFIG_SEL_UART_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_6(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11102,24 +7562,16 @@ mm_response_t mm_getMTC_Addr_0_Set_SEL_UART_6From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_SEL_VBAT(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_VBAT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_SEL_VBAT(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11129,24 +7581,16 @@ mm_response_t mm_getMTC_Addr_0_Set_SEL_VBATFrom(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_SEL_VBAT_ALT(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_SEL_VBAT_ALT(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11156,24 +7600,16 @@ mm_response_t mm_getMTC_Addr_0_Set_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_SEL_VBAT_FPGA(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_SEL_VBAT_FPGA(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11183,24 +7619,16 @@ mm_response_t mm_getMTC_Addr_0_Set_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const 
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_SEL_nRESET_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_NRESET_1_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_SEL_nRESET_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11210,24 +7638,16 @@ mm_response_t mm_getMTC_Addr_0_Set_SEL_nRESET_1From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_SEL_nRESET_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_NRESET_2_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_SEL_nRESET_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11237,24 +7657,16 @@ mm_response_t mm_getMTC_Addr_0_Set_SEL_nRESET_2From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_SEL_nRESET_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_NRESET_3_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_SEL_nRESET_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11264,24 +7676,16 @@ mm_response_t mm_getMTC_Addr_0_Set_SEL_nRESET_3From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_SEL_CS_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_CS_1_Msk) | (val << REG_MTC_CONFIG_SEL_CS_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11291,24 +7695,16 @@ mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_1From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_SEL_CS_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_CS_2_Msk) | (val << REG_MTC_CONFIG_SEL_CS_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11318,24 +7714,16 @@ mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_2From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_SEL_CS_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_CS_3_Msk) | (val << REG_MTC_CONFIG_SEL_CS_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11345,24 +7733,16 @@ mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_3From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_SEL_CS_4(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_CS_4_Msk) | (val << REG_MTC_CONFIG_SEL_CS_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_4(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11372,24 +7752,16 @@ mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_4From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_SEL_CS_5(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_CS_5_Msk) | (val << REG_MTC_CONFIG_SEL_CS_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_5(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11399,24 +7771,16 @@ mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_5From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_SEL_CS_6(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_CS_6_Msk) | (val << REG_MTC_CONFIG_SEL_CS_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_6(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11426,24 +7790,16 @@ mm_response_t mm_getMTC_Addr_0_Set_SEL_CS_6From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_SEL_SPI_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_SPI_1_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_SEL_SPI_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11453,24 +7809,16 @@ mm_response_t mm_getMTC_Addr_0_Set_SEL_SPI_1From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_SEL_SPI_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_SPI_2_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_SEL_SPI_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11480,24 +7828,16 @@ mm_response_t mm_getMTC_Addr_0_Set_SEL_SPI_2From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_SEL_CAN_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_CAN_1_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_SEL_CAN_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11507,24 +7847,16 @@ mm_response_t mm_getMTC_Addr_0_Set_SEL_CAN_1From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_SEL_CAN_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_CAN_2_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_SEL_CAN_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11534,24 +7866,16 @@ mm_response_t mm_getMTC_Addr_0_Set_SEL_CAN_2From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_SEL_CAN_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_CAN_3_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_SEL_CAN_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11561,24 +7885,16 @@ mm_response_t mm_getMTC_Addr_0_Set_SEL_CAN_3From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_0_Set_SEL_RS422(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Set = (mm.MTC_Addr_0_Set & ~REG_MTC_CONFIG_SEL_RS422_Msk) | (val << REG_MTC_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Set_SEL_RS422(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Set & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11589,46 +7905,28 @@ mm_response_t mm_getMTC_Addr_0_Set_SEL_RS422From(mm_enabled_t * dest, const uint
 
 /*************** Get/Set functions for MTC_Addr_0_Clear register **************************************************************/
 mm_response_t mm_setMTC_Addr_0_Clear(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.MTC_Addr_0_Clear;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_ScanEnabled(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SCANENABLED_Msk) | (val << REG_MTC_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_ScanEnabled(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11638,24 +7936,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_ScanEnabledFrom(mm_enabled_t * dest, const 
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_Detected(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_DETECTED_Msk) | (val << REG_MTC_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_Detected(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11665,24 +7955,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_DetectedFrom(bool * dest, const uint32_t so
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_Type(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_TYPE_Msk) | (val << REG_MTC_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_Type(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint32_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11692,24 +7974,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_TypeFrom(uint32_t * dest, const uint32_t so
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_ENABLE_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_ENABLE_1_Msk) | (val << REG_MTC_CONFIG_ENABLE_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_ENABLE_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11719,24 +7993,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_ENABLE_1From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_ENABLE_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_ENABLE_2_Msk) | (val << REG_MTC_CONFIG_ENABLE_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_ENABLE_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11746,24 +8012,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_ENABLE_2From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_SEL_I2C_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_I2C_1_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_SEL_I2C_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11773,24 +8031,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_SEL_I2C_1From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_SEL_I2C_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_I2C_2_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_SEL_I2C_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11800,24 +8050,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_SEL_I2C_2From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_SEL_UART_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_UART_1_Msk) | (val << REG_MTC_CONFIG_SEL_UART_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11827,24 +8069,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_1From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_SEL_UART_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_UART_2_Msk) | (val << REG_MTC_CONFIG_SEL_UART_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11854,24 +8088,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_2From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_SEL_UART_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_UART_3_Msk) | (val << REG_MTC_CONFIG_SEL_UART_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11881,24 +8107,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_3From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_SEL_UART_4(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_UART_4_Msk) | (val << REG_MTC_CONFIG_SEL_UART_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_4(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11908,24 +8126,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_4From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_SEL_UART_5(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_UART_5_Msk) | (val << REG_MTC_CONFIG_SEL_UART_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_5(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11935,24 +8145,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_5From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_SEL_UART_6(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_UART_6_Msk) | (val << REG_MTC_CONFIG_SEL_UART_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_6(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11962,24 +8164,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_SEL_UART_6From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_SEL_VBAT(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_VBAT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_SEL_VBAT(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -11989,24 +8183,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_SEL_VBATFrom(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_SEL_VBAT_ALT(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_SEL_VBAT_ALT(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12016,24 +8202,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_SEL_VBAT_FPGA(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_SEL_VBAT_FPGA(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12043,24 +8221,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, cons
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_SEL_nRESET_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_NRESET_1_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_SEL_nRESET_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12070,24 +8240,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_SEL_nRESET_1From(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_SEL_nRESET_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_NRESET_2_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_SEL_nRESET_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12097,24 +8259,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_SEL_nRESET_2From(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_SEL_nRESET_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_NRESET_3_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_SEL_nRESET_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12124,24 +8278,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_SEL_nRESET_3From(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_SEL_CS_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_CS_1_Msk) | (val << REG_MTC_CONFIG_SEL_CS_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12151,24 +8297,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_1From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_SEL_CS_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_CS_2_Msk) | (val << REG_MTC_CONFIG_SEL_CS_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12178,24 +8316,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_2From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_SEL_CS_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_CS_3_Msk) | (val << REG_MTC_CONFIG_SEL_CS_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12205,24 +8335,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_3From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_SEL_CS_4(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_CS_4_Msk) | (val << REG_MTC_CONFIG_SEL_CS_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_4(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12232,24 +8354,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_4From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_SEL_CS_5(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_CS_5_Msk) | (val << REG_MTC_CONFIG_SEL_CS_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_5(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12259,24 +8373,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_5From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_SEL_CS_6(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_CS_6_Msk) | (val << REG_MTC_CONFIG_SEL_CS_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_6(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12286,24 +8392,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_SEL_CS_6From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_SEL_SPI_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_SPI_1_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_SEL_SPI_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12313,24 +8411,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_SEL_SPI_1From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_SEL_SPI_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_SPI_2_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_SEL_SPI_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12340,24 +8430,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_SEL_SPI_2From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_SEL_CAN_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_CAN_1_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_SEL_CAN_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12367,24 +8449,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_SEL_CAN_1From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_SEL_CAN_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_CAN_2_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_SEL_CAN_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12394,24 +8468,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_SEL_CAN_2From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_SEL_CAN_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_CAN_3_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_SEL_CAN_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12421,24 +8487,16 @@ mm_response_t mm_getMTC_Addr_0_Clear_SEL_CAN_3From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_0_Clear_SEL_RS422(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_0_Clear = (mm.MTC_Addr_0_Clear & ~REG_MTC_CONFIG_SEL_RS422_Msk) | (val << REG_MTC_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_0_Clear_SEL_RS422(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_0_Clear & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12449,46 +8507,28 @@ mm_response_t mm_getMTC_Addr_0_Clear_SEL_RS422From(mm_enabled_t * dest, const ui
 
 /*************** Get/Set functions for MTC_Addr_1 register ********************************************************************/
 mm_response_t mm_setMTC_Addr_1(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.MTC_Addr_1;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setMTC_Addr_1_ScanEnabled(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SCANENABLED_Msk) | (val << REG_MTC_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_ScanEnabled(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12498,24 +8538,16 @@ mm_response_t mm_getMTC_Addr_1_ScanEnabledFrom(mm_enabled_t * dest, const uint32
 }
 
 mm_response_t mm_setMTC_Addr_1_Detected(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_DETECTED_Msk) | (val << REG_MTC_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Detected(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12525,24 +8557,16 @@ mm_response_t mm_getMTC_Addr_1_DetectedFrom(bool * dest, const uint32_t source) 
 }
 
 mm_response_t mm_setMTC_Addr_1_Type(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_TYPE_Msk) | (val << REG_MTC_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Type(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint32_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12552,24 +8576,16 @@ mm_response_t mm_getMTC_Addr_1_TypeFrom(uint32_t * dest, const uint32_t source) 
 }
 
 mm_response_t mm_setMTC_Addr_1_ENABLE_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_ENABLE_1_Msk) | (val << REG_MTC_CONFIG_ENABLE_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_ENABLE_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12579,24 +8595,16 @@ mm_response_t mm_getMTC_Addr_1_ENABLE_1From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_1_ENABLE_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_ENABLE_2_Msk) | (val << REG_MTC_CONFIG_ENABLE_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_ENABLE_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12606,24 +8614,16 @@ mm_response_t mm_getMTC_Addr_1_ENABLE_2From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_1_SEL_I2C_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_I2C_1_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_SEL_I2C_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12633,24 +8633,16 @@ mm_response_t mm_getMTC_Addr_1_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_1_SEL_I2C_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_I2C_2_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_SEL_I2C_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12660,24 +8652,16 @@ mm_response_t mm_getMTC_Addr_1_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_1_SEL_UART_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_UART_1_Msk) | (val << REG_MTC_CONFIG_SEL_UART_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_SEL_UART_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12687,24 +8671,16 @@ mm_response_t mm_getMTC_Addr_1_SEL_UART_1From(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setMTC_Addr_1_SEL_UART_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_UART_2_Msk) | (val << REG_MTC_CONFIG_SEL_UART_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_SEL_UART_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12714,24 +8690,16 @@ mm_response_t mm_getMTC_Addr_1_SEL_UART_2From(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setMTC_Addr_1_SEL_UART_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_UART_3_Msk) | (val << REG_MTC_CONFIG_SEL_UART_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_SEL_UART_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12741,24 +8709,16 @@ mm_response_t mm_getMTC_Addr_1_SEL_UART_3From(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setMTC_Addr_1_SEL_UART_4(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_UART_4_Msk) | (val << REG_MTC_CONFIG_SEL_UART_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_SEL_UART_4(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12768,24 +8728,16 @@ mm_response_t mm_getMTC_Addr_1_SEL_UART_4From(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setMTC_Addr_1_SEL_UART_5(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_UART_5_Msk) | (val << REG_MTC_CONFIG_SEL_UART_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_SEL_UART_5(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12795,24 +8747,16 @@ mm_response_t mm_getMTC_Addr_1_SEL_UART_5From(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setMTC_Addr_1_SEL_UART_6(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_UART_6_Msk) | (val << REG_MTC_CONFIG_SEL_UART_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_SEL_UART_6(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12822,24 +8766,16 @@ mm_response_t mm_getMTC_Addr_1_SEL_UART_6From(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setMTC_Addr_1_SEL_VBAT(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_VBAT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_SEL_VBAT(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12849,24 +8785,16 @@ mm_response_t mm_getMTC_Addr_1_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_1_SEL_VBAT_ALT(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_SEL_VBAT_ALT(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12876,24 +8804,16 @@ mm_response_t mm_getMTC_Addr_1_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_1_SEL_VBAT_FPGA(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_SEL_VBAT_FPGA(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12903,24 +8823,16 @@ mm_response_t mm_getMTC_Addr_1_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_1_SEL_nRESET_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_NRESET_1_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_SEL_nRESET_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12930,24 +8842,16 @@ mm_response_t mm_getMTC_Addr_1_SEL_nRESET_1From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_1_SEL_nRESET_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_NRESET_2_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_SEL_nRESET_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12957,24 +8861,16 @@ mm_response_t mm_getMTC_Addr_1_SEL_nRESET_2From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_1_SEL_nRESET_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_NRESET_3_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_SEL_nRESET_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -12984,24 +8880,16 @@ mm_response_t mm_getMTC_Addr_1_SEL_nRESET_3From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_1_SEL_CS_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_CS_1_Msk) | (val << REG_MTC_CONFIG_SEL_CS_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_SEL_CS_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13011,24 +8899,16 @@ mm_response_t mm_getMTC_Addr_1_SEL_CS_1From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_1_SEL_CS_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_CS_2_Msk) | (val << REG_MTC_CONFIG_SEL_CS_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_SEL_CS_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13038,24 +8918,16 @@ mm_response_t mm_getMTC_Addr_1_SEL_CS_2From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_1_SEL_CS_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_CS_3_Msk) | (val << REG_MTC_CONFIG_SEL_CS_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_SEL_CS_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13065,24 +8937,16 @@ mm_response_t mm_getMTC_Addr_1_SEL_CS_3From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_1_SEL_CS_4(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_CS_4_Msk) | (val << REG_MTC_CONFIG_SEL_CS_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_SEL_CS_4(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13092,24 +8956,16 @@ mm_response_t mm_getMTC_Addr_1_SEL_CS_4From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_1_SEL_CS_5(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_CS_5_Msk) | (val << REG_MTC_CONFIG_SEL_CS_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_SEL_CS_5(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13119,24 +8975,16 @@ mm_response_t mm_getMTC_Addr_1_SEL_CS_5From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_1_SEL_CS_6(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_CS_6_Msk) | (val << REG_MTC_CONFIG_SEL_CS_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_SEL_CS_6(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13146,24 +8994,16 @@ mm_response_t mm_getMTC_Addr_1_SEL_CS_6From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_1_SEL_SPI_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_SPI_1_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_SEL_SPI_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13173,24 +9013,16 @@ mm_response_t mm_getMTC_Addr_1_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_1_SEL_SPI_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_SPI_2_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_SEL_SPI_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13200,24 +9032,16 @@ mm_response_t mm_getMTC_Addr_1_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_1_SEL_CAN_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_CAN_1_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_SEL_CAN_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13227,24 +9051,16 @@ mm_response_t mm_getMTC_Addr_1_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_1_SEL_CAN_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_CAN_2_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_SEL_CAN_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13254,24 +9070,16 @@ mm_response_t mm_getMTC_Addr_1_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_1_SEL_CAN_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_CAN_3_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_SEL_CAN_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13281,24 +9089,16 @@ mm_response_t mm_getMTC_Addr_1_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_1_SEL_RS422(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1 = (mm.MTC_Addr_1 & ~REG_MTC_CONFIG_SEL_RS422_Msk) | (val << REG_MTC_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_SEL_RS422(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1 & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13309,46 +9109,28 @@ mm_response_t mm_getMTC_Addr_1_SEL_RS422From(mm_enabled_t * dest, const uint32_t
 
 /*************** Get/Set functions for MTC_Addr_1_Set register ****************************************************************/
 mm_response_t mm_setMTC_Addr_1_Set(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.MTC_Addr_1_Set;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_ScanEnabled(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SCANENABLED_Msk) | (val << REG_MTC_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_ScanEnabled(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13358,24 +9140,16 @@ mm_response_t mm_getMTC_Addr_1_Set_ScanEnabledFrom(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_Detected(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_DETECTED_Msk) | (val << REG_MTC_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_Detected(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13385,24 +9159,16 @@ mm_response_t mm_getMTC_Addr_1_Set_DetectedFrom(bool * dest, const uint32_t sour
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_Type(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_TYPE_Msk) | (val << REG_MTC_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_Type(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint32_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13412,24 +9178,16 @@ mm_response_t mm_getMTC_Addr_1_Set_TypeFrom(uint32_t * dest, const uint32_t sour
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_ENABLE_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_ENABLE_1_Msk) | (val << REG_MTC_CONFIG_ENABLE_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_ENABLE_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13439,24 +9197,16 @@ mm_response_t mm_getMTC_Addr_1_Set_ENABLE_1From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_ENABLE_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_ENABLE_2_Msk) | (val << REG_MTC_CONFIG_ENABLE_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_ENABLE_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13466,24 +9216,16 @@ mm_response_t mm_getMTC_Addr_1_Set_ENABLE_2From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_SEL_I2C_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_I2C_1_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_SEL_I2C_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13493,24 +9235,16 @@ mm_response_t mm_getMTC_Addr_1_Set_SEL_I2C_1From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_SEL_I2C_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_I2C_2_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_SEL_I2C_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13520,24 +9254,16 @@ mm_response_t mm_getMTC_Addr_1_Set_SEL_I2C_2From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_SEL_UART_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_UART_1_Msk) | (val << REG_MTC_CONFIG_SEL_UART_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13547,24 +9273,16 @@ mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_1From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_SEL_UART_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_UART_2_Msk) | (val << REG_MTC_CONFIG_SEL_UART_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13574,24 +9292,16 @@ mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_2From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_SEL_UART_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_UART_3_Msk) | (val << REG_MTC_CONFIG_SEL_UART_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13601,24 +9311,16 @@ mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_3From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_SEL_UART_4(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_UART_4_Msk) | (val << REG_MTC_CONFIG_SEL_UART_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_4(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13628,24 +9330,16 @@ mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_4From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_SEL_UART_5(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_UART_5_Msk) | (val << REG_MTC_CONFIG_SEL_UART_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_5(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13655,24 +9349,16 @@ mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_5From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_SEL_UART_6(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_UART_6_Msk) | (val << REG_MTC_CONFIG_SEL_UART_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_6(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13682,24 +9368,16 @@ mm_response_t mm_getMTC_Addr_1_Set_SEL_UART_6From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_SEL_VBAT(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_VBAT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_SEL_VBAT(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13709,24 +9387,16 @@ mm_response_t mm_getMTC_Addr_1_Set_SEL_VBATFrom(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_SEL_VBAT_ALT(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_SEL_VBAT_ALT(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13736,24 +9406,16 @@ mm_response_t mm_getMTC_Addr_1_Set_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_SEL_VBAT_FPGA(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_SEL_VBAT_FPGA(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13763,24 +9425,16 @@ mm_response_t mm_getMTC_Addr_1_Set_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const 
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_SEL_nRESET_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_NRESET_1_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_SEL_nRESET_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13790,24 +9444,16 @@ mm_response_t mm_getMTC_Addr_1_Set_SEL_nRESET_1From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_SEL_nRESET_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_NRESET_2_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_SEL_nRESET_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13817,24 +9463,16 @@ mm_response_t mm_getMTC_Addr_1_Set_SEL_nRESET_2From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_SEL_nRESET_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_NRESET_3_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_SEL_nRESET_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13844,24 +9482,16 @@ mm_response_t mm_getMTC_Addr_1_Set_SEL_nRESET_3From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_SEL_CS_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_CS_1_Msk) | (val << REG_MTC_CONFIG_SEL_CS_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13871,24 +9501,16 @@ mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_1From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_SEL_CS_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_CS_2_Msk) | (val << REG_MTC_CONFIG_SEL_CS_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13898,24 +9520,16 @@ mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_2From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_SEL_CS_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_CS_3_Msk) | (val << REG_MTC_CONFIG_SEL_CS_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13925,24 +9539,16 @@ mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_3From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_SEL_CS_4(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_CS_4_Msk) | (val << REG_MTC_CONFIG_SEL_CS_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_4(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13952,24 +9558,16 @@ mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_4From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_SEL_CS_5(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_CS_5_Msk) | (val << REG_MTC_CONFIG_SEL_CS_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_5(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -13979,24 +9577,16 @@ mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_5From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_SEL_CS_6(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_CS_6_Msk) | (val << REG_MTC_CONFIG_SEL_CS_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_6(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14006,24 +9596,16 @@ mm_response_t mm_getMTC_Addr_1_Set_SEL_CS_6From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_SEL_SPI_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_SPI_1_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_SEL_SPI_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14033,24 +9615,16 @@ mm_response_t mm_getMTC_Addr_1_Set_SEL_SPI_1From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_SEL_SPI_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_SPI_2_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_SEL_SPI_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14060,24 +9634,16 @@ mm_response_t mm_getMTC_Addr_1_Set_SEL_SPI_2From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_SEL_CAN_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_CAN_1_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_SEL_CAN_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14087,24 +9653,16 @@ mm_response_t mm_getMTC_Addr_1_Set_SEL_CAN_1From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_SEL_CAN_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_CAN_2_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_SEL_CAN_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14114,24 +9672,16 @@ mm_response_t mm_getMTC_Addr_1_Set_SEL_CAN_2From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_SEL_CAN_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_CAN_3_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_SEL_CAN_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14141,24 +9691,16 @@ mm_response_t mm_getMTC_Addr_1_Set_SEL_CAN_3From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_1_Set_SEL_RS422(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Set = (mm.MTC_Addr_1_Set & ~REG_MTC_CONFIG_SEL_RS422_Msk) | (val << REG_MTC_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Set_SEL_RS422(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Set & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14169,46 +9711,28 @@ mm_response_t mm_getMTC_Addr_1_Set_SEL_RS422From(mm_enabled_t * dest, const uint
 
 /*************** Get/Set functions for MTC_Addr_1_Clear register **************************************************************/
 mm_response_t mm_setMTC_Addr_1_Clear(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.MTC_Addr_1_Clear;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_ScanEnabled(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SCANENABLED_Msk) | (val << REG_MTC_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_ScanEnabled(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14218,24 +9742,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_ScanEnabledFrom(mm_enabled_t * dest, const 
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_Detected(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_DETECTED_Msk) | (val << REG_MTC_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_Detected(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14245,24 +9761,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_DetectedFrom(bool * dest, const uint32_t so
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_Type(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_TYPE_Msk) | (val << REG_MTC_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_Type(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint32_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14272,24 +9780,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_TypeFrom(uint32_t * dest, const uint32_t so
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_ENABLE_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_ENABLE_1_Msk) | (val << REG_MTC_CONFIG_ENABLE_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_ENABLE_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14299,24 +9799,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_ENABLE_1From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_ENABLE_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_ENABLE_2_Msk) | (val << REG_MTC_CONFIG_ENABLE_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_ENABLE_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14326,24 +9818,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_ENABLE_2From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_SEL_I2C_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_I2C_1_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_SEL_I2C_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14353,24 +9837,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_SEL_I2C_1From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_SEL_I2C_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_I2C_2_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_SEL_I2C_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14380,24 +9856,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_SEL_I2C_2From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_SEL_UART_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_UART_1_Msk) | (val << REG_MTC_CONFIG_SEL_UART_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14407,24 +9875,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_1From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_SEL_UART_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_UART_2_Msk) | (val << REG_MTC_CONFIG_SEL_UART_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14434,24 +9894,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_2From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_SEL_UART_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_UART_3_Msk) | (val << REG_MTC_CONFIG_SEL_UART_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14461,24 +9913,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_3From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_SEL_UART_4(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_UART_4_Msk) | (val << REG_MTC_CONFIG_SEL_UART_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_4(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14488,24 +9932,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_4From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_SEL_UART_5(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_UART_5_Msk) | (val << REG_MTC_CONFIG_SEL_UART_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_5(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14515,24 +9951,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_5From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_SEL_UART_6(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_UART_6_Msk) | (val << REG_MTC_CONFIG_SEL_UART_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_6(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14542,24 +9970,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_SEL_UART_6From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_SEL_VBAT(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_VBAT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_SEL_VBAT(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14569,24 +9989,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_SEL_VBATFrom(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_SEL_VBAT_ALT(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_SEL_VBAT_ALT(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14596,24 +10008,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_SEL_VBAT_FPGA(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_SEL_VBAT_FPGA(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14623,24 +10027,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, cons
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_SEL_nRESET_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_NRESET_1_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_SEL_nRESET_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14650,24 +10046,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_SEL_nRESET_1From(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_SEL_nRESET_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_NRESET_2_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_SEL_nRESET_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14677,24 +10065,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_SEL_nRESET_2From(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_SEL_nRESET_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_NRESET_3_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_SEL_nRESET_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14704,24 +10084,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_SEL_nRESET_3From(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_SEL_CS_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_CS_1_Msk) | (val << REG_MTC_CONFIG_SEL_CS_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14731,24 +10103,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_1From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_SEL_CS_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_CS_2_Msk) | (val << REG_MTC_CONFIG_SEL_CS_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14758,24 +10122,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_2From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_SEL_CS_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_CS_3_Msk) | (val << REG_MTC_CONFIG_SEL_CS_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14785,24 +10141,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_3From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_SEL_CS_4(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_CS_4_Msk) | (val << REG_MTC_CONFIG_SEL_CS_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_4(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14812,24 +10160,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_4From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_SEL_CS_5(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_CS_5_Msk) | (val << REG_MTC_CONFIG_SEL_CS_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_5(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14839,24 +10179,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_5From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_SEL_CS_6(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_CS_6_Msk) | (val << REG_MTC_CONFIG_SEL_CS_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_6(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14866,24 +10198,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_SEL_CS_6From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_SEL_SPI_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_SPI_1_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_SEL_SPI_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14893,24 +10217,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_SEL_SPI_1From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_SEL_SPI_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_SPI_2_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_SEL_SPI_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14920,24 +10236,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_SEL_SPI_2From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_SEL_CAN_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_CAN_1_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_SEL_CAN_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14947,24 +10255,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_SEL_CAN_1From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_SEL_CAN_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_CAN_2_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_SEL_CAN_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -14974,24 +10274,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_SEL_CAN_2From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_SEL_CAN_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_CAN_3_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_SEL_CAN_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15001,24 +10293,16 @@ mm_response_t mm_getMTC_Addr_1_Clear_SEL_CAN_3From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_1_Clear_SEL_RS422(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_1_Clear = (mm.MTC_Addr_1_Clear & ~REG_MTC_CONFIG_SEL_RS422_Msk) | (val << REG_MTC_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_1_Clear_SEL_RS422(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_1_Clear & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15029,46 +10313,28 @@ mm_response_t mm_getMTC_Addr_1_Clear_SEL_RS422From(mm_enabled_t * dest, const ui
 
 /*************** Get/Set functions for MTC_Addr_2 register ********************************************************************/
 mm_response_t mm_setMTC_Addr_2(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.MTC_Addr_2;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setMTC_Addr_2_ScanEnabled(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SCANENABLED_Msk) | (val << REG_MTC_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_ScanEnabled(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15078,24 +10344,16 @@ mm_response_t mm_getMTC_Addr_2_ScanEnabledFrom(mm_enabled_t * dest, const uint32
 }
 
 mm_response_t mm_setMTC_Addr_2_Detected(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_DETECTED_Msk) | (val << REG_MTC_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Detected(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15105,24 +10363,16 @@ mm_response_t mm_getMTC_Addr_2_DetectedFrom(bool * dest, const uint32_t source) 
 }
 
 mm_response_t mm_setMTC_Addr_2_Type(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_TYPE_Msk) | (val << REG_MTC_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Type(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint32_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15132,24 +10382,16 @@ mm_response_t mm_getMTC_Addr_2_TypeFrom(uint32_t * dest, const uint32_t source) 
 }
 
 mm_response_t mm_setMTC_Addr_2_ENABLE_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_ENABLE_1_Msk) | (val << REG_MTC_CONFIG_ENABLE_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_ENABLE_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15159,24 +10401,16 @@ mm_response_t mm_getMTC_Addr_2_ENABLE_1From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_2_ENABLE_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_ENABLE_2_Msk) | (val << REG_MTC_CONFIG_ENABLE_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_ENABLE_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15186,24 +10420,16 @@ mm_response_t mm_getMTC_Addr_2_ENABLE_2From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_2_SEL_I2C_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_I2C_1_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_SEL_I2C_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15213,24 +10439,16 @@ mm_response_t mm_getMTC_Addr_2_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_2_SEL_I2C_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_I2C_2_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_SEL_I2C_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15240,24 +10458,16 @@ mm_response_t mm_getMTC_Addr_2_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_2_SEL_UART_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_UART_1_Msk) | (val << REG_MTC_CONFIG_SEL_UART_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_SEL_UART_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15267,24 +10477,16 @@ mm_response_t mm_getMTC_Addr_2_SEL_UART_1From(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setMTC_Addr_2_SEL_UART_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_UART_2_Msk) | (val << REG_MTC_CONFIG_SEL_UART_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_SEL_UART_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15294,24 +10496,16 @@ mm_response_t mm_getMTC_Addr_2_SEL_UART_2From(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setMTC_Addr_2_SEL_UART_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_UART_3_Msk) | (val << REG_MTC_CONFIG_SEL_UART_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_SEL_UART_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15321,24 +10515,16 @@ mm_response_t mm_getMTC_Addr_2_SEL_UART_3From(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setMTC_Addr_2_SEL_UART_4(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_UART_4_Msk) | (val << REG_MTC_CONFIG_SEL_UART_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_SEL_UART_4(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15348,24 +10534,16 @@ mm_response_t mm_getMTC_Addr_2_SEL_UART_4From(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setMTC_Addr_2_SEL_UART_5(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_UART_5_Msk) | (val << REG_MTC_CONFIG_SEL_UART_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_SEL_UART_5(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15375,24 +10553,16 @@ mm_response_t mm_getMTC_Addr_2_SEL_UART_5From(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setMTC_Addr_2_SEL_UART_6(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_UART_6_Msk) | (val << REG_MTC_CONFIG_SEL_UART_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_SEL_UART_6(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15402,24 +10572,16 @@ mm_response_t mm_getMTC_Addr_2_SEL_UART_6From(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setMTC_Addr_2_SEL_VBAT(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_VBAT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_SEL_VBAT(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15429,24 +10591,16 @@ mm_response_t mm_getMTC_Addr_2_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_2_SEL_VBAT_ALT(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_SEL_VBAT_ALT(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15456,24 +10610,16 @@ mm_response_t mm_getMTC_Addr_2_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_2_SEL_VBAT_FPGA(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_SEL_VBAT_FPGA(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15483,24 +10629,16 @@ mm_response_t mm_getMTC_Addr_2_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_2_SEL_nRESET_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_NRESET_1_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_SEL_nRESET_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15510,24 +10648,16 @@ mm_response_t mm_getMTC_Addr_2_SEL_nRESET_1From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_2_SEL_nRESET_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_NRESET_2_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_SEL_nRESET_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15537,24 +10667,16 @@ mm_response_t mm_getMTC_Addr_2_SEL_nRESET_2From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_2_SEL_nRESET_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_NRESET_3_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_SEL_nRESET_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15564,24 +10686,16 @@ mm_response_t mm_getMTC_Addr_2_SEL_nRESET_3From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_2_SEL_CS_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_CS_1_Msk) | (val << REG_MTC_CONFIG_SEL_CS_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_SEL_CS_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15591,24 +10705,16 @@ mm_response_t mm_getMTC_Addr_2_SEL_CS_1From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_2_SEL_CS_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_CS_2_Msk) | (val << REG_MTC_CONFIG_SEL_CS_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_SEL_CS_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15618,24 +10724,16 @@ mm_response_t mm_getMTC_Addr_2_SEL_CS_2From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_2_SEL_CS_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_CS_3_Msk) | (val << REG_MTC_CONFIG_SEL_CS_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_SEL_CS_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15645,24 +10743,16 @@ mm_response_t mm_getMTC_Addr_2_SEL_CS_3From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_2_SEL_CS_4(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_CS_4_Msk) | (val << REG_MTC_CONFIG_SEL_CS_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_SEL_CS_4(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15672,24 +10762,16 @@ mm_response_t mm_getMTC_Addr_2_SEL_CS_4From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_2_SEL_CS_5(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_CS_5_Msk) | (val << REG_MTC_CONFIG_SEL_CS_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_SEL_CS_5(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15699,24 +10781,16 @@ mm_response_t mm_getMTC_Addr_2_SEL_CS_5From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_2_SEL_CS_6(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_CS_6_Msk) | (val << REG_MTC_CONFIG_SEL_CS_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_SEL_CS_6(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15726,24 +10800,16 @@ mm_response_t mm_getMTC_Addr_2_SEL_CS_6From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_2_SEL_SPI_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_SPI_1_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_SEL_SPI_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15753,24 +10819,16 @@ mm_response_t mm_getMTC_Addr_2_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_2_SEL_SPI_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_SPI_2_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_SEL_SPI_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15780,24 +10838,16 @@ mm_response_t mm_getMTC_Addr_2_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_2_SEL_CAN_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_CAN_1_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_SEL_CAN_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15807,24 +10857,16 @@ mm_response_t mm_getMTC_Addr_2_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_2_SEL_CAN_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_CAN_2_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_SEL_CAN_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15834,24 +10876,16 @@ mm_response_t mm_getMTC_Addr_2_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_2_SEL_CAN_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_CAN_3_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_SEL_CAN_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15861,24 +10895,16 @@ mm_response_t mm_getMTC_Addr_2_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_2_SEL_RS422(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2 = (mm.MTC_Addr_2 & ~REG_MTC_CONFIG_SEL_RS422_Msk) | (val << REG_MTC_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_SEL_RS422(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2 & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15889,46 +10915,28 @@ mm_response_t mm_getMTC_Addr_2_SEL_RS422From(mm_enabled_t * dest, const uint32_t
 
 /*************** Get/Set functions for MTC_Addr_2_Set register ****************************************************************/
 mm_response_t mm_setMTC_Addr_2_Set(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.MTC_Addr_2_Set;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_ScanEnabled(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SCANENABLED_Msk) | (val << REG_MTC_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_ScanEnabled(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15938,24 +10946,16 @@ mm_response_t mm_getMTC_Addr_2_Set_ScanEnabledFrom(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_Detected(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_DETECTED_Msk) | (val << REG_MTC_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_Detected(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15965,24 +10965,16 @@ mm_response_t mm_getMTC_Addr_2_Set_DetectedFrom(bool * dest, const uint32_t sour
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_Type(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_TYPE_Msk) | (val << REG_MTC_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_Type(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint32_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -15992,24 +10984,16 @@ mm_response_t mm_getMTC_Addr_2_Set_TypeFrom(uint32_t * dest, const uint32_t sour
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_ENABLE_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_ENABLE_1_Msk) | (val << REG_MTC_CONFIG_ENABLE_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_ENABLE_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16019,24 +11003,16 @@ mm_response_t mm_getMTC_Addr_2_Set_ENABLE_1From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_ENABLE_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_ENABLE_2_Msk) | (val << REG_MTC_CONFIG_ENABLE_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_ENABLE_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16046,24 +11022,16 @@ mm_response_t mm_getMTC_Addr_2_Set_ENABLE_2From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_SEL_I2C_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_I2C_1_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_SEL_I2C_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16073,24 +11041,16 @@ mm_response_t mm_getMTC_Addr_2_Set_SEL_I2C_1From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_SEL_I2C_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_I2C_2_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_SEL_I2C_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16100,24 +11060,16 @@ mm_response_t mm_getMTC_Addr_2_Set_SEL_I2C_2From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_SEL_UART_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_UART_1_Msk) | (val << REG_MTC_CONFIG_SEL_UART_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16127,24 +11079,16 @@ mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_1From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_SEL_UART_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_UART_2_Msk) | (val << REG_MTC_CONFIG_SEL_UART_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16154,24 +11098,16 @@ mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_2From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_SEL_UART_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_UART_3_Msk) | (val << REG_MTC_CONFIG_SEL_UART_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16181,24 +11117,16 @@ mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_3From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_SEL_UART_4(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_UART_4_Msk) | (val << REG_MTC_CONFIG_SEL_UART_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_4(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16208,24 +11136,16 @@ mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_4From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_SEL_UART_5(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_UART_5_Msk) | (val << REG_MTC_CONFIG_SEL_UART_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_5(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16235,24 +11155,16 @@ mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_5From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_SEL_UART_6(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_UART_6_Msk) | (val << REG_MTC_CONFIG_SEL_UART_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_6(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16262,24 +11174,16 @@ mm_response_t mm_getMTC_Addr_2_Set_SEL_UART_6From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_SEL_VBAT(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_VBAT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_SEL_VBAT(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16289,24 +11193,16 @@ mm_response_t mm_getMTC_Addr_2_Set_SEL_VBATFrom(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_SEL_VBAT_ALT(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_SEL_VBAT_ALT(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16316,24 +11212,16 @@ mm_response_t mm_getMTC_Addr_2_Set_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_SEL_VBAT_FPGA(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_SEL_VBAT_FPGA(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16343,24 +11231,16 @@ mm_response_t mm_getMTC_Addr_2_Set_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const 
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_SEL_nRESET_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_NRESET_1_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_SEL_nRESET_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16370,24 +11250,16 @@ mm_response_t mm_getMTC_Addr_2_Set_SEL_nRESET_1From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_SEL_nRESET_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_NRESET_2_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_SEL_nRESET_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16397,24 +11269,16 @@ mm_response_t mm_getMTC_Addr_2_Set_SEL_nRESET_2From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_SEL_nRESET_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_NRESET_3_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_SEL_nRESET_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16424,24 +11288,16 @@ mm_response_t mm_getMTC_Addr_2_Set_SEL_nRESET_3From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_SEL_CS_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_CS_1_Msk) | (val << REG_MTC_CONFIG_SEL_CS_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16451,24 +11307,16 @@ mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_1From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_SEL_CS_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_CS_2_Msk) | (val << REG_MTC_CONFIG_SEL_CS_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16478,24 +11326,16 @@ mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_2From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_SEL_CS_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_CS_3_Msk) | (val << REG_MTC_CONFIG_SEL_CS_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16505,24 +11345,16 @@ mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_3From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_SEL_CS_4(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_CS_4_Msk) | (val << REG_MTC_CONFIG_SEL_CS_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_4(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16532,24 +11364,16 @@ mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_4From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_SEL_CS_5(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_CS_5_Msk) | (val << REG_MTC_CONFIG_SEL_CS_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_5(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16559,24 +11383,16 @@ mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_5From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_SEL_CS_6(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_CS_6_Msk) | (val << REG_MTC_CONFIG_SEL_CS_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_6(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16586,24 +11402,16 @@ mm_response_t mm_getMTC_Addr_2_Set_SEL_CS_6From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_SEL_SPI_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_SPI_1_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_SEL_SPI_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16613,24 +11421,16 @@ mm_response_t mm_getMTC_Addr_2_Set_SEL_SPI_1From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_SEL_SPI_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_SPI_2_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_SEL_SPI_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16640,24 +11440,16 @@ mm_response_t mm_getMTC_Addr_2_Set_SEL_SPI_2From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_SEL_CAN_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_CAN_1_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_SEL_CAN_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16667,24 +11459,16 @@ mm_response_t mm_getMTC_Addr_2_Set_SEL_CAN_1From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_SEL_CAN_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_CAN_2_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_SEL_CAN_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16694,24 +11478,16 @@ mm_response_t mm_getMTC_Addr_2_Set_SEL_CAN_2From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_SEL_CAN_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_CAN_3_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_SEL_CAN_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16721,24 +11497,16 @@ mm_response_t mm_getMTC_Addr_2_Set_SEL_CAN_3From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_2_Set_SEL_RS422(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Set = (mm.MTC_Addr_2_Set & ~REG_MTC_CONFIG_SEL_RS422_Msk) | (val << REG_MTC_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Set_SEL_RS422(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Set & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16749,46 +11517,28 @@ mm_response_t mm_getMTC_Addr_2_Set_SEL_RS422From(mm_enabled_t * dest, const uint
 
 /*************** Get/Set functions for MTC_Addr_2_Clear register **************************************************************/
 mm_response_t mm_setMTC_Addr_2_Clear(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.MTC_Addr_2_Clear;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_ScanEnabled(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SCANENABLED_Msk) | (val << REG_MTC_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_ScanEnabled(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16798,24 +11548,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_ScanEnabledFrom(mm_enabled_t * dest, const 
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_Detected(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_DETECTED_Msk) | (val << REG_MTC_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_Detected(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16825,24 +11567,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_DetectedFrom(bool * dest, const uint32_t so
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_Type(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_TYPE_Msk) | (val << REG_MTC_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_Type(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint32_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16852,24 +11586,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_TypeFrom(uint32_t * dest, const uint32_t so
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_ENABLE_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_ENABLE_1_Msk) | (val << REG_MTC_CONFIG_ENABLE_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_ENABLE_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16879,24 +11605,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_ENABLE_1From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_ENABLE_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_ENABLE_2_Msk) | (val << REG_MTC_CONFIG_ENABLE_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_ENABLE_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16906,24 +11624,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_ENABLE_2From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_SEL_I2C_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_I2C_1_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_SEL_I2C_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16933,24 +11643,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_SEL_I2C_1From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_SEL_I2C_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_I2C_2_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_SEL_I2C_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16960,24 +11662,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_SEL_I2C_2From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_SEL_UART_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_UART_1_Msk) | (val << REG_MTC_CONFIG_SEL_UART_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -16987,24 +11681,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_1From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_SEL_UART_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_UART_2_Msk) | (val << REG_MTC_CONFIG_SEL_UART_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17014,24 +11700,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_2From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_SEL_UART_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_UART_3_Msk) | (val << REG_MTC_CONFIG_SEL_UART_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17041,24 +11719,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_3From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_SEL_UART_4(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_UART_4_Msk) | (val << REG_MTC_CONFIG_SEL_UART_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_4(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17068,24 +11738,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_4From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_SEL_UART_5(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_UART_5_Msk) | (val << REG_MTC_CONFIG_SEL_UART_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_5(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17095,24 +11757,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_5From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_SEL_UART_6(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_UART_6_Msk) | (val << REG_MTC_CONFIG_SEL_UART_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_6(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17122,24 +11776,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_SEL_UART_6From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_SEL_VBAT(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_VBAT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_SEL_VBAT(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17149,24 +11795,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_SEL_VBATFrom(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_SEL_VBAT_ALT(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_SEL_VBAT_ALT(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17176,24 +11814,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_SEL_VBAT_FPGA(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_SEL_VBAT_FPGA(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17203,24 +11833,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, cons
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_SEL_nRESET_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_NRESET_1_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_SEL_nRESET_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17230,24 +11852,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_SEL_nRESET_1From(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_SEL_nRESET_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_NRESET_2_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_SEL_nRESET_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17257,24 +11871,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_SEL_nRESET_2From(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_SEL_nRESET_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_NRESET_3_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_SEL_nRESET_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17284,24 +11890,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_SEL_nRESET_3From(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_SEL_CS_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_CS_1_Msk) | (val << REG_MTC_CONFIG_SEL_CS_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17311,24 +11909,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_1From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_SEL_CS_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_CS_2_Msk) | (val << REG_MTC_CONFIG_SEL_CS_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17338,24 +11928,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_2From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_SEL_CS_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_CS_3_Msk) | (val << REG_MTC_CONFIG_SEL_CS_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17365,24 +11947,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_3From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_SEL_CS_4(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_CS_4_Msk) | (val << REG_MTC_CONFIG_SEL_CS_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_4(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17392,24 +11966,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_4From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_SEL_CS_5(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_CS_5_Msk) | (val << REG_MTC_CONFIG_SEL_CS_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_5(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17419,24 +11985,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_5From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_SEL_CS_6(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_CS_6_Msk) | (val << REG_MTC_CONFIG_SEL_CS_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_6(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17446,24 +12004,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_SEL_CS_6From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_SEL_SPI_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_SPI_1_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_SEL_SPI_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17473,24 +12023,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_SEL_SPI_1From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_SEL_SPI_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_SPI_2_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_SEL_SPI_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17500,24 +12042,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_SEL_SPI_2From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_SEL_CAN_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_CAN_1_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_SEL_CAN_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17527,24 +12061,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_SEL_CAN_1From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_SEL_CAN_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_CAN_2_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_SEL_CAN_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17554,24 +12080,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_SEL_CAN_2From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_SEL_CAN_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_CAN_3_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_SEL_CAN_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17581,24 +12099,16 @@ mm_response_t mm_getMTC_Addr_2_Clear_SEL_CAN_3From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_2_Clear_SEL_RS422(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_2_Clear = (mm.MTC_Addr_2_Clear & ~REG_MTC_CONFIG_SEL_RS422_Msk) | (val << REG_MTC_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_2_Clear_SEL_RS422(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_2_Clear & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17609,46 +12119,28 @@ mm_response_t mm_getMTC_Addr_2_Clear_SEL_RS422From(mm_enabled_t * dest, const ui
 
 /*************** Get/Set functions for MTC_Addr_3 register ********************************************************************/
 mm_response_t mm_setMTC_Addr_3(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.MTC_Addr_3;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setMTC_Addr_3_ScanEnabled(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SCANENABLED_Msk) | (val << REG_MTC_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_ScanEnabled(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17658,24 +12150,16 @@ mm_response_t mm_getMTC_Addr_3_ScanEnabledFrom(mm_enabled_t * dest, const uint32
 }
 
 mm_response_t mm_setMTC_Addr_3_Detected(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_DETECTED_Msk) | (val << REG_MTC_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Detected(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17685,24 +12169,16 @@ mm_response_t mm_getMTC_Addr_3_DetectedFrom(bool * dest, const uint32_t source) 
 }
 
 mm_response_t mm_setMTC_Addr_3_Type(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_TYPE_Msk) | (val << REG_MTC_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Type(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint32_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17712,24 +12188,16 @@ mm_response_t mm_getMTC_Addr_3_TypeFrom(uint32_t * dest, const uint32_t source) 
 }
 
 mm_response_t mm_setMTC_Addr_3_ENABLE_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_ENABLE_1_Msk) | (val << REG_MTC_CONFIG_ENABLE_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_ENABLE_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17739,24 +12207,16 @@ mm_response_t mm_getMTC_Addr_3_ENABLE_1From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_3_ENABLE_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_ENABLE_2_Msk) | (val << REG_MTC_CONFIG_ENABLE_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_ENABLE_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17766,24 +12226,16 @@ mm_response_t mm_getMTC_Addr_3_ENABLE_2From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_3_SEL_I2C_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_I2C_1_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_SEL_I2C_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17793,24 +12245,16 @@ mm_response_t mm_getMTC_Addr_3_SEL_I2C_1From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_3_SEL_I2C_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_I2C_2_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_SEL_I2C_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17820,24 +12264,16 @@ mm_response_t mm_getMTC_Addr_3_SEL_I2C_2From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_3_SEL_UART_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_UART_1_Msk) | (val << REG_MTC_CONFIG_SEL_UART_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_SEL_UART_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17847,24 +12283,16 @@ mm_response_t mm_getMTC_Addr_3_SEL_UART_1From(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setMTC_Addr_3_SEL_UART_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_UART_2_Msk) | (val << REG_MTC_CONFIG_SEL_UART_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_SEL_UART_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17874,24 +12302,16 @@ mm_response_t mm_getMTC_Addr_3_SEL_UART_2From(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setMTC_Addr_3_SEL_UART_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_UART_3_Msk) | (val << REG_MTC_CONFIG_SEL_UART_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_SEL_UART_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17901,24 +12321,16 @@ mm_response_t mm_getMTC_Addr_3_SEL_UART_3From(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setMTC_Addr_3_SEL_UART_4(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_UART_4_Msk) | (val << REG_MTC_CONFIG_SEL_UART_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_SEL_UART_4(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17928,24 +12340,16 @@ mm_response_t mm_getMTC_Addr_3_SEL_UART_4From(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setMTC_Addr_3_SEL_UART_5(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_UART_5_Msk) | (val << REG_MTC_CONFIG_SEL_UART_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_SEL_UART_5(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17955,24 +12359,16 @@ mm_response_t mm_getMTC_Addr_3_SEL_UART_5From(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setMTC_Addr_3_SEL_UART_6(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_UART_6_Msk) | (val << REG_MTC_CONFIG_SEL_UART_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_SEL_UART_6(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -17982,24 +12378,16 @@ mm_response_t mm_getMTC_Addr_3_SEL_UART_6From(mm_enabled_t * dest, const uint32_
 }
 
 mm_response_t mm_setMTC_Addr_3_SEL_VBAT(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_VBAT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_SEL_VBAT(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18009,24 +12397,16 @@ mm_response_t mm_getMTC_Addr_3_SEL_VBATFrom(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_3_SEL_VBAT_ALT(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_SEL_VBAT_ALT(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18036,24 +12416,16 @@ mm_response_t mm_getMTC_Addr_3_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_3_SEL_VBAT_FPGA(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_SEL_VBAT_FPGA(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18063,24 +12435,16 @@ mm_response_t mm_getMTC_Addr_3_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_3_SEL_nRESET_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_NRESET_1_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_SEL_nRESET_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18090,24 +12454,16 @@ mm_response_t mm_getMTC_Addr_3_SEL_nRESET_1From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_3_SEL_nRESET_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_NRESET_2_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_SEL_nRESET_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18117,24 +12473,16 @@ mm_response_t mm_getMTC_Addr_3_SEL_nRESET_2From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_3_SEL_nRESET_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_NRESET_3_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_SEL_nRESET_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18144,24 +12492,16 @@ mm_response_t mm_getMTC_Addr_3_SEL_nRESET_3From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_3_SEL_CS_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_CS_1_Msk) | (val << REG_MTC_CONFIG_SEL_CS_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_SEL_CS_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18171,24 +12511,16 @@ mm_response_t mm_getMTC_Addr_3_SEL_CS_1From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_3_SEL_CS_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_CS_2_Msk) | (val << REG_MTC_CONFIG_SEL_CS_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_SEL_CS_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18198,24 +12530,16 @@ mm_response_t mm_getMTC_Addr_3_SEL_CS_2From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_3_SEL_CS_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_CS_3_Msk) | (val << REG_MTC_CONFIG_SEL_CS_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_SEL_CS_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18225,24 +12549,16 @@ mm_response_t mm_getMTC_Addr_3_SEL_CS_3From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_3_SEL_CS_4(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_CS_4_Msk) | (val << REG_MTC_CONFIG_SEL_CS_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_SEL_CS_4(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18252,24 +12568,16 @@ mm_response_t mm_getMTC_Addr_3_SEL_CS_4From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_3_SEL_CS_5(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_CS_5_Msk) | (val << REG_MTC_CONFIG_SEL_CS_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_SEL_CS_5(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18279,24 +12587,16 @@ mm_response_t mm_getMTC_Addr_3_SEL_CS_5From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_3_SEL_CS_6(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_CS_6_Msk) | (val << REG_MTC_CONFIG_SEL_CS_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_SEL_CS_6(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18306,24 +12606,16 @@ mm_response_t mm_getMTC_Addr_3_SEL_CS_6From(mm_enabled_t * dest, const uint32_t 
 }
 
 mm_response_t mm_setMTC_Addr_3_SEL_SPI_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_SPI_1_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_SEL_SPI_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18333,24 +12625,16 @@ mm_response_t mm_getMTC_Addr_3_SEL_SPI_1From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_3_SEL_SPI_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_SPI_2_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_SEL_SPI_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18360,24 +12644,16 @@ mm_response_t mm_getMTC_Addr_3_SEL_SPI_2From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_3_SEL_CAN_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_CAN_1_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_SEL_CAN_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18387,24 +12663,16 @@ mm_response_t mm_getMTC_Addr_3_SEL_CAN_1From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_3_SEL_CAN_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_CAN_2_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_SEL_CAN_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18414,24 +12682,16 @@ mm_response_t mm_getMTC_Addr_3_SEL_CAN_2From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_3_SEL_CAN_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_CAN_3_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_SEL_CAN_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18441,24 +12701,16 @@ mm_response_t mm_getMTC_Addr_3_SEL_CAN_3From(mm_enabled_t * dest, const uint32_t
 }
 
 mm_response_t mm_setMTC_Addr_3_SEL_RS422(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3 = (mm.MTC_Addr_3 & ~REG_MTC_CONFIG_SEL_RS422_Msk) | (val << REG_MTC_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_SEL_RS422(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3 & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18469,46 +12721,28 @@ mm_response_t mm_getMTC_Addr_3_SEL_RS422From(mm_enabled_t * dest, const uint32_t
 
 /*************** Get/Set functions for MTC_Addr_3_Set register ****************************************************************/
 mm_response_t mm_setMTC_Addr_3_Set(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.MTC_Addr_3_Set;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_ScanEnabled(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SCANENABLED_Msk) | (val << REG_MTC_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_ScanEnabled(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18518,24 +12752,16 @@ mm_response_t mm_getMTC_Addr_3_Set_ScanEnabledFrom(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_Detected(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_DETECTED_Msk) | (val << REG_MTC_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_Detected(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18545,24 +12771,16 @@ mm_response_t mm_getMTC_Addr_3_Set_DetectedFrom(bool * dest, const uint32_t sour
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_Type(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_TYPE_Msk) | (val << REG_MTC_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_Type(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint32_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18572,24 +12790,16 @@ mm_response_t mm_getMTC_Addr_3_Set_TypeFrom(uint32_t * dest, const uint32_t sour
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_ENABLE_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_ENABLE_1_Msk) | (val << REG_MTC_CONFIG_ENABLE_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_ENABLE_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18599,24 +12809,16 @@ mm_response_t mm_getMTC_Addr_3_Set_ENABLE_1From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_ENABLE_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_ENABLE_2_Msk) | (val << REG_MTC_CONFIG_ENABLE_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_ENABLE_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18626,24 +12828,16 @@ mm_response_t mm_getMTC_Addr_3_Set_ENABLE_2From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_SEL_I2C_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_I2C_1_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_SEL_I2C_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18653,24 +12847,16 @@ mm_response_t mm_getMTC_Addr_3_Set_SEL_I2C_1From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_SEL_I2C_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_I2C_2_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_SEL_I2C_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18680,24 +12866,16 @@ mm_response_t mm_getMTC_Addr_3_Set_SEL_I2C_2From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_SEL_UART_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_UART_1_Msk) | (val << REG_MTC_CONFIG_SEL_UART_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18707,24 +12885,16 @@ mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_1From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_SEL_UART_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_UART_2_Msk) | (val << REG_MTC_CONFIG_SEL_UART_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18734,24 +12904,16 @@ mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_2From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_SEL_UART_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_UART_3_Msk) | (val << REG_MTC_CONFIG_SEL_UART_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18761,24 +12923,16 @@ mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_3From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_SEL_UART_4(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_UART_4_Msk) | (val << REG_MTC_CONFIG_SEL_UART_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_4(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18788,24 +12942,16 @@ mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_4From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_SEL_UART_5(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_UART_5_Msk) | (val << REG_MTC_CONFIG_SEL_UART_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_5(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18815,24 +12961,16 @@ mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_5From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_SEL_UART_6(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_UART_6_Msk) | (val << REG_MTC_CONFIG_SEL_UART_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_6(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18842,24 +12980,16 @@ mm_response_t mm_getMTC_Addr_3_Set_SEL_UART_6From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_SEL_VBAT(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_VBAT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_SEL_VBAT(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18869,24 +12999,16 @@ mm_response_t mm_getMTC_Addr_3_Set_SEL_VBATFrom(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_SEL_VBAT_ALT(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_SEL_VBAT_ALT(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18896,24 +13018,16 @@ mm_response_t mm_getMTC_Addr_3_Set_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_SEL_VBAT_FPGA(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_SEL_VBAT_FPGA(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18923,24 +13037,16 @@ mm_response_t mm_getMTC_Addr_3_Set_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, const 
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_SEL_nRESET_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_NRESET_1_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_SEL_nRESET_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18950,24 +13056,16 @@ mm_response_t mm_getMTC_Addr_3_Set_SEL_nRESET_1From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_SEL_nRESET_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_NRESET_2_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_SEL_nRESET_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -18977,24 +13075,16 @@ mm_response_t mm_getMTC_Addr_3_Set_SEL_nRESET_2From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_SEL_nRESET_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_NRESET_3_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_SEL_nRESET_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19004,24 +13094,16 @@ mm_response_t mm_getMTC_Addr_3_Set_SEL_nRESET_3From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_SEL_CS_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_CS_1_Msk) | (val << REG_MTC_CONFIG_SEL_CS_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19031,24 +13113,16 @@ mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_1From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_SEL_CS_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_CS_2_Msk) | (val << REG_MTC_CONFIG_SEL_CS_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19058,24 +13132,16 @@ mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_2From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_SEL_CS_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_CS_3_Msk) | (val << REG_MTC_CONFIG_SEL_CS_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19085,24 +13151,16 @@ mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_3From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_SEL_CS_4(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_CS_4_Msk) | (val << REG_MTC_CONFIG_SEL_CS_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_4(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19112,24 +13170,16 @@ mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_4From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_SEL_CS_5(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_CS_5_Msk) | (val << REG_MTC_CONFIG_SEL_CS_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_5(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19139,24 +13189,16 @@ mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_5From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_SEL_CS_6(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_CS_6_Msk) | (val << REG_MTC_CONFIG_SEL_CS_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_6(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19166,24 +13208,16 @@ mm_response_t mm_getMTC_Addr_3_Set_SEL_CS_6From(mm_enabled_t * dest, const uint3
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_SEL_SPI_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_SPI_1_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_SEL_SPI_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19193,24 +13227,16 @@ mm_response_t mm_getMTC_Addr_3_Set_SEL_SPI_1From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_SEL_SPI_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_SPI_2_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_SEL_SPI_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19220,24 +13246,16 @@ mm_response_t mm_getMTC_Addr_3_Set_SEL_SPI_2From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_SEL_CAN_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_CAN_1_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_SEL_CAN_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19247,24 +13265,16 @@ mm_response_t mm_getMTC_Addr_3_Set_SEL_CAN_1From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_SEL_CAN_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_CAN_2_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_SEL_CAN_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19274,24 +13284,16 @@ mm_response_t mm_getMTC_Addr_3_Set_SEL_CAN_2From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_SEL_CAN_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_CAN_3_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_SEL_CAN_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19301,24 +13303,16 @@ mm_response_t mm_getMTC_Addr_3_Set_SEL_CAN_3From(mm_enabled_t * dest, const uint
 }
 
 mm_response_t mm_setMTC_Addr_3_Set_SEL_RS422(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Set = (mm.MTC_Addr_3_Set & ~REG_MTC_CONFIG_SEL_RS422_Msk) | (val << REG_MTC_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Set_SEL_RS422(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Set & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19329,46 +13323,28 @@ mm_response_t mm_getMTC_Addr_3_Set_SEL_RS422From(mm_enabled_t * dest, const uint
 
 /*************** Get/Set functions for MTC_Addr_3_Clear register **************************************************************/
 mm_response_t mm_setMTC_Addr_3_Clear(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.MTC_Addr_3_Clear;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_ScanEnabled(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SCANENABLED_Msk) | (val << REG_MTC_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_ScanEnabled(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SCANENABLED_Msk) >> REG_MTC_CONFIG_SCANENABLED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19378,24 +13354,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_ScanEnabledFrom(mm_enabled_t * dest, const 
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_Detected(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_DETECTED_Msk) | (val << REG_MTC_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_Detected(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_DETECTED_Msk) >> REG_MTC_CONFIG_DETECTED_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19405,24 +13373,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_DetectedFrom(bool * dest, const uint32_t so
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_Type(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_TYPE_Msk) | (val << REG_MTC_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_Type(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint32_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_TYPE_Msk) >> REG_MTC_CONFIG_TYPE_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19432,24 +13392,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_TypeFrom(uint32_t * dest, const uint32_t so
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_ENABLE_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_ENABLE_1_Msk) | (val << REG_MTC_CONFIG_ENABLE_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_ENABLE_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_ENABLE_1_Msk) >> REG_MTC_CONFIG_ENABLE_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19459,24 +13411,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_ENABLE_1From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_ENABLE_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_ENABLE_2_Msk) | (val << REG_MTC_CONFIG_ENABLE_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_ENABLE_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_ENABLE_2_Msk) >> REG_MTC_CONFIG_ENABLE_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19486,24 +13430,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_ENABLE_2From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_SEL_I2C_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_I2C_1_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_SEL_I2C_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_I2C_1_Msk) >> REG_MTC_CONFIG_SEL_I2C_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19513,24 +13449,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_SEL_I2C_1From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_SEL_I2C_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_I2C_2_Msk) | (val << REG_MTC_CONFIG_SEL_I2C_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_SEL_I2C_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_I2C_2_Msk) >> REG_MTC_CONFIG_SEL_I2C_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19540,24 +13468,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_SEL_I2C_2From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_SEL_UART_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_UART_1_Msk) | (val << REG_MTC_CONFIG_SEL_UART_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_UART_1_Msk) >> REG_MTC_CONFIG_SEL_UART_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19567,24 +13487,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_1From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_SEL_UART_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_UART_2_Msk) | (val << REG_MTC_CONFIG_SEL_UART_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_UART_2_Msk) >> REG_MTC_CONFIG_SEL_UART_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19594,24 +13506,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_2From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_SEL_UART_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_UART_3_Msk) | (val << REG_MTC_CONFIG_SEL_UART_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_UART_3_Msk) >> REG_MTC_CONFIG_SEL_UART_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19621,24 +13525,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_3From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_SEL_UART_4(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_UART_4_Msk) | (val << REG_MTC_CONFIG_SEL_UART_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_4(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_UART_4_Msk) >> REG_MTC_CONFIG_SEL_UART_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19648,24 +13544,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_4From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_SEL_UART_5(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_UART_5_Msk) | (val << REG_MTC_CONFIG_SEL_UART_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_5(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_UART_5_Msk) >> REG_MTC_CONFIG_SEL_UART_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19675,24 +13563,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_5From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_SEL_UART_6(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_UART_6_Msk) | (val << REG_MTC_CONFIG_SEL_UART_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_6(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_UART_6_Msk) >> REG_MTC_CONFIG_SEL_UART_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19702,24 +13582,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_SEL_UART_6From(mm_enabled_t * dest, const u
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_SEL_VBAT(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_VBAT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_SEL_VBAT(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_VBAT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19729,24 +13601,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_SEL_VBATFrom(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_SEL_VBAT_ALT(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_SEL_VBAT_ALT(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_VBAT_ALT_Msk) >> REG_MTC_CONFIG_SEL_VBAT_ALT_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19756,24 +13620,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_SEL_VBAT_ALTFrom(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_SEL_VBAT_FPGA(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) | (val << REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_SEL_VBAT_FPGA(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_VBAT_FPGA_Msk) >> REG_MTC_CONFIG_SEL_VBAT_FPGA_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19783,24 +13639,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_SEL_VBAT_FPGAFrom(mm_enabled_t * dest, cons
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_SEL_nRESET_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_NRESET_1_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_SEL_nRESET_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_NRESET_1_Msk) >> REG_MTC_CONFIG_SEL_NRESET_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19810,24 +13658,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_SEL_nRESET_1From(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_SEL_nRESET_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_NRESET_2_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_SEL_nRESET_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_NRESET_2_Msk) >> REG_MTC_CONFIG_SEL_NRESET_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19837,24 +13677,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_SEL_nRESET_2From(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_SEL_nRESET_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_NRESET_3_Msk) | (val << REG_MTC_CONFIG_SEL_NRESET_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_SEL_nRESET_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_NRESET_3_Msk) >> REG_MTC_CONFIG_SEL_NRESET_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19864,24 +13696,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_SEL_nRESET_3From(mm_enabled_t * dest, const
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_SEL_CS_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_CS_1_Msk) | (val << REG_MTC_CONFIG_SEL_CS_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_CS_1_Msk) >> REG_MTC_CONFIG_SEL_CS_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19891,24 +13715,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_1From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_SEL_CS_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_CS_2_Msk) | (val << REG_MTC_CONFIG_SEL_CS_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_CS_2_Msk) >> REG_MTC_CONFIG_SEL_CS_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19918,24 +13734,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_2From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_SEL_CS_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_CS_3_Msk) | (val << REG_MTC_CONFIG_SEL_CS_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_CS_3_Msk) >> REG_MTC_CONFIG_SEL_CS_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19945,24 +13753,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_3From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_SEL_CS_4(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_CS_4_Msk) | (val << REG_MTC_CONFIG_SEL_CS_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_4(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_CS_4_Msk) >> REG_MTC_CONFIG_SEL_CS_4_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19972,24 +13772,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_4From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_SEL_CS_5(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_CS_5_Msk) | (val << REG_MTC_CONFIG_SEL_CS_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_5(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_CS_5_Msk) >> REG_MTC_CONFIG_SEL_CS_5_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -19999,24 +13791,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_5From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_SEL_CS_6(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_CS_6_Msk) | (val << REG_MTC_CONFIG_SEL_CS_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_6(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_CS_6_Msk) >> REG_MTC_CONFIG_SEL_CS_6_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20026,24 +13810,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_SEL_CS_6From(mm_enabled_t * dest, const uin
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_SEL_SPI_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_SPI_1_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_SEL_SPI_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_SPI_1_Msk) >> REG_MTC_CONFIG_SEL_SPI_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20053,24 +13829,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_SEL_SPI_1From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_SEL_SPI_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_SPI_2_Msk) | (val << REG_MTC_CONFIG_SEL_SPI_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_SEL_SPI_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_SPI_2_Msk) >> REG_MTC_CONFIG_SEL_SPI_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20080,24 +13848,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_SEL_SPI_2From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_SEL_CAN_1(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_CAN_1_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_SEL_CAN_1(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_CAN_1_Msk) >> REG_MTC_CONFIG_SEL_CAN_1_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20107,24 +13867,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_SEL_CAN_1From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_SEL_CAN_2(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_CAN_2_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_SEL_CAN_2(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_CAN_2_Msk) >> REG_MTC_CONFIG_SEL_CAN_2_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20134,24 +13886,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_SEL_CAN_2From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_SEL_CAN_3(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_CAN_3_Msk) | (val << REG_MTC_CONFIG_SEL_CAN_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_SEL_CAN_3(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_CAN_3_Msk) >> REG_MTC_CONFIG_SEL_CAN_3_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20161,24 +13905,16 @@ mm_response_t mm_getMTC_Addr_3_Clear_SEL_CAN_3From(mm_enabled_t * dest, const ui
 }
 
 mm_response_t mm_setMTC_Addr_3_Clear_SEL_RS422(const mm_enabled_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.MTC_Addr_3_Clear = (mm.MTC_Addr_3_Clear & ~REG_MTC_CONFIG_SEL_RS422_Msk) | (val << REG_MTC_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getMTC_Addr_3_Clear_SEL_RS422(mm_enabled_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_enabled_t) ((mm.MTC_Addr_3_Clear & REG_MTC_CONFIG_SEL_RS422_Msk) >> REG_MTC_CONFIG_SEL_RS422_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20189,46 +13925,28 @@ mm_response_t mm_getMTC_Addr_3_Clear_SEL_RS422From(mm_enabled_t * dest, const ui
 
 /*************** Get/Set functions for RTOS_Status0 register ******************************************************************/
 mm_response_t mm_setRTOS_Status0(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.RTOS_Status0 = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getRTOS_Status0(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.RTOS_Status0;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setRTOS_Status0_uartRxHBOverflow(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_UARTRXHBOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_UARTRXHBOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getRTOS_Status0_uartRxHBOverflow(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_UARTRXHBOVERFLOW_Msk) >> REG_RTOS_STATUS0_UARTRXHBOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20238,24 +13956,16 @@ mm_response_t mm_getRTOS_Status0_uartRxHBOverflowFrom(bool * dest, const uint32_
 }
 
 mm_response_t mm_setRTOS_Status0_uartRxSBOverflow(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_UARTRXSBOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_UARTRXSBOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getRTOS_Status0_uartRxSBOverflow(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_UARTRXSBOVERFLOW_Msk) >> REG_RTOS_STATUS0_UARTRXSBOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20265,24 +13975,16 @@ mm_response_t mm_getRTOS_Status0_uartRxSBOverflowFrom(bool * dest, const uint32_
 }
 
 mm_response_t mm_setRTOS_Status0_uartTxSBOverflow(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_UARTTXSBOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_UARTTXSBOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getRTOS_Status0_uartTxSBOverflow(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_UARTTXSBOVERFLOW_Msk) >> REG_RTOS_STATUS0_UARTTXSBOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20292,24 +13994,16 @@ mm_response_t mm_getRTOS_Status0_uartTxSBOverflowFrom(bool * dest, const uint32_
 }
 
 mm_response_t mm_setRTOS_Status0_uartTxHBOverflow(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_UARTTXHBOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_UARTTXHBOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getRTOS_Status0_uartTxHBOverflow(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_UARTTXHBOVERFLOW_Msk) >> REG_RTOS_STATUS0_UARTTXHBOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20319,24 +14013,16 @@ mm_response_t mm_getRTOS_Status0_uartTxHBOverflowFrom(bool * dest, const uint32_
 }
 
 mm_response_t mm_setRTOS_Status0_I2CTargetIncomingOverflow(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_I2CTARGETINCOMINGOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_I2CTARGETINCOMINGOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getRTOS_Status0_I2CTargetIncomingOverflow(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_I2CTARGETINCOMINGOVERFLOW_Msk) >> REG_RTOS_STATUS0_I2CTARGETINCOMINGOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20346,24 +14032,16 @@ mm_response_t mm_getRTOS_Status0_I2CTargetIncomingOverflowFrom(bool * dest, cons
 }
 
 mm_response_t mm_setRTOS_Status0_I2CTargetOutgoingOverflow(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_I2CTARGETOUTGOINGOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_I2CTARGETOUTGOINGOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getRTOS_Status0_I2CTargetOutgoingOverflow(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_I2CTARGETOUTGOINGOVERFLOW_Msk) >> REG_RTOS_STATUS0_I2CTARGETOUTGOINGOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20373,24 +14051,16 @@ mm_response_t mm_getRTOS_Status0_I2CTargetOutgoingOverflowFrom(bool * dest, cons
 }
 
 mm_response_t mm_setRTOS_Status0_CANTargetIncomingOverflow(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_CANTARGETINCOMINGOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_CANTARGETINCOMINGOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getRTOS_Status0_CANTargetIncomingOverflow(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_CANTARGETINCOMINGOVERFLOW_Msk) >> REG_RTOS_STATUS0_CANTARGETINCOMINGOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20400,24 +14070,16 @@ mm_response_t mm_getRTOS_Status0_CANTargetIncomingOverflowFrom(bool * dest, cons
 }
 
 mm_response_t mm_setRTOS_Status0_CANInterruptBufferOverflow(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_CANINTERRUPTBUFFEROVERFLOW_Msk) | (val << REG_RTOS_STATUS0_CANINTERRUPTBUFFEROVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getRTOS_Status0_CANInterruptBufferOverflow(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_CANINTERRUPTBUFFEROVERFLOW_Msk) >> REG_RTOS_STATUS0_CANINTERRUPTBUFFEROVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20427,24 +14089,16 @@ mm_response_t mm_getRTOS_Status0_CANInterruptBufferOverflowFrom(bool * dest, con
 }
 
 mm_response_t mm_setRTOS_Status0_CANTargetOutgoingOverflow(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_CANTARGETOUTGOINGOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_CANTARGETOUTGOINGOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getRTOS_Status0_CANTargetOutgoingOverflow(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_CANTARGETOUTGOINGOVERFLOW_Msk) >> REG_RTOS_STATUS0_CANTARGETOUTGOINGOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20454,24 +14108,16 @@ mm_response_t mm_getRTOS_Status0_CANTargetOutgoingOverflowFrom(bool * dest, cons
 }
 
 mm_response_t mm_setRTOS_Status0_UARTTargetIncomingOverflow(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_UARTTARGETINCOMINGOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_UARTTARGETINCOMINGOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getRTOS_Status0_UARTTargetIncomingOverflow(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_UARTTARGETINCOMINGOVERFLOW_Msk) >> REG_RTOS_STATUS0_UARTTARGETINCOMINGOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20481,24 +14127,16 @@ mm_response_t mm_getRTOS_Status0_UARTTargetIncomingOverflowFrom(bool * dest, con
 }
 
 mm_response_t mm_setRTOS_Status0_UARTTargetTxHBOverflow(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_UARTTARGETTXHBOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_UARTTARGETTXHBOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getRTOS_Status0_UARTTargetTxHBOverflow(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_UARTTARGETTXHBOVERFLOW_Msk) >> REG_RTOS_STATUS0_UARTTARGETTXHBOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20508,24 +14146,16 @@ mm_response_t mm_getRTOS_Status0_UARTTargetTxHBOverflowFrom(bool * dest, const u
 }
 
 mm_response_t mm_setRTOS_Status0_UARTTargetRxHBOverflow(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_UARTTARGETRXHBOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_UARTTARGETRXHBOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getRTOS_Status0_UARTTargetRxHBOverflow(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_UARTTARGETRXHBOVERFLOW_Msk) >> REG_RTOS_STATUS0_UARTTARGETRXHBOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20535,24 +14165,16 @@ mm_response_t mm_getRTOS_Status0_UARTTargetRxHBOverflowFrom(bool * dest, const u
 }
 
 mm_response_t mm_setRTOS_Status0_UARTTargetOutgoingOverflow(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_UARTTARGETOUTGOINGOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_UARTTARGETOUTGOINGOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getRTOS_Status0_UARTTargetOutgoingOverflow(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_UARTTARGETOUTGOINGOVERFLOW_Msk) >> REG_RTOS_STATUS0_UARTTARGETOUTGOINGOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20562,24 +14184,16 @@ mm_response_t mm_getRTOS_Status0_UARTTargetOutgoingOverflowFrom(bool * dest, con
 }
 
 mm_response_t mm_setRTOS_Status0_GSETargetIncomingOverflow(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_GSETARGETINCOMINGOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_GSETARGETINCOMINGOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getRTOS_Status0_GSETargetIncomingOverflow(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_GSETARGETINCOMINGOVERFLOW_Msk) >> REG_RTOS_STATUS0_GSETARGETINCOMINGOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20589,24 +14203,16 @@ mm_response_t mm_getRTOS_Status0_GSETargetIncomingOverflowFrom(bool * dest, cons
 }
 
 mm_response_t mm_setRTOS_Status0_GSETargetOutgoingOverflow(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_GSETARGETOUTGOINGOVERFLOW_Msk) | (val << REG_RTOS_STATUS0_GSETARGETOUTGOINGOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getRTOS_Status0_GSETargetOutgoingOverflow(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_GSETARGETOUTGOINGOVERFLOW_Msk) >> REG_RTOS_STATUS0_GSETARGETOUTGOINGOVERFLOW_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20616,24 +14222,16 @@ mm_response_t mm_getRTOS_Status0_GSETargetOutgoingOverflowFrom(bool * dest, cons
 }
 
 mm_response_t mm_setRTOS_Status0_SERMUX_CRC_Error(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.RTOS_Status0 = (mm.RTOS_Status0 & ~REG_RTOS_STATUS0_SERMUX_CRC_ERROR_Msk) | (val << REG_RTOS_STATUS0_SERMUX_CRC_ERROR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getRTOS_Status0_SERMUX_CRC_Error(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.RTOS_Status0 & REG_RTOS_STATUS0_SERMUX_CRC_ERROR_Msk) >> REG_RTOS_STATUS0_SERMUX_CRC_ERROR_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20644,46 +14242,28 @@ mm_response_t mm_getRTOS_Status0_SERMUX_CRC_ErrorFrom(bool * dest, const uint32_
 
 /*************** Get/Set functions for UtilI2CConfA register ******************************************************************/
 mm_response_t mm_setUtilI2CConfA(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.UtilI2CConfA = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getUtilI2CConfA(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.UtilI2CConfA;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setUtilI2CConfA_Reset(const bool val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.UtilI2CConfA = (mm.UtilI2CConfA & ~REG_UTILI2CCONFA_RESET_Msk) | (val << REG_UTILI2CCONFA_RESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getUtilI2CConfA_Reset(bool * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (bool) ((mm.UtilI2CConfA & REG_UTILI2CCONFA_RESET_Msk) >> REG_UTILI2CCONFA_RESET_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20693,24 +14273,16 @@ mm_response_t mm_getUtilI2CConfA_ResetFrom(bool * dest, const uint32_t source) {
 }
 
 mm_response_t mm_setUtilI2CConfA_SPD(const uint8_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.UtilI2CConfA = (mm.UtilI2CConfA & ~REG_UTILI2CCONFA_SPD_Msk) | (val << REG_UTILI2CCONFA_SPD_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getUtilI2CConfA_SPD(uint8_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint8_t) ((mm.UtilI2CConfA & REG_UTILI2CCONFA_SPD_Msk) >> REG_UTILI2CCONFA_SPD_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20721,24 +14293,14 @@ mm_response_t mm_getUtilI2CConfA_SPDFrom(uint8_t * dest, const uint32_t source) 
 
 /*************** Get/Set functions for UtilI2CStatus register *****************************************************************/
 mm_response_t mm_setUtilI2CStatus(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.UtilI2CStatus = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getUtilI2CStatus(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.UtilI2CStatus;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
@@ -20750,46 +14312,28 @@ mm_response_t mm_getUtilI2CStatusFrom(uint32_t * dest, const uint32_t source) {
 
 /*************** Get/Set functions for PreviousEndpoint register **************************************************************/
 mm_response_t mm_setPreviousEndpoint(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.PreviousEndpoint = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getPreviousEndpoint(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.PreviousEndpoint;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setPreviousEndpoint_Number(const uint8_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.PreviousEndpoint = (mm.PreviousEndpoint & ~REG_PREVIOUSENDPOINT_NUMBER_Msk) | (val << REG_PREVIOUSENDPOINT_NUMBER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getPreviousEndpoint_Number(uint8_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (uint8_t) ((mm.PreviousEndpoint & REG_PREVIOUSENDPOINT_NUMBER_Msk) >> REG_PREVIOUSENDPOINT_NUMBER_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20800,46 +14344,28 @@ mm_response_t mm_getPreviousEndpoint_NumberFrom(uint8_t * dest, const uint32_t s
 
 /*************** Get/Set functions for ConfCommsProtocol register *************************************************************/
 mm_response_t mm_setConfCommsProtocol(const uint32_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.ConfCommsProtocol = val;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
 mm_response_t mm_getConfCommsProtocol(uint32_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
     *dest = mm.ConfCommsProtocol;
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
     return mm_OK;
 }
 
 mm_response_t mm_setConfCommsProtocol_BUS_UART(const mm_comms_protocol_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.ConfCommsProtocol = (mm.ConfCommsProtocol & ~REG_CONFCOMMSPROTOCOL_BUS_UART_Msk) | (val << REG_CONFCOMMSPROTOCOL_BUS_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getConfCommsProtocol_BUS_UART(mm_comms_protocol_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_comms_protocol_t) ((mm.ConfCommsProtocol & REG_CONFCOMMSPROTOCOL_BUS_UART_Msk) >> REG_CONFCOMMSPROTOCOL_BUS_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20849,24 +14375,16 @@ mm_response_t mm_getConfCommsProtocol_BUS_UARTFrom(mm_comms_protocol_t * dest, c
 }
 
 mm_response_t mm_setConfCommsProtocol_TEL_UART(const mm_comms_protocol_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.ConfCommsProtocol = (mm.ConfCommsProtocol & ~REG_CONFCOMMSPROTOCOL_TEL_UART_Msk) | (val << REG_CONFCOMMSPROTOCOL_TEL_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getConfCommsProtocol_TEL_UART(mm_comms_protocol_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_comms_protocol_t) ((mm.ConfCommsProtocol & REG_CONFCOMMSPROTOCOL_TEL_UART_Msk) >> REG_CONFCOMMSPROTOCOL_TEL_UART_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 
@@ -20876,24 +14394,16 @@ mm_response_t mm_getConfCommsProtocol_TEL_UARTFrom(mm_comms_protocol_t * dest, c
 }
 
 mm_response_t mm_setConfCommsProtocol_BUS_CAN(const mm_comms_protocol_t val) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     mm.ConfCommsProtocol = (mm.ConfCommsProtocol & ~REG_CONFCOMMSPROTOCOL_BUS_CAN_Msk) | (val << REG_CONFCOMMSPROTOCOL_BUS_CAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
-    return  mm_OK;
+    taskEXIT_CRITICAL();
+    return mm_OK;
 }
 
 mm_response_t mm_getConfCommsProtocol_BUS_CAN(mm_comms_protocol_t * dest) {
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreTake(_mm_mutex, pdMS_TO_TICKS(MEMORY_MAP_MUTEX_WAIT_ms))) {
-        return mm_NotReady;
-    }
+    taskENTER_CRITICAL();
     *dest = (mm_comms_protocol_t) ((mm.ConfCommsProtocol & REG_CONFCOMMSPROTOCOL_BUS_CAN_Msk) >> REG_CONFCOMMSPROTOCOL_BUS_CAN_Pos);
-    if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING && !xSemaphoreGive(_mm_mutex)) {
-        return mm_NotReady;
-    }
+    taskEXIT_CRITICAL();
     return mm_OK;
 }
 

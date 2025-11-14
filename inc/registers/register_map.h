@@ -5,9 +5,8 @@
 
  **********************************************************************/
 
-
-#ifndef OBC_H
-#define OBC_H
+#ifndef EGSE_REGISTER_MAP_H
+#define EGSE_REGISTER_MAP_H
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -3066,4 +3065,4 @@ mm_response_t mm_getConfCommsProtocol_BUS_CAN(mm_comms_protocol_t * dest);
 mm_response_t mm_getConfCommsProtocol_BUS_CANFrom(mm_comms_protocol_t * dest, const uint32_t source);
 
 
-#endif /* memory_map_h */
+#endif /* EGSE_REGISTER_MAP_H */
