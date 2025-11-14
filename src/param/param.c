@@ -7,26 +7,58 @@
 
 #include "../vmem/vmem_internal.h"
 
+#ifdef PARAM_USE_CC_STATIC_RAM
 
 #define PARAM_GET(_type, _name, _swapfct) \
-	_type param_get_##_name##_array(param_t * param, unsigned int i) { \
-		if (i >= (unsigned int) param->array_size) { \
-			return 0; \
-		} \
-		if (param->vmem) { \
-			_type data = 0; \
-			vmem_read_direct(param->vmem, &data, param->vmem->vaddr + param->vaddr + i * param->array_step, sizeof(data)); \
-			if (param->vmem->big_endian == 1) { \
-				data = _swapfct(data); \
-			} \
-			return data; \
-		} else { \
-			return *(_type *)(param->addr + i * param->array_step); \
-		} \
-	} \
-	_type param_get_##_name(param_t * param) { \
-		return param_get_##_name##_array(param, 0); \
-	}
+    _type param_get_##_name##_array(param_t * param, unsigned int i) { \
+        if (i >= (unsigned int) param->array_size) { \
+            return 0; \
+        } \
+        if (param->vmem) { \
+            _type data = 0; \
+            vmem_read_direct(param->vmem, &data, param->vmem->vaddr + param->vaddr + i * param->array_step, sizeof(data)); \
+            if (param->vmem->big_endian == 1) { \
+                data = _swapfct(data); \
+            } \
+            return data; \
+        } else if (param->addr) { \
+            return *(_type *)(param->addr + i * param->array_step); \
+        } else { \
+            /* Only uint32_t parameters are supported / have been tested - remove this once other types have been tested */ \
+            configASSERT(param->type == PARAM_TYPE_UINT32); \
+            configASSERT(param->read_func != NULL); \
+            _type param_value; \
+            param->read_func(param->id, (void *) &param_value); \
+            return param_value; \
+        }\
+    } \
+    _type param_get_##_name(param_t * param) { \
+	    return param_get_##_name##_array(param, 0); \
+    }
+
+#else // PARAM_USE_CC_STATIC_RAM
+
+#define PARAM_GET(_type, _name, _swapfct) \
+    _type param_get_##_name##_array(param_t * param, unsigned int i) { \
+        if (i >= (unsigned int) param->array_size) { \
+            return 0; \
+        } \
+        if (param->vmem) { \
+            _type data = 0; \
+            vmem_read_direct(param->vmem, &data, param->vmem->vaddr + param->vaddr + i * param->array_step, sizeof(data)); \
+            if (param->vmem->big_endian == 1) { \
+                data = _swapfct(data); \
+        } \
+            return data; \
+        } else { \
+            return *(_type *)(param->addr + i * param->array_step); \
+        }\
+    } \
+    _type param_get_##_name(param_t * param) { \
+        return param_get_##_name##_array(param, 0); \
+    }
+        
+#endif // PARAM_USE_CC_STATIC_RAM
 
 PARAM_GET(uint8_t, uint8, )
 PARAM_GET(uint16_t, uint16, be16toh)
@@ -89,6 +121,47 @@ void param_get_data(param_t * param, void * outbuf, int len)
 #define param_log(...)
 #endif
 
+#ifdef PARAM_USE_CC_STATIC_RAM
+
+#define PARAM_SET(_type, name_in, _swapfct) \
+	void __param_set_##name_in(param_t * param, _type value, bool do_callback, unsigned int i) { \
+		if (i >= (unsigned int) param->array_size) { \
+			return; \
+		} \
+		if (param->vmem) { \
+			if (param->vmem->big_endian == 1) \
+				value = _swapfct(value); \
+			vmem_write_direct(param->vmem, param->vmem->vaddr + param->vaddr + i * param->array_step, &value, sizeof(_type)); \
+        } else if (param->addr) { \
+			/* Aligned access directly to RAM */ \
+			*(_type*)(param->addr + i * param->array_step) = value; \
+        } else { \
+            param->write_func(param->addr, (const void *) &value); \
+        }\
+		/* Callback */ \
+		if ((do_callback == true) && (param->callback)) { \
+			param->callback(param, i); \
+		} \
+	} \
+	inline void param_set_##name_in(param_t * param, _type value) \
+	{ \
+		__param_set_##name_in(param, value, true, 0); \
+	} \
+	inline void param_set_##name_in##_nocallback(param_t * param, _type value) \
+	{ \
+		__param_set_##name_in(param, value, false, 0); \
+	} \
+	inline void param_set_##name_in##_array(param_t * param, unsigned int i, _type value) \
+	{ \
+		__param_set_##name_in(param, value, true, i); \
+	} \
+	inline void param_set_##name_in##_array_nocallback(param_t * param, unsigned int i, _type value) \
+	{ \
+		__param_set_##name_in(param, value, false, i); \
+	}
+
+#else // PARAM_USE_CC_STATIC_RAM
+
 #define PARAM_SET(_type, name_in, _swapfct) \
 	void __param_set_##name_in(param_t * param, _type value, bool do_callback, unsigned int i) { \
 		if (i >= (unsigned int) param->array_size) { \
@@ -123,6 +196,8 @@ void param_get_data(param_t * param, void * outbuf, int len)
 	{ \
 		__param_set_##name_in(param, value, false, i); \
 	}
+
+#endif // PARAM_USE_CC_STATIC_RAM
 
 PARAM_SET(uint8_t, uint8, )
 PARAM_SET(uint16_t, uint16, htobe16)
@@ -284,5 +359,3 @@ void param_copy(param_t * dest, param_t * src) {
 	}
 
 }
-
-

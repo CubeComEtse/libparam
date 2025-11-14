@@ -40,13 +40,13 @@
  * `__attribute__((no_reorder))` is preferred over c_args '-fno-toplevel-reorder',
  * as it doesn't require the user to modify their usage of libparam.
  */
-#ifndef PARAM_STORAGE_SIZE
 __attribute__((no_reorder))
 const param_t param_size_set0;
 __attribute__((no_reorder))
 const param_t param_size_set1;
-#define PARAM_STORAGE_SIZE ((intptr_t) &param_size_set1 - (intptr_t) &param_size_set0)
-#endif
+#define ABS(a) ((a) < 0 ? -(a) : (a))
+#define PARAM_STORAGE_SIZE_PRE_ABS ((intptr_t) &param_size_set1 - (intptr_t) &param_size_set0)
+#define PARAM_STORAGE_SIZE (ABS(PARAM_STORAGE_SIZE_PRE_ABS))
 
 #ifdef PARAM_HAVE_SYS_QUEUE
 static SLIST_HEAD(param_list_head_s, param_s) param_list_head = {};

@@ -56,7 +56,7 @@ typedef enum {
 #define PM_SYSCONF              (1 << 7) //! C: Network and time configuration
 #define PM_WDT                  (1 << 8) //! w: Crictical watchdog
 #define PM_DEBUG                (1 << 9) //! d: Debug flag (enables uart output)
-#define PM_CALIB               (1 << 10) //! q: Calibration gains and offsets
+#define PM_CALIB                (1 << 10) //! q: Calibration gains and offsets
 
 /* Atomic write:
  * If this flag is set, the receiver must enter a critical region before writing to
@@ -74,22 +74,22 @@ typedef enum {
 
 /* Reserved flags:
  * Lower 16 is parameter system, upper 16 are user flags  */
-#define PM_PARAM_FLAGS        0x0000FFFF //! Lower 16-bits are reserved for parameter system and major class flags
-#define PM_USER_FLAGS         0xFFFF0000 //! Upper 16-bits are reserved for user
-#define PM_USER_FLAGS_OFFSET  16         //! Upper 16-bits are reserved for user
+#define PM_PARAM_FLAGS         0x0000FFFF //! Lower 16-bits are reserved for parameter system and major class flags
+#define PM_USER_FLAGS          0xFFFF0000 //! Upper 16-bits are reserved for user
+#define PM_USER_FLAGS_OFFSET   16         //! Upper 16-bits are reserved for user
 
 
 /**
  * Used defined parameter mask
  */
-#define PM_ENCRYPT              (4 << 16) //! Known as 4 in elfparse and genparamtable
-#define PM_CSP               (5 << 16) //! Known as 5 in elfparse and genparamtable
-#define PM_KEYCONF               (6 << 16) //! Known as 6 in elfparse and genparamtable
+#define PM_ENCRYPT             (4 << 16) //! Known as 4 in elfparse and genparamtable
+#define PM_CSP                 (5 << 16) //! Known as 5 in elfparse and genparamtable
+#define PM_KEYCONF             (6 << 16) //! Known as 6 in elfparse and genparamtable
 
 
 /**
  * Parameter description structure
- * Note: this is not packed in order to maximise run-time efficiency
+ * Note: this is not packed in order to maximize run-time efficiency
  */
 typedef struct param_s {
 
@@ -103,13 +103,17 @@ typedef struct param_s {
 	char *docstr;
 
 	/* Storage */
-	void * addr; /* Physical address */
-	uint64_t vaddr; /* Virtual address in case of VMEM */
+	void * addr;            /* Physical address */
+	uint64_t vaddr;         /* Virtual address in case of VMEM */
 	struct vmem_s * vmem;
 	int array_size;
 	int array_step;
 
 	/* Local info */
+#ifdef PARAM_USE_CC_STATIC_RAM
+    void (*read_func)(const uint16_t address, void * value);
+    void (*write_func)(const uint16_t address, const void * value);
+#endif
 	void (*callback)(struct param_s * param, int offset);
 	csp_timestamp_t * timestamp;
 
@@ -118,7 +122,6 @@ typedef struct param_s {
 	 * The weird definition format comes from sys/queue.h SLINST_ENTRY() macro */
 	struct { struct param_s *sle_next; } next;
 #endif
-
 
 } param_t;
 
