@@ -19,7 +19,7 @@ extern "C" {
 #include <machine/endian.h>
 #include <param/param.h>
 
-enum vmem_types{
+typedef enum vmem_types_e {
 	VMEM_TYPE_RAM = 1,
 	VMEM_TYPE_FRAM = 2,
 	VMEM_TYPE_FRAM_SECURE = 3,
@@ -31,10 +31,10 @@ enum vmem_types{
 	VMEM_TYPE_NOR_FLASH = 9,
 	VMEM_TYPE_BLOCK = 10,
 	VMEM_TYPE_UNKNOWN = -1,
-};
+} vmem_type_t;
 
 typedef struct vmem_s {
-	int type;
+	vmem_type_t type;
 	void (*read)(struct vmem_s * vmem, uint64_t addr, void * dataout, uint32_t len);
 	void (*write)(struct vmem_s * vmem, uint64_t addr, const void * datain, uint32_t len);
 	int (*backup)(struct vmem_s * vmem);
