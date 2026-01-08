@@ -136,7 +136,10 @@ void param_get_data(param_t * param, void * outbuf, int len)
 			/* Aligned access directly to RAM */ \
 			*(_type*)(param->addr + i * param->array_step) = value; \
         } else { \
-            param->write_func(param->addr, (const void *) &value); \
+            /* Only uint32_t parameters are supported / have been tested - remove this once other types have been tested */ \
+            configASSERT(param->type == PARAM_TYPE_UINT32); \
+            configASSERT(param->write_func != NULL); \
+            param->write_func(param->id, (const void *) &value); \
         }\
 		/* Callback */ \
 		if ((do_callback == true) && (param->callback)) { \
